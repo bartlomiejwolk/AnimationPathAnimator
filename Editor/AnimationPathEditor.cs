@@ -101,8 +101,6 @@ namespace ATP.AnimationPathTools {
         }
 
         public override void OnInspectorGUI() {
-            base.OnInspectorGUI();
-
             // Draw inspector GUI elements.
             DrawInspectorGUI();
 

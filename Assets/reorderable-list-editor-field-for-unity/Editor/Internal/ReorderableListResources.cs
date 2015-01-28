@@ -5,7 +5,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Rotorz.ReorderableList.Internal {
+namespace ATP.ReorderableList.Internal {
 
 	/// <summary>
 	/// Resources to assist with reorderable list control.

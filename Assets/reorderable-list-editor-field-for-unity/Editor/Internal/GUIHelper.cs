@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace Rotorz.ReorderableList.Internal {
+namespace ATP.ReorderableList.Internal {
 
 	/// <summary>
 	/// Utility functions to assist with GUIs.

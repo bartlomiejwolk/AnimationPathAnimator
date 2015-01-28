@@ -67,12 +67,12 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public const KeyCode JumpBackward = KeyCode.LeftArrow;
 
-        public const float JumpValue = 0.1f;
+        public const float JumpValue = 0.01f;
 
         /// <summary>
         ///     Value of the jump when modifier key is pressed.
         /// </summary>
-        public const float ShortJumpValue = 0.01f;
+        public const float ShortJumpValue = 0.002f;
 
 		void Start () {
             // Start playing animation on Start().

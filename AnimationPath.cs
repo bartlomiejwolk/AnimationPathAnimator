@@ -189,11 +189,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        void OnDestroy() {
-            // Remove class field from the memory.
-            Destroy(_animationCurves);
-        }
-
         #endregion Unity Messages
 
         #region Public Methods

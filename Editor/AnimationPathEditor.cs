@@ -83,7 +83,7 @@ namespace ATP.AnimationPathTools {
             Tools.current = lastTool;
         }
 
-        void OnEnable() {
+        protected virtual void OnEnable() {
             // Initialize serialized properties.
             gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");

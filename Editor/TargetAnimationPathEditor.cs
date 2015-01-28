@@ -6,7 +6,8 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(TargetAnimationPath))]
     public class TargetAnimationPathEditor : AnimationPathEditor {
 
-        void OnEnable() {
+        protected override void OnEnable() {
+            base.OnEnable();
             script = (TargetAnimationPath)target;
         }
 

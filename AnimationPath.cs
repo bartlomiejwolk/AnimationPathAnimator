@@ -170,7 +170,7 @@ namespace ATP.AnimationPathTools {
             skin = Resources.Load("GUISkin/default") as GUISkin;
         }
 
-        void OnDrawGizmos() {
+        void OnDrawGizmosSelected() {
             DrawGizmoCurve();
         }
 

@@ -8,6 +8,7 @@ namespace ATP.AnimationPathTools {
 
         protected override void OnEnable() {
             base.OnEnable();
+
             script = (TargetAnimationPath)target;
         }
 

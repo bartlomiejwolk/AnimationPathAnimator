@@ -108,7 +108,7 @@ namespace ATP.AnimationPathTools {
             SceneView.RepaintAll();
         }
 
-        void OnSceneGUI() {
+        protected void OnSceneGUI() {
             // Log error if inspector GUISkin filed is empty.
             if (script.Skin == null) {
                 script.MissingReferenceError(

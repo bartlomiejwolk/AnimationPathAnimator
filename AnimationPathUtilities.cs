@@ -1,8 +1,7 @@
-﻿using OneDayGame.LoggingTools;
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     ///     Static methods used across all <c>AnimationPathTools</c> classes.

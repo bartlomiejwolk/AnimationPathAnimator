@@ -1,9 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
-using OneDayGame.LoggingTools;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
 	[CustomPropertyDrawer(typeof(Animation))]
 	public class AnimationDrawer : PropertyDrawer {

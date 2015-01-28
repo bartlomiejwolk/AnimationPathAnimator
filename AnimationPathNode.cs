@@ -2,9 +2,8 @@ using MemoryManagment;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using OneDayGame.LoggingTools;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     ///     Defines single node in space and time.

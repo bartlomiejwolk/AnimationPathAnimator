@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
-using OneDayGame.LoggingTools;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     ///     Keeps references to animation paths and targets used by the

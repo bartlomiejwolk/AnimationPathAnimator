@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using OneDayGame.LoggingTools;
+using ATP.ReorderableList;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     ///     Component that allows animating transforms position along
@@ -74,13 +74,7 @@ namespace OneDayGame.AnimationPathTools {
         /// </summary>
         public const float ShortJumpValue = 0.01f;
 
-		public override void Awake() {
-			base.Awake();
-		}
-
-		public override void Start () {
-			base.Start();
-
+		void Start () {
             // Start playing animation on Start().
             isPlaying = true;
 
@@ -88,13 +82,7 @@ namespace OneDayGame.AnimationPathTools {
             currentAnimTime = animTimeRatio * duration;
 		}
 
-		public override void OnEnable() {
-			base.OnEnable();
-		}
-
-		public override void OnValidate() {
-			base.OnValidate();
-
+		void OnValidate() {
             // Limit duration value.
             if (duration < 1) {
                 duration = 1;
@@ -109,9 +97,7 @@ namespace OneDayGame.AnimationPathTools {
 			}
 		}
 
-		public override void Update () {
-			base.Update();
-
+		public void Update () {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
                 // Increase animation time.

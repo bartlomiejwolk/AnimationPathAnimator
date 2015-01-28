@@ -1,4 +1,4 @@
-﻿namespace OneDayGame.AnimationPathTools {
+﻿namespace ATP.AnimationPathTools {
 
     public class TargetAnimationPath : AnimationPath {
     }

@@ -1,16 +1,16 @@
 ﻿using MemoryManagment;
 using System;
 using System.Collections.Generic;
+using ATP.ReorderableList;
 using UnityEditor;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 /// Classes that allow for creation and usage of \link AnimationPath Animation
 /// Paths\endlink.
 /// 
 /// Collaboration diagram for _AnimationPath_ component \image html
 /// AnimationPathTools-collaboration.png
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.
@@ -165,22 +165,16 @@ namespace OneDayGame.AnimationPathTools {
 
         #region Unity Messages
 
-        public override void Awake() {
-            base.Awake();
-
+        void Awake() {
             // Load default skin.
             skin = Resources.Load("GUISkin/default") as GUISkin;
         }
 
-        public override void OnDrawGizmos() {
-            base.OnDrawGizmos();
-
+        void OnDrawGizmos() {
             DrawGizmoCurve();
         }
 
-        public override void OnEnable() {
-            base.OnEnable();
-
+         void OnEnable() {
             // Instantiate class field.
             if (_animationCurves == null) {
                 _animationCurves =
@@ -188,18 +182,16 @@ namespace OneDayGame.AnimationPathTools {
             }
         }
 
-        public override void OnValidate() {
-            base.OnValidate();
-
+        void OnValidate() {
             // Sampling frequency inspector option cannot be less than 2.
             if (gizmoCurveSamplingFrequency <= 2) {
                 gizmoCurveSamplingFrequency = 2;
             }
         }
 
-        private void OnDestroy() {
+        void OnDestroy() {
             // Remove class field from the memory.
-            _animationCurves.Destroy();
+            Destroy(_animationCurves);
         }
 
         #endregion Unity Messages

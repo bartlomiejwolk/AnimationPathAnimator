@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     /// </summary>

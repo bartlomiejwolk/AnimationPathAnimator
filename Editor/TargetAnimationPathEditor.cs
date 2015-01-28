@@ -1,14 +1,12 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof(TargetAnimationPath))]
     public class TargetAnimationPathEditor : AnimationPathEditor {
 
-        public override void OnEnable() {
-            base.OnEnable();
-
+        void OnEnable() {
             script = (TargetAnimationPath)target;
         }
 

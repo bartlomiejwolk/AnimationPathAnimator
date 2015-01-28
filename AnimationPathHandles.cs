@@ -1,9 +1,8 @@
-using OneDayGame.LoggingTools;
 using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// It's responsible for drawing on-scene handles and other info for an
     /// AnimationPath class.

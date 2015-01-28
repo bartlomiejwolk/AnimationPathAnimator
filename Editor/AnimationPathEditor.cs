@@ -1,8 +1,9 @@
 ﻿using System;
+using ATP.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     /// <summary>
     /// Editor for AnimationPath class.
@@ -12,7 +13,7 @@ namespace OneDayGame.AnimationPathTools {
     /// drawing handles, buttons and labels.
     /// </remarks>
     [CustomEditor(typeof(AnimationPath))]
-    public class AnimationPathEditor : GameComponentEditor {
+    public class AnimationPathEditor : Editor {
 
         #region Composite Object
 
@@ -78,15 +79,11 @@ namespace OneDayGame.AnimationPathTools {
 
         #region UNITY MESSAGES
 
-        public override void OnDisable() {
-            base.OnDisable();
-
+        void OnDisable() {
             Tools.current = lastTool;
         }
 
-        public override void OnEnable() {
-            base.OnEnable();
-
+        void OnEnable() {
             // Initialize serialized properties.
             gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");
@@ -113,9 +110,7 @@ namespace OneDayGame.AnimationPathTools {
             SceneView.RepaintAll();
         }
 
-        public override void OnSceneGUI() {
-            base.OnSceneGUI();
-
+        void OnSceneGUI() {
             // Log error if inspector GUISkin filed is empty.
             if (script.Skin == null) {
                 script.MissingReferenceError(

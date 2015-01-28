@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
-using Rotorz.ReorderableList;
-using OneDayGame.LoggingTools;
+using ATP.ReorderableList;
 
-namespace OneDayGame.AnimationPathTools {
+namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof(AnimationPathAnimator))]
-	public class AnimatorEditor: GameComponentEditor {
+	public class AnimatorEditor: Editor {
 
         /// <summary>
         /// Reference to target script.
@@ -24,9 +23,7 @@ namespace OneDayGame.AnimationPathTools {
         /// </summary>
         private bool modKeyPressed;
 
-		public override void OnEnable() {
-			base.OnEnable();
-
+		void OnEnable() {
             // Get target script reference.
 			script = (AnimationPathAnimator)target;
 
@@ -37,8 +34,6 @@ namespace OneDayGame.AnimationPathTools {
 		}
 
 		public override void OnInspectorGUI() {
-			base.OnInspectorGUI();
-
 			serializedObject.Update();
 
 			EditorGUILayout.Slider(
@@ -57,9 +52,7 @@ namespace OneDayGame.AnimationPathTools {
 			}
 		}
 
-		public override void OnSceneGUI() {
-			base.OnSceneGUI();
-
+		void OnSceneGUI() {
 			serializedObject.Update();
 
             // Update modifier key state.

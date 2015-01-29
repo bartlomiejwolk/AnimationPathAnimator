@@ -14,7 +14,7 @@ namespace ATP.AnimationPathTools {
 
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             // Add a new node.
             script.AddNodeAuto(nodeIndex);
@@ -24,7 +24,7 @@ namespace ATP.AnimationPathTools {
                     int nodeIndex) {
 
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.SetNodeLinear(nodeIndex);
         }
@@ -35,7 +35,7 @@ namespace ATP.AnimationPathTools {
                     Vector3 moveDelta) {
 
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             // If Move All mode enabled, move all nodes.
             if (script.MoveAllMode) {
@@ -49,14 +49,14 @@ namespace ATP.AnimationPathTools {
 
         protected override void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.RemoveNode(nodeIndex);
         }
 
         protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.SmoothNodeTangents(
                     index,
@@ -68,7 +68,7 @@ namespace ATP.AnimationPathTools {
                     Vector3 inOutTangent) {
 
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
         }

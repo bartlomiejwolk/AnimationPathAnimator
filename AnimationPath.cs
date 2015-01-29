@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using ATP.ReorderableList;
-using UnityEditor;
 using UnityEngine;
 
 /// Classes that allow for creation and usage of \link AnimationPath Animation
@@ -159,6 +158,10 @@ namespace ATP.AnimationPathTools {
         public bool SceneControls {
             get { return sceneControls; }
             set { sceneControls = value; }
+        }
+
+        public AnimationPathCurves AnimationCurves {
+            get { return _animationCurves; }
         }
 
         #endregion Public Properties
@@ -367,7 +370,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        public void ResetPath() {
+        public void ResetPath(Vector3 worldPoint) {
             // Number of nodes to remove.
             int noOfNodesToRemove = NodesNo;
 
@@ -377,12 +380,6 @@ namespace ATP.AnimationPathTools {
                 _animationCurves.RemovePoint(0);
             }
 
-            // Get scene view camera.
-            Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-
-            // Get world point to place the Animation Path.
-            Vector3 worldPoint = sceneCamera.transform.position
-                + sceneCamera.transform.forward * 7;
             // Calculate end point.
             Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
 
@@ -422,15 +419,6 @@ namespace ATP.AnimationPathTools {
 
         public void SmoothNodeTangents(int nodeIndex, float tangentWeigth) {
             _animationCurves.SmoothPointTangents(nodeIndex, tangentWeigth);
-        }
-
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        // Remove this method. TODO Move undo implementation to AnimationPath
-        // class.
-        public void HandleUndo() {
-            Undo.RecordObject(_animationCurves, "Change path");
         }
 
         #endregion Public Methods

@@ -197,7 +197,7 @@ namespace ATP.AnimationPathTools {
                 "Set tangent mode to linear for all nodePositions."))) {
 
                 // Allow undo this operation.
-                script.HandleUndo();
+                HandleUndo();
 
                 script.SetNodesLinear();
                 script.DistributeNodeSpeedValues();
@@ -206,7 +206,7 @@ namespace ATP.AnimationPathTools {
                            "Smooth",
                 "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
 
-                script.HandleUndo();
+                HandleUndo();
                 script.SmoothNodesTangents(tangentWeight.floatValue);
                 script.DistributeNodeSpeedValues();
             }
@@ -215,10 +215,16 @@ namespace ATP.AnimationPathTools {
                 "Create a new default Animation Path or reset to default."))) {
 
                 // Allow undo this operation. TODO Check if this works.
-                script.HandleUndo();
+                HandleUndo();
+
+                // Get scene view camera.
+                Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+                // Get world point to place the Animation Path.
+                Vector3 worldPoint = sceneCamera.transform.position
+                    + sceneCamera.transform.forward * 7;
 
                 // Reset curves to its default state.
-                script.ResetPath();
+                script.ResetPath(worldPoint);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -338,6 +344,15 @@ namespace ATP.AnimationPathTools {
                 // Disable Tangent Mode.
                 script.TangentMode = !script.TangentMode;
             }
+        }
+
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        // Remove this method. TODO Move undo implementation to AnimationPath
+        // class.
+        public void HandleUndo() {
+            Undo.RecordObject(script.AnimationCurves, "Change path");
         }
 
         #endregion PRIVATE METHODS
@@ -595,7 +610,7 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             // Add a new node.
             script.AddNodeAuto(nodeIndex);
@@ -607,7 +622,7 @@ namespace ATP.AnimationPathTools {
                     int nodeIndex) {
 
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.SetNodeLinear(nodeIndex);
             script.DistributeNodeSpeedValues();
@@ -619,7 +634,7 @@ namespace ATP.AnimationPathTools {
                     Vector3 moveDelta) {
 
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             // If Move All mode enabled, move all nodes.
             if (script.MoveAllMode) {
@@ -634,7 +649,7 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.RemoveNode(nodeIndex);
             script.DistributeNodeSpeedValues();
@@ -642,7 +657,7 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.SmoothNodeTangents(
                     index,
@@ -655,7 +670,7 @@ namespace ATP.AnimationPathTools {
                     Vector3 inOutTangent) {
 
             // Make snapshot of the target object.
-            script.HandleUndo();
+            HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
             script.DistributeNodeSpeedValues();

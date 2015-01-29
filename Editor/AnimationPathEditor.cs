@@ -342,7 +342,7 @@ namespace ATP.AnimationPathTools {
         // Remove this method. TODO Move undo implementation to AnimationPath
         // class.
         public void HandleUndo() {
-            Undo.RecordObject(script.AnimationCurves, "Change path");
+            Undo.RecordObject(target, "Change path");
         }
 
         #endregion PRIVATE METHODS

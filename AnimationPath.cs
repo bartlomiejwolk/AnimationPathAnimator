@@ -195,17 +195,7 @@ namespace ATP.AnimationPathTools {
 
         #region Public Methods
 
-        // TODO Move to Editor class.
-        public void AddNodeAuto(int nodeIndex) {
-            // If this node is the last one in the path..
-            if (nodeIndex == NodesNo - 1) {
-                AddNodeEnd(nodeIndex);
-            }
-            // Any other node than the last one.
-            else {
-                AddNodeBetween(nodeIndex);
-            }
-        }
+
         public void MoveAllNodes(Vector3 moveDelta) {
             // For each node..
             for (int i = 0; i < NodesNo; i++) {
@@ -423,90 +413,21 @@ namespace ATP.AnimationPathTools {
             _animationCurves.SmoothPointTangents(nodeIndex, tangentWeigth);
         }
 
+        public float GetNodeTimestamp(int nodeIndex) {
+            return _animationCurves.GetTimeAtKey(nodeIndex);
+        }
+
+        // TODO Rename to CreateNodeAtTime().
+        public void AddNodeAtTime(float timestamp) {
+            _animationCurves.AddNodeAtTime(timestamp);
+        }
+
+        public void CreateNode(float timestamp, Vector3 position) {
+            _animationCurves.AddNewPoint(1, position);
+        }
+
         #endregion Public Methods
         #region Private Methods
-        // TODO Should receive two node indexes.
-        private void AddNodeBetween(int nodeIndex) {
-            // Timestamp of node on which was taken action.
-            float currentKeyTime = _animationCurves.GetTimeAtKey(nodeIndex);
-            // Get timestamp of the next node.
-            float nextKeyTime = _animationCurves.GetTimeAtKey(nodeIndex + 1);
-
-            // Calculate timestamps for new key. It'll be placed exactly
-            // between the two nodes.
-            float newKeyTime =
-                currentKeyTime +
-                ((nextKeyTime - currentKeyTime) / 2);
-
-            // Add node to the animation curves.
-            for (int j = 0; j < 3; j++) {
-                float newKeyValue = _animationCurves[j].Evaluate(newKeyTime);
-                _animationCurves[j].AddKey(newKeyTime, newKeyValue);
-            }
-        }
-
-        // TODO Move to Editor class.
-        private void AddNodeEnd(int nodeIndex) {
-            // Calculate position for the new node.
-            var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
-
-            // Decrease current last node timestamp to make place for the
-            // new node.
-            DecreaseNodeTimestampByHalfInterval(nodeIndex);
-
-            // Add new node to animation curves.
-            _animationCurves.AddNewPoint(1, newNodePosition);
-        }
-
-        // TODO Move to Editor class.
-        private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
-            // Get positions of all nodes.
-            Vector3[] nodePositions = GetNodePositions();
-
-            // Timestamp of node on which was taken action.
-            float currentKeyTime = _animationCurves.GetTimeAtKey(nodeIndex);
-
-            // Timestamp of some point behind and close to the node.
-            float refTime = currentKeyTime - 0.001f;
-
-            // Create Vector3 for the reference point.
-            Vector3 refPoint = _animationCurves.GetVectorAtTime(refTime);
-
-            // Calculate direction from ref. point to current node.
-            Vector3 dir = nodePositions[nodeIndex] - refPoint;
-
-            // Normalize direction.
-            dir.Normalize();
-
-            // Create vector with new node's position.
-            Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
-
-            return newNodePosition;
-        }
-
-        /// <summary>
-        /// Decrease node timestamp by half its time interval.
-        /// </summary>
-        /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
-        /// <param name="nodeIndex"></param>
-        // TODO Move to Editor class.
-        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
-            // Get timestamp of the penultimate node.
-            float penultimateNodeTimestamp =
-                _animationCurves.GetTimeAtKey((nodeIndex - 1));
-
-            // Calculate time between last and penultimate nodes.
-            float deltaTime = 1 - penultimateNodeTimestamp;
-
-            // Calculate new, smaller time for the last node.
-            float newLastNodeTimestamp =
-                penultimateNodeTimestamp + (deltaTime*0.5f);
-
-            // Update point timestamp in animation curves.
-            _animationCurves.ChangePointTimestamp(
-                nodeIndex,
-                newLastNodeTimestamp);
-        }
 
         private float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;

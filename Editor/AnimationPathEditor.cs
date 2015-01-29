@@ -949,7 +949,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            script.AddNodeAuto(nodeIndex);
+            AddNodeAuto(nodeIndex);
 
             script.DistributeNodeSpeedValues();
         }
@@ -1012,5 +1012,94 @@ namespace ATP.AnimationPathTools {
             script.DistributeNodeSpeedValues();
         }
         #endregion CALLBACK HANDLERS
+        #region PRIVATE
+        public void AddNodeAuto(int nodeIndex) {
+            // If this node is the last one in the path..
+            if (nodeIndex == script.NodesNo - 1) {
+                AddNodeEnd(nodeIndex);
+            }
+            // Any other node than the last one.
+            else {
+                AddNodeBetween(nodeIndex);
+            }
+        }
+        // TODO Should receive two node indexes.
+        private void AddNodeBetween(int nodeIndex) {
+            // Timestamp of node on which was taken action.
+            float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
+            // Get timestamp of the next node.
+            float nextKeyTime = script.GetNodeTimestamp(nodeIndex + 1);
+
+            // Calculate timestamps for new key. It'll be placed exactly
+            // between the two nodes.
+            float newKeyTime =
+                currentKeyTime +
+                ((nextKeyTime - currentKeyTime) / 2);
+
+            // Add node to the animation curves.
+            script.AddNodeAtTime(newKeyTime);
+        }
+
+        private void AddNodeEnd(int nodeIndex) {
+            // Calculate position for the new node.
+            var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
+
+            // Decrease current last node timestamp to make place for the
+            // new node.
+            DecreaseNodeTimestampByHalfInterval(nodeIndex);
+
+            // Add new node to animation curves.
+            script.CreateNode(1, newNodePosition);
+        }
+
+        private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
+            // Get positions of all nodes.
+            Vector3[] nodePositions = script.GetNodePositions();
+
+            // Timestamp of node on which was taken action.
+            float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
+
+            // Timestamp of some point behind and close to the node.
+            float refTime = currentKeyTime - 0.001f;
+
+            // Create Vector3 for the reference point.
+            Vector3 refPoint = script.GetVectorAtTime(refTime);
+
+            // Calculate direction from ref. point to current node.
+            Vector3 dir = nodePositions[nodeIndex] - refPoint;
+
+            // Normalize direction.
+            dir.Normalize();
+
+            // Create vector with new node's position.
+            Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
+
+            return newNodePosition;
+        }
+
+        /// <summary>
+        /// Decrease node timestamp by half its time interval.
+        /// </summary>
+        /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
+        /// <param name="nodeIndex"></param>
+        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
+            // Get timestamp of the penultimate node.
+            float penultimateNodeTimestamp =
+                script.GetNodeTimestamp((nodeIndex - 1));
+
+            // Calculate time between last and penultimate nodes.
+            float deltaTime = 1 - penultimateNodeTimestamp;
+
+            // Calculate new, smaller time for the last node.
+            float newLastNodeTimestamp =
+                penultimateNodeTimestamp + (deltaTime * 0.5f);
+
+            // Update point timestamp in animation curves.
+            script.ChangeNodeTimestamp(
+                nodeIndex,
+                newLastNodeTimestamp);
+        }
+
+        #endregion
     }
 }

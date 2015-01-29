@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ATP.ReorderableList;
+using System;
 using System.Collections.Generic;
-using ATP.ReorderableList;
 using UnityEngine;
 
 /// Classes that allow for creation and usage of \link AnimationPath Animation
@@ -47,6 +47,7 @@ namespace ATP.AnimationPathTools {
         public const KeyCode MoveAllKey = KeyCode.H;
 
         #endregion Constants
+
         #region Fields
 
         /// <summary>
@@ -145,27 +146,27 @@ namespace ATP.AnimationPathTools {
             set { sceneControls = value; }
         }
 
-        #endregion Public Properties
+        #endregion PUBLIC PROPERTIES
 
         #region Unity Messages
 
-        void Awake() {
+        private void Awake() {
             // Load default skin.
             skin = Resources.Load("GUISkin/default") as GUISkin;
         }
 
-        void OnDrawGizmosSelected() {
+        private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
         }
 
-         void OnEnable() {
+        private void OnEnable() {
             // Initialize _curves field.
             if (_curves[0] == null) {
                 InitializeCurves();
             }
         }
 
-        void OnValidate() {
+        private void OnValidate() {
             // Sampling frequency inspector option cannot be less than 2.
             if (gizmoCurveSamplingFrequency <= 2) {
                 gizmoCurveSamplingFrequency = 2;
@@ -187,6 +188,7 @@ namespace ATP.AnimationPathTools {
                 AddNodeBetween(nodeIndex);
             }
         }
+
         public void MoveAllNodes(Vector3 moveDelta) {
             // For each node..
             for (int i = 0; i < NodesNo; i++) {
@@ -244,6 +246,7 @@ namespace ATP.AnimationPathTools {
                 ChangePointTimestamp(i, newTimestamp);
             }
         }
+
         /// <summary>
         /// Export Animation Path nodes as transforms.
         /// </summary>
@@ -255,8 +258,8 @@ namespace ATP.AnimationPathTools {
             // Points to be exported.
             List<Vector3> points;
 
-            // If exportSampling arg. is zero then export one transform for each
-            // Animation Path node.
+            // If exportSampling arg. is zero then export one transform for
+            // each Animation Path node.
             if (exportSampling == 0) {
                 // Initialize points.
                 points = new List<Vector3>(NodesNo);
@@ -372,7 +375,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="keyIndex">Node index.</param>
         public void SetNodeLinear(int keyIndex) {
-           SetPointLinear(keyIndex);
+            SetPointLinear(keyIndex);
         }
 
         /// <summary>
@@ -401,7 +404,9 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion Public Methods
+
         #region Private Methods
+
         // TODO Should receive two node indexes.
         private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
@@ -427,8 +432,8 @@ namespace ATP.AnimationPathTools {
             // Calculate position for the new node.
             var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
 
-            // Decrease current last node timestamp to make place for the
-            // new node.
+            // Decrease current last node timestamp to make place for the new
+            // node.
             DecreaseNodeTimestampByHalfInterval(nodeIndex);
 
             // Add new node to animation curves.
@@ -464,7 +469,9 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Decrease node timestamp by half its time interval.
         /// </summary>
-        /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
+        /// <remarks>
+        /// Node interval is a time betwenn this and previous node.
+        /// </remarks>
         /// <param name="nodeIndex"></param>
         // TODO Move to Editor class.
         private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
@@ -477,7 +484,7 @@ namespace ATP.AnimationPathTools {
 
             // Calculate new, smaller time for the last node.
             float newLastNodeTimestamp =
-                penultimateNodeTimestamp + (deltaTime*0.5f);
+                penultimateNodeTimestamp + (deltaTime * 0.5f);
 
             // Update point timestamp in animation curves.
             ChangePointTimestamp(
@@ -788,6 +795,7 @@ namespace ATP.AnimationPathTools {
                 curve.MoveKey(i, key);
             }
         }
+
         public void DrawGizmoCurve() {
             List<Vector3> points = SamplePathForPoints(gizmoCurveSamplingFrequency);
 
@@ -985,6 +993,7 @@ namespace ATP.AnimationPathTools {
                 _curves[i].MoveKey(nodeIndex, key);
             }
         }
+
         #endregion Private Methods
     }
 }

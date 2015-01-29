@@ -532,7 +532,7 @@ namespace ATP.AnimationPathTools {
         /// Handle all actions related to drawing speed labels.
         /// </summary>
         // TODO Remove before release.
-        private void HandleDrawingSpeedLabels() {
+        /*private void HandleDrawingSpeedLabels() {
             // Return if animation curves are not initialized or if there's not
             // enough nodes to calculate speed. TODO Replace with a call to
             // method in AnimationPath.
@@ -554,7 +554,7 @@ namespace ATP.AnimationPathTools {
                     nodePositions,
                     speedValues,
                     style);
-        }
+        }*/
 
         /// <summary>
         /// Handle drawing tangent handles.

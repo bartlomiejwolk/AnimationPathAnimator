@@ -265,7 +265,7 @@ namespace ATP.AnimationPathTools {
         /// Animation curves based on which the speed values will be
         /// calculated.
         /// </param>
-        public float[] GetSpeedValues() {
+        /*public float[] GetSpeedValues() {
             // Result array.
             float[] result = new float[NodesNo];
 
@@ -280,7 +280,7 @@ namespace ATP.AnimationPathTools {
             }
 
             return result;
-        }
+        }*/
 
         public Vector3 GetVectorAtTime(float timestamp) {
             return _animationCurves.GetVectorAtTime(timestamp);
@@ -392,7 +392,7 @@ namespace ATP.AnimationPathTools {
         /// Speed of an object that would travel between given two nodes in
         /// time that is determined by their timestamps.
         /// </returns>
-        private float CalculateNodeSpeed(
+        /*private float CalculateNodeSpeed(
             int samplingRate,
             int leftNodeIdx,
             int rightNodeIdx) {
@@ -434,7 +434,7 @@ namespace ATP.AnimationPathTools {
             float sectionSpeed = sectionDistance / sectionTime;
 
             return sectionSpeed;
-        }
+        }*/
 
         /// <summary>
         /// Calculate path length using shortest path between each node.

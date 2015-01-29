@@ -47,13 +47,6 @@ namespace ATP.AnimationPathTools {
         public const KeyCode MoveAllKey = KeyCode.H;
 
         #endregion Constants
-
-        //[SerializeField]
-        //private AnimationPathGizmos animationPathGizmos;
-
-        //[SerializeField]
-        //private List<AnimationPathNode> nodes = new List<AnimationPathNode>();
-
         #region Fields
 
         /// <summary>
@@ -81,6 +74,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
+        // TODO Rename to curveSamplingFrequency;
         [SerializeField]
         private int gizmoCurveSamplingFrequency = 20;
 
@@ -612,10 +606,8 @@ namespace ATP.AnimationPathTools {
             int firstNodeIndex,
             int secondNodeIndex) {
 
-            Vector3 firstNodePosition =
-                GetVectorAtKey(firstNodeIndex);
-            Vector3 secondNodePosition =
-                GetVectorAtKey(secondNodeIndex);
+            Vector3 firstNodePosition = GetVectorAtKey(firstNodeIndex);
+            Vector3 secondNodePosition = GetVectorAtKey(secondNodeIndex);
 
             float sectionLength =
                 Vector3.Distance(firstNodePosition, secondNodePosition);
@@ -807,9 +799,8 @@ namespace ATP.AnimationPathTools {
                 Gizmos.DrawLine(points[i], points[i + 1]);
             }
         }
-        #endregion Private Methods
 
-        public void AddNewPoint(float timestamp, Vector3 position) {
+        private void AddNewPoint(float timestamp, Vector3 position) {
             _curves[0].AddKey(timestamp, position.x);
             _curves[1].AddKey(timestamp, position.y);
             _curves[2].AddKey(timestamp, position.z);
@@ -823,7 +814,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="keyIndex">Index of the key to update.</param>
         /// <param name="position">New key value.</param>
         // TODO This should accept timestamp instead of index.
-        public void MovePoint(
+        private void MovePoint(
                 int keyIndex,
                 Vector3 position) {
 
@@ -843,7 +834,7 @@ namespace ATP.AnimationPathTools {
             _curves[2].MoveKey(keyIndex, keyZCopy);
         }
 
-        public void ChangePointTangents(
+        private void ChangePointTangents(
                 int nodeIndex,
                 Vector3 tangentDelta) {
 
@@ -867,7 +858,7 @@ namespace ATP.AnimationPathTools {
             _curves[2].MoveKey(nodeIndex, keyZCopy);
         }
 
-        public void ChangePointTimestamp(
+        private void ChangePointTimestamp(
             int keyIndex,
             float newTimestamp) {
 
@@ -884,11 +875,11 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public float GetTimeAtKey(int keyIndex) {
+        private float GetTimeAtKey(int keyIndex) {
             return _curves[0].keys[keyIndex].time;
         }
 
-        public Vector3 GetVectorAtKey(int keyIndex) {
+        private Vector3 GetVectorAtKey(int keyIndex) {
             float x = _curves[0].keys[keyIndex].value;
             float y = _curves[1].keys[keyIndex].value;
             float z = _curves[2].keys[keyIndex].value;
@@ -919,7 +910,7 @@ namespace ATP.AnimationPathTools {
             return pos;
         }
 
-        public void RemovePoint(int nodeIndex) {
+        private void RemovePoint(int nodeIndex) {
             // For each animation curve..
             for (int i = 0; i < 3; i++) {
                 // Remove node keys.
@@ -932,7 +923,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="nodeIndex">Point index.</param>
         /// <param name="tangentWeight">Tangent weight.</param>
-        public void SmoothPointTangents(int nodeIndex, float tangentWeight) {
+        private void SmoothPointTangents(int nodeIndex, float tangentWeight) {
             // For each curve..
             for (int i = 0; i < _curves.Length; i++) {
                 // Smooth tangents.
@@ -949,7 +940,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void SetPointLinear(int nodeIndex) {
+        private void SetPointLinear(int nodeIndex) {
             for (int i = 0; i < 3; ++i) {
                 float intangent = 0;
                 float outtangent = 0;
@@ -994,5 +985,6 @@ namespace ATP.AnimationPathTools {
                 _curves[i].MoveKey(nodeIndex, key);
             }
         }
+        #endregion Private Methods
     }
 }

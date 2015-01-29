@@ -196,6 +196,7 @@ namespace ATP.AnimationPathTools {
 
         #region Public Methods
 
+        // TODO Move to Editor class.
         public void AddNodeAuto(int nodeIndex) {
             // If this node is the last one in the path..
             if (nodeIndex == NodesNo - 1) {
@@ -269,6 +270,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="exportSampling">
         /// Amount of result transforms for one meter of Animation Path.
         /// </param>
+        // TODO Move to Editor class.
         public void ExportNodes(int exportSampling) {
             // Points to be exported.
             List<Vector3> points;
@@ -370,6 +372,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
+        // TODO Move to Editor class and remove param.
         public void ResetPath(Vector3 worldPoint) {
             // Number of nodes to remove.
             int noOfNodesToRemove = NodesNo;
@@ -423,6 +426,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion Public Methods
         #region Private Methods
+        // TODO Should receive two node indexes.
         private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = _animationCurves.GetTimeAtKey(nodeIndex);
@@ -442,6 +446,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Move to Editor class.
         private void AddNodeEnd(int nodeIndex) {
             // Calculate position for the new node.
             var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
@@ -454,6 +459,7 @@ namespace ATP.AnimationPathTools {
             _animationCurves.AddNewPoint(1, newNodePosition);
         }
 
+        // TODO Move to Editor class.
         private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
             // Get positions of all nodes.
             Vector3[] nodePositions = GetNodePositions();
@@ -484,6 +490,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
         /// <param name="nodeIndex"></param>
+        // TODO Move to Editor class.
         private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
             // Get timestamp of the penultimate node.
             float penultimateNodeTimestamp =
@@ -501,7 +508,6 @@ namespace ATP.AnimationPathTools {
                 nodeIndex,
                 newLastNodeTimestamp);
         }
-
 
         private float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;
@@ -651,9 +657,7 @@ namespace ATP.AnimationPathTools {
             List<Vector3> points = new List<Vector3>(NodesNo);
 
             // Call reference overload.
-            SamplePathForPoints(
-                 samplingFrequency,
-                 points);
+            SamplePathForPoints(samplingFrequency, points);
 
             return points;
         }

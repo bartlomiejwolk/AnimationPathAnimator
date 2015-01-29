@@ -63,12 +63,6 @@ namespace ATP.AnimationPathTools {
 
 			// Save changes
 			serializedObject.ApplyModifiedProperties();
-
-			// Update animation each time sth. happens on the scene.
-			//
-			// It allows camera preview update when moving animation path
-			// nodes.
-			script.Update();
 		}
 
         /// <summary>

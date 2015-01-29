@@ -97,7 +97,7 @@ namespace ATP.AnimationPathTools {
 			}
 		}
 
-		public void Update () {
+		void Update () {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
                 // Increase animation time.

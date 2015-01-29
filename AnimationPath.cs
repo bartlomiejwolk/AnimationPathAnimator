@@ -163,6 +163,13 @@ namespace ATP.AnimationPathTools {
             get { return _animationCurves; }
         }
 
+        /// <summary>
+        /// How many points should be drawn for one meter of a gizmo curve.
+        /// </summary>
+        public int GizmoCurveSamplingFrequency {
+            get { return gizmoCurveSamplingFrequency; }
+        }
+
         #endregion Public Properties
 
         #region Unity Messages
@@ -223,36 +230,6 @@ namespace ATP.AnimationPathTools {
             _animationCurves.ChangePointTimestamp(keyIndex, newTimestamp);
         }
 
-        public void DistributeNodeSpeedValues() {
-            float pathLength = CalculatePathCurvedLength(
-                gizmoCurveSamplingFrequency);
-
-            // Calculate time for one meter of curve length.
-            float timeForMeter = 1 / pathLength;
-
-            // Helper variable.
-            float prevTimestamp = 0;
-
-            for (var i = 1; i < NodesNo - 1; i++) {
-                // Calculate section curved length.
-                float sectionLength = CalculateSectionCurvedLength(
-                    i - 1,
-                    i,
-                    gizmoCurveSamplingFrequency);
-
-                // Calculate time interval.
-                float sectionTimeInterval = sectionLength * timeForMeter;
-
-                // Calculate new timestamp.
-                float newTimestamp = prevTimestamp + sectionTimeInterval;
-
-                // Update previous timestamp.
-                prevTimestamp = newTimestamp;
-
-                // Add timestamp to the list.
-                _animationCurves.ChangePointTimestamp(i, newTimestamp);
-            }
-        }
         /// <summary>
         /// Export Animation Path nodes as transforms.
         /// </summary>
@@ -429,7 +406,7 @@ namespace ATP.AnimationPathTools {
         #endregion Public Methods
         #region Private Methods
 
-        private float CalculatePathCurvedLength(int samplingFrequency) {
+        public float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;
 
             for (var i = 0; i < NodesNo - 1; i++) {
@@ -442,7 +419,7 @@ namespace ATP.AnimationPathTools {
             return pathLength;
         }
 
-        private float CalculateSectionCurvedLength(
+        public float CalculateSectionCurvedLength(
                     int firstNodeIndex,
                     int secondNodeIndex,
                     int samplingFrequency) {

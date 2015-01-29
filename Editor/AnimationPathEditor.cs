@@ -190,7 +190,7 @@ namespace ATP.AnimationPathTools {
                 HandleUndo();
 
                 script.SetNodesLinear();
-                script.DistributeNodeSpeedValues();
+                DistributeNodeSpeedValues();
             }
             if (GUILayout.Button(new GUIContent(
                            "Smooth",
@@ -198,7 +198,7 @@ namespace ATP.AnimationPathTools {
 
                 HandleUndo();
                 script.SmoothNodesTangents(tangentWeight.floatValue);
-                script.DistributeNodeSpeedValues();
+                DistributeNodeSpeedValues();
             }
             if (GUILayout.Button(new GUIContent(
                 "Reset",
@@ -951,7 +951,7 @@ namespace ATP.AnimationPathTools {
             // Add a new node.
             AddNodeAuto(nodeIndex);
 
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
 
         protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
@@ -961,7 +961,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.SetNodeLinear(nodeIndex);
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
 
         protected virtual void DrawMovementHandlesCallbackHandler(
@@ -979,7 +979,7 @@ namespace ATP.AnimationPathTools {
             // Move single node.
             else {
                 script.MoveNodeToPosition(movedNodeIndex, position);
-                script.DistributeNodeSpeedValues();
+                DistributeNodeSpeedValues();
             }
         }
 
@@ -988,7 +988,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.RemoveNode(nodeIndex);
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -999,7 +999,7 @@ namespace ATP.AnimationPathTools {
                     index,
                     tangentWeight.floatValue);
 
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
         protected virtual void DrawTangentHandlesCallbackHandler(
                     int index,
@@ -1009,7 +1009,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
         #endregion CALLBACK HANDLERS
         #region PRIVATE
@@ -1100,6 +1100,36 @@ namespace ATP.AnimationPathTools {
                 newLastNodeTimestamp);
         }
 
+        public void DistributeNodeSpeedValues() {
+            float pathLength = script.CalculatePathCurvedLength(
+                script.GizmoCurveSamplingFrequency);
+
+            // Calculate time for one meter of curve length.
+            float timeForMeter = 1 / pathLength;
+
+            // Helper variable.
+            float prevTimestamp = 0;
+
+            for (var i = 1; i < script.NodesNo - 1; i++) {
+                // Calculate section curved length.
+                float sectionLength = script.CalculateSectionCurvedLength(
+                    i - 1,
+                    i,
+                    script.GizmoCurveSamplingFrequency);
+
+                // Calculate time interval.
+                float sectionTimeInterval = sectionLength * timeForMeter;
+
+                // Calculate new timestamp.
+                float newTimestamp = prevTimestamp + sectionTimeInterval;
+
+                // Update previous timestamp.
+                prevTimestamp = newTimestamp;
+
+                // Add timestamp to the list.
+                script.ChangeNodeTimestamp(i, newTimestamp);
+            }
+        }
         #endregion
     }
 }

@@ -38,6 +38,7 @@ namespace ATP.AnimationPathTools {
             set { _curves[i] = value; }
         }
 
+        // TODO Rename to CreateNewPoint().
         public void AddNewPoint(float timestamp, Vector3 position) {
             _curves[0].AddKey(timestamp, position.x);
             _curves[1].AddKey(timestamp, position.y);
@@ -54,6 +55,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="curves">Animation curves.</param>
         /// <param name="keyIndex">Index of the key to update.</param>
         /// <param name="position">New key value.</param>
+        // TODO Rename to MovePointToPosition().
         // TODO This should accept timestamp instead of index.
         public void MovePoint(
                 int keyIndex,
@@ -250,6 +252,13 @@ namespace ATP.AnimationPathTools {
 
             // Fire event.
             OnCurvesChanged();
+        }
+
+        public void AddNodeAtTime(float timestamp) {
+             for (int j = 0; j < 3; j++) {
+                float newKeyValue = _curves[j].Evaluate(timestamp);
+                _curves[j].AddKey(timestamp, newKeyValue);
+            }           
         }
     }
 }

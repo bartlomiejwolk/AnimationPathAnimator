@@ -163,6 +163,13 @@ namespace ATP.AnimationPathTools {
             get { return _animationCurves; }
         }
 
+        /// <summary>
+        /// How many points should be drawn for one meter of a gizmo curve.
+        /// </summary>
+        public int GizmoCurveSamplingFrequency {
+            get { return gizmoCurveSamplingFrequency; }
+        }
+
         #endregion Public Properties
 
         #region Unity Messages
@@ -195,17 +202,7 @@ namespace ATP.AnimationPathTools {
 
         #region Public Methods
 
-        // TODO Move to Editor class.
-        public void AddNodeAuto(int nodeIndex) {
-            // If this node is the last one in the path..
-            if (nodeIndex == NodesNo - 1) {
-                AddNodeEnd(nodeIndex);
-            }
-            // Any other node than the last one.
-            else {
-                AddNodeBetween(nodeIndex);
-            }
-        }
+
         public void MoveAllNodes(Vector3 moveDelta) {
             // For each node..
             for (int i = 0; i < NodesNo; i++) {
@@ -231,81 +228,6 @@ namespace ATP.AnimationPathTools {
                             float newTimestamp) {
 
             _animationCurves.ChangePointTimestamp(keyIndex, newTimestamp);
-        }
-
-        public void DistributeNodeSpeedValues() {
-            float pathLength = CalculatePathCurvedLength(
-                gizmoCurveSamplingFrequency);
-
-            // Calculate time for one meter of curve length.
-            float timeForMeter = 1 / pathLength;
-
-            // Helper variable.
-            float prevTimestamp = 0;
-
-            for (var i = 1; i < NodesNo - 1; i++) {
-                // Calculate section curved length.
-                float sectionLength = CalculateSectionCurvedLength(
-                    i - 1,
-                    i,
-                    gizmoCurveSamplingFrequency);
-
-                // Calculate time interval.
-                float sectionTimeInterval = sectionLength * timeForMeter;
-
-                // Calculate new timestamp.
-                float newTimestamp = prevTimestamp + sectionTimeInterval;
-
-                // Update previous timestamp.
-                prevTimestamp = newTimestamp;
-
-                // Add timestamp to the list.
-                _animationCurves.ChangePointTimestamp(i, newTimestamp);
-            }
-        }
-        /// <summary>
-        /// Export Animation Path nodes as transforms.
-        /// </summary>
-        /// <param name="exportSampling">
-        /// Amount of result transforms for one meter of Animation Path.
-        /// </param>
-        // TODO Move to Editor class.
-        public void ExportNodes(int exportSampling) {
-            // Points to be exported.
-            List<Vector3> points;
-
-            // If exportSampling arg. is zero then export one transform for each
-            // Animation Path node.
-            if (exportSampling == 0) {
-                // Initialize points.
-                points = new List<Vector3>(NodesNo);
-
-                // For each node in the path..
-                for (int i = 0; i < NodesNo; i++) {
-                    // Get it 3d position.
-                    points[i] = GetNodePosition(i);
-                }
-            }
-            // exportSampling not zero..
-            else {
-                // Initialize points array with nodes to export.
-                points = SamplePathForPoints(exportSampling);
-            }
-
-            // Create parent GO.
-            GameObject exportedPath = new GameObject("exported_path");
-
-            // Create child GOs.
-            for (int i = 0; i < points.Count; i++) {
-                // Create child GO.
-                GameObject node = new GameObject("Node " + i);
-
-                // Move node under the path GO.
-                node.transform.parent = exportedPath.transform;
-
-                // Assign node local position.
-                node.transform.localPosition = points[i];
-            }
         }
 
         public Vector3 GetNodePosition(int nodeIndex) {
@@ -343,7 +265,7 @@ namespace ATP.AnimationPathTools {
         /// Animation curves based on which the speed values will be
         /// calculated.
         /// </param>
-        public float[] GetSpeedValues() {
+        /*public float[] GetSpeedValues() {
             // Result array.
             float[] result = new float[NodesNo];
 
@@ -358,7 +280,7 @@ namespace ATP.AnimationPathTools {
             }
 
             return result;
-        }
+        }*/
 
         public Vector3 GetVectorAtTime(float timestamp) {
             return _animationCurves.GetVectorAtTime(timestamp);
@@ -366,28 +288,6 @@ namespace ATP.AnimationPathTools {
 
         public void RemoveNode(int nodeIndex) {
             _animationCurves.RemovePoint(nodeIndex);
-        }
-
-        /// <summary>
-        /// Remove all keys in animation curves and create new, default ones.
-        /// </summary>
-        // TODO Move to Editor class and remove param.
-        public void ResetPath(Vector3 worldPoint) {
-            // Number of nodes to remove.
-            int noOfNodesToRemove = NodesNo;
-
-            // Remove all nodes.
-            for (var i = 0; i < noOfNodesToRemove; i++) {
-                // NOTE After each removal, next node gets index 0.
-                _animationCurves.RemovePoint(0);
-            }
-
-            // Calculate end point.
-            Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
-
-            // Add beginning and end points.
-            _animationCurves.AddNewPoint(0, worldPoint);
-            _animationCurves.AddNewPoint(1, endPoint);
         }
 
         /// <summary>
@@ -423,92 +323,23 @@ namespace ATP.AnimationPathTools {
             _animationCurves.SmoothPointTangents(nodeIndex, tangentWeigth);
         }
 
+        public float GetNodeTimestamp(int nodeIndex) {
+            return _animationCurves.GetTimeAtKey(nodeIndex);
+        }
+
+        // TODO Rename to CreateNodeAtTime().
+        public void AddNodeAtTime(float timestamp) {
+            _animationCurves.AddNodeAtTime(timestamp);
+        }
+
+        public void CreateNode(float timestamp, Vector3 position) {
+            _animationCurves.AddNewPoint(1, position);
+        }
+
         #endregion Public Methods
         #region Private Methods
-        // TODO Should receive two node indexes.
-        private void AddNodeBetween(int nodeIndex) {
-            // Timestamp of node on which was taken action.
-            float currentKeyTime = _animationCurves.GetTimeAtKey(nodeIndex);
-            // Get timestamp of the next node.
-            float nextKeyTime = _animationCurves.GetTimeAtKey(nodeIndex + 1);
 
-            // Calculate timestamps for new key. It'll be placed exactly
-            // between the two nodes.
-            float newKeyTime =
-                currentKeyTime +
-                ((nextKeyTime - currentKeyTime) / 2);
-
-            // Add node to the animation curves.
-            for (int j = 0; j < 3; j++) {
-                float newKeyValue = _animationCurves[j].Evaluate(newKeyTime);
-                _animationCurves[j].AddKey(newKeyTime, newKeyValue);
-            }
-        }
-
-        // TODO Move to Editor class.
-        private void AddNodeEnd(int nodeIndex) {
-            // Calculate position for the new node.
-            var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
-
-            // Decrease current last node timestamp to make place for the
-            // new node.
-            DecreaseNodeTimestampByHalfInterval(nodeIndex);
-
-            // Add new node to animation curves.
-            _animationCurves.AddNewPoint(1, newNodePosition);
-        }
-
-        // TODO Move to Editor class.
-        private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
-            // Get positions of all nodes.
-            Vector3[] nodePositions = GetNodePositions();
-
-            // Timestamp of node on which was taken action.
-            float currentKeyTime = _animationCurves.GetTimeAtKey(nodeIndex);
-
-            // Timestamp of some point behind and close to the node.
-            float refTime = currentKeyTime - 0.001f;
-
-            // Create Vector3 for the reference point.
-            Vector3 refPoint = _animationCurves.GetVectorAtTime(refTime);
-
-            // Calculate direction from ref. point to current node.
-            Vector3 dir = nodePositions[nodeIndex] - refPoint;
-
-            // Normalize direction.
-            dir.Normalize();
-
-            // Create vector with new node's position.
-            Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
-
-            return newNodePosition;
-        }
-
-        /// <summary>
-        /// Decrease node timestamp by half its time interval.
-        /// </summary>
-        /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
-        /// <param name="nodeIndex"></param>
-        // TODO Move to Editor class.
-        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
-            // Get timestamp of the penultimate node.
-            float penultimateNodeTimestamp =
-                _animationCurves.GetTimeAtKey((nodeIndex - 1));
-
-            // Calculate time between last and penultimate nodes.
-            float deltaTime = 1 - penultimateNodeTimestamp;
-
-            // Calculate new, smaller time for the last node.
-            float newLastNodeTimestamp =
-                penultimateNodeTimestamp + (deltaTime*0.5f);
-
-            // Update point timestamp in animation curves.
-            _animationCurves.ChangePointTimestamp(
-                nodeIndex,
-                newLastNodeTimestamp);
-        }
-
-        private float CalculatePathCurvedLength(int samplingFrequency) {
+        public float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;
 
             for (var i = 0; i < NodesNo - 1; i++) {
@@ -521,7 +352,7 @@ namespace ATP.AnimationPathTools {
             return pathLength;
         }
 
-        private float CalculateSectionCurvedLength(
+        public float CalculateSectionCurvedLength(
                     int firstNodeIndex,
                     int secondNodeIndex,
                     int samplingFrequency) {
@@ -561,7 +392,7 @@ namespace ATP.AnimationPathTools {
         /// Speed of an object that would travel between given two nodes in
         /// time that is determined by their timestamps.
         /// </returns>
-        private float CalculateNodeSpeed(
+        /*private float CalculateNodeSpeed(
             int samplingRate,
             int leftNodeIdx,
             int rightNodeIdx) {
@@ -603,7 +434,7 @@ namespace ATP.AnimationPathTools {
             float sectionSpeed = sectionDistance / sectionTime;
 
             return sectionSpeed;
-        }
+        }*/
 
         /// <summary>
         /// Calculate path length using shortest path between each node.
@@ -651,7 +482,7 @@ namespace ATP.AnimationPathTools {
         /// Length of the Animation Path in meters.
         /// </param>
         /// <returns>Array of 3d points.</returns>
-        private List<Vector3> SamplePathForPoints(int samplingFrequency) {
+        public List<Vector3> SamplePathForPoints(int samplingFrequency) {
             // TODO Why initialise with nodes number?!
             List<Vector3> points = new List<Vector3>(NodesNo);
 

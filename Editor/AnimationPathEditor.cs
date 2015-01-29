@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ATP.ReorderableList;
 using UnityEditor;
 using UnityEngine;
@@ -190,7 +191,7 @@ namespace ATP.AnimationPathTools {
                 HandleUndo();
 
                 script.SetNodesLinear();
-                script.DistributeNodeSpeedValues();
+                DistributeNodeSpeedValues();
             }
             if (GUILayout.Button(new GUIContent(
                            "Smooth",
@@ -198,7 +199,7 @@ namespace ATP.AnimationPathTools {
 
                 HandleUndo();
                 script.SmoothNodesTangents(tangentWeight.floatValue);
-                script.DistributeNodeSpeedValues();
+                DistributeNodeSpeedValues();
             }
             if (GUILayout.Button(new GUIContent(
                 "Reset",
@@ -214,7 +215,7 @@ namespace ATP.AnimationPathTools {
                     + sceneCamera.transform.forward * 7;
 
                 // Reset curves to its default state.
-                script.ResetPath(worldPoint);
+                ResetPath(worldPoint);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -268,7 +269,7 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
 
             if (GUILayout.Button("Export Nodes")) {
-                script.ExportNodes(exportSamplingFrequency.intValue);
+                ExportNodes(exportSamplingFrequency.intValue);
             }
 
             EditorGUILayout.Space();
@@ -531,7 +532,7 @@ namespace ATP.AnimationPathTools {
         /// Handle all actions related to drawing speed labels.
         /// </summary>
         // TODO Remove before release.
-        private void HandleDrawingSpeedLabels() {
+        /*private void HandleDrawingSpeedLabels() {
             // Return if animation curves are not initialized or if there's not
             // enough nodes to calculate speed. TODO Replace with a call to
             // method in AnimationPath.
@@ -553,7 +554,7 @@ namespace ATP.AnimationPathTools {
                     nodePositions,
                     speedValues,
                     style);
-        }
+        }*/
 
         /// <summary>
         /// Handle drawing tangent handles.
@@ -949,9 +950,9 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            script.AddNodeAuto(nodeIndex);
+            AddNodeAuto(nodeIndex);
 
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
 
         protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
@@ -961,7 +962,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.SetNodeLinear(nodeIndex);
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
 
         protected virtual void DrawMovementHandlesCallbackHandler(
@@ -979,7 +980,7 @@ namespace ATP.AnimationPathTools {
             // Move single node.
             else {
                 script.MoveNodeToPosition(movedNodeIndex, position);
-                script.DistributeNodeSpeedValues();
+                DistributeNodeSpeedValues();
             }
         }
 
@@ -988,7 +989,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.RemoveNode(nodeIndex);
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -999,7 +1000,7 @@ namespace ATP.AnimationPathTools {
                     index,
                     tangentWeight.floatValue);
 
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
         protected virtual void DrawTangentHandlesCallbackHandler(
                     int index,
@@ -1009,8 +1010,193 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
-            script.DistributeNodeSpeedValues();
+            DistributeNodeSpeedValues();
         }
         #endregion CALLBACK HANDLERS
+        #region PRIVATE
+        public void AddNodeAuto(int nodeIndex) {
+            // If this node is the last one in the path..
+            if (nodeIndex == script.NodesNo - 1) {
+                AddNodeEnd(nodeIndex);
+            }
+            // Any other node than the last one.
+            else {
+                AddNodeBetween(nodeIndex);
+            }
+        }
+        // TODO Should receive two node indexes.
+        private void AddNodeBetween(int nodeIndex) {
+            // Timestamp of node on which was taken action.
+            float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
+            // Get timestamp of the next node.
+            float nextKeyTime = script.GetNodeTimestamp(nodeIndex + 1);
+
+            // Calculate timestamps for new key. It'll be placed exactly
+            // between the two nodes.
+            float newKeyTime =
+                currentKeyTime +
+                ((nextKeyTime - currentKeyTime) / 2);
+
+            // Add node to the animation curves.
+            script.AddNodeAtTime(newKeyTime);
+        }
+
+        private void AddNodeEnd(int nodeIndex) {
+            // Calculate position for the new node.
+            var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
+
+            // Decrease current last node timestamp to make place for the
+            // new node.
+            DecreaseNodeTimestampByHalfInterval(nodeIndex);
+
+            // Add new node to animation curves.
+            script.CreateNode(1, newNodePosition);
+        }
+
+        private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
+            // Get positions of all nodes.
+            Vector3[] nodePositions = script.GetNodePositions();
+
+            // Timestamp of node on which was taken action.
+            float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
+
+            // Timestamp of some point behind and close to the node.
+            float refTime = currentKeyTime - 0.001f;
+
+            // Create Vector3 for the reference point.
+            Vector3 refPoint = script.GetVectorAtTime(refTime);
+
+            // Calculate direction from ref. point to current node.
+            Vector3 dir = nodePositions[nodeIndex] - refPoint;
+
+            // Normalize direction.
+            dir.Normalize();
+
+            // Create vector with new node's position.
+            Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
+
+            return newNodePosition;
+        }
+
+        /// <summary>
+        /// Decrease node timestamp by half its time interval.
+        /// </summary>
+        /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
+        /// <param name="nodeIndex"></param>
+        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
+            // Get timestamp of the penultimate node.
+            float penultimateNodeTimestamp =
+                script.GetNodeTimestamp((nodeIndex - 1));
+
+            // Calculate time between last and penultimate nodes.
+            float deltaTime = 1 - penultimateNodeTimestamp;
+
+            // Calculate new, smaller time for the last node.
+            float newLastNodeTimestamp =
+                penultimateNodeTimestamp + (deltaTime * 0.5f);
+
+            // Update point timestamp in animation curves.
+            script.ChangeNodeTimestamp(
+                nodeIndex,
+                newLastNodeTimestamp);
+        }
+
+        private void DistributeNodeSpeedValues() {
+            float pathLength = script.CalculatePathCurvedLength(
+                script.GizmoCurveSamplingFrequency);
+
+            // Calculate time for one meter of curve length.
+            float timeForMeter = 1 / pathLength;
+
+            // Helper variable.
+            float prevTimestamp = 0;
+
+            for (var i = 1; i < script.NodesNo - 1; i++) {
+                // Calculate section curved length.
+                float sectionLength = script.CalculateSectionCurvedLength(
+                    i - 1,
+                    i,
+                    script.GizmoCurveSamplingFrequency);
+
+                // Calculate time interval.
+                float sectionTimeInterval = sectionLength * timeForMeter;
+
+                // Calculate new timestamp.
+                float newTimestamp = prevTimestamp + sectionTimeInterval;
+
+                // Update previous timestamp.
+                prevTimestamp = newTimestamp;
+
+                // Add timestamp to the list.
+                script.ChangeNodeTimestamp(i, newTimestamp);
+            }
+        }
+
+        /// <summary>
+        /// Export Animation Path nodes as transforms.
+        /// </summary>
+        /// <param name="exportSampling">
+        /// Amount of result transforms for one meter of Animation Path.
+        /// </param>
+        private void ExportNodes(int exportSampling) {
+            // Points to be exported.
+            List<Vector3> points;
+
+            // If exportSampling arg. is zero then export one transform for each
+            // Animation Path node.
+            if (exportSampling == 0) {
+                // Initialize points.
+                points = new List<Vector3>(script.NodesNo);
+
+                // For each node in the path..
+                for (int i = 0; i < script.NodesNo; i++) {
+                    // Get it 3d position.
+                    points[i] = script.GetNodePosition(i);
+                }
+            }
+            // exportSampling not zero..
+            else {
+                // Initialize points array with nodes to export.
+                points = script.SamplePathForPoints(exportSampling);
+            }
+
+            // Create parent GO.
+            GameObject exportedPath = new GameObject("exported_path");
+
+            // Create child GOs.
+            for (int i = 0; i < points.Count; i++) {
+                // Create child GO.
+                GameObject node = new GameObject("Node " + i);
+
+                // Move node under the path GO.
+                node.transform.parent = exportedPath.transform;
+
+                // Assign node local position.
+                node.transform.localPosition = points[i];
+            }
+        }
+
+        /// <summary>
+        /// Remove all keys in animation curves and create new, default ones.
+        /// </summary>
+        private void ResetPath(Vector3 worldPoint) {
+            // Number of nodes to remove.
+            int noOfNodesToRemove = script.NodesNo;
+
+            // Remove all nodes.
+            for (var i = 0; i < noOfNodesToRemove; i++) {
+                // NOTE After each removal, next node gets index 0.
+                script.RemoveNode(0);
+            }
+
+            // Calculate end point.
+            Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
+
+            // Add beginning and end points.
+            script.CreateNode(0, worldPoint);
+            script.CreateNode(1, endPoint);
+        }
+
+        #endregion
     }
 }

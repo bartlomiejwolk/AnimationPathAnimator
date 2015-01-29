@@ -1101,7 +1101,7 @@ namespace ATP.AnimationPathTools {
                 newLastNodeTimestamp);
         }
 
-        public void DistributeNodeSpeedValues() {
+        private void DistributeNodeSpeedValues() {
             float pathLength = script.CalculatePathCurvedLength(
                 script.GizmoCurveSamplingFrequency);
 
@@ -1138,7 +1138,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="exportSampling">
         /// Amount of result transforms for one meter of Animation Path.
         /// </param>
-        public void ExportNodes(int exportSampling) {
+        private void ExportNodes(int exportSampling) {
             // Points to be exported.
             List<Vector3> points;
 
@@ -1179,7 +1179,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        public void ResetPath(Vector3 worldPoint) {
+        private void ResetPath(Vector3 worldPoint) {
             // Number of nodes to remove.
             int noOfNodesToRemove = script.NodesNo;
 

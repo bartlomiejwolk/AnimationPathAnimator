@@ -291,28 +291,6 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Remove all keys in animation curves and create new, default ones.
-        /// </summary>
-        // TODO Move to Editor class and remove param.
-        public void ResetPath(Vector3 worldPoint) {
-            // Number of nodes to remove.
-            int noOfNodesToRemove = NodesNo;
-
-            // Remove all nodes.
-            for (var i = 0; i < noOfNodesToRemove; i++) {
-                // NOTE After each removal, next node gets index 0.
-                _animationCurves.RemovePoint(0);
-            }
-
-            // Calculate end point.
-            Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
-
-            // Add beginning and end points.
-            _animationCurves.AddNewPoint(0, worldPoint);
-            _animationCurves.AddNewPoint(1, endPoint);
-        }
-
-        /// <summary>
         /// Set tangent mode for a single node to linear.
         /// </summary>
         /// <param name="keyIndex">Node index.</param>

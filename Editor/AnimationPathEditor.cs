@@ -215,7 +215,7 @@ namespace ATP.AnimationPathTools {
                     + sceneCamera.transform.forward * 7;
 
                 // Reset curves to its default state.
-                script.ResetPath(worldPoint);
+                ResetPath(worldPoint);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -1174,6 +1174,27 @@ namespace ATP.AnimationPathTools {
                 // Assign node local position.
                 node.transform.localPosition = points[i];
             }
+        }
+
+        /// <summary>
+        /// Remove all keys in animation curves and create new, default ones.
+        /// </summary>
+        public void ResetPath(Vector3 worldPoint) {
+            // Number of nodes to remove.
+            int noOfNodesToRemove = script.NodesNo;
+
+            // Remove all nodes.
+            for (var i = 0; i < noOfNodesToRemove; i++) {
+                // NOTE After each removal, next node gets index 0.
+                script.RemoveNode(0);
+            }
+
+            // Calculate end point.
+            Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
+
+            // Add beginning and end points.
+            script.CreateNode(0, worldPoint);
+            script.CreateNode(1, endPoint);
         }
 
         #endregion

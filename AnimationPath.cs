@@ -230,51 +230,6 @@ namespace ATP.AnimationPathTools {
             _animationCurves.ChangePointTimestamp(keyIndex, newTimestamp);
         }
 
-        /// <summary>
-        /// Export Animation Path nodes as transforms.
-        /// </summary>
-        /// <param name="exportSampling">
-        /// Amount of result transforms for one meter of Animation Path.
-        /// </param>
-        // TODO Move to Editor class.
-        public void ExportNodes(int exportSampling) {
-            // Points to be exported.
-            List<Vector3> points;
-
-            // If exportSampling arg. is zero then export one transform for each
-            // Animation Path node.
-            if (exportSampling == 0) {
-                // Initialize points.
-                points = new List<Vector3>(NodesNo);
-
-                // For each node in the path..
-                for (int i = 0; i < NodesNo; i++) {
-                    // Get it 3d position.
-                    points[i] = GetNodePosition(i);
-                }
-            }
-            // exportSampling not zero..
-            else {
-                // Initialize points array with nodes to export.
-                points = SamplePathForPoints(exportSampling);
-            }
-
-            // Create parent GO.
-            GameObject exportedPath = new GameObject("exported_path");
-
-            // Create child GOs.
-            for (int i = 0; i < points.Count; i++) {
-                // Create child GO.
-                GameObject node = new GameObject("Node " + i);
-
-                // Move node under the path GO.
-                node.transform.parent = exportedPath.transform;
-
-                // Assign node local position.
-                node.transform.localPosition = points[i];
-            }
-        }
-
         public Vector3 GetNodePosition(int nodeIndex) {
             return _animationCurves.GetVectorAtKey(nodeIndex);
         }
@@ -549,7 +504,7 @@ namespace ATP.AnimationPathTools {
         /// Length of the Animation Path in meters.
         /// </param>
         /// <returns>Array of 3d points.</returns>
-        private List<Vector3> SamplePathForPoints(int samplingFrequency) {
+        public List<Vector3> SamplePathForPoints(int samplingFrequency) {
             // TODO Why initialise with nodes number?!
             List<Vector3> points = new List<Vector3>(NodesNo);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ATP.ReorderableList;
 using UnityEditor;
 using UnityEngine;
@@ -268,7 +269,7 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
 
             if (GUILayout.Button("Export Nodes")) {
-                script.ExportNodes(exportSamplingFrequency.intValue);
+                ExportNodes(exportSamplingFrequency.intValue);
             }
 
             EditorGUILayout.Space();
@@ -1130,6 +1131,51 @@ namespace ATP.AnimationPathTools {
                 script.ChangeNodeTimestamp(i, newTimestamp);
             }
         }
+
+        /// <summary>
+        /// Export Animation Path nodes as transforms.
+        /// </summary>
+        /// <param name="exportSampling">
+        /// Amount of result transforms for one meter of Animation Path.
+        /// </param>
+        public void ExportNodes(int exportSampling) {
+            // Points to be exported.
+            List<Vector3> points;
+
+            // If exportSampling arg. is zero then export one transform for each
+            // Animation Path node.
+            if (exportSampling == 0) {
+                // Initialize points.
+                points = new List<Vector3>(script.NodesNo);
+
+                // For each node in the path..
+                for (int i = 0; i < script.NodesNo; i++) {
+                    // Get it 3d position.
+                    points[i] = script.GetNodePosition(i);
+                }
+            }
+            // exportSampling not zero..
+            else {
+                // Initialize points array with nodes to export.
+                points = script.SamplePathForPoints(exportSampling);
+            }
+
+            // Create parent GO.
+            GameObject exportedPath = new GameObject("exported_path");
+
+            // Create child GOs.
+            for (int i = 0; i < points.Count; i++) {
+                // Create child GO.
+                GameObject node = new GameObject("Node " + i);
+
+                // Move node under the path GO.
+                node.transform.parent = exportedPath.transform;
+
+                // Assign node local position.
+                node.transform.localPosition = points[i];
+            }
+        }
+
         #endregion
     }
 }

@@ -25,12 +25,6 @@ namespace ATP.AnimationPathTools {
         #region Constants
 
         /// <summary>
-        /// Animation path sampling rate used to calculate speed between two
-        /// nodes.
-        /// </summary>
-        private const int SpeedSampling = 10;
-
-        /// <summary>
         /// Key shortcut to enable handles mode.
         /// </summary>
         /// <remarks>
@@ -46,6 +40,11 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         public const KeyCode MoveAllKey = KeyCode.H;
 
+        /// <summary>
+        /// Animation path sampling rate used to calculate speed between two
+        /// nodes.
+        /// </summary>
+        private const int SpeedSampling = 10;
         #endregion Constants
 
         #region Fields
@@ -65,6 +64,12 @@ namespace ATP.AnimationPathTools {
         #region Editor
 
         /// <summary>
+        /// If true, advenced setting in the inspector will be folded out.
+        /// </summary>
+        [SerializeField]
+        private bool advancedSettingsFoldout = false;
+
+        /// <summary>
         /// How many transforms should be created for 1 m of gizmo curve when
         /// exporting nodes to transforms.
         /// </summary>
@@ -73,11 +78,26 @@ namespace ATP.AnimationPathTools {
         private int exportSamplingFrequency = 2;
 
         /// <summary>
+        /// Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
+        /// <summary>
         /// How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
         // TODO Rename to curveSamplingFrequency;
         [SerializeField]
         private int gizmoCurveSamplingFrequency = 20;
+
+        /// <summary>
+        /// If "Move All" mode is enabled.
+        /// </summary>
+        [SerializeField]
+        private bool moveAllMode = false;
+
+        [SerializeField]
+        private bool sceneControls = true;
 
         /// <summary>
         /// Styles for multiple GUI elements.
@@ -88,57 +108,26 @@ namespace ATP.AnimationPathTools {
 #pragma warning disable 0414
 
         /// <summary>
-        /// Tangent weight used by <c>AnimationCurve.SmoothNodesTangents()</c>.
-        /// </summary>
-        [SerializeField]
-        private float tangentWeight;
-
-        /// <summary>
-        /// Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
-        /// <summary>
-        /// If true, advenced setting in the inspector will be folded out.
-        /// </summary>
-        [SerializeField]
-        private bool advancedSettingsFoldout = false;
-
-        /// <summary>
-        /// If "Move All" mode is enabled.
-        /// </summary>
-        [SerializeField]
-        private bool moveAllMode = false;
-
-        /// <summary>
         /// If enabled, on-scene handles will be use to change node's in/out
         /// tangents.
         /// </summary>
         [SerializeField]
         private bool tangentMode = false;
 
+        /// <summary>
+        /// Tangent weight used by <c>AnimationCurve.SmoothNodesTangents()</c>.
+        /// </summary>
         [SerializeField]
-        private bool sceneControls = true;
-
+        private float tangentWeight;
 #pragma warning restore 0414
 
         #endregion Editor
 
         #region PUBLIC PROPERTIES
 
-        public GUISkin Skin {
-            get { return skin; }
-        }
-
         public bool MoveAllMode {
             get { return moveAllMode; }
             set { moveAllMode = value; }
-        }
-
-        public bool TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
         }
 
         public bool SceneControls {
@@ -146,6 +135,13 @@ namespace ATP.AnimationPathTools {
             set { sceneControls = value; }
         }
 
+        public GUISkin Skin {
+            get { return skin; }
+        }
+        public bool TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
         #endregion PUBLIC PROPERTIES
 
         #region Unity Messages
@@ -187,22 +183,6 @@ namespace ATP.AnimationPathTools {
             else {
                 AddNodeBetween(nodeIndex);
             }
-        }
-
-        public void MoveAllNodes(Vector3 moveDelta) {
-            // For each node..
-            for (int i = 0; i < NodesNo; i++) {
-                // Old node position.
-                Vector3 oldPosition = GetNodePosition(i);
-                // New node position.
-                Vector3 newPosition = oldPosition + moveDelta;
-                // Update node positions.
-                MovePoint(i, newPosition);
-            }
-        }
-
-        public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
-            MovePoint(nodeIndex, position);
         }
 
         public void ChangeNodeTangents(int index, Vector3 inOutTangent) {
@@ -344,6 +324,21 @@ namespace ATP.AnimationPathTools {
             return result;
         }
 
+        public void MoveAllNodes(Vector3 moveDelta) {
+            // For each node..
+            for (int i = 0; i < NodesNo; i++) {
+                // Old node position.
+                Vector3 oldPosition = GetNodePosition(i);
+                // New node position.
+                Vector3 newPosition = oldPosition + moveDelta;
+                // Update node positions.
+                MovePoint(i, newPosition);
+            }
+        }
+
+        public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
+            MovePoint(nodeIndex, position);
+        }
         public void RemoveNode(int nodeIndex) {
             RemovePoint(nodeIndex);
         }
@@ -407,6 +402,47 @@ namespace ATP.AnimationPathTools {
 
         #region Private Methods
 
+        public void DrawGizmoCurve() {
+            List<Vector3> points = SamplePathForPoints(gizmoCurveSamplingFrequency);
+
+            if (points.Count < 3) return;
+
+            // Draw curve.
+            for (int i = 0; i < points.Count - 1; i++) {
+                Gizmos.color = gizmoCurveColor;
+                Gizmos.DrawLine(points[i], points[i + 1]);
+            }
+        }
+
+        /// <summary>
+        /// Create 3d vector from animation curves.
+        /// </summary>
+        /// <param name="curves">
+        /// Three animation curves that make 3d path.
+        /// </param>
+        /// <param name="timestamp">
+        /// Point in time for which the 3d vector should be constructed. Time
+        /// ranges alwas from 0 to 1.
+        /// </param>
+        /// <returns>3d point at a given time.</returns>
+        public Vector3 GetVectorAtTime(float timestamp) {
+            // Get node position.
+            var x = _curves[0].Evaluate(timestamp);
+            var y = _curves[1].Evaluate(timestamp);
+            var z = _curves[2].Evaluate(timestamp);
+
+            // Construct 3d point.
+            Vector3 pos = new Vector3(x, y, z);
+
+            return pos;
+        }
+
+        private void AddNewPoint(float timestamp, Vector3 position) {
+            _curves[0].AddKey(timestamp, position.x);
+            _curves[1].AddKey(timestamp, position.y);
+            _curves[2].AddKey(timestamp, position.z);
+        }
+
         // TODO Should receive two node indexes.
         private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
@@ -464,68 +500,6 @@ namespace ATP.AnimationPathTools {
             Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
 
             return newNodePosition;
-        }
-
-        /// <summary>
-        /// Decrease node timestamp by half its time interval.
-        /// </summary>
-        /// <remarks>
-        /// Node interval is a time betwenn this and previous node.
-        /// </remarks>
-        /// <param name="nodeIndex"></param>
-        // TODO Move to Editor class.
-        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
-            // Get timestamp of the penultimate node.
-            float penultimateNodeTimestamp =
-                GetTimeAtKey((nodeIndex - 1));
-
-            // Calculate time between last and penultimate nodes.
-            float deltaTime = 1 - penultimateNodeTimestamp;
-
-            // Calculate new, smaller time for the last node.
-            float newLastNodeTimestamp =
-                penultimateNodeTimestamp + (deltaTime * 0.5f);
-
-            // Update point timestamp in animation curves.
-            ChangePointTimestamp(
-                nodeIndex,
-                newLastNodeTimestamp);
-        }
-
-        private float CalculatePathCurvedLength(int samplingFrequency) {
-            float pathLength = 0;
-
-            for (var i = 0; i < NodesNo - 1; i++) {
-                pathLength += CalculateSectionCurvedLength(
-                    i,
-                    i + 1,
-                    gizmoCurveSamplingFrequency);
-            }
-
-            return pathLength;
-        }
-
-        private float CalculateSectionCurvedLength(
-                    int firstNodeIndex,
-                    int secondNodeIndex,
-                    int samplingFrequency) {
-
-            // Sampled points.
-            List<Vector3> points;
-
-            // Result path length.
-            float pathLength = 0;
-
-            points = SampleSectionForPoints(
-                firstNodeIndex,
-                secondNodeIndex,
-                samplingFrequency);
-
-            for (var i = 1; i < points.Count; i++) {
-                pathLength += Vector3.Distance(points[i - 1], points[i]);
-            }
-
-            return pathLength;
         }
 
         /// <summary>
@@ -589,6 +563,19 @@ namespace ATP.AnimationPathTools {
             return sectionSpeed;
         }
 
+        private float CalculatePathCurvedLength(int samplingFrequency) {
+            float pathLength = 0;
+
+            for (var i = 0; i < NodesNo - 1; i++) {
+                pathLength += CalculateSectionCurvedLength(
+                    i,
+                    i + 1,
+                    gizmoCurveSamplingFrequency);
+            }
+
+            return pathLength;
+        }
+
         /// <summary>
         /// Calculate path length using shortest path between each node.
         /// </summary>
@@ -609,9 +596,32 @@ namespace ATP.AnimationPathTools {
             return dist;
         }
 
+        private float CalculateSectionCurvedLength(
+                            int firstNodeIndex,
+                            int secondNodeIndex,
+                            int samplingFrequency) {
+
+            // Sampled points.
+            List<Vector3> points;
+
+            // Result path length.
+            float pathLength = 0;
+
+            points = SampleSectionForPoints(
+                firstNodeIndex,
+                secondNodeIndex,
+                samplingFrequency);
+
+            for (var i = 1; i < points.Count; i++) {
+                pathLength += Vector3.Distance(points[i - 1], points[i]);
+            }
+
+            return pathLength;
+        }
+
         private float CalculateSectionLinearLength(
-            int firstNodeIndex,
-            int secondNodeIndex) {
+                    int firstNodeIndex,
+                    int secondNodeIndex) {
 
             Vector3 firstNodePosition = GetVectorAtKey(firstNodeIndex);
             Vector3 secondNodePosition = GetVectorAtKey(secondNodeIndex);
@@ -620,6 +630,129 @@ namespace ATP.AnimationPathTools {
                 Vector3.Distance(firstNodePosition, secondNodePosition);
 
             return sectionLength;
+        }
+
+        private void ChangePointTangents(
+                        int nodeIndex,
+                        Vector3 tangentDelta) {
+
+            // Copy keys.
+            Keyframe keyXCopy = _curves[0].keys[nodeIndex];
+            Keyframe keyYCopy = _curves[1].keys[nodeIndex];
+            Keyframe keyZCopy = _curves[2].keys[nodeIndex];
+
+            // Update keys' values.
+            keyXCopy.inTangent += tangentDelta.x;
+            keyYCopy.inTangent += tangentDelta.y;
+            keyZCopy.inTangent += tangentDelta.z;
+
+            keyXCopy.outTangent += tangentDelta.x;
+            keyYCopy.outTangent += tangentDelta.y;
+            keyZCopy.outTangent += tangentDelta.z;
+
+            // Update keys.
+            _curves[0].MoveKey(nodeIndex, keyXCopy);
+            _curves[1].MoveKey(nodeIndex, keyYCopy);
+            _curves[2].MoveKey(nodeIndex, keyZCopy);
+        }
+
+        private void ChangePointTimestamp(
+                    int keyIndex,
+                    float newTimestamp) {
+
+            // For each curve..
+            for (int i = 0; i < 3; i++) {
+                // Get copy of the key from animation curves.
+                Keyframe keyCopy = _curves[i].keys[keyIndex];
+
+                // Change key's time.
+                keyCopy.time = newTimestamp;
+
+                // Replace old key with a new one.
+                _curves[i].MoveKey(keyIndex, keyCopy);
+            }
+        }
+
+        /// <summary>
+        /// Decrease node timestamp by half its time interval.
+        /// </summary>
+        /// <remarks>
+        /// Node interval is a time betwenn this and previous node.
+        /// </remarks>
+        /// <param name="nodeIndex"></param>
+        // TODO Move to Editor class.
+        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
+            // Get timestamp of the penultimate node.
+            float penultimateNodeTimestamp =
+                GetTimeAtKey((nodeIndex - 1));
+
+            // Calculate time between last and penultimate nodes.
+            float deltaTime = 1 - penultimateNodeTimestamp;
+
+            // Calculate new, smaller time for the last node.
+            float newLastNodeTimestamp =
+                penultimateNodeTimestamp + (deltaTime * 0.5f);
+
+            // Update point timestamp in animation curves.
+            ChangePointTimestamp(
+                nodeIndex,
+                newLastNodeTimestamp);
+        }
+        private float GetTimeAtKey(int keyIndex) {
+            return _curves[0].keys[keyIndex].time;
+        }
+
+        private Vector3 GetVectorAtKey(int keyIndex) {
+            float x = _curves[0].keys[keyIndex].value;
+            float y = _curves[1].keys[keyIndex].value;
+            float z = _curves[2].keys[keyIndex].value;
+
+            return new Vector3(x, y, z);
+        }
+
+        /// <summary>
+        /// Initialize <c>_curves</c> field with empty AnimationCurve objects.
+        /// </summary>
+        private void InitializeCurves() {
+            for (var i = 0; i < _curves.Length; i++) {
+                _curves[i] = new AnimationCurve();
+            }
+        }
+
+        /// <summary>
+        /// Update animation curves' values for a given key with a given
+        /// Vector3 value.
+        /// </summary>
+        /// <param name="curves">Animation curves.</param>
+        /// <param name="keyIndex">Index of the key to update.</param>
+        /// <param name="position">New key value.</param>
+        // TODO This should accept timestamp instead of index.
+        private void MovePoint(
+                int keyIndex,
+                Vector3 position) {
+
+            // Copy keys.
+            Keyframe keyXCopy = _curves[0].keys[keyIndex];
+            Keyframe keyYCopy = _curves[1].keys[keyIndex];
+            Keyframe keyZCopy = _curves[2].keys[keyIndex];
+
+            // Update keys' values.
+            keyXCopy.value = position.x;
+            keyYCopy.value = position.y;
+            keyZCopy.value = position.z;
+
+            // Move keys.
+            _curves[0].MoveKey(keyIndex, keyXCopy);
+            _curves[1].MoveKey(keyIndex, keyYCopy);
+            _curves[2].MoveKey(keyIndex, keyZCopy);
+        }
+
+        private void RemovePoint(int nodeIndex) {
+            // For each animation curve..
+            for (int i = 0; i < 3; i++) {
+                // Remove node keys.
+                _curves[i].RemoveKey(nodeIndex);
+            }
         }
 
         /// <summary>
@@ -795,159 +928,6 @@ namespace ATP.AnimationPathTools {
                 curve.MoveKey(i, key);
             }
         }
-
-        public void DrawGizmoCurve() {
-            List<Vector3> points = SamplePathForPoints(gizmoCurveSamplingFrequency);
-
-            if (points.Count < 3) return;
-
-            // Draw curve.
-            for (int i = 0; i < points.Count - 1; i++) {
-                Gizmos.color = gizmoCurveColor;
-                Gizmos.DrawLine(points[i], points[i + 1]);
-            }
-        }
-
-        private void AddNewPoint(float timestamp, Vector3 position) {
-            _curves[0].AddKey(timestamp, position.x);
-            _curves[1].AddKey(timestamp, position.y);
-            _curves[2].AddKey(timestamp, position.z);
-        }
-
-        /// <summary>
-        /// Update animation curves' values for a given key with a given
-        /// Vector3 value.
-        /// </summary>
-        /// <param name="curves">Animation curves.</param>
-        /// <param name="keyIndex">Index of the key to update.</param>
-        /// <param name="position">New key value.</param>
-        // TODO This should accept timestamp instead of index.
-        private void MovePoint(
-                int keyIndex,
-                Vector3 position) {
-
-            // Copy keys.
-            Keyframe keyXCopy = _curves[0].keys[keyIndex];
-            Keyframe keyYCopy = _curves[1].keys[keyIndex];
-            Keyframe keyZCopy = _curves[2].keys[keyIndex];
-
-            // Update keys' values.
-            keyXCopy.value = position.x;
-            keyYCopy.value = position.y;
-            keyZCopy.value = position.z;
-
-            // Move keys.
-            _curves[0].MoveKey(keyIndex, keyXCopy);
-            _curves[1].MoveKey(keyIndex, keyYCopy);
-            _curves[2].MoveKey(keyIndex, keyZCopy);
-        }
-
-        private void ChangePointTangents(
-                int nodeIndex,
-                Vector3 tangentDelta) {
-
-            // Copy keys.
-            Keyframe keyXCopy = _curves[0].keys[nodeIndex];
-            Keyframe keyYCopy = _curves[1].keys[nodeIndex];
-            Keyframe keyZCopy = _curves[2].keys[nodeIndex];
-
-            // Update keys' values.
-            keyXCopy.inTangent += tangentDelta.x;
-            keyYCopy.inTangent += tangentDelta.y;
-            keyZCopy.inTangent += tangentDelta.z;
-
-            keyXCopy.outTangent += tangentDelta.x;
-            keyYCopy.outTangent += tangentDelta.y;
-            keyZCopy.outTangent += tangentDelta.z;
-
-            // Update keys.
-            _curves[0].MoveKey(nodeIndex, keyXCopy);
-            _curves[1].MoveKey(nodeIndex, keyYCopy);
-            _curves[2].MoveKey(nodeIndex, keyZCopy);
-        }
-
-        private void ChangePointTimestamp(
-            int keyIndex,
-            float newTimestamp) {
-
-            // For each curve..
-            for (int i = 0; i < 3; i++) {
-                // Get copy of the key from animation curves.
-                Keyframe keyCopy = _curves[i].keys[keyIndex];
-
-                // Change key's time.
-                keyCopy.time = newTimestamp;
-
-                // Replace old key with a new one.
-                _curves[i].MoveKey(keyIndex, keyCopy);
-            }
-        }
-
-        private float GetTimeAtKey(int keyIndex) {
-            return _curves[0].keys[keyIndex].time;
-        }
-
-        private Vector3 GetVectorAtKey(int keyIndex) {
-            float x = _curves[0].keys[keyIndex].value;
-            float y = _curves[1].keys[keyIndex].value;
-            float z = _curves[2].keys[keyIndex].value;
-
-            return new Vector3(x, y, z);
-        }
-
-        /// <summary>
-        /// Create 3d vector from animation curves.
-        /// </summary>
-        /// <param name="curves">
-        /// Three animation curves that make 3d path.
-        /// </param>
-        /// <param name="timestamp">
-        /// Point in time for which the 3d vector should be constructed. Time
-        /// ranges alwas from 0 to 1.
-        /// </param>
-        /// <returns>3d point at a given time.</returns>
-        public Vector3 GetVectorAtTime(float timestamp) {
-            // Get node position.
-            var x = _curves[0].Evaluate(timestamp);
-            var y = _curves[1].Evaluate(timestamp);
-            var z = _curves[2].Evaluate(timestamp);
-
-            // Construct 3d point.
-            Vector3 pos = new Vector3(x, y, z);
-
-            return pos;
-        }
-
-        private void RemovePoint(int nodeIndex) {
-            // For each animation curve..
-            for (int i = 0; i < 3; i++) {
-                // Remove node keys.
-                _curves[i].RemoveKey(nodeIndex);
-            }
-        }
-
-        /// <summary>
-        /// Smooth in/out tangents of a single point.
-        /// </summary>
-        /// <param name="nodeIndex">Point index.</param>
-        /// <param name="tangentWeight">Tangent weight.</param>
-        private void SmoothPointTangents(int nodeIndex, float tangentWeight) {
-            // For each curve..
-            for (int i = 0; i < _curves.Length; i++) {
-                // Smooth tangents.
-                _curves[i].SmoothTangents(nodeIndex, tangentWeight);
-            }
-        }
-
-        /// <summary>
-        /// Initialize <c>_curves</c> field with empty AnimationCurve objects.
-        /// </summary>
-        private void InitializeCurves() {
-            for (var i = 0; i < _curves.Length; i++) {
-                _curves[i] = new AnimationCurve();
-            }
-        }
-
         private void SetPointLinear(int nodeIndex) {
             for (int i = 0; i < 3; ++i) {
                 float intangent = 0;
@@ -994,6 +974,18 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        /// <summary>
+        /// Smooth in/out tangents of a single point.
+        /// </summary>
+        /// <param name="nodeIndex">Point index.</param>
+        /// <param name="tangentWeight">Tangent weight.</param>
+        private void SmoothPointTangents(int nodeIndex, float tangentWeight) {
+            // For each curve..
+            for (int i = 0; i < _curves.Length; i++) {
+                // Smooth tangents.
+                _curves[i].SmoothTangents(nodeIndex, tangentWeight);
+            }
+        }
         #endregion Private Methods
     }
 }

@@ -595,7 +595,7 @@ namespace ATP.AnimationPathTools {
                         15);
 
                 // Draw button.
-                buttonPressed = GUI.Button(rect, "X", buttonStyle);
+                buttonPressed = GUI.Button(rect, "", buttonStyle);
 
                 // If button pressed..
                 if (buttonPressed == true) {

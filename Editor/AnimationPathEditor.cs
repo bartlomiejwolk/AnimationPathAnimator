@@ -1118,32 +1118,29 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DistributeNodeSpeedValues() {
+            // Calculate path curved length.
             float pathLength = script.CalculatePathCurvedLength(
                 script.GizmoCurveSamplingFrequency);
-
             // Calculate time for one meter of curve length.
             float timeForMeter = 1 / pathLength;
-
             // Helper variable.
             float prevTimestamp = 0;
 
+            // For each node calculate and apply new timestamp.
             for (var i = 1; i < script.NodesNo - 1; i++) {
                 // Calculate section curved length.
                 float sectionLength = script.CalculateSectionCurvedLength(
                     i - 1,
                     i,
                     script.GizmoCurveSamplingFrequency);
-
                 // Calculate time interval.
                 float sectionTimeInterval = sectionLength * timeForMeter;
-
                 // Calculate new timestamp.
                 float newTimestamp = prevTimestamp + sectionTimeInterval;
-
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
-                // Add timestamp to the list.
+                // Update node timestamp.
                 script.ChangeNodeTimestamp(i, newTimestamp);
             }
         }

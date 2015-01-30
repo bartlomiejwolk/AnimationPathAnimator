@@ -463,9 +463,10 @@ namespace ATP.AnimationPathTools {
 
             bool buttonPressed = false;
 
-            // Draw add buttons for each node. Execute callback on button
-            // press.
-            for (int i = 1; i < nodePositions.Length; i++) {
+            // Draw remove buttons for each node except for the first and the
+            // last one.
+            // Execute callback on button press.
+            for (int i = 1; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
                 Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);

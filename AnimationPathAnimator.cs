@@ -123,6 +123,9 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC METHODS
 
+        /// <summary>
+        /// Call in edit mode to update animation.
+        /// </summary>
         public void UpdateAnimation() {
             if (!Application.isPlaying) {
                 Animate();

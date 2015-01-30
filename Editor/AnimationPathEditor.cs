@@ -429,17 +429,15 @@ namespace ATP.AnimationPathTools {
 
             Handles.BeginGUI();
 
-            bool buttonPressed = false;
-
-            // Draw add buttons for each node. Execute callback on button
-            // press.
-            for (int i = 0; i < nodePositions.Length; i++) {
+            // Draw add buttons for each node (except the last one).
+            // Execute callback on button press.
+            for (var i = 0; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
                 Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
 
                 // Draw button.
-                buttonPressed = DrawButton(
+                bool buttonPressed = DrawButton(
                     guiPoint,
                     82,
                     25,
@@ -448,7 +446,7 @@ namespace ATP.AnimationPathTools {
                     buttonStyle);
 
                 // Execute callback.
-                if (buttonPressed == true) {
+                if (buttonPressed) {
                     callback(i);
                 }
             }
@@ -465,9 +463,10 @@ namespace ATP.AnimationPathTools {
 
             bool buttonPressed = false;
 
-            // Draw add buttons for each node. Execute callback on button
-            // press.
-            for (int i = 0; i < nodePositions.Length; i++) {
+            // Draw remove buttons for each node except for the first and the
+            // last one.
+            // Execute callback on button press.
+            for (int i = 1; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
                 Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
@@ -774,7 +773,8 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            AddNodeAuto(nodeIndex);
+            //AddNodeAuto(nodeIndex);
+            AddNodeBetween(nodeIndex);
 
             DistributeNodeSpeedValues();
         }
@@ -1010,7 +1010,7 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(script.AnimationCurves, "Change path");
         }
 
-        protected void AddNodeAuto(int nodeIndex) {
+        /*protected void AddNodeAuto(int nodeIndex) {
             // If this node is the last one in the path..
             if (nodeIndex == script.NodesNo - 1) {
                 AddNodeEnd(nodeIndex);
@@ -1019,9 +1019,10 @@ namespace ATP.AnimationPathTools {
             else {
                 AddNodeBetween(nodeIndex);
             }
-        }
+        }*/
+
         // TODO Should receive two node indexes.
-        private void AddNodeBetween(int nodeIndex) {
+        protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
@@ -1037,7 +1038,7 @@ namespace ATP.AnimationPathTools {
             script.AddNodeAtTime(newKeyTime);
         }
 
-        private void AddNodeEnd(int nodeIndex) {
+        /*private void AddNodeEnd(int nodeIndex) {
             // Calculate position for the new node.
             var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
 
@@ -1047,7 +1048,7 @@ namespace ATP.AnimationPathTools {
 
             // Add new node to animation curves.
             script.CreateNode(1, newNodePosition);
-        }
+        }*/
 
         private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
             // Get positions of all nodes.

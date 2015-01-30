@@ -17,7 +17,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            AddNodeAuto(nodeIndex);
+            AddNodeBetween(nodeIndex);
         }
 
         protected override void DrawLinearTangentModeButtonsCallbackHandler(

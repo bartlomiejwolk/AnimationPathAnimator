@@ -494,6 +494,7 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
 
+            Handles.color = script.GizmoCurveColor;
             Vector3 newPos;
 
             // For each node..
@@ -649,6 +650,8 @@ namespace ATP.AnimationPathTools {
         public void DrawTangentHandles(
             Vector3[] nodes,
             Action<int, Vector3> callback) {
+
+            Handles.color = script.GizmoCurveColor;
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {

@@ -22,6 +22,7 @@ namespace ATP.AnimationPathTools {
         /// Event that is fired every time there's any change to the animation
         /// curves.
         /// </summary>
+        // TODO Remove this event.
         public event EventHandler CurvesChanged;
 
         public int KeysNo {

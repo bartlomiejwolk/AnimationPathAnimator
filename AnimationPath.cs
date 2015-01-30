@@ -184,6 +184,10 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawPathStartGizmo() {
+            // Return if curve length is zero.
+            float pathLinearLength = CalculatePathLinearLength();
+            if (pathLinearLength == 0) return;
+
             Vector3 firstNodePosition = GetNodePosition(0);
             float handleSize = HandleUtility.GetHandleSize(firstNodePosition);
             float radius = handleSize * FirstNodeGizmoSize;
@@ -299,7 +303,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void CreateNode(float timestamp, Vector3 position) {
-            _animationCurves.AddNewPoint(1, position);
+            _animationCurves.AddNewPoint(timestamp, position);
         }
 
         public void DrawGizmoCurve() {

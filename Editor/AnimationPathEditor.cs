@@ -932,15 +932,8 @@ namespace ATP.AnimationPathTools {
 
                 // Allow undo this operation. TODO Check if this works.
                 HandleUndo();
-
-                // Get scene view camera.
-                Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-                // Get world point to place the Animation Path.
-                Vector3 worldPoint = sceneCamera.transform.position
-                    + sceneCamera.transform.forward * 7;
-
                 // Reset curves to its default state.
-                ResetPath(worldPoint);
+                ResetPath();
             }
             EditorGUILayout.EndHorizontal();
 
@@ -1192,7 +1185,12 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        private void ResetPath(Vector3 worldPoint) {
+        private void ResetPath() {
+            // Get scene view camera.
+            Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+            // Get world point to place the Animation Path.
+            Vector3 worldPoint = sceneCamera.transform.position
+                + sceneCamera.transform.forward * 7;
             // Number of nodes to remove.
             int noOfNodesToRemove = script.NodesNo;
 

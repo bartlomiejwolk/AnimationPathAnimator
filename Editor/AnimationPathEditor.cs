@@ -41,14 +41,14 @@ namespace ATP.AnimationPathTools {
         #endregion Keyboard Keys
         #region BUTTON OFFSETS
 
-        private const int smoothButtonH = 15;
-        private const int smoothButtonV = 0;
-        private const int linearButtonH = 34;
-        private const int linearButtonV = 0;
-        private const int addButtonH = 53;
-        private const int addButtonV = 0;
-        private const int removeButtonH = 72;
-        private const int removeButtonV = 0;
+        private const int smoothButtonH = 25;
+        private const int smoothButtonV = 10;
+        private const int linearButtonH = 44;
+        private const int linearButtonV = 10;
+        private const int addButtonH = 62;
+        private const int addButtonV = 10;
+        private const int removeButtonH = 81;
+        private const int removeButtonV = 10;
         #endregion
 
         #region SERIALIZED PROPERTIES

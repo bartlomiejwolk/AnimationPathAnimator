@@ -1,6 +1,7 @@
 ﻿using ATP.ReorderableList;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// Classes that allow for creation and usage of \link AnimationPath Animation
@@ -54,6 +55,7 @@ namespace ATP.AnimationPathTools {
         //private List<AnimationPathNode> nodes = new List<AnimationPathNode>();
 
         #region Fields
+        private const float FirstNodeGizmoSize = 0.15f;
 
         /// <summary>
         /// Animation curves that make the animation path.
@@ -125,6 +127,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         private float tangentWeight;
+
 #pragma warning restore 0414
 
         #endregion Editor
@@ -177,6 +180,16 @@ namespace ATP.AnimationPathTools {
 
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
+            DrawPathStartGizmo();
+        }
+
+        private void DrawPathStartGizmo() {
+            Vector3 firstNodePosition = GetNodePosition(0);
+            float handleSize = HandleUtility.GetHandleSize(firstNodePosition);
+            float radius = handleSize * FirstNodeGizmoSize;
+
+            Gizmos.color = gizmoCurveColor;
+            Gizmos.DrawSphere(firstNodePosition, radius);
         }
 
         private void OnEnable() {

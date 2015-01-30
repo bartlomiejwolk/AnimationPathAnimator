@@ -39,6 +39,17 @@ namespace ATP.AnimationPathTools {
         private bool prevMoveAllKeyValue = false;
 
         #endregion Keyboard Keys
+        #region BUTTON OFFSETS
+
+        private const int smoothButtonH = 15;
+        private const int smoothButtonV = 0;
+        private const int linearButtonH = 34;
+        private const int linearButtonV = 0;
+        private const int addButtonH = 53;
+        private const int addButtonV = 0;
+        private const int removeButtonH = 72;
+        private const int removeButtonV = 0;
+        #endregion
 
         #region SERIALIZED PROPERTIES
 
@@ -440,8 +451,8 @@ namespace ATP.AnimationPathTools {
                 // Draw button.
                 bool buttonPressed = DrawButton(
                     guiPoint,
-                    82,
-                    25,
+                    addButtonH,
+                    addButtonV,
                     15,
                     15,
                     buttonStyle);
@@ -475,8 +486,8 @@ namespace ATP.AnimationPathTools {
                 // Draw button.
                 buttonPressed = DrawButton(
                     guiPoint,
-                    64,
-                    25,
+                    removeButtonH,
+                    removeButtonV,
                     15,
                     15,
                     buttonStyle);
@@ -548,8 +559,8 @@ namespace ATP.AnimationPathTools {
 
                 // Create rectangle for the "+" button.
                 Rect rect = new Rect(
-                        guiPoint.x + 100,
-                        guiPoint.y + 25,
+                        guiPoint.x + smoothButtonH,
+                        guiPoint.y + smoothButtonV,
                         15,
                         15);
 
@@ -589,8 +600,8 @@ namespace ATP.AnimationPathTools {
 
                 // Create rectangle for the button.
                 Rect rect = new Rect(
-                        guiPoint.x + 120,
-                        guiPoint.y + 25,
+                        guiPoint.x + linearButtonH,
+                        guiPoint.y + linearButtonV,
                         15,
                         15);
 

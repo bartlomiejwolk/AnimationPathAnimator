@@ -77,6 +77,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         protected AnimationPath script;
         private const float MovementHandleSize = 0.25f;
+        private readonly Color MoveAllModeColor = Color.gray;
 
         #endregion Helper Variables
 
@@ -506,6 +507,11 @@ namespace ATP.AnimationPathTools {
             Action<int, Vector3, Vector3> callback) {
 
             Handles.color = script.GizmoCurveColor;
+            // Set node color for Move All mode.
+            if (script.MoveAllMode) {
+                Handles.color = MoveAllModeColor;
+            }
+
             Vector3 newPos;
 
             // For each node..

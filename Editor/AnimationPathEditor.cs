@@ -774,7 +774,8 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            AddNodeAuto(nodeIndex);
+            //AddNodeAuto(nodeIndex);
+            AddNodeBetween(nodeIndex);
 
             DistributeNodeSpeedValues();
         }
@@ -1010,7 +1011,7 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(script.AnimationCurves, "Change path");
         }
 
-        protected void AddNodeAuto(int nodeIndex) {
+        /*protected void AddNodeAuto(int nodeIndex) {
             // If this node is the last one in the path..
             if (nodeIndex == script.NodesNo - 1) {
                 AddNodeEnd(nodeIndex);
@@ -1019,9 +1020,10 @@ namespace ATP.AnimationPathTools {
             else {
                 AddNodeBetween(nodeIndex);
             }
-        }
+        }*/
+
         // TODO Should receive two node indexes.
-        private void AddNodeBetween(int nodeIndex) {
+        protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
@@ -1037,7 +1039,7 @@ namespace ATP.AnimationPathTools {
             script.AddNodeAtTime(newKeyTime);
         }
 
-        private void AddNodeEnd(int nodeIndex) {
+        /*private void AddNodeEnd(int nodeIndex) {
             // Calculate position for the new node.
             var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
 
@@ -1047,7 +1049,7 @@ namespace ATP.AnimationPathTools {
 
             // Add new node to animation curves.
             script.CreateNode(1, newNodePosition);
-        }
+        }*/
 
         private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
             // Get positions of all nodes.

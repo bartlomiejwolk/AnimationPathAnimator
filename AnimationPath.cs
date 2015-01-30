@@ -180,7 +180,7 @@ namespace ATP.AnimationPathTools {
 
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
-            DrawPathStartGizmo();
+            //DrawPathStartGizmo();
         }
 
         private void DrawPathStartGizmo() {

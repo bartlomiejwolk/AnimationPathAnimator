@@ -65,6 +65,7 @@ namespace ATP.AnimationPathTools {
         /// Reference to serialized class.
         /// </summary>
         protected AnimationPath script;
+        private const float MovementHandleSize = 0.25f;
 
         #endregion Helper Variables
 
@@ -497,10 +498,20 @@ namespace ATP.AnimationPathTools {
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
+                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                float sphereSize = handleSize * MovementHandleSize;
+
+                //newPos = Handles.PositionHandle(
+                //        nodes[i],
+                //        Quaternion.identity);
+
                 // draw node's handle.
-                newPos = Handles.PositionHandle(
-                        nodes[i],
-                        Quaternion.identity);
+                newPos = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.SphereCap);
 
                 // If node was moved..
                 if (newPos != nodes[i]) {

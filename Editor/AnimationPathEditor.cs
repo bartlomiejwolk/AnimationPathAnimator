@@ -145,11 +145,11 @@ namespace ATP.AnimationPathTools {
 
             // Handle drawing for each node an indicator of currently active
             // handles mode.
-            HandleDrawingHandlesModeIndicator();
+            //HandleDrawingHandlesModeIndicator();
 
             // Handle drawing for each node an indicator of currently active
             // movement mode.
-            HandleDrawingMovementModeIndicator();
+            //HandleDrawingMovementModeIndicator();
 
             // Handle drawing for each node timestamp label.
             //HandleDrawingTimestampLabels();

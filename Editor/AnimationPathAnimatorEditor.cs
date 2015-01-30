@@ -63,6 +63,8 @@ namespace ATP.AnimationPathTools {
 
 			// Save changes
 			serializedObject.ApplyModifiedProperties();
+
+		    script.UpdateAnimation();
 		}
 
         /// <summary>

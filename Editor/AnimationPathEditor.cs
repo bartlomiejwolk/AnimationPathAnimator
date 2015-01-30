@@ -172,183 +172,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion UNITY MESSAGES
 
-        #region PRIVATE METHODS
-
-        private void DrawInspectorGUI() {
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                    gizmoCurveColor,
-                    new GUIContent("Curve Color", ""));
-            serializedObject.ApplyModifiedProperties();
-
-            EditorGUILayout.BeginHorizontal();
-            serializedObject.Update();
-            if (GUILayout.Button(new GUIContent(
-                "Linear",
-                "Set tangent mode to linear for all nodePositions."))) {
-
-                // Allow undo this operation.
-                HandleUndo();
-
-                script.SetNodesLinear();
-                DistributeNodeSpeedValues();
-            }
-            if (GUILayout.Button(new GUIContent(
-                           "Smooth",
-                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
-
-                HandleUndo();
-                script.SmoothNodesTangents(tangentWeight.floatValue);
-                DistributeNodeSpeedValues();
-            }
-            if (GUILayout.Button(new GUIContent(
-                "Reset",
-                "Create a new default Animation Path or reset to default."))) {
-
-                // Allow undo this operation. TODO Check if this works.
-                HandleUndo();
-
-                // Get scene view camera.
-                Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-                // Get world point to place the Animation Path.
-                Vector3 worldPoint = sceneCamera.transform.position
-                    + sceneCamera.transform.forward * 7;
-
-                // Reset curves to its default state.
-                ResetPath(worldPoint);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            // Tooltip for moveAllMode property.
-            string moveAllModeTooltip = String.Format(
-                "If enabled, you can move with mouse all nodePositions at once. " +
-                "Toggle it with {0} key.",
-                AnimationPath.MoveAllKey);
-
-            // Disable this control if Tangent Mode is enabled.
-            GUI.enabled = !script.TangentMode;
-            script.MoveAllMode = GUILayout.Toggle(
-                script.MoveAllMode,
-                new GUIContent(
-                    "Move All Mode",
-                    moveAllModeTooltip));
-            GUI.enabled = true;
-
-            // Tooltip for handlesMode property.
-            string tangentModeTooltip = String.Format(
-                "If enabled, the on-scene handles will change node's tangents." +
-                "Enable it temporarily with {0} key.",
-                AnimationPath.HandlesModeKey);
-
-            GUI.enabled = !script.MoveAllMode;
-            script.TangentMode = GUILayout.Toggle(
-                script.TangentMode,
-                new GUIContent(
-                    "Tangent Mode",
-                    tangentModeTooltip));
-            GUI.enabled = true;
-
-            script.SceneControls = GUILayout.Toggle(
-                script.SceneControls,
-                new GUIContent(
-                    "Scene Controls",
-                    "Toggle displaying on-scene node controls."));
-
-            EditorGUILayout.Space();
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                    exportSamplingFrequency,
-                    new GUIContent(
-                        "Export Sampling",
-                        "Number of points to export for 1 m of the curve. " +
-                        "If set to 0, it'll export only keys defined in " +
-                        "the curve."));
-            serializedObject.ApplyModifiedProperties();
-
-            if (GUILayout.Button("Export Nodes")) {
-                ExportNodes(exportSamplingFrequency.intValue);
-            }
-
-            EditorGUILayout.Space();
-
-            serializedObject.Update();
-            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                    advancedSettingsFoldout.boolValue,
-                    new GUIContent(
-                        "Advanced Settings",
-                        ""));
-            if (advancedSettingsFoldout.boolValue) {
-                EditorGUILayout.PropertyField(
-                        samplingFrequency,
-                        new GUIContent(
-                            "Curve Sampling",
-                            "Number of points to draw 1 m of gizmo curve."));
-                EditorGUILayout.PropertyField(
-                        skin,
-                        new GUIContent(
-                            "Skin",
-                            "Styles used by on-scene GUI elements."));
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// Update <c>moveAllMode</c> option with keyboard shortcut.
-        /// </summary>
-        private void HandleMoveAllOptionShortcut() {
-            // Don't allow changing Movement mode when Tangent mode is already
-            // enabled.
-            if (script.TangentMode) return;
-
-            // If was pressed..
-            if (moveAllKeyPressed && !prevMoveAllKeyValue) {
-                // Toggle move all mode.
-                script.MoveAllMode = !script.MoveAllMode;
-            }
-
-            // If key was released..
-            if (!moveAllKeyPressed && prevMoveAllKeyValue) {
-                // Toggle move all mode.
-                script.MoveAllMode = !script.MoveAllMode;
-            }
-        }
-
-        /// <summary>
-        /// Toggle handles mode with key shortcut.
-        /// </summary>
-        private void HandleTangentModeOptionShortcut() {
-            // Don't allow changing Handles mode when Move All mode is already
-            // enabled.
-            if (script.MoveAllMode) return;
-
-            // If modifier key was pressed, toggle handles mode.
-            if (handlesModeKeyPressed && !prevHandlesModeKeyValue) {
-                // Enable Tangent Mode.
-                script.TangentMode = !script.TangentMode;
-            }
-
-            // If key was released..
-            if (!handlesModeKeyPressed && prevHandlesModeKeyValue) {
-                // Disable Tangent Mode.
-                script.TangentMode = !script.TangentMode;
-            }
-        }
-
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        // Remove this method. TODO Move undo implementation to AnimationPath
-        // class.
-        public void HandleUndo() {
-            Undo.RecordObject(script.AnimationCurves, "Change path");
-        }
-
-        #endregion PRIVATE METHODS
-
-        #region DRAWING
+        #region DRAWING HANDLERS
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
@@ -1014,7 +838,179 @@ namespace ATP.AnimationPathTools {
         }
         #endregion CALLBACK HANDLERS
         #region PRIVATE
-        public void AddNodeAuto(int nodeIndex) {
+        /// <summary>
+        /// Update <c>moveAllMode</c> option with keyboard shortcut.
+        /// </summary>
+        private void HandleMoveAllOptionShortcut() {
+            // Don't allow changing Movement mode when Tangent mode is already
+            // enabled.
+            if (script.TangentMode) return;
+
+            // If was pressed..
+            if (moveAllKeyPressed && !prevMoveAllKeyValue) {
+                // Toggle move all mode.
+                script.MoveAllMode = !script.MoveAllMode;
+            }
+
+            // If key was released..
+            if (!moveAllKeyPressed && prevMoveAllKeyValue) {
+                // Toggle move all mode.
+                script.MoveAllMode = !script.MoveAllMode;
+            }
+        }
+
+        /// <summary>
+        /// Toggle handles mode with key shortcut.
+        /// </summary>
+        private void HandleTangentModeOptionShortcut() {
+            // Don't allow changing Handles mode when Move All mode is already
+            // enabled.
+            if (script.MoveAllMode) return;
+
+            // If modifier key was pressed, toggle handles mode.
+            if (handlesModeKeyPressed && !prevHandlesModeKeyValue) {
+                // Enable Tangent Mode.
+                script.TangentMode = !script.TangentMode;
+            }
+
+            // If key was released..
+            if (!handlesModeKeyPressed && prevHandlesModeKeyValue) {
+                // Disable Tangent Mode.
+                script.TangentMode = !script.TangentMode;
+            }
+        }
+
+        private void DrawInspectorGUI() {
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                    gizmoCurveColor,
+                    new GUIContent("Curve Color", ""));
+            serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.BeginHorizontal();
+            serializedObject.Update();
+            if (GUILayout.Button(new GUIContent(
+                "Linear",
+                "Set tangent mode to linear for all nodePositions."))) {
+
+                // Allow undo this operation.
+                HandleUndo();
+
+                script.SetNodesLinear();
+                DistributeNodeSpeedValues();
+            }
+            if (GUILayout.Button(new GUIContent(
+                           "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+
+                HandleUndo();
+                script.SmoothNodesTangents(tangentWeight.floatValue);
+                DistributeNodeSpeedValues();
+            }
+            if (GUILayout.Button(new GUIContent(
+                "Reset",
+                "Create a new default Animation Path or reset to default."))) {
+
+                // Allow undo this operation. TODO Check if this works.
+                HandleUndo();
+
+                // Get scene view camera.
+                Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+                // Get world point to place the Animation Path.
+                Vector3 worldPoint = sceneCamera.transform.position
+                    + sceneCamera.transform.forward * 7;
+
+                // Reset curves to its default state.
+                ResetPath(worldPoint);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            // Tooltip for moveAllMode property.
+            string moveAllModeTooltip = String.Format(
+                "If enabled, you can move with mouse all nodePositions at once. " +
+                "Toggle it with {0} key.",
+                AnimationPath.MoveAllKey);
+
+            // Disable this control if Tangent Mode is enabled.
+            GUI.enabled = !script.TangentMode;
+            script.MoveAllMode = GUILayout.Toggle(
+                script.MoveAllMode,
+                new GUIContent(
+                    "Move All Mode",
+                    moveAllModeTooltip));
+            GUI.enabled = true;
+
+            // Tooltip for handlesMode property.
+            string tangentModeTooltip = String.Format(
+                "If enabled, the on-scene handles will change node's tangents." +
+                "Enable it temporarily with {0} key.",
+                AnimationPath.HandlesModeKey);
+
+            GUI.enabled = !script.MoveAllMode;
+            script.TangentMode = GUILayout.Toggle(
+                script.TangentMode,
+                new GUIContent(
+                    "Tangent Mode",
+                    tangentModeTooltip));
+            GUI.enabled = true;
+
+            script.SceneControls = GUILayout.Toggle(
+                script.SceneControls,
+                new GUIContent(
+                    "Scene Controls",
+                    "Toggle displaying on-scene node controls."));
+
+            EditorGUILayout.Space();
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                    exportSamplingFrequency,
+                    new GUIContent(
+                        "Export Sampling",
+                        "Number of points to export for 1 m of the curve. " +
+                        "If set to 0, it'll export only keys defined in " +
+                        "the curve."));
+            serializedObject.ApplyModifiedProperties();
+
+            if (GUILayout.Button("Export Nodes")) {
+                ExportNodes(exportSamplingFrequency.intValue);
+            }
+
+            EditorGUILayout.Space();
+
+            serializedObject.Update();
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                    advancedSettingsFoldout.boolValue,
+                    new GUIContent(
+                        "Advanced Settings",
+                        ""));
+            if (advancedSettingsFoldout.boolValue) {
+                EditorGUILayout.PropertyField(
+                        samplingFrequency,
+                        new GUIContent(
+                            "Curve Sampling",
+                            "Number of points to draw 1 m of gizmo curve."));
+                EditorGUILayout.PropertyField(
+                        skin,
+                        new GUIContent(
+                            "Skin",
+                            "Styles used by on-scene GUI elements."));
+            }
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        // Remove this method. TODO Move undo implementation to AnimationPath
+        // class.
+        protected void HandleUndo() {
+            Undo.RecordObject(script.AnimationCurves, "Change path");
+        }
+
+        protected void AddNodeAuto(int nodeIndex) {
             // If this node is the last one in the path..
             if (nodeIndex == script.NodesNo - 1) {
                 AddNodeEnd(nodeIndex);

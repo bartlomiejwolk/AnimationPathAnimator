@@ -116,15 +116,15 @@ namespace ATP.AnimationPathTools {
 
             // Update shortcut keys state for this frame. TODO Move to a
             // separate method.
-            AnimationPathUtilities.UpdateKeyboardKey(
-                AnimationPath.MoveAllKey,
-                ref moveAllKeyPressed,
-                ref prevMoveAllKeyValue);
+            //AnimationPathUtilities.UpdateKeyboardKey(
+            //    AnimationPath.MoveAllKey,
+            //    ref moveAllKeyPressed,
+            //    ref prevMoveAllKeyValue);
 
-            AnimationPathUtilities.UpdateKeyboardKey(
-                AnimationPath.HandlesModeKey,
-                ref handlesModeKeyPressed,
-                ref prevHandlesModeKeyValue);
+            //AnimationPathUtilities.UpdateKeyboardKey(
+            //    AnimationPath.HandlesModeKey,
+            //    ref handlesModeKeyPressed,
+            //    ref prevHandlesModeKeyValue);
 
             // Change handles mode.
             // Each on-scene node has a handle to update node's attribute.
@@ -844,10 +844,10 @@ namespace ATP.AnimationPathTools {
         private void HandleMoveAllOptionShortcut() {
             // Don't allow changing Movement mode when Tangent mode is already
             // enabled.
-            if (script.TangentMode) return;
+            //if (script.TangentMode) return;
 
             // If was pressed..
-            if (moveAllKeyPressed && !prevMoveAllKeyValue) {
+            /*if (moveAllKeyPressed && !prevMoveAllKeyValue) {
                 // Toggle move all mode.
                 script.MoveAllMode = !script.MoveAllMode;
             }
@@ -856,7 +856,16 @@ namespace ATP.AnimationPathTools {
             if (!moveAllKeyPressed && prevMoveAllKeyValue) {
                 // Toggle move all mode.
                 script.MoveAllMode = !script.MoveAllMode;
-            }
+            }*/
+
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != AnimationPath.MoveAllKey) return;
+
+            // Make sure Tangent mode is disabled.
+            script.TangentMode = false;
+
+            // Toggle Move All mode.
+            script.MoveAllMode = !script.MoveAllMode;
         }
 
         /// <summary>
@@ -865,7 +874,7 @@ namespace ATP.AnimationPathTools {
         private void HandleTangentModeOptionShortcut() {
             // Don't allow changing Handles mode when Move All mode is already
             // enabled.
-            if (script.MoveAllMode) return;
+            /*if (script.MoveAllMode) return;
 
             // If modifier key was pressed, toggle handles mode.
             if (handlesModeKeyPressed && !prevHandlesModeKeyValue) {
@@ -877,7 +886,17 @@ namespace ATP.AnimationPathTools {
             if (!handlesModeKeyPressed && prevHandlesModeKeyValue) {
                 // Disable Tangent Mode.
                 script.TangentMode = !script.TangentMode;
-            }
+            }*/
+
+            // Return if Tangent Mode shortcut wasn't released.
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != AnimationPath.HandlesModeKey) return;
+
+            // Make sure Move All mode is disabled.
+            script.MoveAllMode = false;
+
+            // Toggle Move All mode.
+            script.TangentMode = !script.TangentMode;
         }
 
         private void DrawInspectorGUI() {

@@ -429,17 +429,15 @@ namespace ATP.AnimationPathTools {
 
             Handles.BeginGUI();
 
-            bool buttonPressed = false;
-
-            // Draw add buttons for each node. Execute callback on button
-            // press.
-            for (int i = 0; i < nodePositions.Length; i++) {
+            // Draw add buttons for each node (except the last one).
+            // Execute callback on button press.
+            for (var i = 0; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
                 Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
 
                 // Draw button.
-                buttonPressed = DrawButton(
+                bool buttonPressed = DrawButton(
                     guiPoint,
                     82,
                     25,
@@ -448,7 +446,7 @@ namespace ATP.AnimationPathTools {
                     buttonStyle);
 
                 // Execute callback.
-                if (buttonPressed == true) {
+                if (buttonPressed) {
                     callback(i);
                 }
             }

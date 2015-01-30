@@ -169,6 +169,14 @@ namespace ATP.AnimationPathTools {
             get { return tangentMode; }
             set { tangentMode = value; }
         }
+
+        /// <summary>
+        /// Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region Unity Messages
@@ -180,7 +188,7 @@ namespace ATP.AnimationPathTools {
 
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
-            DrawPathStartGizmo();
+            //DrawPathStartGizmo();
         }
 
         private void DrawPathStartGizmo() {

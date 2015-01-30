@@ -65,6 +65,7 @@ namespace ATP.AnimationPathTools {
         /// Reference to serialized class.
         /// </summary>
         protected AnimationPath script;
+        private const float MovementHandleSize = 0.25f;
 
         #endregion Helper Variables
 
@@ -144,11 +145,11 @@ namespace ATP.AnimationPathTools {
 
             // Handle drawing for each node an indicator of currently active
             // handles mode.
-            HandleDrawingHandlesModeIndicator();
+            //HandleDrawingHandlesModeIndicator();
 
             // Handle drawing for each node an indicator of currently active
             // movement mode.
-            HandleDrawingMovementModeIndicator();
+            //HandleDrawingMovementModeIndicator();
 
             // Handle drawing for each node timestamp label.
             //HandleDrawingTimestampLabels();
@@ -493,14 +494,21 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
 
+            Handles.color = script.GizmoCurveColor;
             Vector3 newPos;
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
+                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                float sphereSize = handleSize * MovementHandleSize;
+
                 // draw node's handle.
-                newPos = Handles.PositionHandle(
-                        nodes[i],
-                        Quaternion.identity);
+                newPos = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.SphereCap);
 
                 // If node was moved..
                 if (newPos != nodes[i]) {
@@ -643,12 +651,21 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3> callback) {
 
+            Handles.color = script.GizmoCurveColor;
+
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
+                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                float sphereSize = handleSize * MovementHandleSize;
+
                 // draw node's handle.
-                Vector3 newHandleValue = Handles.PositionHandle(
-                        nodes[i],
-                        Quaternion.identity);
+                Vector3 newHandleValue = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    //Handles.SphereCap);
+                    Handles.CubeCap);
 
                 // How much tangent's value changed in this frame.
                 Vector3 tangentDelta = newHandleValue - nodes[i];

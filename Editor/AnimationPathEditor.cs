@@ -1050,11 +1050,11 @@ namespace ATP.AnimationPathTools {
                         "Advanced Settings",
                         ""));
             if (advancedSettingsFoldout.boolValue) {
-                EditorGUILayout.PropertyField(
-                        samplingFrequency,
-                        new GUIContent(
-                            "Curve Sampling",
-                            "Number of points to draw 1 m of gizmo curve."));
+                //EditorGUILayout.PropertyField(
+                //        samplingFrequency,
+                //        new GUIContent(
+                //            "Curve Sampling",
+                //            "Number of points to draw 1 m of gizmo curve."));
                 EditorGUILayout.PropertyField(
                         skin,
                         new GUIContent(

@@ -46,6 +46,11 @@ namespace ATP.AnimationPathTools {
         /// nodes.
         /// </summary>
         private const int SpeedSampling = 10;
+
+        /// <summary>
+        /// How many points should be drawn for one meter of a gizmo curve.
+        /// </summary>
+        private const int gizmoCurveSamplingFrequency = 20;
         #endregion Constants
 
         //[SerializeField]
@@ -91,12 +96,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         private Color gizmoCurveColor = Color.yellow;
-
-        /// <summary>
-        /// How many points should be drawn for one meter of a gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private int gizmoCurveSamplingFrequency = 20;
 
         /// <summary>
         /// If "Move All" mode is enabled.
@@ -209,13 +208,6 @@ namespace ATP.AnimationPathTools {
             if (_animationCurves == null) {
                 _animationCurves =
                     ScriptableObject.CreateInstance<AnimationPathCurves>();
-            }
-        }
-
-        private void OnValidate() {
-            // Sampling frequency inspector option cannot be less than 2.
-            if (gizmoCurveSamplingFrequency <= 2) {
-                gizmoCurveSamplingFrequency = 2;
             }
         }
 

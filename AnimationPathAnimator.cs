@@ -13,6 +13,8 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         #region CONSTANTS
+        // TODO Add in to the inspector.
+        private const float RotationDamping = 3.0f;
 
         /// <summary>
         /// Key shortcut to jump backward.
@@ -79,7 +81,6 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
-
         #endregion FIELDS
 
         #region UNITY MESSAGES
@@ -136,6 +137,7 @@ namespace ATP.AnimationPathTools {
 
         #region PRIVATE METHODS
 
+        // TODO Rename target object to objectTransform.
         private void Animate() {
             // Animate targets selected in the inspector.
             foreach (Animation anim in animations) {
@@ -157,8 +159,18 @@ namespace ATP.AnimationPathTools {
                 // If target and look at target inspector fields are not
                 // empty..
                 if (anim.Target != null && anim.LookAtTarget != null) {
+                    Vector3 targetDirection =
+                        anim.LookAtTarget.position - anim.Target.position;
+                    Quaternion rotation = Quaternion.LookRotation(
+                        targetDirection);
+                    float speed = Time.deltaTime * RotationDamping;
+                    anim.Target.rotation = Quaternion.Slerp(
+                        anim.Target.rotation,
+                        rotation,
+                        speed);
+
                     // rotate target.
-                    anim.Target.LookAt(anim.LookAtTarget);
+                    //anim.Target.LookAt(anim.LookAtTarget);
                 }
             }
         }

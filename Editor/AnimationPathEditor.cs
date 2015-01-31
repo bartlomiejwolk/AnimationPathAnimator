@@ -55,7 +55,7 @@ namespace ATP.AnimationPathTools {
 
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
-        private SerializedProperty gizmoCurveColor;
+        protected SerializedProperty gizmoCurveColor;
         // TODO Rename to curveSamplingFrequency
         private SerializedProperty samplingFrequency;
         private SerializedProperty skin;

@@ -174,6 +174,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public Color GizmoCurveColor {
             get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
         }
 
         #endregion PUBLIC PROPERTIES

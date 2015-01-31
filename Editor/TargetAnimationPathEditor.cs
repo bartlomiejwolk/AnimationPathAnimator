@@ -10,6 +10,9 @@ namespace ATP.AnimationPathTools {
             base.OnEnable();
 
             script = (TargetAnimationPath)target;
+
+            // Set default gizmo curve color.
+            script.GizmoCurveColor = Color.magenta;
         }
 
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {

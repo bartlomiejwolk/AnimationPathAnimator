@@ -50,6 +50,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
+        // TODO Rename to CamelCase.
         private const int gizmoCurveSamplingFrequency = 20;
         #endregion Constants
 
@@ -60,6 +61,7 @@ namespace ATP.AnimationPathTools {
         //private List<AnimationPathNode> nodes = new List<AnimationPathNode>();
 
         #region Fields
+
         private const float FirstNodeGizmoSize = 0.15f;
 
         /// <summary>
@@ -120,13 +122,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         private bool tangentMode = false;
-
-        /// <summary>
-        /// Tangent weight used by <c>AnimationCurve.SmoothNodesTangents()</c>.
-        /// </summary>
-        [SerializeField]
-        private float tangentWeight;
-
 #pragma warning restore 0414
 
         #endregion Editor
@@ -594,12 +589,12 @@ namespace ATP.AnimationPathTools {
             // For each key..
             for (int j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
-                _animationCurves.SmoothPointTangents(j, weight);
+                _animationCurves.SmoothPointTangents(j);
             }
         }
 
-        public void SmoothNodeTangents(int nodeIndex, float tangentWeigth) {
-            _animationCurves.SmoothPointTangents(nodeIndex, tangentWeigth);
+        public void SmoothNodeTangents(int nodeIndex) {
+            _animationCurves.SmoothPointTangents(nodeIndex);
         }
         /// <summary>
         /// Calculate speed between two nodes.

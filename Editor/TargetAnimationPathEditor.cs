@@ -61,9 +61,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(
-                    index,
-                    tangentWeight.floatValue);
+            script.SmoothNodeTangents(index);
         }
 
         protected override void DrawTangentHandlesCallbackHandler(

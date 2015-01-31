@@ -154,11 +154,11 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="nodeIndex">Point index.</param>
         /// <param name="tangentWeight">Tangent weight.</param>
-        public void SmoothPointTangents(int nodeIndex, float tangentWeight) {
+        public void SmoothPointTangents(int nodeIndex) {
             // For each curve..
             for (int i = 0; i < _curves.Length; i++) {
                 // Smooth tangents.
-                _curves[i].SmoothTangents(nodeIndex, tangentWeight);
+                _curves[i].SmoothTangents(nodeIndex, 0);
             }
         }
 

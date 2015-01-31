@@ -58,8 +58,6 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty gizmoCurveColor;
         private SerializedProperty curveSamplingFrequency;
         private SerializedProperty skin;
-        // TODO Make it a const field.
-        protected SerializedProperty tangentWeight;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -96,7 +94,6 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("gizmoCurveSamplingFrequency");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
-            tangentWeight = serializedObject.FindProperty("tangentWeight");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
 
@@ -874,9 +871,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(
-                    index,
-                    tangentWeight.floatValue);
+            script.SmoothNodeTangents(index);
 
             DistributeNodeSpeedValues();
         }
@@ -977,7 +972,7 @@ namespace ATP.AnimationPathTools {
                 "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
 
                 HandleUndo();
-                script.SmoothNodesTangents(tangentWeight.floatValue);
+                script.SmoothNodesTangents();
                 DistributeNodeSpeedValues();
             }
             if (GUILayout.Button(new GUIContent(

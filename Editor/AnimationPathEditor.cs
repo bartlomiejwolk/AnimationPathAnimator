@@ -77,6 +77,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         protected AnimationPath script;
         private const float MovementHandleSize = 0.25f;
+        private const float FirstNodeSize = 0.12f;
         private readonly Color MoveAllModeColor = Color.gray;
 
         #endregion Helper Variables
@@ -516,16 +517,23 @@ namespace ATP.AnimationPathTools {
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
+                // Get handle size.
                 float handleSize = HandleUtility.GetHandleSize(nodes[i]);
                 float sphereSize = handleSize * MovementHandleSize;
+                // Decide on cap function used to draw handle and its size.
+                Handles.DrawCapFunction capFunction = Handles.SphereCap;
+                if (i == 0) {
+                    capFunction = Handles.DotCap;
+                    sphereSize = handleSize * FirstNodeSize;
+                }
 
-                // draw node's handle.
+                // Draw handle.
                 newPos = Handles.FreeMoveHandle(
                     nodes[i],
                     Quaternion.identity,
                     sphereSize,
                     Vector3.zero,
-                    Handles.SphereCap);
+                    capFunction);
 
                 // If node was moved..
                 if (newPos != nodes[i]) {

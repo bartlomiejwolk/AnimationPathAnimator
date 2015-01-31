@@ -79,6 +79,7 @@ namespace ATP.AnimationPathTools {
         private const float MovementHandleSize = 0.25f;
         private const float FirstNodeSize = 0.12f;
         private readonly Color MoveAllModeColor = Color.gray;
+        private const float FirstNodeColorOffset = 0.3f;
 
         #endregion Helper Variables
 
@@ -507,24 +508,33 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
 
-            Handles.color = script.GizmoCurveColor;
-            // Set node color for Move All mode.
-            if (script.MoveAllMode) {
-                Handles.color = MoveAllModeColor;
-            }
-
             Vector3 newPos;
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
+                // Set handle color.
+                Handles.color = script.GizmoCurveColor;
+                // Set node color for Move All mode.
+                if (script.MoveAllMode) {
+                    Handles.color = MoveAllModeColor;
+                }
                 // Get handle size.
                 float handleSize = HandleUtility.GetHandleSize(nodes[i]);
                 float sphereSize = handleSize * MovementHandleSize;
-                // Decide on cap function used to draw handle and its size.
+                // Decide on cap function used to draw handle.
                 Handles.DrawCapFunction capFunction = Handles.SphereCap;
+
+                // Set first node handle properties.
                 if (i == 0) {
                     capFunction = Handles.DotCap;
                     sphereSize = handleSize * FirstNodeSize;
+                    //float r = Mathf.Clamp(
+                    //    Handles.color.r * FirstNodeColorOffset, 0, 1);
+                    //float g = Mathf.Clamp(
+                    //    Handles.color.g * FirstNodeColorOffset, 0, 1);
+                    //float b = Mathf.Clamp(
+                    //    Handles.color.b * FirstNodeColorOffset, 0, 1);
+                    //Handles.color = new Color(r, g, b);
                 }
 
                 // Draw handle.

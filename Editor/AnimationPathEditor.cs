@@ -689,8 +689,7 @@ namespace ATP.AnimationPathTools {
                     Quaternion.identity,
                     sphereSize,
                     Vector3.zero,
-                    //Handles.SphereCap);
-                    Handles.CubeCap);
+                    Handles.CircleCap);
 
                 // How much tangent's value changed in this frame.
                 Vector3 tangentDelta = newHandleValue - nodes[i];

@@ -18,12 +18,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationCurve[] _curves = new AnimationCurve[3];
 
-        /// <summary>
-        /// Event that is fired every time there's any change to the animation
-        /// curves.
-        /// </summary>
-        public event EventHandler CurvesChanged;
-
         public int KeysNo {
             get { return _curves[0].length; }
         }
@@ -38,14 +32,10 @@ namespace ATP.AnimationPathTools {
             set { _curves[i] = value; }
         }
 
-        // TODO Rename to CreateNewPoint().
-        public void AddNewPoint(float timestamp, Vector3 position) {
+        public void CreateNewPoint(float timestamp, Vector3 position) {
             _curves[0].AddKey(timestamp, position.x);
             _curves[1].AddKey(timestamp, position.y);
             _curves[2].AddKey(timestamp, position.z);
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         /// <summary>
@@ -55,9 +45,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="curves">Animation curves.</param>
         /// <param name="keyIndex">Index of the key to update.</param>
         /// <param name="position">New key value.</param>
-        // TODO Rename to MovePointToPosition().
-        // TODO This should accept timestamp instead of index.
-        public void MovePoint(
+        public void MovePointToPosition(
                 int keyIndex,
                 Vector3 position) {
 
@@ -75,9 +63,6 @@ namespace ATP.AnimationPathTools {
             _curves[0].MoveKey(keyIndex, keyXCopy);
             _curves[1].MoveKey(keyIndex, keyYCopy);
             _curves[2].MoveKey(keyIndex, keyZCopy);
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public void ChangePointTangents(
@@ -102,9 +87,6 @@ namespace ATP.AnimationPathTools {
             _curves[0].MoveKey(nodeIndex, keyXCopy);
             _curves[1].MoveKey(nodeIndex, keyYCopy);
             _curves[2].MoveKey(nodeIndex, keyZCopy);
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public void ChangePointTimestamp(
@@ -122,9 +104,6 @@ namespace ATP.AnimationPathTools {
                 // Replace old key with a new one.
                 _curves[i].MoveKey(keyIndex, keyCopy);
             }
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public float GetTimeAtKey(int keyIndex) {
@@ -175,11 +154,11 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="nodeIndex">Point index.</param>
         /// <param name="tangentWeight">Tangent weight.</param>
-        public void SmoothPointTangents(int nodeIndex, float tangentWeight) {
+        public void SmoothPointTangents(int nodeIndex) {
             // For each curve..
             for (int i = 0; i < _curves.Length; i++) {
                 // Smooth tangents.
-                _curves[i].SmoothTangents(nodeIndex, tangentWeight);
+                _curves[i].SmoothTangents(nodeIndex, 0);
             }
         }
 
@@ -189,12 +168,6 @@ namespace ATP.AnimationPathTools {
         private void InitializeCurves() {
             for (var i = 0; i < _curves.Length; i++) {
                 _curves[i] = new AnimationCurve();
-            }
-        }
-
-        private void OnCurvesChanged() {
-            if (CurvesChanged != null) {
-                CurvesChanged(this, EventArgs.Empty);
             }
         }
 
@@ -249,9 +222,6 @@ namespace ATP.AnimationPathTools {
 
                 _curves[i].MoveKey(nodeIndex, key);
             }
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public void AddNodeAtTime(float timestamp) {

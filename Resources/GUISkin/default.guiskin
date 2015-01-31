@@ -1659,8 +1659,8 @@ MonoBehaviour:
     m_StretchHeight: 0
   - m_Name: LinearTangentModeButton
     m_Normal:
-      m_Background: {fileID: 0}
-      m_TextColor: {r: .91911763, g: .0473075137, b: .0473075137, a: 1}
+      m_Background: {fileID: 2800000, guid: b5258c3dfd63ec843acc1ec4cb6c91ed, type: 3}
+      m_TextColor: {r: .219607845, g: .219607845, b: .219607845, a: 1}
     m_Hover:
       m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}

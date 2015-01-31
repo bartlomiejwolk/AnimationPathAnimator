@@ -1,4 +1,6 @@
-﻿namespace ATP.AnimationPathTools {
+﻿using UnityEngine;
+
+namespace ATP.AnimationPathTools {
 
     public class TargetAnimationPath : AnimationPath {
     }

@@ -10,6 +10,9 @@ namespace ATP.AnimationPathTools {
             base.OnEnable();
 
             script = (TargetAnimationPath)target;
+
+            // Set default gizmo curve color.
+            script.GizmoCurveColor = Color.magenta;
         }
 
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
@@ -17,7 +20,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            AddNodeAuto(nodeIndex);
+            AddNewNode(nodeIndex);
         }
 
         protected override void DrawLinearTangentModeButtonsCallbackHandler(
@@ -58,9 +61,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(
-                    index,
-                    tangentWeight.floatValue);
+            script.SmoothNodeTangents(index);
         }
 
         protected override void DrawTangentHandlesCallbackHandler(

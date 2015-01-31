@@ -16,40 +16,24 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(AnimationPath))]
     public class AnimationPathEditor : Editor {
 
-        #region Keyboard Keys
+        #region BUTTON OFFSETS
 
-        /// <summary>
-        /// If handles mode key is pressed in this frame.
-        /// </summary>
-        private bool handlesModeKeyPressed = false;
-
-        /// <summary>
-        /// If move all mode key is pressed in this frame.
-        /// </summary>
-        private bool moveAllKeyPressed = false;
-
-        /// <summary>
-        /// If handles mode key was pressed in the previous frame.
-        /// </summary>
-        private bool prevHandlesModeKeyValue = false;
-
-        /// <summary>
-        /// If move all mode key was pressed in the previous frame.
-        /// </summary>
-        private bool prevMoveAllKeyValue = false;
-
-        #endregion Keyboard Keys
+        private const int smoothButtonH = 25;
+        private const int smoothButtonV = 10;
+        private const int linearButtonH = 44;
+        private const int linearButtonV = 10;
+        private const int addButtonH = 62;
+        private const int addButtonV = 10;
+        private const int removeButtonH = 81;
+        private const int removeButtonV = 10;
+        #endregion
 
         #region SERIALIZED PROPERTIES
 
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
-        private SerializedProperty gizmoCurveColor;
-        // TODO Rename to curveSamplingFrequency
-        private SerializedProperty samplingFrequency;
+        protected SerializedProperty gizmoCurveColor;
         private SerializedProperty skin;
-        // TODO Make it a const field.
-        protected SerializedProperty tangentWeight;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -59,12 +43,16 @@ namespace ATP.AnimationPathTools {
         /// Scene tool that was selected when game object was first selected in
         /// the hierarchy view.
         /// </summary>
-        private Tool lastTool = Tool.None;
+        public static Tool lastTool = Tool.None;
 
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
         protected AnimationPath script;
+        private const float MovementHandleSize = 0.25f;
+        private const float FirstNodeSize = 0.12f;
+        private readonly Color MoveAllModeColor = Color.gray;
+        private const float FirstNodeColorOffset = 0.3f;
 
         #endregion Helper Variables
 
@@ -78,17 +66,18 @@ namespace ATP.AnimationPathTools {
             // Initialize serialized properties.
             gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");
-            samplingFrequency =
-                serializedObject.FindProperty("gizmoCurveSamplingFrequency");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
-            tangentWeight = serializedObject.FindProperty("tangentWeight");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
 
             script = (AnimationPath)target;
-            lastTool = Tools.current;
-            Tools.current = Tool.None;
+
+            // Remember active scene tool.
+            if (Tools.current != Tool.None) {
+                lastTool = Tools.current;
+                Tools.current = Tool.None;
+            }
         }
 
         public override void OnInspectorGUI() {
@@ -114,17 +103,16 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
-            // Update shortcut keys state for this frame. TODO Move to a
-            // separate method.
-            AnimationPathUtilities.UpdateKeyboardKey(
-                AnimationPath.MoveAllKey,
-                ref moveAllKeyPressed,
-                ref prevMoveAllKeyValue);
+            // Update shortcut keys state for this frame. 
+            //AnimationPathUtilities.UpdateKeyboardKey(
+            //    AnimationPath.MoveAllKey,
+            //    ref moveAllKeyPressed,
+            //    ref prevMoveAllKeyValue);
 
-            AnimationPathUtilities.UpdateKeyboardKey(
-                AnimationPath.HandlesModeKey,
-                ref handlesModeKeyPressed,
-                ref prevHandlesModeKeyValue);
+            //AnimationPathUtilities.UpdateKeyboardKey(
+            //    AnimationPath.HandlesModeKey,
+            //    ref handlesModeKeyPressed,
+            //    ref prevHandlesModeKeyValue);
 
             // Change handles mode.
             // Each on-scene node has a handle to update node's attribute.
@@ -144,11 +132,11 @@ namespace ATP.AnimationPathTools {
 
             // Handle drawing for each node an indicator of currently active
             // handles mode.
-            HandleDrawingHandlesModeIndicator();
+            //HandleDrawingHandlesModeIndicator();
 
             // Handle drawing for each node an indicator of currently active
             // movement mode.
-            HandleDrawingMovementModeIndicator();
+            //HandleDrawingMovementModeIndicator();
 
             // Handle drawing for each node timestamp label.
             //HandleDrawingTimestampLabels();
@@ -172,183 +160,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion UNITY MESSAGES
 
-        #region PRIVATE METHODS
-
-        private void DrawInspectorGUI() {
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                    gizmoCurveColor,
-                    new GUIContent("Curve Color", ""));
-            serializedObject.ApplyModifiedProperties();
-
-            EditorGUILayout.BeginHorizontal();
-            serializedObject.Update();
-            if (GUILayout.Button(new GUIContent(
-                "Linear",
-                "Set tangent mode to linear for all nodePositions."))) {
-
-                // Allow undo this operation.
-                HandleUndo();
-
-                script.SetNodesLinear();
-                DistributeNodeSpeedValues();
-            }
-            if (GUILayout.Button(new GUIContent(
-                           "Smooth",
-                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
-
-                HandleUndo();
-                script.SmoothNodesTangents(tangentWeight.floatValue);
-                DistributeNodeSpeedValues();
-            }
-            if (GUILayout.Button(new GUIContent(
-                "Reset",
-                "Create a new default Animation Path or reset to default."))) {
-
-                // Allow undo this operation. TODO Check if this works.
-                HandleUndo();
-
-                // Get scene view camera.
-                Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-                // Get world point to place the Animation Path.
-                Vector3 worldPoint = sceneCamera.transform.position
-                    + sceneCamera.transform.forward * 7;
-
-                // Reset curves to its default state.
-                ResetPath(worldPoint);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            // Tooltip for moveAllMode property.
-            string moveAllModeTooltip = String.Format(
-                "If enabled, you can move with mouse all nodePositions at once. " +
-                "Toggle it with {0} key.",
-                AnimationPath.MoveAllKey);
-
-            // Disable this control if Tangent Mode is enabled.
-            GUI.enabled = !script.TangentMode;
-            script.MoveAllMode = GUILayout.Toggle(
-                script.MoveAllMode,
-                new GUIContent(
-                    "Move All Mode",
-                    moveAllModeTooltip));
-            GUI.enabled = true;
-
-            // Tooltip for handlesMode property.
-            string tangentModeTooltip = String.Format(
-                "If enabled, the on-scene handles will change node's tangents." +
-                "Enable it temporarily with {0} key.",
-                AnimationPath.HandlesModeKey);
-
-            GUI.enabled = !script.MoveAllMode;
-            script.TangentMode = GUILayout.Toggle(
-                script.TangentMode,
-                new GUIContent(
-                    "Tangent Mode",
-                    tangentModeTooltip));
-            GUI.enabled = true;
-
-            script.SceneControls = GUILayout.Toggle(
-                script.SceneControls,
-                new GUIContent(
-                    "Scene Controls",
-                    "Toggle displaying on-scene node controls."));
-
-            EditorGUILayout.Space();
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                    exportSamplingFrequency,
-                    new GUIContent(
-                        "Export Sampling",
-                        "Number of points to export for 1 m of the curve. " +
-                        "If set to 0, it'll export only keys defined in " +
-                        "the curve."));
-            serializedObject.ApplyModifiedProperties();
-
-            if (GUILayout.Button("Export Nodes")) {
-                ExportNodes(exportSamplingFrequency.intValue);
-            }
-
-            EditorGUILayout.Space();
-
-            serializedObject.Update();
-            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                    advancedSettingsFoldout.boolValue,
-                    new GUIContent(
-                        "Advanced Settings",
-                        ""));
-            if (advancedSettingsFoldout.boolValue) {
-                EditorGUILayout.PropertyField(
-                        samplingFrequency,
-                        new GUIContent(
-                            "Curve Sampling",
-                            "Number of points to draw 1 m of gizmo curve."));
-                EditorGUILayout.PropertyField(
-                        skin,
-                        new GUIContent(
-                            "Skin",
-                            "Styles used by on-scene GUI elements."));
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// Update <c>moveAllMode</c> option with keyboard shortcut.
-        /// </summary>
-        private void HandleMoveAllOptionShortcut() {
-            // Don't allow changing Movement mode when Tangent mode is already
-            // enabled.
-            if (script.TangentMode) return;
-
-            // If was pressed..
-            if (moveAllKeyPressed && !prevMoveAllKeyValue) {
-                // Toggle move all mode.
-                script.MoveAllMode = !script.MoveAllMode;
-            }
-
-            // If key was released..
-            if (!moveAllKeyPressed && prevMoveAllKeyValue) {
-                // Toggle move all mode.
-                script.MoveAllMode = !script.MoveAllMode;
-            }
-        }
-
-        /// <summary>
-        /// Toggle handles mode with key shortcut.
-        /// </summary>
-        private void HandleTangentModeOptionShortcut() {
-            // Don't allow changing Handles mode when Move All mode is already
-            // enabled.
-            if (script.MoveAllMode) return;
-
-            // If modifier key was pressed, toggle handles mode.
-            if (handlesModeKeyPressed && !prevHandlesModeKeyValue) {
-                // Enable Tangent Mode.
-                script.TangentMode = !script.TangentMode;
-            }
-
-            // If key was released..
-            if (!handlesModeKeyPressed && prevHandlesModeKeyValue) {
-                // Disable Tangent Mode.
-                script.TangentMode = !script.TangentMode;
-            }
-        }
-
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        // Remove this method. TODO Move undo implementation to AnimationPath
-        // class.
-        public void HandleUndo() {
-            Undo.RecordObject(script.AnimationCurves, "Change path");
-        }
-
-        #endregion PRIVATE METHODS
-
-        #region DRAWING
+        #region DRAWING HANDLERS
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
@@ -450,8 +262,7 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing Move mode indicator.
         /// </summary>
         private void HandleDrawingMovementModeIndicator() {
-            // Draw label for Move All mode. TODO Add this condition to one
-            // above.
+            // Draw label for Move All mode.
             if (script.MoveAllMode) {
                 GUIStyle style = script.Skin.GetStyle("MoveAllModeIndicator");
 
@@ -531,11 +342,8 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle all actions related to drawing speed labels.
         /// </summary>
-        // TODO Remove before release.
         /*private void HandleDrawingSpeedLabels() {
             // Return if animation curves are not initialized or if there's not
-            // enough nodes to calculate speed. TODO Replace with a call to
-            // method in AnimationPath.
             if (script.NodesNo < 2) {
                 return;
             }
@@ -578,23 +386,22 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing timestamp labels.
         /// </summary>
-        // TODO Remove before release.
-        private void HandleDrawingTimestampLabels() {
-            // Timestamp label style.
-            GUIStyle style = script.Skin.GetStyle("TimestampLabel");
+        //private void HandleDrawingTimestampLabels() {
+        //    // Timestamp label style.
+        //    GUIStyle style = script.Skin.GetStyle("TimestampLabel");
 
-            // Positions at which to draw movement handles.
-            Vector3[] nodes = script.GetNodePositions();
+        //    // Positions at which to draw movement handles.
+        //    Vector3[] nodes = script.GetNodePositions();
 
-            // Nodes' timestamps.
-            float[] timestamps = script.GetNodeTimestamps();
+        //    // Nodes' timestamps.
+        //    float[] timestamps = script.GetNodeTimestamps();
 
-            // Draw timestamp labels.
-            DrawTimestampLabels(
-                    nodes,
-                    timestamps,
-                    style);
-        }
+        //    // Draw timestamp labels.
+        //    DrawTimestampLabels(
+        //            nodes,
+        //            timestamps,
+        //            style);
+        //}
         #endregion DRAWING
         #region Drawing methods
 
@@ -605,26 +412,24 @@ namespace ATP.AnimationPathTools {
 
             Handles.BeginGUI();
 
-            bool buttonPressed = false;
-
-            // Draw add buttons for each node. Execute callback on button
-            // press.
-            for (int i = 0; i < nodePositions.Length; i++) {
+            // Draw add buttons for each node (except the last one).
+            // Execute callback on button press.
+            for (var i = 0; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
                 Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
 
                 // Draw button.
-                buttonPressed = DrawButton(
+                bool buttonPressed = DrawButton(
                     guiPoint,
-                    82,
-                    25,
+                    addButtonH,
+                    addButtonV,
                     15,
                     15,
                     buttonStyle);
 
                 // Execute callback.
-                if (buttonPressed == true) {
+                if (buttonPressed) {
                     callback(i);
                 }
             }
@@ -641,9 +446,10 @@ namespace ATP.AnimationPathTools {
 
             bool buttonPressed = false;
 
-            // Draw add buttons for each node. Execute callback on button
-            // press.
-            for (int i = 0; i < nodePositions.Length; i++) {
+            // Draw remove buttons for each node except for the first and the
+            // last one.
+            // Execute callback on button press.
+            for (int i = 1; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
                 Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
@@ -651,8 +457,8 @@ namespace ATP.AnimationPathTools {
                 // Draw button.
                 buttonPressed = DrawButton(
                     guiPoint,
-                    64,
-                    25,
+                    removeButtonH,
+                    removeButtonV,
                     15,
                     15,
                     buttonStyle);
@@ -674,10 +480,38 @@ namespace ATP.AnimationPathTools {
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
-                // draw node's handle.
-                newPos = Handles.PositionHandle(
-                        nodes[i],
-                        Quaternion.identity);
+                // Set handle color.
+                Handles.color = script.GizmoCurveColor;
+                // Set node color for Move All mode.
+                if (script.MoveAllMode) {
+                    Handles.color = MoveAllModeColor;
+                }
+                // Get handle size.
+                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                float sphereSize = handleSize * MovementHandleSize;
+                // Decide on cap function used to draw handle.
+                Handles.DrawCapFunction capFunction = Handles.SphereCap;
+
+                // Set first node handle properties.
+                if (i == 0) {
+                    capFunction = Handles.DotCap;
+                    sphereSize = handleSize * FirstNodeSize;
+                    //float r = Mathf.Clamp(
+                    //    Handles.color.r * FirstNodeColorOffset, 0, 1);
+                    //float g = Mathf.Clamp(
+                    //    Handles.color.g * FirstNodeColorOffset, 0, 1);
+                    //float b = Mathf.Clamp(
+                    //    Handles.color.b * FirstNodeColorOffset, 0, 1);
+                    //Handles.color = new Color(r, g, b);
+                }
+
+                // Draw handle.
+                newPos = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    capFunction);
 
                 // If node was moved..
                 if (newPos != nodes[i]) {
@@ -717,8 +551,8 @@ namespace ATP.AnimationPathTools {
 
                 // Create rectangle for the "+" button.
                 Rect rect = new Rect(
-                        guiPoint.x + 100,
-                        guiPoint.y + 25,
+                        guiPoint.x + smoothButtonH,
+                        guiPoint.y + smoothButtonV,
                         15,
                         15);
 
@@ -758,13 +592,13 @@ namespace ATP.AnimationPathTools {
 
                 // Create rectangle for the button.
                 Rect rect = new Rect(
-                        guiPoint.x + 120,
-                        guiPoint.y + 25,
+                        guiPoint.x + linearButtonH,
+                        guiPoint.y + linearButtonV,
                         15,
                         15);
 
                 // Draw button.
-                buttonPressed = GUI.Button(rect, "X", buttonStyle);
+                buttonPressed = GUI.Button(rect, "", buttonStyle);
 
                 // If button pressed..
                 if (buttonPressed == true) {
@@ -820,12 +654,20 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3> callback) {
 
+            Handles.color = script.GizmoCurveColor;
+
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
+                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                float sphereSize = handleSize * MovementHandleSize;
+
                 // draw node's handle.
-                Vector3 newHandleValue = Handles.PositionHandle(
-                        nodes[i],
-                        Quaternion.identity);
+                Vector3 newHandleValue = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.CircleCap);
 
                 // How much tangent's value changed in this frame.
                 Vector3 tangentDelta = newHandleValue - nodes[i];
@@ -950,7 +792,8 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // Add a new node.
-            AddNodeAuto(nodeIndex);
+            //AddNodeAuto(nodeIndex);
+            AddNewNode(nodeIndex);
 
             DistributeNodeSpeedValues();
         }
@@ -996,9 +839,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(
-                    index,
-                    tangentWeight.floatValue);
+            script.SmoothNodeTangents(index);
 
             DistributeNodeSpeedValues();
         }
@@ -1014,18 +855,201 @@ namespace ATP.AnimationPathTools {
         }
         #endregion CALLBACK HANDLERS
         #region PRIVATE
-        public void AddNodeAuto(int nodeIndex) {
+        /// <summary>
+        /// Update <c>moveAllMode</c> option with keyboard shortcut.
+        /// </summary>
+        private void HandleMoveAllOptionShortcut() {
+            // Don't allow changing Movement mode when Tangent mode is already
+            // enabled.
+            //if (script.TangentMode) return;
+
+            // If was pressed..
+            /*if (moveAllKeyPressed && !prevMoveAllKeyValue) {
+                // Toggle move all mode.
+                script.MoveAllMode = !script.MoveAllMode;
+            }
+
+            // If key was released..
+            if (!moveAllKeyPressed && prevMoveAllKeyValue) {
+                // Toggle move all mode.
+                script.MoveAllMode = !script.MoveAllMode;
+            }*/
+
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != AnimationPath.MoveAllKey) return;
+
+            // Make sure Tangent mode is disabled.
+            script.TangentMode = false;
+
+            // Toggle Move All mode.
+            script.MoveAllMode = !script.MoveAllMode;
+        }
+
+        /// <summary>
+        /// Toggle handles mode with key shortcut.
+        /// </summary>
+        private void HandleTangentModeOptionShortcut() {
+            // Don't allow changing Handles mode when Move All mode is already
+            // enabled.
+            /*if (script.MoveAllMode) return;
+
+            // If modifier key was pressed, toggle handles mode.
+            if (handlesModeKeyPressed && !prevHandlesModeKeyValue) {
+                // Enable Tangent Mode.
+                script.TangentMode = !script.TangentMode;
+            }
+
+            // If key was released..
+            if (!handlesModeKeyPressed && prevHandlesModeKeyValue) {
+                // Disable Tangent Mode.
+                script.TangentMode = !script.TangentMode;
+            }*/
+
+            // Return if Tangent Mode shortcut wasn't released.
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != AnimationPath.HandlesModeKey) return;
+
+            // Make sure Move All mode is disabled.
+            script.MoveAllMode = false;
+
+            // Toggle Move All mode.
+            script.TangentMode = !script.TangentMode;
+        }
+
+        private void DrawInspectorGUI() {
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                    gizmoCurveColor,
+                    new GUIContent("Curve Color", ""));
+            serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.BeginHorizontal();
+            serializedObject.Update();
+            if (GUILayout.Button(new GUIContent(
+                "Linear",
+                "Set tangent mode to linear for all nodePositions."))) {
+
+                // Allow undo this operation.
+                HandleUndo();
+
+                script.SetNodesLinear();
+                DistributeNodeSpeedValues();
+            }
+            if (GUILayout.Button(new GUIContent(
+                           "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+
+                HandleUndo();
+                script.SmoothNodesTangents();
+                DistributeNodeSpeedValues();
+            }
+            if (GUILayout.Button(new GUIContent(
+                "Reset",
+                "Create a new default Animation Path or reset to default."))) {
+
+                // Allow undo this operation.
+                HandleUndo();
+                // Reset curves to its default state.
+                ResetPath();
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            // Tooltip for moveAllMode property.
+            string moveAllModeTooltip = String.Format(
+                "If enabled, you can move with mouse all nodePositions at once. " +
+                "Toggle it with {0} key.",
+                AnimationPath.MoveAllKey);
+
+            // Disable this control if Tangent Mode is enabled.
+            GUI.enabled = !script.TangentMode;
+            script.MoveAllMode = GUILayout.Toggle(
+                script.MoveAllMode,
+                new GUIContent(
+                    "Move All Mode",
+                    moveAllModeTooltip));
+            GUI.enabled = true;
+
+            // Tooltip for handlesMode property.
+            string tangentModeTooltip = String.Format(
+                "If enabled, the on-scene handles will change node's tangents." +
+                "Enable it temporarily with {0} key.",
+                AnimationPath.HandlesModeKey);
+
+            GUI.enabled = !script.MoveAllMode;
+            script.TangentMode = GUILayout.Toggle(
+                script.TangentMode,
+                new GUIContent(
+                    "Tangent Mode",
+                    tangentModeTooltip));
+            GUI.enabled = true;
+
+            script.SceneControls = GUILayout.Toggle(
+                script.SceneControls,
+                new GUIContent(
+                    "Scene Controls",
+                    "Toggle displaying on-scene node controls."));
+
+            EditorGUILayout.Space();
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                    exportSamplingFrequency,
+                    new GUIContent(
+                        "Export Sampling",
+                        "Number of points to export for 1 m of the curve. " +
+                        "If set to 0, it'll export only keys defined in " +
+                        "the curve."));
+            serializedObject.ApplyModifiedProperties();
+
+            if (GUILayout.Button("Export Nodes")) {
+                ExportNodes(exportSamplingFrequency.intValue);
+            }
+
+            EditorGUILayout.Space();
+
+            serializedObject.Update();
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                    advancedSettingsFoldout.boolValue,
+                    new GUIContent(
+                        "Advanced Settings",
+                        ""));
+            if (advancedSettingsFoldout.boolValue) {
+                //EditorGUILayout.PropertyField(
+                //        curveSamplingFrequency,
+                //        new GUIContent(
+                //            "Curve Sampling",
+                //            "Number of points to draw 1 m of gizmo curve."));
+                EditorGUILayout.PropertyField(
+                        skin,
+                        new GUIContent(
+                            "Skin",
+                            "Styles used by on-scene GUI elements."));
+            }
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        // Remove this method.
+        protected void HandleUndo() {
+            Undo.RecordObject(script.AnimationCurves, "Change path");
+        }
+
+        /*protected void AddNodeAuto(int nodeIndex) {
             // If this node is the last one in the path..
             if (nodeIndex == script.NodesNo - 1) {
                 AddNodeEnd(nodeIndex);
             }
             // Any other node than the last one.
             else {
-                AddNodeBetween(nodeIndex);
+                AddNewNode(nodeIndex);
             }
-        }
-        // TODO Should receive two node indexes.
-        private void AddNodeBetween(int nodeIndex) {
+        }*/
+
+        protected void AddNewNode(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
@@ -1038,10 +1062,10 @@ namespace ATP.AnimationPathTools {
                 ((nextKeyTime - currentKeyTime) / 2);
 
             // Add node to the animation curves.
-            script.AddNodeAtTime(newKeyTime);
+            script.CreateNodeAtTime(newKeyTime);
         }
 
-        private void AddNodeEnd(int nodeIndex) {
+        /*private void AddNodeEnd(int nodeIndex) {
             // Calculate position for the new node.
             var newNodePosition = CalculateNewEndNodePosition(nodeIndex);
 
@@ -1051,7 +1075,7 @@ namespace ATP.AnimationPathTools {
 
             // Add new node to animation curves.
             script.CreateNode(1, newNodePosition);
-        }
+        }*/
 
         private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
             // Get positions of all nodes.
@@ -1102,32 +1126,29 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DistributeNodeSpeedValues() {
+            // Calculate path curved length.
             float pathLength = script.CalculatePathCurvedLength(
-                script.GizmoCurveSamplingFrequency);
-
+                AnimationPath.GizmoCurveSamplingFrequency);
             // Calculate time for one meter of curve length.
             float timeForMeter = 1 / pathLength;
-
             // Helper variable.
             float prevTimestamp = 0;
 
+            // For each node calculate and apply new timestamp.
             for (var i = 1; i < script.NodesNo - 1; i++) {
                 // Calculate section curved length.
                 float sectionLength = script.CalculateSectionCurvedLength(
                     i - 1,
                     i,
-                    script.GizmoCurveSamplingFrequency);
-
+                    AnimationPath.GizmoCurveSamplingFrequency);
                 // Calculate time interval.
                 float sectionTimeInterval = sectionLength * timeForMeter;
-
                 // Calculate new timestamp.
                 float newTimestamp = prevTimestamp + sectionTimeInterval;
-
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
-                // Add timestamp to the list.
+                // Update node timestamp.
                 script.ChangeNodeTimestamp(i, newTimestamp);
             }
         }
@@ -1179,7 +1200,12 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        private void ResetPath(Vector3 worldPoint) {
+        private void ResetPath() {
+            // Get scene view camera.
+            Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+            // Get world point to place the Animation Path.
+            Vector3 worldPoint = sceneCamera.transform.position
+                + sceneCamera.transform.forward * 7;
             // Number of nodes to remove.
             int noOfNodesToRemove = script.NodesNo;
 

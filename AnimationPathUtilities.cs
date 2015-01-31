@@ -36,7 +36,7 @@ namespace ATP.AnimationPathTools {
         ///     Check if modifier key is pressed and remember that in a class
         ///     field.
         /// </summary>
-        public static void UpdateKeyboardKey(
+        /*public static void UpdateKeyboardKey(
             KeyCode keyCode,
             ref bool keyPressed,
             ref bool keyPressedInPreviousFrame) {
@@ -75,6 +75,6 @@ namespace ATP.AnimationPathTools {
 
                 keyPressedInPreviousFrame = false;
             }
-        }
+        }*/
     }
 }

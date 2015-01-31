@@ -1102,7 +1102,7 @@ namespace ATP.AnimationPathTools {
                 ((nextKeyTime - currentKeyTime) / 2);
 
             // Add node to the animation curves.
-            script.AddNodeAtTime(newKeyTime);
+            script.CreateNodeAtTime(newKeyTime);
         }
 
         /*private void AddNodeEnd(int nodeIndex) {

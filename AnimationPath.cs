@@ -216,8 +216,7 @@ namespace ATP.AnimationPathTools {
 
         #region Public Methods
 
-        // TODO Rename to CreateNodeAtTime().
-        public void AddNodeAtTime(float timestamp) {
+        public void CreateNodeAtTime(float timestamp) {
             _animationCurves.AddNodeAtTime(timestamp);
         }
 

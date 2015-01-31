@@ -50,8 +50,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
-        // TODO Rename to CamelCase.
-        private const int gizmoCurveSamplingFrequency = 20;
+        public const int GizmoCurveSamplingFrequency = 20;
         #endregion Constants
 
         //[SerializeField]
@@ -130,13 +129,6 @@ namespace ATP.AnimationPathTools {
 
         public AnimationPathCurves AnimationCurves {
             get { return _animationCurves; }
-        }
-
-        /// <summary>
-        /// How many points should be drawn for one meter of a gizmo curve.
-        /// </summary>
-        public int GizmoCurveSamplingFrequency {
-            get { return gizmoCurveSamplingFrequency; }
         }
 
         public bool MoveAllMode {
@@ -222,7 +214,7 @@ namespace ATP.AnimationPathTools {
                 pathLength += CalculateSectionCurvedLength(
                     i,
                     i + 1,
-                    gizmoCurveSamplingFrequency);
+                    GizmoCurveSamplingFrequency);
             }
 
             return pathLength;
@@ -302,7 +294,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void DrawGizmoCurve() {
-            List<Vector3> points = SamplePathForPoints(gizmoCurveSamplingFrequency);
+            List<Vector3> points = SamplePathForPoints(GizmoCurveSamplingFrequency);
 
             if (points.Count < 3) return;
 

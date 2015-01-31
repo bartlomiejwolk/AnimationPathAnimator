@@ -9,6 +9,8 @@ namespace ATP.AnimationPathTools {
     /// Animation Paths and also animate their rotation on x and y axis in
     /// time.
     /// </summary>
+    [RequireComponent (typeof (AnimationPath))]
+    [RequireComponent (typeof (TargetAnimationPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
 

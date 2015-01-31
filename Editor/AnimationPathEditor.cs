@@ -70,7 +70,7 @@ namespace ATP.AnimationPathTools {
         /// Scene tool that was selected when game object was first selected in
         /// the hierarchy view.
         /// </summary>
-        private Tool lastTool = Tool.None;
+        public static Tool lastTool = Tool.None;
 
         /// <summary>
         /// Reference to serialized class.
@@ -102,8 +102,12 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
 
             script = (AnimationPath)target;
-            lastTool = Tools.current;
-            Tools.current = Tool.None;
+
+            // Remember active scene tool.
+            if (Tools.current != Tool.None) {
+                lastTool = Tools.current;
+                Tools.current = Tool.None;
+            }
         }
 
         public override void OnInspectorGUI() {

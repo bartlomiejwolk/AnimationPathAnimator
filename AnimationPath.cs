@@ -362,12 +362,12 @@ namespace ATP.AnimationPathTools {
                 // New node position.
                 Vector3 newPosition = oldPosition + moveDelta;
                 // Update node positions.
-                _animationCurves.MovePoint(i, newPosition);
+                _animationCurves.MovePointToPosition(i, newPosition);
             }
         }
 
         public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
-            _animationCurves.MovePoint(nodeIndex, position);
+            _animationCurves.MovePointToPosition(nodeIndex, position);
         }
         /// <summary>
         /// Update speed value for each node.

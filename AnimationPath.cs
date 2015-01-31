@@ -408,8 +408,7 @@ namespace ATP.AnimationPathTools {
         /// </param>
         /// <returns>Array of 3d points.</returns>
         public List<Vector3> SamplePathForPoints(int samplingFrequency) {
-            // TODO Why initialise with nodes number?!
-            List<Vector3> points = new List<Vector3>(NodesNo);
+            List<Vector3> points = new List<Vector3>();
 
             // Call reference overload.
             SamplePathForPoints(samplingFrequency, points);

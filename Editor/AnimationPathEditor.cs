@@ -56,8 +56,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
         protected SerializedProperty gizmoCurveColor;
-        // TODO Rename to curveSamplingFrequency
-        private SerializedProperty samplingFrequency;
+        private SerializedProperty curveSamplingFrequency;
         private SerializedProperty skin;
         // TODO Make it a const field.
         protected SerializedProperty tangentWeight;
@@ -93,7 +92,7 @@ namespace ATP.AnimationPathTools {
             // Initialize serialized properties.
             gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");
-            samplingFrequency =
+            curveSamplingFrequency =
                 serializedObject.FindProperty("gizmoCurveSamplingFrequency");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
@@ -1055,7 +1054,7 @@ namespace ATP.AnimationPathTools {
                         ""));
             if (advancedSettingsFoldout.boolValue) {
                 //EditorGUILayout.PropertyField(
-                //        samplingFrequency,
+                //        curveSamplingFrequency,
                 //        new GUIContent(
                 //            "Curve Sampling",
                 //            "Number of points to draw 1 m of gizmo curve."));

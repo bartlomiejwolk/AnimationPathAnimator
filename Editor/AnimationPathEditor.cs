@@ -129,8 +129,7 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
-            // Update shortcut keys state for this frame. TODO Move to a
-            // separate method.
+            // Update shortcut keys state for this frame. 
             //AnimationPathUtilities.UpdateKeyboardKey(
             //    AnimationPath.MoveAllKey,
             //    ref moveAllKeyPressed,
@@ -289,8 +288,7 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing Move mode indicator.
         /// </summary>
         private void HandleDrawingMovementModeIndicator() {
-            // Draw label for Move All mode. TODO Add this condition to one
-            // above.
+            // Draw label for Move All mode.
             if (script.MoveAllMode) {
                 GUIStyle style = script.Skin.GetStyle("MoveAllModeIndicator");
 
@@ -370,11 +368,8 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle all actions related to drawing speed labels.
         /// </summary>
-        // TODO Remove before release.
         /*private void HandleDrawingSpeedLabels() {
             // Return if animation curves are not initialized or if there's not
-            // enough nodes to calculate speed. TODO Replace with a call to
-            // method in AnimationPath.
             if (script.NodesNo < 2) {
                 return;
             }
@@ -417,23 +412,22 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing timestamp labels.
         /// </summary>
-        // TODO Remove before release.
-        private void HandleDrawingTimestampLabels() {
-            // Timestamp label style.
-            GUIStyle style = script.Skin.GetStyle("TimestampLabel");
+        //private void HandleDrawingTimestampLabels() {
+        //    // Timestamp label style.
+        //    GUIStyle style = script.Skin.GetStyle("TimestampLabel");
 
-            // Positions at which to draw movement handles.
-            Vector3[] nodes = script.GetNodePositions();
+        //    // Positions at which to draw movement handles.
+        //    Vector3[] nodes = script.GetNodePositions();
 
-            // Nodes' timestamps.
-            float[] timestamps = script.GetNodeTimestamps();
+        //    // Nodes' timestamps.
+        //    float[] timestamps = script.GetNodeTimestamps();
 
-            // Draw timestamp labels.
-            DrawTimestampLabels(
-                    nodes,
-                    timestamps,
-                    style);
-        }
+        //    // Draw timestamp labels.
+        //    DrawTimestampLabels(
+        //            nodes,
+        //            timestamps,
+        //            style);
+        //}
         #endregion DRAWING
         #region Drawing methods
 
@@ -825,7 +819,7 @@ namespace ATP.AnimationPathTools {
 
             // Add a new node.
             //AddNodeAuto(nodeIndex);
-            AddNodeBetween(nodeIndex);
+            AddNewNode(nodeIndex);
 
             DistributeNodeSpeedValues();
         }
@@ -979,7 +973,7 @@ namespace ATP.AnimationPathTools {
                 "Reset",
                 "Create a new default Animation Path or reset to default."))) {
 
-                // Allow undo this operation. TODO Check if this works.
+                // Allow undo this operation.
                 HandleUndo();
                 // Reset curves to its default state.
                 ResetPath();
@@ -1065,8 +1059,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Record target object state for undo.
         /// </summary>
-        // Remove this method. TODO Move undo implementation to AnimationPath
-        // class.
+        // Remove this method.
         protected void HandleUndo() {
             Undo.RecordObject(script.AnimationCurves, "Change path");
         }
@@ -1078,12 +1071,11 @@ namespace ATP.AnimationPathTools {
             }
             // Any other node than the last one.
             else {
-                AddNodeBetween(nodeIndex);
+                AddNewNode(nodeIndex);
             }
         }*/
 
-        // TODO Should receive two node indexes.
-        protected void AddNodeBetween(int nodeIndex) {
+        protected void AddNewNode(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.

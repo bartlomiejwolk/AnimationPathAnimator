@@ -16,29 +16,6 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(AnimationPath))]
     public class AnimationPathEditor : Editor {
 
-        #region Keyboard Keys
-
-        /// <summary>
-        /// If handles mode key is pressed in this frame.
-        /// </summary>
-        private bool handlesModeKeyPressed = false;
-
-        /// <summary>
-        /// If move all mode key is pressed in this frame.
-        /// </summary>
-        private bool moveAllKeyPressed = false;
-
-        /// <summary>
-        /// If handles mode key was pressed in the previous frame.
-        /// </summary>
-        private bool prevHandlesModeKeyValue = false;
-
-        /// <summary>
-        /// If move all mode key was pressed in the previous frame.
-        /// </summary>
-        private bool prevMoveAllKeyValue = false;
-
-        #endregion Keyboard Keys
         #region BUTTON OFFSETS
 
         private const int smoothButtonH = 25;
@@ -56,7 +33,6 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
         protected SerializedProperty gizmoCurveColor;
-        private SerializedProperty curveSamplingFrequency;
         private SerializedProperty skin;
 
         #endregion SERIALIZED PROPERTIES
@@ -90,8 +66,6 @@ namespace ATP.AnimationPathTools {
             // Initialize serialized properties.
             gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");
-            curveSamplingFrequency =
-                serializedObject.FindProperty("gizmoCurveSamplingFrequency");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =

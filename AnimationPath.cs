@@ -68,12 +68,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         private AnimationPathCurves _animationCurves;
-
-        /// <summary>
-        /// Event called after changes made to the animation path.
-        /// </summary>
-        public event EventHandler PathChanged;
-
         #endregion Fields
 
         #region Editor
@@ -82,7 +76,9 @@ namespace ATP.AnimationPathTools {
         /// If true, advenced setting in the inspector will be folded out.
         /// </summary>
         [SerializeField]
+#pragma warning disable 414
         private bool advancedSettingsFoldout = false;
+#pragma warning restore 414
 
         /// <summary>
         /// How many transforms should be created for 1 m of gizmo curve when
@@ -90,7 +86,9 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <remarks>Exporting is implemented in <c>Editor</c> class.</remarks>
         [SerializeField]
+#pragma warning disable 414
         private int exportSamplingFrequency = 2;
+#pragma warning restore 414
 
         /// <summary>
         /// Color of the gizmo curve.

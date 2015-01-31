@@ -18,13 +18,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationCurve[] _curves = new AnimationCurve[3];
 
-        /// <summary>
-        /// Event that is fired every time there's any change to the animation
-        /// curves.
-        /// </summary>
-        // TODO Remove this event.
-        public event EventHandler CurvesChanged;
-
         public int KeysNo {
             get { return _curves[0].length; }
         }
@@ -44,9 +37,6 @@ namespace ATP.AnimationPathTools {
             _curves[0].AddKey(timestamp, position.x);
             _curves[1].AddKey(timestamp, position.y);
             _curves[2].AddKey(timestamp, position.z);
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         /// <summary>
@@ -76,9 +66,6 @@ namespace ATP.AnimationPathTools {
             _curves[0].MoveKey(keyIndex, keyXCopy);
             _curves[1].MoveKey(keyIndex, keyYCopy);
             _curves[2].MoveKey(keyIndex, keyZCopy);
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public void ChangePointTangents(
@@ -103,9 +90,6 @@ namespace ATP.AnimationPathTools {
             _curves[0].MoveKey(nodeIndex, keyXCopy);
             _curves[1].MoveKey(nodeIndex, keyYCopy);
             _curves[2].MoveKey(nodeIndex, keyZCopy);
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public void ChangePointTimestamp(
@@ -123,9 +107,6 @@ namespace ATP.AnimationPathTools {
                 // Replace old key with a new one.
                 _curves[i].MoveKey(keyIndex, keyCopy);
             }
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public float GetTimeAtKey(int keyIndex) {
@@ -193,12 +174,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void OnCurvesChanged() {
-            if (CurvesChanged != null) {
-                CurvesChanged(this, EventArgs.Empty);
-            }
-        }
-
         private void OnEnable() {
             // Initialize _curves field.
             if (_curves[0] == null) {
@@ -250,9 +225,6 @@ namespace ATP.AnimationPathTools {
 
                 _curves[i].MoveKey(nodeIndex, key);
             }
-
-            // Fire event.
-            OnCurvesChanged();
         }
 
         public void AddNodeAtTime(float timestamp) {

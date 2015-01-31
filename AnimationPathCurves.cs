@@ -32,8 +32,7 @@ namespace ATP.AnimationPathTools {
             set { _curves[i] = value; }
         }
 
-        // TODO Rename to CreateNewPoint().
-        public void AddNewPoint(float timestamp, Vector3 position) {
+        public void CreateNewPoint(float timestamp, Vector3 position) {
             _curves[0].AddKey(timestamp, position.x);
             _curves[1].AddKey(timestamp, position.y);
             _curves[2].AddKey(timestamp, position.z);

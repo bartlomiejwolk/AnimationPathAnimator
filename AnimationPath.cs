@@ -303,7 +303,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void CreateNode(float timestamp, Vector3 position) {
-            _animationCurves.AddNewPoint(timestamp, position);
+            _animationCurves.CreateNewPoint(timestamp, position);
         }
 
         public void DrawGizmoCurve() {

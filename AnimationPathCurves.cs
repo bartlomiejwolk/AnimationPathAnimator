@@ -45,7 +45,6 @@ namespace ATP.AnimationPathTools {
         /// <param name="curves">Animation curves.</param>
         /// <param name="keyIndex">Index of the key to update.</param>
         /// <param name="position">New key value.</param>
-        // TODO This should accept timestamp instead of index.
         public void MovePointToPosition(
                 int keyIndex,
                 Vector3 position) {

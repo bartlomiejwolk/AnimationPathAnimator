@@ -5,7 +5,6 @@ namespace ATP.ReorderableList {
     public class GameComponent : MonoBehaviour {
 
         public enum InfoType { Warning, Error }
-        // TODO Convert these to one extension method.
 
         public void MissingReferenceError(
             string fieldName,
@@ -25,10 +24,8 @@ namespace ATP.ReorderableList {
         /// \param type type of the info message.
         private void MissingReference(
             string fieldName,
-            // TODO Remove default value.
-            InfoType type = InfoType.Error,
-            // TODO Remove default value.
-            string detailedInfo = "") {
+            InfoType type,
+            string detailedInfo) {
 
             // Message to be displayed.
             string message;

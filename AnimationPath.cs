@@ -379,8 +379,7 @@ namespace ATP.AnimationPathTools {
             return points;
         }
 
-        // TODO Reimplement it to take time interval as an argument and do not
-        // TODO need path length.
+        // TODO Reimplement to get curved length instead of the linear.
         public void SamplePathForPoints(
                             int samplingFrequency,
                             List<Vector3> points) {

@@ -405,7 +405,7 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING
         #region Drawing methods
 
-        public void DrawAddNodeButtons(
+        private void DrawAddNodeButtons(
             Vector3[] nodePositions,
             Action<int> callback,
             GUIStyle buttonStyle) {
@@ -437,7 +437,7 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
-        public void DrawRemoveNodeButtons(
+        private void DrawRemoveNodeButtons(
             Vector3[] nodePositions,
             Action<int> callback,
             GUIStyle buttonStyle) {
@@ -470,7 +470,7 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
-        public void DrawMovementHandles(
+        private void DrawMovementHandles(
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
 
@@ -532,7 +532,7 @@ namespace ATP.AnimationPathTools {
         /// </param>
         /// <param name="smoothButtonStyle">Style of the button.</param>
         /// <returns>If any button was pressed.</returns>
-        public void DrawSmoothTangentButtons(
+        private void DrawSmoothTangentButtons(
             Vector3[] nodePositions,
             GUIStyle smoothButtonStyle,
             Action<int> callback) {
@@ -648,7 +648,7 @@ namespace ATP.AnimationPathTools {
         /// tangents for each of the animation curves separately.
         /// </summary>
         /// <returns>True if any handle was moved.</returns>
-        public void DrawTangentHandles(
+        private void DrawTangentHandles(
             Vector3[] nodes,
             Action<int, Vector3> callback) {
 
@@ -760,7 +760,7 @@ namespace ATP.AnimationPathTools {
         //    Handles.EndGUI();
         //}
 
-        public bool DrawButton(
+        private bool DrawButton(
             Vector2 position,
             int relativeXPos,
             int relativeYPos,
@@ -793,7 +793,7 @@ namespace ATP.AnimationPathTools {
             //AddNodeAuto(nodeIndex);
             AddNewNode(nodeIndex);
 
-            DistributeTimestamps();
+            script.DistributeTimestamps();
         }
 
         //protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
@@ -821,7 +821,7 @@ namespace ATP.AnimationPathTools {
             // Move single node.
             else {
                 script.MoveNodeToPosition(movedNodeIndex, position);
-                DistributeTimestamps();
+                script.DistributeTimestamps();
             }
         }
 
@@ -830,7 +830,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.RemoveNode(nodeIndex);
-            DistributeTimestamps();
+            script.DistributeTimestamps();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -839,7 +839,7 @@ namespace ATP.AnimationPathTools {
 
             script.SmoothNodeTangents(index);
 
-            DistributeTimestamps();
+            script.DistributeTimestamps();
         }
         protected virtual void DrawTangentHandlesCallbackHandler(
                     int index,
@@ -849,7 +849,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
-            DistributeTimestamps();
+            script.DistributeTimestamps();
         }
         #endregion CALLBACK HANDLERS
         #region PRIVATE
@@ -929,7 +929,7 @@ namespace ATP.AnimationPathTools {
 
                 HandleUndo();
                 script.SmoothNodesTangents();
-                DistributeTimestamps();
+                script.DistributeTimestamps();
             }
             if (GUILayout.Button(new GUIContent(
                 "Linear",
@@ -939,7 +939,7 @@ namespace ATP.AnimationPathTools {
                 HandleUndo();
 
                 script.SetNodesLinear();
-                DistributeTimestamps();
+                script.DistributeTimestamps();
             }
             if (GUILayout.Button(new GUIContent(
                 "Create",
@@ -1123,34 +1123,6 @@ namespace ATP.AnimationPathTools {
         //        nodeIndex,
         //        newLastNodeTimestamp);
         //}
-
-        private void DistributeTimestamps() {
-            // Calculate path curved length.
-            float pathLength = script.CalculatePathCurvedLength(
-                AnimationPath.GizmoCurveSamplingFrequency);
-            // Calculate time for one meter of curve length.
-            float timeForMeter = 1 / pathLength;
-            // Helper variable.
-            float prevTimestamp = 0;
-
-            // For each node calculate and apply new timestamp.
-            for (var i = 1; i < script.NodesNo - 1; i++) {
-                // Calculate section curved length.
-                float sectionLength = script.CalculateSectionCurvedLength(
-                    i - 1,
-                    i,
-                    AnimationPath.GizmoCurveSamplingFrequency);
-                // Calculate time interval.
-                float sectionTimeInterval = sectionLength * timeForMeter;
-                // Calculate new timestamp.
-                float newTimestamp = prevTimestamp + sectionTimeInterval;
-                // Update previous timestamp.
-                prevTimestamp = newTimestamp;
-
-                // Update node timestamp.
-                script.ChangeNodeTimestamp(i, newTimestamp);
-            }
-        }
 
         /// <summary>
         /// Export Animation Path nodes as transforms.

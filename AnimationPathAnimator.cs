@@ -190,11 +190,11 @@ namespace ATP.AnimationPathTools {
 
         // TODO Rename target object to objectTransform.
         private void Animate() {
-            // Animate targets selected in the inspector.
+            // Animate all animations.
             foreach (Animation anim in animations) {
-                // If target and target path inspector fields are not empty..
+                // Animate transform.
                 if (anim.Target != null && anim.Path != null) {
-                    // animate target.
+                    // Update position.
                     anim.Target.position =
                         anim.Path.GetVectorAtTime(animTimeRatio);
 
@@ -202,22 +202,24 @@ namespace ATP.AnimationPathTools {
                     //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
                 }
 
-                // If look at target and look at target path inspector options
-                // are not empty..
+                // Animate target.
                 if (anim.LookAtTarget != null && anim.LookAtPath != null) {
-                    // animate look at target.
+                    // Update position.
                     anim.LookAtTarget.position =
                         anim.LookAtPath.GetVectorAtTime(animTimeRatio);
                 }
 
-                // If target and look at target inspector fields are not
-                // empty..
+                // Rotate transform.
                 if (anim.Target != null && anim.LookAtTarget != null) {
+                    // Calculate direction to target.
                     Vector3 targetDirection =
                         anim.LookAtTarget.position - anim.Target.position;
+                    // Calculate rotation to target.
                     Quaternion rotation = Quaternion.LookRotation(
                         targetDirection);
+                    // Calculate rotation speed.
                     float speed = Time.deltaTime * RotationDamping;
+                    // Lerp rotation.
                     anim.Target.rotation = Quaternion.Slerp(
                         anim.Target.rotation,
                         rotation,

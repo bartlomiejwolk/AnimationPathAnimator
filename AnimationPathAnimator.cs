@@ -86,6 +86,7 @@ namespace ATP.AnimationPathTools {
         private bool isPlaying;
 
         private float _rotationDuration = 3.0f;
+        private const int DOTweenSamplingFrequency = 5;
 
         #endregion FIELDS
 
@@ -112,6 +113,24 @@ namespace ATP.AnimationPathTools {
 
             // Start animation from time ratio specified in the inspector.
             currentAnimTime = animTimeRatio * duration;
+
+            foreach (Animation anim in animations) {
+                if (anim.LookAtTarget != null && anim.LookAtPath != null) {
+                    List<Vector3> waypoints =
+                        anim.LookAtPath.SamplePathForPoints(DOTweenSamplingFrequency);
+                    anim.LookAtTarget.transform.DOPath(waypoints.ToArray(), duration);
+                }
+                if (anim.Target != null && anim.Path != null) {
+                    List<Vector3> waypoints =
+                        anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
+                    anim.Target.transform.DOPath(waypoints.ToArray(), duration);
+                    //.SetLookAt(anim.LookAtTarget).SetEase(Ease.InCirc);
+
+                    //anim.Target.DOLookAt(
+                    //    anim.LookAtTarget.position,
+                    //    2.0f);
+                }
+            }
         }
 
         private void Update() {
@@ -150,16 +169,19 @@ namespace ATP.AnimationPathTools {
                 // If target and target path inspector fields are not empty..
                 if (anim.Target != null && anim.Path != null) {
                     // animate target.
-                    anim.Target.position =
-                        anim.Path.GetVectorAtTime(animTimeRatio);
+                    //anim.Target.position =
+                    //    anim.Path.GetVectorAtTime(animTimeRatio);
+
+                    //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
+                    //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
                 }
 
                 // If look at target and look at target path inspector options
                 // are not empty..
                 if (anim.LookAtTarget != null && anim.LookAtPath != null) {
                     // animate look at target.
-                    anim.LookAtTarget.position =
-                        anim.LookAtPath.GetVectorAtTime(animTimeRatio);
+                    //anim.LookAtTarget.position =
+                    //    anim.LookAtPath.GetVectorAtTime(animTimeRatio);
                 }
 
                 // If target and look at target inspector fields are not
@@ -177,7 +199,7 @@ namespace ATP.AnimationPathTools {
 
                     // In play mode, rotate using tween.
                     if (Application.isPlaying) {
-                        transform.DOLookAt(
+                        anim.Target.DOLookAt(
                             anim.LookAtTarget.position,
                             _rotationDuration);
                     }

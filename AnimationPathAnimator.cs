@@ -1,5 +1,6 @@
 ﻿using ATP.ReorderableList;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -83,6 +84,9 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
+
+        private float _rotationDuration = 3.0f;
+
         #endregion FIELDS
 
         #region UNITY MESSAGES
@@ -161,15 +165,26 @@ namespace ATP.AnimationPathTools {
                 // If target and look at target inspector fields are not
                 // empty..
                 if (anim.Target != null && anim.LookAtTarget != null) {
-                    Vector3 targetDirection =
-                        anim.LookAtTarget.position - anim.Target.position;
-                    Quaternion rotation = Quaternion.LookRotation(
-                        targetDirection);
-                    float speed = Time.deltaTime * RotationDamping;
-                    anim.Target.rotation = Quaternion.Slerp(
-                        anim.Target.rotation,
-                        rotation,
-                        speed);
+                    //Vector3 targetDirection =
+                    //    anim.LookAtTarget.position - anim.Target.position;
+                    //Quaternion rotation = Quaternion.LookRotation(
+                    //    targetDirection);
+                    //float speed = Time.deltaTime * RotationDamping;
+                    //anim.Target.rotation = Quaternion.Slerp(
+                    //    anim.Target.rotation,
+                    //    rotation,
+                    //    speed);
+
+                    // In play mode, rotate using tween.
+                    if (Application.isPlaying) {
+                        transform.DOLookAt(
+                            anim.LookAtTarget.position,
+                            _rotationDuration);
+                    }
+                    // In editor mode, rotate using Unity LookAt().
+                    else {
+                        transform.LookAt(anim.LookAtTarget.position);
+                    }
 
                     // rotate target.
                     //anim.Target.LookAt(anim.LookAtTarget);

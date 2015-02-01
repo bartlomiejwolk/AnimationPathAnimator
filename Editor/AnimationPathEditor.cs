@@ -795,7 +795,7 @@ namespace ATP.AnimationPathTools {
             //AddNodeAuto(nodeIndex);
             AddNewNode(nodeIndex);
 
-            DistributeNodeSpeedValues();
+            DistributeTimestamps();
         }
 
         //protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
@@ -805,7 +805,7 @@ namespace ATP.AnimationPathTools {
         //    HandleUndo();
 
         //    script.SetNodeLinear(nodeIndex);
-        //    DistributeNodeSpeedValues();
+        //    DistributeTimestamps();
         //}
 
         protected virtual void DrawMovementHandlesCallbackHandler(
@@ -823,7 +823,7 @@ namespace ATP.AnimationPathTools {
             // Move single node.
             else {
                 script.MoveNodeToPosition(movedNodeIndex, position);
-                DistributeNodeSpeedValues();
+                DistributeTimestamps();
             }
         }
 
@@ -832,7 +832,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.RemoveNode(nodeIndex);
-            DistributeNodeSpeedValues();
+            DistributeTimestamps();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -841,7 +841,7 @@ namespace ATP.AnimationPathTools {
 
             script.SmoothNodeTangents(index);
 
-            DistributeNodeSpeedValues();
+            DistributeTimestamps();
         }
         protected virtual void DrawTangentHandlesCallbackHandler(
                     int index,
@@ -851,7 +851,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
-            DistributeNodeSpeedValues();
+            DistributeTimestamps();
         }
         #endregion CALLBACK HANDLERS
         #region PRIVATE
@@ -933,7 +933,7 @@ namespace ATP.AnimationPathTools {
                 HandleUndo();
 
                 script.SetNodesLinear();
-                DistributeNodeSpeedValues();
+                DistributeTimestamps();
             }
             if (GUILayout.Button(new GUIContent(
                            "Smooth",
@@ -941,7 +941,7 @@ namespace ATP.AnimationPathTools {
 
                 HandleUndo();
                 script.SmoothNodesTangents();
-                DistributeNodeSpeedValues();
+                DistributeTimestamps();
             }
             if (GUILayout.Button(new GUIContent(
                 "Reset",
@@ -1125,7 +1125,7 @@ namespace ATP.AnimationPathTools {
                 newLastNodeTimestamp);
         }
 
-        private void DistributeNodeSpeedValues() {
+        private void DistributeTimestamps() {
             // Calculate path curved length.
             float pathLength = script.CalculatePathCurvedLength(
                 AnimationPath.GizmoCurveSamplingFrequency);

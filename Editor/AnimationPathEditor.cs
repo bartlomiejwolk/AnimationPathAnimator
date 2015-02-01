@@ -20,8 +20,8 @@ namespace ATP.AnimationPathTools {
 
         private const int smoothButtonH = 25;
         private const int smoothButtonV = 10;
-        private const int linearButtonH = 44;
-        private const int linearButtonV = 10;
+        //private const int linearButtonH = 44;
+        //private const int linearButtonV = 10;
         private const int addButtonH = 62;
         private const int addButtonV = 10;
         private const int removeButtonH = 81;
@@ -155,7 +155,7 @@ namespace ATP.AnimationPathTools {
 
             // Handle drawing button that changes node's tangent mode to
             // linear.
-            HandleDrawingLinearTangentModeButtons();
+            //HandleDrawingLinearTangentModeButtons();
         }
 
         #endregion UNITY MESSAGES
@@ -218,24 +218,24 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing linear tangent mode button.
         /// </summary>
-        private void HandleDrawingLinearTangentModeButtons() {
-            // Get button style.
-            GUIStyle buttonStyle = script.Skin.GetStyle(
-                        "LinearTangentModeButton");
+        //private void HandleDrawingLinearTangentModeButtons() {
+        //    // Get button style.
+        //    GUIStyle buttonStyle = script.Skin.GetStyle(
+        //                "LinearTangentModeButton");
 
-            // Positions at which to draw movement handles.
-            Vector3[] nodePositions = script.GetNodePositions();
+        //    // Positions at which to draw movement handles.
+        //    Vector3[] nodePositions = script.GetNodePositions();
 
-            // Callback to smooth a node after smooth node button was pressed.
-            Action<int> setNodeLinearCallback =
-                DrawLinearTangentModeButtonsCallbackHandler;
+        //    // Callback to smooth a node after smooth node button was pressed.
+        //    Action<int> setNodeLinearCallback =
+        //        DrawLinearTangentModeButtonsCallbackHandler;
 
-            // Draw button.
-            DrawLinearTangentModeButtons(
-                nodePositions,
-                buttonStyle,
-                setNodeLinearCallback);
-        }
+        //    // Draw button.
+        //    DrawLinearTangentModeButtons(
+        //        nodePositions,
+        //        buttonStyle,
+        //        setNodeLinearCallback);
+        //}
 
         /// <summary>
         /// Handle drawing movement handles.
@@ -575,39 +575,39 @@ namespace ATP.AnimationPathTools {
         /// <param name="curves">Animation curves.</param>
         /// <param name="buttonStyle">Style of the button.</param>
         /// <returns>If any button was pressed.</returns>
-        public void DrawLinearTangentModeButtons(
-            Vector3[] nodePositions,
-            GUIStyle buttonStyle,
-            Action<int> callback) {
+        //public void DrawLinearTangentModeButtons(
+        //    Vector3[] nodePositions,
+        //    GUIStyle buttonStyle,
+        //    Action<int> callback) {
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            bool buttonPressed;
+        //    bool buttonPressed;
 
-            // For each key..
-            for (int i = 0; i < nodePositions.Length; i++) {
-                // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
-                        nodePositions[i]);
+        //    // For each key..
+        //    for (int i = 0; i < nodePositions.Length; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+        //                nodePositions[i]);
 
-                // Create rectangle for the button.
-                Rect rect = new Rect(
-                        guiPoint.x + linearButtonH,
-                        guiPoint.y + linearButtonV,
-                        15,
-                        15);
+        //        // Create rectangle for the button.
+        //        Rect rect = new Rect(
+        //                guiPoint.x + linearButtonH,
+        //                guiPoint.y + linearButtonV,
+        //                15,
+        //                15);
 
-                // Draw button.
-                buttonPressed = GUI.Button(rect, "", buttonStyle);
+        //        // Draw button.
+        //        buttonPressed = GUI.Button(rect, "", buttonStyle);
 
-                // If button pressed..
-                if (buttonPressed == true) {
-                    // Execute callback.
-                    callback(i);
-                }
-            }
-            Handles.EndGUI();
-        }
+        //        // If button pressed..
+        //        if (buttonPressed == true) {
+        //            // Execute callback.
+        //            callback(i);
+        //        }
+        //    }
+        //    Handles.EndGUI();
+        //}
 
         /// <summary>Draw speed label for each node on the scene.</summary>
         /// <remarks>
@@ -798,15 +798,15 @@ namespace ATP.AnimationPathTools {
             DistributeNodeSpeedValues();
         }
 
-        protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
-                    int nodeIndex) {
+        //protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
+        //            int nodeIndex) {
 
-            // Make snapshot of the target object.
-            HandleUndo();
+        //    // Make snapshot of the target object.
+        //    HandleUndo();
 
-            script.SetNodeLinear(nodeIndex);
-            DistributeNodeSpeedValues();
-        }
+        //    script.SetNodeLinear(nodeIndex);
+        //    DistributeNodeSpeedValues();
+        //}
 
         protected virtual void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,

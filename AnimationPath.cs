@@ -479,14 +479,7 @@ namespace ATP.AnimationPathTools {
                 time += timestep;
             }
         }
-
-        // // Find curves to update. List<AnimationCurve> curvesToUpdate = new
-        // List<AnimationCurve>();
-        /// <summary>
-        /// Set tangent mode for all keys in one AnimationCurve to linear.
-        /// </summary>
-        /// <remarks>Posted by eagle555 at Unity forum.</remarks>
-        /// <param name="curve">Animation curve</param>
+       
         public void SetCurveLinear(AnimationCurve curve) {
             for (int i = 0; i < curve.keys.Length; ++i) {
                 float intangent = 0;
@@ -537,13 +530,10 @@ namespace ATP.AnimationPathTools {
         /// Set tangent mode for a single node to linear.
         /// </summary>
         /// <param name="keyIndex">Node index.</param>
-        public void SetNodeLinear(int keyIndex) {
-            _animationCurves.SetPointLinear(keyIndex);
-        }
+        //public void SetNodeLinear(int keyIndex) {
+        //    _animationCurves.SetPointLinear(keyIndex);
+        //}
 
-        /// <summary>
-        /// Set all nodes' tangent mode to linear.
-        /// </summary>
         public void SetNodesLinear() {
             for (int i = 0; i < 3; i++) {
                 SetCurveLinear(_animationCurves[i]);

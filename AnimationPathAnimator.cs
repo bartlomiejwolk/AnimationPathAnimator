@@ -131,16 +131,18 @@ namespace ATP.AnimationPathTools {
             //        //    2.0f);
             //    }
             //}
+
+            DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration);
         }
 
         private void Update() {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
                 // Increase animation time.
-                currentAnimTime += Time.deltaTime;
+                //currentAnimTime += Time.deltaTime;
 
                 // Convert animation time to <0; 1> ratio.
-                animTimeRatio = currentAnimTime / duration;
+                //animTimeRatio = currentAnimTime / duration;
             }
 
             Animate();

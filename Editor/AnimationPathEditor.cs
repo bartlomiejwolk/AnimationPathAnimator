@@ -926,6 +926,14 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.BeginHorizontal();
             serializedObject.Update();
             if (GUILayout.Button(new GUIContent(
+                                      "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+
+                HandleUndo();
+                script.SmoothNodesTangents();
+                DistributeTimestamps();
+            }
+            if (GUILayout.Button(new GUIContent(
                 "Linear",
                 "Set tangent mode to linear for all nodePositions."))) {
 
@@ -936,15 +944,7 @@ namespace ATP.AnimationPathTools {
                 DistributeTimestamps();
             }
             if (GUILayout.Button(new GUIContent(
-                           "Smooth",
-                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
-
-                HandleUndo();
-                script.SmoothNodesTangents();
-                DistributeTimestamps();
-            }
-            if (GUILayout.Button(new GUIContent(
-                "Reset",
+                "Create",
                 "Create a new default Animation Path or reset to default."))) {
 
                 // Allow undo this operation.

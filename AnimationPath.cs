@@ -41,12 +41,6 @@ namespace ATP.AnimationPathTools {
         public const KeyCode MoveAllKey = KeyCode.H;
 
         /// <summary>
-        /// Animation path sampling rate used to calculate speed between two
-        /// nodes.
-        /// </summary>
-        private const int SpeedSampling = 10;
-
-        /// <summary>
         /// How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
         public const int GizmoCurveSamplingFrequency = 20;
@@ -59,8 +53,6 @@ namespace ATP.AnimationPathTools {
         //private List<AnimationPathNode> nodes = new List<AnimationPathNode>();
 
         #region Fields
-
-        private const float FirstNodeGizmoSize = 0.15f;
 
         /// <summary>
         /// Animation curves that make the animation path.

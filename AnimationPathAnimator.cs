@@ -1,4 +1,5 @@
-﻿using ATP.ReorderableList;
+﻿using System.Collections;
+using ATP.ReorderableList;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -136,10 +137,11 @@ namespace ATP.AnimationPathTools {
             //    }
             //}
 
-            DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
-                .SetEase(_easeAnimationCurve);
-        }
+            //DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
+            //    .SetEase(_easeAnimationCurve);
 
+            StartCoroutine(EaseTime());
+        }
         private void Update() {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
@@ -168,6 +170,21 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
+        private IEnumerator EaseTime() {
+            while (true) {
+                // Increase animation time.
+                currentAnimTime += Time.deltaTime;
+
+                // Convert animation time to <0; 1> ratio.
+                //animTimeRatio = currentAnimTime / duration;
+                float timeRatio = currentAnimTime / duration;
+
+                animTimeRatio = _easeAnimationCurve.Evaluate(timeRatio);
+
+                yield return null;
+            }
+        }
+
 
         // TODO Rename target object to objectTransform.
         private void Animate() {

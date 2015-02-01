@@ -132,7 +132,8 @@ namespace ATP.AnimationPathTools {
             //    }
             //}
 
-            DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration);
+            DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
+                .SetEase(Ease.InOutSine);
         }
 
         private void Update() {

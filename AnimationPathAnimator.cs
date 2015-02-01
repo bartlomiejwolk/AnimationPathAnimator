@@ -86,12 +86,12 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         private bool isPlaying;
 
-        private float _rotationDuration = 3.0f;
+        //private float _rotationDuration = 3.0f;
 
         [SerializeField]
         private AnimationCurve _easeAnimationCurve;
 
-        private const int dotweensamplingfrequency = 5;
+        //private const int dotweensamplingfrequency = 5;
 
         #endregion FIELDS
 
@@ -140,7 +140,9 @@ namespace ATP.AnimationPathTools {
             //DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
             //    .SetEase(_easeAnimationCurve);
 
-            StartCoroutine(EaseTime());
+            if (Application.isPlaying) {
+                StartCoroutine(EaseTime());
+            }
         }
         private void Update() {
             // In play mode, update animation time with delta time.
@@ -171,18 +173,18 @@ namespace ATP.AnimationPathTools {
 
         #region PRIVATE METHODS
         private IEnumerator EaseTime() {
-            while (true) {
+            do {
                 // Increase animation time.
                 currentAnimTime += Time.deltaTime;
 
                 // Convert animation time to <0; 1> ratio.
                 //animTimeRatio = currentAnimTime / duration;
-                float timeRatio = currentAnimTime / duration;
+                float timeRatio = currentAnimTime/duration;
 
                 animTimeRatio = _easeAnimationCurve.Evaluate(timeRatio);
 
                 yield return null;
-            }
+            } while (animTimeRatio < 1.0f);
         }
 
 

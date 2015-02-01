@@ -17,6 +17,7 @@ namespace ATP.AnimationPathTools {
 		private SerializedProperty duration;
 		private SerializedProperty animTimeRatio;
 		private SerializedProperty animations;
+        private SerializedProperty _easeAnimationCurve;
 
         /// <summary>
         ///     If modifier is currently pressed.
@@ -31,6 +32,7 @@ namespace ATP.AnimationPathTools {
 			duration = serializedObject.FindProperty("duration");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
 			animations = serializedObject.FindProperty("animations");
+		    _easeAnimationCurve = serializedObject.FindProperty("_easeAnimationCurve");
 		}
 
 		public override void OnInspectorGUI() {
@@ -40,13 +42,22 @@ namespace ATP.AnimationPathTools {
 					animTimeRatio,
 					0,
 					1);
+
 			EditorGUILayout.PropertyField(duration);
+
+		    EditorGUILayout.PropertyField(
+		        _easeAnimationCurve,
+		        new GUIContent(
+		            "Ease Curve",
+		            ""));
+
 			ReorderableListGUI.Title("Animations");
 			ReorderableListGUI.ListField(animations);
 
 			// Save changes
 			serializedObject.ApplyModifiedProperties();
 
+            // TODO Delete if not needed.
 			if (GUI.changed) {
 				EditorUtility.SetDirty(script);
 			}

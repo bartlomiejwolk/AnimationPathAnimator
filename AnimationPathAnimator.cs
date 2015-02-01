@@ -86,7 +86,11 @@ namespace ATP.AnimationPathTools {
         private bool isPlaying;
 
         private float _rotationDuration = 3.0f;
-        private const int DOTweenSamplingFrequency = 5;
+
+        [SerializeField]
+        private AnimationCurve _easeAnimationCurve;
+
+        private const int dotweensamplingfrequency = 5;
 
         #endregion FIELDS
 
@@ -133,7 +137,7 @@ namespace ATP.AnimationPathTools {
             //}
 
             DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
-                .SetEase(Ease.InOutSine);
+                .SetEase(_easeAnimationCurve);
         }
 
         private void Update() {

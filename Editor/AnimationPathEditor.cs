@@ -22,9 +22,9 @@ namespace ATP.AnimationPathTools {
         private const int smoothButtonV = 10;
         //private const int linearButtonH = 44;
         //private const int linearButtonV = 10;
-        private const int addButtonH = 62;
+        private const int addButtonH = 44;
         private const int addButtonV = 10;
-        private const int removeButtonH = 81;
+        private const int removeButtonH = 63;
         private const int removeButtonV = 10;
         #endregion
 

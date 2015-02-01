@@ -372,7 +372,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="samplingFrequency">
         /// How many 3d points should be extracted from the path for 1 m of its
-        /// length.
+        /// linear length.
         /// </param>
         /// <param name="pathLength">
         /// Length of the Animation Path in meters.
@@ -387,6 +387,8 @@ namespace ATP.AnimationPathTools {
             return points;
         }
 
+        // TODO Reimplement it to take time interval as an argument and do not
+        // TODO need path length.
         public void SamplePathForPoints(
                             int samplingFrequency,
                             List<Vector3> points) {

@@ -251,6 +251,11 @@ namespace ATP.AnimationPathTools {
                     rotation,
                     speed);
 
+                // Set rotation on Z axis to 0.
+                Vector3 eulerAngles = transform.rotation.eulerAngles;
+                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, 0);
+                transform.rotation = Quaternion.Euler(eulerAngles);
+
                 // In play mode, rotate using tween.
                 //if (Application.isPlaying) {
                 //    anim.Target.DOLookAt(

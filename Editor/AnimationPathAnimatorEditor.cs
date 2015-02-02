@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEditor;
 using ATP.ReorderableList;
@@ -85,7 +86,7 @@ namespace ATP.AnimationPathTools {
             // If a key is pressed..
 			if (Event.current.type == EventType.keyDown
                     // and modifier key is pressed also..
-					&& modKeyPressed == true) {
+					&& modKeyPressed) {
 
                 // Check what key is pressed..
 				switch (Event.current.keyCode) {
@@ -111,21 +112,29 @@ namespace ATP.AnimationPathTools {
             }
 			// Modifier key not pressed.
 			else if (Event.current.type == EventType.keyDown) {
+                // Helper variable.
+			    float newAnimationTimeRatio;
 				switch (Event.current.keyCode) {
                     // Jump backward.
 					case AnimationPathAnimator.JumpBackward:
 						Event.current.Use();
 
-                        animTimeRatio.floatValue -=
-                            AnimationPathAnimator.ShortJumpValue;
+                        // Calculate new time ratio.
+				        newAnimationTimeRatio = animTimeRatio.floatValue
+                            - AnimationPathAnimator.ShortJumpValue;
+                        // Apply rounded value.
+				        animTimeRatio.floatValue =
+                            (float)(Math.Round(newAnimationTimeRatio, 3));
 
 						break;
                     // Jump forward.
 					case AnimationPathAnimator.JumpForward:
 						Event.current.Use();
 
-						animTimeRatio.floatValue +=
-                            AnimationPathAnimator.ShortJumpValue;
+				        newAnimationTimeRatio = animTimeRatio.floatValue
+                            + AnimationPathAnimator.ShortJumpValue;
+				        animTimeRatio.floatValue =
+                            (float)(Math.Round(newAnimationTimeRatio, 3));
 
 						break;
 				}

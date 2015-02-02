@@ -82,6 +82,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Change current animation time with arrow keys.
         /// </summary>
+        // TODO Refactor.
 		private void ChangeTimeWithArrowKeys() {
             // If a key is pressed..
 			if (Event.current.type == EventType.keyDown
@@ -108,6 +109,20 @@ namespace ATP.AnimationPathTools {
                             AnimationPathAnimator.JumpValue;
 
 						break;
+                    case AnimationPathAnimator.JumpToStart:
+                        Event.current.Use();
+
+                        // Jump to next node.
+				        animTimeRatio.floatValue = GetNearestNodeForwardTimestamp();
+
+				        break;
+                    case AnimationPathAnimator.JumpToEnd:
+                        Event.current.Use();
+
+                        // Jump to next node.
+                        animTimeRatio.floatValue = GetNearestNodeBackwardTimestamp();
+
+                        break;
 				}
             }
 			// Modifier key not pressed.
@@ -158,6 +173,32 @@ namespace ATP.AnimationPathTools {
 				}
 			}
 		}
+
+        private float GetNearestNodeForwardTimestamp() {
+            float[] targetPathTimestamps = script.GetTargetPathTimestamps();
+
+            for (var i = 0; i < targetPathTimestamps.Length; i++) {
+                if (targetPathTimestamps[i] > animTimeRatio.floatValue) {
+                    return targetPathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
+        }
+
+        private float GetNearestNodeBackwardTimestamp() {
+            float[] targetPathTimestamps = script.GetTargetPathTimestamps();
+
+            for (var i = targetPathTimestamps.Length - 1; i >= 0; i--) {
+                if (targetPathTimestamps[i] < animTimeRatio.floatValue) {
+                    return targetPathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
 
         /// <summary>
         ///     Checked if modifier key is pressed and remember it in a class

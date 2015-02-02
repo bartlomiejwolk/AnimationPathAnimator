@@ -243,5 +243,9 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
+
+        public float[] GetTargetPathTimestamps() {
+            return new float[] {0, 0.2f, 0.4f, 0.8f, 1 };
+        }
     }
 }

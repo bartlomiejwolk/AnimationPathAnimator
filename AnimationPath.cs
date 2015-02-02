@@ -269,7 +269,7 @@ namespace ATP.AnimationPathTools {
             _animationCurves.CreateNewPoint(timestamp, position);
         }
 
-        public void DrawGizmoCurve() {
+        private void DrawGizmoCurve() {
             List<Vector3> points = SamplePathForPoints(GizmoCurveSamplingFrequency);
 
             if (points.Count < 3) return;
@@ -407,7 +407,6 @@ namespace ATP.AnimationPathTools {
             return points;
         }
 
-        // TODO Reimplement to get curved length instead of the linear.
         public void SamplePathForPoints(
                             int samplingFrequency,
                             List<Vector3> points) {

@@ -192,6 +192,13 @@ namespace ATP.AnimationPathTools {
         private void Animate() {
             // Animate all animations.
             foreach (Animation anim in animations) {
+                // Animate target.
+                if (anim.LookAtTarget != null && anim.LookAtPath != null) {
+                    // Update position.
+                    anim.LookAtTarget.position =
+                        anim.LookAtPath.GetVectorAtTime(animTimeRatio);
+                }
+
                 // Animate transform.
                 if (anim.Target != null && anim.Path != null) {
                     // Update position.
@@ -200,13 +207,6 @@ namespace ATP.AnimationPathTools {
 
                     //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
                     //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
-                }
-
-                // Animate target.
-                if (anim.LookAtTarget != null && anim.LookAtPath != null) {
-                    // Update position.
-                    anim.LookAtTarget.position =
-                        anim.LookAtPath.GetVectorAtTime(animTimeRatio);
                 }
 
                 // Rotate transform.

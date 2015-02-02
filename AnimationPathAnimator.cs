@@ -112,8 +112,12 @@ namespace ATP.AnimationPathTools {
 
         //private float _rotationDuration = 3.0f;
 
+        // TODO Rename to _easeCurve.
         [SerializeField]
         private AnimationCurve _easeAnimationCurve;
+
+        [SerializeField]
+        private AnimationCurve _zAxisRotationCurve;
 
         //private const int dotweensamplingfrequency = 5;
 
@@ -217,6 +221,7 @@ namespace ATP.AnimationPathTools {
 
 
         // TODO Rename target object to objectTransform.
+        // TODO Refactor into smaller method.
         private void Animate() {
             // Animate target.
             if (_lookAtTarget != null && _lookAtPath != null) {
@@ -252,8 +257,14 @@ namespace ATP.AnimationPathTools {
                     speed);
 
                 // Set rotation on Z axis to 0.
+                //Vector3 eulerAngles = transform.rotation.eulerAngles;
+                //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, 0);
+                //transform.rotation = Quaternion.Euler(eulerAngles);
+
                 Vector3 eulerAngles = transform.rotation.eulerAngles;
-                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, 0);
+                // Get rotation from AnimationCurve.
+                float zRotation = _zAxisRotationCurve.Evaluate(animTimeRatio);
+                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
                 transform.rotation = Quaternion.Euler(eulerAngles);
 
                 // In play mode, rotate using tween.

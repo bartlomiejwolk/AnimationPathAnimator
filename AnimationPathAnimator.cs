@@ -85,7 +85,7 @@ namespace ATP.AnimationPathTools {
         ///     Path used to animate the <c>lookAtTarget</c>.
         /// </summary>
         [SerializeField]
-        private AnimationPath _lookAtPath;
+        private TargetAnimationPath _lookAtPath;
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]

@@ -100,7 +100,7 @@ namespace ATP.AnimationPathTools {
         /// Animation duration in seconds.
         /// </summary>
         [SerializeField]
-        private float duration = 10;
+        private float duration = 20;
 
         /// <summary>
         /// If animation is currently enabled.
@@ -114,10 +114,10 @@ namespace ATP.AnimationPathTools {
 
         // TODO Rename to _easeCurve.
         [SerializeField]
-        private AnimationCurve _easeAnimationCurve;
+        private AnimationCurve _easeAnimationCurve = new AnimationCurve();
 
         [SerializeField]
-        private AnimationCurve _zAxisRotationCurve;
+        private AnimationCurve _zAxisRotationCurve = new AnimationCurve();
 
         //private const int dotweensamplingfrequency = 5;
 
@@ -143,6 +143,9 @@ namespace ATP.AnimationPathTools {
         private void Start() {
             _path = GetComponent<AnimationPath>();
             _lookAtPath = GetComponent<TargetAnimationPath>();
+
+            InitializeEaseCurve();
+            InitializeRotationCurve();
 
             // Start playing animation on Start().
             isPlaying = true;
@@ -207,6 +210,22 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
+        private void InitializeEaseCurve() {
+            Keyframe firstKey = new Keyframe(0, 0, 0, 0);
+            Keyframe lastKey = new Keyframe(1, 1, 0, 0);
+
+            _easeAnimationCurve.AddKey(firstKey);
+            _easeAnimationCurve.AddKey(lastKey);
+        }
+
+        private void InitializeRotationCurve() {
+            Keyframe firstKey = new Keyframe(0, 0, 0, 0);
+            Keyframe lastKey = new Keyframe(1, 0, 0, 0);
+
+            _zAxisRotationCurve.AddKey(firstKey);
+            _zAxisRotationCurve.AddKey(lastKey);
+        }
+
         private IEnumerator EaseTime() {
             do {
                 // Increase animation time.

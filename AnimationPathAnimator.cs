@@ -141,6 +141,9 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Start() {
+            _path = GetComponent<AnimationPath>();
+            _lookAtPath = GetComponent<TargetAnimationPath>();
+
             // Start playing animation on Start().
             isPlaying = true;
 

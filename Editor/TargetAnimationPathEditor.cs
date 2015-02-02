@@ -64,6 +64,14 @@ namespace ATP.AnimationPathTools {
             script.SmoothNodeTangents(index);
         }
 
+        protected override void DrawSmoothInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+                HandleUndo();
+                script.SmoothNodesTangents();
+            }
+        }
         protected override void DrawTangentHandlesCallbackHandler(
                     int index,
                     Vector3 inOutTangent) {

@@ -852,6 +852,47 @@ namespace ATP.AnimationPathTools {
             script.DistributeTimestamps();
         }
         #endregion CALLBACK HANDLERS
+        #region INSPECTOR
+        private void DrawCreateInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Create",
+                "Create a new default Animation Path or reset to default."))) {
+                // Allow undo this operation.
+                HandleUndo();
+                // Reset curves to its default state.
+                ResetPath();
+            }
+        }
+
+        private void DrawLinearInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Linear",
+                "Set tangent mode to linear for all nodePositions."))) {
+                // Allow undo this operation.
+                HandleUndo();
+
+                script.SetNodesLinear();
+                script.DistributeTimestamps();
+            }
+        }
+
+        protected virtual void DrawSmoothInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+                HandleUndo();
+                script.SmoothNodesTangents();
+                script.DistributeTimestamps();
+            }
+        }
+
+        private void DrawExportNodesInspectorButton() {
+            if (GUILayout.Button("Export Nodes")) {
+                ExportNodes(exportSamplingFrequency.intValue);
+            }
+        }
+        #endregion
+
         #region PRIVATE
         /// <summary>
         /// Update <c>moveAllMode</c> option with keyboard shortcut.
@@ -923,33 +964,9 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.BeginHorizontal();
             serializedObject.Update();
-            if (GUILayout.Button(new GUIContent(
-                                      "Smooth",
-                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
-
-                HandleUndo();
-                script.SmoothNodesTangents();
-                script.DistributeTimestamps();
-            }
-            if (GUILayout.Button(new GUIContent(
-                "Linear",
-                "Set tangent mode to linear for all nodePositions."))) {
-
-                // Allow undo this operation.
-                HandleUndo();
-
-                script.SetNodesLinear();
-                script.DistributeTimestamps();
-            }
-            if (GUILayout.Button(new GUIContent(
-                "Create",
-                "Create a new default Animation Path or reset to default."))) {
-
-                // Allow undo this operation.
-                HandleUndo();
-                // Reset curves to its default state.
-                ResetPath();
-            }
+            DrawSmoothInspectorButton();
+            DrawLinearInspectorButton();
+            DrawCreateInspectorButton();
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
@@ -1001,9 +1018,7 @@ namespace ATP.AnimationPathTools {
                         "the curve."));
             serializedObject.ApplyModifiedProperties();
 
-            if (GUILayout.Button("Export Nodes")) {
-                ExportNodes(exportSamplingFrequency.intValue);
-            }
+            DrawExportNodesInspectorButton();
 
             EditorGUILayout.Space();
 
@@ -1027,7 +1042,6 @@ namespace ATP.AnimationPathTools {
             }
             serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// Record target object state for undo.
         /// </summary>
@@ -1193,7 +1207,6 @@ namespace ATP.AnimationPathTools {
             script.CreateNode(0, worldPoint);
             script.CreateNode(1, endPoint);
         }
-
         #endregion
     }
 }

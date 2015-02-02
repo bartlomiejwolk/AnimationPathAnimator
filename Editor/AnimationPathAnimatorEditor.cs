@@ -17,8 +17,11 @@ namespace ATP.AnimationPathTools {
         // Serialized properties
 		private SerializedProperty duration;
 		private SerializedProperty animTimeRatio;
-		private SerializedProperty animations;
         private SerializedProperty _easeAnimationCurve;
+        private SerializedProperty _target;
+        private SerializedProperty _path;
+        private SerializedProperty _lookAtTarget;
+        private SerializedProperty _lookAtPath;
 
         /// <summary>
         ///     If modifier is currently pressed.
@@ -32,8 +35,11 @@ namespace ATP.AnimationPathTools {
             // Initialize serialized properties.
 			duration = serializedObject.FindProperty("duration");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-			animations = serializedObject.FindProperty("animations");
 		    _easeAnimationCurve = serializedObject.FindProperty("_easeAnimationCurve");
+		    _target = serializedObject.FindProperty("_target");
+		    _path = serializedObject.FindProperty("_path");
+		    _lookAtTarget = serializedObject.FindProperty("_lookAtTarget");
+		    _lookAtPath = serializedObject.FindProperty("_lookAtPath");
 		}
 
 		public override void OnInspectorGUI() {
@@ -52,8 +58,31 @@ namespace ATP.AnimationPathTools {
 		            "Ease Curve",
 		            ""));
 
-			ReorderableListGUI.Title("Animations");
-			ReorderableListGUI.ListField(animations);
+            EditorGUILayout.Space();
+
+		    EditorGUILayout.PropertyField(
+		        _target,
+		        new GUIContent(
+		            "Object",
+		            ""));
+
+		    EditorGUILayout.PropertyField(
+                _path,
+		        new GUIContent(
+		            "Object Path",
+		            ""));
+
+		    EditorGUILayout.PropertyField(
+                _lookAtTarget,
+		        new GUIContent(
+		            "Target",
+		            ""));
+
+		    EditorGUILayout.PropertyField(
+                _lookAtPath,
+		        new GUIContent(
+		            "Target Path",
+		            ""));
 
 			// Save changes
 			serializedObject.ApplyModifiedProperties();

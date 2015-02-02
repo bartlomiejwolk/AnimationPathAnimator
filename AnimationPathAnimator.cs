@@ -60,8 +60,32 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// List of animations to by played by the animator.
         /// </summary>
+        //[SerializeField]
+        //private List<Animation> animations = new List<Animation>();
+
+        /// <summary>
+        ///     Transform to be animated.
+        /// </summary>
         [SerializeField]
-        private List<Animation> animations = new List<Animation>();
+        private Transform _target;
+
+        /// <summary>
+        ///     Path used to animate the <c>_target</c> transform.
+        /// </summary>
+        [SerializeField]
+        private AnimationPath _path;
+
+        /// <summary>
+        ///     Transform that the <c>_target</c> will be looking at.
+        /// </summary>
+        [SerializeField]
+        private Transform _lookAtTarget;
+
+        /// <summary>
+        ///     Path used to animate the <c>lookAtTarget</c>.
+        /// </summary>
+        [SerializeField]
+        private AnimationPath _lookAtPath;
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
@@ -190,55 +214,52 @@ namespace ATP.AnimationPathTools {
 
         // TODO Rename target object to objectTransform.
         private void Animate() {
-            // Animate all animations.
-            foreach (Animation anim in animations) {
-                // Animate target.
-                if (anim.LookAtTarget != null && anim.LookAtPath != null) {
-                    // Update position.
-                    anim.LookAtTarget.position =
-                        anim.LookAtPath.GetVectorAtTime(animTimeRatio);
-                }
+            // Animate target.
+            if (_lookAtTarget != null && _lookAtPath != null) {
+                // Update position.
+                _lookAtTarget.position =
+                    _lookAtPath.GetVectorAtTime(animTimeRatio);
+            }
 
-                // Animate transform.
-                if (anim.Target != null && anim.Path != null) {
-                    // Update position.
-                    anim.Target.position =
-                        anim.Path.GetVectorAtTime(animTimeRatio);
+            // Animate transform.
+            if (_target != null && _path != null) {
+                // Update position.
+                _target.position =
+                    _path.GetVectorAtTime(animTimeRatio);
 
-                    //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
-                    //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
-                }
+                //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
+                //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
+            }
 
-                // Rotate transform.
-                if (anim.Target != null && anim.LookAtTarget != null) {
-                    // Calculate direction to target.
-                    Vector3 targetDirection =
-                        anim.LookAtTarget.position - anim.Target.position;
-                    // Calculate rotation to target.
-                    Quaternion rotation = Quaternion.LookRotation(
-                        targetDirection);
-                    // Calculate rotation speed.
-                    float speed = Time.deltaTime * RotationDamping;
-                    // Lerp rotation.
-                    anim.Target.rotation = Quaternion.Slerp(
-                        anim.Target.rotation,
-                        rotation,
-                        speed);
+            // Rotate transform.
+            if (_target != null && _lookAtTarget != null) {
+                // Calculate direction to target.
+                Vector3 targetDirection =
+                    _lookAtTarget.position - _target.position;
+                // Calculate rotation to target.
+                Quaternion rotation = Quaternion.LookRotation(
+                    targetDirection);
+                // Calculate rotation speed.
+                float speed = Time.deltaTime * RotationDamping;
+                // Lerp rotation.
+                _target.rotation = Quaternion.Slerp(
+                    _target.rotation,
+                    rotation,
+                    speed);
 
-                    // In play mode, rotate using tween.
-                    //if (Application.isPlaying) {
-                    //    anim.Target.DOLookAt(
-                    //        anim.LookAtTarget.position,
-                    //        _rotationDuration);
-                    //}
-                    //// In editor mode, rotate using Unity LookAt().
-                    //else {
-                    //    transform.LookAt(anim.LookAtTarget.position);
-                    //}
+                // In play mode, rotate using tween.
+                //if (Application.isPlaying) {
+                //    anim.Target.DOLookAt(
+                //        anim.LookAtTarget.position,
+                //        _rotationDuration);
+                //}
+                //// In editor mode, rotate using Unity LookAt().
+                //else {
+                //    transform.LookAt(anim.LookAtTarget.position);
+                //}
 
-                    // rotate target.
-                    //anim.Target.LookAt(anim.LookAtTarget);
-                }
+                // rotate target.
+                //anim.Target.LookAt(anim.LookAtTarget);
             }
         }
 

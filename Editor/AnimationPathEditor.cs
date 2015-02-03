@@ -20,11 +20,11 @@ namespace ATP.AnimationPathTools {
 
         private const int smoothButtonH = 25;
         private const int smoothButtonV = 10;
-        private const int linearButtonH = 44;
-        private const int linearButtonV = 10;
-        private const int addButtonH = 62;
+        //private const int linearButtonH = 44;
+        //private const int linearButtonV = 10;
+        private const int addButtonH = 44;
         private const int addButtonV = 10;
-        private const int removeButtonH = 81;
+        private const int removeButtonH = 63;
         private const int removeButtonV = 10;
         #endregion
 
@@ -155,7 +155,7 @@ namespace ATP.AnimationPathTools {
 
             // Handle drawing button that changes node's tangent mode to
             // linear.
-            HandleDrawingLinearTangentModeButtons();
+            //HandleDrawingLinearTangentModeButtons();
         }
 
         #endregion UNITY MESSAGES
@@ -183,59 +183,59 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing handles mode indicator.
         /// </summary>
-        private void HandleDrawingHandlesModeIndicator() {
-            // Tangent mode indicator style;
-            GUIStyle style = script.Skin.GetStyle(
-                        "TangentModeIndicator");
+        //private void HandleDrawingHandlesModeIndicator() {
+        //    // Tangent mode indicator style;
+        //    GUIStyle style = script.Skin.GetStyle(
+        //                "TangentModeIndicator");
 
-            // Positions at which to draw movement handles.
-            Vector3[] nodes = script.GetNodePositions();
+        //    // Positions at which to draw movement handles.
+        //    Vector3[] nodes = script.GetNodePositions();
 
-            // Draw label for Movement mode.
-            if (!script.TangentMode) {
-                DrawLabelForEachNode(
-                    nodes,
-                    style,
-                    "M",
-                    30,
-                    6,
-                    25,
-                    25);
-            }
-            // Draw label for Tangent mode.
-            else {
-                DrawLabelForEachNode(
-                    nodes,
-                    style,
-                    "T",
-                    30,
-                    6,
-                    25,
-                    25);
-            }
-        }
+        //    // Draw label for Movement mode.
+        //    if (!script.TangentMode) {
+        //        DrawLabelForEachNode(
+        //            nodes,
+        //            style,
+        //            "M",
+        //            30,
+        //            6,
+        //            25,
+        //            25);
+        //    }
+        //    // Draw label for Tangent mode.
+        //    else {
+        //        DrawLabelForEachNode(
+        //            nodes,
+        //            style,
+        //            "T",
+        //            30,
+        //            6,
+        //            25,
+        //            25);
+        //    }
+        //}
 
         /// <summary>
         /// Handle drawing linear tangent mode button.
         /// </summary>
-        private void HandleDrawingLinearTangentModeButtons() {
-            // Get button style.
-            GUIStyle buttonStyle = script.Skin.GetStyle(
-                        "LinearTangentModeButton");
+        //private void HandleDrawingLinearTangentModeButtons() {
+        //    // Get button style.
+        //    GUIStyle buttonStyle = script.Skin.GetStyle(
+        //                "LinearTangentModeButton");
 
-            // Positions at which to draw movement handles.
-            Vector3[] nodePositions = script.GetNodePositions();
+        //    // Positions at which to draw movement handles.
+        //    Vector3[] nodePositions = script.GetNodePositions();
 
-            // Callback to smooth a node after smooth node button was pressed.
-            Action<int> setNodeLinearCallback =
-                DrawLinearTangentModeButtonsCallbackHandler;
+        //    // Callback to smooth a node after smooth node button was pressed.
+        //    Action<int> setNodeLinearCallback =
+        //        DrawLinearTangentModeButtonsCallbackHandler;
 
-            // Draw button.
-            DrawLinearTangentModeButtons(
-                nodePositions,
-                buttonStyle,
-                setNodeLinearCallback);
-        }
+        //    // Draw button.
+        //    DrawLinearTangentModeButtons(
+        //        nodePositions,
+        //        buttonStyle,
+        //        setNodeLinearCallback);
+        //}
 
         /// <summary>
         /// Handle drawing movement handles.
@@ -261,42 +261,42 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing Move mode indicator.
         /// </summary>
-        private void HandleDrawingMovementModeIndicator() {
-            // Draw label for Move All mode.
-            if (script.MoveAllMode) {
-                GUIStyle style = script.Skin.GetStyle("MoveAllModeIndicator");
+        //private void HandleDrawingMovementModeIndicator() {
+        //    // Draw label for Move All mode.
+        //    if (script.MoveAllMode) {
+        //        GUIStyle style = script.Skin.GetStyle("MoveAllModeIndicator");
 
-                // Positions at which to draw movement handles.
-                Vector3[] nodes = script.GetNodePositions();
+        //        // Positions at which to draw movement handles.
+        //        Vector3[] nodes = script.GetNodePositions();
 
-                // Draw labels for all nodes.
-                DrawLabelForEachNode(
-                    nodes,
-                    style,
-                    "A",
-                    20,
-                    6,
-                    25,
-                    25);
-            }
-            // Draw label for Move Single mode.
-            else {
-                GUIStyle style = script.Skin.GetStyle("MoveSingleModeIndicator");
+        //        // Draw labels for all nodes.
+        //        DrawLabelForEachNode(
+        //            nodes,
+        //            style,
+        //            "A",
+        //            20,
+        //            6,
+        //            25,
+        //            25);
+        //    }
+        //    // Draw label for Move Single mode.
+        //    else {
+        //        GUIStyle style = script.Skin.GetStyle("MoveSingleModeIndicator");
 
-                // Positions at which to draw movement handles.
-                Vector3[] nodes = script.GetNodePositions();
+        //        // Positions at which to draw movement handles.
+        //        Vector3[] nodes = script.GetNodePositions();
 
-                // Draw labels for all nodes.
-                DrawLabelForEachNode(
-                    nodes,
-                    style,
-                    "S",
-                    20,
-                    6,
-                    25,
-                    25);
-            }
-        }
+        //        // Draw labels for all nodes.
+        //        DrawLabelForEachNode(
+        //            nodes,
+        //            style,
+        //            "S",
+        //            20,
+        //            6,
+        //            25,
+        //            25);
+        //    }
+        //}
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
@@ -405,7 +405,7 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING
         #region Drawing methods
 
-        public void DrawAddNodeButtons(
+        private void DrawAddNodeButtons(
             Vector3[] nodePositions,
             Action<int> callback,
             GUIStyle buttonStyle) {
@@ -437,14 +437,12 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
-        public void DrawRemoveNodeButtons(
+        private void DrawRemoveNodeButtons(
             Vector3[] nodePositions,
             Action<int> callback,
             GUIStyle buttonStyle) {
 
             Handles.BeginGUI();
-
-            bool buttonPressed = false;
 
             // Draw remove buttons for each node except for the first and the
             // last one.
@@ -455,7 +453,7 @@ namespace ATP.AnimationPathTools {
                         nodePositions[i]);
 
                 // Draw button.
-                buttonPressed = DrawButton(
+                bool buttonPressed = DrawButton(
                     guiPoint,
                     removeButtonH,
                     removeButtonV,
@@ -464,7 +462,7 @@ namespace ATP.AnimationPathTools {
                     buttonStyle);
 
                 // Execute callback.
-                if (buttonPressed == true) {
+                if (buttonPressed) {
                     callback(i);
                 }
             }
@@ -472,7 +470,7 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
-        public void DrawMovementHandles(
+        private void DrawMovementHandles(
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
 
@@ -534,7 +532,7 @@ namespace ATP.AnimationPathTools {
         /// </param>
         /// <param name="smoothButtonStyle">Style of the button.</param>
         /// <returns>If any button was pressed.</returns>
-        public void DrawSmoothTangentButtons(
+        private void DrawSmoothTangentButtons(
             Vector3[] nodePositions,
             GUIStyle smoothButtonStyle,
             Action<int> callback) {
@@ -575,39 +573,39 @@ namespace ATP.AnimationPathTools {
         /// <param name="curves">Animation curves.</param>
         /// <param name="buttonStyle">Style of the button.</param>
         /// <returns>If any button was pressed.</returns>
-        public void DrawLinearTangentModeButtons(
-            Vector3[] nodePositions,
-            GUIStyle buttonStyle,
-            Action<int> callback) {
+        //public void DrawLinearTangentModeButtons(
+        //    Vector3[] nodePositions,
+        //    GUIStyle buttonStyle,
+        //    Action<int> callback) {
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            bool buttonPressed;
+        //    bool buttonPressed;
 
-            // For each key..
-            for (int i = 0; i < nodePositions.Length; i++) {
-                // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
-                        nodePositions[i]);
+        //    // For each key..
+        //    for (int i = 0; i < nodePositions.Length; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+        //                nodePositions[i]);
 
-                // Create rectangle for the button.
-                Rect rect = new Rect(
-                        guiPoint.x + linearButtonH,
-                        guiPoint.y + linearButtonV,
-                        15,
-                        15);
+        //        // Create rectangle for the button.
+        //        Rect rect = new Rect(
+        //                guiPoint.x + linearButtonH,
+        //                guiPoint.y + linearButtonV,
+        //                15,
+        //                15);
 
-                // Draw button.
-                buttonPressed = GUI.Button(rect, "", buttonStyle);
+        //        // Draw button.
+        //        buttonPressed = GUI.Button(rect, "", buttonStyle);
 
-                // If button pressed..
-                if (buttonPressed == true) {
-                    // Execute callback.
-                    callback(i);
-                }
-            }
-            Handles.EndGUI();
-        }
+        //        // If button pressed..
+        //        if (buttonPressed == true) {
+        //            // Execute callback.
+        //            callback(i);
+        //        }
+        //    }
+        //    Handles.EndGUI();
+        //}
 
         /// <summary>Draw speed label for each node on the scene.</summary>
         /// <remarks>
@@ -616,41 +614,41 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         /// <param name="curves"></param>
         /// <param name="labelStyle"></param>
-        public void DrawSpeedLabels(
-                Vector3[] nodePositions,
-                float[] speedValues,
-                GUIStyle labelStyle) {
+        //public void DrawSpeedLabels(
+        //        Vector3[] nodePositions,
+        //        float[] speedValues,
+        //        GUIStyle labelStyle) {
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            // For each node.. First node has no speed label.
-            for (int i = 1; i < nodePositions.Length; i++) {
-                // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
-                        nodePositions[i]);
+        //    // For each node.. First node has no speed label.
+        //    for (int i = 1; i < nodePositions.Length; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+        //                nodePositions[i]);
 
-                // Create rectangle for the label.
-                Rect rect = new Rect(guiPoint.x, guiPoint.y + 60, 40, 20);
+        //        // Create rectangle for the label.
+        //        Rect rect = new Rect(guiPoint.x, guiPoint.y + 60, 40, 20);
 
-                // Label content.
-                string label = string.Format("{0:0.0} m/s", speedValues[i]);
+        //        // Label content.
+        //        string label = string.Format("{0:0.0} m/s", speedValues[i]);
 
-                // Draw label on the scene.
-                GUI.Box(
-                        rect,
-                        label,
-                        labelStyle);
-            }
+        //        // Draw label on the scene.
+        //        GUI.Box(
+        //                rect,
+        //                label,
+        //                labelStyle);
+        //    }
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
         /// <summary>
         /// For each node in the scene draw handle that allow manipulating
         /// tangents for each of the animation curves separately.
         /// </summary>
         /// <returns>True if any handle was moved.</returns>
-        public void DrawTangentHandles(
+        private void DrawTangentHandles(
             Vector3[] nodes,
             Action<int, Vector3> callback) {
 
@@ -694,36 +692,36 @@ namespace ATP.AnimationPathTools {
         /// </param>
         /// <param name="width">Label width.</param>
         /// <param name="height">Label height.</param>
-        public void DrawLabelForEachNode(
-            Vector3[] positions,
-            GUIStyle labelStyle,
-            string labelText,
-            int relativeXPos,
-            int relativeYPos,
-            int width,
-            int height) {
+        //public void DrawLabelForEachNode(
+        //    Vector3[] positions,
+        //    GUIStyle labelStyle,
+        //    string labelText,
+        //    int relativeXPos,
+        //    int relativeYPos,
+        //    int width,
+        //    int height) {
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            // For each node..
-            for (int i = 0; i < positions.Length; i++) {
-                // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
-                        positions[i]);
+        //    // For each node..
+        //    for (int i = 0; i < positions.Length; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+        //                positions[i]);
 
-                // Create rectangle for the "+" button.
-                Rect rect = new Rect(
-                        guiPoint.x + relativeXPos,
-                        guiPoint.y + relativeYPos,
-                        width,
-                        height);
+        //        // Create rectangle for the "+" button.
+        //        Rect rect = new Rect(
+        //                guiPoint.x + relativeXPos,
+        //                guiPoint.y + relativeYPos,
+        //                width,
+        //                height);
 
-                // Draw label.
-                GUI.Label(rect, labelText, labelStyle);
-            }
+        //        // Draw label.
+        //        GUI.Label(rect, labelText, labelStyle);
+        //    }
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
         /// <summary>Draw information labels for each node.</summary>
         /// <param name="curves">
@@ -732,37 +730,37 @@ namespace ATP.AnimationPathTools {
         /// <param name="labelStyle">
         /// Style of the label displayed in the scene view.
         /// </param>
-        public void DrawTimestampLabels(
-                Vector3[] nodes,
-                float[] timestamps,
-                GUIStyle labelStyle) {
+        //public void DrawTimestampLabels(
+        //        Vector3[] nodes,
+        //        float[] timestamps,
+        //        GUIStyle labelStyle) {
 
-            // Draw GUI elements inside scene.
-            Handles.BeginGUI();
+        //    // Draw GUI elements inside scene.
+        //    Handles.BeginGUI();
 
-            // For each node..
-            for (int i = 0; i < nodes.Length; i++) {
-                // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
-                        nodes[i]);
+        //    // For each node..
+        //    for (int i = 0; i < nodes.Length; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+        //                nodes[i]);
 
-                // Create rectangle for the label.
-                Rect rect = new Rect(guiPoint.x, guiPoint.y + 20, 40, 20);
+        //        // Create rectangle for the label.
+        //        Rect rect = new Rect(guiPoint.x, guiPoint.y + 20, 40, 20);
 
-                // Label content.
-                string label = string.Format("{0:0.000}", timestamps[i]);
+        //        // Label content.
+        //        string label = string.Format("{0:0.000}", timestamps[i]);
 
-                // Draw label on the scene.
-                GUI.Box(
-                        rect,
-                        label,
-                        labelStyle);
-            }
+        //        // Draw label on the scene.
+        //        GUI.Box(
+        //                rect,
+        //                label,
+        //                labelStyle);
+        //    }
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
-        public bool DrawButton(
+        private bool DrawButton(
             Vector2 position,
             int relativeXPos,
             int relativeYPos,
@@ -795,18 +793,18 @@ namespace ATP.AnimationPathTools {
             //AddNodeAuto(nodeIndex);
             AddNewNode(nodeIndex);
 
-            DistributeNodeSpeedValues();
+            script.DistributeTimestamps();
         }
 
-        protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
-                    int nodeIndex) {
+        //protected virtual void DrawLinearTangentModeButtonsCallbackHandler(
+        //            int nodeIndex) {
 
-            // Make snapshot of the target object.
-            HandleUndo();
+        //    // Make snapshot of the target object.
+        //    HandleUndo();
 
-            script.SetNodeLinear(nodeIndex);
-            DistributeNodeSpeedValues();
-        }
+        //    script.SetNodeLinear(nodeIndex);
+        //    DistributeTimestamps();
+        //}
 
         protected virtual void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,
@@ -823,7 +821,7 @@ namespace ATP.AnimationPathTools {
             // Move single node.
             else {
                 script.MoveNodeToPosition(movedNodeIndex, position);
-                DistributeNodeSpeedValues();
+                script.DistributeTimestamps();
             }
         }
 
@@ -832,7 +830,7 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.RemoveNode(nodeIndex);
-            DistributeNodeSpeedValues();
+            script.DistributeTimestamps();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -841,7 +839,7 @@ namespace ATP.AnimationPathTools {
 
             script.SmoothNodeTangents(index);
 
-            DistributeNodeSpeedValues();
+            script.DistributeTimestamps();
         }
         protected virtual void DrawTangentHandlesCallbackHandler(
                     int index,
@@ -851,9 +849,50 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             script.ChangeNodeTangents(index, inOutTangent);
-            DistributeNodeSpeedValues();
+            script.DistributeTimestamps();
         }
         #endregion CALLBACK HANDLERS
+        #region INSPECTOR
+        private void DrawCreateInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Create",
+                "Create a new default Animation Path or reset to default."))) {
+                // Allow undo this operation.
+                HandleUndo();
+                // Reset curves to its default state.
+                ResetPath();
+            }
+        }
+
+        private void DrawLinearInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Linear",
+                "Set tangent mode to linear for all nodePositions."))) {
+                // Allow undo this operation.
+                HandleUndo();
+
+                script.SetNodesLinear();
+                script.DistributeTimestamps();
+            }
+        }
+
+        protected virtual void DrawSmoothInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+                HandleUndo();
+                script.SmoothNodesTangents();
+                script.DistributeTimestamps();
+            }
+        }
+
+        private void DrawExportNodesInspectorButton() {
+            if (GUILayout.Button("Export Nodes")) {
+                ExportNodes(exportSamplingFrequency.intValue);
+            }
+        }
+        #endregion
+
         #region PRIVATE
         /// <summary>
         /// Update <c>moveAllMode</c> option with keyboard shortcut.
@@ -925,33 +964,9 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.BeginHorizontal();
             serializedObject.Update();
-            if (GUILayout.Button(new GUIContent(
-                "Linear",
-                "Set tangent mode to linear for all nodePositions."))) {
-
-                // Allow undo this operation.
-                HandleUndo();
-
-                script.SetNodesLinear();
-                DistributeNodeSpeedValues();
-            }
-            if (GUILayout.Button(new GUIContent(
-                           "Smooth",
-                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
-
-                HandleUndo();
-                script.SmoothNodesTangents();
-                DistributeNodeSpeedValues();
-            }
-            if (GUILayout.Button(new GUIContent(
-                "Reset",
-                "Create a new default Animation Path or reset to default."))) {
-
-                // Allow undo this operation.
-                HandleUndo();
-                // Reset curves to its default state.
-                ResetPath();
-            }
+            DrawSmoothInspectorButton();
+            DrawLinearInspectorButton();
+            DrawCreateInspectorButton();
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
@@ -1003,9 +1018,7 @@ namespace ATP.AnimationPathTools {
                         "the curve."));
             serializedObject.ApplyModifiedProperties();
 
-            if (GUILayout.Button("Export Nodes")) {
-                ExportNodes(exportSamplingFrequency.intValue);
-            }
+            DrawExportNodesInspectorButton();
 
             EditorGUILayout.Space();
 
@@ -1029,7 +1042,6 @@ namespace ATP.AnimationPathTools {
             }
             serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// Record target object state for undo.
         /// </summary>
@@ -1049,6 +1061,7 @@ namespace ATP.AnimationPathTools {
             }
         }*/
 
+        // TODO Rename to AddNodeBetween().
         protected void AddNewNode(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
@@ -1077,81 +1090,53 @@ namespace ATP.AnimationPathTools {
             script.CreateNode(1, newNodePosition);
         }*/
 
-        private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
-            // Get positions of all nodes.
-            Vector3[] nodePositions = script.GetNodePositions();
+        //private Vector3 CalculateNewEndNodePosition(int nodeIndex) {
+        //    // Get positions of all nodes.
+        //    Vector3[] nodePositions = script.GetNodePositions();
 
-            // Timestamp of node on which was taken action.
-            float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
+        //    // Timestamp of node on which was taken action.
+        //    float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
 
-            // Timestamp of some point behind and close to the node.
-            float refTime = currentKeyTime - 0.001f;
+        //    // Timestamp of some point behind and close to the node.
+        //    float refTime = currentKeyTime - 0.001f;
 
-            // Create Vector3 for the reference point.
-            Vector3 refPoint = script.GetVectorAtTime(refTime);
+        //    // Create Vector3 for the reference point.
+        //    Vector3 refPoint = script.GetVectorAtTime(refTime);
 
-            // Calculate direction from ref. point to current node.
-            Vector3 dir = nodePositions[nodeIndex] - refPoint;
+        //    // Calculate direction from ref. point to current node.
+        //    Vector3 dir = nodePositions[nodeIndex] - refPoint;
 
-            // Normalize direction.
-            dir.Normalize();
+        //    // Normalize direction.
+        //    dir.Normalize();
 
-            // Create vector with new node's position.
-            Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
+        //    // Create vector with new node's position.
+        //    Vector3 newNodePosition = nodePositions[nodeIndex] + dir * 0.5f;
 
-            return newNodePosition;
-        }
+        //    return newNodePosition;
+        //}
 
         /// <summary>
         /// Decrease node timestamp by half its time interval.
         /// </summary>
         /// <remarks>Node interval is a time betwenn this and previous node.</remarks>
         /// <param name="nodeIndex"></param>
-        private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
-            // Get timestamp of the penultimate node.
-            float penultimateNodeTimestamp =
-                script.GetNodeTimestamp((nodeIndex - 1));
+        //private void DecreaseNodeTimestampByHalfInterval(int nodeIndex) {
+        //    // Get timestamp of the penultimate node.
+        //    float penultimateNodeTimestamp =
+        //        script.GetNodeTimestamp((nodeIndex - 1));
 
-            // Calculate time between last and penultimate nodes.
-            float deltaTime = 1 - penultimateNodeTimestamp;
+        //    // Calculate time between last and penultimate nodes.
+        //    float deltaTime = 1 - penultimateNodeTimestamp;
 
-            // Calculate new, smaller time for the last node.
-            float newLastNodeTimestamp =
-                penultimateNodeTimestamp + (deltaTime * 0.5f);
+        //    // Calculate new, smaller time for the last node.
+        //    float newLastNodeTimestamp =
+        //        penultimateNodeTimestamp + (deltaTime * 0.5f);
 
-            // Update point timestamp in animation curves.
-            script.ChangeNodeTimestamp(
-                nodeIndex,
-                newLastNodeTimestamp);
-        }
-
-        private void DistributeNodeSpeedValues() {
-            // Calculate path curved length.
-            float pathLength = script.CalculatePathCurvedLength(
-                AnimationPath.GizmoCurveSamplingFrequency);
-            // Calculate time for one meter of curve length.
-            float timeForMeter = 1 / pathLength;
-            // Helper variable.
-            float prevTimestamp = 0;
-
-            // For each node calculate and apply new timestamp.
-            for (var i = 1; i < script.NodesNo - 1; i++) {
-                // Calculate section curved length.
-                float sectionLength = script.CalculateSectionCurvedLength(
-                    i - 1,
-                    i,
-                    AnimationPath.GizmoCurveSamplingFrequency);
-                // Calculate time interval.
-                float sectionTimeInterval = sectionLength * timeForMeter;
-                // Calculate new timestamp.
-                float newTimestamp = prevTimestamp + sectionTimeInterval;
-                // Update previous timestamp.
-                prevTimestamp = newTimestamp;
-
-                // Update node timestamp.
-                script.ChangeNodeTimestamp(i, newTimestamp);
-            }
-        }
+        //    // Update point timestamp in animation curves.
+        //    script.ChangeNodeTimestamp(
+        //        nodeIndex,
+        //        newLastNodeTimestamp);
+        //}
 
         /// <summary>
         /// Export Animation Path nodes as transforms.
@@ -1222,7 +1207,6 @@ namespace ATP.AnimationPathTools {
             script.CreateNode(0, worldPoint);
             script.CreateNode(1, endPoint);
         }
-
         #endregion
     }
 }

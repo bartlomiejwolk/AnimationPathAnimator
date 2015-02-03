@@ -1,5 +1,7 @@
-﻿using ATP.ReorderableList;
+﻿using System.Collections;
+using ATP.ReorderableList;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -9,6 +11,8 @@ namespace ATP.AnimationPathTools {
     /// Animation Paths and also animate their rotation on x and y axis in
     /// time.
     /// </summary>
+    [RequireComponent (typeof (AnimationPath))]
+    [RequireComponent (typeof (TargetAnimationPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
 
@@ -56,8 +60,32 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// List of animations to by played by the animator.
         /// </summary>
+        //[SerializeField]
+        //private List<Animation> animations = new List<Animation>();
+
+        /// <summary>
+        ///     Transform to be animated.
+        /// </summary>
         [SerializeField]
-        private List<Animation> animations = new List<Animation>();
+        private Transform _target;
+
+        /// <summary>
+        ///     Path used to animate the <c>_target</c> transform.
+        /// </summary>
+        [SerializeField]
+        private AnimationPath _path;
+
+        /// <summary>
+        ///     Transform that the <c>_target</c> will be looking at.
+        /// </summary>
+        [SerializeField]
+        private Transform _lookAtTarget;
+
+        /// <summary>
+        ///     Path used to animate the <c>lookAtTarget</c>.
+        /// </summary>
+        [SerializeField]
+        private TargetAnimationPath _lookAtPath;
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
@@ -72,7 +100,7 @@ namespace ATP.AnimationPathTools {
         /// Animation duration in seconds.
         /// </summary>
         [SerializeField]
-        private float duration = 10;
+        private float duration = 20;
 
         /// <summary>
         /// If animation is currently enabled.
@@ -81,6 +109,18 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
+
+        //private float _rotationDuration = 3.0f;
+
+        // TODO Rename to _easeCurve.
+        [SerializeField]
+        private AnimationCurve _easeAnimationCurve = new AnimationCurve();
+
+        [SerializeField]
+        private AnimationCurve _zAxisRotationCurve = new AnimationCurve();
+
+        //private const int dotweensamplingfrequency = 5;
+
         #endregion FIELDS
 
         #region UNITY MESSAGES
@@ -101,21 +141,51 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Start() {
+            _path = GetComponent<AnimationPath>();
+            _lookAtPath = GetComponent<TargetAnimationPath>();
+
+            InitializeEaseCurve();
+            InitializeRotationCurve();
+
             // Start playing animation on Start().
             isPlaying = true;
 
             // Start animation from time ratio specified in the inspector.
             currentAnimTime = animTimeRatio * duration;
-        }
 
+            //foreach (Animation anim in animations) {
+            //    if (anim.LookAtTarget != null && anim.LookAtPath != null) {
+            //        List<Vector3> waypoints =
+            //            anim.LookAtPath.SamplePathForPoints(DOTweenSamplingFrequency);
+            //        anim.LookAtTarget.transform.DOPath(waypoints.ToArray(), duration);
+            //    }
+            //    if (anim.Target != null && anim.Path != null) {
+            //        List<Vector3> waypoints =
+            //            anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
+            //        anim.Target.transform.DOPath(waypoints.ToArray(), duration);
+            //        //.SetLookAt(anim.LookAtTarget).SetEase(Ease.InCirc);
+
+            //        //anim.Target.DOLookAt(
+            //        //    anim.LookAtTarget.position,
+            //        //    2.0f);
+            //    }
+            //}
+
+            //DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
+            //    .SetEase(_easeAnimationCurve);
+
+            if (Application.isPlaying) {
+                StartCoroutine(EaseTime());
+            }
+        }
         private void Update() {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
                 // Increase animation time.
-                currentAnimTime += Time.deltaTime;
+                //currentAnimTime += Time.deltaTime;
 
                 // Convert animation time to <0; 1> ratio.
-                animTimeRatio = currentAnimTime / duration;
+                //animTimeRatio = currentAnimTime / duration;
             }
 
             Animate();
@@ -133,45 +203,105 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public float[] GetTargetPathTimestamps() {
+            return _lookAtPath.GetNodeTimestamps();
+        }
+
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
+        private void InitializeEaseCurve() {
+            Keyframe firstKey = new Keyframe(0, 0, 0, 0);
+            Keyframe lastKey = new Keyframe(1, 1, 0, 0);
+
+            _easeAnimationCurve.AddKey(firstKey);
+            _easeAnimationCurve.AddKey(lastKey);
+        }
+
+        private void InitializeRotationCurve() {
+            Keyframe firstKey = new Keyframe(0, 0, 0, 0);
+            Keyframe lastKey = new Keyframe(1, 0, 0, 0);
+
+            _zAxisRotationCurve.AddKey(firstKey);
+            _zAxisRotationCurve.AddKey(lastKey);
+        }
+
+        private IEnumerator EaseTime() {
+            do {
+                // Increase animation time.
+                currentAnimTime += Time.deltaTime;
+
+                // Convert animation time to <0; 1> ratio.
+                //animTimeRatio = currentAnimTime / duration;
+                float timeRatio = currentAnimTime/duration;
+
+                animTimeRatio = _easeAnimationCurve.Evaluate(timeRatio);
+
+                yield return null;
+            } while (animTimeRatio < 1.0f);
+        }
+
 
         // TODO Rename target object to objectTransform.
+        // TODO Refactor into smaller method.
         private void Animate() {
-            // Animate targets selected in the inspector.
-            foreach (Animation anim in animations) {
-                // If target and target path inspector fields are not empty..
-                if (anim.Target != null && anim.Path != null) {
-                    // animate target.
-                    anim.Target.position =
-                        anim.Path.GetVectorAtTime(animTimeRatio);
-                }
+            // Animate target.
+            if (_lookAtTarget != null && _lookAtPath != null) {
+                // Update position.
+                _lookAtTarget.position =
+                    _lookAtPath.GetVectorAtTime(animTimeRatio);
+            }
 
-                // If look at target and look at target path inspector options
-                // are not empty..
-                if (anim.LookAtTarget != null && anim.LookAtPath != null) {
-                    // animate look at target.
-                    anim.LookAtTarget.position =
-                        anim.LookAtPath.GetVectorAtTime(animTimeRatio);
-                }
+            // Animate transform.
+            if (_target != null && _path != null) {
+                // Update position.
+                _target.position =
+                    _path.GetVectorAtTime(animTimeRatio);
 
-                // If target and look at target inspector fields are not
-                // empty..
-                if (anim.Target != null && anim.LookAtTarget != null) {
-                    Vector3 targetDirection =
-                        anim.LookAtTarget.position - anim.Target.position;
-                    Quaternion rotation = Quaternion.LookRotation(
-                        targetDirection);
-                    float speed = Time.deltaTime * RotationDamping;
-                    anim.Target.rotation = Quaternion.Slerp(
-                        anim.Target.rotation,
-                        rotation,
-                        speed);
+                //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
+                //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
+            }
 
-                    // rotate target.
-                    //anim.Target.LookAt(anim.LookAtTarget);
-                }
+            // Rotate transform.
+            if (_target != null && _lookAtTarget != null) {
+                // Calculate direction to target.
+                Vector3 targetDirection =
+                    _lookAtTarget.position - _target.position;
+                // Calculate rotation to target.
+                Quaternion rotation = Quaternion.LookRotation(
+                    targetDirection);
+                // Calculate rotation speed.
+                float speed = Time.deltaTime * RotationDamping;
+                // Lerp rotation.
+                _target.rotation = Quaternion.Slerp(
+                    _target.rotation,
+                    rotation,
+                    speed);
+
+                // Set rotation on Z axis to 0.
+                //Vector3 eulerAngles = transform.rotation.eulerAngles;
+                //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, 0);
+                //transform.rotation = Quaternion.Euler(eulerAngles);
+
+                Vector3 eulerAngles = transform.rotation.eulerAngles;
+                // Get rotation from AnimationCurve.
+                float zRotation = _zAxisRotationCurve.Evaluate(animTimeRatio);
+                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+                transform.rotation = Quaternion.Euler(eulerAngles);
+
+                // In play mode, rotate using tween.
+                //if (Application.isPlaying) {
+                //    anim.Target.DOLookAt(
+                //        anim.LookAtTarget.position,
+                //        _rotationDuration);
+                //}
+                //// In editor mode, rotate using Unity LookAt().
+                //else {
+                //    transform.LookAt(anim.LookAtTarget.position);
+                //}
+
+                // rotate target.
+                //anim.Target.LookAt(anim.LookAtTarget);
             }
         }
 

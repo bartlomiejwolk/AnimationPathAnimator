@@ -23,14 +23,14 @@ namespace ATP.AnimationPathTools {
             AddNewNode(nodeIndex);
         }
 
-        protected override void DrawLinearTangentModeButtonsCallbackHandler(
-                    int nodeIndex) {
+        //protected override void DrawLinearTangentModeButtonsCallbackHandler(
+        //            int nodeIndex) {
 
-            // Make snapshot of the target object.
-            HandleUndo();
+        //    // Make snapshot of the target object.
+        //    HandleUndo();
 
-            script.SetNodeLinear(nodeIndex);
-        }
+        //    script.SetNodeLinear(nodeIndex);
+        //}
 
         protected override void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,
@@ -64,6 +64,14 @@ namespace ATP.AnimationPathTools {
             script.SmoothNodeTangents(index);
         }
 
+        protected override void DrawSmoothInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+                HandleUndo();
+                script.SmoothNodesTangents();
+            }
+        }
         protected override void DrawTangentHandlesCallbackHandler(
                     int index,
                     Vector3 inOutTangent) {

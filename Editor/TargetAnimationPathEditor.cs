@@ -6,16 +6,6 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(TargetAnimationPath))]
     public class TargetAnimationPathEditor : AnimationPathEditor {
 
-
-        protected override void OnEnable() {
-            base.OnEnable();
-
-            Script = (TargetAnimationPath)target;
-
-            // Set default gizmo curve color.
-            Script.GizmoCurveColor = Color.magenta;
-        }
-
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
             HandleUndo();
@@ -23,8 +13,6 @@ namespace ATP.AnimationPathTools {
             // Add a new node.
             AddNodeBetween(nodeIndex);
         }
-
-       
 
         protected override void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,
@@ -51,13 +39,6 @@ namespace ATP.AnimationPathTools {
             Script.RemoveNode(nodeIndex);
         }
 
-        protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
-            // Make snapshot of the target object.
-            HandleUndo();
-
-            Script.SmoothNodeTangents(index);
-        }
-
         protected override void DrawSmoothInspectorButton() {
             if (GUILayout.Button(new GUIContent(
                 "Smooth",
@@ -66,6 +47,14 @@ namespace ATP.AnimationPathTools {
                 Script.SmoothNodesTangents();
             }
         }
+
+        protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
+            // Make snapshot of the target object.
+            HandleUndo();
+
+            Script.SmoothNodeTangents(index);
+        }
+
         protected override void DrawTangentHandlesCallbackHandler(
                     int index,
                     Vector3 inOutTangent) {
@@ -74,6 +63,15 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             Script.ChangeNodeTangents(index, inOutTangent);
+        }
+
+        protected override void OnEnable() {
+            base.OnEnable();
+
+            Script = (TargetAnimationPath)target;
+
+            // Set default gizmo curve color.
+            Script.GizmoCurveColor = Color.magenta;
         }
     }
 }

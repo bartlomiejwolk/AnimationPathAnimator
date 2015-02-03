@@ -27,7 +27,7 @@ namespace ATP.AnimationPathTools {
 		private SerializedProperty rotationSpeed;
 		private SerializedProperty animTimeRatio;
         private SerializedProperty easeAnimationCurve;
-        private SerializedProperty zAxisRotationCurve;
+        private SerializedProperty tiltingCurve;
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
         private SerializedProperty followedObject;
@@ -45,7 +45,7 @@ namespace ATP.AnimationPathTools {
 		    rotationSpeed = serializedObject.FindProperty("rotationSpeed");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
 		    easeAnimationCurve = serializedObject.FindProperty("easeCurve");
-		    zAxisRotationCurve = serializedObject.FindProperty("zAxisRotationCurve");
+		    tiltingCurve = serializedObject.FindProperty("tiltingCurve");
 		    animatedObject = serializedObject.FindProperty("animatedObject");
 		    animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
 		    followedObject = serializedObject.FindProperty("animatedObject");
@@ -70,7 +70,7 @@ namespace ATP.AnimationPathTools {
 		            ""));
 
 		    EditorGUILayout.PropertyField(
-		        zAxisRotationCurve,
+		        tiltingCurve,
 		        new GUIContent(
 		            "Tilting Curve",
 		            ""));

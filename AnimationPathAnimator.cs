@@ -16,11 +16,6 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         #region CONSTANTS
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        // ReSharper disable once ConvertToConstant.Local
-        private float rotationSpeed = 3.0f;
-
         /// <summary>
         /// Key shortcut to jump backward.
         /// </summary>
@@ -56,7 +51,12 @@ namespace ATP.AnimationPathTools {
 
         #endregion CONSTANTS
 
-        #region FIELDS
+        #region EDITOR
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
+        private float rotationSpeed = 3.0f;
+
 
 
         /// <summary>
@@ -90,18 +90,23 @@ namespace ATP.AnimationPathTools {
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
-
-        /// <summary>
-        /// Current animation time in seconds.
-        /// </summary>
-        private float currentAnimTime;
-
         /// <summary>
         /// Animation duration in seconds.
         /// </summary>
         [SerializeField]
         private float duration = 20;
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private AnimationCurve easeCurve = new AnimationCurve();
 
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private AnimationCurve tiltingCurve = new AnimationCurve();
+
+
+        #endregion 
+
+        #region FIELDS
         /// <summary>
         /// If animation is currently enabled.
         /// </summary>
@@ -110,17 +115,12 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         private bool isPlaying;
 
+        /// <summary>
+        /// Current animation time in seconds.
+        /// </summary>
+        private float currentAnimTime;
 
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private AnimationCurve easeCurve = new AnimationCurve();
-
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private AnimationCurve zAxisRotationCurve = new AnimationCurve();
-
-
-        #endregion FIELDS
+        #endregion
 
         #region UNITY MESSAGES
 
@@ -199,8 +199,8 @@ namespace ATP.AnimationPathTools {
             var firstKey = new Keyframe(0, 0, 0, 0);
             var lastKey = new Keyframe(1, 0, 0, 0);
 
-            zAxisRotationCurve.AddKey(firstKey);
-            zAxisRotationCurve.AddKey(lastKey);
+            tiltingCurve.AddKey(firstKey);
+            tiltingCurve.AddKey(lastKey);
         }
 
         private IEnumerator EaseTime() {
@@ -235,7 +235,7 @@ namespace ATP.AnimationPathTools {
             if (animatedObject != null && followedObject != null) {
                 var eulerAngles = transform.rotation.eulerAngles;
                 // Get rotation from AnimationCurve.
-                var zRotation = zAxisRotationCurve.Evaluate(animTimeRatio);
+                var zRotation = tiltingCurve.Evaluate(animTimeRatio);
                 eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
                 transform.rotation = Quaternion.Euler(eulerAngles);
               

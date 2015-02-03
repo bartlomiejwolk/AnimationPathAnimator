@@ -649,7 +649,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!1 &399377219
 GameObject:
   m_ObjectHideFlags: 0
@@ -1971,7 +1971,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!1 &796120719
 GameObject:
   m_ObjectHideFlags: 0
@@ -2635,11 +2635,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1108505293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.9766655, y: 9.7193079, z: 1.66494811}
+  m_LocalPosition: {x: -13.0380163, y: 9.68224525, z: .716593206}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1109040073
 GameObject:
   m_ObjectHideFlags: 0
@@ -2872,12 +2872,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1126246260}
-  m_LocalRotation: {x: -.0122601306, y: -.191188201, z: -.00238823681, w: .981473923}
-  m_LocalPosition: {x: -12.3898745, y: 9.6802454, z: .215941116}
+  m_LocalRotation: {x: .00188055751, y: .215489626, z: -.00852149818, w: -.976467133}
+  m_LocalPosition: {x: -12.5055828, y: 9.68224525, z: -.430989951}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 9
 --- !u!114 &1126246267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2889,12 +2889,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce894b8395c1174a858bdbbfa2a4d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 3
   animatedObject: {fileID: 1126246266}
   animatedObjectPath: {fileID: 1126246271}
-  followedObject: {fileID: 1108505294}
-  followedObjectPath: {fileID: 1126246268}
-  animTimeRatio: 0
+  animTimeRatio: .00200000009
   duration: 30
   easeCurve:
     serializedVersion: 2
@@ -2911,9 +2908,22 @@ MonoBehaviour:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+  followedObject: {fileID: 1108505294}
+  followedObjectPath: {fileID: 1126246268}
+  rotationSpeed: 3
   tiltingCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
 --- !u!114 &1126246268
@@ -3080,7 +3090,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!1 &1155268891
 GameObject:
   m_ObjectHideFlags: 0
@@ -3149,7 +3159,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!1 &1159366033
 GameObject:
   m_ObjectHideFlags: 0
@@ -5454,7 +5464,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!1 &2002135693
 GameObject:
   m_ObjectHideFlags: 0

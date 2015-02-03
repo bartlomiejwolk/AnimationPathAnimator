@@ -43,50 +43,63 @@ namespace ATP.AnimationPathTools {
             serializedObject.Update();
 
             EditorGUILayout.Slider(
-                    animTimeRatio,
+                new GUIContent(
+                    "Animation Time",
+                    "Current animation time."),
+                    animTimeRatio.floatValue,
                     0,
                     1);
 
-            EditorGUILayout.PropertyField(duration);
-            EditorGUILayout.PropertyField(rotationSpeed);
+            EditorGUILayout.PropertyField(
+                duration,
+                new GUIContent(
+                    "Duration",
+                    "Duration of the animation in seconds."));
+
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
 
             EditorGUILayout.PropertyField(
                 easeAnimationCurve,
                 new GUIContent(
                     "Ease Curve",
-                    ""));
+                    "Use it to control speed of the animated object."));
 
             EditorGUILayout.PropertyField(
                 tiltingCurve,
                 new GUIContent(
                     "Tilting Curve",
-                    ""));
+                    "Use it to control tilting of the animated object."));
 
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(
                 animatedObject,
                 new GUIContent(
-                    "Object",
-                    ""));
+                    "Animated Object",
+                    "Object to animate."));
 
             EditorGUILayout.PropertyField(
                 animatedObjectPath,
                 new GUIContent(
-                    "Object Path",
-                    ""));
+                    "Animated Object Path",
+                    "Path used to animate object."));
 
             EditorGUILayout.PropertyField(
                 followedObject,
                 new GUIContent(
-                    "Target",
-                    ""));
+                    "Followed Object",
+                    "Object that the animated object will be looking at."));
 
             EditorGUILayout.PropertyField(
                 followedObjectPath,
                 new GUIContent(
-                    "Target Path",
-                    ""));
+                    "Follow Object Path",
+                    "Path for the followed object."));
 
             // Save changes.
             serializedObject.ApplyModifiedProperties();

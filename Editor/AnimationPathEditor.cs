@@ -591,7 +591,7 @@ namespace ATP.AnimationPathTools {
 
             // Tooltip for moveAllMode property.
             var moveAllModeTooltip = String.Format(
-                "If enabled, you can move with mouse all nodePositions at once. " +
+                "Move all nodes at once. " +
                 "Toggle it with {0} key.",
                 AnimationPath.MoveAllKey);
 
@@ -606,8 +606,8 @@ namespace ATP.AnimationPathTools {
 
             // Tooltip for handlesMode property.
             var tangentModeTooltip = String.Format(
-                "If enabled, the on-scene handles will change node's tangents." +
-                "Enable it temporarily with {0} key.",
+                "Display handles that allow changing node tangents. " +
+                "Toggle it with {0} key.",
                 AnimationPath.HandlesModeKey);
 
             GUI.enabled = !Script.MoveAllMode;
@@ -622,7 +622,7 @@ namespace ATP.AnimationPathTools {
                 Script.SceneControls,
                 new GUIContent(
                     "Scene Controls",
-                    "Toggle displaying on-scene node controls."));
+                    "Toggle on-scene node controls."));
 
             EditorGUILayout.Space();
 

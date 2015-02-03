@@ -2753,7 +2753,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1108505293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.0756073, y: .279637009, z: -1.99215484}
+  m_LocalPosition: {x: -15.8291817, y: .367744058, z: -.847680628}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2990,8 +2990,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1126246260}
-  m_LocalRotation: {x: .0053563132, y: .451950461, z: -.00271381857, w: .892022908}
-  m_LocalPosition: {x: -17.8872833, y: .29172644, z: -2.58754396}
+  m_LocalRotation: {x: .0169572122, y: -.495629042, z: -.00967907812, w: -.868314862}
+  m_LocalPosition: {x: -16.7495766, y: .3259781, z: -1.39124322}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3007,13 +3007,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce894b8395c1174a858bdbbfa2a4d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 1126246266}
-  _path: {fileID: 1126246271}
-  _lookAtTarget: {fileID: 1108505294}
-  _lookAtPath: {fileID: 1126246268}
-  animTimeRatio: 0
+  _rotationSpeed: 3
+  _object: {fileID: 1126246266}
+  _objectPath: {fileID: 1126246271}
+  _target: {fileID: 1108505294}
+  _targetPath: {fileID: 1126246268}
+  animTimeRatio: .104000002
   duration: 30
-  _easeAnimationCurve:
+  _easeCurve:
     serializedVersion: 2
     m_Curve:
     - time: 0

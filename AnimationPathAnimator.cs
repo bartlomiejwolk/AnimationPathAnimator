@@ -67,25 +67,25 @@ namespace ATP.AnimationPathTools {
         ///     Transform to be animated.
         /// </summary>
         [SerializeField]
+        private Transform _object;
+
+        /// <summary>
+        ///     Path used to animate the <c>_object</c> transform.
+        /// </summary>
+        [SerializeField]
+        private AnimationPath _objectPath;
+
+        /// <summary>
+        ///     Transform that the <c>_object</c> will be looking at.
+        /// </summary>
+        [SerializeField]
         private Transform _target;
-
-        /// <summary>
-        ///     Path used to animate the <c>_target</c> transform.
-        /// </summary>
-        [SerializeField]
-        private AnimationPath _path;
-
-        /// <summary>
-        ///     Transform that the <c>_target</c> will be looking at.
-        /// </summary>
-        [SerializeField]
-        private Transform _lookAtTarget;
 
         /// <summary>
         ///     Path used to animate the <c>lookAtTarget</c>.
         /// </summary>
         [SerializeField]
-        private TargetAnimationPath _lookAtPath;
+        private TargetAnimationPath _targetPath;
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
@@ -140,8 +140,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Start() {
-            _path = GetComponent<AnimationPath>();
-            _lookAtPath = GetComponent<TargetAnimationPath>();
+            _objectPath = GetComponent<AnimationPath>();
+            _targetPath = GetComponent<TargetAnimationPath>();
 
             InitializeEaseCurve();
             InitializeRotationCurve();
@@ -203,7 +203,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public float[] GetTargetPathTimestamps() {
-            return _lookAtPath.GetNodeTimestamps();
+            return _targetPath.GetNodeTimestamps();
         }
 
         #endregion PUBLIC METHODS
@@ -241,39 +241,38 @@ namespace ATP.AnimationPathTools {
         }
 
 
-        // TODO Rename target object to objectTransform.
         // TODO Refactor into smaller method.
         private void Animate() {
             // Animate target.
-            if (_lookAtTarget != null && _lookAtPath != null) {
+            if (_target != null && _targetPath != null) {
                 // Update position.
-                _lookAtTarget.position =
-                    _lookAtPath.GetVectorAtTime(animTimeRatio);
+                _target.position =
+                    _targetPath.GetVectorAtTime(animTimeRatio);
             }
 
             // Animate transform.
-            if (_target != null && _path != null) {
+            if (_object != null && _objectPath != null) {
                 // Update position.
-                _target.position =
-                    _path.GetVectorAtTime(animTimeRatio);
+                _object.position =
+                    _objectPath.GetVectorAtTime(animTimeRatio);
 
                 //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
                 //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
             }
 
             // Rotate transform.
-            if (_target != null && _lookAtTarget != null) {
+            if (_object != null && _target != null) {
                 // Calculate direction to target.
                 Vector3 targetDirection =
-                    _lookAtTarget.position - _target.position;
+                    _target.position - _object.position;
                 // Calculate rotation to target.
                 Quaternion rotation = Quaternion.LookRotation(
                     targetDirection);
                 // Calculate rotation speed.
                 float speed = Time.deltaTime * _rotationSpeed;
                 // Lerp rotation.
-                _target.rotation = Quaternion.Slerp(
-                    _target.rotation,
+                _object.rotation = Quaternion.Slerp(
+                    _object.rotation,
                     rotation,
                     speed);
 

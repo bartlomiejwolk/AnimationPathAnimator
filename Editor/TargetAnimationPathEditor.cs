@@ -23,14 +23,7 @@ namespace ATP.AnimationPathTools {
             AddNodeBetween(nodeIndex);
         }
 
-        //protected override void DrawLinearTangentModeButtonsCallbackHandler(
-        //            int nodeIndex) {
-
-        //    // Make snapshot of the target object.
-        //    HandleUndo();
-
-        //    script.SetNodeLinear(nodeIndex);
-        //}
+       
 
         protected override void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,

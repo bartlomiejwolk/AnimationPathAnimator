@@ -60,12 +60,12 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void OnEnable() {
             // Initialize serialized properties.
-            GizmoCurveColor = serializedObject.FindProperty("_gizmoCurveColor");
-            skin = serializedObject.FindProperty("_skin");
+            GizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
+            skin = serializedObject.FindProperty("skin");
             exportSamplingFrequency =
-                serializedObject.FindProperty("_exportSamplingFrequency");
+                serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
-                serializedObject.FindProperty("_advancedSettingsFoldout");
+                serializedObject.FindProperty("advancedSettingsFoldout");
 
             script = (AnimationPath)target;
 

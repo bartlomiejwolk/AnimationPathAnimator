@@ -9,11 +9,19 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(AnimationPathAnimator))]
 	public class AnimatorEditor: Editor {
 
+        #region FIELDS
         /// <summary>
         /// Reference to target script.
         /// </summary>
 		private AnimationPathAnimator script;
 
+        /// <summary>
+        ///     If modifier is currently pressed.
+        /// </summary>
+        private bool modKeyPressed;
+
+        #endregion
+        #region SERIALIZED PROPERTIES
         // Serialized properties
 		private SerializedProperty duration;
 		private SerializedProperty rotationSpeed;
@@ -24,11 +32,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty animatedObjectPath;
         private SerializedProperty followedObject;
         private SerializedProperty followedObjectPath;
-
-        /// <summary>
-        ///     If modifier is currently pressed.
-        /// </summary>
-        private bool modKeyPressed;
+        #endregion
+        #region UNITY MESSAGES
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         void OnEnable() {
@@ -115,7 +120,8 @@ namespace ATP.AnimationPathTools {
 
 		    script.UpdateAnimation();
 		}
-
+        #endregion
+        #region PRIVATE METHODS
         /// <summary>
         /// Change current animation time with arrow keys.
         /// </summary>
@@ -261,5 +267,6 @@ namespace ATP.AnimationPathTools {
                 modKeyPressed = false;
             }
         }
-	}
+        #endregion
+    }
 }

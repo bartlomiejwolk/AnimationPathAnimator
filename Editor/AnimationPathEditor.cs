@@ -45,7 +45,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
-        private AnimationPath script;
+        protected AnimationPath script;
         private const float MovementHandleSize = 0.25f;
         private const float FirstNodeSize = 0.12f;
         private readonly Color moveAllModeColor = Color.gray;

@@ -112,9 +112,8 @@ namespace ATP.AnimationPathTools {
 
         //private float _rotationDuration = 3.0f;
 
-        // TODO Rename to _easeCurve.
         [SerializeField]
-        private AnimationCurve _easeAnimationCurve = new AnimationCurve();
+        private AnimationCurve _easeCurve = new AnimationCurve();
 
         [SerializeField]
         private AnimationCurve _zAxisRotationCurve = new AnimationCurve();
@@ -172,7 +171,7 @@ namespace ATP.AnimationPathTools {
             //}
 
             //DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
-            //    .SetEase(_easeAnimationCurve);
+            //    .SetEase(_easeCurve);
 
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());
@@ -214,8 +213,8 @@ namespace ATP.AnimationPathTools {
             Keyframe firstKey = new Keyframe(0, 0, 0, 0);
             Keyframe lastKey = new Keyframe(1, 1, 0, 0);
 
-            _easeAnimationCurve.AddKey(firstKey);
-            _easeAnimationCurve.AddKey(lastKey);
+            _easeCurve.AddKey(firstKey);
+            _easeCurve.AddKey(lastKey);
         }
 
         private void InitializeRotationCurve() {
@@ -235,7 +234,7 @@ namespace ATP.AnimationPathTools {
                 //animTimeRatio = currentAnimTime / duration;
                 float timeRatio = currentAnimTime/duration;
 
-                animTimeRatio = _easeAnimationCurve.Evaluate(timeRatio);
+                animTimeRatio = _easeCurve.Evaluate(timeRatio);
 
                 yield return null;
             } while (animTimeRatio < 1.0f);

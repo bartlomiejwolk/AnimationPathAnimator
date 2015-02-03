@@ -38,7 +38,7 @@ namespace ATP.AnimationPathTools {
 			duration = serializedObject.FindProperty("duration");
 		    _rotationSpeed = serializedObject.FindProperty("_rotationSpeed");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-		    _easeAnimationCurve = serializedObject.FindProperty("_easeAnimationCurve");
+		    _easeAnimationCurve = serializedObject.FindProperty("_easeCurve");
 		    _zAxisRotationCurve = serializedObject.FindProperty("_zAxisRotationCurve");
 		    _target = serializedObject.FindProperty("_target");
 		    _path = serializedObject.FindProperty("_path");

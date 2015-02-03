@@ -18,7 +18,7 @@ namespace ATP.AnimationPathTools {
         /// Animation Curves based on which the Animation Path is constructed.
         /// </summary>
         [SerializeField]
-        private readonly AnimationCurve[] curves = new AnimationCurve[3];
+        private AnimationCurve[] curves = new AnimationCurve[3];
 
         public int KeysNo {
             get { return curves[0].length; }

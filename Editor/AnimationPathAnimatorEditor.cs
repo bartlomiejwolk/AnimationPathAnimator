@@ -16,6 +16,7 @@ namespace ATP.AnimationPathTools {
 
         // Serialized properties
 		private SerializedProperty duration;
+		private SerializedProperty _rotationSpeed;
 		private SerializedProperty animTimeRatio;
         private SerializedProperty _easeAnimationCurve;
         private SerializedProperty _zAxisRotationCurve;
@@ -35,6 +36,7 @@ namespace ATP.AnimationPathTools {
 
             // Initialize serialized properties.
 			duration = serializedObject.FindProperty("duration");
+		    _rotationSpeed = serializedObject.FindProperty("_rotationSpeed");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
 		    _easeAnimationCurve = serializedObject.FindProperty("_easeAnimationCurve");
 		    _zAxisRotationCurve = serializedObject.FindProperty("_zAxisRotationCurve");
@@ -53,6 +55,7 @@ namespace ATP.AnimationPathTools {
 					1);
 
 			EditorGUILayout.PropertyField(duration);
+			EditorGUILayout.PropertyField(_rotationSpeed);
 
 		    EditorGUILayout.PropertyField(
 		        _easeAnimationCurve,

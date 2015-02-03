@@ -17,8 +17,8 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         #region CONSTANTS
-        // TODO Add in to the inspector.
-        private const float RotationDamping = 3.0f;
+        [SerializeField]
+        private float _rotationSpeed = 3.0f;
 
         /// <summary>
         /// Key shortcut to jump backward.
@@ -271,7 +271,7 @@ namespace ATP.AnimationPathTools {
                 Quaternion rotation = Quaternion.LookRotation(
                     targetDirection);
                 // Calculate rotation speed.
-                float speed = Time.deltaTime * RotationDamping;
+                float speed = Time.deltaTime * _rotationSpeed;
                 // Lerp rotation.
                 _target.rotation = Quaternion.Slerp(
                     _target.rotation,

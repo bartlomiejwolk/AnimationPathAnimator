@@ -12,6 +12,7 @@ namespace ATP.AnimationPathTools {
     /// </remarks>
     public class AnimationPathCurves : ScriptableObject {
 
+        #region FIELDS
         /// <summary>
         /// Animation Curves based on which the Animation Path is constructed.
         /// </summary>
@@ -30,6 +31,15 @@ namespace ATP.AnimationPathTools {
         public AnimationCurve this[int i] {
             get { return curves[i]; }
             set { curves[i] = value; }
+        }
+        #endregion
+
+        #region PUBLIC METHODS
+        public void AddNodeAtTime(float timestamp) {
+            for (var j = 0; j < 3; j++) {
+                var newKeyValue = curves[j].Evaluate(timestamp);
+                curves[j].AddKey(timestamp, newKeyValue);
+            }
         }
 
         public void CreateNewPoint(float timestamp, Vector3 position) {
@@ -156,6 +166,8 @@ namespace ATP.AnimationPathTools {
                 curves[i].SmoothTangents(nodeIndex, 0);
             }
         }
+        #endregion
+        #region PRIVATE METHODS
 
         /// <summary>
         /// Initialize <c>curves</c> field with empty AnimationCurve objects.
@@ -173,12 +185,6 @@ namespace ATP.AnimationPathTools {
                 InitializeCurves();
             }
         }
-
-        public void AddNodeAtTime(float timestamp) {
-             for (var j = 0; j < 3; j++) {
-                var newKeyValue = curves[j].Evaluate(timestamp);
-                curves[j].AddKey(timestamp, newKeyValue);
-            }           
-        }
+        #endregion
     }
 }

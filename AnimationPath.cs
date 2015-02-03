@@ -402,14 +402,14 @@ namespace ATP.AnimationPathTools {
             List<Vector3> points = new List<Vector3>();
 
             // Call reference overload.
-            SamplePathForPoints(samplingFrequency, points);
+            SamplePathForPoints(samplingFrequency, ref points);
 
             return points;
         }
 
         public void SamplePathForPoints(
                             int samplingFrequency,
-                            List<Vector3> points) {
+                            ref List<Vector3> points) {
 
             float linearPathLength = CalculatePathLinearLength();
 
@@ -452,7 +452,7 @@ namespace ATP.AnimationPathTools {
                 firstNodeIndex,
                 secondNodeIndex,
                 samplingFrequency,
-                points);
+                ref points);
 
             return points;
         }
@@ -461,7 +461,7 @@ namespace ATP.AnimationPathTools {
                     int firstNodeIndex,
                     int secondNodeIndex,
                     float samplingFrequency,
-                    List<Vector3> points) {
+                    ref List<Vector3> points) {
 
             float linearPathLength = CalculatePathLinearLength();
 

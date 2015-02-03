@@ -153,14 +153,8 @@ namespace ATP.AnimationPathTools {
         private void Update() {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
-                // Increase animation time.
-                //currentAnimTime += Time.deltaTime;
-
-                // Convert animation time to <0; 1> ratio.
-                //animTimeRatio = currentAnimTime / duration;
+                Animate();
             }
-
-            Animate();
         }
         #endregion UNITY MESSAGES
 

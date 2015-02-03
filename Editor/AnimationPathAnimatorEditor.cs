@@ -36,14 +36,14 @@ namespace ATP.AnimationPathTools {
 
             // Initialize serialized properties.
 			duration = serializedObject.FindProperty("duration");
-		    _rotationSpeed = serializedObject.FindProperty("_rotationSpeed");
+		    _rotationSpeed = serializedObject.FindProperty("rotationSpeed");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-		    _easeAnimationCurve = serializedObject.FindProperty("_easeCurve");
-		    _zAxisRotationCurve = serializedObject.FindProperty("_zAxisRotationCurve");
-		    _target = serializedObject.FindProperty("_object");
-		    _path = serializedObject.FindProperty("_objectPath");
-		    _lookAtTarget = serializedObject.FindProperty("_target");
-		    _lookAtPath = serializedObject.FindProperty("_targetPath");
+		    _easeAnimationCurve = serializedObject.FindProperty("easeCurve");
+		    _zAxisRotationCurve = serializedObject.FindProperty("zAxisRotationCurve");
+		    _target = serializedObject.FindProperty("animatedObject");
+		    _path = serializedObject.FindProperty("animatedObjectPath");
+		    _lookAtTarget = serializedObject.FindProperty("followedObject");
+		    _lookAtPath = serializedObject.FindProperty("followedObjectPath");
 		}
 
 		public override void OnInspectorGUI() {

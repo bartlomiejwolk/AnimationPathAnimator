@@ -93,6 +93,9 @@ namespace ATP.AnimationPathTools {
                         "GUISkin in the Animation PathTools/GUISkin folder");
             }
 
+            // Disable scene tool.
+            Tools.current = Tool.None;
+
             // Return if curves are not initialized or scene controls are
             // disabled from the inspector.
             if (script.NodesNo < 2 || !script.SceneControls) {

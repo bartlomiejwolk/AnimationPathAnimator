@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using ATP.ReorderableList;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using ATP.ReorderableList;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -10,12 +10,13 @@ namespace ATP.AnimationPathTools {
     /// Animation Paths and also animate their rotation on x and y axis in
     /// time.
     /// </summary>
-    [RequireComponent (typeof (AnimationPath))]
-    [RequireComponent (typeof (TargetAnimationPath))]
+    [RequireComponent(typeof(AnimationPath))]
+    [RequireComponent(typeof(TargetAnimationPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
 
         #region CONSTANTS
+
         /// <summary>
         /// Key shortcut to jump backward.
         /// </summary>
@@ -52,61 +53,66 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region EDITOR
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        // ReSharper disable once ConvertToConstant.Local
-        private float rotationSpeed = 3.0f;
-
-
 
         /// <summary>
-        ///     Transform to be animated.
+        /// Transform to be animated.
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
         private Transform animatedObject;
-#pragma warning restore 649
 
         /// <summary>
-        ///     Path used to animate the <c>animatedObject</c> transform.
+        /// Path used to animate the <c>animatedObject</c> transform.
         /// </summary>
         [SerializeField]
         private AnimationPath animatedObjectPath;
 
-        /// <summary>
-        ///     Transform that the <c>animatedObject</c> will be looking at.
-        /// </summary>
-        [SerializeField]
-#pragma warning disable 649
-        private Transform followedObject;
-#pragma warning restore 649
-
-        /// <summary>
-        ///     Path used to animate the <c>lookAtTarget</c>.
-        /// </summary>
-        [SerializeField]
-        private TargetAnimationPath followedObjectPath;
-
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
+
         /// <summary>
         /// Animation duration in seconds.
         /// </summary>
         [SerializeField]
         private float duration = 20;
+
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve easeCurve = new AnimationCurve();
 
+        /// <summary>
+        /// Transform that the <c>animatedObject</c> will be looking at.
+        /// </summary>
+        [SerializeField]
+#pragma warning disable 649
+        private Transform followedObject;
+
+        /// <summary>
+        /// Path used to animate the <c>lookAtTarget</c>.
+        /// </summary>
+        [SerializeField]
+        private TargetAnimationPath followedObjectPath;
+
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
+        // disable once ConvertToConstant.Local
+        private float rotationSpeed = 3.0f;
+#pragma warning restore 649
+#pragma warning restore 649
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
 
-
-        #endregion 
+        #endregion EDITOR
 
         #region FIELDS
+
+        /// <summary>
+        /// Current animation time in seconds.
+        /// </summary>
+        private float currentAnimTime;
+
         /// <summary>
         /// If animation is currently enabled.
         /// </summary>
@@ -114,13 +120,7 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
-
-        /// <summary>
-        /// Current animation time in seconds.
-        /// </summary>
-        private float currentAnimTime;
-
-        #endregion
+        #endregion FIELDS
 
         #region UNITY MESSAGES
 
@@ -154,7 +154,6 @@ namespace ATP.AnimationPathTools {
             // Start animation from time ratio specified in the inspector.
             currentAnimTime = animTimeRatio * duration;
 
-
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());
             }
@@ -167,9 +166,14 @@ namespace ATP.AnimationPathTools {
                 Animate();
             }
         }
+
         #endregion UNITY MESSAGES
 
         #region PUBLIC METHODS
+
+        public float[] GetTargetPathTimestamps() {
+            return followedObjectPath.GetNodeTimestamps();
+        }
 
         /// <summary>
         /// Call in edit mode to update animation.
@@ -179,44 +183,9 @@ namespace ATP.AnimationPathTools {
                 Animate();
             }
         }
-
-        public float[] GetTargetPathTimestamps() {
-            return followedObjectPath.GetNodeTimestamps();
-        }
-
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
-        private void InitializeEaseCurve() {
-            var firstKey = new Keyframe(0, 0, 0, 0);
-            var lastKey = new Keyframe(1, 1, 0, 0);
-
-            easeCurve.AddKey(firstKey);
-            easeCurve.AddKey(lastKey);
-        }
-
-        private void InitializeRotationCurve() {
-            var firstKey = new Keyframe(0, 0, 0, 0);
-            var lastKey = new Keyframe(1, 0, 0, 0);
-
-            tiltingCurve.AddKey(firstKey);
-            tiltingCurve.AddKey(lastKey);
-        }
-
-        private IEnumerator EaseTime() {
-            do {
-                // Increase animation time.
-                currentAnimTime += Time.deltaTime;
-
-                // Convert animation time to <0; 1> ratio.
-                var timeRatio = currentAnimTime/duration;
-
-                animTimeRatio = easeCurve.Evaluate(timeRatio);
-
-                yield return null;
-            } while (animTimeRatio < 1.0f);
-        }
-
 
         private void Animate() {
             // Animate target.
@@ -229,35 +198,6 @@ namespace ATP.AnimationPathTools {
             RotateObject();
 
             TiltObject();
-        }
-
-        private void TiltObject() {
-            if (animatedObject != null && followedObject != null) {
-                var eulerAngles = transform.rotation.eulerAngles;
-                // Get rotation from AnimationCurve.
-                var zRotation = tiltingCurve.Evaluate(animTimeRatio);
-                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-                transform.rotation = Quaternion.Euler(eulerAngles);
-              
-            }
-        }
-
-        private void RotateObject() {
-            if (animatedObject != null && followedObject != null) {
-                // Calculate direction to target.
-                var targetDirection =
-                    followedObject.position - animatedObject.position;
-                // Calculate rotation to target.
-                var rotation = Quaternion.LookRotation(
-                    targetDirection);
-                // Calculate rotation speed.
-                var speed = Time.deltaTime*rotationSpeed;
-                // Lerp rotation.
-                animatedObject.rotation = Quaternion.Slerp(
-                    animatedObject.rotation,
-                    rotation,
-                    speed);
-            }
         }
 
         private void AnimateObject() {
@@ -276,6 +216,63 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private IEnumerator EaseTime() {
+            do {
+                // Increase animation time.
+                currentAnimTime += Time.deltaTime;
+
+                // Convert animation time to <0; 1> ratio.
+                var timeRatio = currentAnimTime / duration;
+
+                animTimeRatio = easeCurve.Evaluate(timeRatio);
+
+                yield return null;
+            } while (animTimeRatio < 1.0f);
+        }
+
+        private void InitializeEaseCurve() {
+            var firstKey = new Keyframe(0, 0, 0, 0);
+            var lastKey = new Keyframe(1, 1, 0, 0);
+
+            easeCurve.AddKey(firstKey);
+            easeCurve.AddKey(lastKey);
+        }
+
+        private void InitializeRotationCurve() {
+            var firstKey = new Keyframe(0, 0, 0, 0);
+            var lastKey = new Keyframe(1, 0, 0, 0);
+
+            tiltingCurve.AddKey(firstKey);
+            tiltingCurve.AddKey(lastKey);
+        }
+        private void RotateObject() {
+            if (animatedObject != null && followedObject != null) {
+                // Calculate direction to target.
+                var targetDirection =
+                    followedObject.position - animatedObject.position;
+                // Calculate rotation to target.
+                var rotation = Quaternion.LookRotation(
+                    targetDirection);
+                // Calculate rotation speed.
+                var speed = Time.deltaTime * rotationSpeed;
+                // Lerp rotation.
+                animatedObject.rotation = Quaternion.Slerp(
+                    animatedObject.rotation,
+                    rotation,
+                    speed);
+            }
+        }
+
+        private void TiltObject() {
+            if (animatedObject != null && followedObject != null) {
+                var eulerAngles = transform.rotation.eulerAngles;
+                // Get rotation from AnimationCurve.
+                var zRotation = tiltingCurve.Evaluate(animTimeRatio);
+                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+                transform.rotation = Quaternion.Euler(eulerAngles);
+
+            }
+        }
         #endregion PRIVATE METHODS
     }
 }

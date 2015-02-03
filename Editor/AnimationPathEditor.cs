@@ -45,7 +45,8 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
-        protected AnimationPath script;
+        public AnimationPath Script { get; protected set; }
+
         private const float MovementHandleSize = 0.25f;
         private const float FirstNodeSize = 0.12f;
         private readonly Color moveAllModeColor = Color.gray;
@@ -67,7 +68,7 @@ namespace ATP.AnimationPathTools {
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
 
-            script = (AnimationPath)target;
+            Script = (AnimationPath)target;
 
             // Remember active scene tool.
             if (Tools.current != Tool.None) {
@@ -86,8 +87,8 @@ namespace ATP.AnimationPathTools {
 
         protected void OnSceneGUI() {
             // Log error if inspector GUISkin filed is empty.
-            if (script.Skin == null) {
-                script.MissingReferenceError(
+            if (Script.Skin == null) {
+                Script.MissingReferenceError(
                         "Skin",
                         "Skin field cannot be empty. You will find default " +
                         "GUISkin in the Animation PathTools/GUISkin folder");
@@ -98,7 +99,7 @@ namespace ATP.AnimationPathTools {
 
             // Return if curves are not initialized or scene controls are
             // disabled from the inspector.
-            if (script.NodesNo < 2 || !script.SceneControls) {
+            if (Script.NodesNo < 2 || !Script.SceneControls) {
                 return;
             }
 
@@ -136,10 +137,10 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            Vector3[] nodePositions = script.GetNodePositions();
+            Vector3[] nodePositions = Script.GetNodePositions();
 
             // Get style for add button.
-            GUIStyle addButtonStyle = script.Skin.GetStyle(
+            GUIStyle addButtonStyle = Script.Skin.GetStyle(
                         "AddButton");
 
             // Callback executed after add button was pressed.
@@ -158,10 +159,10 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingMovementHandles() {
-            if (script.TangentMode) return;
+            if (Script.TangentMode) return;
 
             // Positions at which to draw movement handles.
-            Vector3[] nodes = script.GetNodePositions();
+            Vector3[] nodes = Script.GetNodePositions();
 
             // Callback to call when a node is moved on the scene.
             Action<int, Vector3, Vector3> handlerCallback =
@@ -174,10 +175,10 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            Vector3[] nodes = script.GetNodePositions();
+            Vector3[] nodes = Script.GetNodePositions();
 
             // Get style for add button.
-            GUIStyle removeButtonStyle = script.Skin.GetStyle(
+            GUIStyle removeButtonStyle = Script.Skin.GetStyle(
                         "RemoveButton");
 
             // Callback to add a new node after add button was pressed.
@@ -196,11 +197,11 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private void HandleDrawingSmoothTangentButton() {
             // Get button style.
-            GUIStyle smoothButtonStyle = script.Skin.GetStyle(
+            GUIStyle smoothButtonStyle = Script.Skin.GetStyle(
                         "SmoothButton");
 
             // Positions at which to draw movement handles.
-            Vector3[] nodePositions = script.GetNodePositions();
+            Vector3[] nodePositions = Script.GetNodePositions();
 
             // Callback to smooth a node after smooth node button was pressed.
             Action<int> smoothNodeCallback =
@@ -218,10 +219,10 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing tangent handles.
         /// </summary>
         private void HandleDrawingTangentHandles() {
-            if (!script.TangentMode) return;
+            if (!Script.TangentMode) return;
 
             // Positions at which to draw tangent handles.
-            Vector3[] nodes = script.GetNodePositions();
+            Vector3[] nodes = Script.GetNodePositions();
 
             // Callback: After handle is moved, update animation curves.
             Action<int, Vector3> updateTangentsCallback =
@@ -307,9 +308,9 @@ namespace ATP.AnimationPathTools {
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
                 // Set handle color.
-                Handles.color = script.GizmoCurveColor;
+                Handles.color = Script.GizmoCurveColor;
                 // Set node color for Move All mode.
-                if (script.MoveAllMode) {
+                if (Script.MoveAllMode) {
                     Handles.color = moveAllModeColor;
                 }
                 // Get handle size.
@@ -392,7 +393,7 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3> callback) {
 
-            Handles.color = script.GizmoCurveColor;
+            Handles.color = Script.GizmoCurveColor;
 
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
@@ -451,7 +452,7 @@ namespace ATP.AnimationPathTools {
             // Add a new node.
             AddNodeBetween(nodeIndex);
 
-            script.DistributeTimestamps();
+            Script.DistributeTimestamps();
         }
         protected virtual void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,
@@ -462,13 +463,13 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // If Move All mode enabled, move all nodes.
-            if (script.MoveAllMode) {
-                script.MoveAllNodes(moveDelta);
+            if (Script.MoveAllMode) {
+                Script.MoveAllNodes(moveDelta);
             }
             // Move single node.
             else {
-                script.MoveNodeToPosition(movedNodeIndex, position);
-                script.DistributeTimestamps();
+                Script.MoveNodeToPosition(movedNodeIndex, position);
+                Script.DistributeTimestamps();
             }
         }
 
@@ -476,17 +477,17 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.RemoveNode(nodeIndex);
-            script.DistributeTimestamps();
+            Script.RemoveNode(nodeIndex);
+            Script.DistributeTimestamps();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(index);
+            Script.SmoothNodeTangents(index);
 
-            script.DistributeTimestamps();
+            Script.DistributeTimestamps();
         }
         protected virtual void DrawTangentHandlesCallbackHandler(
                     int index,
@@ -495,8 +496,8 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.ChangeNodeTangents(index, inOutTangent);
-            script.DistributeTimestamps();
+            Script.ChangeNodeTangents(index, inOutTangent);
+            Script.DistributeTimestamps();
         }
         #endregion CALLBACK HANDLERS
         #region INSPECTOR
@@ -518,8 +519,8 @@ namespace ATP.AnimationPathTools {
                 // Allow undo this operation.
                 HandleUndo();
 
-                script.SetNodesLinear();
-                script.DistributeTimestamps();
+                Script.SetNodesLinear();
+                Script.DistributeTimestamps();
             }
         }
 
@@ -528,8 +529,8 @@ namespace ATP.AnimationPathTools {
                 "Smooth",
                 "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
                 HandleUndo();
-                script.SmoothNodesTangents();
-                script.DistributeTimestamps();
+                Script.SmoothNodesTangents();
+                Script.DistributeTimestamps();
             }
         }
 
@@ -549,10 +550,10 @@ namespace ATP.AnimationPathTools {
                 || Event.current.keyCode != AnimationPath.MoveAllKey) return;
 
             // Make sure Tangent mode is disabled.
-            script.TangentMode = false;
+            Script.TangentMode = false;
 
             // Toggle Move All mode.
-            script.MoveAllMode = !script.MoveAllMode;
+            Script.MoveAllMode = !Script.MoveAllMode;
         }
 
         /// <summary>
@@ -564,10 +565,10 @@ namespace ATP.AnimationPathTools {
                 || Event.current.keyCode != AnimationPath.HandlesModeKey) return;
 
             // Make sure Move All mode is disabled.
-            script.MoveAllMode = false;
+            Script.MoveAllMode = false;
 
             // Toggle Move All mode.
-            script.TangentMode = !script.TangentMode;
+            Script.TangentMode = !Script.TangentMode;
         }
 
         private void DrawInspector() {
@@ -593,9 +594,9 @@ namespace ATP.AnimationPathTools {
                 AnimationPath.MoveAllKey);
 
             // Disable this control if Tangent Mode is enabled.
-            GUI.enabled = !script.TangentMode;
-            script.MoveAllMode = GUILayout.Toggle(
-                script.MoveAllMode,
+            GUI.enabled = !Script.TangentMode;
+            Script.MoveAllMode = GUILayout.Toggle(
+                Script.MoveAllMode,
                 new GUIContent(
                     "Move All Mode",
                     moveAllModeTooltip));
@@ -607,16 +608,16 @@ namespace ATP.AnimationPathTools {
                 "Enable it temporarily with {0} key.",
                 AnimationPath.HandlesModeKey);
 
-            GUI.enabled = !script.MoveAllMode;
-            script.TangentMode = GUILayout.Toggle(
-                script.TangentMode,
+            GUI.enabled = !Script.MoveAllMode;
+            Script.TangentMode = GUILayout.Toggle(
+                Script.TangentMode,
                 new GUIContent(
                     "Tangent Mode",
                     tangentModeTooltip));
             GUI.enabled = true;
 
-            script.SceneControls = GUILayout.Toggle(
-                script.SceneControls,
+            Script.SceneControls = GUILayout.Toggle(
+                Script.SceneControls,
                 new GUIContent(
                     "Scene Controls",
                     "Toggle displaying on-scene node controls."));
@@ -657,16 +658,16 @@ namespace ATP.AnimationPathTools {
         /// Record target object state for undo.
         /// </summary>
         protected void HandleUndo() {
-            Undo.RecordObject(script.AnimationCurves, "Change path");
+            Undo.RecordObject(Script.AnimationCurves, "Change path");
         }
 
      
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
-            float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
+            float currentKeyTime = Script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
-            float nextKeyTime = script.GetNodeTimestamp(nodeIndex + 1);
+            float nextKeyTime = Script.GetNodeTimestamp(nodeIndex + 1);
 
             // Calculate timestamps for new key. It'll be placed exactly
             // between the two nodes.
@@ -675,7 +676,7 @@ namespace ATP.AnimationPathTools {
                 ((nextKeyTime - currentKeyTime) / 2);
 
             // Add node to the animation curves.
-            script.CreateNodeAtTime(newKeyTime);
+            Script.CreateNodeAtTime(newKeyTime);
         }
 
 
@@ -694,18 +695,18 @@ namespace ATP.AnimationPathTools {
             // Animation Path node.
             if (exportSampling == 0) {
                 // Initialize points.
-                points = new List<Vector3>(script.NodesNo);
+                points = new List<Vector3>(Script.NodesNo);
 
                 // For each node in the path..
-                for (int i = 0; i < script.NodesNo; i++) {
+                for (int i = 0; i < Script.NodesNo; i++) {
                     // Get it 3d position.
-                    points[i] = script.GetNodePosition(i);
+                    points[i] = Script.GetNodePosition(i);
                 }
             }
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = script.SamplePathForPoints(exportSampling);
+                points = Script.SamplePathForPoints(exportSampling);
             }
 
             // Create parent GO.
@@ -734,20 +735,20 @@ namespace ATP.AnimationPathTools {
             Vector3 worldPoint = sceneCamera.transform.position
                 + sceneCamera.transform.forward * 7;
             // Number of nodes to remove.
-            int noOfNodesToRemove = script.NodesNo;
+            int noOfNodesToRemove = Script.NodesNo;
 
             // Remove all nodes.
             for (var i = 0; i < noOfNodesToRemove; i++) {
                 // NOTE After each removal, next node gets index 0.
-                script.RemoveNode(0);
+                Script.RemoveNode(0);
             }
 
             // Calculate end point.
             Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
 
             // Add beginning and end points.
-            script.CreateNode(0, worldPoint);
-            script.CreateNode(1, endPoint);
+            Script.CreateNode(0, worldPoint);
+            Script.CreateNode(1, endPoint);
         }
         #endregion
     }

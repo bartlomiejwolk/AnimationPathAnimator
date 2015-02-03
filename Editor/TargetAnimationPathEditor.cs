@@ -10,10 +10,10 @@ namespace ATP.AnimationPathTools {
         protected override void OnEnable() {
             base.OnEnable();
 
-            script = (TargetAnimationPath)target;
+            Script = (TargetAnimationPath)target;
 
             // Set default gizmo curve color.
-            script.GizmoCurveColor = Color.magenta;
+            Script.GizmoCurveColor = Color.magenta;
         }
 
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
@@ -35,12 +35,12 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // If Move All mode enabled, move all nodes.
-            if (script.MoveAllMode) {
-                script.MoveAllNodes(moveDelta);
+            if (Script.MoveAllMode) {
+                Script.MoveAllNodes(moveDelta);
             }
             // Move single node.
             else {
-                script.MoveNodeToPosition(movedNodeIndex, position);
+                Script.MoveNodeToPosition(movedNodeIndex, position);
             }
         }
 
@@ -48,14 +48,14 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.RemoveNode(nodeIndex);
+            Script.RemoveNode(nodeIndex);
         }
 
         protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(index);
+            Script.SmoothNodeTangents(index);
         }
 
         protected override void DrawSmoothInspectorButton() {
@@ -63,7 +63,7 @@ namespace ATP.AnimationPathTools {
                 "Smooth",
                 "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
                 HandleUndo();
-                script.SmoothNodesTangents();
+                Script.SmoothNodesTangents();
             }
         }
         protected override void DrawTangentHandlesCallbackHandler(
@@ -73,7 +73,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.ChangeNodeTangents(index, inOutTangent);
+            Script.ChangeNodeTangents(index, inOutTangent);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEditor;
 using UnityEngine;
 
@@ -55,6 +56,7 @@ namespace ATP.AnimationPathTools {
 
         #region UNITY MESSAGES
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         void OnDisable() {
             Tools.current = LastTool;
         }
@@ -85,6 +87,7 @@ namespace ATP.AnimationPathTools {
             SceneView.RepaintAll();
         }
 
+        [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected void OnSceneGUI() {
             // Log error if inspector GUISkin filed is empty.
             if (Script.Skin == null) {

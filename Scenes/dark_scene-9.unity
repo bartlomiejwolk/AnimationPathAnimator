@@ -377,49 +377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90c62b8724c53e46b8bcb537ba435bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _curves:
-  - serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: -13.6233759
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: -13.1859789
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  - serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 13.0066214
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 14.0066214
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  - serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 2.2556138
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 4.02017641
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
 --- !u!1 &233058252
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,7 +2635,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1108505293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.457695, y: 13.2666216, z: 2.6437912}
+  m_LocalPosition: {x: -12.9766655, y: 9.7193079, z: 1.66494811}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2915,8 +2872,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1126246260}
-  m_LocalRotation: {x: .0105557237, y: -.0709562004, z: -.000750928943, w: -.997423291}
-  m_LocalPosition: {x: -13.797287, y: 13.2158403, z: .269066215}
+  m_LocalRotation: {x: -.0122601306, y: -.191188201, z: -.00238823681, w: .981473923}
+  m_LocalPosition: {x: -12.3898745, y: 9.6802454, z: .215941116}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2937,7 +2894,7 @@ MonoBehaviour:
   animatedObjectPath: {fileID: 1126246271}
   followedObject: {fileID: 1108505294}
   followedObjectPath: {fileID: 1126246268}
-  animTimeRatio: .25999999
+  animTimeRatio: 0
   duration: 30
   easeCurve:
     serializedVersion: 2
@@ -2954,19 +2911,9 @@ MonoBehaviour:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-  zAxisRotationCurve:
+  tiltingCurve:
     serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
 --- !u!114 &1126246268
@@ -4329,49 +4276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90c62b8724c53e46b8bcb537ba435bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _curves:
-  - serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: -14.2725286
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: -11.9886408
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  - serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 12.9558401
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 13.9558401
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  - serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: -.24003306
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 2.24581409
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
 --- !u!1 &1224794011
 GameObject:
   m_ObjectHideFlags: 0

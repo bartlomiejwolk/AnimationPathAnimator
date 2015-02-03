@@ -791,7 +791,7 @@ namespace ATP.AnimationPathTools {
 
             // Add a new node.
             //AddNodeAuto(nodeIndex);
-            AddNewNode(nodeIndex);
+            AddNodeBetween(nodeIndex);
 
             script.DistributeTimestamps();
         }
@@ -1057,12 +1057,11 @@ namespace ATP.AnimationPathTools {
             }
             // Any other node than the last one.
             else {
-                AddNewNode(nodeIndex);
+                AddNodeBetween(nodeIndex);
             }
         }*/
 
-        // TODO Rename to AddNodeBetween().
-        protected void AddNewNode(int nodeIndex) {
+        protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             float currentKeyTime = script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.

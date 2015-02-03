@@ -140,10 +140,10 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            Vector3[] nodePositions = Script.GetNodePositions();
+            var nodePositions = Script.GetNodePositions();
 
             // Get style for add button.
-            GUIStyle addButtonStyle = Script.Skin.GetStyle(
+            var addButtonStyle = Script.Skin.GetStyle(
                         "AddButton");
 
             // Callback executed after add button was pressed.
@@ -165,7 +165,7 @@ namespace ATP.AnimationPathTools {
             if (Script.TangentMode) return;
 
             // Positions at which to draw movement handles.
-            Vector3[] nodes = Script.GetNodePositions();
+            var nodes = Script.GetNodePositions();
 
             // Callback to call when a node is moved on the scene.
             Action<int, Vector3, Vector3> handlerCallback =
@@ -178,10 +178,10 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            Vector3[] nodes = Script.GetNodePositions();
+            var nodes = Script.GetNodePositions();
 
             // Get style for add button.
-            GUIStyle removeButtonStyle = Script.Skin.GetStyle(
+            var removeButtonStyle = Script.Skin.GetStyle(
                         "RemoveButton");
 
             // Callback to add a new node after add button was pressed.
@@ -200,11 +200,11 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private void HandleDrawingSmoothTangentButton() {
             // Get button style.
-            GUIStyle smoothButtonStyle = Script.Skin.GetStyle(
+            var smoothButtonStyle = Script.Skin.GetStyle(
                         "SmoothButton");
 
             // Positions at which to draw movement handles.
-            Vector3[] nodePositions = Script.GetNodePositions();
+            var nodePositions = Script.GetNodePositions();
 
             // Callback to smooth a node after smooth node button was pressed.
             Action<int> smoothNodeCallback =
@@ -225,7 +225,7 @@ namespace ATP.AnimationPathTools {
             if (!Script.TangentMode) return;
 
             // Positions at which to draw tangent handles.
-            Vector3[] nodes = Script.GetNodePositions();
+            var nodes = Script.GetNodePositions();
 
             // Callback: After handle is moved, update animation curves.
             Action<int, Vector3> updateTangentsCallback =
@@ -251,11 +251,11 @@ namespace ATP.AnimationPathTools {
             // Execute callback on button press.
             for (var i = 0; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+                var guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
 
                 // Draw button.
-                bool buttonPressed = DrawButton(
+                var buttonPressed = DrawButton(
                     guiPoint,
                     AddButtonH,
                     AddButtonV,
@@ -282,13 +282,13 @@ namespace ATP.AnimationPathTools {
             // Draw remove buttons for each node except for the first and the
             // last one.
             // Execute callback on button press.
-            for (int i = 1; i < nodePositions.Length - 1; i++) {
+            for (var i = 1; i < nodePositions.Length - 1; i++) {
                 // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+                var guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
 
                 // Draw button.
-                bool buttonPressed = DrawButton(
+                var buttonPressed = DrawButton(
                     guiPoint,
                     RemoveButtonH,
                     RemoveButtonV,
@@ -309,7 +309,7 @@ namespace ATP.AnimationPathTools {
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
             // For each node..
-            for (int i = 0; i < nodes.Length; i++) {
+            for (var i = 0; i < nodes.Length; i++) {
                 // Set handle color.
                 Handles.color = Script.GizmoCurveColor;
                 // Set node color for Move All mode.
@@ -317,8 +317,8 @@ namespace ATP.AnimationPathTools {
                     Handles.color = moveAllModeColor;
                 }
                 // Get handle size.
-                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                float sphereSize = handleSize * MovementHandleSize;
+                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                var sphereSize = handleSize * MovementHandleSize;
                 // Decide on cap function used to draw handle.
                 Handles.DrawCapFunction capFunction = Handles.SphereCap;
 
@@ -330,7 +330,7 @@ namespace ATP.AnimationPathTools {
                 }
 
                 // Draw handle.
-                Vector3 newPos = Handles.FreeMoveHandle(
+                var newPos = Handles.FreeMoveHandle(
                     nodes[i],
                     Quaternion.identity,
                     sphereSize,
@@ -340,7 +340,7 @@ namespace ATP.AnimationPathTools {
                 // If node was moved..
                 if (newPos != nodes[i]) {
                     // Calculate movement delta.
-                    Vector3 moveDelta = newPos - nodes[i];
+                    var moveDelta = newPos - nodes[i];
 
                     // Execute callback.
                     callback(i, newPos, moveDelta);
@@ -363,20 +363,20 @@ namespace ATP.AnimationPathTools {
             Handles.BeginGUI();
 
             // For each key..
-            for (int i = 0; i < nodePositions.Length; i++) {
+            for (var i = 0; i < nodePositions.Length; i++) {
                 // Translate node's 3d position into screen coordinates.
-                Vector2 guiPoint = HandleUtility.WorldToGUIPoint(
+                var guiPoint = HandleUtility.WorldToGUIPoint(
                         nodePositions[i]);
 
                 // Create rectangle for the "+" button.
-                Rect rect = new Rect(
+                var rect = new Rect(
                         guiPoint.x + SmoothButtonH,
                         guiPoint.y + SmoothButtonV,
                         15,
                         15);
 
                 // Draw button.
-                bool buttonPressed = GUI.Button(rect, "", smoothButtonStyle);
+                var buttonPressed = GUI.Button(rect, "", smoothButtonStyle);
 
                 // If button pressed..
                 if (buttonPressed) {
@@ -399,12 +399,12 @@ namespace ATP.AnimationPathTools {
             Handles.color = Script.GizmoCurveColor;
 
             // For each node..
-            for (int i = 0; i < nodes.Length; i++) {
-                float handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                float sphereSize = handleSize * MovementHandleSize;
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                var sphereSize = handleSize * MovementHandleSize;
 
                 // draw node's handle.
-                Vector3 newHandleValue = Handles.FreeMoveHandle(
+                var newHandleValue = Handles.FreeMoveHandle(
                     nodes[i],
                     Quaternion.identity,
                     sphereSize,
@@ -412,7 +412,7 @@ namespace ATP.AnimationPathTools {
                     Handles.CircleCap);
 
                 // How much tangent's value changed in this frame.
-                Vector3 tangentDelta = newHandleValue - nodes[i];
+                var tangentDelta = newHandleValue - nodes[i];
 
                 // Remember if handle was moved.
                 if (tangentDelta != Vector3.zero) {
@@ -433,14 +433,14 @@ namespace ATP.AnimationPathTools {
             string buttonText = "") {
 
             // Create rectangle for the "+" button.
-            Rect rectAdd = new Rect(
+            var rectAdd = new Rect(
                     position.x + relativeXPos,
                     position.y + relativeYPos,
                     width,
                     height);
 
             // Draw the "+" button.
-            bool addButtonPressed = GUI.Button(rectAdd, buttonText, style);
+            var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
 
             return addButtonPressed;
         }
@@ -591,7 +591,7 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             // Tooltip for moveAllMode property.
-            string moveAllModeTooltip = String.Format(
+            var moveAllModeTooltip = String.Format(
                 "If enabled, you can move with mouse all nodePositions at once. " +
                 "Toggle it with {0} key.",
                 AnimationPath.MoveAllKey);
@@ -606,7 +606,7 @@ namespace ATP.AnimationPathTools {
             GUI.enabled = true;
 
             // Tooltip for handlesMode property.
-            string tangentModeTooltip = String.Format(
+            var tangentModeTooltip = String.Format(
                 "If enabled, the on-scene handles will change node's tangents." +
                 "Enable it temporarily with {0} key.",
                 AnimationPath.HandlesModeKey);
@@ -668,13 +668,13 @@ namespace ATP.AnimationPathTools {
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
-            float currentKeyTime = Script.GetNodeTimestamp(nodeIndex);
+            var currentKeyTime = Script.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
-            float nextKeyTime = Script.GetNodeTimestamp(nodeIndex + 1);
+            var nextKeyTime = Script.GetNodeTimestamp(nodeIndex + 1);
 
             // Calculate timestamps for new key. It'll be placed exactly
             // between the two nodes.
-            float newKeyTime =
+            var newKeyTime =
                 currentKeyTime +
                 ((nextKeyTime - currentKeyTime) / 2);
 
@@ -701,7 +701,7 @@ namespace ATP.AnimationPathTools {
                 points = new List<Vector3>(Script.NodesNo);
 
                 // For each node in the path..
-                for (int i = 0; i < Script.NodesNo; i++) {
+                for (var i = 0; i < Script.NodesNo; i++) {
                     // Get it 3d position.
                     points[i] = Script.GetNodePosition(i);
                 }
@@ -713,12 +713,12 @@ namespace ATP.AnimationPathTools {
             }
 
             // Create parent GO.
-            GameObject exportedPath = new GameObject("exported_path");
+            var exportedPath = new GameObject("exported_path");
 
             // Create child GOs.
-            for (int i = 0; i < points.Count; i++) {
+            for (var i = 0; i < points.Count; i++) {
                 // Create child GO.
-                GameObject node = new GameObject("Node " + i);
+                var node = new GameObject("Node " + i);
 
                 // Move node under the path GO.
                 node.transform.parent = exportedPath.transform;
@@ -733,12 +733,12 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private void ResetPath() {
             // Get scene view camera.
-            Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+            var sceneCamera = SceneView.lastActiveSceneView.camera;
             // Get world point to place the Animation Path.
-            Vector3 worldPoint = sceneCamera.transform.position
+            var worldPoint = sceneCamera.transform.position
                 + sceneCamera.transform.forward * 7;
             // Number of nodes to remove.
-            int noOfNodesToRemove = Script.NodesNo;
+            var noOfNodesToRemove = Script.NodesNo;
 
             // Remove all nodes.
             for (var i = 0; i < noOfNodesToRemove; i++) {
@@ -747,7 +747,7 @@ namespace ATP.AnimationPathTools {
             }
 
             // Calculate end point.
-            Vector3 endPoint = worldPoint + new Vector3(1, 1, 1);
+            var endPoint = worldPoint + new Vector3(1, 1, 1);
 
             // Add beginning and end points.
             Script.CreateNode(0, worldPoint);

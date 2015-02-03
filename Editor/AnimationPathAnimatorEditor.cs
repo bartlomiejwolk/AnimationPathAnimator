@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using UnityEditor;
-using ATP.ReorderableList;
+using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
@@ -16,34 +16,35 @@ namespace ATP.AnimationPathTools {
 
         // Serialized properties
 		private SerializedProperty duration;
-		private SerializedProperty _rotationSpeed;
+		private SerializedProperty rotationSpeed;
 		private SerializedProperty animTimeRatio;
-        private SerializedProperty _easeAnimationCurve;
-        private SerializedProperty _zAxisRotationCurve;
-        private SerializedProperty _target;
-        private SerializedProperty _path;
-        private SerializedProperty _lookAtTarget;
-        private SerializedProperty _lookAtPath;
+        private SerializedProperty easeAnimationCurve;
+        private SerializedProperty zAxisRotationCurve;
+        private SerializedProperty animatedObject;
+        private SerializedProperty animatedObjectPath;
+        private SerializedProperty followedObject;
+        private SerializedProperty followedObjectPath;
 
         /// <summary>
         ///     If modifier is currently pressed.
         /// </summary>
         private bool modKeyPressed;
 
-		void OnEnable() {
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        void OnEnable() {
             // Get target script reference.
 			script = (AnimationPathAnimator)target;
 
             // Initialize serialized properties.
 			duration = serializedObject.FindProperty("duration");
-		    _rotationSpeed = serializedObject.FindProperty("rotationSpeed");
+		    rotationSpeed = serializedObject.FindProperty("rotationSpeed");
 			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-		    _easeAnimationCurve = serializedObject.FindProperty("easeCurve");
-		    _zAxisRotationCurve = serializedObject.FindProperty("zAxisRotationCurve");
-		    _target = serializedObject.FindProperty("animatedObject");
-		    _path = serializedObject.FindProperty("animatedObjectPath");
-		    _lookAtTarget = serializedObject.FindProperty("followedObject");
-		    _lookAtPath = serializedObject.FindProperty("followedObjectPath");
+		    easeAnimationCurve = serializedObject.FindProperty("easeCurve");
+		    zAxisRotationCurve = serializedObject.FindProperty("zAxisRotationCurve");
+		    animatedObject = serializedObject.FindProperty("animatedObject");
+		    animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
+		    followedObject = serializedObject.FindProperty("animatedObject");
+		    followedObjectPath = serializedObject.FindProperty("followedObjectPath");
 		}
 
 		public override void OnInspectorGUI() {
@@ -55,16 +56,16 @@ namespace ATP.AnimationPathTools {
 					1);
 
 			EditorGUILayout.PropertyField(duration);
-			EditorGUILayout.PropertyField(_rotationSpeed);
+			EditorGUILayout.PropertyField(rotationSpeed);
 
 		    EditorGUILayout.PropertyField(
-		        _easeAnimationCurve,
+		        easeAnimationCurve,
 		        new GUIContent(
 		            "Ease Curve",
 		            ""));
 
 		    EditorGUILayout.PropertyField(
-		        _zAxisRotationCurve,
+		        zAxisRotationCurve,
 		        new GUIContent(
 		            "Tilting Curve",
 		            ""));
@@ -72,25 +73,25 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
 		    EditorGUILayout.PropertyField(
-		        _target,
+		        animatedObject,
 		        new GUIContent(
 		            "Object",
 		            ""));
 
 		    EditorGUILayout.PropertyField(
-                _path,
+                animatedObjectPath,
 		        new GUIContent(
 		            "Object Path",
 		            ""));
 
 		    EditorGUILayout.PropertyField(
-                _lookAtTarget,
+                followedObject,
 		        new GUIContent(
 		            "Target",
 		            ""));
 
 		    EditorGUILayout.PropertyField(
-                _lookAtPath,
+                followedObjectPath,
 		        new GUIContent(
 		            "Target Path",
 		            ""));
@@ -99,7 +100,8 @@ namespace ATP.AnimationPathTools {
 			serializedObject.ApplyModifiedProperties();
 		}
 
-		void OnSceneGUI() {
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        void OnSceneGUI() {
 			serializedObject.Update();
 
             // Update modifier key state.
@@ -212,21 +214,23 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Rename to GetNearestForwardNodeTimestamp().
         private float GetNearestNodeForwardTimestamp() {
-            float[] targetPathTimestamps = script.GetTargetPathTimestamps();
+            var targetPathTimestamps = script.GetTargetPathTimestamps();
 
-            for (var i = 0; i < targetPathTimestamps.Length; i++) {
-                if (targetPathTimestamps[i] > animTimeRatio.floatValue) {
-                    return targetPathTimestamps[i];
-                }
+            foreach (var timestamp in targetPathTimestamps
+                .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
+
+                return timestamp;
             }
 
             // Return timestamp of the last node.
             return 1.0f;
         }
 
+        // TODO Rename to GetNearestBackwardNodeTimestamp().
         private float GetNearestNodeBackwardTimestamp() {
-            float[] targetPathTimestamps = script.GetTargetPathTimestamps();
+            var targetPathTimestamps = script.GetTargetPathTimestamps();
 
             for (var i = targetPathTimestamps.Length - 1; i >= 0; i--) {
                 if (targetPathTimestamps[i] < animTimeRatio.floatValue) {

@@ -196,7 +196,7 @@ namespace ATP.AnimationPathTools {
             float dist = 0;
 
             // For each node (exclude the first one)..
-            for (int i = 0; i < animationCurves.KeysNo - 1; i++) {
+            for (var i = 0; i < animationCurves.KeysNo - 1; i++) {
                 dist += CalculateSectionLinearLength(i, i + 1);
             }
 
@@ -211,7 +211,7 @@ namespace ATP.AnimationPathTools {
             // Result path length.
             float pathLength = 0;
 
-            List<Vector3> points = SampleSectionForPoints(
+            var points = SampleSectionForPoints(
                 firstNodeIndex,
                 secondNodeIndex,
                 samplingFrequency);
@@ -227,12 +227,12 @@ namespace ATP.AnimationPathTools {
             int firstNodeIndex,
             int secondNodeIndex) {
 
-            Vector3 firstNodePosition =
+            var firstNodePosition =
                 animationCurves.GetVectorAtKey(firstNodeIndex);
-            Vector3 secondNodePosition =
+            var secondNodePosition =
                 animationCurves.GetVectorAtKey(secondNodeIndex);
 
-            float sectionLength =
+            var sectionLength =
                 Vector3.Distance(firstNodePosition, secondNodePosition);
 
             return sectionLength;
@@ -252,27 +252,14 @@ namespace ATP.AnimationPathTools {
         public void CreateNode(float timestamp, Vector3 position) {
             animationCurves.CreateNewPoint(timestamp, position);
         }
-
-        private void DrawGizmoCurve() {
-            List<Vector3> points = SamplePathForPoints(GizmoCurveSamplingFrequency);
-
-            if (points.Count < 3) return;
-
-            // Draw curve.
-            for (int i = 0; i < points.Count - 1; i++) {
-                Gizmos.color = gizmoCurveColor;
-                Gizmos.DrawLine(points[i], points[i + 1]);
-            }
-        }
-
         public Vector3 GetNodePosition(int nodeIndex) {
             return animationCurves.GetVectorAtKey(nodeIndex);
         }
 
         public Vector3[] GetNodePositions() {
-            Vector3[] result = new Vector3[NodesNo];
+            var result = new Vector3[NodesNo];
 
-            for (int i = 0; i < NodesNo; i++) {
+            for (var i = 0; i < NodesNo; i++) {
                 // Get node 3d position.
                 result[i] = animationCurves.GetVectorAtKey(i);
             }
@@ -282,24 +269,24 @@ namespace ATP.AnimationPathTools {
 
         public void DistributeTimestamps() {
             // Calculate path curved length.
-            float pathLength = CalculatePathCurvedLength(
+            var pathLength = CalculatePathCurvedLength(
                 GizmoCurveSamplingFrequency);
             // Calculate time for one meter of curve length.
-            float timeForMeter = 1 / pathLength;
+            var timeForMeter = 1 / pathLength;
             // Helper variable.
             float prevTimestamp = 0;
 
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
-                float sectionLength = CalculateSectionCurvedLength(
+                var sectionLength = CalculateSectionCurvedLength(
                     i - 1,
                     i,
                     GizmoCurveSamplingFrequency);
                 // Calculate time interval.
-                float sectionTimeInterval = sectionLength * timeForMeter;
+                var sectionTimeInterval = sectionLength * timeForMeter;
                 // Calculate new timestamp.
-                float newTimestamp = prevTimestamp + sectionTimeInterval;
+                var newTimestamp = prevTimestamp + sectionTimeInterval;
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
@@ -314,10 +301,10 @@ namespace ATP.AnimationPathTools {
 
         public float[] GetNodeTimestamps() {
             // Output array.
-            float[] result = new float[NodesNo];
+            var result = new float[NodesNo];
 
             // For each key..
-            for (int i = 0; i < NodesNo; i++) {
+            for (var i = 0; i < NodesNo; i++) {
                 // Get key time.
                 result[i] = animationCurves.GetTimeAtKey(i);
             }
@@ -329,13 +316,14 @@ namespace ATP.AnimationPathTools {
             return animationCurves.GetVectorAtTime(timestamp);
         }
 
+        // TODO Rename to MoveNodesByDelta().
         public void MoveAllNodes(Vector3 moveDelta) {
             // For each node..
-            for (int i = 0; i < NodesNo; i++) {
+            for (var i = 0; i < NodesNo; i++) {
                 // Old node position.
-                Vector3 oldPosition = GetNodePosition(i);
+                var oldPosition = GetNodePosition(i);
                 // New node position.
-                Vector3 newPosition = oldPosition + moveDelta;
+                var newPosition = oldPosition + moveDelta;
                 // Update node positions.
                 animationCurves.MovePointToPosition(i, newPosition);
             }
@@ -354,7 +342,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="samplingFrequency"></param>
         /// <returns></returns>
         public List<Vector3> SamplePathForPoints(int samplingFrequency) {
-            List<Vector3> points = new List<Vector3>();
+            var points = new List<Vector3>();
 
             // Call reference overload.
             SamplePathForPoints(samplingFrequency, ref points);
@@ -367,10 +355,10 @@ namespace ATP.AnimationPathTools {
                             ref List<Vector3> points) {
 
             // TODO Use curved path length.
-            float linearPathLength = CalculatePathLinearLength();
+            var linearPathLength = CalculatePathLinearLength();
 
             // Calculate amount of points to extract.
-            int samplingRate = (int)(linearPathLength * samplingFrequency);
+            var samplingRate = (int)(linearPathLength * samplingFrequency);
 
             // NOTE Cannot do any sampling if sampling rate is less than 1.
             if (samplingRate < 1) return;
@@ -379,15 +367,15 @@ namespace ATP.AnimationPathTools {
             float time = 0;
 
             // Time step between each point.
-            float timestep = 1f / samplingRate;
+            var timestep = 1f / samplingRate;
 
             // Clear points list.
             points.Clear();
 
             // Fill points array with 3d points.
-            for (int i = 0; i < samplingRate + 1; i++) {
+            for (var i = 0; i < samplingRate + 1; i++) {
                 // Calculate single point.
-                Vector3 point = animationCurves.GetVectorAtTime(time);
+                var point = animationCurves.GetVectorAtTime(time);
 
                 // Construct 3d point from animation curves at a given time.
                 points.Add(point);
@@ -402,7 +390,7 @@ namespace ATP.AnimationPathTools {
                     int secondNodeIndex,
                     float samplingFrequency) {
 
-            List<Vector3> points = new List<Vector3>();
+            var points = new List<Vector3>();
 
             SampleSectionForPoints(
                 firstNodeIndex,
@@ -425,33 +413,33 @@ namespace ATP.AnimationPathTools {
             //    throw new Exception("Path is too short.");
             //}
 
-            float sectionLinearLength = CalculateSectionLinearLength(
+            var sectionLinearLength = CalculateSectionLinearLength(
                 firstNodeIndex,
                 secondNodeIndex);
 
             // Calculate amount of points to extract.
-            int samplingRate = (int)(sectionLinearLength * samplingFrequency);
+            var samplingRate = (int)(sectionLinearLength * samplingFrequency);
 
-            float firstNodeTime =
+            var firstNodeTime =
                 animationCurves.GetTimeAtKey(firstNodeIndex);
-            float secondNodeTime =
+            var secondNodeTime =
                 animationCurves.GetTimeAtKey(secondNodeIndex);
 
-            float timeInterval = secondNodeTime - firstNodeTime;
+            var timeInterval = secondNodeTime - firstNodeTime;
 
             // Used to read values from animation curves.
-            float time = firstNodeTime;
+            var time = firstNodeTime;
 
             // Time step between each point.
-            float timestep = timeInterval / samplingRate;
+            var timestep = timeInterval / samplingRate;
 
             // Clear points list.
             points.Clear();
 
             // Fill points array with 3d points.
-            for (int i = 0; i < samplingRate + 1; i++) {
+            for (var i = 0; i < samplingRate + 1; i++) {
                 // Calculate single point.
-                Vector3 point = animationCurves.GetVectorAtTime(time);
+                var point = animationCurves.GetVectorAtTime(time);
 
                 // Construct 3d point from animation curves at a given time.
                 points.Add(point);
@@ -467,15 +455,15 @@ namespace ATP.AnimationPathTools {
         /// <remarks>http://forum.unity3d.com/threads/how-to-set-an-animation-curve-to-linear-through-scripting.151683/#post-1121021</remarks>
         /// <param name="curve"></param>
         public void SetCurveLinear(AnimationCurve curve) {
-            for (int i = 0; i < curve.keys.Length; ++i) {
+            for (var i = 0; i < curve.keys.Length; ++i) {
                 float intangent = 0;
                 float outtangent = 0;
-                bool inTangentSet = false;
-                bool outTangentSet = false;
+                var inTangentSet = false;
+                var outTangentSet = false;
                 Vector2 point1;
                 Vector2 point2;
                 Vector2 deltapoint;
-                Keyframe key = curve[i];
+                var key = curve[i];
 
                 if (i == 0) {
                     intangent = 0; inTangentSet = true;
@@ -513,7 +501,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void SetNodesLinear() {
-            for (int i = 0; i < 3; i++) {
+            for (var i = 0; i < 3; i++) {
                 SetCurveLinear(animationCurves[i]);
             }
         }
@@ -522,9 +510,10 @@ namespace ATP.AnimationPathTools {
         /// Smooth all tangents in the Animation Curves.
         /// </summary>
         /// <param name="weight">Weight to be applied to the tangents.</param>
+        // TODO Rename to SmoothAllNodeTangents().
         public void SmoothNodesTangents(float weight = 0) {
             // For each key..
-            for (int j = 0; j < NodesNo; j++) {
+            for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
                 animationCurves.SmoothPointTangents(j);
             }
@@ -534,5 +523,19 @@ namespace ATP.AnimationPathTools {
             animationCurves.SmoothPointTangents(nodeIndex);
         }
         #endregion Public Methods
+        #region PRIVATE METHODS
+        private void DrawGizmoCurve() {
+            var points = SamplePathForPoints(GizmoCurveSamplingFrequency);
+
+            if (points.Count < 3) return;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.color = gizmoCurveColor;
+                Gizmos.DrawLine(points[i], points[i + 1]);
+            }
+        }
+
+        #endregion
     }
 }

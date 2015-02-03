@@ -56,7 +56,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
 #pragma warning disable 414
-        private bool advancedSettingsFoldout = false;
+        private bool _advancedSettingsFoldout;
 #pragma warning restore 414
 
         /// <summary>
@@ -66,29 +66,29 @@ namespace ATP.AnimationPathTools {
         /// <remarks>Exporting is implemented in <c>Editor</c> class.</remarks>
         [SerializeField]
 #pragma warning disable 414
-        private int exportSamplingFrequency = 2;
+        private int _exportSamplingFrequency = 5;
 #pragma warning restore 414
 
         /// <summary>
         /// Color of the gizmo curve.
         /// </summary>
         [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
+        private Color _gizmoCurveColor = Color.yellow;
 
         /// <summary>
         /// If "Move All" mode is enabled.
         /// </summary>
         [SerializeField]
-        private bool moveAllMode = false;
+        private bool _moveAllMode;
 
         [SerializeField]
-        private bool sceneControls = true;
+        private bool _sceneControls = true;
 
         /// <summary>
         /// Styles for multiple GUI elements.
         /// </summary>
         [SerializeField]
-        private GUISkin skin;
+        private GUISkin _skin;
 
 #pragma warning disable 0414
 
@@ -97,7 +97,7 @@ namespace ATP.AnimationPathTools {
         /// tangents.
         /// </summary>
         [SerializeField]
-        private bool tangentMode = false;
+        private bool _tangentMode;
 #pragma warning restore 0414
 
         #endregion Editor
@@ -109,8 +109,8 @@ namespace ATP.AnimationPathTools {
         }
 
         public bool MoveAllMode {
-            get { return moveAllMode; }
-            set { moveAllMode = value; }
+            get { return _moveAllMode; }
+            set { _moveAllMode = value; }
         }
 
         /// <summary>
@@ -121,24 +121,24 @@ namespace ATP.AnimationPathTools {
         }
 
         public bool SceneControls {
-            get { return sceneControls; }
-            set { sceneControls = value; }
+            get { return _sceneControls; }
+            set { _sceneControls = value; }
         }
 
         public GUISkin Skin {
-            get { return skin; }
+            get { return _skin; }
         }
         public bool TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
+            get { return _tangentMode; }
+            set { _tangentMode = value; }
         }
 
         /// <summary>
         /// Color of the gizmo curve.
         /// </summary>
         public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
+            get { return _gizmoCurveColor; }
+            set { _gizmoCurveColor = value; }
         }
 
         #endregion PUBLIC PROPERTIES
@@ -147,7 +147,7 @@ namespace ATP.AnimationPathTools {
 
         private void Awake() {
             // Load default skin.
-            skin = Resources.Load("GUISkin/default") as GUISkin;
+            _skin = Resources.Load("GUISkin/default") as GUISkin;
         }
 
         private void OnDrawGizmosSelected() {
@@ -263,7 +263,7 @@ namespace ATP.AnimationPathTools {
 
             // Draw curve.
             for (int i = 0; i < points.Count - 1; i++) {
-                Gizmos.color = gizmoCurveColor;
+                Gizmos.color = _gizmoCurveColor;
                 Gizmos.DrawLine(points[i], points[i + 1]);
             }
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ATP.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,19 +17,19 @@ namespace ATP.AnimationPathTools {
 
         #region BUTTON OFFSETS
 
-        private const int smoothButtonH = 25;
-        private const int smoothButtonV = 10;
-        private const int addButtonH = 44;
-        private const int addButtonV = 10;
-        private const int removeButtonH = 63;
-        private const int removeButtonV = 10;
+        private const int SmoothButtonH = 25;
+        private const int SmoothButtonV = 10;
+        private const int AddButtonH = 44;
+        private const int AddButtonV = 10;
+        private const int RemoveButtonH = 63;
+        private const int RemoveButtonV = 10;
         #endregion
 
         #region SERIALIZED PROPERTIES
 
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
-        protected SerializedProperty gizmoCurveColor;
+        protected SerializedProperty GizmoCurveColor;
         private SerializedProperty skin;
 
         #endregion SERIALIZED PROPERTIES
@@ -41,46 +40,45 @@ namespace ATP.AnimationPathTools {
         /// Scene tool that was selected when game object was first selected in
         /// the hierarchy view.
         /// </summary>
-        public static Tool lastTool = Tool.None;
+        public static Tool LastTool = Tool.None;
 
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
-        protected AnimationPath script;
+        private AnimationPath script;
         private const float MovementHandleSize = 0.25f;
         private const float FirstNodeSize = 0.12f;
-        private readonly Color MoveAllModeColor = Color.gray;
-        private const float FirstNodeColorOffset = 0.3f;
+        private readonly Color moveAllModeColor = Color.gray;
 
         #endregion Helper Variables
 
         #region UNITY MESSAGES
 
         void OnDisable() {
-            Tools.current = lastTool;
+            Tools.current = LastTool;
         }
 
         protected virtual void OnEnable() {
             // Initialize serialized properties.
-            gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
-            skin = serializedObject.FindProperty("skin");
+            GizmoCurveColor = serializedObject.FindProperty("_gizmoCurveColor");
+            skin = serializedObject.FindProperty("_skin");
             exportSamplingFrequency =
-                serializedObject.FindProperty("exportSamplingFrequency");
+                serializedObject.FindProperty("_exportSamplingFrequency");
             advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
+                serializedObject.FindProperty("_advancedSettingsFoldout");
 
             script = (AnimationPath)target;
 
             // Remember active scene tool.
             if (Tools.current != Tool.None) {
-                lastTool = Tools.current;
+                LastTool = Tools.current;
                 Tools.current = Tool.None;
             }
         }
 
         public override void OnInspectorGUI() {
             // Draw inspector GUI elements.
-            DrawInspectorGUI();
+            DrawInspector();
 
             // Update scene.
             SceneView.RepaintAll();
@@ -164,11 +162,7 @@ namespace ATP.AnimationPathTools {
 
             // Callback to call when a node is moved on the scene.
             Action<int, Vector3, Vector3> handlerCallback =
-                (index, newPosition, moveDelta) =>
-                    DrawMovementHandlesCallbackHandler(
-                        index,
-                        newPosition,
-                        moveDelta);
+                DrawMovementHandlesCallbackHandler;
 
             // Draw handles.
             DrawMovementHandles(nodes, handlerCallback);
@@ -256,8 +250,8 @@ namespace ATP.AnimationPathTools {
                 // Draw button.
                 bool buttonPressed = DrawButton(
                     guiPoint,
-                    addButtonH,
-                    addButtonV,
+                    AddButtonH,
+                    AddButtonV,
                     15,
                     15,
                     buttonStyle);
@@ -289,8 +283,8 @@ namespace ATP.AnimationPathTools {
                 // Draw button.
                 bool buttonPressed = DrawButton(
                     guiPoint,
-                    removeButtonH,
-                    removeButtonV,
+                    RemoveButtonH,
+                    RemoveButtonV,
                     15,
                     15,
                     buttonStyle);
@@ -307,16 +301,13 @@ namespace ATP.AnimationPathTools {
         private void DrawMovementHandles(
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
-
-            Vector3 newPos;
-
             // For each node..
             for (int i = 0; i < nodes.Length; i++) {
                 // Set handle color.
                 Handles.color = script.GizmoCurveColor;
                 // Set node color for Move All mode.
                 if (script.MoveAllMode) {
-                    Handles.color = MoveAllModeColor;
+                    Handles.color = moveAllModeColor;
                 }
                 // Get handle size.
                 float handleSize = HandleUtility.GetHandleSize(nodes[i]);
@@ -332,7 +323,7 @@ namespace ATP.AnimationPathTools {
                 }
 
                 // Draw handle.
-                newPos = Handles.FreeMoveHandle(
+                Vector3 newPos = Handles.FreeMoveHandle(
                     nodes[i],
                     Quaternion.identity,
                     sphereSize,
@@ -350,24 +341,19 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+       
         /// <summary>
-        /// Draw smooth tangent button for each node on the scene.
+        /// Draw on-scene tangent button for each path node.
         /// </summary>
-        /// <param name="curves">Animation curves.</param>
-        /// <param name="smoothWeight">
-        /// Weight parameter for the Unity's
-        /// <c>AnimationCurve.SmoothTangent</c> method.
-        /// </param>
-        /// <param name="smoothButtonStyle">Style of the button.</param>
-        /// <returns>If any button was pressed.</returns>
+        /// <param name="nodePositions">Node positions.</param>
+        /// <param name="smoothButtonStyle">Button style.</param>
+        /// <param name="callback">Callback called when a button is pressed.</param>
         private void DrawSmoothTangentButtons(
             Vector3[] nodePositions,
             GUIStyle smoothButtonStyle,
             Action<int> callback) {
 
             Handles.BeginGUI();
-
-            bool buttonPressed;
 
             // For each key..
             for (int i = 0; i < nodePositions.Length; i++) {
@@ -377,16 +363,16 @@ namespace ATP.AnimationPathTools {
 
                 // Create rectangle for the "+" button.
                 Rect rect = new Rect(
-                        guiPoint.x + smoothButtonH,
-                        guiPoint.y + smoothButtonV,
+                        guiPoint.x + SmoothButtonH,
+                        guiPoint.y + SmoothButtonV,
                         15,
                         15);
 
                 // Draw button.
-                buttonPressed = GUI.Button(rect, "", smoothButtonStyle);
+                bool buttonPressed = GUI.Button(rect, "", smoothButtonStyle);
 
                 // If button pressed..
-                if (buttonPressed == true) {
+                if (buttonPressed) {
                     // Execute callback.
                     callback(i);
                 }
@@ -581,10 +567,10 @@ namespace ATP.AnimationPathTools {
             script.TangentMode = !script.TangentMode;
         }
 
-        private void DrawInspectorGUI() {
+        private void DrawInspector() {
             serializedObject.Update();
             EditorGUILayout.PropertyField(
-                    gizmoCurveColor,
+                    GizmoCurveColor,
                     new GUIContent("Curve Color", ""));
             serializedObject.ApplyModifiedProperties();
 

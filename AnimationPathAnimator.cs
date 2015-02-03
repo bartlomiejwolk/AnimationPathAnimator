@@ -188,16 +188,16 @@ namespace ATP.AnimationPathTools {
 
         #region PRIVATE METHODS
         private void InitializeEaseCurve() {
-            Keyframe firstKey = new Keyframe(0, 0, 0, 0);
-            Keyframe lastKey = new Keyframe(1, 1, 0, 0);
+            var firstKey = new Keyframe(0, 0, 0, 0);
+            var lastKey = new Keyframe(1, 1, 0, 0);
 
             easeCurve.AddKey(firstKey);
             easeCurve.AddKey(lastKey);
         }
 
         private void InitializeRotationCurve() {
-            Keyframe firstKey = new Keyframe(0, 0, 0, 0);
-            Keyframe lastKey = new Keyframe(1, 0, 0, 0);
+            var firstKey = new Keyframe(0, 0, 0, 0);
+            var lastKey = new Keyframe(1, 0, 0, 0);
 
             zAxisRotationCurve.AddKey(firstKey);
             zAxisRotationCurve.AddKey(lastKey);
@@ -209,7 +209,7 @@ namespace ATP.AnimationPathTools {
                 currentAnimTime += Time.deltaTime;
 
                 // Convert animation time to <0; 1> ratio.
-                float timeRatio = currentAnimTime/duration;
+                var timeRatio = currentAnimTime/duration;
 
                 animTimeRatio = easeCurve.Evaluate(timeRatio);
 
@@ -233,9 +233,9 @@ namespace ATP.AnimationPathTools {
 
         private void TiltObject() {
             if (animatedObject != null && followedObject != null) {
-                Vector3 eulerAngles = transform.rotation.eulerAngles;
+                var eulerAngles = transform.rotation.eulerAngles;
                 // Get rotation from AnimationCurve.
-                float zRotation = zAxisRotationCurve.Evaluate(animTimeRatio);
+                var zRotation = zAxisRotationCurve.Evaluate(animTimeRatio);
                 eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
                 transform.rotation = Quaternion.Euler(eulerAngles);
               
@@ -245,13 +245,13 @@ namespace ATP.AnimationPathTools {
         private void RotateObject() {
             if (animatedObject != null && followedObject != null) {
                 // Calculate direction to target.
-                Vector3 targetDirection =
+                var targetDirection =
                     followedObject.position - animatedObject.position;
                 // Calculate rotation to target.
-                Quaternion rotation = Quaternion.LookRotation(
+                var rotation = Quaternion.LookRotation(
                     targetDirection);
                 // Calculate rotation speed.
-                float speed = Time.deltaTime*rotationSpeed;
+                var speed = Time.deltaTime*rotationSpeed;
                 // Lerp rotation.
                 animatedObject.rotation = Quaternion.Slerp(
                     animatedObject.rotation,

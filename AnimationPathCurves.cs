@@ -50,9 +50,9 @@ namespace ATP.AnimationPathTools {
                 Vector3 position) {
 
             // Copy keys.
-            Keyframe keyXCopy = _curves[0].keys[keyIndex];
-            Keyframe keyYCopy = _curves[1].keys[keyIndex];
-            Keyframe keyZCopy = _curves[2].keys[keyIndex];
+            var keyXCopy = _curves[0].keys[keyIndex];
+            var keyYCopy = _curves[1].keys[keyIndex];
+            var keyZCopy = _curves[2].keys[keyIndex];
 
             // Update keys' values.
             keyXCopy.value = position.x;
@@ -70,9 +70,9 @@ namespace ATP.AnimationPathTools {
                 Vector3 tangentDelta) {
 
             // Copy keys.
-            Keyframe keyXCopy = _curves[0].keys[nodeIndex];
-            Keyframe keyYCopy = _curves[1].keys[nodeIndex];
-            Keyframe keyZCopy = _curves[2].keys[nodeIndex];
+            var keyXCopy = _curves[0].keys[nodeIndex];
+            var keyYCopy = _curves[1].keys[nodeIndex];
+            var keyZCopy = _curves[2].keys[nodeIndex];
 
             // Update keys' values.
             keyXCopy.inTangent += tangentDelta.x;
@@ -94,9 +94,9 @@ namespace ATP.AnimationPathTools {
             float newTimestamp) {
 
             // For each curve..
-            for (int i = 0; i < 3; i++) {
+            for (var i = 0; i < 3; i++) {
                 // Get copy of the key from animation curves.
-                Keyframe keyCopy = _curves[i].keys[keyIndex];
+                var keyCopy = _curves[i].keys[keyIndex];
 
                 // Change key's time.
                 keyCopy.time = newTimestamp;
@@ -111,9 +111,9 @@ namespace ATP.AnimationPathTools {
         }
 
         public Vector3 GetVectorAtKey(int keyIndex) {
-            float x = _curves[0].keys[keyIndex].value;
-            float y = _curves[1].keys[keyIndex].value;
-            float z = _curves[2].keys[keyIndex].value;
+            var x = _curves[0].keys[keyIndex].value;
+            var y = _curves[1].keys[keyIndex].value;
+            var z = _curves[2].keys[keyIndex].value;
 
             return new Vector3(x, y, z);
         }
@@ -136,14 +136,14 @@ namespace ATP.AnimationPathTools {
             var z = _curves[2].Evaluate(timestamp);
 
             // Construct 3d point.
-            Vector3 pos = new Vector3(x, y, z);
+            var pos = new Vector3(x, y, z);
 
             return pos;
         }
 
         public void RemovePoint(int nodeIndex) {
             // For each animation curve..
-            for (int i = 0; i < 3; i++) {
+            for (var i = 0; i < 3; i++) {
                 // Remove node keys.
                 _curves[i].RemoveKey(nodeIndex);
             }
@@ -156,7 +156,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="tangentWeight">Tangent weight.</param>
         public void SmoothPointTangents(int nodeIndex) {
             // For each curve..
-            for (int i = 0; i < _curves.Length; i++) {
+            for (var i = 0; i < _curves.Length; i++) {
                 // Smooth tangents.
                 _curves[i].SmoothTangents(nodeIndex, 0);
             }
@@ -179,15 +179,15 @@ namespace ATP.AnimationPathTools {
         }
 
         public void SetPointLinear(int nodeIndex) {
-             for (int i = 0; i < 3; ++i) {
+             for (var i = 0; i < 3; ++i) {
                 float intangent = 0;
                 float outtangent = 0;
-                bool intangent_set = false;
-                bool outtangent_set = false;
+                var intangent_set = false;
+                var outtangent_set = false;
                 Vector2 point1;
                 Vector2 point2;
                 Vector2 deltapoint;
-                Keyframe key = _curves[i][nodeIndex];
+                var key = _curves[i][nodeIndex];
 
                 if (nodeIndex == 0) {
                     intangent = 0; intangent_set = true;
@@ -225,8 +225,8 @@ namespace ATP.AnimationPathTools {
         }
 
         public void AddNodeAtTime(float timestamp) {
-             for (int j = 0; j < 3; j++) {
-                float newKeyValue = _curves[j].Evaluate(timestamp);
+             for (var j = 0; j < 3; j++) {
+                var newKeyValue = _curves[j].Evaluate(timestamp);
                 _curves[j].AddKey(timestamp, newKeyValue);
             }           
         }

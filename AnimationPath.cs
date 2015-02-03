@@ -3,11 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// Classes that allow for creation and usage of \link AnimationPath Animation
-/// Paths\endlink.
-/// 
-/// Collaboration diagram for _AnimationPath_ component \image html
-/// AnimationPathTools-collaboration.png
 namespace ATP.AnimationPathTools {
 
     /// <summary>
@@ -45,13 +40,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public const int GizmoCurveSamplingFrequency = 20;
         #endregion Constants
-
-        //[SerializeField]
-        //private AnimationPathGizmos animationPathGizmos;
-
-        //[SerializeField]
-        //private List<AnimationPathNode> nodes = new List<AnimationPathNode>();
-
         #region Fields
 
         /// <summary>
@@ -164,7 +152,6 @@ namespace ATP.AnimationPathTools {
 
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
-            //DrawPathStartGizmo();
         }
 
         private void OnEnable() {
@@ -360,29 +347,6 @@ namespace ATP.AnimationPathTools {
         public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
             _animationCurves.MovePointToPosition(nodeIndex, position);
         }
-        /// <summary>
-        /// Update speed value for each node.
-        /// </summary>
-        /// <param name="curves">
-        /// Animation curves based on which the speed values will be
-        /// calculated.
-        /// </param>
-        /*public float[] GetSpeedValues() {
-            // Result array.
-            float[] result = new float[NodesNo];
-
-            // For each node (except the first one)..
-            for (int i = 1; i < NodesNo; i++) {
-                // Calculate speed for section between two nodes.
-                //result[i] = nodes[i].Speed;
-                result[i] = CalculateNodeSpeed(
-                    SpeedSampling,
-                    i - 1,
-                    i);
-            }
-
-            return result;
-        }*/
         public void RemoveNode(int nodeIndex) {
             _animationCurves.RemovePoint(nodeIndex);
         }
@@ -553,14 +517,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        /// <summary>
-        /// Set tangent mode for a single node to linear.
-        /// </summary>
-        /// <param name="keyIndex">Node index.</param>
-        //public void SetNodeLinear(int keyIndex) {
-        //    _animationCurves.SetPointLinear(keyIndex);
-        //}
-
         public void SetNodesLinear() {
             for (int i = 0; i < 3; i++) {
                 SetCurveLinear(_animationCurves[i]);
@@ -582,66 +538,6 @@ namespace ATP.AnimationPathTools {
         public void SmoothNodeTangents(int nodeIndex) {
             _animationCurves.SmoothPointTangents(nodeIndex);
         }
-        /// <summary>
-        /// Calculate speed between two nodes.
-        /// </summary>
-        /// <param name="samplingRate">
-        /// Amount of samples taken between two nodes to determine the line's
-        /// shape.
-        /// </param>
-        /// <param name="leftNodeIdx">
-        /// Index of a node with smaller timestamp.
-        /// </param>
-        /// <param name="rightNodeIdx">
-        /// Index of a node with bigger timestamp.
-        /// </param>
-        /// <returns>
-        /// Speed of an object that would travel between given two nodes in
-        /// time that is determined by their timestamps.
-        /// </returns>
-        /*private float CalculateNodeSpeed(
-            int samplingRate,
-            int leftNodeIdx,
-            int rightNodeIdx) {
-
-            // Time between two nodes.
-            float sectionTime = _animationCurves.GetTimeAtKey(rightNodeIdx)
-                - _animationCurves.GetTimeAtKey(leftNodeIdx);
-
-            // Overall distance for node pair.
-            float sectionDistance = 0;
-
-            // A 3d point on the path.
-            Vector3 point = new Vector3();
-            Vector3 prevPoint = new Vector3();
-
-            // For each point between two nodes..
-            // + 1 because it must include also the last point.
-            for (int i = 0; i < samplingRate + 1; i++) {
-                float sampleTime = sectionTime / samplingRate;
-
-                // Calculate time for point.
-                float pointTimestamp = _animationCurves.GetTimeAtKey(leftNodeIdx)
-                    + i * sampleTime;
-
-                point = _animationCurves.GetVectorAtTime(pointTimestamp);
-
-                // Needs at least two points to calculate distance.
-                if (i != 0) {
-                    // Calculate distance between two nodes and increase total.
-                    sectionDistance +=
-                        Vector3.Distance(prevPoint, point);
-                }
-
-                // Update previous point value.
-                prevPoint = point;
-            }
-
-            // Calculate section speed.
-            float sectionSpeed = sectionDistance / sectionTime;
-
-            return sectionSpeed;
-        }*/
         #endregion Public Methods
     }
 }

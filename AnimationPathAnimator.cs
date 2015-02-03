@@ -57,11 +57,6 @@ namespace ATP.AnimationPathTools {
 
         #region FIELDS
 
-        /// <summary>
-        /// List of animations to by played by the animator.
-        /// </summary>
-        //[SerializeField]
-        //private List<Animation> animations = new List<Animation>();
 
         /// <summary>
         ///     Transform to be animated.
@@ -110,7 +105,6 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         private bool isPlaying;
 
-        //private float _rotationDuration = 3.0f;
 
         [SerializeField]
         private AnimationCurve _easeCurve = new AnimationCurve();
@@ -118,7 +112,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationCurve _zAxisRotationCurve = new AnimationCurve();
 
-        //private const int dotweensamplingfrequency = 5;
 
         #endregion FIELDS
 
@@ -152,26 +145,6 @@ namespace ATP.AnimationPathTools {
             // Start animation from time ratio specified in the inspector.
             currentAnimTime = animTimeRatio * duration;
 
-            //foreach (Animation anim in animations) {
-            //    if (anim.LookAtTarget != null && anim.LookAtPath != null) {
-            //        List<Vector3> waypoints =
-            //            anim.LookAtPath.SamplePathForPoints(DOTweenSamplingFrequency);
-            //        anim.LookAtTarget.transform.DOPath(waypoints.ToArray(), duration);
-            //    }
-            //    if (anim.Target != null && anim.Path != null) {
-            //        List<Vector3> waypoints =
-            //            anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
-            //        anim.Target.transform.DOPath(waypoints.ToArray(), duration);
-            //        //.SetLookAt(anim.LookAtTarget).SetEase(Ease.InCirc);
-
-            //        //anim.Target.DOLookAt(
-            //        //    anim.LookAtTarget.position,
-            //        //    2.0f);
-            //    }
-            //}
-
-            //DOTween.To(() => animTimeRatio, x => animTimeRatio = x, 1, duration)
-            //    .SetEase(_easeCurve);
 
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());
@@ -231,7 +204,6 @@ namespace ATP.AnimationPathTools {
                 currentAnimTime += Time.deltaTime;
 
                 // Convert animation time to <0; 1> ratio.
-                //animTimeRatio = currentAnimTime / duration;
                 float timeRatio = currentAnimTime/duration;
 
                 animTimeRatio = _easeCurve.Evaluate(timeRatio);
@@ -251,11 +223,6 @@ namespace ATP.AnimationPathTools {
             // Rotate transform.
             RotateObject();
 
-            // Set rotation on Z axis to 0.
-                //Vector3 eulerAngles = transform.rotation.eulerAngles;
-                //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, 0);
-                //transform.rotation = Quaternion.Euler(eulerAngles);
-
             TiltObject();
         }
 
@@ -266,20 +233,7 @@ namespace ATP.AnimationPathTools {
                 float zRotation = _zAxisRotationCurve.Evaluate(animTimeRatio);
                 eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
                 transform.rotation = Quaternion.Euler(eulerAngles);
-
-                // In play mode, rotate using tween.
-                //if (Application.isPlaying) {
-                //    anim.Target.DOLookAt(
-                //        anim.LookAtTarget.position,
-                //        _rotationDuration);
-                //}
-                //// In editor mode, rotate using Unity LookAt().
-                //else {
-                //    transform.LookAt(anim.LookAtTarget.position);
-                //}
-
-                // rotate target.
-                //anim.Target.LookAt(anim.LookAtTarget);
+              
             }
         }
 
@@ -306,9 +260,6 @@ namespace ATP.AnimationPathTools {
                 // Update position.
                 _object.position =
                     _objectPath.GetVectorAtTime(animTimeRatio);
-
-                //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
-                //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
             }
         }
 

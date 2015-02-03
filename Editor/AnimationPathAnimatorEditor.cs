@@ -7,183 +7,176 @@ using UnityEngine;
 namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof(AnimationPathAnimator))]
-	public class AnimatorEditor: Editor {
+    public class AnimatorEditor : Editor {
 
         #region FIELDS
-        /// <summary>
-        /// Reference to target script.
-        /// </summary>
-		private AnimationPathAnimator script;
 
         /// <summary>
-        ///     If modifier is currently pressed.
+        /// If modifier is currently pressed.
         /// </summary>
         private bool modKeyPressed;
 
-        #endregion
+        /// <summary>
+        /// Reference to target script.
+        /// </summary>
+        private AnimationPathAnimator script;
+
+        #endregion FIELDS
+
         #region SERIALIZED PROPERTIES
-        // Serialized properties
-		private SerializedProperty duration;
-		private SerializedProperty rotationSpeed;
-		private SerializedProperty animTimeRatio;
-        private SerializedProperty easeAnimationCurve;
-        private SerializedProperty tiltingCurve;
+
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
+        private SerializedProperty animTimeRatio;
+        private SerializedProperty duration;
+        private SerializedProperty easeAnimationCurve;
         private SerializedProperty followedObject;
         private SerializedProperty followedObjectPath;
-        #endregion
+        private SerializedProperty rotationSpeed;
+        private SerializedProperty tiltingCurve;
+
+        #endregion SERIALIZED PROPERTIES
+
         #region UNITY MESSAGES
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        void OnEnable() {
-            // Get target script reference.
-			script = (AnimationPathAnimator)target;
+        public override void OnInspectorGUI() {
+            serializedObject.Update();
 
-            // Initialize serialized properties.
-			duration = serializedObject.FindProperty("duration");
-		    rotationSpeed = serializedObject.FindProperty("rotationSpeed");
-			animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-		    easeAnimationCurve = serializedObject.FindProperty("easeCurve");
-		    tiltingCurve = serializedObject.FindProperty("tiltingCurve");
-		    animatedObject = serializedObject.FindProperty("animatedObject");
-		    animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
-		    followedObject = serializedObject.FindProperty("animatedObject");
-		    followedObjectPath = serializedObject.FindProperty("followedObjectPath");
-		}
+            EditorGUILayout.Slider(
+                    animTimeRatio,
+                    0,
+                    1);
 
-		public override void OnInspectorGUI() {
-			serializedObject.Update();
+            EditorGUILayout.PropertyField(duration);
+            EditorGUILayout.PropertyField(rotationSpeed);
 
-			EditorGUILayout.Slider(
-					animTimeRatio,
-					0,
-					1);
+            EditorGUILayout.PropertyField(
+                easeAnimationCurve,
+                new GUIContent(
+                    "Ease Curve",
+                    ""));
 
-			EditorGUILayout.PropertyField(duration);
-			EditorGUILayout.PropertyField(rotationSpeed);
-
-		    EditorGUILayout.PropertyField(
-		        easeAnimationCurve,
-		        new GUIContent(
-		            "Ease Curve",
-		            ""));
-
-		    EditorGUILayout.PropertyField(
-		        tiltingCurve,
-		        new GUIContent(
-		            "Tilting Curve",
-		            ""));
+            EditorGUILayout.PropertyField(
+                tiltingCurve,
+                new GUIContent(
+                    "Tilting Curve",
+                    ""));
 
             EditorGUILayout.Space();
 
-		    EditorGUILayout.PropertyField(
-		        animatedObject,
-		        new GUIContent(
-		            "Object",
-		            ""));
+            EditorGUILayout.PropertyField(
+                animatedObject,
+                new GUIContent(
+                    "Object",
+                    ""));
 
-		    EditorGUILayout.PropertyField(
+            EditorGUILayout.PropertyField(
                 animatedObjectPath,
-		        new GUIContent(
-		            "Object Path",
-		            ""));
+                new GUIContent(
+                    "Object Path",
+                    ""));
 
-		    EditorGUILayout.PropertyField(
+            EditorGUILayout.PropertyField(
                 followedObject,
-		        new GUIContent(
-		            "Target",
-		            ""));
+                new GUIContent(
+                    "Target",
+                    ""));
 
-		    EditorGUILayout.PropertyField(
+            EditorGUILayout.PropertyField(
                 followedObjectPath,
-		        new GUIContent(
-		            "Target Path",
-		            ""));
+                new GUIContent(
+                    "Target Path",
+                    ""));
 
-			// Save changes
-			serializedObject.ApplyModifiedProperties();
-		}
+            // Save changes.
+            serializedObject.ApplyModifiedProperties();
+        }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        void OnSceneGUI() {
-			serializedObject.Update();
+        private void OnEnable() {
+            // Get target script reference.
+            script = (AnimationPathAnimator)target;
+
+            // Initialize serialized properties.
+            duration = serializedObject.FindProperty("duration");
+            rotationSpeed = serializedObject.FindProperty("rotationSpeed");
+            animTimeRatio = serializedObject.FindProperty("animTimeRatio");
+            easeAnimationCurve = serializedObject.FindProperty("easeCurve");
+            tiltingCurve = serializedObject.FindProperty("tiltingCurve");
+            animatedObject = serializedObject.FindProperty("animatedObject");
+            animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
+            followedObject = serializedObject.FindProperty("animatedObject");
+            followedObjectPath = serializedObject.FindProperty("followedObjectPath");
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnSceneGUI() {
+            serializedObject.Update();
 
             // Update modifier key state.
-			UpdateModifierKey();
+            UpdateModifierKey();
 
             // Change current animation time with arrow keys.
-			ChangeTimeWithArrowKeys();
+            ChangeTimeWithArrowKeys();
 
-			// Save changes
-			serializedObject.ApplyModifiedProperties();
+            // Save changes
+            serializedObject.ApplyModifiedProperties();
 
-		    script.UpdateAnimation();
-		}
-        #endregion
+            script.UpdateAnimation();
+        }
+
+        #endregion UNITY MESSAGES
+
         #region PRIVATE METHODS
+
         /// <summary>
         /// Change current animation time with arrow keys.
         /// </summary>
-		private void ChangeTimeWithArrowKeys() {
+        private void ChangeTimeWithArrowKeys() {
             // If a key is pressed..
-			if (Event.current.type == EventType.keyDown
-                    // and modifier key is pressed also..
-					&& modKeyPressed) {
+            if (Event.current.type == EventType.keyDown
+                // and modifier key is pressed also..
+                    && modKeyPressed) {
 
-			    HandleModifiedShortcuts();
-			}
-			// Modifier key not pressed.
-			else if (Event.current.type == EventType.keyDown) {
-                HandleUnmodifiedShortcuts();
-			}
-
-		
-		}
-
-        private void HandleUnmodifiedShortcuts() {
-// Helper variable.
-            float newAnimationTimeRatio;
-            switch (Event.current.keyCode) {
-                // Jump backward.
-                case AnimationPathAnimator.JumpBackward:
-                    Event.current.Use();
-
-                    // Calculate new time ratio.
-                    newAnimationTimeRatio = animTimeRatio.floatValue
-                                            - AnimationPathAnimator.ShortJumpValue;
-                    // Apply rounded value.
-                    animTimeRatio.floatValue =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-
-                    break;
-                // Jump forward.
-                case AnimationPathAnimator.JumpForward:
-                    Event.current.Use();
-
-                    newAnimationTimeRatio = animTimeRatio.floatValue
-                                            + AnimationPathAnimator.ShortJumpValue;
-                    animTimeRatio.floatValue =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-
-                    break;
-                case AnimationPathAnimator.JumpToStart:
-                    Event.current.Use();
-
-                    animTimeRatio.floatValue = 1;
-
-                    break;
-                case AnimationPathAnimator.JumpToEnd:
-                    Event.current.Use();
-
-                    animTimeRatio.floatValue = 0;
-
-                    break;
+                HandleModifiedShortcuts();
             }
+            // Modifier key not pressed.
+            else if (Event.current.type == EventType.keyDown) {
+                HandleUnmodifiedShortcuts();
+            }
+
+        }
+
+        // TODO Rename to GetNearestBackwardNodeTimestamp().
+        private float GetNearestNodeBackwardTimestamp() {
+            var targetPathTimestamps = script.GetTargetPathTimestamps();
+
+            for (var i = targetPathTimestamps.Length - 1; i >= 0; i--) {
+                if (targetPathTimestamps[i] < animTimeRatio.floatValue) {
+                    return targetPathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
+        // TODO Rename to GetNearestForwardNodeTimestamp().
+        private float GetNearestNodeForwardTimestamp() {
+            var targetPathTimestamps = script.GetTargetPathTimestamps();
+
+            foreach (var timestamp in targetPathTimestamps
+                .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
+
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
         }
 
         private void HandleModifiedShortcuts() {
-// Check what key is pressed..
+            // Check what key is pressed..
             switch (Event.current.keyCode) {
                 // Jump backward.
                 case AnimationPathAnimator.JumpBackward:
@@ -203,6 +196,7 @@ namespace ATP.AnimationPathTools {
                         AnimationPathAnimator.JumpValue;
 
                     break;
+
                 case AnimationPathAnimator.JumpToStart:
                     Event.current.Use();
 
@@ -210,6 +204,7 @@ namespace ATP.AnimationPathTools {
                     animTimeRatio.floatValue = GetNearestNodeForwardTimestamp();
 
                     break;
+
                 case AnimationPathAnimator.JumpToEnd:
                     Event.current.Use();
 
@@ -220,37 +215,52 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        // TODO Rename to GetNearestForwardNodeTimestamp().
-        private float GetNearestNodeForwardTimestamp() {
-            var targetPathTimestamps = script.GetTargetPathTimestamps();
+        private void HandleUnmodifiedShortcuts() {
+            // Helper variable.
+            float newAnimationTimeRatio;
+            switch (Event.current.keyCode) {
+                // Jump backward.
+                case AnimationPathAnimator.JumpBackward:
+                    Event.current.Use();
 
-            foreach (var timestamp in targetPathTimestamps
-                .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
+                    // Calculate new time ratio.
+                    newAnimationTimeRatio = animTimeRatio.floatValue
+                                            - AnimationPathAnimator.ShortJumpValue;
+                    // Apply rounded value.
+                    animTimeRatio.floatValue =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
 
-                return timestamp;
+                    break;
+                // Jump forward.
+                case AnimationPathAnimator.JumpForward:
+                    Event.current.Use();
+
+                    newAnimationTimeRatio = animTimeRatio.floatValue
+                                            + AnimationPathAnimator.ShortJumpValue;
+                    animTimeRatio.floatValue =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+
+                    break;
+
+                case AnimationPathAnimator.JumpToStart:
+                    Event.current.Use();
+
+                    animTimeRatio.floatValue = 1;
+
+                    break;
+
+                case AnimationPathAnimator.JumpToEnd:
+                    Event.current.Use();
+
+                    animTimeRatio.floatValue = 0;
+
+                    break;
             }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
-        // TODO Rename to GetNearestBackwardNodeTimestamp().
-        private float GetNearestNodeBackwardTimestamp() {
-            var targetPathTimestamps = script.GetTargetPathTimestamps();
-
-            for (var i = targetPathTimestamps.Length - 1; i >= 0; i--) {
-                if (targetPathTimestamps[i] < animTimeRatio.floatValue) {
-                    return targetPathTimestamps[i];
-                }
-            }
-
-            // Return timestamp of the last node.
-            return 0;
         }
 
         /// <summary>
-        ///     Checked if modifier key is pressed and remember it in a class
-        ///     field.
+        /// Checked if modifier key is pressed and remember it in a class
+        /// field.
         /// </summary>
         private void UpdateModifierKey() {
             // Check if modifier key is currently pressed.
@@ -267,6 +277,7 @@ namespace ATP.AnimationPathTools {
                 modKeyPressed = false;
             }
         }
-        #endregion
+
+        #endregion PRIVATE METHODS
     }
 }

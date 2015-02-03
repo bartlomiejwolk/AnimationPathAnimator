@@ -1,6 +1,6 @@
-﻿using ATP.ReorderableList;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using ATP.ReorderableList;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -145,15 +145,18 @@ namespace ATP.AnimationPathTools {
 
         #region Unity Messages
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
             // Load default skin.
             skin = Resources.Load("GUISkin/default") as GUISkin;
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Instantiate class field.
             if (animationCurves == null) {
@@ -416,13 +419,11 @@ namespace ATP.AnimationPathTools {
                     float samplingFrequency,
                     ref List<Vector3> points) {
 
-            float linearPathLength = CalculatePathLinearLength();
-
             // Throw exception when there's nothing to draw.
-            if (linearPathLength == 0) {
-                throw new Exception("Animation path length is 0. At least " +
-                        "two keys in a curve must differ in value.");
-            }
+            // TODO Use curved length.
+            //if (Math.Abs(linearPathLength) < 0.01f) {
+            //    throw new Exception("Path is too short.");
+            //}
 
             float sectionLinearLength = CalculateSectionLinearLength(
                 firstNodeIndex,
@@ -469,22 +470,22 @@ namespace ATP.AnimationPathTools {
             for (int i = 0; i < curve.keys.Length; ++i) {
                 float intangent = 0;
                 float outtangent = 0;
-                bool intangent_set = false;
-                bool outtangent_set = false;
+                bool inTangentSet = false;
+                bool outTangentSet = false;
                 Vector2 point1;
                 Vector2 point2;
                 Vector2 deltapoint;
                 Keyframe key = curve[i];
 
                 if (i == 0) {
-                    intangent = 0; intangent_set = true;
+                    intangent = 0; inTangentSet = true;
                 }
 
                 if (i == curve.keys.Length - 1) {
-                    outtangent = 0; outtangent_set = true;
+                    outtangent = 0; outTangentSet = true;
                 }
 
-                if (!intangent_set) {
+                if (!inTangentSet) {
                     point1.x = curve.keys[i - 1].time;
                     point1.y = curve.keys[i - 1].value;
                     point2.x = curve.keys[i].time;
@@ -494,7 +495,7 @@ namespace ATP.AnimationPathTools {
                     intangent = deltapoint.y / deltapoint.x;
                 }
 
-                if (!outtangent_set) {
+                if (!outTangentSet) {
                     point1.x = curve.keys[i].time;
                     point1.y = curve.keys[i].value;
                     point2.x = curve.keys[i + 1].time;

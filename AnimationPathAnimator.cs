@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using ATP.ReorderableList;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANTS
         [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
 
         /// <summary>
@@ -60,7 +63,9 @@ namespace ATP.AnimationPathTools {
         ///     Transform to be animated.
         /// </summary>
         [SerializeField]
+#pragma warning disable 649
         private Transform animatedObject;
+#pragma warning restore 649
 
         /// <summary>
         ///     Path used to animate the <c>animatedObject</c> transform.
@@ -72,7 +77,9 @@ namespace ATP.AnimationPathTools {
         ///     Transform that the <c>animatedObject</c> will be looking at.
         /// </summary>
         [SerializeField]
+#pragma warning disable 649
         private Transform followedObject;
+#pragma warning restore 649
 
         /// <summary>
         ///     Path used to animate the <c>lookAtTarget</c>.
@@ -105,9 +112,11 @@ namespace ATP.AnimationPathTools {
 
 
         [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve easeCurve = new AnimationCurve();
 
         [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve zAxisRotationCurve = new AnimationCurve();
 
 
@@ -115,6 +124,7 @@ namespace ATP.AnimationPathTools {
 
         #region UNITY MESSAGES
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnValidate() {
             // Limit duration value.
             if (duration < 1) {
@@ -130,6 +140,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
             animatedObjectPath = GetComponent<AnimationPath>();
             followedObjectPath = GetComponent<TargetAnimationPath>();
@@ -148,6 +159,8 @@ namespace ATP.AnimationPathTools {
                 StartCoroutine(EaseTime());
             }
         }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {

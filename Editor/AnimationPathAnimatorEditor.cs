@@ -121,97 +121,107 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Change current animation time with arrow keys.
         /// </summary>
-        // TODO Refactor.
 		private void ChangeTimeWithArrowKeys() {
             // If a key is pressed..
 			if (Event.current.type == EventType.keyDown
                     // and modifier key is pressed also..
 					&& modKeyPressed) {
 
-                // Check what key is pressed..
-				switch (Event.current.keyCode) {
-                    // Jump backward.
-					case AnimationPathAnimator.JumpBackward:
-						Event.current.Use();
-
-                        // Update animation time.
-						animTimeRatio.floatValue -=
-                            AnimationPathAnimator.JumpValue;
-
-						break;
-                    // Jump forward.
-					case AnimationPathAnimator.JumpForward:
-						Event.current.Use();
-
-                        // Update animation time.
-						animTimeRatio.floatValue +=
-                            AnimationPathAnimator.JumpValue;
-
-						break;
-                    case AnimationPathAnimator.JumpToStart:
-                        Event.current.Use();
-
-                        // Jump to next node.
-				        animTimeRatio.floatValue = GetNearestNodeForwardTimestamp();
-
-				        break;
-                    case AnimationPathAnimator.JumpToEnd:
-                        Event.current.Use();
-
-                        // Jump to next node.
-                        animTimeRatio.floatValue = GetNearestNodeBackwardTimestamp();
-
-                        break;
-				}
-            }
+			    HandleModifiedShortcuts();
+			}
 			// Modifier key not pressed.
 			else if (Event.current.type == EventType.keyDown) {
-                // Helper variable.
-			    float newAnimationTimeRatio;
-				switch (Event.current.keyCode) {
-                    // Jump backward.
-					case AnimationPathAnimator.JumpBackward:
-						Event.current.Use();
-
-                        // Calculate new time ratio.
-				        newAnimationTimeRatio = animTimeRatio.floatValue
-                            - AnimationPathAnimator.ShortJumpValue;
-                        // Apply rounded value.
-				        animTimeRatio.floatValue =
-                            (float)(Math.Round(newAnimationTimeRatio, 3));
-
-						break;
-                    // Jump forward.
-					case AnimationPathAnimator.JumpForward:
-						Event.current.Use();
-
-				        newAnimationTimeRatio = animTimeRatio.floatValue
-                            + AnimationPathAnimator.ShortJumpValue;
-				        animTimeRatio.floatValue =
-                            (float)(Math.Round(newAnimationTimeRatio, 3));
-
-						break;
-				}
+                HandleUnmodifiedShortcuts();
 			}
 
-			// Handle up/down arrows.
-			if (Event.current.type == EventType.keyDown) {
-				switch (Event.current.keyCode) {
-					case AnimationPathAnimator.JumpToStart:
-						Event.current.Use();
-
-						animTimeRatio.floatValue = 1;
-
-						break;
-					case AnimationPathAnimator.JumpToEnd:
-						Event.current.Use();
-
-						animTimeRatio.floatValue = 0;
-
-						break;
-				}
-			}
+		
 		}
+
+        private void HandleUnmodifiedShortcuts() {
+// Helper variable.
+            float newAnimationTimeRatio;
+            switch (Event.current.keyCode) {
+                // Jump backward.
+                case AnimationPathAnimator.JumpBackward:
+                    Event.current.Use();
+
+                    // Calculate new time ratio.
+                    newAnimationTimeRatio = animTimeRatio.floatValue
+                                            - AnimationPathAnimator.ShortJumpValue;
+                    // Apply rounded value.
+                    animTimeRatio.floatValue =
+                        (float) (Math.Round(newAnimationTimeRatio, 3));
+
+                    break;
+                // Jump forward.
+                case AnimationPathAnimator.JumpForward:
+                    Event.current.Use();
+
+                    newAnimationTimeRatio = animTimeRatio.floatValue
+                                            + AnimationPathAnimator.ShortJumpValue;
+                    animTimeRatio.floatValue =
+                        (float) (Math.Round(newAnimationTimeRatio, 3));
+
+                    break;
+                case AnimationPathAnimator.JumpToStart:
+                    Event.current.Use();
+
+                    animTimeRatio.floatValue = 1;
+
+                    break;
+                case AnimationPathAnimator.JumpToEnd:
+                    Event.current.Use();
+
+                    animTimeRatio.floatValue = 0;
+
+                    break;
+            }
+
+            // Handle up/down arrows.
+            //if (Event.current.type == EventType.keyDown) {
+            //    switch (Event.current.keyCode) {
+                    
+            //    }
+            //}
+        }
+
+        private void HandleModifiedShortcuts() {
+// Check what key is pressed..
+            switch (Event.current.keyCode) {
+                // Jump backward.
+                case AnimationPathAnimator.JumpBackward:
+                    Event.current.Use();
+
+                    // Update animation time.
+                    animTimeRatio.floatValue -=
+                        AnimationPathAnimator.JumpValue;
+
+                    break;
+                // Jump forward.
+                case AnimationPathAnimator.JumpForward:
+                    Event.current.Use();
+
+                    // Update animation time.
+                    animTimeRatio.floatValue +=
+                        AnimationPathAnimator.JumpValue;
+
+                    break;
+                case AnimationPathAnimator.JumpToStart:
+                    Event.current.Use();
+
+                    // Jump to next node.
+                    animTimeRatio.floatValue = GetNearestNodeForwardTimestamp();
+
+                    break;
+                case AnimationPathAnimator.JumpToEnd:
+                    Event.current.Use();
+
+                    // Jump to next node.
+                    animTimeRatio.floatValue = GetNearestNodeBackwardTimestamp();
+
+                    break;
+            }
+        }
 
         private float GetNearestNodeForwardTimestamp() {
             float[] targetPathTimestamps = script.GetTargetPathTimestamps();

@@ -6,30 +6,12 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(TargetAnimationPath))]
     public class TargetAnimationPathEditor : AnimationPathEditor {
 
-        protected override void OnEnable() {
-            base.OnEnable();
-
-            script = (TargetAnimationPath)target;
-
-            // Set default gizmo curve color.
-            script.GizmoCurveColor = Color.magenta;
-        }
-
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
             HandleUndo();
 
             // Add a new node.
-            AddNewNode(nodeIndex);
-        }
-
-        protected override void DrawLinearTangentModeButtonsCallbackHandler(
-                    int nodeIndex) {
-
-            // Make snapshot of the target object.
-            HandleUndo();
-
-            script.SetNodeLinear(nodeIndex);
+            AddNodeBetween(nodeIndex);
         }
 
         protected override void DrawMovementHandlesCallbackHandler(
@@ -41,12 +23,12 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // If Move All mode enabled, move all nodes.
-            if (script.MoveAllMode) {
-                script.MoveAllNodes(moveDelta);
+            if (Script.MoveAllMode) {
+                Script.MoveAllNodes(moveDelta);
             }
             // Move single node.
             else {
-                script.MoveNodeToPosition(movedNodeIndex, position);
+                Script.MoveNodeToPosition(movedNodeIndex, position);
             }
         }
 
@@ -54,14 +36,23 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.RemoveNode(nodeIndex);
+            Script.RemoveNode(nodeIndex);
+        }
+
+        protected override void DrawSmoothInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Smooth",
+                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+                HandleUndo();
+                Script.SmoothNodesTangents();
+            }
         }
 
         protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.SmoothNodeTangents(index);
+            Script.SmoothNodeTangents(index);
         }
 
         protected override void DrawTangentHandlesCallbackHandler(
@@ -71,7 +62,16 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.ChangeNodeTangents(index, inOutTangent);
+            Script.ChangeNodeTangents(index, inOutTangent);
+        }
+
+        protected override void OnEnable() {
+            base.OnEnable();
+
+            Script = (TargetAnimationPath)target;
+
+            // Set default gizmo curve color.
+            Script.GizmoCurveColor = Color.magenta;
         }
     }
 }

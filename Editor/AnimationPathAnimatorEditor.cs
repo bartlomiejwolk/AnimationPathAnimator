@@ -98,10 +98,9 @@ namespace ATP.AnimationPathTools {
 			// Save changes
 			serializedObject.ApplyModifiedProperties();
 
-            // TODO Delete if not needed.
-			if (GUI.changed) {
-				EditorUtility.SetDirty(script);
-			}
+            //if (GUI.changed) {
+            //    EditorUtility.SetDirty(script);
+            //}
 		}
 
 		void OnSceneGUI() {

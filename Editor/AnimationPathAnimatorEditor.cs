@@ -97,10 +97,6 @@ namespace ATP.AnimationPathTools {
 
 			// Save changes
 			serializedObject.ApplyModifiedProperties();
-
-            //if (GUI.changed) {
-            //    EditorUtility.SetDirty(script);
-            //}
 		}
 
 		void OnSceneGUI() {
@@ -176,13 +172,6 @@ namespace ATP.AnimationPathTools {
 
                     break;
             }
-
-            // Handle up/down arrows.
-            //if (Event.current.type == EventType.keyDown) {
-            //    switch (Event.current.keyCode) {
-                    
-            //    }
-            //}
         }
 
         private void HandleModifiedShortcuts() {

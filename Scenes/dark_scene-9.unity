@@ -2753,7 +2753,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1108505293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.8291817, y: .367744058, z: -.847680628}
+  m_LocalPosition: {x: -17.0756073, y: .279637009, z: -1.99215484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2990,8 +2990,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1126246260}
-  m_LocalRotation: {x: .0169572122, y: -.495629042, z: -.00967907812, w: -.868314862}
-  m_LocalPosition: {x: -16.7495766, y: .3259781, z: -1.39124322}
+  m_LocalRotation: {x: .00535632484, y: .45195058, z: -.00271382532, w: .892022848}
+  m_LocalPosition: {x: -17.8872833, y: .29172644, z: -2.58754396}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3012,7 +3012,7 @@ MonoBehaviour:
   _objectPath: {fileID: 1126246271}
   _target: {fileID: 1108505294}
   _targetPath: {fileID: 1126246268}
-  animTimeRatio: .104000002
+  animTimeRatio: 0
   duration: 30
   _easeCurve:
     serializedVersion: 2
@@ -3033,6 +3033,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .299999982
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .479351401
+      value: 29.7771358
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .60610044
+      value: -8.45741081
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .690046847
       value: 0
       inSlope: 0
       outSlope: 0

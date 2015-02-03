@@ -241,46 +241,26 @@ namespace ATP.AnimationPathTools {
         }
 
 
-        // TODO Refactor into smaller method.
         private void Animate() {
             // Animate target.
-            if (_target != null && _targetPath != null) {
-                // Update position.
-                _target.position =
-                    _targetPath.GetVectorAtTime(animTimeRatio);
-            }
+            AnimateTarget();
 
             // Animate transform.
-            if (_object != null && _objectPath != null) {
-                // Update position.
-                _object.position =
-                    _objectPath.GetVectorAtTime(animTimeRatio);
-
-                //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
-                //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
-            }
+            AnimateObject();
 
             // Rotate transform.
-            if (_object != null && _target != null) {
-                // Calculate direction to target.
-                Vector3 targetDirection =
-                    _target.position - _object.position;
-                // Calculate rotation to target.
-                Quaternion rotation = Quaternion.LookRotation(
-                    targetDirection);
-                // Calculate rotation speed.
-                float speed = Time.deltaTime * _rotationSpeed;
-                // Lerp rotation.
-                _object.rotation = Quaternion.Slerp(
-                    _object.rotation,
-                    rotation,
-                    speed);
+            RotateObject();
 
-                // Set rotation on Z axis to 0.
+            // Set rotation on Z axis to 0.
                 //Vector3 eulerAngles = transform.rotation.eulerAngles;
                 //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, 0);
                 //transform.rotation = Quaternion.Euler(eulerAngles);
 
+            TiltObject();
+        }
+
+        private void TiltObject() {
+            if (_object != null && _target != null) {
                 Vector3 eulerAngles = transform.rotation.eulerAngles;
                 // Get rotation from AnimationCurve.
                 float zRotation = _zAxisRotationCurve.Evaluate(animTimeRatio);
@@ -300,6 +280,43 @@ namespace ATP.AnimationPathTools {
 
                 // rotate target.
                 //anim.Target.LookAt(anim.LookAtTarget);
+            }
+        }
+
+        private void RotateObject() {
+            if (_object != null && _target != null) {
+                // Calculate direction to target.
+                Vector3 targetDirection =
+                    _target.position - _object.position;
+                // Calculate rotation to target.
+                Quaternion rotation = Quaternion.LookRotation(
+                    targetDirection);
+                // Calculate rotation speed.
+                float speed = Time.deltaTime*_rotationSpeed;
+                // Lerp rotation.
+                _object.rotation = Quaternion.Slerp(
+                    _object.rotation,
+                    rotation,
+                    speed);
+            }
+        }
+
+        private void AnimateObject() {
+            if (_object != null && _objectPath != null) {
+                // Update position.
+                _object.position =
+                    _objectPath.GetVectorAtTime(animTimeRatio);
+
+                //List<Vector3> waypoints = anim.Path.SamplePathForPoints(DOTweenSamplingFrequency);
+                //anim.Target.transform.DOPath(waypoints.ToArray(), duration);
+            }
+        }
+
+        private void AnimateTarget() {
+            if (_target != null && _targetPath != null) {
+                // Update position.
+                _target.position =
+                    _targetPath.GetVectorAtTime(animTimeRatio);
             }
         }
 

@@ -16,7 +16,9 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(AnimationPath))]
     public class AnimationPathEditor : Editor {
 
-        #region BUTTON OFFSETS
+        #region CONSTANS
+        private const float FirstNodeSize = 0.12f;
+        private const float MovementHandleSize = 0.25f;
 
         private const int SmoothButtonH = 25;
         private const int SmoothButtonV = 10;
@@ -26,16 +28,7 @@ namespace ATP.AnimationPathTools {
         private const int RemoveButtonV = 10;
         #endregion
 
-        #region SERIALIZED PROPERTIES
-
-        private SerializedProperty advancedSettingsFoldout;
-        private SerializedProperty exportSamplingFrequency;
-        protected SerializedProperty GizmoCurveColor;
-        private SerializedProperty skin;
-
-        #endregion SERIALIZED PROPERTIES
-
-        #region Helper Variables
+        #region FIELDS
 
         /// <summary>
         /// Scene tool that was selected when game object was first selected in
@@ -47,13 +40,18 @@ namespace ATP.AnimationPathTools {
         /// Reference to serialized class.
         /// </summary>
         public AnimationPath Script { get; protected set; }
-
-        private const float MovementHandleSize = 0.25f;
-        private const float FirstNodeSize = 0.12f;
         private readonly Color moveAllModeColor = Color.gray;
 
         #endregion Helper Variables
 
+        #region SERIALIZED PROPERTIES
+
+        private SerializedProperty advancedSettingsFoldout;
+        private SerializedProperty exportSamplingFrequency;
+        protected SerializedProperty GizmoCurveColor;
+        private SerializedProperty skin;
+
+        #endregion SERIALIZED PROPERTIES
         #region UNITY MESSAGES
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

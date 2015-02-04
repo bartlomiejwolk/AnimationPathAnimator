@@ -37,7 +37,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public static Tool LastTool = Tool.None;
 
-        private readonly Color moveAllModeColor = Color.gray;
+        private readonly Color moveAllModeColor = Color.white;
 
         /// <summary>
         /// Reference to serialized class.

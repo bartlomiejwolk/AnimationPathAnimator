@@ -30,6 +30,7 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         /// Handles mode will change only while key is pressed.
         /// </remarks>
+        // TODO Move to Editor class.
         public const KeyCode HandlesModeKey = KeyCode.J;
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         /// Movement mode will change only while key is pressed.
         /// </remarks>
+        // TODO Move to Editor class.
         public const KeyCode MoveAllKey = KeyCode.H;
         #endregion Constants
 

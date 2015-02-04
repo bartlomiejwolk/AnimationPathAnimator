@@ -123,6 +123,18 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
+
+        private const float LookForwardGizmoSize = 0.5f;
+
+        /// <summary>
+        /// How much look forward point should be positioned away from the
+        /// animated object.
+        /// </summary>
+        /// <remarks>
+        /// Value is a time in range from 0 to 1.
+        /// </remarks>
+        private const float LookForwardTimeDelta = 0.03f;
+
         #endregion FIELDS
 
         #region UNITY MESSAGES
@@ -167,8 +179,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void InitializeLookForwardCurve() {
-            var firstKey = new Keyframe(0, 0.05f, 0, 0);
-            var lastKey = new Keyframe(1, 0.05f, 0, 0);
+            var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
+            var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
 
             lookForwardCurve.AddKey(firstKey);
             lookForwardCurve.AddKey(lastKey);
@@ -180,6 +192,15 @@ namespace ATP.AnimationPathTools {
             if (Application.isPlaying && isPlaying) {
                 Animate();
             }
+        }
+
+        private void OnDrawGizmosSelected() {
+            Vector3 forwardPoint = GetForwardPoint();
+            Vector3 size = new Vector3(
+                LookForwardGizmoSize,
+                LookForwardGizmoSize,
+                LookForwardGizmoSize);
+            Gizmos.DrawWireCube(forwardPoint, size);
         }
 
         #endregion UNITY MESSAGES

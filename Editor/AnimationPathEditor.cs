@@ -37,8 +37,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public static Tool LastTool = Tool.None;
 
-        private readonly Color moveAllModeColor = Color.white;
-
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
@@ -49,9 +47,12 @@ namespace ATP.AnimationPathTools {
         #region SERIALIZED PROPERTIES
 
         protected SerializedProperty GizmoCurveColor;
-        private SerializedProperty advancedSettingsFoldout;
-        private SerializedProperty exportSamplingFrequency;
-        private SerializedProperty skin;
+        protected SerializedProperty advancedSettingsFoldout;
+        protected SerializedProperty exportSamplingFrequency;
+        protected SerializedProperty skin;
+
+        public Vector3 FirstNodeOffset { get; protected set; }
+        public Vector3 LastNodeOffset { get; protected set; }
 
         #endregion SERIALIZED PROPERTIES
 
@@ -80,6 +81,13 @@ namespace ATP.AnimationPathTools {
             if (Tools.current != Tool.None) {
                 LastTool = Tools.current;
                 Tools.current = Tool.None;
+            }
+
+            FirstNodeOffset = new Vector3(0, 0, 0);
+            LastNodeOffset = new Vector3(1, 1, 1);
+
+            if (!Script.IsInitialized) {
+                ResetPath(FirstNodeOffset, LastNodeOffset);
             }
         }
 
@@ -531,7 +539,7 @@ namespace ATP.AnimationPathTools {
                 // Allow undo this operation.
                 HandleUndo();
                 // Reset curves to its default state.
-                ResetPath();
+                ResetPath(FirstNodeOffset, LastNodeOffset);
             }
         }
 
@@ -740,10 +748,14 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        private void ResetPath() {
+        protected void ResetPath(
+            Vector3 firstNodeOffset,
+            Vector3 lastNodeOffset) {
+
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;
             // Get world point to place the Animation Path.
+            // TODO Create constant field.
             var worldPoint = sceneCamera.transform.position
                 + sceneCamera.transform.forward * 7;
             // Number of nodes to remove.
@@ -756,10 +768,10 @@ namespace ATP.AnimationPathTools {
             }
 
             // Calculate end point.
-            var endPoint = worldPoint + new Vector3(1, 1, 1);
+            var endPoint = worldPoint + lastNodeOffset;
 
             // Add beginning and end points.
-            Script.CreateNode(0, worldPoint);
+            Script.CreateNode(0, worldPoint + firstNodeOffset);
             Script.CreateNode(1, endPoint);
         }
 

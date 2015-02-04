@@ -104,6 +104,9 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
 
+        [SerializeField]
+        private AnimationCurve lookForwardCurve = new AnimationCurve();
+
         #endregion EDITOR
 
         #region FIELDS
@@ -142,11 +145,15 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
+            if (Camera.main.transform != null) {
+                animatedObject = Camera.main.transform;
+            }
             animatedObjectPath = GetComponent<AnimationPath>();
             followedObjectPath = GetComponent<TargetAnimationPath>();
 
             InitializeEaseCurve();
             InitializeRotationCurve();
+            InitializeLookForwardCurve();
 
             // Start playing animation on Start().
             isPlaying = true;
@@ -157,6 +164,14 @@ namespace ATP.AnimationPathTools {
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());
             }
+        }
+
+        private void InitializeLookForwardCurve() {
+            var firstKey = new Keyframe(0, 0.05f, 0, 0);
+            var lastKey = new Keyframe(1, 0.05f, 0, 0);
+
+            lookForwardCurve.AddKey(firstKey);
+            lookForwardCurve.AddKey(lastKey);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -245,22 +260,41 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(firstKey);
             tiltingCurve.AddKey(lastKey);
         }
+        // TODO Rename to HandleObjectRotation().
         private void RotateObject() {
+            // Look at target.
             if (animatedObject != null && followedObject != null) {
-                // Calculate direction to target.
-                var targetDirection =
-                    followedObject.position - animatedObject.position;
-                // Calculate rotation to target.
-                var rotation = Quaternion.LookRotation(
-                    targetDirection);
-                // Calculate rotation speed.
-                var speed = Time.deltaTime * rotationSpeed;
-                // Lerp rotation.
-                animatedObject.rotation = Quaternion.Slerp(
-                    animatedObject.rotation,
-                    rotation,
-                    speed);
+                RotateObjectToPosition(followedObject.position);
             }
+            // Look forward.
+            else if (animatedObject != null) {
+                Vector3 forwardPoint = GetForwardPoint();
+                RotateObjectToPosition(forwardPoint);
+            }
+        }
+
+        private Vector3 GetForwardPoint() {
+            // Timestamp offset of the forward point.
+            var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
+            // Forward point timestamp.
+            var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
+
+            return animatedObjectPath.GetVectorAtTime(forwardPointTimestamp);
+        }
+
+        private void RotateObjectToPosition(Vector3 targetPosition) {
+// Calculate direction to target.
+            var targetDirection = targetPosition - animatedObject.position;
+            // Calculate rotation to target.
+            var rotation = Quaternion.LookRotation(targetDirection);
+            // Calculate rotation speed.
+            var speed = Time.deltaTime * rotationSpeed;
+
+            // Lerp rotation.
+            animatedObject.rotation = Quaternion.Slerp(
+                animatedObject.rotation,
+                rotation,
+                speed);
         }
 
         private void TiltObject() {

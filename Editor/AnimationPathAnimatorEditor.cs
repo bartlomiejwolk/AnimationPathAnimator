@@ -30,6 +30,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty animTimeRatio;
         private SerializedProperty duration;
         private SerializedProperty easeAnimationCurve;
+        private SerializedProperty lookForwardCurve;
         private SerializedProperty followedObject;
         private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
@@ -75,6 +76,13 @@ namespace ATP.AnimationPathTools {
                     "Tilting Curve",
                     "Use it to control tilting of the animated object."));
 
+            EditorGUILayout.PropertyField(
+                lookForwardCurve,
+                new GUIContent(
+                    "Look Forward",
+                    "Use it to control how far in time animated object will " +
+                    "be looking ahead on its path."));
+
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(
@@ -116,6 +124,7 @@ namespace ATP.AnimationPathTools {
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
             easeAnimationCurve = serializedObject.FindProperty("easeCurve");
             tiltingCurve = serializedObject.FindProperty("tiltingCurve");
+            lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
             animatedObject = serializedObject.FindProperty("animatedObject");
             animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
             followedObject = serializedObject.FindProperty("followedObject");

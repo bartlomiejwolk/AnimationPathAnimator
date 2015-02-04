@@ -148,6 +148,10 @@ namespace ATP.AnimationPathTools {
             get { return tangentMode; }
             set { tangentMode = value; }
         }
+
+        public bool IsInitialized {
+            get { return (animationCurves.KeysNo >= 2); }
+        }
         #endregion PUBLIC PROPERTIES
 
         #region Unity Messages

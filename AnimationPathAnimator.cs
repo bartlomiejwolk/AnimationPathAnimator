@@ -240,19 +240,29 @@ namespace ATP.AnimationPathTools {
         }
 
         private void AnimateObject() {
-            if (animatedObject != null && animatedObjectPath != null) {
-                // Update position.
-                animatedObject.position =
-                    animatedObjectPath.GetVectorAtTime(animTimeRatio);
+            if (animatedObject == null
+                || animatedObjectPath == null
+                || !animatedObjectPath.IsInitialized) {
+
+                return;
             }
+
+            // Update position.
+            animatedObject.position =
+                animatedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
         private void AnimateTarget() {
-            if (followedObject != null && followedObjectPath != null) {
-                // Update position.
-                followedObject.position =
-                    followedObjectPath.GetVectorAtTime(animTimeRatio);
+            if (followedObject == null
+               || followedObjectPath == null
+               || !followedObjectPath.IsInitialized) {
+
+                return;
             }
+
+            // Update position.
+            followedObject.position =
+                followedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
         private IEnumerator EaseTime() {
@@ -322,14 +332,16 @@ namespace ATP.AnimationPathTools {
         }
 
         private void TiltObject() {
-            if (animatedObject != null && followedObject != null) {
-                var eulerAngles = transform.rotation.eulerAngles;
-                // Get rotation from AnimationCurve.
-                var zRotation = tiltingCurve.Evaluate(animTimeRatio);
-                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-                transform.rotation = Quaternion.Euler(eulerAngles);
-
+            if (animatedObject == null || followedObject == null) {
+                return;
             }
+
+            var eulerAngles = transform.rotation.eulerAngles;
+            // Get rotation from AnimationCurve.
+            var zRotation = tiltingCurve.Evaluate(animTimeRatio);
+            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            transform.rotation = Quaternion.Euler(eulerAngles);
+
         }
         #endregion PRIVATE METHODS
     }

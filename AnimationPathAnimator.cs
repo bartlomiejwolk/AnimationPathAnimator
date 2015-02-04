@@ -296,6 +296,8 @@ namespace ATP.AnimationPathTools {
         }
         // TODO Rename to HandleObjectRotation().
         private void RotateObject() {
+            if (!animatedObjectPath.IsInitialized) return;
+
             // Look at target.
             if (animatedObject != null && followedObject != null) {
                 RotateObjectToPosition(followedObject.position);
@@ -332,7 +334,10 @@ namespace ATP.AnimationPathTools {
         }
 
         private void TiltObject() {
-            if (animatedObject == null || followedObject == null) {
+            if (animatedObject == null
+                || followedObject == null
+                || !animatedObjectPath.IsInitialized) {
+
                 return;
             }
 

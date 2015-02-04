@@ -235,7 +235,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion DRAWING HANDLERS
 
-        #region Drawing methods
+        #region DRAWING METHODS
 
         private void DrawAddNodeButtons(
             Vector3[] nodePositions,

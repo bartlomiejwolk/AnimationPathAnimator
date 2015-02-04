@@ -17,7 +17,7 @@ namespace ATP.AnimationPathTools {
     [ExecuteInEditMode]
     public class AnimationPath : GameComponent {
 
-        #region Constants
+        #region CONSTANTS
 
         /// <summary>
         /// How many points should be drawn for one meter of a gizmo curve.
@@ -43,7 +43,7 @@ namespace ATP.AnimationPathTools {
         public const KeyCode MoveAllKey = KeyCode.H;
         #endregion Constants
 
-        #region Fields
+        #region FIELDS
 
         /// <summary>
         /// Animation curves that make the animation path.
@@ -53,7 +53,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion Fields
 
-        #region Editor
+        #region EDITOR
 
         /// <summary>
         /// If true, advenced setting in the inspector will be folded out.
@@ -154,7 +154,7 @@ namespace ATP.AnimationPathTools {
         }
         #endregion PUBLIC PROPERTIES
 
-        #region Unity Messages
+        #region UNITY MESSAGES
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
@@ -178,7 +178,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion Unity Messages
 
-        #region Public Methods
+        #region PUBLIC METHODS
 
         public float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;

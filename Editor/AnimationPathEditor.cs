@@ -20,16 +20,19 @@ namespace ATP.AnimationPathTools {
 
         private const int AddButtonH = 44;
         private const int AddButtonV = 10;
-        private const float FirstNodeSize = 0.12f;
-        private const float MovementHandleSize = 0.25f;
+        //private const float FirstNodeSize = 0.12f;
+        private const float MoveAllModeSize = 0.15f;
+        private const float MovementHandleSize = 0.12f;
         private const int RemoveButtonH = 63;
         private const int RemoveButtonV = 10;
         private const int SmoothButtonH = 25;
         private const int SmoothButtonV = 10;
+        private const float TangentHandleSize = 0.25f;
 
         #endregion CONSTANS
 
         #region FIELDS
+        private readonly Color moveAllModeColor = Color.red;
 
         /// <summary>
         /// Scene tool that was selected when game object was first selected in
@@ -53,7 +56,6 @@ namespace ATP.AnimationPathTools {
 
         public Vector3 FirstNodeOffset { get; protected set; }
         public Vector3 LastNodeOffset { get; protected set; }
-
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -314,21 +316,26 @@ namespace ATP.AnimationPathTools {
 
                 // Get handle size.
                 var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                //var sphereSize = handleSize * MovementHandleSize;
                 var sphereSize = handleSize * MovementHandleSize;
 
-                // Decide on cap function used to draw handle.
-                Handles.DrawCapFunction capFunction = Handles.SphereCap;
+                // Cap function used to draw handle.
+                Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+                // In Move All mode..
                 if (Script.MoveAllMode) {
-                    capFunction = Handles.DotCap;
-                    sphereSize = handleSize * FirstNodeSize;
+                    //capFunction = Handles.DotCap;
+                    //capFunction = Handles.SphereCap;
+                    Handles.color = moveAllModeColor;
+                    sphereSize = handleSize * MoveAllModeSize;
                 }
 
                 // Set first node handle properties.
-                if (i == 0) {
-                    capFunction = Handles.DotCap;
-                    sphereSize = handleSize * FirstNodeSize;
+                //if (i == 0) {
+                //    capFunction = Handles.CircleCap;
+                //    sphereSize = handleSize * MoveAllModeSize;
 
-                }
+                //}
 
                 // Draw handle.
                 var newPos = Handles.FreeMoveHandle(
@@ -436,7 +443,7 @@ namespace ATP.AnimationPathTools {
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
                 var handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                var sphereSize = handleSize * MovementHandleSize;
+                var sphereSize = handleSize * TangentHandleSize;
 
                 // draw node's handle.
                 var newHandleValue = Handles.FreeMoveHandle(

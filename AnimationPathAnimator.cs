@@ -157,10 +157,13 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
+            // Initialize animatedObject field.
             if (Camera.main.transform != null) {
                 animatedObject = Camera.main.transform;
             }
+            // Initialize animatedObjectPath field.
             animatedObjectPath = GetComponent<AnimationPath>();
+            // Initialize followedObjectPath field.
             followedObjectPath = GetComponent<TargetAnimationPath>();
 
             InitializeEaseCurve();
@@ -172,6 +175,18 @@ namespace ATP.AnimationPathTools {
 
             // Start animation from time ratio specified in the inspector.
             currentAnimTime = animTimeRatio * duration;
+
+            // TODO Move to separate method.
+            string followedObjectName = name + "-target";
+            GameObject followedGO= GameObject.Find(followedObjectName);
+            // If nothing was found, create a new one.
+            if (followedGO == null) {
+                followedObject = new GameObject(followedObjectName).transform;
+                followedObject.parent = gameObject.transform;
+            }
+            else {
+                followedObject = followedGO.transform;
+            }
 
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());
@@ -265,6 +280,7 @@ namespace ATP.AnimationPathTools {
                 followedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
+        // TODO Add possibility to stop when isPlaying is disabled.
         private IEnumerator EaseTime() {
             do {
                 // Increase animation time.

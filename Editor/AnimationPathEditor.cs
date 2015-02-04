@@ -298,15 +298,22 @@ namespace ATP.AnimationPathTools {
             for (var i = 0; i < nodes.Length; i++) {
                 // Set handle color.
                 Handles.color = Script.GizmoCurveColor;
+
                 // Set node color for Move All mode.
-                if (Script.MoveAllMode) {
-                    Handles.color = moveAllModeColor;
-                }
+                //if (Script.MoveAllMode) {
+                //    Handles.color = moveAllModeColor;
+                //}
+
                 // Get handle size.
                 var handleSize = HandleUtility.GetHandleSize(nodes[i]);
                 var sphereSize = handleSize * MovementHandleSize;
+
                 // Decide on cap function used to draw handle.
                 Handles.DrawCapFunction capFunction = Handles.SphereCap;
+                if (Script.MoveAllMode) {
+                    capFunction = Handles.DotCap;
+                    sphereSize = handleSize * FirstNodeSize;
+                }
 
                 // Set first node handle properties.
                 if (i == 0) {

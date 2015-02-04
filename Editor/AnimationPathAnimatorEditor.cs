@@ -118,7 +118,7 @@ namespace ATP.AnimationPathTools {
             tiltingCurve = serializedObject.FindProperty("tiltingCurve");
             animatedObject = serializedObject.FindProperty("animatedObject");
             animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
-            followedObject = serializedObject.FindProperty("animatedObject");
+            followedObject = serializedObject.FindProperty("followedObject");
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
         }
 

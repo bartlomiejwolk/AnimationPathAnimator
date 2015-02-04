@@ -296,6 +296,7 @@ namespace ATP.AnimationPathTools {
         }
         // TODO Rename to HandleObjectRotation().
         private void RotateObject() {
+            // TODO Move this condition to Animate().
             if (!animatedObjectPath.IsInitialized) return;
 
             // Look at target.

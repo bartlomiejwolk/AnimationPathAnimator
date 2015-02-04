@@ -194,7 +194,10 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
+            if (followedObject != null) return;
+
             Vector3 forwardPoint = GetForwardPoint();
             Vector3 size = new Vector3(
                 LookForwardGizmoSize,

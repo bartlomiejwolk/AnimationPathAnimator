@@ -1,6 +1,7 @@
 ﻿using ATP.ReorderableList;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using OneDayGame.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -171,20 +172,6 @@ namespace ATP.AnimationPathTools {
 
             CreateTargetGO();
         }
-
-        public void CreateTargetGO() {
-            string followedGOName = name + "-target";
-            GameObject followedGO = GameObject.Find(followedGOName);
-            // If nothing was found, create a new one.
-            if (followedGO == null) {
-                followedObject = new GameObject(followedGOName).transform;
-                followedObject.parent = gameObject.transform;
-            }
-            else {
-                followedObject = followedGO.transform;
-            }
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
             InitializeEaseCurve();
@@ -201,15 +188,6 @@ namespace ATP.AnimationPathTools {
                 StartCoroutine(EaseTime());
             }
         }
-
-        private void InitializeLookForwardCurve() {
-            var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
-            var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
-
-            lookForwardCurve.AddKey(firstKey);
-            lookForwardCurve.AddKey(lastKey);
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
@@ -249,6 +227,27 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
+        private void InitializeLookForwardCurve() {
+            var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
+            var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
+
+            lookForwardCurve.AddKey(firstKey);
+            lookForwardCurve.AddKey(lastKey);
+        }
+
+        private void CreateTargetGO() {
+            string followedGOName = name + "-target";
+            GameObject followedGO = GameObject.Find(followedGOName);
+            // If nothing was found, create a new one.
+            if (followedGO == null) {
+                followedObject = new GameObject(followedGOName).transform;
+                //followedObject.parent = gameObject.transform;
+            }
+            else {
+                followedObject = followedGO.transform;
+            }
+        }
+
 
         private void Animate() {
             // Animate target.

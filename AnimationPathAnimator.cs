@@ -329,12 +329,12 @@ namespace ATP.AnimationPathTools {
                 && followedObject != null
                 && !lookForwardMode) {
 
-                RotateObjectToPosition(followedObject.position);
+                RotateObjectWithSlerp(followedObject.position);
             }
             // Look forward.
             else if (animatedObject != null && lookForwardMode) {
                 Vector3 forwardPoint = GetForwardPoint();
-                RotateObjectToPosition(forwardPoint);
+                RotateObjectWithSlerp(forwardPoint);
             }
         }
 
@@ -347,7 +347,7 @@ namespace ATP.AnimationPathTools {
             return animatedObjectPath.GetVectorAtTime(forwardPointTimestamp);
         }
 
-        private void RotateObjectToPosition(Vector3 targetPosition) {
+        private void RotateObjectWithSlerp(Vector3 targetPosition) {
             // There's no more points to look at.
             if (targetPosition == animatedObject.position) return;
 

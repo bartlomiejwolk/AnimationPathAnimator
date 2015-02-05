@@ -35,6 +35,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
         private SerializedProperty tiltingCurve;
+        private SerializedProperty lookForwardMode;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -83,6 +84,12 @@ namespace ATP.AnimationPathTools {
                     "Use it to control how far in time animated object will " +
                     "be looking ahead on its path."));
 
+            EditorGUILayout.PropertyField(
+                lookForwardMode,
+                new GUIContent(
+                    "Look Forward Mode",
+                    "Ignore target object and look ahead."));
+
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(
@@ -109,11 +116,11 @@ namespace ATP.AnimationPathTools {
                     "Follow Object Path",
                     "Path for the followed object."));
 
-            EditorGUILayout.Space();
+            //EditorGUILayout.Space();
 
-            if (GUILayout.Button(new GUIContent("Create Target", ""))) {
-                script.CreateTargetGO();
-            }
+            //if (GUILayout.Button(new GUIContent("Create Target", ""))) {
+            //    script.CreateTargetGO();
+            //}
 
             // Save changes.
             serializedObject.ApplyModifiedProperties();
@@ -135,6 +142,7 @@ namespace ATP.AnimationPathTools {
             animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
             followedObject = serializedObject.FindProperty("followedObject");
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
+            lookForwardMode = serializedObject.FindProperty("lookForwardMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

@@ -107,6 +107,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationCurve lookForwardCurve = new AnimationCurve();
 
+        [SerializeField]
+        private bool lookForwardMode;
+
         #endregion EDITOR
 
         #region FIELDS
@@ -166,7 +169,7 @@ namespace ATP.AnimationPathTools {
             // Initialize followedObjectPath field.
             followedObjectPath = GetComponent<TargetAnimationPath>();
 
-            //CreateTargetGO();
+            CreateTargetGO();
         }
 
         public void CreateTargetGO() {
@@ -322,11 +325,14 @@ namespace ATP.AnimationPathTools {
             if (!animatedObjectPath.IsInitialized) return;
 
             // Look at target.
-            if (animatedObject != null && followedObject != null) {
+            if (animatedObject != null
+                && followedObject != null
+                && !lookForwardMode) {
+
                 RotateObjectToPosition(followedObject.position);
             }
             // Look forward.
-            else if (animatedObject != null) {
+            else if (animatedObject != null && lookForwardMode) {
                 Vector3 forwardPoint = GetForwardPoint();
                 RotateObjectToPosition(forwardPoint);
             }

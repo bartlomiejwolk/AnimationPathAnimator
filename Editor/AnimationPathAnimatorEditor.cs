@@ -77,20 +77,29 @@ namespace ATP.AnimationPathTools {
                     "Tilting Curve",
                     "Use it to control tilting of the animated object."));
 
+            //EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            //lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
+            //    new GUIContent(
+            //        "Look Forward",
+            //        "Ignore target object and look ahead."),
+            //        lookForwardMode.boolValue,
+            //        GUILayout.Width(115));
+
+            EditorGUILayout.PropertyField(
+                lookForwardMode,
+                new GUIContent(
+                    "Look Forward",
+                    "Ignore target object and look ahead."));
+
             EditorGUILayout.PropertyField(
                 lookForwardCurve,
                 new GUIContent(
-                    "Look Forward",
+                    "",
                     "Use it to control how far in time animated object will " +
                     "be looking ahead on its path."));
-
-            EditorGUILayout.Space();
-
-            lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
-                new GUIContent(
-                    "Look Forward Mode",
-                    "Ignore target object and look ahead."),
-                    lookForwardMode.boolValue);
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 

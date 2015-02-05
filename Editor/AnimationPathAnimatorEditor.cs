@@ -109,6 +109,12 @@ namespace ATP.AnimationPathTools {
                     "Follow Object Path",
                     "Path for the followed object."));
 
+            EditorGUILayout.Space();
+
+            if (GUILayout.Button(new GUIContent("Create Target", ""))) {
+                script.CreateTargetGO();
+            }
+
             // Save changes.
             serializedObject.ApplyModifiedProperties();
         }

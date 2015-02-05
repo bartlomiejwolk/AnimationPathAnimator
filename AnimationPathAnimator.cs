@@ -156,9 +156,9 @@ namespace ATP.AnimationPathTools {
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void Start() {
+        private void Awake() {
             // Initialize animatedObject field.
-            if (Camera.main.transform != null) {
+            if (animatedObject == null && Camera.main.transform != null) {
                 animatedObject = Camera.main.transform;
             }
             // Initialize animatedObjectPath field.
@@ -166,6 +166,24 @@ namespace ATP.AnimationPathTools {
             // Initialize followedObjectPath field.
             followedObjectPath = GetComponent<TargetAnimationPath>();
 
+            //CreateTargetGO();
+        }
+
+        public void CreateTargetGO() {
+            string followedGOName = name + "-target";
+            GameObject followedGO = GameObject.Find(followedGOName);
+            // If nothing was found, create a new one.
+            if (followedGO == null) {
+                followedObject = new GameObject(followedGOName).transform;
+                followedObject.parent = gameObject.transform;
+            }
+            else {
+                followedObject = followedGO.transform;
+            }
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void Start() {
             InitializeEaseCurve();
             InitializeRotationCurve();
             InitializeLookForwardCurve();
@@ -175,18 +193,6 @@ namespace ATP.AnimationPathTools {
 
             // Start animation from time ratio specified in the inspector.
             currentAnimTime = animTimeRatio * duration;
-
-            // TODO Move to separate method.
-            string followedObjectName = name + "-target";
-            GameObject followedGO= GameObject.Find(followedObjectName);
-            // If nothing was found, create a new one.
-            if (followedGO == null) {
-                followedObject = new GameObject(followedObjectName).transform;
-                followedObject.parent = gameObject.transform;
-            }
-            else {
-                followedObject = followedGO.transform;
-            }
 
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());

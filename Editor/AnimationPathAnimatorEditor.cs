@@ -86,7 +86,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.ToggleLeft(
+            lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
                 new GUIContent(
                     "Look Forward Mode",
                     "Ignore target object and look ahead."),

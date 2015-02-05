@@ -198,14 +198,14 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
-            if (followedObject != null) return;
+            //if (followedObject != null) return;
 
-            Vector3 forwardPoint = GetForwardPoint();
-            Vector3 size = new Vector3(
-                LookForwardGizmoSize,
-                LookForwardGizmoSize,
-                LookForwardGizmoSize);
-            Gizmos.DrawWireCube(forwardPoint, size);
+            //Vector3 forwardPoint = GetForwardPoint();
+            //Vector3 size = new Vector3(
+            //    LookForwardGizmoSize,
+            //    LookForwardGizmoSize,
+            //    LookForwardGizmoSize);
+            //Gizmos.DrawWireCube(forwardPoint, size);
         }
 
         #endregion UNITY MESSAGES
@@ -355,7 +355,7 @@ namespace ATP.AnimationPathTools {
             animatedObject.LookAt(targetPos);
         }
 
-        private Vector3 GetForwardPoint() {
+        public Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
             // Forward point timestamp.

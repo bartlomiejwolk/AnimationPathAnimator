@@ -169,7 +169,22 @@ namespace ATP.AnimationPathTools {
             // Save changes
             serializedObject.ApplyModifiedProperties();
 
+            HandleDrawingForwardPointHandle();
+
             script.UpdateAnimation();
+        }
+
+        private void HandleDrawingForwardPointHandle() {
+            if (!lookForwardMode.boolValue) return;
+
+            var targetPos = script.GetForwardPoint();
+            // TODO Create class field with this style.
+            var style = new GUIStyle {
+                normal = {textColor = Color.white},
+                fontStyle = FontStyle.Bold,
+            };
+
+            Handles.Label(targetPos, "Target", style);
         }
 
         #endregion UNITY MESSAGES

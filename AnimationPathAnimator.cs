@@ -320,6 +320,7 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(lastKey);
         }
         // TODO Rename to HandleObjectRotation().
+        // TODO Refactor.
         private void RotateObject() {
             // TODO Move this condition to Animate().
             if (!animatedObjectPath.IsInitialized) return;
@@ -329,13 +330,30 @@ namespace ATP.AnimationPathTools {
                 && followedObject != null
                 && !lookForwardMode) {
 
-                RotateObjectWithSlerp(followedObject.position);
+                // In play mode use Quaternion.Slerp();
+                if (Application.isPlaying) {
+                    RotateObjectWithSlerp(followedObject.position);
+                }
+                // In editor mode use Transform.LookAt().
+                else {
+                    RotateObjectWithLookAt(followedObject.position);
+                }
             }
             // Look forward.
             else if (animatedObject != null && lookForwardMode) {
                 Vector3 forwardPoint = GetForwardPoint();
-                RotateObjectWithSlerp(forwardPoint);
+
+                if (Application.isPlaying) {
+                    RotateObjectWithSlerp(forwardPoint);
+                }
+                else {
+                    RotateObjectWithLookAt(forwardPoint);
+                }
             }
+        }
+
+        private void RotateObjectWithLookAt(Vector3 targetPos) {
+            animatedObject.LookAt(targetPos);
         }
 
         private Vector3 GetForwardPoint() {

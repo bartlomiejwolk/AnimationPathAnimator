@@ -85,8 +85,8 @@ namespace ATP.AnimationPathTools {
                 Tools.current = Tool.None;
             }
 
-            FirstNodeOffset = new Vector3(1, -1, 0);
-            LastNodeOffset = new Vector3(2, 0, 1);
+            FirstNodeOffset = new Vector3(0.3f, -0.3f, 1);
+            LastNodeOffset = new Vector3(1.3f, 0.3f, 2);
 
             if (!Script.IsInitialized) {
                 ResetPath(FirstNodeOffset, LastNodeOffset);

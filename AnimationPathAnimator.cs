@@ -1,7 +1,6 @@
 ﻿using ATP.ReorderableList;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using OneDayGame.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {

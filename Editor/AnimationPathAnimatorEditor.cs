@@ -30,10 +30,12 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty animTimeRatio;
         private SerializedProperty duration;
         private SerializedProperty easeAnimationCurve;
+        private SerializedProperty lookForwardCurve;
         private SerializedProperty followedObject;
         private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
         private SerializedProperty tiltingCurve;
+        private SerializedProperty lookForwardMode;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -75,6 +77,30 @@ namespace ATP.AnimationPathTools {
                     "Tilting Curve",
                     "Use it to control tilting of the animated object."));
 
+            //EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
+                new GUIContent(
+                    "Look Forward",
+                    "Ignore target object and look ahead."),
+                    lookForwardMode.boolValue,
+                    GUILayout.Width(116));
+
+            //EditorGUILayout.PropertyField(
+            //    lookForwardMode,
+            //    new GUIContent(
+            //        "Look Forward",
+            //        "Ignore target object and look ahead."));
+
+            EditorGUILayout.PropertyField(
+                lookForwardCurve,
+                new GUIContent(
+                    "",
+                    "Use it to control how far in time animated object will " +
+                    "be looking ahead on its path."));
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(
@@ -92,14 +118,20 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.PropertyField(
                 followedObject,
                 new GUIContent(
-                    "Followed Object",
+                    "Target Object",
                     "Object that the animated object will be looking at."));
 
             EditorGUILayout.PropertyField(
                 followedObjectPath,
                 new GUIContent(
-                    "Follow Object Path",
+                    "Target Object Path",
                     "Path for the followed object."));
+
+            //EditorGUILayout.Space();
+
+            //if (GUILayout.Button(new GUIContent("Create Target", ""))) {
+            //    script.CreateTargetGO();
+            //}
 
             // Save changes.
             serializedObject.ApplyModifiedProperties();
@@ -116,10 +148,12 @@ namespace ATP.AnimationPathTools {
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
             easeAnimationCurve = serializedObject.FindProperty("easeCurve");
             tiltingCurve = serializedObject.FindProperty("tiltingCurve");
+            lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
             animatedObject = serializedObject.FindProperty("animatedObject");
             animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
-            followedObject = serializedObject.FindProperty("animatedObject");
+            followedObject = serializedObject.FindProperty("followedObject");
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
+            lookForwardMode = serializedObject.FindProperty("lookForwardMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -135,7 +169,38 @@ namespace ATP.AnimationPathTools {
             // Save changes
             serializedObject.ApplyModifiedProperties();
 
+            HandleDrawingForwardPointGizmo();
+            HandleDrawingTargetGizmo();
+
             script.UpdateAnimation();
+        }
+
+        private void HandleDrawingTargetGizmo() {
+            if (followedObject.objectReferenceValue == null) return;
+
+            var targetPos =
+                ((Transform) followedObject.objectReferenceValue).position;
+            // TODO Create class field with this style.
+            var style = new GUIStyle {
+                normal = {textColor = Color.white},
+                fontStyle = FontStyle.Bold,
+            };
+
+            Handles.Label(targetPos, "Target", style);
+        
+        }
+
+        private void HandleDrawingForwardPointGizmo() {
+            if (!lookForwardMode.boolValue) return;
+
+            var targetPos = script.GetForwardPoint();
+            // TODO Create class field with this style.
+            var style = new GUIStyle {
+                normal = {textColor = Color.white},
+                fontStyle = FontStyle.Bold,
+            };
+
+            Handles.Label(targetPos, "Point", style);
         }
 
         #endregion UNITY MESSAGES

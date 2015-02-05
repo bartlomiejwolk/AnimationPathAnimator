@@ -66,9 +66,31 @@ namespace ATP.AnimationPathTools {
         }
 
         protected override void OnEnable() {
-            base.OnEnable();
+            // TODO Move to separate method and make those private again.
+            // TODO Use base.OnEnable() again.
+            // Initialize serialized properties.
+            GizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
+            skin = serializedObject.FindProperty("skin");
+            exportSamplingFrequency =
+                serializedObject.FindProperty("exportSamplingFrequency");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
 
             Script = (TargetAnimationPath)target;
+
+            // TODO Move to separate method.
+            // Remember active scene tool.
+            if (Tools.current != Tool.None) {
+                LastTool = Tools.current;
+                Tools.current = Tool.None;
+            }
+
+            FirstNodeOffset = new Vector3(0.3f, -0.3f, 1);
+            LastNodeOffset = new Vector3(1.3f, 0.3f, 2);
+
+            if (!Script.IsInitialized) {
+                ResetPath(FirstNodeOffset, LastNodeOffset);
+            }
 
             // Set default gizmo curve color.
             Script.GizmoCurveColor = Color.magenta;

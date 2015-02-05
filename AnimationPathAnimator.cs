@@ -1,6 +1,7 @@
 ﻿using ATP.ReorderableList;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using OneDayGame.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -75,7 +76,7 @@ namespace ATP.AnimationPathTools {
         /// Animation duration in seconds.
         /// </summary>
         [SerializeField]
-        private float duration = 20;
+        private float duration = 10;
 
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -86,6 +87,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
+        // TODO Rename to targetObject.
         private Transform followedObject;
 
         /// <summary>
@@ -104,6 +106,12 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
 
+        [SerializeField]
+        private AnimationCurve lookForwardCurve = new AnimationCurve();
+
+        [SerializeField]
+        private bool lookForwardMode;
+
         #endregion EDITOR
 
         #region FIELDS
@@ -120,6 +128,18 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
+
+        private const float LookForwardGizmoSize = 0.5f;
+
+        /// <summary>
+        /// How much look forward point should be positioned away from the
+        /// animated object.
+        /// </summary>
+        /// <remarks>
+        /// Value is a time in range from 0 to 1.
+        /// </remarks>
+        private const float LookForwardTimeDelta = 0.03f;
+
         #endregion FIELDS
 
         #region UNITY MESSAGES
@@ -141,12 +161,23 @@ namespace ATP.AnimationPathTools {
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void Start() {
+        private void Awake() {
+            // Initialize animatedObject field.
+            if (animatedObject == null && Camera.main.transform != null) {
+                animatedObject = Camera.main.transform;
+            }
+            // Initialize animatedObjectPath field.
             animatedObjectPath = GetComponent<AnimationPath>();
+            // Initialize followedObjectPath field.
             followedObjectPath = GetComponent<TargetAnimationPath>();
 
+            CreateTargetGO();
+        }
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void Start() {
             InitializeEaseCurve();
             InitializeRotationCurve();
+            InitializeLookForwardCurve();
 
             // Start playing animation on Start().
             isPlaying = true;
@@ -158,13 +189,24 @@ namespace ATP.AnimationPathTools {
                 StartCoroutine(EaseTime());
             }
         }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
             if (Application.isPlaying && isPlaying) {
                 Animate();
             }
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnDrawGizmosSelected() {
+            //if (followedObject != null) return;
+
+            //Vector3 forwardPoint = GetForwardPoint();
+            //Vector3 size = new Vector3(
+            //    LookForwardGizmoSize,
+            //    LookForwardGizmoSize,
+            //    LookForwardGizmoSize);
+            //Gizmos.DrawWireCube(forwardPoint, size);
         }
 
         #endregion UNITY MESSAGES
@@ -186,6 +228,27 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
+        private void InitializeLookForwardCurve() {
+            var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
+            var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
+
+            lookForwardCurve.AddKey(firstKey);
+            lookForwardCurve.AddKey(lastKey);
+        }
+
+        private void CreateTargetGO() {
+            string followedGOName = name + "-target";
+            GameObject followedGO = GameObject.Find(followedGOName);
+            // If nothing was found, create a new one.
+            if (followedGO == null) {
+                followedObject = new GameObject(followedGOName).transform;
+                //followedObject.parent = gameObject.transform;
+            }
+            else {
+                followedObject = followedGO.transform;
+            }
+        }
+
 
         private void Animate() {
             // Animate target.
@@ -201,21 +264,32 @@ namespace ATP.AnimationPathTools {
         }
 
         private void AnimateObject() {
-            if (animatedObject != null && animatedObjectPath != null) {
-                // Update position.
-                animatedObject.position =
-                    animatedObjectPath.GetVectorAtTime(animTimeRatio);
+            if (animatedObject == null
+                || animatedObjectPath == null
+                || !animatedObjectPath.IsInitialized) {
+
+                return;
             }
+
+            // Update position.
+            animatedObject.position =
+                animatedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
         private void AnimateTarget() {
-            if (followedObject != null && followedObjectPath != null) {
-                // Update position.
-                followedObject.position =
-                    followedObjectPath.GetVectorAtTime(animTimeRatio);
+            if (followedObject == null
+               || followedObjectPath == null
+               || !followedObjectPath.IsInitialized) {
+
+                return;
             }
+
+            // Update position.
+            followedObject.position =
+                followedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
+        // TODO Add possibility to stop when isPlaying is disabled.
         private IEnumerator EaseTime() {
             do {
                 // Increase animation time.
@@ -245,33 +319,84 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(firstKey);
             tiltingCurve.AddKey(lastKey);
         }
+        // TODO Rename to HandleObjectRotation().
+        // TODO Refactor.
         private void RotateObject() {
-            if (animatedObject != null && followedObject != null) {
-                // Calculate direction to target.
-                var targetDirection =
-                    followedObject.position - animatedObject.position;
-                // Calculate rotation to target.
-                var rotation = Quaternion.LookRotation(
-                    targetDirection);
-                // Calculate rotation speed.
-                var speed = Time.deltaTime * rotationSpeed;
-                // Lerp rotation.
-                animatedObject.rotation = Quaternion.Slerp(
-                    animatedObject.rotation,
-                    rotation,
-                    speed);
+            // TODO Move this condition to Animate().
+            if (!animatedObjectPath.IsInitialized) return;
+
+            // Look at target.
+            if (animatedObject != null
+                && followedObject != null
+                && !lookForwardMode) {
+
+                // In play mode use Quaternion.Slerp();
+                if (Application.isPlaying) {
+                    RotateObjectWithSlerp(followedObject.position);
+                }
+                // In editor mode use Transform.LookAt().
+                else {
+                    RotateObjectWithLookAt(followedObject.position);
+                }
+            }
+            // Look forward.
+            else if (animatedObject != null && lookForwardMode) {
+                Vector3 forwardPoint = GetForwardPoint();
+
+                if (Application.isPlaying) {
+                    RotateObjectWithSlerp(forwardPoint);
+                }
+                else {
+                    RotateObjectWithLookAt(forwardPoint);
+                }
             }
         }
 
-        private void TiltObject() {
-            if (animatedObject != null && followedObject != null) {
-                var eulerAngles = transform.rotation.eulerAngles;
-                // Get rotation from AnimationCurve.
-                var zRotation = tiltingCurve.Evaluate(animTimeRatio);
-                eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-                transform.rotation = Quaternion.Euler(eulerAngles);
+        private void RotateObjectWithLookAt(Vector3 targetPos) {
+            animatedObject.LookAt(targetPos);
+        }
 
+        public Vector3 GetForwardPoint() {
+            // Timestamp offset of the forward point.
+            var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
+            // Forward point timestamp.
+            var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
+
+            return animatedObjectPath.GetVectorAtTime(forwardPointTimestamp);
+        }
+
+        private void RotateObjectWithSlerp(Vector3 targetPosition) {
+            // There's no more points to look at.
+            if (targetPosition == animatedObject.position) return;
+
+            // Calculate direction to target.
+            var targetDirection = targetPosition - animatedObject.position;
+            // Calculate rotation to target.
+            var rotation = Quaternion.LookRotation(targetDirection);
+            // Calculate rotation speed.
+            var speed = Time.deltaTime * rotationSpeed;
+
+            // Lerp rotation.
+            animatedObject.rotation = Quaternion.Slerp(
+                animatedObject.rotation,
+                rotation,
+                speed);
+        }
+
+        private void TiltObject() {
+            if (animatedObject == null
+                || followedObject == null
+                || !animatedObjectPath.IsInitialized) {
+
+                return;
             }
+
+            var eulerAngles = transform.rotation.eulerAngles;
+            // Get rotation from AnimationCurve.
+            var zRotation = tiltingCurve.Evaluate(animTimeRatio);
+            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            transform.rotation = Quaternion.Euler(eulerAngles);
+
         }
         #endregion PRIVATE METHODS
     }

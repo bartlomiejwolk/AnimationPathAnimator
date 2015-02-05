@@ -84,11 +84,13 @@ namespace ATP.AnimationPathTools {
                     "Use it to control how far in time animated object will " +
                     "be looking ahead on its path."));
 
-            EditorGUILayout.PropertyField(
-                lookForwardMode,
+            EditorGUILayout.Space();
+
+            EditorGUILayout.ToggleLeft(
                 new GUIContent(
                     "Look Forward Mode",
-                    "Ignore target object and look ahead."));
+                    "Ignore target object and look ahead."),
+                    lookForwardMode.boolValue);
 
             EditorGUILayout.Space();
 

@@ -348,7 +348,10 @@ namespace ATP.AnimationPathTools {
         }
 
         private void RotateObjectToPosition(Vector3 targetPosition) {
-// Calculate direction to target.
+            // There's no more points to look at.
+            if (targetPosition == animatedObject.position) return;
+
+            // Calculate direction to target.
             var targetDirection = targetPosition - animatedObject.position;
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);

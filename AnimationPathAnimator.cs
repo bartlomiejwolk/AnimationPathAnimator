@@ -87,6 +87,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
+        // TODO Rename to targetObject.
         private Transform followedObject;
 
         /// <summary>

@@ -118,13 +118,13 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.PropertyField(
                 followedObject,
                 new GUIContent(
-                    "Followed Object",
+                    "Target Object",
                     "Object that the animated object will be looking at."));
 
             EditorGUILayout.PropertyField(
                 followedObjectPath,
                 new GUIContent(
-                    "Follow Object Path",
+                    "Target Object Path",
                     "Path for the followed object."));
 
             //EditorGUILayout.Space();

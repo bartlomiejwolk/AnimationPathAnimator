@@ -80,18 +80,18 @@ namespace ATP.AnimationPathTools {
             //EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
-            //lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
-            //    new GUIContent(
-            //        "Look Forward",
-            //        "Ignore target object and look ahead."),
-            //        lookForwardMode.boolValue,
-            //        GUILayout.Width(115));
-
-            EditorGUILayout.PropertyField(
-                lookForwardMode,
+            lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
                 new GUIContent(
                     "Look Forward",
-                    "Ignore target object and look ahead."));
+                    "Ignore target object and look ahead."),
+                    lookForwardMode.boolValue,
+                    GUILayout.Width(116));
+
+            //EditorGUILayout.PropertyField(
+            //    lookForwardMode,
+            //    new GUIContent(
+            //        "Look Forward",
+            //        "Ignore target object and look ahead."));
 
             EditorGUILayout.PropertyField(
                 lookForwardCurve,

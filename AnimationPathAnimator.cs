@@ -76,7 +76,7 @@ namespace ATP.AnimationPathTools {
         /// Animation duration in seconds.
         /// </summary>
         [SerializeField]
-        private float duration = 20;
+        private float duration = 10;
 
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local

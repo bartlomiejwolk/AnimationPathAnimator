@@ -169,12 +169,28 @@ namespace ATP.AnimationPathTools {
             // Save changes
             serializedObject.ApplyModifiedProperties();
 
-            HandleDrawingForwardPointHandle();
+            HandleDrawingForwardPointGizmo();
+            HandleDrawingTargetGizmo();
 
             script.UpdateAnimation();
         }
 
-        private void HandleDrawingForwardPointHandle() {
+        private void HandleDrawingTargetGizmo() {
+            if (followedObject.objectReferenceValue == null) return;
+
+            var targetPos =
+                ((Transform) followedObject.objectReferenceValue).position;
+            // TODO Create class field with this style.
+            var style = new GUIStyle {
+                normal = {textColor = Color.white},
+                fontStyle = FontStyle.Bold,
+            };
+
+            Handles.Label(targetPos, "Target", style);
+        
+        }
+
+        private void HandleDrawingForwardPointGizmo() {
             if (!lookForwardMode.boolValue) return;
 
             var targetPos = script.GetForwardPoint();
@@ -184,7 +200,7 @@ namespace ATP.AnimationPathTools {
                 fontStyle = FontStyle.Bold,
             };
 
-            Handles.Label(targetPos, "Target", style);
+            Handles.Label(targetPos, "Point", style);
         }
 
         #endregion UNITY MESSAGES

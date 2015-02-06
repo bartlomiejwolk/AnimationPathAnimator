@@ -1,4 +1,5 @@
-﻿using ATP.ReorderableList;
+﻿using System;
+using ATP.ReorderableList;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
@@ -179,6 +180,21 @@ namespace ATP.AnimationPathTools {
 
             CreateTargetGO();
         }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnEnable() {
+            animatedObjectPath.PathChanged += AnimatedObjectPathOnPathChanged;
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnDisable() {
+            animatedObjectPath.PathChanged -= AnimatedObjectPathOnPathChanged;
+        }
+
+        private void AnimatedObjectPathOnPathChanged(object sender, EventArgs eventArgs) {
+            throw new NotImplementedException();
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
             InitializeEaseCurve();

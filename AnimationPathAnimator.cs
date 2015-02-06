@@ -139,6 +139,13 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         private const float LookForwardTimeDelta = 0.03f;
 
+        /// <summary>
+        /// Path used to animate the <c>animatedObject</c> transform.
+        /// </summary>
+        public AnimationPath AnimatedObjectPath {
+            get { return animatedObjectPath; }
+        }
+
         #endregion FIELDS
 
         #region UNITY MESSAGES

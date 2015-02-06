@@ -171,8 +171,45 @@ namespace ATP.AnimationPathTools {
 
             HandleDrawingForwardPointGizmo();
             HandleDrawingTargetGizmo();
+            HandleDrawingEaseHandles();
 
             script.UpdateAnimation();
+        }
+
+        private float value = 300.0f;
+        private void HandleDrawingEaseHandles() {
+            Handles.color = Color.red;
+			/*Handles.Label(
+			  script.transform.position + Vector3.up * 1.5f,
+			  "ThresholdAngle: " + script.ThresholdAngle.ToString(),
+			  script.LabelStyle);*/
+            var center = script.AnimatedObjectPath.GetNodePosition(1);
+            // TODO Create constant.
+            var radius = 0.5f;
+
+			Handles.DrawWireArc(
+                    center,
+					Vector3.up, 
+					// Make the arc simetrical on the left and right
+					// side of the object.
+                    Quaternion.AngleAxis(
+                        -value / 2,
+                        Vector3.up) * Vector3.forward,
+                    //Quaternion.AngleAxis(-value/2, Vector3.up).eulerAngles,
+					value,
+					radius);
+
+            Handles.color = Color.red;
+            var handleSize = HandleUtility.GetHandleSize(center);
+            // TODO Create constant.
+            var scaleHandleSize = handleSize*1.5f;
+            value = Handles.ScaleValueHandle(
+                    value,
+                    center + Vector3.up + Vector3.forward * radius * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
         }
 
         private void HandleDrawingTargetGizmo() {

@@ -2,6 +2,8 @@
 using ATP.ReorderableList;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Remoting.Messaging;
+using DemoApplication;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -192,7 +194,86 @@ namespace ATP.AnimationPathTools {
         }
 
         private void AnimatedObjectPathOnPathChanged(object sender, EventArgs eventArgs) {
-            throw new NotImplementedException();
+            // For each node timestamp in AnimationPath, check if there's a key with
+            // same value as the timestamp.
+            var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
+            // Get values from easeCurve.
+            var easeCurveValues = new float[easeCurve.length];
+            for (var i = 0; i < easeCurveValues.Length; i++) {
+                easeCurveValues[i] = easeCurve.keys[i].value;
+            }
+
+            for (var i = 0; i < nodeTimestamps.Length; i++) {
+                bool valueExists = false;
+                for (var j = 0; j < easeCurveValues.Length; j++) {
+                    if (Math.Abs(nodeTimestamps[i] - easeCurveValues[j]) < 0.001f) {
+                        valueExists = true;
+                        break;
+                    }
+                }
+
+                // Add missing key.
+                if (!valueExists) {
+                    AddKeyToEaseCurve(nodeTimestamps[i]);
+                    // Only one node could be added to the path in one frame.
+                    break;
+                }
+            }
+
+            // If there's not, create a new key with this value and the corresponding
+            // timestamp in the ease curve.
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value">Value for the new key in <c>easeCurve</c>.</param>
+        private void AddKeyToEaseCurve(float value) {
+            // TODO Make it a class field.
+            const float precision = 0.001f;
+            float time = FindTimestampForValue(easeCurve, value, precision);
+            easeCurve.AddKey(time, value);
+        }
+
+        private float FindTimestampForValue(
+            AnimationCurve curve,
+            float value,
+            float precision) {
+
+            var timestamp = 0f;
+            bool timestampFound = false;
+
+            // Search for timestamp.
+            while (timestampFound == false) {
+                var easeCurveValue = curve.Evaluate(timestamp);
+                // Check the given timestamp generates expected value;
+                if (Math.Abs(easeCurveValue - value) < precision) {
+                    timestampFound = true;
+                }
+
+                timestamp = CalculateNewTestTimestamp(curve, timestamp, value);
+            }
+
+            return timestamp;
+        }
+
+        private float CalculateNewTestTimestamp(
+            AnimationCurve curve,
+            float currentTimestamp,
+            float desiredValue) {
+
+            var newTimestamp = RootFinding.Brent(
+                EvaluateTimestamp, 
+                0,
+                1,
+                1e-10,
+                desiredValue);
+
+            return (float)newTimestamp;
+        }
+
+        private double EvaluateTimestamp(double x) {
+            return easeCurve.Evaluate((float)x);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

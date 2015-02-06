@@ -194,7 +194,45 @@ namespace ATP.AnimationPathTools {
         }
 
         private void AnimatedObjectPathOnPathChanged(object sender, EventArgs eventArgs) {
-            // For each node timestamp in AnimationPath, check if there's a key with
+            UpdateEaseCurve();
+
+            // If there's not, create a new key with this value and the corresponding
+            // timestamp in the ease curve.
+        }
+
+        private void UpdateEaseCurve() {
+            UpdateEaseCurveWithAddedKeys();
+            UpdateEaseCurveWithRemovedKeys();
+        }
+
+        private void UpdateEaseCurveWithRemovedKeys() {
+            // AnimationPath node timestamps.
+            var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
+            // Get values from easeCurve.
+            var easeCurveValues = new float[easeCurve.length];
+            for (var i = 0; i < easeCurveValues.Length; i++) {
+                easeCurveValues[i] = easeCurve.keys[i].value;
+            }
+
+            // For each value in easeCurve..
+            for (var i = 0; i < easeCurveValues.Length; i++) {
+                var keyExists = false;
+                for (var j = 0; j < nodeTimestamps.Length; j++) {
+                    if (Math.Abs(easeCurveValues[i] - nodeTimestamps[j]) < 0.001f) {
+                        keyExists = true;
+                        break;
+                    }
+                }
+
+                if (!keyExists) {
+                    easeCurve.RemoveKey(i);
+                    break;
+                }
+            }
+        }
+
+        private void UpdateEaseCurveWithAddedKeys() {
+// For each node timestamp in AnimationPath, check if there's a key with
             // same value as the timestamp.
             var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
             // Get values from easeCurve.
@@ -219,9 +257,6 @@ namespace ATP.AnimationPathTools {
                     break;
                 }
             }
-
-            // If there's not, create a new key with this value and the corresponding
-            // timestamp in the ease curve.
         }
 
         /// <summary>

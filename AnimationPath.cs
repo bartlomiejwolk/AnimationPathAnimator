@@ -1,4 +1,5 @@
-﻿using ATP.ReorderableList;
+﻿using System;
+using ATP.ReorderableList;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
@@ -44,6 +45,8 @@ namespace ATP.AnimationPathTools {
         #endregion Constants
 
         #region FIELDS
+
+        public event EventHandler PathChanged;
 
         /// <summary>
         /// Animation curves that make the animation path.
@@ -552,5 +555,10 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
+
+        public virtual void OnPathChanged() {
+            var handler = PathChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
     }
 }

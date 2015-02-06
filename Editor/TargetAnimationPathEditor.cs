@@ -6,31 +6,13 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(TargetAnimationPath))]
     public class TargetAnimationPathEditor : AnimationPathEditor {
 
-        protected override void OnEnable() {
-            base.OnEnable();
-
-            script = (TargetAnimationPath)target;
-
-            // Set default gizmo curve color.
-            script.GizmoCurveColor = Color.magenta;
-        }
-
         protected override void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
             HandleUndo();
 
             // Add a new node.
-            AddNewNode(nodeIndex);
+            AddNodeBetween(nodeIndex);
         }
-
-        //protected override void DrawLinearTangentModeButtonsCallbackHandler(
-        //            int nodeIndex) {
-
-        //    // Make snapshot of the target object.
-        //    HandleUndo();
-
-        //    script.SetNodeLinear(nodeIndex);
-        //}
 
         protected override void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,
@@ -41,12 +23,12 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // If Move All mode enabled, move all nodes.
-            if (script.MoveAllMode) {
-                script.MoveAllNodes(moveDelta);
+            if (Script.MoveAllMode) {
+                Script.MoveAllNodes(moveDelta);
             }
             // Move single node.
             else {
-                script.MoveNodeToPosition(movedNodeIndex, position);
+                Script.MoveNodeToPosition(movedNodeIndex, position);
             }
         }
 
@@ -54,14 +36,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.RemoveNode(nodeIndex);
-        }
-
-        protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
-            // Make snapshot of the target object.
-            HandleUndo();
-
-            script.SmoothNodeTangents(index);
+            Script.RemoveNode(nodeIndex);
         }
 
         protected override void DrawSmoothInspectorButton() {
@@ -69,9 +44,17 @@ namespace ATP.AnimationPathTools {
                 "Smooth",
                 "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
                 HandleUndo();
-                script.SmoothNodesTangents();
+                Script.SmoothNodesTangents();
             }
         }
+
+        protected override void DrawSmoothTangentButtonsCallbackHandler(int index) {
+            // Make snapshot of the target object.
+            HandleUndo();
+
+            Script.SmoothNodeTangents(index);
+        }
+
         protected override void DrawTangentHandlesCallbackHandler(
                     int index,
                     Vector3 inOutTangent) {
@@ -79,7 +62,38 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            script.ChangeNodeTangents(index, inOutTangent);
+            Script.ChangeNodeTangents(index, inOutTangent);
+        }
+
+        protected override void OnEnable() {
+            // TODO Move to separate method and make those private again.
+            // TODO Use base.OnEnable() again.
+            // Initialize serialized properties.
+            GizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
+            skin = serializedObject.FindProperty("skin");
+            exportSamplingFrequency =
+                serializedObject.FindProperty("exportSamplingFrequency");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+
+            Script = (TargetAnimationPath)target;
+
+            // TODO Move to separate method.
+            // Remember active scene tool.
+            if (Tools.current != Tool.None) {
+                LastTool = Tools.current;
+                Tools.current = Tool.None;
+            }
+
+            FirstNodeOffset = new Vector3(0.3f, -0.3f, 1);
+            LastNodeOffset = new Vector3(1.3f, 0.3f, 2);
+
+            if (!Script.IsInitialized) {
+                ResetPath(FirstNodeOffset, LastNodeOffset);
+            }
+
+            // Set default gizmo curve color.
+            Script.GizmoCurveColor = Color.magenta;
         }
     }
 }

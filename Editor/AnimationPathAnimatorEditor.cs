@@ -9,6 +9,9 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
 
+        #region CONSTANTS
+        private const float ArcHandleRadius = 0.5f;
+        #endregion
         #region FIELDS
 
         /// <summary>
@@ -178,38 +181,42 @@ namespace ATP.AnimationPathTools {
 
         private float value = 300.0f;
         private void HandleDrawingEaseHandles() {
-            Handles.color = Color.red;
-			/*Handles.Label(
-			  script.transform.position + Vector3.up * 1.5f,
-			  "ThresholdAngle: " + script.ThresholdAngle.ToString(),
-			  script.LabelStyle);*/
-            var center = script.AnimatedObjectPath.GetNodePosition(1);
-            // TODO Create constant.
-            var radius = 0.5f;
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
-			Handles.DrawWireArc(
-                    center,
-					Vector3.up, 
-					// Make the arc simetrical on the left and right
-					// side of the object.
-                    Quaternion.AngleAxis(
-                        -value / 2,
-                        Vector3.up) * Vector3.forward,
-                    //Quaternion.AngleAxis(-value/2, Vector3.up).eulerAngles,
-					value,
-					radius);
+            foreach (var position in nodePositions) {
+                DrawArcHandle(position);
+            }
+        }
 
+        private void DrawArcHandle(Vector3 center) {
+            // TODO Create const.
             Handles.color = Color.red;
+
+            Handles.DrawWireArc(
+                center,
+                Vector3.up,
+                // Make the arc simetrical on the left and right
+                // side of the object.
+                Quaternion.AngleAxis(
+                    -value/2,
+                    Vector3.up)*Vector3.forward,
+                //Quaternion.AngleAxis(-value/2, Vector3.up).eulerAngles,
+                value,
+                ArcHandleRadius);
+
+            // TODO Create const.
+            Handles.color = Color.red;
+
             var handleSize = HandleUtility.GetHandleSize(center);
             // TODO Create constant.
             var scaleHandleSize = handleSize*1.5f;
             value = Handles.ScaleValueHandle(
-                    value,
-                    center + Vector3.up + Vector3.forward * radius * 1.3f,
-                    Quaternion.identity,
-                    scaleHandleSize,
-                    Handles.ConeCap,
-                    1);
+                value,
+                center + Vector3.up + Vector3.forward*ArcHandleRadius*1.3f,
+                Quaternion.identity,
+                scaleHandleSize,
+                Handles.ConeCap,
+                1);
         }
 
         private void HandleDrawingTargetGizmo() {

@@ -218,12 +218,6 @@ namespace ATP.AnimationPathTools {
             // Get AnimationPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
-            // Get ease curve values.
-            var easeValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < easeValues.Length; i++) {
-                easeValues[i] = script.EaseCurve.keys[i].value;
-            }
-
             // Get ease curve timestamps.
             var easeTimestamps = new float[script.EaseCurve.length];
             for (var i = 0; i < script.EaseCurve.length; i++) {
@@ -231,8 +225,6 @@ namespace ATP.AnimationPathTools {
             }
 
             for (var i = 1; i < nodePositions.Length - 1; i++) {
-                var easeValue = easeValues[i];
-                //var arcValue = easeValue * 360f;
                 var easeTimestamp = easeTimestamps[i];
                 var arcValue = easeTimestamp * 360f;
 
@@ -245,7 +237,8 @@ namespace ATP.AnimationPathTools {
                     // Make the arc simetrical on the left and right
                     // side of the object.
                     Quaternion.AngleAxis(
-                        -arcValue / 2,
+                        //-arcValue / 2,
+                        0,
                         Vector3.up) * Vector3.forward,
                     arcValue,
                     ArcHandleRadius);

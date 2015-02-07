@@ -149,6 +149,10 @@ namespace ATP.AnimationPathTools {
             get { return animatedObjectPath; }
         }
 
+        public AnimationCurve EaseCurve {
+            get { return easeCurve; }
+        }
+
         #endregion FIELDS
 
         #region UNITY MESSAGES

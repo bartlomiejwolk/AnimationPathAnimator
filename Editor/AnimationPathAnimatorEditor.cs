@@ -183,12 +183,19 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingEaseHandles() {
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
-            foreach (var position in nodePositions) {
-                DrawArcHandle(position);
+            var arcValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < arcValues.Length; i++) {
+                arcValues[i] = script.EaseCurve.keys[i].value;
+            }
+
+            for (var i = 0; i < nodePositions.Length; i++){
+                DrawArcHandle(nodePositions[i], arcValues[i]);
             }
         }
 
-        private void DrawArcHandle(Vector3 center) {
+        private void DrawArcHandle(Vector3 center, float arcValue) {
+            arcValue = arcValue * 360f;
+
             // TODO Create const.
             Handles.color = Color.red;
 
@@ -198,10 +205,9 @@ namespace ATP.AnimationPathTools {
                 // Make the arc simetrical on the left and right
                 // side of the object.
                 Quaternion.AngleAxis(
-                    -value/2,
+                    -arcValue/2,
                     Vector3.up)*Vector3.forward,
-                //Quaternion.AngleAxis(-value/2, Vector3.up).eulerAngles,
-                value,
+                arcValue,
                 ArcHandleRadius);
 
             // TODO Create const.
@@ -210,8 +216,8 @@ namespace ATP.AnimationPathTools {
             var handleSize = HandleUtility.GetHandleSize(center);
             // TODO Create constant.
             var scaleHandleSize = handleSize*1.5f;
-            value = Handles.ScaleValueHandle(
-                value,
+            arcValue = Handles.ScaleValueHandle(
+                arcValue,
                 center + Vector3.up + Vector3.forward*ArcHandleRadius*1.3f,
                 Quaternion.identity,
                 scaleHandleSize,

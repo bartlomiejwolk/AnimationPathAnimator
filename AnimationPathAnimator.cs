@@ -205,7 +205,7 @@ namespace ATP.AnimationPathTools {
             // timestamp in the ease curve.
         }
 
-        private void UpdateEaseCurve() {
+        public void UpdateEaseCurve() {
             UpdateEaseCurveWithAddedKeys();
             UpdateEaseCurveWithRemovedKeys();
         }

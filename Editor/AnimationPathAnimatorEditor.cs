@@ -161,6 +161,12 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                script.UpdateEaseCurve();
+            }
+
             serializedObject.Update();
 
             // Update modifier key state.
@@ -186,7 +192,10 @@ namespace ATP.AnimationPathTools {
             DrawEaseHandles(callbackHandler);
         }
 
+        // TODO Refactor.
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newTimestamp) {
+            HandleUndo();
+
             // Copy keyframe.
             var keyframeCopy = script.EaseCurve.keys[keyIndex];
             // Update keyframe timestamp.
@@ -447,6 +456,12 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        protected void HandleUndo() {
+            Undo.RecordObject(script, "Ease curve changed.");
+        }
         #endregion PRIVATE METHODS
     }
 }

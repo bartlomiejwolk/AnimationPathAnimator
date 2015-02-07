@@ -188,7 +188,7 @@ namespace ATP.AnimationPathTools {
                 arcValues[i] = script.EaseCurve.keys[i].value;
             }
 
-            for (var i = 0; i < nodePositions.Length; i++){
+            for (var i = 1; i < nodePositions.Length - 1; i++){
                 DrawArcHandle(nodePositions[i], arcValues[i]);
             }
         }

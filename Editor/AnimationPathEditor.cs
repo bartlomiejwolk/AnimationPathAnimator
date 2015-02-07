@@ -173,6 +173,7 @@ namespace ATP.AnimationPathTools {
             if (Script.TangentMode) return;
 
             // Positions at which to draw movement handles.
+            // TODO Move to DrawmovementHandles().
             var nodes = Script.GetNodePositions();
 
             // Callback to call when a node is moved on the scene.

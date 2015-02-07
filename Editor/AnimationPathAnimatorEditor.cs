@@ -179,50 +179,64 @@ namespace ATP.AnimationPathTools {
             script.UpdateAnimation();
         }
 
-        private float value = 300.0f;
         private void HandleDrawingEaseHandles() {
-            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+            Action<int, float> callbackHandler =
+                DrawEaseHandlesCallbackHandler;
 
-            var arcValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < arcValues.Length; i++) {
-                arcValues[i] = script.EaseCurve.keys[i].value;
-            }
-
-            for (var i = 1; i < nodePositions.Length - 1; i++){
-                DrawArcHandle(nodePositions[i], arcValues[i]);
-            }
+            DrawEaseHandles(callbackHandler);
         }
 
-        private void DrawArcHandle(Vector3 center, float arcValue) {
-            arcValue = arcValue * 360f;
+        private void DrawEaseHandlesCallbackHandler(int nodeIndex, float easeValue) {
+        }
 
-            // TODO Create const.
-            Handles.color = Color.red;
+        private void DrawEaseHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
-            Handles.DrawWireArc(
-                center,
-                Vector3.up,
-                // Make the arc simetrical on the left and right
-                // side of the object.
-                Quaternion.AngleAxis(
-                    -arcValue/2,
-                    Vector3.up)*Vector3.forward,
-                arcValue,
-                ArcHandleRadius);
+            // Get ease curve values.
+            var easeValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < easeValues.Length; i++) {
+                easeValues[i] = script.EaseCurve.keys[i].value;
+            }
 
-            // TODO Create const.
-            Handles.color = Color.red;
+            for (var i = 1; i < nodePositions.Length - 1; i++) {
+                var easeValue = easeValues[i];
+                var arcValue = easeValue * 360f;
 
-            var handleSize = HandleUtility.GetHandleSize(center);
-            // TODO Create constant.
-            var scaleHandleSize = handleSize*1.5f;
-            arcValue = Handles.ScaleValueHandle(
-                arcValue,
-                center + Vector3.up + Vector3.forward*ArcHandleRadius*1.3f,
-                Quaternion.identity,
-                scaleHandleSize,
-                Handles.ConeCap,
-                1);
+                // TODO Create const.
+                Handles.color = Color.red;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right
+                    // side of the object.
+                    Quaternion.AngleAxis(
+                        -arcValue / 2,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    ArcHandleRadius);
+
+                // TODO Create const.
+                Handles.color = Color.red;
+
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * ArcHandleRadius
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, easeValue);
+                }
+            }
         }
 
         private void HandleDrawingTargetGizmo() {

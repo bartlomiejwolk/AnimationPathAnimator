@@ -186,17 +186,32 @@ namespace ATP.AnimationPathTools {
             DrawEaseHandles(callbackHandler);
         }
 
-        private void DrawEaseHandlesCallbackHandler(int keyIndex, float timestamp) {
-            var easeValue = script.EaseCurve.keys[keyIndex].value;
+        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newTimestamp) {
             // Copy keyframe.
             var keyframeCopy = script.EaseCurve.keys[keyIndex];
-            keyframeCopy.time = timestamp;
-            //var updateKeyframe = new Keyframe(timestamp, easeValue);
-            script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            // Update keyframe timestamp.
+            keyframeCopy.time = newTimestamp;
+            var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
 
-            //for (var i = 0; i < script.EaseCurve.length; i++) {
-            //    script.EaseCurve.SmoothTangents(i, 0);
-            //}
+            // If new timestamp is bigger than old timestamp..
+            if (newTimestamp > oldTimestamp) {
+                // Get timestamp of the node to the right.
+                var rightNeighbourTimestamp = script.EaseCurve.keys[keyIndex + 1].time;
+                // If new timestamp is bigger or equal to the neighbors's..
+                if (newTimestamp >= rightNeighbourTimestamp) return;
+
+                // Move key in the easeCurve.
+                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            }
+            else {
+                // Get timestamp of the node to the left.
+                var leftNeighbourTimestamp = script.EaseCurve.keys[keyIndex - 1].time;
+                // If new timestamp is smaller or equal to the neighbors's..
+                if (newTimestamp <= leftNeighbourTimestamp) return;
+
+                // Move key in the easeCurve.
+                script.EaseCurve.MoveKey(keyIndex, keyframeCopy); 
+            }
         }
 
         private void DrawEaseHandles(Action<int, float> callback) {

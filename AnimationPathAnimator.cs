@@ -4,6 +4,7 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Remoting.Messaging;
 using DemoApplication;
+using Fasterflect;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -236,8 +237,6 @@ namespace ATP.AnimationPathTools {
         }
 
         private void UpdateEaseCurveWithAddedKeys() {
-// For each node timestamp in AnimationPath, check if there's a key with
-            // same value as the timestamp.
             var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
             // Get values from easeCurve.
             var easeCurveValues = new float[easeCurve.length];
@@ -245,8 +244,10 @@ namespace ATP.AnimationPathTools {
                 easeCurveValues[i] = easeCurve.keys[i].value;
             }
 
+            // For each AnimationPath node timestamp..
             for (var i = 0; i < nodeTimestamps.Length; i++) {
                 bool valueExists = false;
+                // For each value in easeCurve..
                 for (var j = 0; j < easeCurveValues.Length; j++) {
                     if (Math.Abs(nodeTimestamps[i] - easeCurveValues[j]) < 0.001f) {
                         valueExists = true;
@@ -272,6 +273,19 @@ namespace ATP.AnimationPathTools {
             const float precision = 0.001f;
             float time = FindTimestampForValue(easeCurve, value, precision);
             easeCurve.AddKey(time, value);
+
+            // Ease first node.
+            var firstKeyCopy = easeCurve.keys[0];
+            firstKeyCopy.outTangent = 0;
+            easeCurve.RemoveKey(0);
+            easeCurve.AddKey(firstKeyCopy);
+
+            // Ease last node.
+            var lastKeyIndex = easeCurve.length - 1;
+            var lastKeyCopy = easeCurve.keys[lastKeyIndex];
+            lastKeyCopy.inTangent = 0;
+            easeCurve.RemoveKey(lastKeyIndex);
+            easeCurve.AddKey(lastKeyCopy);
         }
 
         private float FindTimestampForValue(

@@ -186,7 +186,10 @@ namespace ATP.AnimationPathTools {
             DrawEaseHandles(callbackHandler);
         }
 
-        private void DrawEaseHandlesCallbackHandler(int nodeIndex, float easeValue) {
+        private void DrawEaseHandlesCallbackHandler(int keyIndex, float timestamp) {
+            var easeValue = script.EaseCurve.keys[keyIndex].value;
+            var updateKeyframe = new Keyframe(timestamp, easeValue);
+            script.EaseCurve.MoveKey(keyIndex, updateKeyframe);
         }
 
         private void DrawEaseHandles(Action<int, float> callback) {
@@ -199,9 +202,17 @@ namespace ATP.AnimationPathTools {
                 easeValues[i] = script.EaseCurve.keys[i].value;
             }
 
+            // Get ease curve timestamps.
+            var easeTimestamps = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.EaseCurve.length; i++) {
+                easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            }
+
             for (var i = 1; i < nodePositions.Length - 1; i++) {
                 var easeValue = easeValues[i];
-                var arcValue = easeValue * 360f;
+                //var arcValue = easeValue * 360f;
+                var easeTimestamp = easeTimestamps[i];
+                var arcValue = easeTimestamp * 360f;
 
                 // TODO Create const.
                 Handles.color = Color.red;
@@ -232,9 +243,10 @@ namespace ATP.AnimationPathTools {
                     Handles.ConeCap,
                     1);
 
+                // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
-                    callback(i, easeValue);
+                    callback(i, newArcValue / 360f);
                 }
             }
         }

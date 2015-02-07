@@ -188,8 +188,15 @@ namespace ATP.AnimationPathTools {
 
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float timestamp) {
             var easeValue = script.EaseCurve.keys[keyIndex].value;
-            var updateKeyframe = new Keyframe(timestamp, easeValue);
-            script.EaseCurve.MoveKey(keyIndex, updateKeyframe);
+            // Copy keyframe.
+            var keyframeCopy = script.EaseCurve.keys[keyIndex];
+            keyframeCopy.time = timestamp;
+            //var updateKeyframe = new Keyframe(timestamp, easeValue);
+            script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+
+            //for (var i = 0; i < script.EaseCurve.length; i++) {
+            //    script.EaseCurve.SmoothTangents(i, 0);
+            //}
         }
 
         private void DrawEaseHandles(Action<int, float> callback) {

@@ -114,6 +114,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private bool lookForwardMode;
 
+        [SerializeField]
+        private bool displayEaseHandles;
+
         #endregion EDITOR
 
         #region FIELDS

@@ -39,6 +39,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationSpeed;
         private SerializedProperty tiltingCurve;
         private SerializedProperty lookForwardMode;
+        private SerializedProperty displayEaseHandles;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -104,6 +105,8 @@ namespace ATP.AnimationPathTools {
                     "be looking ahead on its path."));
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.PropertyField(displayEaseHandles);
+
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(
@@ -157,6 +160,7 @@ namespace ATP.AnimationPathTools {
             followedObject = serializedObject.FindProperty("followedObject");
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
+            displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -186,6 +190,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingEaseHandles() {
+            if (!displayEaseHandles.boolValue) return;
+
             Action<int, float> callbackHandler =
                 DrawEaseHandlesCallbackHandler;
 

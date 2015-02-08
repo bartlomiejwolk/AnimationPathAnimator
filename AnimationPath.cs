@@ -54,9 +54,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationPathCurves animationCurves;
 
-        [SerializeField]
-        private AnimationPathCurves rotationCurves;
-
         #endregion Fields
 
         #region EDITOR
@@ -169,12 +166,9 @@ namespace ATP.AnimationPathTools {
         private void Awake() {
             // Load default skin.
             skin = Resources.Load("GUISkin/default") as GUISkin;
-
-            PathChanged += OnPathChanged;
         }
 
         private void OnDestroy() {
-            PathChanged -= OnPathChanged;
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
@@ -189,11 +183,6 @@ namespace ATP.AnimationPathTools {
                     ScriptableObject.CreateInstance<AnimationPathCurves>();
             }
 
-            // Instantiate rotationCurves.
-            if (rotationCurves == null) {
-                rotationCurves =
-                    ScriptableObject.CreateInstance<AnimationPathCurves>();
-            }
         }
 
         #endregion Unity Messages
@@ -563,89 +552,8 @@ namespace ATP.AnimationPathTools {
         #endregion Public Methods
 
         #region PRIVATE METHODS
-        private void OnPathChanged(object sender, EventArgs eventArgs) {
-            UpdateRotationCurves();
-        }
 
-        private void UpdateRotationCurves() {
-            if (animationCurves.KeysNo > rotationCurves.KeysNo) {
-                UpdateRotationCurvesWithAddedKeys();
-            }
-            else if (animationCurves.KeysNo < rotationCurves.KeysNo) {
-                UpdateRotationCurvesWithRemovedKeys();
-            }
-            // Update rotationCurves timestamps.
-            else {
-                UpdateRotationCurvesTimestamps();
-            }
-        }
 
-        private void UpdateRotationCurvesTimestamps() {
-            // Get node timestamps.
-            var nodeTimestamps = GetNodeTimestamps();
-            var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
-            // For each node in rotationCurves..
-            for (var i = 1; i < rotationCurves.KeysNo - 1; i++) {
-                // If resp. node timestamp is different from key value..
-                if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i]) > 0.001f) {
-                    rotationCurves.ChangePointTimestamp(i, nodeTimestamps[i]);
-                }
-            }
-        }
-
-        private void UpdateRotationCurvesWithRemovedKeys() {
-            // AnimationPath node timestamps.
-            var animationCurvesTimestamps = GetNodeTimestamps();
-            // Get values from rotationCurves.
-            var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
-
-            // For each timestamp in rotationCurves..
-            for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
-                var keyExists = false;
-                for (var j = 0; j < animationCurvesTimestamps.Length; j++) {
-                    if (Math.Abs(rotationCurvesTimestamps[i]
-                        - animationCurvesTimestamps[j]) < 0.001f) {
-
-                        keyExists = true;
-                        break;
-                    }
-                }
-
-                if (!keyExists) {
-                    rotationCurves.RemovePoint(i);
-                    break;
-                }
-            }
-        }
-
-        private void UpdateRotationCurvesWithAddedKeys() {
-            // AnimationPath node timestamps.
-            var animationCurvesTimestamps = GetNodeTimestamps();
-            // Get values from rotationCurves.
-            var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
-            var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
-
-            // For each timestamp in rotationCurves..
-            for (var i = 0; i < animationCurvesTimestamps.Length; i++) {
-                var keyExists = false;
-                for (var j = 0; j < rotationCurvesKeysNo; j++) {
-                    if (Math.Abs(rotationCurvesTimestamps[j]
-                        - animationCurvesTimestamps[i]) < 0.001f) {
-
-                        keyExists = true;
-                        break;
-                    }
-                }
-
-                if (!keyExists) {
-                    var defaultRotation = new Vector3(0, 0, 0);
-
-                    rotationCurves.CreateNewPoint(
-                        animationCurvesTimestamps[i],
-                        defaultRotation);
-                }
-            }
-        }
 
         private void DrawGizmoCurve() {
             var points = SamplePathForPoints(GizmoCurveSamplingFrequency);
@@ -661,25 +569,5 @@ namespace ATP.AnimationPathTools {
 
         #endregion PRIVATE METHODS
 
-        public Vector3 GetNodeRotation(int nodeIndex) {
-            return rotationCurves.GetVectorAtKey(nodeIndex);
-        }
-
-        public void ChangeNodeRotation(int nodeIndex, Vector3 rotation) {
-            rotationCurves.MovePointToPosition(nodeIndex, rotation);
-            rotationCurves.SmoothAllNodes();
-        }
-
-        public Vector3 GetRotationAtTime(float timestamp) {
-            return rotationCurves.GetVectorAtTime(timestamp);
-        }
-
-        public void ResetRotation() {
-            // Remove all nodes.
-            for (var i = 0; i < rotationCurves.KeysNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                rotationCurves.RemovePoint(0);
-            }
-        }
     }
 }

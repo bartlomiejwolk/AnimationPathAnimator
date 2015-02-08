@@ -28,6 +28,7 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
+        protected SerializedProperty drawRotationHandles;
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
         private SerializedProperty animTimeRatio;
@@ -90,6 +91,8 @@ namespace ATP.AnimationPathTools {
                     "Ignore target object and look ahead."),
                     lookForwardMode.boolValue,
                     GUILayout.Width(116));
+
+            EditorGUILayout.PropertyField(drawRotationHandles);
 
             //EditorGUILayout.PropertyField(
             //    lookForwardMode,
@@ -161,6 +164,7 @@ namespace ATP.AnimationPathTools {
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
+            drawRotationHandles = serializedObject.FindProperty("drawRotationHandles");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -185,6 +189,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingForwardPointGizmo();
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
+            HandleDrawingRotationHandles();
 
             script.UpdateAnimation();
         }
@@ -469,6 +474,41 @@ namespace ATP.AnimationPathTools {
         protected void HandleUndo() {
             Undo.RecordObject(script, "Ease curve changed.");
         }
+        private void HandleDrawingRotationHandles() {
+            if (!drawRotationHandles.boolValue) return;
+
+            // Callback to call when node rotation is changed.
+            Action<int, Quaternion> callbackHandler =
+                DrawRotationHandlesCallbackHandler;
+
+            // Draw handles.
+            DrawRotationHandles(callbackHandler);
+        }
+        private void DrawRotationHandles(Action<int, Quaternion> callback) {
+            //var handleSize = HandleUtility.GetHandleSize([i]);
+            //var sphereSize = handleSize * TangentHandleSize;
+
+            //// draw node's handle.
+            //var newPosition = Handles.FreeMoveHandle(
+            //    nodes[i],
+            //    Quaternion.identity,
+            //    sphereSize,
+            //    Vector3.zero,
+            //    Handles.CircleCap);
+
+            //if (newRotation != rotation) {
+            //    // Execute callback.
+            //    callback(i, newRotation);
+            //}
+        }
+        private void DrawRotationHandlesCallbackHandler(
+                    int nodeIndex,
+                    Quaternion newRotation) {
+
+            var rotationEuler = newRotation.eulerAngles;
+            script.ChangeNodeRotation(nodeIndex, rotationEuler);
+        }
+
         #endregion PRIVATE METHODS
     }
 }

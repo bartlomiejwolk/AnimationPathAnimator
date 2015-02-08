@@ -52,6 +52,7 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty GizmoCurveColor;
         protected SerializedProperty advancedSettingsFoldout;
         protected SerializedProperty exportSamplingFrequency;
+        protected SerializedProperty drawRotationHandles;
         protected SerializedProperty skin;
         //protected SerializedProperty rotationCurves;
 
@@ -77,6 +78,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            drawRotationHandles = serializedObject.FindProperty("drawRotationHandles");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
 
             Script = (AnimationPath)target;
@@ -98,6 +100,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected void OnSceneGUI() {
+            //Debug.Log(drawRotationHandles.boolValue);
             // Log error if inspector GUISkin filed is empty.
             if (Script.Skin == null) {
                 Script.MissingReferenceError(
@@ -131,6 +134,8 @@ namespace ATP.AnimationPathTools {
             // changing nodes' in/out tangents.
             HandleDrawingTangentHandles();
 
+            HandleDrawingRotationHandles();
+
             // Draw add node buttons.
             HandleDrawingAddButtons();
 
@@ -140,6 +145,34 @@ namespace ATP.AnimationPathTools {
             // Handle drawing smooth tangent button for each node.
             HandleDrawingSmoothTangentButton();
 
+        }
+
+        private void HandleDrawingRotationHandles() {
+            if (!drawRotationHandles.boolValue) return;
+
+            // Callback to call when node rotation is changed.
+            Action<int, Quaternion> callbackHandler =
+                DrawRotationHandlesCallbackHandler;
+
+            // Draw handles.
+            DrawRotationHandles(callbackHandler);
+        }
+
+        private void DrawRotationHandles(Action<int, Quaternion> callback) {
+            var nodePositions = Script.GetNodePositions();
+
+            for (var i = 0; i < nodePositions.Length; i++) {
+                Vector3 rotationVector = Script.GetNodeRotation(i);
+                Quaternion rotation = Quaternion.Euler(rotationVector);
+
+                Handles.RotationHandle(
+                    rotation,
+                    nodePositions[i]);
+            }
+        }
+
+        private void DrawRotationHandlesCallbackHandler(int arg1, Quaternion arg2) {
+            throw new NotImplementedException();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -659,6 +692,10 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Scene Controls",
                     "Toggle on-scene node controls."));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(drawRotationHandles);
+            serializedObject.ApplyModifiedProperties();
 
             //EditorGUILayout.PropertyField(rotationCurves);
 

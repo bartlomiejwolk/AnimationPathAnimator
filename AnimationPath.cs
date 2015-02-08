@@ -79,6 +79,9 @@ namespace ATP.AnimationPathTools {
 #pragma warning disable 414
         private int exportSamplingFrequency = 5;
 
+        [SerializeField]
+        private bool drawRotationHandles;
+
 #pragma warning restore 414
 
         /// <summary>
@@ -657,5 +660,9 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
+
+        public Vector3 GetNodeRotation(int nodeIndex) {
+            return rotationCurves.GetVectorAtKey(nodeIndex);
+        }
     }
 }

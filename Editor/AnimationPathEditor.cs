@@ -53,6 +53,7 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty advancedSettingsFoldout;
         protected SerializedProperty exportSamplingFrequency;
         protected SerializedProperty skin;
+        //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
         public Vector3 LastNodeOffset { get; protected set; }
@@ -76,6 +77,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            //rotationCurves = serializedObject.FindProperty("rotationCurves");
 
             Script = (AnimationPath)target;
 
@@ -656,6 +658,8 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Scene Controls",
                     "Toggle on-scene node controls."));
+
+            //EditorGUILayout.PropertyField(rotationCurves);
 
             EditorGUILayout.Space();
 

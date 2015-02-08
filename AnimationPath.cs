@@ -175,9 +175,15 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
-            // Instantiate class field.
+            // Instantiate animationCurves.
             if (animationCurves == null) {
                 animationCurves =
+                    ScriptableObject.CreateInstance<AnimationPathCurves>();
+            }
+
+            // Instantiate rotationCurves.
+            if (rotationCurves == null) {
+                rotationCurves =
                     ScriptableObject.CreateInstance<AnimationPathCurves>();
             }
         }

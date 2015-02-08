@@ -36,6 +36,16 @@ namespace ATP.AnimationPathTools {
 
         #endregion FIELDS
 
+        #region UNITY MESSAGES
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnEnable() {
+            // Initialize curves field.
+            if (curves[0] == null) {
+                InitializeCurves();
+            }
+        }
+        #endregion
+
         #region PUBLIC METHODS
 
         public void AddNodeAtTime(float timestamp) {
@@ -170,7 +180,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PUBLIC METHODS
-
         #region PRIVATE METHODS
 
         /// <summary>
@@ -181,15 +190,6 @@ namespace ATP.AnimationPathTools {
                 curves[i] = new AnimationCurve();
             }
         }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnEnable() {
-            // Initialize curves field.
-            if (curves[0] == null) {
-                InitializeCurves();
-            }
-        }
-
         #endregion PRIVATE METHODS
     }
 }

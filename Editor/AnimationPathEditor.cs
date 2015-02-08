@@ -173,6 +173,7 @@ namespace ATP.AnimationPathTools {
             if (Script.TangentMode) return;
 
             // Positions at which to draw movement handles.
+            // TODO Move to DrawmovementHandles().
             var nodes = Script.GetNodePositions();
 
             // Callback to call when a node is moved on the scene.
@@ -476,6 +477,8 @@ namespace ATP.AnimationPathTools {
             AddNodeBetween(nodeIndex);
 
             Script.DistributeTimestamps();
+
+            Script.OnPathChanged();
         }
 
         protected virtual void DrawMovementHandlesCallbackHandler(
@@ -495,6 +498,8 @@ namespace ATP.AnimationPathTools {
                 Script.MoveNodeToPosition(movedNodeIndex, position);
                 Script.DistributeTimestamps();
             }
+
+            Script.OnPathChanged();
         }
 
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
@@ -503,6 +508,8 @@ namespace ATP.AnimationPathTools {
 
             Script.RemoveNode(nodeIndex);
             Script.DistributeTimestamps();
+
+            Script.OnPathChanged();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -512,6 +519,8 @@ namespace ATP.AnimationPathTools {
             Script.SmoothNodeTangents(index);
 
             Script.DistributeTimestamps();
+
+            Script.OnPathChanged();
         }
 
         protected virtual void DrawTangentHandlesCallbackHandler(
@@ -523,6 +532,8 @@ namespace ATP.AnimationPathTools {
 
             Script.ChangeNodeTangents(index, inOutTangent);
             Script.DistributeTimestamps();
+
+            Script.OnPathChanged();
         }
 
         #endregion CALLBACK HANDLERS

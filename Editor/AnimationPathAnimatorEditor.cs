@@ -9,6 +9,9 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof(AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
 
+        #region CONSTANTS
+        private const float ArcHandleRadius = 0.5f;
+        #endregion
         #region FIELDS
 
         /// <summary>
@@ -158,6 +161,12 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                script.UpdateEaseCurve();
+            }
+
             serializedObject.Update();
 
             // Update modifier key state.
@@ -171,8 +180,99 @@ namespace ATP.AnimationPathTools {
 
             HandleDrawingForwardPointGizmo();
             HandleDrawingTargetGizmo();
+            HandleDrawingEaseHandles();
 
             script.UpdateAnimation();
+        }
+
+        private void HandleDrawingEaseHandles() {
+            Action<int, float> callbackHandler =
+                DrawEaseHandlesCallbackHandler;
+
+            DrawEaseHandles(callbackHandler);
+        }
+
+        // TODO Refactor.
+        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newTimestamp) {
+            HandleUndo();
+
+            // Copy keyframe.
+            var keyframeCopy = script.EaseCurve.keys[keyIndex];
+            // Update keyframe timestamp.
+            keyframeCopy.time = newTimestamp;
+            var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // If new timestamp is bigger than old timestamp..
+            if (newTimestamp > oldTimestamp) {
+                // Get timestamp of the node to the right.
+                var rightNeighbourTimestamp = script.EaseCurve.keys[keyIndex + 1].time;
+                // If new timestamp is bigger or equal to the neighbors's..
+                if (newTimestamp >= rightNeighbourTimestamp) return;
+
+                // Move key in the easeCurve.
+                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            }
+            else {
+                // Get timestamp of the node to the left.
+                var leftNeighbourTimestamp = script.EaseCurve.keys[keyIndex - 1].time;
+                // If new timestamp is smaller or equal to the neighbors's..
+                if (newTimestamp <= leftNeighbourTimestamp) return;
+
+                // Move key in the easeCurve.
+                script.EaseCurve.MoveKey(keyIndex, keyframeCopy); 
+            }
+        }
+
+        private void DrawEaseHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+
+            // Get ease curve timestamps.
+            var easeTimestamps = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.EaseCurve.length; i++) {
+                easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            }
+
+            for (var i = 1; i < nodePositions.Length - 1; i++) {
+                var easeTimestamp = easeTimestamps[i];
+                var arcValue = easeTimestamp * 360f;
+
+                // TODO Create const.
+                Handles.color = Color.red;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right
+                    // side of the object.
+                    Quaternion.AngleAxis(
+                        //-arcValue / 2,
+                        0,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    ArcHandleRadius);
+
+                // TODO Create const.
+                Handles.color = Color.red;
+
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * ArcHandleRadius
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                // TODO Create float precision const.
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, newArcValue / 360f);
+                }
+            }
         }
 
         private void HandleDrawingTargetGizmo() {
@@ -356,6 +456,12 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        protected void HandleUndo() {
+            Undo.RecordObject(script, "Ease curve changed.");
+        }
         #endregion PRIVATE METHODS
     }
 }

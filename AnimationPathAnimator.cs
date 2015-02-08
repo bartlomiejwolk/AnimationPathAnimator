@@ -192,6 +192,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
+            // TODO Move it to Awake() and OnDestroy().
             animatedObjectPath.PathChanged += AnimatedObjectPathOnPathChanged;
         }
 

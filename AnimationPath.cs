@@ -561,6 +561,32 @@ namespace ATP.AnimationPathTools {
 
         #region PRIVATE METHODS
         private void OnPathChanged(object sender, EventArgs eventArgs) {
+            UpdateRotationCurves();
+        }
+
+        private void UpdateRotationCurves() {
+            if (animationCurves.KeysNo > rotationCurves.KeysNo) {
+                UpdateRotationCurvesWithAddedKeys();
+            }
+            else if (animationCurves.KeysNo < rotationCurves.KeysNo) {
+                UpdateRotationCurvesWithRemovedKeys();
+            }
+            // Update rotationCurves timestamps.
+            else {
+                UpdateRotationCurvesTimestamps();
+            }
+        }
+
+        private void UpdateRotationCurvesTimestamps() {
+            throw new NotImplementedException();
+        }
+
+        private void UpdateRotationCurvesWithRemovedKeys() {
+            throw new NotImplementedException();
+        }
+
+        private void UpdateRotationCurvesWithAddedKeys() {
+            throw new NotImplementedException();
         }
 
 

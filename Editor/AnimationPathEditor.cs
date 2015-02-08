@@ -98,7 +98,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected void OnSceneGUI() {
-            //Debug.Log(drawRotationHandles.boolValue);
+            //Debug.Log(drawRotationHandle.boolValue);
             // Log error if inspector GUISkin filed is empty.
             if (Script.Skin == null) {
                 Script.MissingReferenceError(

@@ -11,6 +11,7 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANTS
         private const float ArcHandleRadius = 1f;
+        private const float RotationHandleSize = 0.25f;
         #endregion
         #region FIELDS
 
@@ -28,7 +29,7 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
-        protected SerializedProperty drawRotationHandles;
+        protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
         private SerializedProperty animTimeRatio;
@@ -92,7 +93,7 @@ namespace ATP.AnimationPathTools {
                     lookForwardMode.boolValue,
                     GUILayout.Width(116));
 
-            EditorGUILayout.PropertyField(drawRotationHandles);
+            EditorGUILayout.PropertyField(drawRotationHandle);
 
             //EditorGUILayout.PropertyField(
             //    lookForwardMode,
@@ -109,6 +110,7 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.PropertyField(displayEaseHandles);
+            EditorGUILayout.PropertyField(drawRotationHandle);
 
             EditorGUILayout.Space();
 
@@ -164,7 +166,7 @@ namespace ATP.AnimationPathTools {
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
-            drawRotationHandles = serializedObject.FindProperty("drawRotationHandles");
+            drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -189,7 +191,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingForwardPointGizmo();
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
-            HandleDrawingRotationHandles();
+            HandleDrawingRotationHandle();
 
             script.UpdateAnimation();
         }
@@ -474,39 +476,44 @@ namespace ATP.AnimationPathTools {
         protected void HandleUndo() {
             Undo.RecordObject(script, "Ease curve changed.");
         }
-        private void HandleDrawingRotationHandles() {
-            if (!drawRotationHandles.boolValue) return;
+        private void HandleDrawingRotationHandle() {
+            if (!drawRotationHandle.boolValue) return;
 
             // Callback to call when node rotation is changed.
-            Action<int, Quaternion> callbackHandler =
+            Action<float, Vector3> callbackHandler =
                 DrawRotationHandlesCallbackHandler;
 
             // Draw handles.
-            DrawRotationHandles(callbackHandler);
+            DrawRotationHandle(callbackHandler);
         }
-        private void DrawRotationHandles(Action<int, Quaternion> callback) {
-            //var handleSize = HandleUtility.GetHandleSize([i]);
-            //var sphereSize = handleSize * TangentHandleSize;
+        private void DrawRotationHandle(Action<float, Vector3> callback) {
+            Handles.color = Color.magenta;
 
-            //// draw node's handle.
-            //var newPosition = Handles.FreeMoveHandle(
-            //    nodes[i],
-            //    Quaternion.identity,
-            //    sphereSize,
-            //    Vector3.zero,
-            //    Handles.CircleCap);
+            var currentAnimationTime = script.AnimationTimeRatio;
+            //var animatedObjectPosition =
+            //    script.AnimatedObjectPath.GetVectorAtTime(currentAnimationTime);
+            var handlePosition = script.GetRotationAtTime(currentAnimationTime); 
+            var handleSize = HandleUtility.GetHandleSize(handlePosition);
+            var sphereSize = handleSize * RotationHandleSize;
 
-            //if (newRotation != rotation) {
-            //    // Execute callback.
-            //    callback(i, newRotation);
-            //}
+            // draw node's handle.
+            var newPosition = Handles.FreeMoveHandle(
+                handlePosition,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                Handles.SphereCap);
+
+            if (newPosition != handlePosition) {
+                // Execute callback.
+                callback(currentAnimationTime, newPosition);
+            }
         }
         private void DrawRotationHandlesCallbackHandler(
-                    int nodeIndex,
-                    Quaternion newRotation) {
+                    float timestamp,
+                    Vector3 newPosition) {
 
-            var rotationEuler = newRotation.eulerAngles;
-            script.ChangeNodeRotation(nodeIndex, rotationEuler);
+            script.ChangeRotationForTimestamp(timestamp, newPosition);
         }
 
         #endregion PRIVATE METHODS

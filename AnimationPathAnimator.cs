@@ -117,6 +117,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private bool displayEaseHandles;
 
+        [SerializeField]
+        private bool drawRotationHandle;
+
         #endregion EDITOR
 
         #region FIELDS
@@ -154,6 +157,10 @@ namespace ATP.AnimationPathTools {
 
         public AnimationCurve EaseCurve {
             get { return easeCurve; }
+        }
+
+        public float AnimationTimeRatio {
+            get { return animTimeRatio; }
         }
 
         [SerializeField]
@@ -429,8 +436,13 @@ namespace ATP.AnimationPathTools {
             return rotationCurves.GetVectorAtKey(nodeIndex);
         }
 
-        public void ChangeNodeRotation(int nodeIndex, Vector3 rotation) {
-            rotationCurves.MovePointToPosition(nodeIndex, rotation);
+        public void ChangeRotationForTimestamp(
+            float timestamp,
+            Vector3 newPosition) {
+
+            // TODO Check what happenes when try creating new node at the same
+            // timestamp.
+            rotationCurves.CreateNewPoint(timestamp, newPosition);
             rotationCurves.SmoothAllNodes();
         }
 

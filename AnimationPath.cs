@@ -76,9 +76,6 @@ namespace ATP.AnimationPathTools {
 #pragma warning disable 414
         private int exportSamplingFrequency = 5;
 
-        [SerializeField]
-        private bool drawRotationHandles;
-
 #pragma warning restore 414
 
         /// <summary>

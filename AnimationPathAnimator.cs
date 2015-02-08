@@ -206,8 +206,33 @@ namespace ATP.AnimationPathTools {
         }
 
         public void UpdateEaseCurve() {
-            UpdateEaseCurveWithAddedKeys();
-            UpdateEaseCurveWithRemovedKeys();
+            if (animatedObjectPath.NodesNo > easeCurve.length) {
+                UpdateEaseCurveWithAddedKeys();
+            }
+            else if (animatedObjectPath.NodesNo < easeCurve.length) {
+                UpdateEaseCurveWithRemovedKeys();
+            }
+            // Update easeCurve values.
+            else {
+                UpdateEaseCurveValues();
+            }
+        }
+
+        private void UpdateEaseCurveValues() {
+            // Get node timestamps.
+            var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
+            // For each key in easeCurve..
+            for (var i = 1; i < nodeTimestamps.Length - 1; i++) {
+                // If resp. node timestamp is different from key value..
+                if (Math.Abs(nodeTimestamps[i] - easeCurve.keys[i].value) > 0.001f) {
+                    // Copy key
+                    var keyCopy = easeCurve.keys[i];
+                    // Update timestamp
+                    keyCopy.value = nodeTimestamps[i];
+                    // Move key to new value.
+                    easeCurve.MoveKey(i, keyCopy);
+                }
+            }
         }
 
         private void UpdateEaseCurveWithRemovedKeys() {

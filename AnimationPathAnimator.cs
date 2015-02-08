@@ -524,6 +524,12 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(followedObject.position);
                 }
             }
+            if (animatedObject != null
+                && followedObject == null
+                && !lookForwardMode) {
+
+                RotateObjectWithPathRotation();
+            }
             // Look forward.
             else if (animatedObject != null && lookForwardMode) {
                 Vector3 forwardPoint = GetForwardPoint();
@@ -535,6 +541,11 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(forwardPoint);
                 }
             }
+        }
+
+        private void RotateObjectWithPathRotation() {
+            var rotation = AnimatedObjectPath.GetRotationAtTime(animTimeRatio);
+            animatedObject.rotation = Quaternion.Euler(rotation);
         }
 
         private void RotateObjectWithLookAt(Vector3 targetPos) {

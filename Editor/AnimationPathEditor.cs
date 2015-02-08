@@ -817,9 +817,14 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
+        // TODO Refactor.
         protected void ResetPath(
             Vector3 firstNodeOffset,
             Vector3 lastNodeOffset) {
+
+            // TODO Extract to method.
+            // Reset rotation.
+            Script.ResetRotation();
 
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;
@@ -830,6 +835,7 @@ namespace ATP.AnimationPathTools {
             // Number of nodes to remove.
             var noOfNodesToRemove = Script.NodesNo;
 
+            // TODO Move to AnimationCurves class.
             // Remove all nodes.
             for (var i = 0; i < noOfNodesToRemove; i++) {
                 // NOTE After each removal, next node gets index 0.

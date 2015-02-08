@@ -669,5 +669,17 @@ namespace ATP.AnimationPathTools {
             rotationCurves.MovePointToPosition(nodeIndex, rotation);
             rotationCurves.SmoothAllNodes();
         }
+
+        public Vector3 GetRotationAtTime(float timestamp) {
+            return rotationCurves.GetVectorAtTime(timestamp);
+        }
+
+        public void ResetRotation() {
+            // Remove all nodes.
+            for (var i = 0; i < rotationCurves.KeysNo; i++) {
+                // NOTE After each removal, next node gets index 0.
+                rotationCurves.RemovePoint(0);
+            }
+        }
     }
 }

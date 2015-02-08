@@ -10,7 +10,7 @@ namespace ATP.AnimationPathTools {
     public class AnimatorEditor : Editor {
 
         #region CONSTANTS
-        private const float ArcHandleRadius = 0.5f;
+        private const float ArcHandleRadius = 1f;
         #endregion
         #region FIELDS
 
@@ -236,6 +236,8 @@ namespace ATP.AnimationPathTools {
             for (var i = 1; i < nodePositions.Length - 1; i++) {
                 var easeTimestamp = easeTimestamps[i];
                 var arcValue = easeTimestamp * 360f;
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                var arcHandleSize = handleSize * ArcHandleRadius;
 
                 // TODO Create const.
                 Handles.color = Color.red;
@@ -250,17 +252,16 @@ namespace ATP.AnimationPathTools {
                         0,
                         Vector3.up) * Vector3.forward,
                     arcValue,
-                    ArcHandleRadius);
+                    arcHandleSize);
 
                 // TODO Create const.
                 Handles.color = Color.red;
 
-                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 // TODO Create constant.
                 var scaleHandleSize = handleSize * 1.5f;
                 float newArcValue = Handles.ScaleValueHandle(
                     arcValue,
-                    nodePositions[i] + Vector3.up + Vector3.forward * ArcHandleRadius
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
                         * 1.3f,
                     Quaternion.identity,
                     scaleHandleSize,

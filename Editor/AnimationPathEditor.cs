@@ -146,7 +146,14 @@ namespace ATP.AnimationPathTools {
             HandleDrawingSmoothTangentButton();
 
         }
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnDisable() {
+            Tools.current = LastTool;
+        }
 
+        #endregion UNITY MESSAGES
+
+        #region DRAWING HANDLERS
         private void HandleDrawingRotationHandles() {
             if (!drawRotationHandles.boolValue) return;
 
@@ -158,40 +165,6 @@ namespace ATP.AnimationPathTools {
             DrawRotationHandles(callbackHandler);
         }
 
-        private void DrawRotationHandles(Action<int, Quaternion> callback) {
-            var nodePositions = Script.GetNodePositions();
-
-            for (var i = 0; i < nodePositions.Length; i++) {
-                Vector3 rotationVector = Script.GetNodeRotation(i);
-                Quaternion rotation = Quaternion.Euler(rotationVector);
-
-                var newRotation = Handles.RotationHandle(
-                    rotation,
-                    nodePositions[i]);
-
-                if (newRotation != rotation) {
-                    // Execute callback.
-                    callback(i, newRotation);
-                }
-            }
-        }
-
-        private void DrawRotationHandlesCallbackHandler(
-            int nodeIndex,
-            Quaternion newRotation) {
-
-            var rotationEuler = newRotation.eulerAngles;
-            Script.ChangeNodeRotation(nodeIndex, rotationEuler);
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnDisable() {
-            Tools.current = LastTool;
-        }
-
-        #endregion UNITY MESSAGES
-
-        #region DRAWING HANDLERS
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
@@ -292,6 +265,24 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING HANDLERS
 
         #region DRAWING METHODS
+        private void DrawRotationHandles(Action<int, Quaternion> callback) {
+            var nodePositions = Script.GetNodePositions();
+
+            for (var i = 0; i < nodePositions.Length; i++) {
+                Vector3 rotationVector = Script.GetNodeRotation(i);
+                Quaternion rotation = Quaternion.Euler(rotationVector);
+
+                var newRotation = Handles.RotationHandle(
+                    rotation,
+                    nodePositions[i]);
+
+                if (newRotation != rotation) {
+                    // Execute callback.
+                    callback(i, newRotation);
+                }
+            }
+        }
+
 
         private void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -513,6 +504,14 @@ namespace ATP.AnimationPathTools {
         #endregion Drawing methods
 
         #region CALLBACK HANDLERS
+        private void DrawRotationHandlesCallbackHandler(
+                    int nodeIndex,
+                    Quaternion newRotation) {
+
+            var rotationEuler = newRotation.eulerAngles;
+            Script.ChangeNodeRotation(nodeIndex, rotationEuler);
+        }
+
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.

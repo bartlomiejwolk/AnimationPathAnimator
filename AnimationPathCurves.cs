@@ -202,5 +202,11 @@ namespace ATP.AnimationPathTools {
 
             return timestamps;
         }
+
+        public void SmoothAllNodes() {
+            for (var i = 0; i < KeysNo; i++) {
+                SmoothPointTangents(i);
+            }
+        }
     }
 }

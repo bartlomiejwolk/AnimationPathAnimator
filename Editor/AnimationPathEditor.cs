@@ -165,14 +165,23 @@ namespace ATP.AnimationPathTools {
                 Vector3 rotationVector = Script.GetNodeRotation(i);
                 Quaternion rotation = Quaternion.Euler(rotationVector);
 
-                Handles.RotationHandle(
+                var newRotation = Handles.RotationHandle(
                     rotation,
                     nodePositions[i]);
+
+                if (newRotation != rotation) {
+                    // Execute callback.
+                    callback(i, newRotation);
+                }
             }
         }
 
-        private void DrawRotationHandlesCallbackHandler(int arg1, Quaternion arg2) {
-            throw new NotImplementedException();
+        private void DrawRotationHandlesCallbackHandler(
+            int nodeIndex,
+            Quaternion newRotation) {
+
+            var rotationEuler = newRotation.eulerAngles;
+            Script.ChangeNodeRotation(nodeIndex, rotationEuler);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

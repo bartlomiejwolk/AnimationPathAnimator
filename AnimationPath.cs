@@ -664,5 +664,10 @@ namespace ATP.AnimationPathTools {
         public Vector3 GetNodeRotation(int nodeIndex) {
             return rotationCurves.GetVectorAtKey(nodeIndex);
         }
+
+        public void ChangeNodeRotation(int nodeIndex, Vector3 rotation) {
+            rotationCurves.MovePointToPosition(nodeIndex, rotation);
+            rotationCurves.SmoothAllNodes();
+        }
     }
 }

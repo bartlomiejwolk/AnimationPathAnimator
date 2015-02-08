@@ -440,8 +440,14 @@ namespace ATP.AnimationPathTools {
             float timestamp,
             Vector3 newPosition) {
 
-            // TODO Check what happenes when try creating new node at the same
-            // timestamp.
+            // TODO Extract.
+            // Remove old key.
+            var timestamps = rotationCurves.GetTimestamps();
+            for (var i = 0; i < rotationCurves.KeysNo; i++) {
+                if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
+                    rotationCurves.RemovePoint(i);
+                }
+            }
             rotationCurves.CreateNewPoint(timestamp, newPosition);
             rotationCurves.SmoothAllNodes();
         }

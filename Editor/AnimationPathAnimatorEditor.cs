@@ -93,14 +93,6 @@ namespace ATP.AnimationPathTools {
                     lookForwardMode.boolValue,
                     GUILayout.Width(116));
 
-            EditorGUILayout.PropertyField(drawRotationHandle);
-
-            //EditorGUILayout.PropertyField(
-            //    lookForwardMode,
-            //    new GUIContent(
-            //        "Look Forward",
-            //        "Ignore target object and look ahead."));
-
             EditorGUILayout.PropertyField(
                 lookForwardCurve,
                 new GUIContent(
@@ -197,7 +189,7 @@ namespace ATP.AnimationPathTools {
         }
         #endregion UNITY MESSAGES
 
-        #region DRAWING HANDLES
+        #region DRAWING HANDLERS
         private void HandleDrawingRotationHandle() {
             if (!drawRotationHandle.boolValue) return;
 

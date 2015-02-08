@@ -54,6 +54,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationPathCurves animationCurves;
 
+        [SerializeField]
+        private AnimationPathCurves rotationCurves;
+
         #endregion Fields
 
         #region EDITOR

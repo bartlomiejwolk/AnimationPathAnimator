@@ -79,6 +79,7 @@ namespace ATP.AnimationPathTools {
             curves[2].MoveKey(nodeIndex, keyZCopy);
         }
 
+        // TODO Rename Point to Node.
         public void ChangePointTimestamp(
             int keyIndex,
             float newTimestamp) {
@@ -191,5 +192,15 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
+
+        public float[] GetTimestamps() {
+            var timestamps = new float[KeysNo];
+
+            for (var i = 0; i < KeysNo; i++) {
+                timestamps[i] = curves[0].keys[i].time;
+            }
+
+            return timestamps;
+        }
     }
 }

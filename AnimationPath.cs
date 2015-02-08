@@ -578,17 +578,71 @@ namespace ATP.AnimationPathTools {
         }
 
         private void UpdateRotationCurvesTimestamps() {
-            throw new NotImplementedException();
+            // Get node timestamps.
+            var nodeTimestamps = GetNodeTimestamps();
+            var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
+            // For each node in rotationCurves..
+            for (var i = 1; i < rotationCurves.KeysNo - 1; i++) {
+                // If resp. node timestamp is different from key value..
+                if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i]) > 0.001f) {
+                    rotationCurves.ChangePointTimestamp(i, nodeTimestamps[i]);
+                }
+            }
         }
 
         private void UpdateRotationCurvesWithRemovedKeys() {
-            throw new NotImplementedException();
+            // AnimationPath node timestamps.
+            var animationCurvesTimestamps = GetNodeTimestamps();
+            // Get values from rotationCurves.
+            var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
+
+            // For each timestamp in rotationCurves..
+            for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
+                var keyExists = false;
+                for (var j = 0; j < animationCurvesTimestamps.Length; j++) {
+                    if (Math.Abs(rotationCurvesTimestamps[i]
+                        - animationCurvesTimestamps[j]) < 0.001f) {
+
+                        keyExists = true;
+                        break;
+                    }
+                }
+
+                if (!keyExists) {
+                    rotationCurves.RemovePoint(i);
+                    break;
+                }
+            }
         }
 
         private void UpdateRotationCurvesWithAddedKeys() {
-            throw new NotImplementedException();
-        }
+            // AnimationPath node timestamps.
+            var animationCurvesTimestamps = GetNodeTimestamps();
+            // Get values from rotationCurves.
+            var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
+            var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
 
+            // For each timestamp in rotationCurves..
+            for (var i = 0; i < animationCurvesTimestamps.Length; i++) {
+                var keyExists = false;
+                for (var j = 0; j < rotationCurvesKeysNo; j++) {
+                    if (Math.Abs(rotationCurvesTimestamps[j]
+                        - animationCurvesTimestamps[i]) < 0.001f) {
+
+                        keyExists = true;
+                        break;
+                    }
+                }
+
+                if (!keyExists) {
+                    var defaultRotation = new Vector3(0, 0, 0);
+
+                    rotationCurves.CreateNewPoint(
+                        animationCurvesTimestamps[i],
+                        defaultRotation);
+                }
+            }
+        }
 
         private void DrawGizmoCurve() {
             var points = SamplePathForPoints(GizmoCurveSamplingFrequency);

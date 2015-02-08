@@ -178,6 +178,10 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
+            InitializeEaseCurve();
+            InitializeRotationCurve();
+            InitializeLookForwardCurve();
+
             // Initialize animatedObject field.
             if (animatedObject == null && Camera.main.transform != null) {
                 animatedObject = Camera.main.transform;
@@ -359,9 +363,6 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
-            InitializeEaseCurve();
-            InitializeRotationCurve();
-            InitializeLookForwardCurve();
 
             // Start playing animation on Start().
             isPlaying = true;

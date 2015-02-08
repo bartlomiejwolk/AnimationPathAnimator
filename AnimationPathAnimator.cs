@@ -15,7 +15,6 @@ namespace ATP.AnimationPathTools {
     /// time.
     /// </summary>
     [RequireComponent(typeof(AnimationPath))]
-    [RequireComponent(typeof(TargetAnimationPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
 
@@ -185,7 +184,7 @@ namespace ATP.AnimationPathTools {
             // Initialize followedObjectPath field.
             followedObjectPath = GetComponent<TargetAnimationPath>();
 
-            CreateTargetGO();
+            //CreateTargetGO();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

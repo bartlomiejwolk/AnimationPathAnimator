@@ -87,6 +87,7 @@ namespace ATP.AnimationPathTools {
                 Tools.current = Tool.None;
             }
 
+            // Initialize public properties.
             FirstNodeOffset = new Vector3(0, 0, 0);
             LastNodeOffset = new Vector3(1, 1, 1);
 
@@ -795,6 +796,9 @@ namespace ATP.AnimationPathTools {
             // Add beginning and end points.
             Script.CreateNode(0, worldPoint + firstNodeOffset);
             Script.CreateNode(1, endPoint);
+            
+            // Raise event.
+            Script.OnPathChanged();
         }
 
         #endregion PRIVATE

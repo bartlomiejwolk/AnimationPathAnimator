@@ -166,8 +166,13 @@ namespace ATP.AnimationPathTools {
         private void Awake() {
             // Load default skin.
             skin = Resources.Load("GUISkin/default") as GUISkin;
+
+            PathChanged += OnPathChanged;
         }
 
+        private void OnDestroy() {
+            PathChanged -= OnPathChanged;
+        }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
@@ -191,6 +196,11 @@ namespace ATP.AnimationPathTools {
         #endregion Unity Messages
 
         #region PUBLIC METHODS
+        public virtual void OnPathChanged() {
+            var handler = PathChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
 
         public float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;
@@ -550,6 +560,9 @@ namespace ATP.AnimationPathTools {
         #endregion Public Methods
 
         #region PRIVATE METHODS
+        private void OnPathChanged(object sender, EventArgs eventArgs) {
+        }
+
 
         private void DrawGizmoCurve() {
             var points = SamplePathForPoints(GizmoCurveSamplingFrequency);
@@ -564,10 +577,5 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
-
-        public virtual void OnPathChanged() {
-            var handler = PathChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
     }
 }

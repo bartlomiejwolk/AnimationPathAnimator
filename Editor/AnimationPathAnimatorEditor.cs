@@ -379,12 +379,12 @@ namespace ATP.AnimationPathTools {
         }
 
         // TODO Rename to GetNearestBackwardNodeTimestamp().
-        private float GetNearestNodeBackwardTimestamp() {
-            var targetPathTimestamps = script.GetTargetPathTimestamps();
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = script.GetPathTimestamps();
 
-            for (var i = targetPathTimestamps.Length - 1; i >= 0; i--) {
-                if (targetPathTimestamps[i] < animTimeRatio.floatValue) {
-                    return targetPathTimestamps[i];
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < animTimeRatio.floatValue) {
+                    return pathTimestamps[i];
                 }
             }
 
@@ -393,10 +393,10 @@ namespace ATP.AnimationPathTools {
         }
 
         // TODO Rename to GetNearestForwardNodeTimestamp().
-        private float GetNearestNodeForwardTimestamp() {
-            var targetPathTimestamps = script.GetTargetPathTimestamps();
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = script.GetPathTimestamps();
 
-            foreach (var timestamp in targetPathTimestamps
+            foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
 
                 return timestamp;
@@ -432,7 +432,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     // Jump to next node.
-                    animTimeRatio.floatValue = GetNearestNodeForwardTimestamp();
+                    animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
 
                     break;
 
@@ -440,7 +440,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     // Jump to next node.
-                    animTimeRatio.floatValue = GetNearestNodeBackwardTimestamp();
+                    animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
 
                     break;
             }

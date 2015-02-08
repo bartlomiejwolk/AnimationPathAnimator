@@ -415,8 +415,8 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC METHODS
 
-        public float[] GetTargetPathTimestamps() {
-            return followedObjectPath.GetNodeTimestamps();
+        public float[] GetPathTimestamps() {
+            return animatedObjectPath.GetNodeTimestamps();
         }
 
         /// <summary>

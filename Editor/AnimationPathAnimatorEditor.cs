@@ -294,24 +294,28 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawRotationHandle(Action<float, Vector3> callback) {
-            Handles.color = Color.magenta;
-
             var currentAnimationTime = script.AnimationTimeRatio;
-            //var animatedObjectPosition =
-            //    script.AnimatedObjectPath.GetVectorAtTime(currentAnimationTime);
-            var handlePosition = script.GetRotationAtTime(currentAnimationTime);
-            var handleSize = HandleUtility.GetHandleSize(handlePosition);
+            var currentObjectPosition = script.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = script.AnimatedObjectPath.GetNodeTimestamps();
+
+            // Return if current animation time is not equal to any node timestamp.
+            var index = Array.FindIndex(
+                nodeTimestamps, x => Math.Abs(x - currentAnimationTime) < 0.001f);
+            if (index < 0) return;
+
+            Handles.color = Color.magenta;
+            var handleSize = HandleUtility.GetHandleSize(currentObjectPosition);
             var sphereSize = handleSize * RotationHandleSize;
 
             // draw node's handle.
             var newPosition = Handles.FreeMoveHandle(
-                handlePosition,
+                currentObjectPosition,
                 Quaternion.identity,
                 sphereSize,
                 Vector3.zero,
                 Handles.SphereCap);
 
-            if (newPosition != handlePosition) {
+            if (newPosition != currentObjectPosition) {
                 // Execute callback.
                 callback(currentAnimationTime, newPosition);
             }

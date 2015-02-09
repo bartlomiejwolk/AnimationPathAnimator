@@ -574,11 +574,12 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(followedObject.position);
                 }
             }
+            // Use AnimationCurves.
             if (animatedObject != null
                 && followedObject == null
                 && !lookForwardMode) {
 
-                RotateObjectWithPathRotation();
+                RotateObjectWithAnimationCurves();
             }
             // Look forward.
             else if (animatedObject != null && lookForwardMode) {
@@ -593,9 +594,20 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void RotateObjectWithPathRotation() {
-            var rotation = GetRotationAtTime(animTimeRatio);
-            animatedObject.rotation = Quaternion.Euler(rotation);
+        private void RotateObjectWithAnimationCurves() {
+            //var rotation = GetRotationAtTime(animTimeRatio);
+            //animatedObject.rotation = Quaternion.Euler(rotation);
+
+            var lookAtTarget = rotationCurves.GetVectorAtTime(animTimeRatio);
+
+            // In play mode use Quaternion.Slerp();
+            if (Application.isPlaying) {
+                RotateObjectWithSlerp(lookAtTarget);
+            }
+            // In editor mode use Transform.LookAt().
+            else {
+                RotateObjectWithLookAt(lookAtTarget);
+            }
         }
 
         private void RotateObjectWithLookAt(Vector3 targetPos) {

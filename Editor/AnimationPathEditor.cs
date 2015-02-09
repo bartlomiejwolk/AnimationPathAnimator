@@ -53,6 +53,7 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty advancedSettingsFoldout;
         protected SerializedProperty exportSamplingFrequency;
         protected SerializedProperty skin;
+        //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
         public Vector3 LastNodeOffset { get; protected set; }
@@ -76,6 +77,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            //rotationCurves = serializedObject.FindProperty("rotationCurves");
 
             Script = (AnimationPath)target;
 
@@ -85,6 +87,7 @@ namespace ATP.AnimationPathTools {
                 Tools.current = Tool.None;
             }
 
+            // Initialize public properties.
             FirstNodeOffset = new Vector3(0, 0, 0);
             LastNodeOffset = new Vector3(1, 1, 1);
 
@@ -95,6 +98,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected void OnSceneGUI() {
+            //Debug.Log(drawRotationHandle.boolValue);
             // Log error if inspector GUISkin filed is empty.
             if (Script.Skin == null) {
                 Script.MissingReferenceError(
@@ -138,7 +142,6 @@ namespace ATP.AnimationPathTools {
             HandleDrawingSmoothTangentButton();
 
         }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             Tools.current = LastTool;
@@ -147,6 +150,7 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
+
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
@@ -248,6 +252,7 @@ namespace ATP.AnimationPathTools {
 
         #region DRAWING METHODS
 
+
         private void DrawAddNodeButtons(
             Vector3[] nodePositions,
             Action<int> callback,
@@ -302,6 +307,7 @@ namespace ATP.AnimationPathTools {
             return addButtonPressed;
         }
 
+        // TODO Rename to DrawPositionHandles().
         private void DrawMovementHandles(
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
@@ -468,6 +474,7 @@ namespace ATP.AnimationPathTools {
         #endregion Drawing methods
 
         #region CALLBACK HANDLERS
+
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
@@ -657,6 +664,8 @@ namespace ATP.AnimationPathTools {
                     "Scene Controls",
                     "Toggle on-scene node controls."));
 
+            //EditorGUILayout.PropertyField(rotationCurves);
+
             EditorGUILayout.Space();
 
             serializedObject.Update();
@@ -766,6 +775,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
+        // TODO Refactor.
         protected void ResetPath(
             Vector3 firstNodeOffset,
             Vector3 lastNodeOffset) {
@@ -779,6 +789,7 @@ namespace ATP.AnimationPathTools {
             // Number of nodes to remove.
             var noOfNodesToRemove = Script.NodesNo;
 
+            // TODO Move to AnimationCurves class.
             // Remove all nodes.
             for (var i = 0; i < noOfNodesToRemove; i++) {
                 // NOTE After each removal, next node gets index 0.
@@ -791,6 +802,9 @@ namespace ATP.AnimationPathTools {
             // Add beginning and end points.
             Script.CreateNode(0, worldPoint + firstNodeOffset);
             Script.CreateNode(1, endPoint);
+            
+            // Raise event.
+            Script.OnPathChanged();
         }
 
         #endregion PRIVATE

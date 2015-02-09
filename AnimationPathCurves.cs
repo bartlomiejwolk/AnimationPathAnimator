@@ -36,6 +36,16 @@ namespace ATP.AnimationPathTools {
 
         #endregion FIELDS
 
+        #region UNITY MESSAGES
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnEnable() {
+            // Initialize curves field.
+            if (curves[0] == null) {
+                InitializeCurves();
+            }
+        }
+        #endregion
+
         #region PUBLIC METHODS
 
         public void AddNodeAtTime(float timestamp) {
@@ -69,6 +79,7 @@ namespace ATP.AnimationPathTools {
             curves[2].MoveKey(nodeIndex, keyZCopy);
         }
 
+        // TODO Rename Point to Node.
         public void ChangePointTimestamp(
             int keyIndex,
             float newTimestamp) {
@@ -170,7 +181,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PUBLIC METHODS
-
         #region PRIVATE METHODS
 
         /// <summary>
@@ -181,15 +191,22 @@ namespace ATP.AnimationPathTools {
                 curves[i] = new AnimationCurve();
             }
         }
+        #endregion PRIVATE METHODS
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnEnable() {
-            // Initialize curves field.
-            if (curves[0] == null) {
-                InitializeCurves();
+        public float[] GetTimestamps() {
+            var timestamps = new float[KeysNo];
+
+            for (var i = 0; i < KeysNo; i++) {
+                timestamps[i] = curves[0].keys[i].time;
             }
+
+            return timestamps;
         }
 
-        #endregion PRIVATE METHODS
+        public void SmoothAllNodes() {
+            for (var i = 0; i < KeysNo; i++) {
+                SmoothPointTangents(i);
+            }
+        }
     }
 }

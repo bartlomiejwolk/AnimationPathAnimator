@@ -256,7 +256,7 @@ namespace ATP.AnimationPathTools {
             }
 
             // For each path node..
-            for (var i = 1; i < nodePositions.Length - 1; i++) {
+            for (var i = 0; i < nodePositions.Length; i++) {
                 //var easeTimestamp = easeTimestamps[i];
                 var easeValue = easeCurveValues[i];
                 //var arcValue = easeTimestamp * 360f;

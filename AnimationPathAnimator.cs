@@ -50,15 +50,34 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public const float ShortJumpValue = 0.002f;
 
-        private const float LookForwardGizmoSize = 0.5f;
-
         /// <summary>
         /// How much look forward point should be positioned away from the
         /// animated object.
         /// </summary>
         /// <remarks>Value is a time in range from 0 to 1.</remarks>
+        // TODO Rename to LookForwardTimeOffset.
         private const float LookForwardTimeDelta = 0.03f;
         #endregion CONSTANTS
+
+        #region FIELDS
+
+        /// <summary>
+        /// Current animation time in seconds.
+        /// </summary>
+        private float currentAnimTime;
+
+        /// <summary>
+        /// If animation is currently enabled.
+        /// </summary>
+        /// <remarks>
+        /// Used in play mode. You can use it to stop animation.
+        /// </remarks>
+        private bool isPlaying;
+
+        [SerializeField]
+        private AnimationPathCurves rotationCurves;
+
+        #endregion FIELDS
 
         #region EDITOR
 
@@ -104,6 +123,7 @@ namespace ATP.AnimationPathTools {
         private Transform followedObject;
 
         [SerializeField]
+        // TODO Replace with float value.
         private AnimationCurve lookForwardCurve = new AnimationCurve();
 
         [SerializeField]
@@ -121,27 +141,6 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
         #endregion EDITOR
-
-        #region FIELDS
-
-        /// <summary>
-        /// Current animation time in seconds.
-        /// </summary>
-        private float currentAnimTime;
-
-        /// <summary>
-        /// If animation is currently enabled.
-        /// </summary>
-        /// <remarks>
-        /// Used in play mode. You can use it to stop animation.
-        /// </remarks>
-        private bool isPlaying;
-
-        [SerializeField]
-        private AnimationPathCurves rotationCurves;
-
-        #endregion FIELDS
-
         #region PUBLIC PROPERTIES
 
         /// <summary>
@@ -400,18 +399,18 @@ namespace ATP.AnimationPathTools {
             return (float)newTimestamp;
         }
 
-        private void CreateTargetGO() {
-            string followedGOName = name + "-target";
-            GameObject followedGO = GameObject.Find(followedGOName);
-            // If nothing was found, create a new one.
-            if (followedGO == null) {
-                followedObject = new GameObject(followedGOName).transform;
-                //followedObject.parent = gameObject.transform;
-            }
-            else {
-                followedObject = followedGO.transform;
-            }
-        }
+        //private void CreateTargetGO() {
+        //    string followedGOName = name + "-target";
+        //    GameObject followedGO = GameObject.Find(followedGOName);
+        //    // If nothing was found, create a new one.
+        //    if (followedGO == null) {
+        //        followedObject = new GameObject(followedGOName).transform;
+        //        //followedObject.parent = gameObject.transform;
+        //    }
+        //    else {
+        //        followedObject = followedGO.transform;
+        //    }
+        //}
 
         // TODO Add possibility to stop when isPlaying is disabled.
         private IEnumerator EaseTime() {

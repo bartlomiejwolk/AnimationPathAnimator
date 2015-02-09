@@ -805,6 +805,7 @@ namespace ATP.AnimationPathTools {
             
             // Raise event.
             Script.OnPathChanged();
+            Script.OnPathReset();
         }
 
         #endregion PRIVATE

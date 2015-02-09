@@ -19,6 +19,16 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         #region CONSTANTS
+        private const float LookForwardGizmoSize = 0.5f;
+        /// <summary>
+        /// How much look forward point should be positioned away from the
+        /// animated object.
+        /// </summary>
+        /// <remarks>
+        /// Value is a time in range from 0 to 1.
+        /// </remarks>
+        private const float LookForwardTimeDelta = 0.03f;
+
 
         /// <summary>
         /// Key shortcut to jump backward.
@@ -136,17 +146,14 @@ namespace ATP.AnimationPathTools {
         /// Used in play mode. You can use it to stop animation.
         /// </remarks>
         private bool isPlaying;
+        [SerializeField]
+        private AnimationPathCurves rotationCurves;
 
-        private const float LookForwardGizmoSize = 0.5f;
-
-        /// <summary>
-        /// How much look forward point should be positioned away from the
-        /// animated object.
-        /// </summary>
-        /// <remarks>
-        /// Value is a time in range from 0 to 1.
-        /// </remarks>
-        private const float LookForwardTimeDelta = 0.03f;
+        #endregion FIELDS
+        #region PUBLIC PROPERTIES
+        public AnimationCurve EaseCurve {
+            get { return easeCurve; }
+        }
 
         /// <summary>
         /// Path used to animate the <c>animatedObject</c> transform.
@@ -155,18 +162,11 @@ namespace ATP.AnimationPathTools {
             get { return animatedObjectPath; }
         }
 
-        public AnimationCurve EaseCurve {
-            get { return easeCurve; }
-        }
-
         public float AnimationTimeRatio {
             get { return animTimeRatio; }
         }
 
-        [SerializeField]
-        private AnimationPathCurves rotationCurves;
-
-        #endregion FIELDS
+        #endregion
 
         #region UNITY MESSAGES
 
@@ -220,16 +220,74 @@ namespace ATP.AnimationPathTools {
         private void OnDisable() {
             animatedObjectPath.PathChanged -= AnimatedObjectPathOnPathChanged;
         }
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void Start() {
 
-        private void AnimatedObjectPathOnPathChanged(
-            object sender,
-            EventArgs eventArgs) {
+            // Start playing animation on Start().
+            isPlaying = true;
 
-            UpdateEaseCurve();
-            UpdateRotationCurves();
+            // Start animation from time ratio specified in the inspector.
+            currentAnimTime = animTimeRatio * duration;
 
-            // If there's not, create a new key with this value and the corresponding
-            // timestamp in the ease curve.
+            if (Application.isPlaying) {
+                StartCoroutine(EaseTime());
+            }
+        }
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void Update() {
+            // In play mode, update animation time with delta time.
+            if (Application.isPlaying && isPlaying) {
+                Animate();
+            }
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnDrawGizmosSelected() {
+        }
+
+        #endregion UNITY MESSAGES
+
+        #region PUBLIC METHODS
+        public Vector3 GetForwardPoint() {
+            // Timestamp offset of the forward point.
+            var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
+            // Forward point timestamp.
+            var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
+
+            return animatedObjectPath.GetVectorAtTime(forwardPointTimestamp);
+        }
+
+        public void ResetRotation() {
+            // Remove all nodes.
+            for (var i = 0; i < rotationCurves.KeysNo; i++) {
+                // NOTE After each removal, next node gets index 0.
+                rotationCurves.RemovePoint(0);
+            }
+        }
+
+        public Vector3 GetRotationAtTime(float timestamp) {
+            return rotationCurves.GetVectorAtTime(timestamp);
+        }
+
+        // TODO Rename to GetRotationDirection().
+        public Vector3 GetNodeRotation(int nodeIndex) {
+            return rotationCurves.GetVectorAtKey(nodeIndex);
+        }
+
+        public void ChangeRotationForTimestamp(
+                    float timestamp,
+                    Vector3 newPosition) {
+
+            // TODO Extract.
+            // Remove old key.
+            var timestamps = rotationCurves.GetTimestamps();
+            for (var i = 0; i < rotationCurves.KeysNo; i++) {
+                if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
+                    rotationCurves.RemovePoint(i);
+                }
+            }
+            rotationCurves.CreateNewPoint(timestamp, newPosition);
+            rotationCurves.SmoothAllNodes();
         }
 
         public void UpdateEaseCurve() {
@@ -245,6 +303,58 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+
+        public float[] GetPathTimestamps() {
+            return animatedObjectPath.GetNodeTimestamps();
+        }
+
+        /// <summary>
+        /// Call in edit mode to update animation.
+        /// </summary>
+        public void UpdateAnimation() {
+            if (!Application.isPlaying) {
+                Animate();
+            }
+        }
+        #endregion PUBLIC METHODS
+
+        #region EVENT HANDLERS
+        private void AnimatedObjectPathOnPathChanged(
+                    object sender,
+                    EventArgs eventArgs) {
+
+            UpdateEaseCurve();
+            UpdateRotationCurves();
+
+            // If there's not, create a new key with this value and the corresponding
+            // timestamp in the ease curve.
+        }
+
+        #endregion
+
+        #region PRIVATE METHODS
+        private float FindTimestampForValue(
+                    AnimationCurve curve,
+                    float value,
+                    float precision) {
+
+            var timestamp = 0f;
+            bool timestampFound = false;
+
+            // Search for timestamp.
+            while (timestampFound == false) {
+                var easeCurveValue = curve.Evaluate(timestamp);
+                // Check the given timestamp generates expected value;
+                if (Math.Abs(easeCurveValue - value) < precision) {
+                    timestampFound = true;
+                }
+
+                timestamp = CalculateNewTestTimestamp(curve, timestamp, value);
+            }
+
+            return timestamp;
+        }
+
         private void UpdateEaseCurveValues() {
             // Get node timestamps.
             var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
@@ -258,32 +368,6 @@ namespace ATP.AnimationPathTools {
                     keyCopy.value = nodeTimestamps[i];
                     // Move key to new value.
                     easeCurve.MoveKey(i, keyCopy);
-                }
-            }
-        }
-
-        private void UpdateEaseCurveWithRemovedKeys() {
-            // AnimationPath node timestamps.
-            var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
-            // Get values from easeCurve.
-            var easeCurveValues = new float[easeCurve.length];
-            for (var i = 0; i < easeCurveValues.Length; i++) {
-                easeCurveValues[i] = easeCurve.keys[i].value;
-            }
-
-            // For each value in easeCurve..
-            for (var i = 0; i < easeCurveValues.Length; i++) {
-                var keyExists = false;
-                for (var j = 0; j < nodeTimestamps.Length; j++) {
-                    if (Math.Abs(easeCurveValues[i] - nodeTimestamps[j]) < 0.001f) {
-                        keyExists = true;
-                        break;
-                    }
-                }
-
-                if (!keyExists) {
-                    easeCurve.RemoveKey(i);
-                    break;
                 }
             }
         }
@@ -340,35 +424,39 @@ namespace ATP.AnimationPathTools {
             easeCurve.AddKey(lastKeyCopy);
         }
 
-        private float FindTimestampForValue(
-            AnimationCurve curve,
-            float value,
-            float precision) {
-
-            var timestamp = 0f;
-            bool timestampFound = false;
-
-            // Search for timestamp.
-            while (timestampFound == false) {
-                var easeCurveValue = curve.Evaluate(timestamp);
-                // Check the given timestamp generates expected value;
-                if (Math.Abs(easeCurveValue - value) < precision) {
-                    timestampFound = true;
-                }
-
-                timestamp = CalculateNewTestTimestamp(curve, timestamp, value);
+        private void UpdateEaseCurveWithRemovedKeys() {
+            // AnimationPath node timestamps.
+            var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
+            // Get values from easeCurve.
+            var easeCurveValues = new float[easeCurve.length];
+            for (var i = 0; i < easeCurveValues.Length; i++) {
+                easeCurveValues[i] = easeCurve.keys[i].value;
             }
 
-            return timestamp;
+            // For each value in easeCurve..
+            for (var i = 0; i < easeCurveValues.Length; i++) {
+                var keyExists = false;
+                for (var j = 0; j < nodeTimestamps.Length; j++) {
+                    if (Math.Abs(easeCurveValues[i] - nodeTimestamps[j]) < 0.001f) {
+                        keyExists = true;
+                        break;
+                    }
+                }
+
+                if (!keyExists) {
+                    easeCurve.RemoveKey(i);
+                    break;
+                }
+            }
         }
 
         private float CalculateNewTestTimestamp(
-            AnimationCurve curve,
-            float currentTimestamp,
-            float desiredValue) {
+                    AnimationCurve curve,
+                    float currentTimestamp,
+                    float desiredValue) {
 
             var newTimestamp = RootFinding.Brent(
-                EvaluateTimestamp, 
+                EvaluateTimestamp,
                 0,
                 1,
                 1e-10,
@@ -379,84 +467,6 @@ namespace ATP.AnimationPathTools {
 
         private double EvaluateTimestamp(double x) {
             return easeCurve.Evaluate((float)x);
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void Start() {
-
-            // Start playing animation on Start().
-            isPlaying = true;
-
-            // Start animation from time ratio specified in the inspector.
-            currentAnimTime = animTimeRatio * duration;
-
-            if (Application.isPlaying) {
-                StartCoroutine(EaseTime());
-            }
-        }
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void Update() {
-            // In play mode, update animation time with delta time.
-            if (Application.isPlaying && isPlaying) {
-                Animate();
-            }
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnDrawGizmosSelected() {
-        }
-
-        #endregion UNITY MESSAGES
-
-        #region PUBLIC METHODS
-
-        public float[] GetPathTimestamps() {
-            return animatedObjectPath.GetNodeTimestamps();
-        }
-
-        /// <summary>
-        /// Call in edit mode to update animation.
-        /// </summary>
-        public void UpdateAnimation() {
-            if (!Application.isPlaying) {
-                Animate();
-            }
-        }
-        #endregion PUBLIC METHODS
-
-        #region PRIVATE METHODS
-
-        // TODO Rename to GetRotationDirection().
-        public Vector3 GetNodeRotation(int nodeIndex) {
-            return rotationCurves.GetVectorAtKey(nodeIndex);
-        }
-
-        public void ChangeRotationForTimestamp(
-            float timestamp,
-            Vector3 newPosition) {
-
-            // TODO Extract.
-            // Remove old key.
-            var timestamps = rotationCurves.GetTimestamps();
-            for (var i = 0; i < rotationCurves.KeysNo; i++) {
-                if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
-                    rotationCurves.RemovePoint(i);
-                }
-            }
-            rotationCurves.CreateNewPoint(timestamp, newPosition);
-            rotationCurves.SmoothAllNodes();
-        }
-
-        public Vector3 GetRotationAtTime(float timestamp) {
-            return rotationCurves.GetVectorAtTime(timestamp);
-        }
-
-        public void ResetRotation() {
-            // Remove all nodes.
-            for (var i = 0; i < rotationCurves.KeysNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                rotationCurves.RemovePoint(0);
-            }
         }
         private void InitializeLookForwardCurve() {
             var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
@@ -608,16 +618,6 @@ namespace ATP.AnimationPathTools {
         private void RotateObjectWithLookAt(Vector3 targetPos) {
             animatedObject.LookAt(targetPos);
         }
-
-        public Vector3 GetForwardPoint() {
-            // Timestamp offset of the forward point.
-            var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
-            // Forward point timestamp.
-            var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
-
-            return animatedObjectPath.GetVectorAtTime(forwardPointTimestamp);
-        }
-
         private void RotateObjectWithSlerp(Vector3 targetPosition) {
             // There's no more points to look at.
             if (targetPosition == animatedObject.position) return;

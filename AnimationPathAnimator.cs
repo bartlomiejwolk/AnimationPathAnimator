@@ -208,6 +208,7 @@ namespace ATP.AnimationPathTools {
         private void OnEnable() {
             // TODO Move it to Awake() and OnDestroy().
             animatedObjectPath.PathChanged += AnimatedObjectPathOnPathChanged;
+            animatedObjectPath.PathReset += AnimatedObjectPathOnPathReset;
 
             // Instantiate rotationCurves.
             if (rotationCurves == null) {
@@ -215,10 +216,10 @@ namespace ATP.AnimationPathTools {
                     ScriptableObject.CreateInstance<AnimationPathCurves>();
             }
         }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             animatedObjectPath.PathChanged -= AnimatedObjectPathOnPathChanged;
+            animatedObjectPath.PathReset -= AnimatedObjectPathOnPathReset;
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
@@ -319,6 +320,18 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region EVENT HANDLERS
+        private void AnimatedObjectPathOnPathReset(object sender, EventArgs eventArgs) {
+            ResetRotationData();
+        }
+
+        private void ResetRotationData() {
+            var pathNodePositions = animatedObjectPath.GetNodePositions();
+
+            for (var i = 0; i < rotationCurves.KeysNo; i++) {
+                rotationCurves.MovePointToPosition(i, pathNodePositions[i]);
+            }
+        }
+
         private void AnimatedObjectPathOnPathChanged(
                     object sender,
                     EventArgs eventArgs) {

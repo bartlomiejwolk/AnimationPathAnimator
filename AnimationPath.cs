@@ -47,6 +47,7 @@ namespace ATP.AnimationPathTools {
         #region FIELDS
 
         public event EventHandler PathChanged;
+        public event EventHandler PathReset;
 
         /// <summary>
         /// Animation curves that make the animation path.
@@ -183,14 +184,20 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion Unity Messages
+        #region EVENT INVOCATORS
+        public virtual void OnPathReset() {
+            var handler = PathReset;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
 
-        #region PUBLIC METHODS
         public virtual void OnPathChanged() {
             var handler = PathChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        #endregion
 
+        #region PUBLIC METHODS
         public float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;
 
@@ -565,6 +572,5 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
-
     }
 }

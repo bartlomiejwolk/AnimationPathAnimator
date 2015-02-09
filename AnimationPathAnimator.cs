@@ -738,5 +738,11 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
+
+        public void SmoothEaseCurve() {
+            for (var i = 0; i < easeCurve.length; i++) {
+                easeCurve.SmoothTangents(i, 0);
+            }
+        }
     }
 }

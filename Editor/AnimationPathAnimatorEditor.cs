@@ -250,9 +250,17 @@ namespace ATP.AnimationPathTools {
                 easeTimestamps[i] = script.EaseCurve.keys[i].time;
             }
 
+            var easeCurveValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.EaseCurve.length; i++) {
+                easeCurveValues[i] = script.EaseCurve.keys[i].value;
+            }
+
+            // For each path node..
             for (var i = 1; i < nodePositions.Length - 1; i++) {
-                var easeTimestamp = easeTimestamps[i];
-                var arcValue = easeTimestamp * 360f;
+                //var easeTimestamp = easeTimestamps[i];
+                var easeValue = easeCurveValues[i];
+                //var arcValue = easeTimestamp * 360f;
+                var arcValue = easeValue * 3600f;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
@@ -288,7 +296,7 @@ namespace ATP.AnimationPathTools {
                 // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
-                    callback(i, newArcValue / 360f);
+                    callback(i, newArcValue / 3600f);
                 }
             }
         }
@@ -330,34 +338,41 @@ namespace ATP.AnimationPathTools {
         }
 
         // TODO Refactor.
-        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newTimestamp) {
+        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
             HandleUndo();
 
             // Copy keyframe.
             var keyframeCopy = script.EaseCurve.keys[keyIndex];
             // Update keyframe timestamp.
-            keyframeCopy.time = newTimestamp;
-            var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+            //keyframeCopy.time = newValue;
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // Replace old key with updated one.
+            script.EaseCurve.RemoveKey(keyIndex);
+            script.EaseCurve.AddKey(keyframeCopy);
+            script.SmoothEaseCurve();
 
             // If new timestamp is bigger than old timestamp..
-            if (newTimestamp > oldTimestamp) {
-                // Get timestamp of the node to the right.
-                var rightNeighbourTimestamp = script.EaseCurve.keys[keyIndex + 1].time;
-                // If new timestamp is bigger or equal to the neighbors's..
-                if (newTimestamp >= rightNeighbourTimestamp) return;
+            //if (newValue > oldTimestamp) {
+            //    // Get timestamp of the node to the right.
+            //    var rightNeighbourTimestamp = script.EaseCurve.keys[keyIndex + 1].time;
+            //    // If new timestamp is bigger or equal to the neighbors's..
+            //    if (newValue >= rightNeighbourTimestamp) return;
 
-                // Move key in the easeCurve.
-                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
-            }
-            else {
-                // Get timestamp of the node to the left.
-                var leftNeighbourTimestamp = script.EaseCurve.keys[keyIndex - 1].time;
-                // If new timestamp is smaller or equal to the neighbors's..
-                if (newTimestamp <= leftNeighbourTimestamp) return;
+            //    // Move key in the easeCurve.
+            //    script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            //}
+            //else {
+            //    // Get timestamp of the node to the left.
+            //    var leftNeighbourTimestamp = script.EaseCurve.keys[keyIndex - 1].time;
+            //    // If new timestamp is smaller or equal to the neighbors's..
+            //    if (newValue <= leftNeighbourTimestamp) return;
 
-                // Move key in the easeCurve.
-                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
-            }
+            //    // Move key in the easeCurve.
+            //    script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            //}
         }
 
         #endregion

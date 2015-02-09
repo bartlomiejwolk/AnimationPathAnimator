@@ -208,5 +208,12 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
+
+        public void RemoveAllKeys() {
+            var keysToRemoveNo = KeysNo;
+            for (var i = 0; i < keysToRemoveNo; i++) {
+                RemovePoint(0);
+            }
+        }
     }
 }

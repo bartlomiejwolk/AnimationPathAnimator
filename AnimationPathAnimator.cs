@@ -143,6 +143,9 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
 
+        private Vector3 defaultStartRotationOffset = new Vector3(0, -0.1f, 0);
+        private Vector3 defaultEndRotationOffset = new Vector3(0, -0.1f, 0);
+
         private const float DefaultEndEaseValue = 0.05f;
         private const float DefaultStartEaseValue = 0.01f;
 
@@ -312,7 +315,7 @@ namespace ATP.AnimationPathTools {
             }
             // Update easeCurve values.
             else {
-                UpdateEaseCurveValues();
+                UpdateEaseCurveTimestamps();
             }
         }
         #endregion PUBLIC METHODS
@@ -340,9 +343,17 @@ namespace ATP.AnimationPathTools {
         private void ResetRotationData() {
             var pathNodePositions = animatedObjectPath.GetNodePositions();
 
-            for (var i = 0; i < rotationCurves.KeysNo; i++) {
-                rotationCurves.MovePointToPosition(i, pathNodePositions[i]);
-            }
+            rotationCurves.RemoveAllKeys();
+            //for (var i = 0; i < rotationCurves.KeysNo; i++) {
+            //    rotationCurves.MovePointToPosition(i, pathNodePositions[i]);
+            //}
+            var startRotation = pathNodePositions[0] + defaultStartRotationOffset;
+            var endRotation = pathNodePositions[1] + defaultEndRotationOffset;
+
+            rotationCurves.CreateNewPoint(0, startRotation);
+            rotationCurves.CreateNewPoint(1, endRotation);
+
+            //EaseCurveExtremeNodes(easeCurve);
         }
 
         private void ResetEaseCurve() {
@@ -611,17 +622,17 @@ namespace ATP.AnimationPathTools {
 
         }
 
-        private void UpdateEaseCurveValues() {
+        private void UpdateEaseCurveTimestamps() {
             // Get node timestamps.
-            var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
+            var pathNodeTimestamps = animatedObjectPath.GetNodeTimestamps();
             // For each key in easeCurve..
-            for (var i = 1; i < nodeTimestamps.Length - 1; i++) {
-                // If resp. node timestamp is different from key value..
-                if (Math.Abs(nodeTimestamps[i] - easeCurve.keys[i].value) > 0.001f) {
+            for (var i = 1; i < easeCurve.length - 1; i++) {
+                // If resp. node timestamp is different from easeCurve timestamp.. 
+                if (Math.Abs(pathNodeTimestamps[i] - easeCurve.keys[i].value) > 0.001f) {
                     // Copy key
                     var keyCopy = easeCurve.keys[i];
                     // Update timestamp
-                    keyCopy.value = nodeTimestamps[i];
+                    keyCopy.time = pathNodeTimestamps[i];
                     // Move key to new value.
                     easeCurve.MoveKey(i, keyCopy);
                 }

@@ -107,8 +107,8 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Animation duration in seconds.
         /// </summary>
-        [SerializeField]
-        private float duration = 10;
+        //[SerializeField]
+        //private float duration = 10;
 
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -201,9 +201,9 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnValidate() {
             // Limit duration value.
-            if (duration < 1) {
-                duration = 1;
-            }
+            //if (duration < 1) {
+            //    duration = 1;
+            //}
 
             // Limit animation time ratio to <0; 1>.
             if (animTimeRatio < 0) {
@@ -220,7 +220,7 @@ namespace ATP.AnimationPathTools {
             isPlaying = true;
 
             // Start animation from time ratio specified in the inspector.
-            currentAnimTime = animTimeRatio * duration;
+            //currentAnimTime = animTimeRatio * duration;
 
             if (Application.isPlaying) {
                 StartCoroutine(EaseTime());
@@ -419,9 +419,9 @@ namespace ATP.AnimationPathTools {
                 currentAnimTime += Time.deltaTime;
 
                 // Convert animation time to <0; 1> ratio.
-                var timeRatio = currentAnimTime / duration;
+                //var timeRatio = currentAnimTime / duration;
 
-                animTimeRatio = easeCurve.Evaluate(timeRatio);
+                //animTimeRatio = easeCurve.Evaluate(timeRatio);
 
                 yield return null;
             } while (animTimeRatio < 1.0f);

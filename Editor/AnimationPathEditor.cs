@@ -804,7 +804,7 @@ namespace ATP.AnimationPathTools {
             Script.CreateNode(1, endPoint);
             
             // Raise event.
-            Script.OnPathChanged();
+            //Script.OnPathChanged();
             Script.OnPathReset();
         }
 

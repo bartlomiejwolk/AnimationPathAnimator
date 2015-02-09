@@ -29,18 +29,20 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
+        // TODO Change this value directly.
         protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
         private SerializedProperty animTimeRatio;
-        private SerializedProperty duration;
+        //private SerializedProperty duration;
         private SerializedProperty easeAnimationCurve;
         private SerializedProperty lookForwardCurve;
         private SerializedProperty followedObject;
-        private SerializedProperty followedObjectPath;
+        //private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
         private SerializedProperty tiltingCurve;
         private SerializedProperty lookForwardMode;
+        // TODO Change this value directly.
         private SerializedProperty displayEaseHandles;
 
         #endregion SERIALIZED PROPERTIES
@@ -50,7 +52,7 @@ namespace ATP.AnimationPathTools {
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
-            EditorGUILayout.Slider(
+            animTimeRatio.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
@@ -58,11 +60,11 @@ namespace ATP.AnimationPathTools {
                     0,
                     1);
 
-            EditorGUILayout.PropertyField(
-                duration,
-                new GUIContent(
-                    "Duration",
-                    "Duration of the animation in seconds."));
+            //EditorGUILayout.PropertyField(
+            //    duration,
+            //    new GUIContent(
+            //        "Duration",
+            //        "Duration of the animation in seconds."));
 
             EditorGUILayout.PropertyField(
                 rotationSpeed,
@@ -124,11 +126,11 @@ namespace ATP.AnimationPathTools {
                     "Target Object",
                     "Object that the animated object will be looking at."));
 
-            EditorGUILayout.PropertyField(
-                followedObjectPath,
-                new GUIContent(
-                    "Target Object Path",
-                    "Path for the followed object."));
+            //EditorGUILayout.PropertyField(
+            //    followedObjectPath,
+            //    new GUIContent(
+            //        "Target Object Path",
+            //        "Path for the followed object."));
 
             //EditorGUILayout.Space();
 
@@ -146,7 +148,7 @@ namespace ATP.AnimationPathTools {
             script = (AnimationPathAnimator)target;
 
             // Initialize serialized properties.
-            duration = serializedObject.FindProperty("duration");
+            //duration = serializedObject.FindProperty("duration");
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
             easeAnimationCurve = serializedObject.FindProperty("easeCurve");
@@ -155,7 +157,7 @@ namespace ATP.AnimationPathTools {
             animatedObject = serializedObject.FindProperty("animatedObject");
             animatedObjectPath = serializedObject.FindProperty("animatedObjectPath");
             followedObject = serializedObject.FindProperty("followedObject");
-            followedObjectPath = serializedObject.FindProperty("followedObjectPath");
+            //followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
             drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
@@ -250,9 +252,17 @@ namespace ATP.AnimationPathTools {
                 easeTimestamps[i] = script.EaseCurve.keys[i].time;
             }
 
-            for (var i = 1; i < nodePositions.Length - 1; i++) {
-                var easeTimestamp = easeTimestamps[i];
-                var arcValue = easeTimestamp * 360f;
+            var easeCurveValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.EaseCurve.length; i++) {
+                easeCurveValues[i] = script.EaseCurve.keys[i].value;
+            }
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                //var easeTimestamp = easeTimestamps[i];
+                var easeValue = easeCurveValues[i];
+                //var arcValue = easeTimestamp * 360f;
+                var arcValue = easeValue * 3600f;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
@@ -285,10 +295,14 @@ namespace ATP.AnimationPathTools {
                     Handles.ConeCap,
                     1);
 
+                // Limit handle value.
+                if (newArcValue > 360) newArcValue = 360;
+                if (newArcValue < 0) newArcValue = 0;
+
                 // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
-                    callback(i, newArcValue / 360f);
+                    callback(i, newArcValue / 3600f);
                 }
             }
         }
@@ -326,38 +340,48 @@ namespace ATP.AnimationPathTools {
                             float timestamp,
                             Vector3 newPosition) {
 
+            RecordRotationObject();
+
             script.ChangeRotationForTimestamp(timestamp, newPosition);
         }
 
         // TODO Refactor.
-        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newTimestamp) {
-            HandleUndo();
+        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
+            RecordTargetObject();
 
             // Copy keyframe.
             var keyframeCopy = script.EaseCurve.keys[keyIndex];
             // Update keyframe timestamp.
-            keyframeCopy.time = newTimestamp;
-            var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+            //keyframeCopy.time = newValue;
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // Replace old key with updated one.
+            script.EaseCurve.RemoveKey(keyIndex);
+            script.EaseCurve.AddKey(keyframeCopy);
+            script.SmoothEaseCurve();
+            script.EaseCurveExtremeNodes(script.EaseCurve);
 
             // If new timestamp is bigger than old timestamp..
-            if (newTimestamp > oldTimestamp) {
-                // Get timestamp of the node to the right.
-                var rightNeighbourTimestamp = script.EaseCurve.keys[keyIndex + 1].time;
-                // If new timestamp is bigger or equal to the neighbors's..
-                if (newTimestamp >= rightNeighbourTimestamp) return;
+            //if (newValue > oldTimestamp) {
+            //    // Get timestamp of the node to the right.
+            //    var rightNeighbourTimestamp = script.EaseCurve.keys[keyIndex + 1].time;
+            //    // If new timestamp is bigger or equal to the neighbors's..
+            //    if (newValue >= rightNeighbourTimestamp) return;
 
-                // Move key in the easeCurve.
-                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
-            }
-            else {
-                // Get timestamp of the node to the left.
-                var leftNeighbourTimestamp = script.EaseCurve.keys[keyIndex - 1].time;
-                // If new timestamp is smaller or equal to the neighbors's..
-                if (newTimestamp <= leftNeighbourTimestamp) return;
+            //    // Move key in the easeCurve.
+            //    script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            //}
+            //else {
+            //    // Get timestamp of the node to the left.
+            //    var leftNeighbourTimestamp = script.EaseCurve.keys[keyIndex - 1].time;
+            //    // If new timestamp is smaller or equal to the neighbors's..
+            //    if (newValue <= leftNeighbourTimestamp) return;
 
-                // Move key in the easeCurve.
-                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
-            }
+            //    // Move key in the easeCurve.
+            //    script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
+            //}
         }
 
         #endregion
@@ -516,8 +540,12 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Record target object state for undo.
         /// </summary>
-        protected void HandleUndo() {
+        // TODO Remove these methods and use record directly.
+        protected void RecordTargetObject() {
             Undo.RecordObject(script, "Ease curve changed.");
+        }
+        protected void RecordRotationObject() {
+            Undo.RecordObject(script.RotationCurves, "Ease curve changed.");
         }
         #endregion PRIVATE METHODS
     }

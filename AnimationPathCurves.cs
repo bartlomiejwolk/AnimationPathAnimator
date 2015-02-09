@@ -47,6 +47,22 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region PUBLIC METHODS
+        public float[] GetTimestamps() {
+            var timestamps = new float[KeysNo];
+
+            for (var i = 0; i < KeysNo; i++) {
+                timestamps[i] = curves[0].keys[i].time;
+            }
+
+            return timestamps;
+        }
+
+        public void SmoothAllNodes() {
+            for (var i = 0; i < KeysNo; i++) {
+                SmoothPointTangents(i);
+            }
+        }
+
 
         public void AddNodeAtTime(float timestamp) {
             for (var j = 0; j < 3; j++) {
@@ -193,19 +209,10 @@ namespace ATP.AnimationPathTools {
         }
         #endregion PRIVATE METHODS
 
-        public float[] GetTimestamps() {
-            var timestamps = new float[KeysNo];
-
-            for (var i = 0; i < KeysNo; i++) {
-                timestamps[i] = curves[0].keys[i].time;
-            }
-
-            return timestamps;
-        }
-
-        public void SmoothAllNodes() {
-            for (var i = 0; i < KeysNo; i++) {
-                SmoothPointTangents(i);
+        public void RemoveAllKeys() {
+            var keysToRemoveNo = KeysNo;
+            for (var i = 0; i < keysToRemoveNo; i++) {
+                RemovePoint(0);
             }
         }
     }

@@ -11,6 +11,7 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANTS
         private const float ArcHandleRadius = 1f;
+        private const float RotationHandleSize = 0.25f;
         #endregion
         #region FIELDS
 
@@ -28,6 +29,7 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
+        protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
         private SerializedProperty animTimeRatio;
@@ -91,12 +93,6 @@ namespace ATP.AnimationPathTools {
                     lookForwardMode.boolValue,
                     GUILayout.Width(116));
 
-            //EditorGUILayout.PropertyField(
-            //    lookForwardMode,
-            //    new GUIContent(
-            //        "Look Forward",
-            //        "Ignore target object and look ahead."));
-
             EditorGUILayout.PropertyField(
                 lookForwardCurve,
                 new GUIContent(
@@ -106,6 +102,7 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.PropertyField(displayEaseHandles);
+            EditorGUILayout.PropertyField(drawRotationHandle);
 
             EditorGUILayout.Space();
 
@@ -161,6 +158,7 @@ namespace ATP.AnimationPathTools {
             followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
+            drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -185,8 +183,50 @@ namespace ATP.AnimationPathTools {
             HandleDrawingForwardPointGizmo();
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
+            HandleDrawingRotationHandle();
 
             script.UpdateAnimation();
+        }
+        #endregion UNITY MESSAGES
+
+        #region DRAWING HANDLERS
+        private void HandleDrawingRotationHandle() {
+            if (!drawRotationHandle.boolValue) return;
+
+            // Callback to call when node rotation is changed.
+            Action<float, Vector3> callbackHandler =
+                DrawRotationHandlesCallbackHandler;
+
+            // Draw handles.
+            DrawRotationHandle(callbackHandler);
+        }
+
+        private void HandleDrawingForwardPointGizmo() {
+            if (!lookForwardMode.boolValue) return;
+
+            var targetPos = script.GetForwardPoint();
+            // TODO Create class field with this style.
+            var style = new GUIStyle {
+                normal = { textColor = Color.white },
+                fontStyle = FontStyle.Bold,
+            };
+
+            Handles.Label(targetPos, "Point", style);
+        }
+
+        private void HandleDrawingTargetGizmo() {
+            if (followedObject.objectReferenceValue == null) return;
+
+            var targetPos =
+                ((Transform)followedObject.objectReferenceValue).position;
+            // TODO Create class field with this style.
+            var style = new GUIStyle {
+                normal = { textColor = Color.white },
+                fontStyle = FontStyle.Bold,
+            };
+
+            Handles.Label(targetPos, "Target", style);
+
         }
 
         private void HandleDrawingEaseHandles() {
@@ -196,6 +236,97 @@ namespace ATP.AnimationPathTools {
                 DrawEaseHandlesCallbackHandler;
 
             DrawEaseHandles(callbackHandler);
+        }
+        #endregion
+
+        #region DRAWING METHODS
+        private void DrawEaseHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+
+            // Get ease curve timestamps.
+            var easeTimestamps = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.EaseCurve.length; i++) {
+                easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            }
+
+            for (var i = 1; i < nodePositions.Length - 1; i++) {
+                var easeTimestamp = easeTimestamps[i];
+                var arcValue = easeTimestamp * 360f;
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                var arcHandleSize = handleSize * ArcHandleRadius;
+
+                // TODO Create const.
+                Handles.color = Color.red;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right
+                    // side of the object.
+                    Quaternion.AngleAxis(
+                    //-arcValue / 2,
+                        0,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    arcHandleSize);
+
+                // TODO Create const.
+                Handles.color = Color.red;
+
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                // TODO Create float precision const.
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, newArcValue / 360f);
+                }
+            }
+        }
+
+        private void DrawRotationHandle(Action<float, Vector3> callback) {
+            var currentAnimationTime = script.AnimationTimeRatio;
+            var currentObjectPosition = script.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = script.AnimatedObjectPath.GetNodeTimestamps();
+
+            // Return if current animation time is not equal to any node timestamp.
+            var index = Array.FindIndex(
+                nodeTimestamps, x => Math.Abs(x - currentAnimationTime) < 0.001f);
+            if (index < 0) return;
+
+            Handles.color = Color.magenta;
+            var handleSize = HandleUtility.GetHandleSize(currentObjectPosition);
+            var sphereSize = handleSize * RotationHandleSize;
+
+            // draw node's handle.
+            var newPosition = Handles.FreeMoveHandle(
+                currentObjectPosition,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                Handles.SphereCap);
+
+            if (newPosition != currentObjectPosition) {
+                // Execute callback.
+                callback(currentAnimationTime, newPosition);
+            }
+        }
+        #endregion
+        #region CALLBACK HANDLERS
+        private void DrawRotationHandlesCallbackHandler(
+                            float timestamp,
+                            Vector3 newPosition) {
+
+            script.ChangeRotationForTimestamp(timestamp, newPosition);
         }
 
         // TODO Refactor.
@@ -225,92 +356,11 @@ namespace ATP.AnimationPathTools {
                 if (newTimestamp <= leftNeighbourTimestamp) return;
 
                 // Move key in the easeCurve.
-                script.EaseCurve.MoveKey(keyIndex, keyframeCopy); 
+                script.EaseCurve.MoveKey(keyIndex, keyframeCopy);
             }
         }
 
-        private void DrawEaseHandles(Action<int, float> callback) {
-            // Get AnimationPath node positions.
-            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
-
-            // Get ease curve timestamps.
-            var easeTimestamps = new float[script.EaseCurve.length];
-            for (var i = 0; i < script.EaseCurve.length; i++) {
-                easeTimestamps[i] = script.EaseCurve.keys[i].time;
-            }
-
-            for (var i = 1; i < nodePositions.Length - 1; i++) {
-                var easeTimestamp = easeTimestamps[i];
-                var arcValue = easeTimestamp * 360f;
-                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
-                var arcHandleSize = handleSize * ArcHandleRadius;
-
-                // TODO Create const.
-                Handles.color = Color.red;
-
-                Handles.DrawWireArc(
-                    nodePositions[i],
-                    Vector3.up,
-                    // Make the arc simetrical on the left and right
-                    // side of the object.
-                    Quaternion.AngleAxis(
-                        //-arcValue / 2,
-                        0,
-                        Vector3.up) * Vector3.forward,
-                    arcValue,
-                    arcHandleSize);
-
-                // TODO Create const.
-                Handles.color = Color.red;
-
-                // TODO Create constant.
-                var scaleHandleSize = handleSize * 1.5f;
-                float newArcValue = Handles.ScaleValueHandle(
-                    arcValue,
-                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
-                        * 1.3f,
-                    Quaternion.identity,
-                    scaleHandleSize,
-                    Handles.ConeCap,
-                    1);
-
-                // TODO Create float precision const.
-                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
-                    // Execute callback.
-                    callback(i, newArcValue / 360f);
-                }
-            }
-        }
-
-        private void HandleDrawingTargetGizmo() {
-            if (followedObject.objectReferenceValue == null) return;
-
-            var targetPos =
-                ((Transform) followedObject.objectReferenceValue).position;
-            // TODO Create class field with this style.
-            var style = new GUIStyle {
-                normal = {textColor = Color.white},
-                fontStyle = FontStyle.Bold,
-            };
-
-            Handles.Label(targetPos, "Target", style);
-        
-        }
-
-        private void HandleDrawingForwardPointGizmo() {
-            if (!lookForwardMode.boolValue) return;
-
-            var targetPos = script.GetForwardPoint();
-            // TODO Create class field with this style.
-            var style = new GUIStyle {
-                normal = {textColor = Color.white},
-                fontStyle = FontStyle.Bold,
-            };
-
-            Handles.Label(targetPos, "Point", style);
-        }
-
-        #endregion UNITY MESSAGES
+        #endregion
 
         #region PRIVATE METHODS
 
@@ -333,12 +383,12 @@ namespace ATP.AnimationPathTools {
         }
 
         // TODO Rename to GetNearestBackwardNodeTimestamp().
-        private float GetNearestNodeBackwardTimestamp() {
-            var targetPathTimestamps = script.GetTargetPathTimestamps();
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = script.GetPathTimestamps();
 
-            for (var i = targetPathTimestamps.Length - 1; i >= 0; i--) {
-                if (targetPathTimestamps[i] < animTimeRatio.floatValue) {
-                    return targetPathTimestamps[i];
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < animTimeRatio.floatValue) {
+                    return pathTimestamps[i];
                 }
             }
 
@@ -347,10 +397,10 @@ namespace ATP.AnimationPathTools {
         }
 
         // TODO Rename to GetNearestForwardNodeTimestamp().
-        private float GetNearestNodeForwardTimestamp() {
-            var targetPathTimestamps = script.GetTargetPathTimestamps();
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = script.GetPathTimestamps();
 
-            foreach (var timestamp in targetPathTimestamps
+            foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
 
                 return timestamp;
@@ -386,7 +436,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     // Jump to next node.
-                    animTimeRatio.floatValue = GetNearestNodeForwardTimestamp();
+                    animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
 
                     break;
 
@@ -394,7 +444,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     // Jump to next node.
-                    animTimeRatio.floatValue = GetNearestNodeBackwardTimestamp();
+                    animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
 
                     break;
             }

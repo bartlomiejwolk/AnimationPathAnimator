@@ -52,7 +52,6 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty GizmoCurveColor;
         protected SerializedProperty advancedSettingsFoldout;
         protected SerializedProperty exportSamplingFrequency;
-        protected SerializedProperty drawRotationHandles;
         protected SerializedProperty skin;
         //protected SerializedProperty rotationCurves;
 
@@ -78,7 +77,6 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
-            drawRotationHandles = serializedObject.FindProperty("drawRotationHandles");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
 
             Script = (AnimationPath)target;
@@ -100,7 +98,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected void OnSceneGUI() {
-            //Debug.Log(drawRotationHandles.boolValue);
+            //Debug.Log(drawRotationHandle.boolValue);
             // Log error if inspector GUISkin filed is empty.
             if (Script.Skin == null) {
                 Script.MissingReferenceError(
@@ -134,8 +132,6 @@ namespace ATP.AnimationPathTools {
             // changing nodes' in/out tangents.
             HandleDrawingTangentHandles();
 
-            HandleDrawingRotationHandles();
-
             // Draw add node buttons.
             HandleDrawingAddButtons();
 
@@ -154,16 +150,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
-        private void HandleDrawingRotationHandles() {
-            if (!drawRotationHandles.boolValue) return;
-
-            // Callback to call when node rotation is changed.
-            Action<int, Quaternion> callbackHandler =
-                DrawRotationHandlesCallbackHandler;
-
-            // Draw handles.
-            DrawRotationHandles(callbackHandler);
-        }
 
 
         private void HandleDrawingAddButtons() {
@@ -265,23 +251,6 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING HANDLERS
 
         #region DRAWING METHODS
-        private void DrawRotationHandles(Action<int, Quaternion> callback) {
-            var nodePositions = Script.GetNodePositions();
-
-            for (var i = 0; i < nodePositions.Length; i++) {
-                Vector3 rotationVector = Script.GetNodeRotation(i);
-                Quaternion rotation = Quaternion.Euler(rotationVector);
-
-                var newRotation = Handles.RotationHandle(
-                    rotation,
-                    nodePositions[i]);
-
-                if (newRotation != rotation) {
-                    // Execute callback.
-                    callback(i, newRotation);
-                }
-            }
-        }
 
 
         private void DrawAddNodeButtons(
@@ -338,6 +307,7 @@ namespace ATP.AnimationPathTools {
             return addButtonPressed;
         }
 
+        // TODO Rename to DrawPositionHandles().
         private void DrawMovementHandles(
             Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
@@ -504,13 +474,6 @@ namespace ATP.AnimationPathTools {
         #endregion Drawing methods
 
         #region CALLBACK HANDLERS
-        private void DrawRotationHandlesCallbackHandler(
-                    int nodeIndex,
-                    Quaternion newRotation) {
-
-            var rotationEuler = newRotation.eulerAngles;
-            Script.ChangeNodeRotation(nodeIndex, rotationEuler);
-        }
 
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
@@ -701,10 +664,6 @@ namespace ATP.AnimationPathTools {
                     "Scene Controls",
                     "Toggle on-scene node controls."));
 
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(drawRotationHandles);
-            serializedObject.ApplyModifiedProperties();
-
             //EditorGUILayout.PropertyField(rotationCurves);
 
             EditorGUILayout.Space();
@@ -820,10 +779,6 @@ namespace ATP.AnimationPathTools {
         protected void ResetPath(
             Vector3 firstNodeOffset,
             Vector3 lastNodeOffset) {
-
-            // TODO Extract to method.
-            // Reset rotation.
-            Script.ResetRotation();
 
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;

@@ -50,7 +50,7 @@ namespace ATP.AnimationPathTools {
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
-            EditorGUILayout.Slider(
+            animTimeRatio.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),

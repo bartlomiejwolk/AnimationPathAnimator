@@ -293,6 +293,10 @@ namespace ATP.AnimationPathTools {
                     Handles.ConeCap,
                     1);
 
+                // Limit handle value.
+                if (newArcValue > 360) newArcValue = 360;
+                if (newArcValue < 0) newArcValue = 0;
+
                 // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
@@ -353,6 +357,7 @@ namespace ATP.AnimationPathTools {
             script.EaseCurve.RemoveKey(keyIndex);
             script.EaseCurve.AddKey(keyframeCopy);
             script.SmoothEaseCurve();
+            script.EaseCurveExtremeNodes(script.EaseCurve);
 
             // If new timestamp is bigger than old timestamp..
             //if (newValue > oldTimestamp) {

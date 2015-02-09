@@ -29,6 +29,7 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
+        // TODO Change this value directly.
         protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animatedObjectPath;
@@ -41,6 +42,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationSpeed;
         private SerializedProperty tiltingCurve;
         private SerializedProperty lookForwardMode;
+        // TODO Change this value directly.
         private SerializedProperty displayEaseHandles;
 
         #endregion SERIALIZED PROPERTIES
@@ -338,12 +340,14 @@ namespace ATP.AnimationPathTools {
                             float timestamp,
                             Vector3 newPosition) {
 
+            RecordRotationObject();
+
             script.ChangeRotationForTimestamp(timestamp, newPosition);
         }
 
         // TODO Refactor.
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
-            HandleUndo();
+            RecordTargetObject();
 
             // Copy keyframe.
             var keyframeCopy = script.EaseCurve.keys[keyIndex];
@@ -536,8 +540,12 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Record target object state for undo.
         /// </summary>
-        protected void HandleUndo() {
+        // TODO Remove these methods and use record directly.
+        protected void RecordTargetObject() {
             Undo.RecordObject(script, "Ease curve changed.");
+        }
+        protected void RecordRotationObject() {
+            Undo.RecordObject(script.RotationCurves, "Ease curve changed.");
         }
         #endregion PRIVATE METHODS
     }

@@ -166,6 +166,11 @@ namespace ATP.AnimationPathTools {
         public AnimationCurve EaseCurve {
             get { return easeCurve; }
         }
+
+        public AnimationPathCurves RotationCurves {
+            get { return rotationCurves; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -251,7 +256,6 @@ namespace ATP.AnimationPathTools {
                 curve.RemoveKey(0);
             }
         }
-
 
         public void ChangeRotationForTimestamp(
                     float timestamp,

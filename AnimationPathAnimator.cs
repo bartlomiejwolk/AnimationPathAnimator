@@ -77,6 +77,8 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationPathCurves rotationCurves;
 
+        //private float timeStep;
+
         #endregion FIELDS
 
         #region EDITOR
@@ -140,6 +142,7 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
+
         #endregion EDITOR
         #region PUBLIC PROPERTIES
 
@@ -206,12 +209,12 @@ namespace ATP.AnimationPathTools {
             //}
 
             // Limit animation time ratio to <0; 1>.
-            if (animTimeRatio < 0) {
-                animTimeRatio = 0;
-            }
-            else if (animTimeRatio > 1) {
-                animTimeRatio = 1;
-            }
+            //if (animTimeRatio < 0) {
+            //    animTimeRatio = 0;
+            //}
+            //else if (animTimeRatio > 1) {
+            //    animTimeRatio = 1;
+            //}
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
@@ -416,12 +419,20 @@ namespace ATP.AnimationPathTools {
         private IEnumerator EaseTime() {
             do {
                 // Increase animation time.
-                currentAnimTime += Time.deltaTime;
+                //currentAnimTime += Time.deltaTime;
+                //currentAnimTime = 0;
 
                 // Convert animation time to <0; 1> ratio.
-                //var timeRatio = currentAnimTime / duration;
+                //var timeStep = Time.deltaTime;
+                //var timeStep = easeCurve.Evaluate(currentAnimTime);
+                var timeStep = easeCurve.Evaluate(animTimeRatio);
+                //Debug.Log("timeStep: " + timeStep);
 
-                //animTimeRatio = easeCurve.Evaluate(timeRatio);
+                //animTimeRatio = easeCurve.Evaluate(timeStep);
+                animTimeRatio += timeStep * Time.deltaTime;
+                //Debug.Log("animTimeRatio: " + animTimeRatio);
+
+                //currentAnimTime += timeStep * Time.deltaTime;
 
                 yield return null;
             } while (animTimeRatio < 1.0f);

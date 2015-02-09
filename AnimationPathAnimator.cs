@@ -221,7 +221,10 @@ namespace ATP.AnimationPathTools {
             animatedObjectPath.PathChanged -= AnimatedObjectPathOnPathChanged;
         }
 
-        private void AnimatedObjectPathOnPathChanged(object sender, EventArgs eventArgs) {
+        private void AnimatedObjectPathOnPathChanged(
+            object sender,
+            EventArgs eventArgs) {
+
             UpdateEaseCurve();
             UpdateRotationCurves();
 
@@ -401,14 +404,6 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
-            //if (followedObject != null) return;
-
-            //Vector3 forwardPoint = GetForwardPoint();
-            //Vector3 size = new Vector3(
-            //    LookForwardGizmoSize,
-            //    LookForwardGizmoSize,
-            //    LookForwardGizmoSize);
-            //Gizmos.DrawWireCube(forwardPoint, size);
         }
 
         #endregion UNITY MESSAGES
@@ -672,24 +667,29 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateRotationCurvesWithRemovedKeys() {
             // AnimationPath node timestamps.
-            var animationCurvesTimestamps = animatedObjectPath.GetNodeTimestamps();
+            var pathTimestamps = animatedObjectPath.GetNodeTimestamps();
             // Get values from rotationCurves.
             var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
 
             // For each timestamp in rotationCurves..
             for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
                 var keyExists = false;
-                for (var j = 0; j < animationCurvesTimestamps.Length; j++) {
+                // For each timestamp in animatedObjectPath..
+                for (var j = 0; j < pathTimestamps.Length; j++) {
+                    // If both timestamps are equal..
                     if (Math.Abs(rotationCurvesTimestamps[i]
-                        - animationCurvesTimestamps[j]) < 0.001f) {
+                        - pathTimestamps[j]) < 0.001f) {
 
                         keyExists = true;
+
                         break;
                     }
                 }
 
+                // Remove node from rotationCurves.
                 if (!keyExists) {
                     rotationCurves.RemovePoint(i);
+
                     break;
                 }
             }
@@ -726,7 +726,10 @@ namespace ATP.AnimationPathTools {
                 }
 
                 if (!keyExists) {
-                    var defaultRotation = new Vector3(0, 0, 0);
+                    var addedKeyTimestamp =
+                        animatedObjectPath.GetNodeTimestamp(i);
+                    var defaultRotation =
+                        rotationCurves.GetVectorAtTime(addedKeyTimestamp);
 
                     rotationCurves.CreateNewPoint(
                         animationCurvesTimestamps[i],

@@ -103,12 +103,6 @@ namespace ATP.AnimationPathTools {
         // TODO Rename to targetObject.
         private Transform followedObject;
 
-        /// <summary>
-        /// Path used to animate the <c>lookAtTarget</c>.
-        /// </summary>
-        [SerializeField]
-        private TargetAnimationPath followedObjectPath;
-
         [SerializeField]
         private AnimationCurve lookForwardCurve = new AnimationCurve();
 
@@ -180,10 +174,6 @@ namespace ATP.AnimationPathTools {
             }
             // Initialize animatedObjectPath field.
             animatedObjectPath = GetComponent<AnimationPath>();
-            // Initialize followedObjectPath field.
-            followedObjectPath = GetComponent<TargetAnimationPath>();
-
-            //CreateTargetGO();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -371,7 +361,7 @@ namespace ATP.AnimationPathTools {
 
         private void Animate() {
             // Animate target.
-            AnimateTarget();
+            //AnimateTarget();
 
             // Animate transform.
             AnimateObject();
@@ -393,19 +383,6 @@ namespace ATP.AnimationPathTools {
             // Update position.
             animatedObject.position =
                 animatedObjectPath.GetVectorAtTime(animTimeRatio);
-        }
-
-        private void AnimateTarget() {
-            if (followedObject == null
-               || followedObjectPath == null
-               || !followedObjectPath.IsInitialized) {
-
-                return;
-            }
-
-            // Update position.
-            followedObject.position =
-                followedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
         private float CalculateNewTestTimestamp(

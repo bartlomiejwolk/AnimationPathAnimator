@@ -30,6 +30,7 @@ namespace ATP.AnimationPathTools {
         #region SERIALIZED PROPERTIES
 
         // TODO Change this value directly.
+        // TODO Rename to drawRotationHandles.
         protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animTimeRatio;
@@ -43,6 +44,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty lookForwardMode;
         // TODO Change this value directly.
         private SerializedProperty displayEaseHandles;
+        // TODO Rename to ???.
+        private SerializedProperty tiltingMode;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -104,6 +107,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.PropertyField(displayEaseHandles);
             EditorGUILayout.PropertyField(drawRotationHandle);
+            EditorGUILayout.PropertyField(tiltingMode);
 
             EditorGUILayout.Space();
 
@@ -153,6 +157,7 @@ namespace ATP.AnimationPathTools {
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
             drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
+            tiltingMode = serializedObject.FindProperty("tiltingMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

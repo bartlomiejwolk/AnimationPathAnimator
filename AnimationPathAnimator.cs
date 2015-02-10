@@ -132,6 +132,10 @@ namespace ATP.AnimationPathTools {
         private bool lookForwardMode;
 
         [SerializeField]
+        private bool tiltingMode;
+
+
+        [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
         // disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;

@@ -52,7 +52,8 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty GizmoCurveColor;
         protected SerializedProperty advancedSettingsFoldout;
         protected SerializedProperty exportSamplingFrequency;
-        protected SerializedProperty skin;
+        private SerializedProperty skin;
+        private SerializedProperty handlesMode;
         //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
@@ -77,6 +78,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            handlesMode = serializedObject.FindProperty("handlesMode");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
 
             Script = (AnimationPath)target;
@@ -98,6 +100,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected void OnSceneGUI() {
+            //Debug.Log(handlesMode.enumValueIndex);
             //Debug.Log(drawRotationHandle.boolValue);
             // Log error if inspector GUISkin filed is empty.
             if (Script.Skin == null) {
@@ -174,7 +177,8 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingMovementHandles() {
-            if (Script.TangentMode) return;
+            if (handlesMode.enumValueIndex ==
+                (int)AnimationPathHandlesMode.Tangent) return;
 
             // Positions at which to draw movement handles.
             // TODO Move to DrawmovementHandles().
@@ -233,7 +237,8 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing tangent handles.
         /// </summary>
         private void HandleDrawingTangentHandles() {
-            if (!Script.TangentMode) return;
+            if (handlesMode.enumValueIndex !=
+                (int)AnimationPathHandlesMode.Tangent) return;
 
             // Positions at which to draw tangent handles.
             var nodes = Script.GetNodePositions();
@@ -330,7 +335,9 @@ namespace ATP.AnimationPathTools {
                 Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
                 // In Move All mode..
-                if (Script.MoveAllMode) {
+                if (handlesMode.enumValueIndex ==
+                    (int)AnimationPathHandlesMode.MoveAll) {
+
                     //capFunction = Handles.DotCap;
                     //capFunction = Handles.SphereCap;
                     Handles.color = moveAllModeColor;
@@ -497,7 +504,10 @@ namespace ATP.AnimationPathTools {
             HandleUndo();
 
             // If Move All mode enabled, move all nodes.
-            if (Script.MoveAllMode) {
+            // TODO Create HandleDrawingMoveAllHandles().
+            if (handlesMode.enumValueIndex ==
+                (int)AnimationPathHandlesMode.MoveAll) {
+
                 Script.MoveAllNodes(moveDelta);
             }
             // Move single node.
@@ -636,33 +646,38 @@ namespace ATP.AnimationPathTools {
                 AnimationPath.MoveAllKey);
 
             // Disable this control if Tangent Mode is enabled.
-            GUI.enabled = !Script.TangentMode;
-            Script.MoveAllMode = GUILayout.Toggle(
-                Script.MoveAllMode,
-                new GUIContent(
-                    "Move All Mode",
-                    moveAllModeTooltip));
-            GUI.enabled = true;
+            //GUI.enabled = !Script.TangentMode;
+            //Script.MoveAllMode = GUILayout.Toggle(
+            //    Script.MoveAllMode,
+            //    new GUIContent(
+            //        "Move All Mode",
+            //        moveAllModeTooltip));
+            //GUI.enabled = true;
 
             // Tooltip for handlesMode property.
             var tangentModeTooltip = String.Format(
                 "Display handles that allow changing node tangents. " +
                 "Toggle it with {0} key.",
-                AnimationPath.HandlesModeKey);
+                AnimationPath.TangentModeKey);
 
-            GUI.enabled = !Script.MoveAllMode;
-            Script.TangentMode = GUILayout.Toggle(
-                Script.TangentMode,
-                new GUIContent(
-                    "Tangent Mode",
-                    tangentModeTooltip));
-            GUI.enabled = true;
+            //GUI.enabled = !Script.MoveAllMode;
+            //Script.TangentMode = GUILayout.Toggle(
+            //    Script.TangentMode,
+            //    new GUIContent(
+            //        "Tangent Mode",
+            //        tangentModeTooltip));
+            //GUI.enabled = true;
 
             Script.SceneControls = GUILayout.Toggle(
                 Script.SceneControls,
                 new GUIContent(
                     "Scene Controls",
                     "Toggle on-scene node controls."));
+
+            serializedObject.Update();
+            // TODO Don't use serialized property. Use script instead.
+            EditorGUILayout.PropertyField(handlesMode);
+            serializedObject.ApplyModifiedProperties();
 
             //EditorGUILayout.PropertyField(rotationCurves);
 
@@ -750,11 +765,8 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != AnimationPath.MoveAllKey) return;
 
-            // Make sure Tangent mode is disabled.
-            Script.TangentMode = false;
-
-            // Toggle Move All mode.
-            Script.MoveAllMode = !Script.MoveAllMode;
+            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveAll;
+            serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
@@ -763,13 +775,10 @@ namespace ATP.AnimationPathTools {
         private void HandleTangentModeOptionShortcut() {
             // Return if Tangent Mode shortcut wasn't released.
             if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimationPath.HandlesModeKey) return;
+                || Event.current.keyCode != AnimationPath.TangentModeKey) return;
 
-            // Make sure Move All mode is disabled.
-            Script.MoveAllMode = false;
-
-            // Toggle Move All mode.
-            Script.TangentMode = !Script.TangentMode;
+            handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
+            serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>

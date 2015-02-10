@@ -30,6 +30,7 @@ namespace ATP.AnimationPathTools {
         #region SERIALIZED PROPERTIES
 
         // TODO Change this value directly.
+        // TODO Rename to drawRotationHandles.
         protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animTimeRatio;
@@ -43,6 +44,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty lookForwardMode;
         // TODO Change this value directly.
         private SerializedProperty displayEaseHandles;
+        // TODO Rename to ???.
+        private SerializedProperty tiltingMode;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -104,6 +107,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.PropertyField(displayEaseHandles);
             EditorGUILayout.PropertyField(drawRotationHandle);
+            EditorGUILayout.PropertyField(tiltingMode);
 
             EditorGUILayout.Space();
 
@@ -153,6 +157,7 @@ namespace ATP.AnimationPathTools {
             lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
             drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
+            tiltingMode = serializedObject.FindProperty("tiltingMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -160,7 +165,7 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
 
-                script.UpdateEaseCurve();
+                //script.UpdateEaseCurve();
             }
 
             serializedObject.Update();
@@ -178,9 +183,109 @@ namespace ATP.AnimationPathTools {
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
+            HandleDrawingZAxisRotationHandles();
 
             script.UpdateAnimation();
         }
+
+        private void HandleDrawingZAxisRotationHandles() {
+            if (!tiltingMode.boolValue) return;
+
+            Action<int, float> callbackHandler =
+                DrawZAxisRotationHandlesCallbackHandler;
+
+            DrawZAxisRotationHandles(callbackHandler);
+        }
+
+        // TODO Extract methods. Do the same to ease curve drawing method.
+        private void DrawZAxisRotationHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+
+            // Get rotation curve timestamps.
+            //var easeTimestamps = new float[script.EaseCurve.length];
+            //for (var i = 0; i < script.EaseCurve.length; i++) {
+            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            //}
+
+            // Get rotation curve values.
+            var rotationCurveValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.TiltingCurve.length; i++) {
+                rotationCurveValues[i] = script.TiltingCurve.keys[i].value;
+            }
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                var rotationValue = rotationCurveValues[i];
+                var arcValue = rotationValue * 2;
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                var arcHandleSize = handleSize * ArcHandleRadius;
+
+                // TODO Create const.
+                Handles.color = Color.green;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right
+                    // side of the object.
+                    Quaternion.AngleAxis(
+                    //-arcValue / 2,
+                        0,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    arcHandleSize);
+
+                // TODO Create const.
+                Handles.color = Color.green;
+
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+                
+                // Set initial arc value to other than zero.
+                // If initial value is zero, handle will always return zero.
+                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
+
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                // Limit handle value.
+                if (newArcValue > 180) newArcValue = 180;
+                if (newArcValue < -180) newArcValue = -180;
+
+                // TODO Create float precision const.
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, newArcValue / 2);
+                }
+            }
+        }
+
+        private void DrawZAxisRotationHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+
+            RecordTargetObject();
+
+            // Copy keyframe.
+            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // Replace old key with updated one.
+            script.TiltingCurve.RemoveKey(keyIndex);
+            script.TiltingCurve.AddKey(keyframeCopy);
+            script.SmoothCurve(script.TiltingCurve);
+            script.EaseCurveExtremeNodes(script.TiltingCurve);
+        }
+
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
@@ -352,7 +457,7 @@ namespace ATP.AnimationPathTools {
             // Replace old key with updated one.
             script.EaseCurve.RemoveKey(keyIndex);
             script.EaseCurve.AddKey(keyframeCopy);
-            script.SmoothEaseCurve();
+            script.SmoothCurve(script.EaseCurve);
             script.EaseCurveExtremeNodes(script.EaseCurve);
 
             // If new timestamp is bigger than old timestamp..

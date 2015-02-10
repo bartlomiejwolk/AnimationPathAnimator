@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
+    // TODO Move to a separate file.
+    public enum AnimationPathHandlesMode { MoveSingle, MoveAll, Tangent }
+
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.
     /// </summary>
@@ -32,7 +35,7 @@ namespace ATP.AnimationPathTools {
         /// Handles mode will change only while key is pressed.
         /// </remarks>
         // TODO Move to Editor class.
-        public const KeyCode HandlesModeKey = KeyCode.J;
+        public const KeyCode TangentModeKey = KeyCode.J;
 
         /// <summary>
         /// Key shortcut to toggle movement mode.
@@ -88,11 +91,11 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// If "Move All" mode is enabled.
         /// </summary>
-        [SerializeField]
-        private bool moveAllMode;
+        //[SerializeField]
+        //private bool moveAllMode;
 
-        [SerializeField]
-        private bool sceneControls = true;
+        //[SerializeField]
+        //private bool sceneControls = true;
 
         /// <summary>
         /// Styles for multiple GUI elements.
@@ -106,8 +109,13 @@ namespace ATP.AnimationPathTools {
         /// If enabled, on-scene handles will be use to change node's in/out
         /// tangents.
         /// </summary>
-        [SerializeField]
-        private bool tangentMode;
+        //[SerializeField]
+        //private bool tangentMode;
+
+        [SerializeField] private AnimationPathHandlesMode handlesMode =
+            AnimationPathHandlesMode.MoveSingle;
+
+        public const KeyCode MoveSingleModeKey = KeyCode.G;
 
 #pragma warning restore 0414
 
@@ -127,10 +135,10 @@ namespace ATP.AnimationPathTools {
             set { gizmoCurveColor = value; }
         }
 
-        public bool MoveAllMode {
-            get { return moveAllMode; }
-            set { moveAllMode = value; }
-        }
+        //public bool MoveAllMode {
+        //    get { return moveAllMode; }
+        //    set { moveAllMode = value; }
+        //}
 
         /// <summary>
         /// Number of keys in an animation curve.
@@ -139,19 +147,19 @@ namespace ATP.AnimationPathTools {
             get { return animationCurves.KeysNo; }
         }
 
-        public bool SceneControls {
-            get { return sceneControls; }
-            set { sceneControls = value; }
-        }
+        //public bool SceneControls {
+        //    get { return sceneControls; }
+        //    set { sceneControls = value; }
+        //}
 
         public GUISkin Skin {
             get { return skin; }
         }
 
-        public bool TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
-        }
+        //public bool TangentMode {
+        //    get { return tangentMode; }
+        //    set { tangentMode = value; }
+        //}
 
         public bool IsInitialized {
             get { return (animationCurves.KeysNo >= 2); }

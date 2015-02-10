@@ -35,17 +35,21 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty animatedObject;
         private SerializedProperty animTimeRatio;
         //private SerializedProperty duration;
-        private SerializedProperty easeAnimationCurve;
-        private SerializedProperty lookForwardCurve;
+        //private SerializedProperty easeAnimationCurve;
+        //private SerializedProperty lookForwardCurve;
         private SerializedProperty followedObject;
         //private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
-        private SerializedProperty tiltingCurve;
-        private SerializedProperty lookForwardMode;
+        //private SerializedProperty tiltingCurve;
+        //private SerializedProperty lookForwardMode;
         // TODO Change this value directly.
-        private SerializedProperty displayEaseHandles;
+        //private SerializedProperty displayEaseHandles;
         // TODO Rename to ???.
-        private SerializedProperty tiltingMode;
+        //private SerializedProperty tiltingMode;
+        private SerializedProperty handleMode;
+        private SerializedProperty rotationMode;
+
+        private readonly Color zRotationHandleColor = Color.green;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -68,46 +72,48 @@ namespace ATP.AnimationPathTools {
             //        "Duration",
             //        "Duration of the animation in seconds."));
 
+            //EditorGUILayout.PropertyField(
+            //    easeAnimationCurve,
+            //    new GUIContent(
+            //        "Ease Curve",
+            //        "Use it to control speed of the animated object."));
+
+            //EditorGUILayout.PropertyField(
+            //    tiltingCurve,
+            //    new GUIContent(
+            //        "Tilting Curve",
+            //        "Use it to control tilting of the animated object."));
+
+            //EditorGUILayout.Space();
+
+            //EditorGUILayout.BeginHorizontal();
+            //lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
+            //    new GUIContent(
+            //        "Look Forward",
+            //        "Ignore target object and look ahead."),
+            //        lookForwardMode.boolValue,
+            //        GUILayout.Width(116));
+
+            //EditorGUILayout.PropertyField(
+            //    lookForwardCurve,
+            //    new GUIContent(
+            //        "",
+            //        "Use it to control how far in time animated object will " +
+            //        "be looking ahead on its path."));
+            //EditorGUILayout.EndHorizontal();
+
+            //EditorGUILayout.PropertyField(displayEaseHandles);
+            //EditorGUILayout.PropertyField(drawRotationHandle);
+            //EditorGUILayout.PropertyField(tiltingMode);
+            EditorGUILayout.PropertyField(handleMode);
+            EditorGUILayout.PropertyField(rotationMode);
+
             EditorGUILayout.PropertyField(
                 rotationSpeed,
                 new GUIContent(
                     "Rotation Speed",
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
-
-            EditorGUILayout.PropertyField(
-                easeAnimationCurve,
-                new GUIContent(
-                    "Ease Curve",
-                    "Use it to control speed of the animated object."));
-
-            EditorGUILayout.PropertyField(
-                tiltingCurve,
-                new GUIContent(
-                    "Tilting Curve",
-                    "Use it to control tilting of the animated object."));
-
-            //EditorGUILayout.Space();
-
-            EditorGUILayout.BeginHorizontal();
-            lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
-                new GUIContent(
-                    "Look Forward",
-                    "Ignore target object and look ahead."),
-                    lookForwardMode.boolValue,
-                    GUILayout.Width(116));
-
-            EditorGUILayout.PropertyField(
-                lookForwardCurve,
-                new GUIContent(
-                    "",
-                    "Use it to control how far in time animated object will " +
-                    "be looking ahead on its path."));
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.PropertyField(displayEaseHandles);
-            EditorGUILayout.PropertyField(drawRotationHandle);
-            EditorGUILayout.PropertyField(tiltingMode);
 
             EditorGUILayout.Space();
 
@@ -148,16 +154,18 @@ namespace ATP.AnimationPathTools {
             //duration = serializedObject.FindProperty("duration");
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-            easeAnimationCurve = serializedObject.FindProperty("easeCurve");
-            tiltingCurve = serializedObject.FindProperty("tiltingCurve");
-            lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
+            //easeAnimationCurve = serializedObject.FindProperty("easeCurve");
+            //tiltingCurve = serializedObject.FindProperty("tiltingCurve");
+            //lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
             animatedObject = serializedObject.FindProperty("animatedObject");
             followedObject = serializedObject.FindProperty("followedObject");
             //followedObjectPath = serializedObject.FindProperty("followedObjectPath");
-            lookForwardMode = serializedObject.FindProperty("lookForwardMode");
-            displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
+            //lookForwardMode = serializedObject.FindProperty("lookForwardMode");
+            //displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
             drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
-            tiltingMode = serializedObject.FindProperty("tiltingMode");
+            //tiltingMode = serializedObject.FindProperty("tiltingMode");
+            handleMode = serializedObject.FindProperty("handleMode");
+            rotationMode = serializedObject.FindProperty("rotationMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -188,8 +196,10 @@ namespace ATP.AnimationPathTools {
             script.UpdateAnimation();
         }
 
+        // TODO Rename to HandleDrawingTiltingHandles().
         private void HandleDrawingZAxisRotationHandles() {
-            if (!tiltingMode.boolValue) return;
+            if (handleMode.enumValueIndex !=
+                (int)AnimatorHandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
                 DrawZAxisRotationHandlesCallbackHandler;
@@ -222,7 +232,7 @@ namespace ATP.AnimationPathTools {
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
                 // TODO Create const.
-                Handles.color = Color.green;
+                Handles.color = zRotationHandleColor;
 
                 Handles.DrawWireArc(
                     nodePositions[i],
@@ -237,7 +247,7 @@ namespace ATP.AnimationPathTools {
                     arcHandleSize);
 
                 // TODO Create const.
-                Handles.color = Color.green;
+                Handles.color = zRotationHandleColor;
 
                 // TODO Create constant.
                 var scaleHandleSize = handleSize * 1.5f;
@@ -301,7 +311,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingForwardPointGizmo() {
-            if (!lookForwardMode.boolValue) return;
+            if (rotationMode.enumValueIndex !=
+                (int)AnimatorRotationMode.Forward) return;
 
             var targetPos = script.GetForwardPoint();
             // TODO Create class field with this style.
@@ -329,7 +340,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingEaseHandles() {
-            if (!displayEaseHandles.boolValue) return;
+            if (handleMode.enumValueIndex !=
+                (int)AnimatorHandleMode.Ease) return;
 
             Action<int, float> callbackHandler =
                 DrawEaseHandlesCallbackHandler;

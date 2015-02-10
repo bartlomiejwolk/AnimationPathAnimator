@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
+    public enum AnimatorHandleMode { Ease, Rotation, Tilting }
+    public enum AnimatorRotationMode { Forward, Custom, Target }
+
     /// <summary>
     /// Component that allows animating transforms position along predefined
     /// Animation Paths and also animate their rotation on x and y axis in
@@ -15,6 +18,12 @@ namespace ATP.AnimationPathTools {
     [RequireComponent(typeof(AnimationPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
+
+        [SerializeField]
+        private AnimatorHandleMode handleMode = AnimatorHandleMode.Rotation;
+
+        [SerializeField]
+        private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
 
         #region CONSTANTS
 

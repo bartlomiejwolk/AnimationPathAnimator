@@ -46,6 +46,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty displayEaseHandles;
         // TODO Rename to ???.
         private SerializedProperty tiltingMode;
+        private SerializedProperty handleMode;
+        private SerializedProperty rotationMode;
 
         private readonly Color zRotationHandleColor = Color.green;
 
@@ -107,9 +109,11 @@ namespace ATP.AnimationPathTools {
                     "be looking ahead on its path."));
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.PropertyField(displayEaseHandles);
-            EditorGUILayout.PropertyField(drawRotationHandle);
-            EditorGUILayout.PropertyField(tiltingMode);
+            //EditorGUILayout.PropertyField(displayEaseHandles);
+            //EditorGUILayout.PropertyField(drawRotationHandle);
+            //EditorGUILayout.PropertyField(tiltingMode);
+            EditorGUILayout.PropertyField(handleMode);
+            EditorGUILayout.PropertyField(rotationMode);
 
             EditorGUILayout.Space();
 
@@ -160,6 +164,8 @@ namespace ATP.AnimationPathTools {
             displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
             drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
             tiltingMode = serializedObject.FindProperty("tiltingMode");
+            handleMode = serializedObject.FindProperty("handleMode");
+            rotationMode = serializedObject.FindProperty("rotationMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

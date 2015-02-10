@@ -569,10 +569,10 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawCreateInspectorButton() {
+        private void DrawResetInspectorButton() {
             if (GUILayout.Button(new GUIContent(
-                "Create",
-                "Create a new default Animation Path or reset to default."))) {
+                "Reset",
+                "Reset path to default."))) {
                 // Allow undo this operation.
                 HandleUndo();
                 // Reset curves to its default state.
@@ -641,7 +641,7 @@ namespace ATP.AnimationPathTools {
             serializedObject.Update();
             DrawSmoothInspectorButton();
             DrawLinearInspectorButton();
-            DrawCreateInspectorButton();
+            DrawResetInspectorButton();
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();

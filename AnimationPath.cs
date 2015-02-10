@@ -115,6 +115,8 @@ namespace ATP.AnimationPathTools {
         [SerializeField] private AnimationPathHandlesMode handlesMode =
             AnimationPathHandlesMode.MoveSingle;
 
+        public const KeyCode MoveSingleModeKey = KeyCode.G;
+
 #pragma warning restore 0414
 
         #endregion Editor

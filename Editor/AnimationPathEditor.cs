@@ -128,6 +128,8 @@ namespace ATP.AnimationPathTools {
             // Update "Move All" inspector option with keyboard shortcut.
             HandleMoveAllOptionShortcut();
 
+            HandleMoveSingleModeShortcut();
+
             // Handle drawing movement handles.
             HandleDrawingMovementHandles();
 
@@ -772,12 +774,22 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Toggle handles mode with key shortcut.
         /// </summary>
+        // TODO Rename to HandleTangentModeShortcut().
         private void HandleTangentModeOptionShortcut() {
             // Return if Tangent Mode shortcut wasn't released.
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != AnimationPath.TangentModeKey) return;
 
             handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleMoveSingleModeShortcut() {
+            // Return if Tangent Mode shortcut wasn't released.
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != AnimationPath.MoveSingleModeKey) return;
+
+            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveSingle;
             serializedObject.ApplyModifiedProperties();
         }
 

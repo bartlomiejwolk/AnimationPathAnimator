@@ -94,8 +94,8 @@ namespace ATP.AnimationPathTools {
         //[SerializeField]
         //private bool moveAllMode;
 
-        [SerializeField]
-        private bool sceneControls = true;
+        //[SerializeField]
+        //private bool sceneControls = true;
 
         /// <summary>
         /// Styles for multiple GUI elements.
@@ -147,10 +147,10 @@ namespace ATP.AnimationPathTools {
             get { return animationCurves.KeysNo; }
         }
 
-        public bool SceneControls {
-            get { return sceneControls; }
-            set { sceneControls = value; }
-        }
+        //public bool SceneControls {
+        //    get { return sceneControls; }
+        //    set { sceneControls = value; }
+        //}
 
         public GUISkin Skin {
             get { return skin; }

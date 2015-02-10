@@ -115,9 +115,9 @@ namespace ATP.AnimationPathTools {
 
             // Return if curves are not initialized or scene controls are
             // disabled from the inspector.
-            if (Script.NodesNo < 2 || !Script.SceneControls) {
-                return;
-            }
+            //if (Script.NodesNo < 2 || !Script.SceneControls) {
+            //    return;
+            //}
 
             // Change handles mode. Each on-scene node has a handle to update
             // node's attribute. Based on inspector option/key pressed, this
@@ -632,6 +632,11 @@ namespace ATP.AnimationPathTools {
                     new GUIContent("Curve Color", ""));
             serializedObject.ApplyModifiedProperties();
 
+            serializedObject.Update();
+            // TODO Don't use serialized property. Use script instead.
+            EditorGUILayout.PropertyField(handlesMode);
+            serializedObject.ApplyModifiedProperties();
+
             EditorGUILayout.BeginHorizontal();
             serializedObject.Update();
             DrawSmoothInspectorButton();
@@ -670,16 +675,11 @@ namespace ATP.AnimationPathTools {
             //        tangentModeTooltip));
             //GUI.enabled = true;
 
-            Script.SceneControls = GUILayout.Toggle(
-                Script.SceneControls,
-                new GUIContent(
-                    "Scene Controls",
-                    "Toggle on-scene node controls."));
-
-            serializedObject.Update();
-            // TODO Don't use serialized property. Use script instead.
-            EditorGUILayout.PropertyField(handlesMode);
-            serializedObject.ApplyModifiedProperties();
+            //Script.SceneControls = GUILayout.Toggle(
+            //    Script.SceneControls,
+            //    new GUIContent(
+            //        "Scene Controls",
+            //        "Toggle on-scene node controls."));
 
             //EditorGUILayout.PropertyField(rotationCurves);
 

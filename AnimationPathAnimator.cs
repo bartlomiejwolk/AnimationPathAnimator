@@ -109,11 +109,11 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private float animTimeRatio;
 
-        [SerializeField]
-        private bool displayEaseHandles;
+        //[SerializeField]
+        //private bool displayEaseHandles;
 
-        [SerializeField]
-        private bool drawRotationHandle;
+        //[SerializeField]
+        //private bool drawRotationHandle;
 
         /// <summary>
         /// Animation duration in seconds.
@@ -137,11 +137,11 @@ namespace ATP.AnimationPathTools {
         // TODO Replace with float value.
         private AnimationCurve lookForwardCurve = new AnimationCurve();
 
-        [SerializeField]
-        private bool lookForwardMode;
+        //[SerializeField]
+        //private bool lookForwardMode;
 
-        [SerializeField]
-        private bool tiltingMode;
+        //[SerializeField]
+        //private bool tiltingMode;
 
 
         [SerializeField]
@@ -578,7 +578,8 @@ namespace ATP.AnimationPathTools {
             // Look at target.
             if (animatedObject != null
                 && followedObject != null
-                && !lookForwardMode) {
+                //&& !lookForwardMode) {
+                && rotationMode != AnimatorRotationMode.Forward) {
 
                 // In play mode use Quaternion.Slerp();
                 if (Application.isPlaying) {
@@ -592,12 +593,16 @@ namespace ATP.AnimationPathTools {
             // Use AnimationCurves.
             if (animatedObject != null
                 && followedObject == null
-                && !lookForwardMode) {
+                //&& !lookForwardMode) {
+                && rotationMode != AnimatorRotationMode.Forward) {
 
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            else if (animatedObject != null && lookForwardMode) {
+            //else if (animatedObject != null && lookForwardMode) {
+            else if (animatedObject != null
+                && rotationMode == AnimatorRotationMode.Forward) {
+
                 Vector3 forwardPoint = GetForwardPoint();
 
                 if (Application.isPlaying) {

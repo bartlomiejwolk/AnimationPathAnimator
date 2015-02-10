@@ -31,7 +31,7 @@ namespace ATP.AnimationPathTools {
 
         // TODO Change this value directly.
         // TODO Rename to drawRotationHandles.
-        protected SerializedProperty drawRotationHandle;
+        //protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
         private SerializedProperty animTimeRatio;
         //private SerializedProperty duration;
@@ -162,7 +162,7 @@ namespace ATP.AnimationPathTools {
             //followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             //lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             //displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
-            drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
+            //drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
             //tiltingMode = serializedObject.FindProperty("tiltingMode");
             handleMode = serializedObject.FindProperty("handleMode");
             rotationMode = serializedObject.FindProperty("rotationMode");
@@ -300,7 +300,9 @@ namespace ATP.AnimationPathTools {
 
         #region DRAWING HANDLERS
         private void HandleDrawingRotationHandle() {
-            if (!drawRotationHandle.boolValue) return;
+            //if (!drawRotationHandle.boolValue) return;
+            if (handleMode.enumValueIndex !=
+                (int)AnimatorHandleMode.Rotation) return;
 
             // Callback to call when node rotation is changed.
             Action<float, Vector3> callbackHandler =

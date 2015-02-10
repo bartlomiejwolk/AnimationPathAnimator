@@ -268,6 +268,12 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region PUBLIC METHODS
+        public void SmoothCurve(AnimationCurve curve) {
+            for (var i = 0; i < curve.length; i++) {
+                curve.SmoothTangents(i, 0);
+            }
+        }
+
         public static void RemoveAllCurveKeys(AnimationCurve curve) {
             var keysToRemoveNo = curve.length;
             for (var i = 0; i < keysToRemoveNo; i++) {
@@ -818,11 +824,5 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
-
-        public void SmoothCurve(AnimationCurve curve) {
-            for (var i = 0; i < curve.length; i++) {
-                curve.SmoothTangents(i, 0);
-            }
-        }
     }
 }

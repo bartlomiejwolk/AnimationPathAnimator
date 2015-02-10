@@ -20,7 +20,7 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         [SerializeField]
-        private AnimatorHandleMode handleMode = AnimatorHandleMode.Ease;
+        private AnimatorHandleMode handleMode = AnimatorHandleMode.Rotation;
 
         [SerializeField]
         private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;

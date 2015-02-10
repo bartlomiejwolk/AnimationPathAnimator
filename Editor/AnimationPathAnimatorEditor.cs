@@ -35,12 +35,12 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty animatedObject;
         private SerializedProperty animTimeRatio;
         //private SerializedProperty duration;
-        private SerializedProperty easeAnimationCurve;
+        //private SerializedProperty easeAnimationCurve;
         //private SerializedProperty lookForwardCurve;
         private SerializedProperty followedObject;
         //private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
-        private SerializedProperty tiltingCurve;
+        //private SerializedProperty tiltingCurve;
         //private SerializedProperty lookForwardMode;
         // TODO Change this value directly.
         //private SerializedProperty displayEaseHandles;
@@ -72,24 +72,17 @@ namespace ATP.AnimationPathTools {
             //        "Duration",
             //        "Duration of the animation in seconds."));
 
-            EditorGUILayout.PropertyField(
-                rotationSpeed,
-                new GUIContent(
-                    "Rotation Speed",
-                    "Controls how much time (in seconds) it'll take the " +
-                    "animated object to finish rotation towards followed target."));
+            //EditorGUILayout.PropertyField(
+            //    easeAnimationCurve,
+            //    new GUIContent(
+            //        "Ease Curve",
+            //        "Use it to control speed of the animated object."));
 
-            EditorGUILayout.PropertyField(
-                easeAnimationCurve,
-                new GUIContent(
-                    "Ease Curve",
-                    "Use it to control speed of the animated object."));
-
-            EditorGUILayout.PropertyField(
-                tiltingCurve,
-                new GUIContent(
-                    "Tilting Curve",
-                    "Use it to control tilting of the animated object."));
+            //EditorGUILayout.PropertyField(
+            //    tiltingCurve,
+            //    new GUIContent(
+            //        "Tilting Curve",
+            //        "Use it to control tilting of the animated object."));
 
             //EditorGUILayout.Space();
 
@@ -114,6 +107,13 @@ namespace ATP.AnimationPathTools {
             //EditorGUILayout.PropertyField(tiltingMode);
             EditorGUILayout.PropertyField(handleMode);
             EditorGUILayout.PropertyField(rotationMode);
+
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
 
             EditorGUILayout.Space();
 
@@ -154,8 +154,8 @@ namespace ATP.AnimationPathTools {
             //duration = serializedObject.FindProperty("duration");
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-            easeAnimationCurve = serializedObject.FindProperty("easeCurve");
-            tiltingCurve = serializedObject.FindProperty("tiltingCurve");
+            //easeAnimationCurve = serializedObject.FindProperty("easeCurve");
+            //tiltingCurve = serializedObject.FindProperty("tiltingCurve");
             //lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
             animatedObject = serializedObject.FindProperty("animatedObject");
             followedObject = serializedObject.FindProperty("followedObject");

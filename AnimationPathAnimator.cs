@@ -634,7 +634,6 @@ namespace ATP.AnimationPathTools {
 
         private void TiltObject() {
             if (animatedObject == null
-                || followedObject == null
                 || !animatedObjectPath.IsInitialized) {
 
                 return;

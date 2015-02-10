@@ -183,9 +183,106 @@ namespace ATP.AnimationPathTools {
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
+            HandleDrawingZAxisRotationHandles();
 
             script.UpdateAnimation();
         }
+
+        private void HandleDrawingZAxisRotationHandles() {
+            if (!tiltingMode.boolValue) return;
+
+            Action<int, float> callbackHandler =
+                DrawZAxisRotationHandlesCallbackHandler;
+
+            DrawZAxisRotationHandles(callbackHandler);
+        }
+
+        // TODO Extract methods. Do the same to ease curve drawing method.
+        private void DrawZAxisRotationHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+
+            // Get rotation curve timestamps.
+            //var easeTimestamps = new float[script.EaseCurve.length];
+            //for (var i = 0; i < script.EaseCurve.length; i++) {
+            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            //}
+
+            // Get rotation curve values.
+            var rotationCurveValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.TiltingCurve.length; i++) {
+                rotationCurveValues[i] = script.TiltingCurve.keys[i].value;
+            }
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                var rotationValue = rotationCurveValues[i];
+                var arcValue = rotationValue;
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                var arcHandleSize = handleSize * ArcHandleRadius;
+
+                // TODO Create const.
+                Handles.color = Color.green;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right
+                    // side of the object.
+                    Quaternion.AngleAxis(
+                    //-arcValue / 2,
+                        0,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    arcHandleSize);
+
+                // TODO Create const.
+                Handles.color = Color.green;
+
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                // Limit handle value.
+                if (newArcValue > 90) newArcValue = 90;
+                if (newArcValue < -90) newArcValue = -90;
+
+                // TODO Create float precision const.
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, newArcValue);
+                }
+            }
+        }
+
+        private void DrawZAxisRotationHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+
+            RecordTargetObject();
+
+            // Copy keyframe.
+            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
+            // Update keyframe timestamp.
+            //keyframeCopy.time = newValue;
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // Replace old key with updated one.
+            script.EaseCurve.RemoveKey(keyIndex);
+            script.EaseCurve.AddKey(keyframeCopy);
+            script.SmoothEaseCurve();
+            script.EaseCurveExtremeNodes(script.EaseCurve);
+        }
+
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS

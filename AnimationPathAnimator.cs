@@ -175,6 +175,10 @@ namespace ATP.AnimationPathTools {
             get { return rotationCurves; }
         }
 
+        public AnimationCurve TiltingCurve {
+            get { return tiltingCurve; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES

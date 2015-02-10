@@ -165,7 +165,7 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
 
-                script.UpdateEaseCurve();
+                //script.UpdateEaseCurve();
             }
 
             serializedObject.Update();

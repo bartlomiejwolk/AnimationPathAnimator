@@ -241,6 +241,11 @@ namespace ATP.AnimationPathTools {
 
                 // TODO Create constant.
                 var scaleHandleSize = handleSize * 1.5f;
+                
+                // Set initial arc value to other than zero.
+                // If initial value is zero, handle will always return zero.
+                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
+
                 float newArcValue = Handles.ScaleValueHandle(
                     arcValue,
                     nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
@@ -270,17 +275,15 @@ namespace ATP.AnimationPathTools {
 
             // Copy keyframe.
             var keyframeCopy = script.TiltingCurve.keys[keyIndex];
-            // Update keyframe timestamp.
-            //keyframeCopy.time = newValue;
             // Update keyframe value.
             keyframeCopy.value = newValue;
             //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
 
             // Replace old key with updated one.
-            script.EaseCurve.RemoveKey(keyIndex);
-            script.EaseCurve.AddKey(keyframeCopy);
-            script.SmoothEaseCurve();
-            script.EaseCurveExtremeNodes(script.EaseCurve);
+            script.TiltingCurve.RemoveKey(keyIndex);
+            script.TiltingCurve.AddKey(keyframeCopy);
+            script.SmoothCurve(script.TiltingCurve);
+            script.EaseCurveExtremeNodes(script.TiltingCurve);
         }
 
         #endregion UNITY MESSAGES
@@ -454,7 +457,7 @@ namespace ATP.AnimationPathTools {
             // Replace old key with updated one.
             script.EaseCurve.RemoveKey(keyIndex);
             script.EaseCurve.AddKey(keyframeCopy);
-            script.SmoothEaseCurve();
+            script.SmoothCurve(script.EaseCurve);
             script.EaseCurveExtremeNodes(script.EaseCurve);
 
             // If new timestamp is bigger than old timestamp..

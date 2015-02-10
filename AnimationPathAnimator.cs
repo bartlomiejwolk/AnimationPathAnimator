@@ -260,7 +260,8 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC METHODS
         public static void RemoveAllCurveKeys(AnimationCurve curve) {
-            for (var i = 0; i < curve.length; i++) {
+            var keysToRemoveNo = curve.length;
+            for (var i = 0; i < keysToRemoveNo; i++) {
                 curve.RemoveKey(0);
             }
         }
@@ -349,7 +350,16 @@ namespace ATP.AnimationPathTools {
         private void AnimatedObjectPathOnPathReset(object sender, EventArgs eventArgs) {
             ResetRotationData();
             ResetEaseCurve();
+            ResetZRotationCurve();
         }
+
+        private void ResetZRotationCurve() {
+            RemoveAllCurveKeys(tiltingCurve);
+
+            tiltingCurve.AddKey(0, 0);
+            tiltingCurve.AddKey(1, 0);
+        }
+
         #endregion EVENT HANDLERS
 
         #region PRIVATE METHODS

@@ -369,12 +369,12 @@ namespace ATP.AnimationPathTools {
         private void AnimatedObjectPathOnPathReset(object sender, EventArgs eventArgs) {
             ResetRotationData();
             ResetEaseCurve();
-            ResetZRotationCurve();
+            ResetTiltCurve();
         }
         #endregion EVENT HANDLERS
 
         #region PRIVATE METHODS
-        private void ResetZRotationCurve() {
+        private void ResetTiltCurve() {
             RemoveAllCurveKeys(tiltingCurve);
 
             tiltingCurve.AddKey(0, 0);

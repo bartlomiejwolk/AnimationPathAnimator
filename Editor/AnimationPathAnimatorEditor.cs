@@ -56,6 +56,8 @@ namespace ATP.AnimationPathTools {
         private const int EaseValueLabelOffsetX = 0;
         private const int EaseValueLabelOffsetY = -60;
         private GUIStyle easeValueLabelStyle;
+        private const int DefaultLabelWidth = 30;
+        private const int DefaultLabelHeight = 10;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -254,7 +256,6 @@ namespace ATP.AnimationPathTools {
             //throw new NotImplementedException();
         }
 
-        // TODO Extract content to DrawNodeLabel().
         private void DrawNodeLabels(
             Func<int, float> calculateValueCallback,
             int offsetX,
@@ -270,29 +271,39 @@ namespace ATP.AnimationPathTools {
                     "{0:0}",
                     calculateValueCallback(i));
 
-                // Get node position.
-                var nodePosition = script.GetNodePosition(i);
-
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
-
-                // Create rectangle for the label.
-                var labelPosition = new Rect(
-                    guiPoint.x + EaseValueLabelOffsetX,
-                    guiPoint.y + EaseValueLabelOffsetY,
-                    30,
-                    10);
-
-                Handles.BeginGUI();
-                
-                // Draw label.
-                GUI.Label(
-                    labelPosition,
-                    arcValue,
-                    style);
-
-                Handles.EndGUI();
+                DrawNodeLabel(i, arcValue, offsetX, offsetY, style);
             }
+        }
+
+        private void DrawNodeLabel(
+            int nodeIndex,
+            string value,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
+            
+            // Get node position.
+            var nodePosition = script.GetNodePosition(nodeIndex);
+
+            // Translate node's 3d position into screen coordinates.
+            var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
+
+            // Create rectangle for the label.
+            var labelPosition = new Rect(
+                guiPoint.x + offsetX,
+                guiPoint.y + offsetY,
+                DefaultLabelWidth,
+                DefaultLabelHeight);
+
+            Handles.BeginGUI();
+
+            // Draw label.
+            GUI.Label(
+                labelPosition,
+                value,
+                style);
+
+            Handles.EndGUI();
         }
 
         #endregion UNITY MESSAGES

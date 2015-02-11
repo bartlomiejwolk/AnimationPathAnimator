@@ -50,7 +50,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationMode;
         private SerializedProperty forwardPointOffset;
 
-        private readonly Color zRotationHandleColor = Color.green;
+        private readonly Color tiltingHandleColor = Color.green;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -241,7 +241,7 @@ namespace ATP.AnimationPathTools {
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
                 // TODO Create const.
-                Handles.color = zRotationHandleColor;
+                Handles.color = tiltingHandleColor;
 
                 Handles.DrawWireArc(
                     nodePositions[i],
@@ -256,7 +256,7 @@ namespace ATP.AnimationPathTools {
                     arcHandleSize);
 
                 // TODO Create const.
-                Handles.color = zRotationHandleColor;
+                Handles.color = tiltingHandleColor;
 
                 // TODO Create constant.
                 var scaleHandleSize = handleSize * 1.5f;

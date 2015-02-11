@@ -176,6 +176,7 @@ namespace ATP.AnimationPathTools {
                 //script.UpdateEaseCurve();
             }
 
+            // TODO Is this update needed?
             serializedObject.Update();
 
             // Update modifier key state.

@@ -599,7 +599,6 @@ namespace ATP.AnimationPathTools {
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            //else if (animatedObject != null && lookForwardMode) {
             else if (animatedObject != null
                 && rotationMode == AnimatorRotationMode.Forward) {
 

@@ -218,13 +218,12 @@ namespace ATP.AnimationPathTools {
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
-            HandleDrawingZAxisRotationHandles();
+            HandleDrawingTiltingHandles();
 
             script.UpdateAnimation();
         }
 
-        // TODO Rename to HandleDrawingTiltingHandles().
-        private void HandleDrawingZAxisRotationHandles() {
+        private void HandleDrawingTiltingHandles() {
             if (handleMode.enumValueIndex !=
                 (int)AnimatorHandleMode.Tilting) return;
 

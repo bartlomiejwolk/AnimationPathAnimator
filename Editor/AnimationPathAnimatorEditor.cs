@@ -48,6 +48,7 @@ namespace ATP.AnimationPathTools {
         //private SerializedProperty tiltingMode;
         private SerializedProperty handleMode;
         private SerializedProperty rotationMode;
+        private SerializedProperty forwardPointOffset;
 
         private readonly Color zRotationHandleColor = Color.green;
 
@@ -107,6 +108,11 @@ namespace ATP.AnimationPathTools {
             //EditorGUILayout.PropertyField(tiltingMode);
             EditorGUILayout.PropertyField(handleMode);
             EditorGUILayout.PropertyField(rotationMode);
+            if (rotationMode.enumValueIndex ==
+                (int) AnimatorRotationMode.Forward) {
+                
+                EditorGUILayout.PropertyField(forwardPointOffset);
+            }
 
             EditorGUILayout.PropertyField(
                 rotationSpeed,
@@ -166,6 +172,8 @@ namespace ATP.AnimationPathTools {
             //tiltingMode = serializedObject.FindProperty("tiltingMode");
             handleMode = serializedObject.FindProperty("handleMode");
             rotationMode = serializedObject.FindProperty("rotationMode");
+            forwardPointOffset =
+                serializedObject.FindProperty("forwardPointOffset");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

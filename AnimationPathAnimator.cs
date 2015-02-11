@@ -133,9 +133,12 @@ namespace ATP.AnimationPathTools {
         // TODO Rename to targetObject.
         private Transform followedObject;
 
+        //[SerializeField]
+        //// TODO Replace with float value.
+        //private AnimationCurve lookForwardCurve = new AnimationCurve();
+
         [SerializeField]
-        // TODO Replace with float value.
-        private AnimationCurve lookForwardCurve = new AnimationCurve();
+        private float forwardPointOffset = 0.05f;
 
         //[SerializeField]
         //private bool lookForwardMode;
@@ -196,7 +199,7 @@ namespace ATP.AnimationPathTools {
         private void Awake() {
             InitializeEaseCurve();
             InitializeRotationCurve();
-            InitializeLookForwardCurve();
+            //InitializeLookForwardCurve();
 
             // Initialize animatedObject field.
             if (animatedObject == null && Camera.main.transform != null) {
@@ -298,7 +301,8 @@ namespace ATP.AnimationPathTools {
 
         public Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
-            var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
+            //var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
+            var forwardPointDelta = forwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
 
@@ -554,13 +558,13 @@ namespace ATP.AnimationPathTools {
             easeCurve.AddKey(lastKey);
         }
 
-        private void InitializeLookForwardCurve() {
-            var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
-            var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
+        //private void InitializeLookForwardCurve() {
+        //    var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
+        //    var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
 
-            lookForwardCurve.AddKey(firstKey);
-            lookForwardCurve.AddKey(lastKey);
-        }
+        //    lookForwardCurve.AddKey(firstKey);
+        //    lookForwardCurve.AddKey(lastKey);
+        //}
 
         private void InitializeRotationCurve() {
             var firstKey = new Keyframe(0, 0, 0, 0);

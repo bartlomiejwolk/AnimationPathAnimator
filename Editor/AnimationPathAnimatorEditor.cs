@@ -14,10 +14,10 @@ namespace ATP.AnimationPathTools {
         private const float ArcHandleRadius = 1f;
         private const int DefaultLabelHeight = 10;
         private const int DefaultLabelWidth = 30;
-        private const int EaseValueLabelOffsetX = 0;
+        private const int EaseValueLabelOffsetX = 20;
         private const int EaseValueLabelOffsetY = -60;
         private const float RotationHandleSize = 0.25f;
-        private const int TiltValueLabelOffsetX = 0;
+        private const int TiltValueLabelOffsetX = 20;
         private const int TiltValueLabelOffsetY = -60;
         #endregion CONSTANTS
 

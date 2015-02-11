@@ -684,9 +684,8 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Tangent Mode",
                     ""));
-            serializedObject.ApplyModifiedProperties();
-
             HandleTangentModeChange();
+            serializedObject.ApplyModifiedProperties();
 
             //EditorGUILayout.BeginHorizontal();
             //serializedObject.Update();
@@ -765,6 +764,27 @@ namespace ATP.AnimationPathTools {
                             "Styles used by on-scene GUI elements."));
             }
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleTangentModeChange() {
+            // If tangent mode was changed..
+            if (tangentMode.enumValueIndex !=
+                (int) Script.TangentMode) {
+
+                // Update path node tangents.
+                if (tangentMode.enumValueIndex ==
+                    (int)AnimationPathTangentMode.Smooth) {
+
+                    Script.SmoothAllNodeTangents();
+                }
+                else if (tangentMode.enumValueIndex ==
+                         (int)AnimationPathTangentMode.Linear) {
+
+                    Script.SetNodesLinear();
+                }
+
+                Script.OnPathChanged();
+            }
         }
 
         /// <summary>

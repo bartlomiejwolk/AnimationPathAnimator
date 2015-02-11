@@ -169,6 +169,11 @@ namespace ATP.AnimationPathTools {
         public bool IsInitialized {
             get { return (animationCurves.KeysNo >= 2); }
         }
+
+        public AnimationPathTangentMode TangentMode {
+            get { return tangentMode; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES

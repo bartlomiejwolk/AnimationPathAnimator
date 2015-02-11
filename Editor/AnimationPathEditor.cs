@@ -607,7 +607,7 @@ namespace ATP.AnimationPathTools {
 
         private void DrawResetInspectorButton() {
             if (GUILayout.Button(new GUIContent(
-                "Reset",
+                "Reset Path",
                 "Reset path to default."))) {
                 // Allow undo this operation.
                 HandleUndo();

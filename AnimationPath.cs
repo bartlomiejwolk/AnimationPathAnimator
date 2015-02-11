@@ -9,6 +9,7 @@ namespace ATP.AnimationPathTools {
     // TODO Move to a separate file.
     //public enum AnimationPathHandlesMode { MoveSingle, MoveAll, Tangent }
     public enum AnimationPathHandlesMode { MoveSingle, MoveAll }
+    public enum AnimationPathTangentMode { Smooth, Linear }
 
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.
@@ -116,6 +117,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField] private AnimationPathHandlesMode handlesMode =
             AnimationPathHandlesMode.MoveSingle;
 
+        [SerializeField] private AnimationPathTangentMode tangentMode =
+            AnimationPathTangentMode.Smooth;
+
         public const KeyCode MoveSingleModeKey = KeyCode.G;
 
 #pragma warning restore 0414
@@ -165,6 +169,11 @@ namespace ATP.AnimationPathTools {
         public bool IsInitialized {
             get { return (animationCurves.KeysNo >= 2); }
         }
+
+        public AnimationPathTangentMode TangentMode {
+            get { return tangentMode; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES

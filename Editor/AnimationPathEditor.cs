@@ -18,16 +18,16 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANS
 
-        private const int AddButtonH = 44;
+        private const int AddButtonH = 25;
         private const int AddButtonV = 10;
         //private const float FirstNodeSize = 0.12f;
         private const float MoveAllModeSize = 0.15f;
         private const float MovementHandleSize = 0.12f;
-        private const int RemoveButtonH = 63;
+        private const int RemoveButtonH = 44;
         private const int RemoveButtonV = 10;
-        private const int SmoothButtonH = 25;
-        private const int SmoothButtonV = 10;
-        private const float TangentHandleSize = 0.25f;
+        //private const int SmoothButtonH = 25;
+        //private const int SmoothButtonV = 10;
+        //private const float TangentHandleSize = 0.25f;
 
         #endregion CONSTANS
 
@@ -216,24 +216,24 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing smooth tangent button.
         /// </summary>
-        private void HandleDrawingSmoothTangentButton() {
-            // Get button style.
-            var smoothButtonStyle = Script.Skin.GetStyle(
-                        "SmoothButton");
+        //private void HandleDrawingSmoothTangentButton() {
+        //    // Get button style.
+        //    var smoothButtonStyle = Script.Skin.GetStyle(
+        //                "SmoothButton");
 
-            // Positions at which to draw movement handles.
-            var nodePositions = Script.GetNodePositions();
+        //    // Positions at which to draw movement handles.
+        //    var nodePositions = Script.GetNodePositions();
 
-            // Callback to smooth a node after smooth node button was pressed.
-            Action<int> smoothNodeCallback =
-                DrawSmoothTangentButtonsCallbackHandler;
+        //    // Callback to smooth a node after smooth node button was pressed.
+        //    Action<int> smoothNodeCallback =
+        //        DrawSmoothTangentButtonsCallbackHandler;
 
-            // Draw button.
-            DrawSmoothTangentButtons(
-                nodePositions,
-                smoothButtonStyle,
-                smoothNodeCallback);
-        }
+        //    // Draw button.
+        //    DrawSmoothTangentButtons(
+        //        nodePositions,
+        //        smoothButtonStyle,
+        //        smoothNodeCallback);
+        //}
 
         /// <summary>
         /// Handle drawing tangent handles.
@@ -412,73 +412,73 @@ namespace ATP.AnimationPathTools {
         /// <param name="callback">
         /// Callback called when a button is pressed.
         /// </param>
-        private void DrawSmoothTangentButtons(
-            Vector3[] nodePositions,
-            GUIStyle smoothButtonStyle,
-            Action<int> callback) {
+        //private void DrawSmoothTangentButtons(
+        //    Vector3[] nodePositions,
+        //    GUIStyle smoothButtonStyle,
+        //    Action<int> callback) {
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            // For each key..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(
-                        nodePositions[i]);
+        //    // For each key..
+        //    for (var i = 0; i < nodePositions.Length; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        var guiPoint = HandleUtility.WorldToGUIPoint(
+        //                nodePositions[i]);
 
-                // Create rectangle for the "+" button.
-                var rect = new Rect(
-                        guiPoint.x + SmoothButtonH,
-                        guiPoint.y + SmoothButtonV,
-                        15,
-                        15);
+        //        // Create rectangle for the "+" button.
+        //        var rect = new Rect(
+        //                guiPoint.x + SmoothButtonH,
+        //                guiPoint.y + SmoothButtonV,
+        //                15,
+        //                15);
 
-                // Draw button.
-                var buttonPressed = GUI.Button(rect, "", smoothButtonStyle);
+        //        // Draw button.
+        //        var buttonPressed = GUI.Button(rect, "", smoothButtonStyle);
 
-                // If button pressed..
-                if (buttonPressed) {
-                    // Execute callback.
-                    callback(i);
-                }
-            }
+        //        // If button pressed..
+        //        if (buttonPressed) {
+        //            // Execute callback.
+        //            callback(i);
+        //        }
+        //    }
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
         /// <summary>
         /// For each node in the scene draw handle that allow manipulating
         /// tangents for each of the animation curves separately.
         /// </summary>
         /// <returns>True if any handle was moved.</returns>
-        private void DrawTangentHandles(
-            Vector3[] nodes,
-            Action<int, Vector3> callback) {
+        //private void DrawTangentHandles(
+        //    Vector3[] nodes,
+        //    Action<int, Vector3> callback) {
 
-            Handles.color = Script.GizmoCurveColor;
+        //    Handles.color = Script.GizmoCurveColor;
 
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                var sphereSize = handleSize * TangentHandleSize;
+        //    // For each node..
+        //    for (var i = 0; i < nodes.Length; i++) {
+        //        var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+        //        var sphereSize = handleSize * TangentHandleSize;
 
-                // draw node's handle.
-                var newHandleValue = Handles.FreeMoveHandle(
-                    nodes[i],
-                    Quaternion.identity,
-                    sphereSize,
-                    Vector3.zero,
-                    Handles.CircleCap);
+        //        // draw node's handle.
+        //        var newHandleValue = Handles.FreeMoveHandle(
+        //            nodes[i],
+        //            Quaternion.identity,
+        //            sphereSize,
+        //            Vector3.zero,
+        //            Handles.CircleCap);
 
-                // How much tangent's value changed in this frame.
-                var tangentDelta = newHandleValue - nodes[i];
+        //        // How much tangent's value changed in this frame.
+        //        var tangentDelta = newHandleValue - nodes[i];
 
-                // Remember if handle was moved.
-                if (tangentDelta != Vector3.zero) {
-                    // Execute callback.
-                    callback(i, tangentDelta);
-                }
-            }
-        }
+        //        // Remember if handle was moved.
+        //        if (tangentDelta != Vector3.zero) {
+        //            // Execute callback.
+        //            callback(i, tangentDelta);
+        //        }
+        //    }
+        //}
 
         #endregion Drawing methods
 

@@ -54,6 +54,7 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
         private SerializedProperty handlesMode;
+        private SerializedProperty tangentMode;
         //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
@@ -80,6 +81,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             handlesMode = serializedObject.FindProperty("handlesMode");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
+            tangentMode = serializedObject.FindProperty("tangentMode");
 
             Script = (AnimationPath)target;
 
@@ -637,15 +639,28 @@ namespace ATP.AnimationPathTools {
 
             serializedObject.Update();
             // TODO Don't use serialized property. Use script instead.
-            EditorGUILayout.PropertyField(handlesMode);
+            EditorGUILayout.PropertyField(
+                handlesMode,
+                new GUIContent(
+                    "Movement Mode",
+                    ""));
             serializedObject.ApplyModifiedProperties();
 
-            EditorGUILayout.BeginHorizontal();
             serializedObject.Update();
-            DrawSmoothInspectorButton();
-            DrawLinearInspectorButton();
+            // TODO Don't use serialized property. Use script instead.
+            EditorGUILayout.PropertyField(
+                tangentMode,
+                new GUIContent(
+                    "Tangent Mode",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+
+            //EditorGUILayout.BeginHorizontal();
+            //serializedObject.Update();
+            //DrawSmoothInspectorButton();
+            //DrawLinearInspectorButton();
             DrawResetInspectorButton();
-            EditorGUILayout.EndHorizontal();
+            //EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 

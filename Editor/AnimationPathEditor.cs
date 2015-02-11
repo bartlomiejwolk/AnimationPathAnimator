@@ -123,7 +123,7 @@ namespace ATP.AnimationPathTools {
             // node's attribute. Based on inspector option/key pressed, this
             // will change handles mode. See HandlesMode enum for available
             // tools.
-            HandleTangentModeOptionShortcut();
+            //HandleTangentModeOptionShortcut();
 
             // Update "Move All" inspector option with keyboard shortcut.
             HandleMoveAllOptionShortcut();
@@ -135,7 +135,7 @@ namespace ATP.AnimationPathTools {
 
             // Handle displaying tangent handles. Tangent handles allows
             // changing nodes' in/out tangents.
-            HandleDrawingTangentHandles();
+            //HandleDrawingTangentHandles();
 
             // Draw add node buttons.
             HandleDrawingAddButtons();
@@ -144,7 +144,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingRemoveButtons();
 
             // Handle drawing smooth tangent button for each node.
-            HandleDrawingSmoothTangentButton();
+            //HandleDrawingSmoothTangentButton();
 
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -179,8 +179,8 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingMovementHandles() {
-            if (handlesMode.enumValueIndex ==
-                (int)AnimationPathHandlesMode.Tangent) return;
+            //if (handlesMode.enumValueIndex ==
+            //    (int)AnimationPathHandlesMode.Tangent) return;
 
             // Positions at which to draw movement handles.
             // TODO Move to DrawmovementHandles().
@@ -238,22 +238,22 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing tangent handles.
         /// </summary>
-        private void HandleDrawingTangentHandles() {
-            if (handlesMode.enumValueIndex !=
-                (int)AnimationPathHandlesMode.Tangent) return;
+        //private void HandleDrawingTangentHandles() {
+        //    if (handlesMode.enumValueIndex !=
+        //        (int)AnimationPathHandlesMode.Tangent) return;
 
-            // Positions at which to draw tangent handles.
-            var nodes = Script.GetNodePositions();
+        //    // Positions at which to draw tangent handles.
+        //    var nodes = Script.GetNodePositions();
 
-            // Callback: After handle is moved, update animation curves.
-            Action<int, Vector3> updateTangentsCallback =
-                DrawTangentHandlesCallbackHandler;
+        //    // Callback: After handle is moved, update animation curves.
+        //    Action<int, Vector3> updateTangentsCallback =
+        //        DrawTangentHandlesCallbackHandler;
 
-            // Draw tangent handles.
-            DrawTangentHandles(
-                nodes,
-                updateTangentsCallback);
-        }
+        //    // Draw tangent handles.
+        //    DrawTangentHandles(
+        //        nodes,
+        //        updateTangentsCallback);
+        //}
 
         #endregion DRAWING HANDLERS
 
@@ -493,6 +493,7 @@ namespace ATP.AnimationPathTools {
             AddNodeBetween(nodeIndex);
 
             Script.DistributeTimestamps();
+            Script.SmoothAllNodeTangents();
 
             Script.OnPathChanged();
         }
@@ -528,6 +529,7 @@ namespace ATP.AnimationPathTools {
 
             Script.RemoveNode(nodeIndex);
             Script.DistributeTimestamps();
+            Script.SmoothAllNodeTangents();
 
             Script.OnPathChanged();
         }
@@ -776,14 +778,14 @@ namespace ATP.AnimationPathTools {
         /// Toggle handles mode with key shortcut.
         /// </summary>
         // TODO Rename to HandleTangentModeShortcut().
-        private void HandleTangentModeOptionShortcut() {
-            // Return if Tangent Mode shortcut wasn't released.
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimationPath.TangentModeKey) return;
+        //private void HandleTangentModeOptionShortcut() {
+        //    // Return if Tangent Mode shortcut wasn't released.
+        //    if (Event.current.type != EventType.keyUp
+        //        || Event.current.keyCode != AnimationPath.TangentModeKey) return;
 
-            handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
-            serializedObject.ApplyModifiedProperties();
-        }
+        //    handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
+        //    serializedObject.ApplyModifiedProperties();
+        //}
 
         private void HandleMoveSingleModeShortcut() {
             // Return if Tangent Mode shortcut wasn't released.

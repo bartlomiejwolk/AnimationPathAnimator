@@ -7,7 +7,8 @@ using UnityEngine;
 namespace ATP.AnimationPathTools {
 
     // TODO Move to a separate file.
-    public enum AnimationPathHandlesMode { MoveSingle, MoveAll, Tangent }
+    //public enum AnimationPathHandlesMode { MoveSingle, MoveAll, Tangent }
+    public enum AnimationPathHandlesMode { MoveSingle, MoveAll }
 
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.

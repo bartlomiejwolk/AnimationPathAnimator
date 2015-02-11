@@ -228,13 +228,13 @@ namespace ATP.AnimationPathTools {
                 (int)AnimatorHandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
-                DrawZAxisRotationHandlesCallbackHandler;
+                DrawTiltingHandlesCallbackHandler;
 
-            DrawZAxisRotationHandles(callbackHandler);
+            DrawTiltingHandles(callbackHandler);
         }
 
         // TODO Extract methods. Do the same to ease curve drawing method.
-        private void DrawZAxisRotationHandles(Action<int, float> callback) {
+        private void DrawTiltingHandles(Action<int, float> callback) {
             // Get AnimationPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
@@ -303,7 +303,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawZAxisRotationHandlesCallbackHandler(
+        private void DrawTiltingHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
 

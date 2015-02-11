@@ -11,14 +11,14 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANTS
 
-        private const float ArcHandleRadius = 1f;
+        private const float ArcHandleRadius = 0.6f;
         private const int DefaultLabelHeight = 10;
         private const int DefaultLabelWidth = 30;
-        private const int EaseValueLabelOffsetX = 20;
-        private const int EaseValueLabelOffsetY = -60;
+        private const int EaseValueLabelOffsetX = -20;
+        private const int EaseValueLabelOffsetY = -25;
         private const float RotationHandleSize = 0.25f;
-        private const int TiltValueLabelOffsetX = 20;
-        private const int TiltValueLabelOffsetY = -60;
+        private const int TiltValueLabelOffsetX = -20;
+        private const int TiltValueLabelOffsetY = -25;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -363,7 +363,7 @@ namespace ATP.AnimationPathTools {
                 var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
                 var arcValue = easeValue * arcValueMultiplier;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
-                var arcHandleSize = handleSize * ArcHandleRadius;
+                var arcRadius = handleSize * ArcHandleRadius;
 
                 // TODO Create const.
                 Handles.color = Color.red;
@@ -378,7 +378,7 @@ namespace ATP.AnimationPathTools {
                         0,
                         Vector3.up) * Vector3.forward,
                     arcValue,
-                    arcHandleSize);
+                    arcRadius);
 
                 // TODO Create const.
                 Handles.color = Color.red;
@@ -391,7 +391,7 @@ namespace ATP.AnimationPathTools {
                 var scaleHandleSize = handleSize * 1.5f;
                 float newArcValue = Handles.ScaleValueHandle(
                     arcValue,
-                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcRadius
                         * 1.3f,
                     Quaternion.identity,
                     scaleHandleSize,

@@ -219,9 +219,44 @@ namespace ATP.AnimationPathTools {
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
             HandleDrawingTiltingHandles();
+            HandleDrawingEaseLabel();
+            HandleDrawingTiltLabel();
 
             script.UpdateAnimation();
         }
+
+        private void HandleDrawingTiltLabel() {
+            //throw new NotImplementedException();
+        }
+
+        private void HandleDrawingEaseLabel() {
+            int nodesNo = script.AnimatedObjectPath.NodesNo;
+
+            // For each path node..
+            for (int i = 0; i < nodesNo; i++) {
+                // Get node position.
+                var nodePosition = script.GetNodePosition(i);
+
+                // Calculate value to display.
+                var easeValue = script.GetNodeEaseValue(i);
+                var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+                var arcValue = easeValue * arcValueMultiplier;
+
+                // TODO Make it class field.
+                // Set gui style.
+                var style = new GUIStyle {
+                    normal = { textColor = Color.white },
+                    fontStyle = FontStyle.Bold,
+                };
+
+                // Draw label.
+                Handles.Label(
+                    nodePosition,
+                    arcValue.ToString(),
+                    style);
+            }
+        }
+
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
@@ -359,6 +394,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Refactor.
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get AnimationPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();

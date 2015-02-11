@@ -52,6 +52,7 @@ namespace ATP.AnimationPathTools {
 
         private readonly Color tiltingHandleColor = Color.green;
         private SerializedProperty advancedSettingsFoldout;
+        private SerializedProperty maxAnimationSpeed;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -158,6 +159,7 @@ namespace ATP.AnimationPathTools {
                         "Advanced Settings",
                         ""));
             if (advancedSettingsFoldout.boolValue) {
+                EditorGUILayout.PropertyField(maxAnimationSpeed);
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -188,6 +190,8 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("forwardPointOffset");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            maxAnimationSpeed =
+                serializedObject.FindProperty("maxAnimationSpeed");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -395,7 +399,8 @@ namespace ATP.AnimationPathTools {
             for (var i = 0; i < nodePositions.Length; i++) {
                 var easeValue = easeCurveValues[i];
                 //var arcValue = easeValue * 3600f;
-                var arcValue = easeValue * 1800f;
+                var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+                var arcValue = easeValue * arcValueMultiplier;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
@@ -416,6 +421,10 @@ namespace ATP.AnimationPathTools {
 
                 // TODO Create const.
                 Handles.color = Color.red;
+                
+                // Set initial arc value to other than zero.
+                // If initial value is zero, handle will always return zero.
+                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
 
                 // TODO Create constant.
                 var scaleHandleSize = handleSize * 1.5f;
@@ -435,7 +444,7 @@ namespace ATP.AnimationPathTools {
                 // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
-                    callback(i, newArcValue / 1800f);
+                    callback(i, newArcValue / arcValueMultiplier);
                 }
             }
         }

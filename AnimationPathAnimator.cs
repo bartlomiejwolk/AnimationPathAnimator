@@ -112,6 +112,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private bool advancedSettingsFoldout;
 
+        [SerializeField]
+        private float maxAnimationSpeed = 0.3f;
+
         //[SerializeField]
         //private bool displayEaseHandles;
 

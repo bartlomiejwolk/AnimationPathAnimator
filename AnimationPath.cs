@@ -7,7 +7,8 @@ using UnityEngine;
 namespace ATP.AnimationPathTools {
 
     // TODO Move to a separate file.
-    public enum AnimationPathHandlesMode { MoveSingle, MoveAll, Tangent }
+    //public enum AnimationPathHandlesMode { MoveSingle, MoveAll, Tangent }
+    public enum AnimationPathHandlesMode { MoveSingle, MoveAll }
 
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.
@@ -549,7 +550,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="weight">Weight to be applied to the tangents.</param>
         // TODO Rename to SmoothAllNodeTangents().
-        public void SmoothNodesTangents(float weight = 0) {
+        public void SmoothAllNodeTangents(float weight = 0) {
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
@@ -557,7 +558,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void SmoothNodeTangents(int nodeIndex) {
+        public void SmoothSingleNodeTangents(int nodeIndex) {
             animationCurves.SmoothPointTangents(nodeIndex);
         }
 

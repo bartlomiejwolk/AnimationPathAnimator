@@ -837,5 +837,17 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
+
+        public float GetNodeEaseValue(int i) {
+            return easeCurve.keys[i].value;
+        }
+
+        public Vector3 GetNodePosition(int i) {
+            return animatedObjectPath.GetNodePosition(i);
+        }
+
+        public float GetNodeTiltValue(int nodeIndex) {
+            return tiltingCurve.keys[nodeIndex].value;
+        }
     }
 }

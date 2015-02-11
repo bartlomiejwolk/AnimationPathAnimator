@@ -10,11 +10,21 @@ namespace ATP.AnimationPathTools {
     public class AnimatorEditor : Editor {
 
         #region CONSTANTS
+
         private const float ArcHandleRadius = 1f;
+        private const int DefaultLabelHeight = 10;
+        private const int DefaultLabelWidth = 30;
+        private const int EaseValueLabelOffsetX = 0;
+        private const int EaseValueLabelOffsetY = -60;
         private const float RotationHandleSize = 0.25f;
-        #endregion
+        private const int TiltValueLabelOffsetX = 0;
+        private const int TiltValueLabelOffsetY = -60;
+        #endregion CONSTANTS
+
         #region FIELDS
 
+        private readonly Color tiltingHandleColor = Color.green;
+        private GUIStyle easeValueLabelStyle;
         /// <summary>
         /// If modifier is currently pressed.
         /// </summary>
@@ -25,21 +35,27 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
+        private GUIStyle tiltValueLabelStyle;
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
+
+        private SerializedProperty advancedSettingsFoldout;
 
         // TODO Change this value directly.
         // TODO Rename to drawRotationHandles.
         //protected SerializedProperty drawRotationHandle;
         private SerializedProperty animatedObject;
+
         private SerializedProperty animTimeRatio;
+
         //private SerializedProperty duration;
         //private SerializedProperty easeAnimationCurve;
         //private SerializedProperty lookForwardCurve;
         private SerializedProperty followedObject;
-        //private SerializedProperty followedObjectPath;
-        private SerializedProperty rotationSpeed;
+
+        private SerializedProperty forwardPointOffset;
+
         //private SerializedProperty tiltingCurve;
         //private SerializedProperty lookForwardMode;
         // TODO Change this value directly.
@@ -47,13 +63,13 @@ namespace ATP.AnimationPathTools {
         // TODO Rename to ???.
         //private SerializedProperty tiltingMode;
         private SerializedProperty handleMode;
-        private SerializedProperty rotationMode;
-        private SerializedProperty forwardPointOffset;
 
-        private readonly Color tiltingHandleColor = Color.green;
-        private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty maxAnimationSpeed;
 
+        private SerializedProperty rotationMode;
+
+        //private SerializedProperty followedObjectPath;
+        private SerializedProperty rotationSpeed;
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -111,8 +127,8 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.PropertyField(handleMode);
             EditorGUILayout.PropertyField(rotationMode);
             if (rotationMode.enumValueIndex ==
-                (int) AnimatorRotationMode.Forward) {
-                
+                (int)AnimatorRotationMode.Forward) {
+
                 EditorGUILayout.PropertyField(forwardPointOffset);
             }
 
@@ -192,6 +208,13 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
+
+            easeValueLabelStyle = new GUIStyle {
+                normal = { textColor = Color.white },
+                fontStyle = FontStyle.Bold,
+            };
+
+            tiltValueLabelStyle = easeValueLabelStyle;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -219,123 +242,35 @@ namespace ATP.AnimationPathTools {
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
             HandleDrawingTiltingHandles();
+            HandleDrawingEaseLabel();
+            HandleDrawingTiltLabel();
 
             script.UpdateAnimation();
-        }
-
-        private void HandleDrawingTiltingHandles() {
-            if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Tilting) return;
-
-            Action<int, float> callbackHandler =
-                DrawZAxisRotationHandlesCallbackHandler;
-
-            DrawZAxisRotationHandles(callbackHandler);
-        }
-
-        // TODO Extract methods. Do the same to ease curve drawing method.
-        private void DrawZAxisRotationHandles(Action<int, float> callback) {
-            // Get AnimationPath node positions.
-            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
-
-            // Get rotation curve timestamps.
-            //var easeTimestamps = new float[script.EaseCurve.length];
-            //for (var i = 0; i < script.EaseCurve.length; i++) {
-            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
-            //}
-
-            // Get rotation curve values.
-            var rotationCurveValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < script.TiltingCurve.length; i++) {
-                rotationCurveValues[i] = script.TiltingCurve.keys[i].value;
-            }
-
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                var rotationValue = rotationCurveValues[i];
-                var arcValue = rotationValue * 2;
-                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
-                var arcHandleSize = handleSize * ArcHandleRadius;
-
-                // TODO Create const.
-                Handles.color = tiltingHandleColor;
-
-                Handles.DrawWireArc(
-                    nodePositions[i],
-                    Vector3.up,
-                    // Make the arc simetrical on the left and right
-                    // side of the object.
-                    Quaternion.AngleAxis(
-                    //-arcValue / 2,
-                        0,
-                        Vector3.up) * Vector3.forward,
-                    arcValue,
-                    arcHandleSize);
-
-                // TODO Create const.
-                Handles.color = tiltingHandleColor;
-
-                // TODO Create constant.
-                var scaleHandleSize = handleSize * 1.5f;
-                
-                // Set initial arc value to other than zero.
-                // If initial value is zero, handle will always return zero.
-                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
-
-                float newArcValue = Handles.ScaleValueHandle(
-                    arcValue,
-                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
-                        * 1.3f,
-                    Quaternion.identity,
-                    scaleHandleSize,
-                    Handles.ConeCap,
-                    1);
-
-                // Limit handle value.
-                if (newArcValue > 180) newArcValue = 180;
-                if (newArcValue < -180) newArcValue = -180;
-
-                // TODO Create float precision const.
-                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
-                    // Execute callback.
-                    callback(i, newArcValue / 2);
-                }
-            }
-        }
-
-        private void DrawZAxisRotationHandlesCallbackHandler(
-            int keyIndex,
-            float newValue) {
-
-            RecordTargetObject();
-
-            // Copy keyframe.
-            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
-            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
-
-            // Replace old key with updated one.
-            script.TiltingCurve.RemoveKey(keyIndex);
-            script.TiltingCurve.AddKey(keyframeCopy);
-            script.SmoothCurve(script.TiltingCurve);
-            script.EaseCurveExtremeNodes(script.TiltingCurve);
         }
 
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
-        private void HandleDrawingRotationHandle() {
-            //if (!drawRotationHandle.boolValue) return;
+
+        private void HandleDrawingEaseHandles() {
             if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Rotation) return;
+                (int)AnimatorHandleMode.Ease) return;
 
-            // Callback to call when node rotation is changed.
-            Action<float, Vector3> callbackHandler =
-                DrawRotationHandlesCallbackHandler;
+            Action<int, float> callbackHandler =
+                DrawEaseHandlesCallbackHandler;
 
-            // Draw handles.
-            DrawRotationHandle(callbackHandler);
+            DrawEaseHandles(callbackHandler);
+        }
+
+        private void HandleDrawingEaseLabel() {
+            if (handleMode.enumValueIndex !=
+                (int)AnimatorHandleMode.Ease) return;
+
+            DrawNodeLabels(
+                ConvertEaseToDegrees,
+                EaseValueLabelOffsetX,
+                EaseValueLabelOffsetY,
+                easeValueLabelStyle);
         }
 
         private void HandleDrawingForwardPointGizmo() {
@@ -350,6 +285,20 @@ namespace ATP.AnimationPathTools {
             };
 
             Handles.Label(targetPos, "Point", style);
+        }
+
+        private void HandleDrawingRotationHandle() {
+            //if (!drawRotationHandle.boolValue) return;
+            if (handleMode.enumValueIndex !=
+                (int)AnimatorHandleMode.Rotation) return;
+
+            // Callback to call when node rotation is changed. TODO Pass func.
+            // directly as an argument.
+            Action<float, Vector3> callbackHandler =
+                DrawRotationHandlesCallbackHandler;
+
+            // Draw handles.
+            DrawRotationHandle(callbackHandler);
         }
 
         private void HandleDrawingTargetGizmo() {
@@ -367,18 +316,31 @@ namespace ATP.AnimationPathTools {
 
         }
 
-        private void HandleDrawingEaseHandles() {
+        private void HandleDrawingTiltingHandles() {
             if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Ease) return;
+                (int)AnimatorHandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
-                DrawEaseHandlesCallbackHandler;
+                DrawTiltingHandlesCallbackHandler;
 
-            DrawEaseHandles(callbackHandler);
+            DrawTiltingHandles(callbackHandler);
         }
-        #endregion
+
+        private void HandleDrawingTiltLabel() {
+            if (handleMode.enumValueIndex !=
+                (int)AnimatorHandleMode.Tilting) return;
+
+            DrawNodeLabels(
+                ConvertTiltToDegrees,
+                TiltValueLabelOffsetX,
+                TiltValueLabelOffsetY,
+                tiltValueLabelStyle);
+        }
+        #endregion DRAWING HANDLERS
 
         #region DRAWING METHODS
+
+        // TODO Refactor.
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get AnimationPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
@@ -409,8 +371,8 @@ namespace ATP.AnimationPathTools {
                 Handles.DrawWireArc(
                     nodePositions[i],
                     Vector3.up,
-                    // Make the arc simetrical on the left and right
-                    // side of the object.
+                    // Make the arc simetrical on the left and right side of
+                    // the object.
                     Quaternion.AngleAxis(
                     //-arcValue / 2,
                         0,
@@ -420,9 +382,9 @@ namespace ATP.AnimationPathTools {
 
                 // TODO Create const.
                 Handles.color = Color.red;
-                
-                // Set initial arc value to other than zero.
-                // If initial value is zero, handle will always return zero.
+
+                // Set initial arc value to other than zero. If initial value
+                // is zero, handle will always return zero.
                 arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
 
                 // TODO Create constant.
@@ -448,12 +410,63 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private void DrawNodeLabel(
+                    int nodeIndex,
+                    string value,
+                    int offsetX,
+                    int offsetY,
+                    GUIStyle style) {
+
+            // Get node position.
+            var nodePosition = script.GetNodePosition(nodeIndex);
+
+            // Translate node's 3d position into screen coordinates.
+            var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
+
+            // Create rectangle for the label.
+            var labelPosition = new Rect(
+                guiPoint.x + offsetX,
+                guiPoint.y + offsetY,
+                DefaultLabelWidth,
+                DefaultLabelHeight);
+
+            Handles.BeginGUI();
+
+            // Draw label.
+            GUI.Label(
+                labelPosition,
+                value,
+                style);
+
+            Handles.EndGUI();
+        }
+
+        private void DrawNodeLabels(
+                    Func<int, float> calculateValueCallback,
+                    int offsetX,
+                    int offsetY,
+                    GUIStyle style) {
+
+            int nodesNo = script.AnimatedObjectPath.NodesNo;
+
+            // For each path node..
+            for (int i = 0; i < nodesNo; i++) {
+                // Get value to display.
+                var arcValue = String.Format(
+                    "{0:0}",
+                    calculateValueCallback(i));
+
+                DrawNodeLabel(i, arcValue, offsetX, offsetY, style);
+            }
+        }
+
         private void DrawRotationHandle(Action<float, Vector3> callback) {
             var currentAnimationTime = script.AnimationTimeRatio;
             var currentObjectPosition = script.GetRotationAtTime(currentAnimationTime);
             var nodeTimestamps = script.AnimatedObjectPath.GetNodeTimestamps();
 
-            // Return if current animation time is not equal to any node timestamp.
+            // Return if current animation time is not equal to any node
+            // timestamp.
             var index = Array.FindIndex(
                 nodeTimestamps, x => Math.Abs(x - currentAnimationTime) < 0.001f);
             if (index < 0) return;
@@ -475,16 +488,80 @@ namespace ATP.AnimationPathTools {
                 callback(currentAnimationTime, newPosition);
             }
         }
-        #endregion
-        #region CALLBACK HANDLERS
-        private void DrawRotationHandlesCallbackHandler(
-                            float timestamp,
-                            Vector3 newPosition) {
 
-            RecordRotationObject();
+        // TODO Extract methods. Do the same to ease curve drawing method.
+        private void DrawTiltingHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
-            script.ChangeRotationForTimestamp(timestamp, newPosition);
+            // Get rotation curve timestamps.
+            //var easeTimestamps = new float[script.EaseCurve.length];
+            //for (var i = 0; i < script.EaseCurve.length; i++) {
+            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            //}
+
+            // Get rotation curve values.
+            var tiltingCurveValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.TiltingCurve.length; i++) {
+                tiltingCurveValues[i] = script.TiltingCurve.keys[i].value;
+            }
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                var rotationValue = tiltingCurveValues[i];
+                //var arcValue = rotationValue * 2;
+                var arcValue = rotationValue;
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                var arcHandleSize = handleSize * ArcHandleRadius;
+
+                // TODO Create const.
+                Handles.color = tiltingHandleColor;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right side of
+                    // the object.
+                    Quaternion.AngleAxis(
+                    //-arcValue / 2,
+                        0,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    arcHandleSize);
+
+                // TODO Create const.
+                Handles.color = tiltingHandleColor;
+
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+
+                // Set initial arc value to other than zero. If initial value
+                // is zero, handle will always return zero.
+                arcValue = Math.Abs(arcValue) < 0.001f ? 15f : arcValue;
+
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                // Limit handle value.
+                if (newArcValue > 90) newArcValue = 90;
+                if (newArcValue < -90) newArcValue = -90;
+
+                // TODO Create float precision const.
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, newArcValue);
+                }
+            }
         }
+        #endregion DRAWING METHODS
+
+        #region CALLBACK HANDLERS
 
         // TODO Refactor.
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
@@ -525,9 +602,48 @@ namespace ATP.AnimationPathTools {
             //}
         }
 
-        #endregion
+        private void DrawRotationHandlesCallbackHandler(
+                            float timestamp,
+                            Vector3 newPosition) {
+
+            RecordRotationObject();
+
+            script.ChangeRotationForTimestamp(timestamp, newPosition);
+        }
+
+        private void DrawTiltingHandlesCallbackHandler(
+                    int keyIndex,
+                    float newValue) {
+
+            RecordTargetObject();
+
+            // Copy keyframe.
+            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // Replace old key with updated one.
+            script.TiltingCurve.RemoveKey(keyIndex);
+            script.TiltingCurve.AddKey(keyframeCopy);
+            script.SmoothCurve(script.TiltingCurve);
+            script.EaseCurveExtremeNodes(script.TiltingCurve);
+        }
+        #endregion CALLBACK HANDLERS
 
         #region PRIVATE METHODS
+
+        protected void RecordRotationObject() {
+            Undo.RecordObject(script.RotationCurves, "Ease curve changed.");
+        }
+
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        // TODO Remove these methods and use record directly.
+        protected void RecordTargetObject() {
+            Undo.RecordObject(script, "Ease curve changed.");
+        }
 
         /// <summary>
         /// Change current animation time with arrow keys.
@@ -547,6 +663,21 @@ namespace ATP.AnimationPathTools {
 
         }
 
+        private float ConvertEaseToDegrees(int nodeIndex) {
+            // Calculate value to display.
+            var easeValue = script.GetNodeEaseValue(nodeIndex);
+            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+            var easeValueInDegrees = easeValue * arcValueMultiplier;
+
+            return easeValueInDegrees;
+        }
+
+        private float ConvertTiltToDegrees(int nodeIndex) {
+            var rotationValue = script.GetNodeTiltValue(nodeIndex);
+            //var arcValue = rotationValue * 2;
+
+            return rotationValue;
+        }
         // TODO Rename to GetNearestBackwardNodeTimestamp().
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = script.GetPathTimestamps();
@@ -676,17 +807,6 @@ namespace ATP.AnimationPathTools {
 
                 modKeyPressed = false;
             }
-        }
-
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        // TODO Remove these methods and use record directly.
-        protected void RecordTargetObject() {
-            Undo.RecordObject(script, "Ease curve changed.");
-        }
-        protected void RecordRotationObject() {
-            Undo.RecordObject(script.RotationCurves, "Ease curve changed.");
         }
         #endregion PRIVATE METHODS
     }

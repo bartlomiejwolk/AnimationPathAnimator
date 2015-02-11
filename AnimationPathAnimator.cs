@@ -162,8 +162,8 @@ namespace ATP.AnimationPathTools {
         private Vector3 defaultStartRotationOffset = new Vector3(0, -0.1f, 0);
         private Vector3 defaultEndRotationOffset = new Vector3(0, -0.1f, 0);
 
-        private const float DefaultEndEaseValue = 0.05f;
         private const float DefaultStartEaseValue = 0.01f;
+        private const float DefaultEndEaseValue = 0.05f;
 
         #endregion EDITOR
         #region PUBLIC PROPERTIES

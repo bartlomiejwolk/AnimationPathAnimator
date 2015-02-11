@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
-    public enum AnimatorHandleMode { Ease, Rotation, Tilting }
+    public enum AnimatorHandleMode { None, Ease, Rotation, Tilting }
     public enum AnimatorRotationMode { Forward, Custom, Target }
 
     /// <summary>
@@ -20,7 +20,7 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         [SerializeField]
-        private AnimatorHandleMode handleMode = AnimatorHandleMode.Rotation;
+        private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
 
         [SerializeField]
         private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;

@@ -371,7 +371,9 @@ namespace ATP.AnimationPathTools {
             ResetEaseCurve();
             ResetZRotationCurve();
         }
+        #endregion EVENT HANDLERS
 
+        #region PRIVATE METHODS
         private void ResetZRotationCurve() {
             RemoveAllCurveKeys(tiltingCurve);
 
@@ -379,9 +381,6 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(1, 0);
         }
 
-        #endregion EVENT HANDLERS
-
-        #region PRIVATE METHODS
         private void ResetRotationData() {
             var pathNodePositions = animatedObjectPath.GetNodePositions();
 

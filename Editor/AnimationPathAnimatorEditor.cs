@@ -222,7 +222,9 @@ namespace ATP.AnimationPathTools {
 
             script.UpdateAnimation();
         }
+        #endregion UNITY MESSAGES
 
+        #region DRAWING HANDLERS
         private void HandleDrawingTiltingHandles() {
             if (handleMode.enumValueIndex !=
                 (int)AnimatorHandleMode.Tilting) return;
@@ -233,98 +235,6 @@ namespace ATP.AnimationPathTools {
             DrawTiltingHandles(callbackHandler);
         }
 
-        // TODO Extract methods. Do the same to ease curve drawing method.
-        private void DrawTiltingHandles(Action<int, float> callback) {
-            // Get AnimationPath node positions.
-            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
-
-            // Get rotation curve timestamps.
-            //var easeTimestamps = new float[script.EaseCurve.length];
-            //for (var i = 0; i < script.EaseCurve.length; i++) {
-            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
-            //}
-
-            // Get rotation curve values.
-            var rotationCurveValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < script.TiltingCurve.length; i++) {
-                rotationCurveValues[i] = script.TiltingCurve.keys[i].value;
-            }
-
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                var rotationValue = rotationCurveValues[i];
-                var arcValue = rotationValue * 2;
-                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
-                var arcHandleSize = handleSize * ArcHandleRadius;
-
-                // TODO Create const.
-                Handles.color = tiltingHandleColor;
-
-                Handles.DrawWireArc(
-                    nodePositions[i],
-                    Vector3.up,
-                    // Make the arc simetrical on the left and right
-                    // side of the object.
-                    Quaternion.AngleAxis(
-                    //-arcValue / 2,
-                        0,
-                        Vector3.up) * Vector3.forward,
-                    arcValue,
-                    arcHandleSize);
-
-                // TODO Create const.
-                Handles.color = tiltingHandleColor;
-
-                // TODO Create constant.
-                var scaleHandleSize = handleSize * 1.5f;
-                
-                // Set initial arc value to other than zero.
-                // If initial value is zero, handle will always return zero.
-                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
-
-                float newArcValue = Handles.ScaleValueHandle(
-                    arcValue,
-                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
-                        * 1.3f,
-                    Quaternion.identity,
-                    scaleHandleSize,
-                    Handles.ConeCap,
-                    1);
-
-                // Limit handle value.
-                if (newArcValue > 180) newArcValue = 180;
-                if (newArcValue < -180) newArcValue = -180;
-
-                // TODO Create float precision const.
-                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
-                    // Execute callback.
-                    callback(i, newArcValue / 2);
-                }
-            }
-        }
-
-        private void DrawTiltingHandlesCallbackHandler(
-            int keyIndex,
-            float newValue) {
-
-            RecordTargetObject();
-
-            // Copy keyframe.
-            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
-            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
-
-            // Replace old key with updated one.
-            script.TiltingCurve.RemoveKey(keyIndex);
-            script.TiltingCurve.AddKey(keyframeCopy);
-            script.SmoothCurve(script.TiltingCurve);
-            script.EaseCurveExtremeNodes(script.TiltingCurve);
-        }
-
-        #endregion UNITY MESSAGES
-
-        #region DRAWING HANDLERS
         private void HandleDrawingRotationHandle() {
             //if (!drawRotationHandle.boolValue) return;
             if (handleMode.enumValueIndex !=
@@ -379,6 +289,76 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region DRAWING METHODS
+        // TODO Extract methods. Do the same to ease curve drawing method.
+        private void DrawTiltingHandles(Action<int, float> callback) {
+            // Get AnimationPath node positions.
+            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+
+            // Get rotation curve timestamps.
+            //var easeTimestamps = new float[script.EaseCurve.length];
+            //for (var i = 0; i < script.EaseCurve.length; i++) {
+            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
+            //}
+
+            // Get rotation curve values.
+            var rotationCurveValues = new float[script.EaseCurve.length];
+            for (var i = 0; i < script.TiltingCurve.length; i++) {
+                rotationCurveValues[i] = script.TiltingCurve.keys[i].value;
+            }
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                var rotationValue = rotationCurveValues[i];
+                var arcValue = rotationValue * 2;
+                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+                var arcHandleSize = handleSize * ArcHandleRadius;
+
+                // TODO Create const.
+                Handles.color = tiltingHandleColor;
+
+                Handles.DrawWireArc(
+                    nodePositions[i],
+                    Vector3.up,
+                    // Make the arc simetrical on the left and right
+                    // side of the object.
+                    Quaternion.AngleAxis(
+                    //-arcValue / 2,
+                        0,
+                        Vector3.up) * Vector3.forward,
+                    arcValue,
+                    arcHandleSize);
+
+                // TODO Create const.
+                Handles.color = tiltingHandleColor;
+
+                // TODO Create constant.
+                var scaleHandleSize = handleSize * 1.5f;
+
+                // Set initial arc value to other than zero.
+                // If initial value is zero, handle will always return zero.
+                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
+
+                float newArcValue = Handles.ScaleValueHandle(
+                    arcValue,
+                    nodePositions[i] + Vector3.up + Vector3.forward * arcHandleSize
+                        * 1.3f,
+                    Quaternion.identity,
+                    scaleHandleSize,
+                    Handles.ConeCap,
+                    1);
+
+                // Limit handle value.
+                if (newArcValue > 180) newArcValue = 180;
+                if (newArcValue < -180) newArcValue = -180;
+
+                // TODO Create float precision const.
+                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+                    // Execute callback.
+                    callback(i, newArcValue / 2);
+                }
+            }
+        }
+
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get AnimationPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
@@ -477,6 +457,25 @@ namespace ATP.AnimationPathTools {
         }
         #endregion
         #region CALLBACK HANDLERS
+        private void DrawTiltingHandlesCallbackHandler(
+                    int keyIndex,
+                    float newValue) {
+
+            RecordTargetObject();
+
+            // Copy keyframe.
+            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+
+            // Replace old key with updated one.
+            script.TiltingCurve.RemoveKey(keyIndex);
+            script.TiltingCurve.AddKey(keyframeCopy);
+            script.SmoothCurve(script.TiltingCurve);
+            script.EaseCurveExtremeNodes(script.TiltingCurve);
+        }
+
         private void DrawRotationHandlesCallbackHandler(
                             float timestamp,
                             Vector3 newPosition) {

@@ -416,7 +416,8 @@ namespace ATP.AnimationPathTools {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var rotationValue = tiltingCurveValues[i];
-                var arcValue = rotationValue * 2;
+                //var arcValue = rotationValue * 2;
+                var arcValue = rotationValue;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
@@ -443,7 +444,7 @@ namespace ATP.AnimationPathTools {
 
                 // Set initial arc value to other than zero.
                 // If initial value is zero, handle will always return zero.
-                arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
+                arcValue = Math.Abs(arcValue) < 0.001f ? 15f : arcValue;
 
                 float newArcValue = Handles.ScaleValueHandle(
                     arcValue,
@@ -455,13 +456,13 @@ namespace ATP.AnimationPathTools {
                     1);
 
                 // Limit handle value.
-                if (newArcValue > 180) newArcValue = 180;
-                if (newArcValue < -180) newArcValue = -180;
+                if (newArcValue > 90) newArcValue = 90;
+                if (newArcValue < -90) newArcValue = -90;
 
                 // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
-                    callback(i, newArcValue / 2);
+                    callback(i, newArcValue);
                 }
             }
         }

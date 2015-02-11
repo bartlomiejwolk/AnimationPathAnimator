@@ -18,14 +18,9 @@ namespace ATP.AnimationPathTools {
     [RequireComponent(typeof(AnimationPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
-
-        [SerializeField]
-        private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
-
-        [SerializeField]
-        private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
-
         #region CONSTANTS
+        private const float DefaultEndEaseValue = 0.05f;
+        private const float DefaultStartEaseValue = 0.01f;
 
         /// <summary>
         /// Key shortcut to jump backward.
@@ -91,6 +86,12 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region EDITOR
+        [SerializeField]
+        private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
+
+        [SerializeField]
+        private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
+
 
         /// <summary>
         /// Transform to be animated.
@@ -167,10 +168,6 @@ namespace ATP.AnimationPathTools {
 
         private Vector3 defaultStartRotationOffset = new Vector3(0, -0.1f, 0);
         private Vector3 defaultEndRotationOffset = new Vector3(0, -0.1f, 0);
-
-        private const float DefaultStartEaseValue = 0.01f;
-        private const float DefaultEndEaseValue = 0.05f;
-
         #endregion EDITOR
         #region PUBLIC PROPERTIES
 

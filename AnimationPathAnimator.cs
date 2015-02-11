@@ -109,6 +109,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private float animTimeRatio;
 
+        [SerializeField]
+        private bool advancedSettingsFoldout;
+
         //[SerializeField]
         //private bool displayEaseHandles;
 

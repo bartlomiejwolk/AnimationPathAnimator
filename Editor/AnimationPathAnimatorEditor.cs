@@ -51,6 +51,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty forwardPointOffset;
 
         private readonly Color tiltingHandleColor = Color.green;
+        private SerializedProperty advancedSettingsFoldout;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -148,6 +149,17 @@ namespace ATP.AnimationPathTools {
             //}
 
             // Save changes.
+
+            EditorGUILayout.Space();
+
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                    advancedSettingsFoldout.boolValue,
+                    new GUIContent(
+                        "Advanced Settings",
+                        ""));
+            if (advancedSettingsFoldout.boolValue) {
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -174,6 +186,8 @@ namespace ATP.AnimationPathTools {
             rotationMode = serializedObject.FindProperty("rotationMode");
             forwardPointOffset =
                 serializedObject.FindProperty("forwardPointOffset");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -379,10 +393,9 @@ namespace ATP.AnimationPathTools {
 
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
-                //var easeTimestamp = easeTimestamps[i];
                 var easeValue = easeCurveValues[i];
-                //var arcValue = easeTimestamp * 360f;
-                var arcValue = easeValue * 3600f;
+                //var arcValue = easeValue * 3600f;
+                var arcValue = easeValue * 1800f;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 var arcHandleSize = handleSize * ArcHandleRadius;
 
@@ -422,7 +435,7 @@ namespace ATP.AnimationPathTools {
                 // TODO Create float precision const.
                 if (Math.Abs(newArcValue - arcValue) > 0.001f) {
                     // Execute callback.
-                    callback(i, newArcValue / 3600f);
+                    callback(i, newArcValue / 1800f);
                 }
             }
         }

@@ -845,5 +845,9 @@ namespace ATP.AnimationPathTools {
         public Vector3 GetNodePosition(int i) {
             return animatedObjectPath.GetNodePosition(i);
         }
+
+        public float GetNodeTiltValue(int nodeIndex) {
+            return tiltingCurve.keys[nodeIndex].value;
+        }
     }
 }

@@ -55,7 +55,10 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty maxAnimationSpeed;
         private const int EaseValueLabelOffsetX = 0;
         private const int EaseValueLabelOffsetY = -60;
+        private const int TiltValueLabelOffsetX = 0;
+        private const int TiltValueLabelOffsetY = -60;
         private GUIStyle easeValueLabelStyle;
+        private GUIStyle tiltValueLabelStyle;
         private const int DefaultLabelWidth = 30;
         private const int DefaultLabelHeight = 10;
 
@@ -202,6 +205,8 @@ namespace ATP.AnimationPathTools {
                 normal = { textColor = Color.white },
                 fontStyle = FontStyle.Bold,
             };
+
+            tiltValueLabelStyle = easeValueLabelStyle;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -236,14 +241,17 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingEaseLabel() {
+            if (handleMode.enumValueIndex !=
+                (int) AnimatorHandleMode.Ease) return;
+
             DrawNodeLabels(
-                CanvertEaseToDegrees,
+                ConvertEaseToDegrees,
                 EaseValueLabelOffsetX,
                 EaseValueLabelOffsetY,
                 easeValueLabelStyle);
         }
 
-        private float CanvertEaseToDegrees(int nodeIndex) {
+        private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = script.GetNodeEaseValue(nodeIndex);
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
@@ -253,7 +261,21 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingTiltLabel() {
-            //throw new NotImplementedException();
+            if (handleMode.enumValueIndex !=
+                (int) AnimatorHandleMode.Tilting) return;
+
+            DrawNodeLabels(
+                ConvertTiltToDegrees,
+                TiltValueLabelOffsetX,
+                TiltValueLabelOffsetY,
+                tiltValueLabelStyle);
+        }
+
+        private float ConvertTiltToDegrees(int nodeIndex) {
+            var rotationValue = script.GetNodeTiltValue(nodeIndex);
+            //var arcValue = rotationValue * 2;
+
+            return rotationValue;
         }
 
         private void DrawNodeLabels(
@@ -386,14 +408,14 @@ namespace ATP.AnimationPathTools {
             //}
 
             // Get rotation curve values.
-            var rotationCurveValues = new float[script.EaseCurve.length];
+            var tiltingCurveValues = new float[script.EaseCurve.length];
             for (var i = 0; i < script.TiltingCurve.length; i++) {
-                rotationCurveValues[i] = script.TiltingCurve.keys[i].value;
+                tiltingCurveValues[i] = script.TiltingCurve.keys[i].value;
             }
 
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
-                var rotationValue = rotationCurveValues[i];
+                var rotationValue = tiltingCurveValues[i];
                 var arcValue = rotationValue * 2;
                 var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
                 var arcHandleSize = handleSize * ArcHandleRadius;

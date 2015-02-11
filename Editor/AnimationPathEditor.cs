@@ -516,6 +516,7 @@ namespace ATP.AnimationPathTools {
             else {
                 Script.MoveNodeToPosition(movedNodeIndex, position);
                 Script.DistributeTimestamps();
+                Script.SmoothAllNodeTangents();
             }
 
             Script.OnPathChanged();
@@ -535,7 +536,7 @@ namespace ATP.AnimationPathTools {
             // Make snapshot of the target object.
             HandleUndo();
 
-            Script.SmoothNodeTangents(index);
+            Script.SmoothSingleNodeTangents(index);
 
             Script.DistributeTimestamps();
 
@@ -562,9 +563,9 @@ namespace ATP.AnimationPathTools {
         protected virtual void DrawSmoothInspectorButton() {
             if (GUILayout.Button(new GUIContent(
                 "Smooth",
-                "Use AnimationCurve.SmoothNodesTangents on every node in the path."))) {
+                "Use AnimationCurve.SmoothAllNodeTangents on every node in the path."))) {
                 HandleUndo();
-                Script.SmoothNodesTangents();
+                Script.SmoothAllNodeTangents();
                 Script.DistributeTimestamps();
             }
         }

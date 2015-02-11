@@ -53,6 +53,9 @@ namespace ATP.AnimationPathTools {
         private readonly Color tiltingHandleColor = Color.green;
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty maxAnimationSpeed;
+        private const int EaseValueLabelOffsetX = 0;
+        private const int EaseValueLabelOffsetY = -60;
+        private GUIStyle easeValueLabelStyle;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -192,6 +195,11 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
+
+            easeValueLabelStyle = new GUIStyle {
+                normal = { textColor = Color.white },
+                fontStyle = FontStyle.Bold,
+            };
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -225,35 +233,65 @@ namespace ATP.AnimationPathTools {
             script.UpdateAnimation();
         }
 
+        private void HandleDrawingEaseLabel() {
+            DrawNodeLabels(
+                CanvertEaseToDegrees,
+                EaseValueLabelOffsetX,
+                EaseValueLabelOffsetY,
+                easeValueLabelStyle);
+        }
+
+        private float CanvertEaseToDegrees(int nodeIndex) {
+            // Calculate value to display.
+            var easeValue = script.GetNodeEaseValue(nodeIndex);
+            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+            var easeValueInDegrees = easeValue * arcValueMultiplier;
+
+            return easeValueInDegrees;
+        }
+
         private void HandleDrawingTiltLabel() {
             //throw new NotImplementedException();
         }
 
-        private void HandleDrawingEaseLabel() {
+        // TODO Extract content to DrawNodeLabel().
+        private void DrawNodeLabels(
+            Func<int, float> calculateValueCallback,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
+
             int nodesNo = script.AnimatedObjectPath.NodesNo;
 
             // For each path node..
             for (int i = 0; i < nodesNo; i++) {
+                // Get value to display.
+                var arcValue = String.Format(
+                    "{0:0}",
+                    calculateValueCallback(i));
+
                 // Get node position.
                 var nodePosition = script.GetNodePosition(i);
 
-                // Calculate value to display.
-                var easeValue = script.GetNodeEaseValue(i);
-                var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
-                var arcValue = easeValue * arcValueMultiplier;
+                // Translate node's 3d position into screen coordinates.
+                var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
 
-                // TODO Make it class field.
-                // Set gui style.
-                var style = new GUIStyle {
-                    normal = { textColor = Color.white },
-                    fontStyle = FontStyle.Bold,
-                };
+                // Create rectangle for the label.
+                var labelPosition = new Rect(
+                    guiPoint.x + EaseValueLabelOffsetX,
+                    guiPoint.y + EaseValueLabelOffsetY,
+                    30,
+                    10);
 
+                Handles.BeginGUI();
+                
                 // Draw label.
-                Handles.Label(
-                    nodePosition,
-                    arcValue.ToString(),
+                GUI.Label(
+                    labelPosition,
+                    arcValue,
                     style);
+
+                Handles.EndGUI();
             }
         }
 
@@ -276,6 +314,7 @@ namespace ATP.AnimationPathTools {
                 (int)AnimatorHandleMode.Rotation) return;
 
             // Callback to call when node rotation is changed.
+            // TODO Pass func. directly as an argument.
             Action<float, Vector3> callbackHandler =
                 DrawRotationHandlesCallbackHandler;
 

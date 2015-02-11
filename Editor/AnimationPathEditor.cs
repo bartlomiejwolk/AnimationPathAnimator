@@ -495,11 +495,22 @@ namespace ATP.AnimationPathTools {
             AddNodeBetween(nodeIndex);
 
             Script.DistributeTimestamps();
-            Script.SmoothAllNodeTangents();
+
+            if (tangentMode.enumValueIndex ==
+                (int) AnimationPathTangentMode.Smooth) {
+                
+                Script.SmoothAllNodeTangents();
+            }
+            else if (tangentMode.enumValueIndex ==
+                     (int) AnimationPathTangentMode.Linear) {
+                
+                Script.SetNodesLinear();
+            }
 
             Script.OnPathChanged();
         }
 
+        // TODO Refactor.
         protected virtual void DrawMovementHandlesCallbackHandler(
                     int movedNodeIndex,
                     Vector3 position,
@@ -519,7 +530,17 @@ namespace ATP.AnimationPathTools {
             else {
                 Script.MoveNodeToPosition(movedNodeIndex, position);
                 Script.DistributeTimestamps();
-                Script.SmoothAllNodeTangents();
+
+                if (tangentMode.enumValueIndex ==
+                    (int)AnimationPathTangentMode.Smooth) {
+
+                    Script.SmoothAllNodeTangents();
+                }
+                else if (tangentMode.enumValueIndex ==
+                         (int)AnimationPathTangentMode.Linear) {
+
+                    Script.SetNodesLinear();
+                }
             }
 
             Script.OnPathChanged();
@@ -531,7 +552,17 @@ namespace ATP.AnimationPathTools {
 
             Script.RemoveNode(nodeIndex);
             Script.DistributeTimestamps();
-            Script.SmoothAllNodeTangents();
+
+            if (tangentMode.enumValueIndex ==
+                (int)AnimationPathTangentMode.Smooth) {
+
+                Script.SmoothAllNodeTangents();
+            }
+            else if (tangentMode.enumValueIndex ==
+                     (int)AnimationPathTangentMode.Linear) {
+
+                Script.SetNodesLinear();
+            }
 
             Script.OnPathChanged();
         }
@@ -654,6 +685,8 @@ namespace ATP.AnimationPathTools {
                     "Tangent Mode",
                     ""));
             serializedObject.ApplyModifiedProperties();
+
+            HandleTangentModeChange();
 
             //EditorGUILayout.BeginHorizontal();
             //serializedObject.Update();

@@ -2,6 +2,7 @@
 using DemoApplication;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -220,6 +221,78 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
+            DrawRotationPoints();
+        }
+
+        private void DrawRotationPoints() {
+            // Get current animation time.
+            //var currentAnimationTime = AnimationTimeRatio;
+
+            // Node path node timestamps.
+            //var nodeTimestamps = AnimatedObjectPath.GetNodeTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            //foreach (var nodeTimestamp in nodeTimestamps) {
+            //    if (Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f) return;
+            //}
+
+            // Get rotation point position.
+            //var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+            
+            // Draw rotation point gizmo.
+            //Gizmos.DrawIcon(
+            //    rotationPointPosition,
+            //    "iTweenIcon",
+            //    false);
+
+            //Gizmos.DrawWireSphere(
+            //    rotationPointPosition,
+            //    0.2f);
+
+            // TODO Calculate samplingRate using rotatio path length.
+            var points = GetRotationPointPositions(100);
+
+            if (points.Count < 2) return;
+
+            // TODO Create const.
+            Gizmos.color = Color.magenta;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(points[i], points[i + 1]);
+            }
+        }
+
+        private List<Vector3> GetRotationPointPositions(float samplingRate) {
+            var result = new List<Vector3>();
+            var timestamps = GetSampledTimestamps(samplingRate);
+            foreach (var timestamp in timestamps) {
+                var point = GetNodeRotation(timestamp);
+                result.Add(point);
+            }
+
+            return result;
+        }
+
+        private Vector3 GetNodeRotation(float nodeTimestamp) {
+            return rotationCurves.GetVectorAtTime(nodeTimestamp);
+        }
+
+        private List<float> GetSampledTimestamps(float samplingRate) {
+            var result = new List<float>();
+
+            float time = 0;
+
+            var timestep = 1f / samplingRate;
+
+            for (var i = 0; i < samplingRate + 1; i++) {
+                result.Add(time);
+
+                // Time goes towards 1.
+                time += timestep;
+            }
+
+            return result;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

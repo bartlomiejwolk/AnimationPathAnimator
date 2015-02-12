@@ -397,8 +397,8 @@ namespace ATP.AnimationPathTools {
         }
 
         public void SamplePathForPoints(
-                            int samplingFrequency,
-                            ref List<Vector3> points) {
+            int samplingFrequency,
+            ref List<Vector3> points) {
 
             // TODO Use curved path length.
             var linearPathLength = CalculatePathLinearLength();

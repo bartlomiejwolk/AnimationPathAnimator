@@ -221,34 +221,11 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
-            DrawRotationPoints();
+            DrawRotationGizmoCurve();
+            DrawRotationPointGizmo();
         }
 
-        private void DrawRotationPoints() {
-            // Get current animation time.
-            //var currentAnimationTime = AnimationTimeRatio;
-
-            // Node path node timestamps.
-            //var nodeTimestamps = AnimatedObjectPath.GetNodeTimestamps();
-
-            // Return if current animation time is the same as any node time.
-            //foreach (var nodeTimestamp in nodeTimestamps) {
-            //    if (Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f) return;
-            //}
-
-            // Get rotation point position.
-            //var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
-            
-            // Draw rotation point gizmo.
-            //Gizmos.DrawIcon(
-            //    rotationPointPosition,
-            //    "iTweenIcon",
-            //    false);
-
-            //Gizmos.DrawWireSphere(
-            //    rotationPointPosition,
-            //    0.2f);
-
+        private void DrawRotationGizmoCurve() {
             // TODO Calculate samplingRate using rotatio path length.
             var points = GetRotationPointPositions(100);
 
@@ -261,6 +238,28 @@ namespace ATP.AnimationPathTools {
             for (var i = 0; i < points.Count - 1; i++) {
                 Gizmos.DrawLine(points[i], points[i + 1]);
             }
+        }
+
+        private void DrawRotationPointGizmo() {
+            // Get current animation time.
+            var currentAnimationTime = AnimationTimeRatio;
+
+            // Node path node timestamps.
+            var nodeTimestamps = AnimatedObjectPath.GetNodeTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            foreach (var nodeTimestamp in nodeTimestamps) {
+                if (Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f) return;
+            }
+
+            // Get rotation point position.
+            var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                rotationPointPosition,
+                "iTweenIcon",
+                false);
         }
 
         private List<Vector3> GetRotationPointPositions(float samplingRate) {

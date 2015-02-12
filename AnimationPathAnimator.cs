@@ -222,12 +222,41 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
             DrawRotationGizmoCurve();
-            DrawRotationPointGizmo();
+            DrawCurrentRotationPointGizmo();
+            DrawRotationPointGizmos();
+        }
+
+        private void DrawRotationPointGizmos() {
+            // Get current animation time.
+            var currentAnimationTime = AnimationTimeRatio;
+
+            // Path node timestamps.
+            var nodeTimestamps = AnimatedObjectPath.GetNodeTimestamps();
+
+            var nodesNo = animatedObjectPath.NodesNo;
+            var rotationPointPositions = new Vector3[nodesNo];
+            for (int i = 0; i < nodesNo; i++) {
+                rotationPointPositions[i] = GetNodeRotation(i);
+            }
+
+            //foreach (var rotationPointPosition in rotationPointPositions) {
+            for (int i = 0; i < rotationPointPositions.Length; i++) {
+                // Return if current animation time is the same as any node time.
+                if (Math.Abs(nodeTimestamps[i] - currentAnimationTime) < 0.001f) {
+                    continue;
+                }
+
+                //Draw rotation point gizmo.
+                Gizmos.DrawIcon(
+                    rotationPointPositions[i],
+                    "iTweenIcon",
+                    false);
+            }
         }
 
         private void DrawRotationGizmoCurve() {
             // TODO Calculate samplingRate using rotatio path length.
-            var points = GetRotationPointPositions(100);
+            var points = SampleForRotationPointPositions(100);
 
             if (points.Count < 2) return;
 
@@ -240,7 +269,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawRotationPointGizmo() {
+        private void DrawCurrentRotationPointGizmo() {
             // Get current animation time.
             var currentAnimationTime = AnimationTimeRatio;
 
@@ -262,7 +291,7 @@ namespace ATP.AnimationPathTools {
                 false);
         }
 
-        private List<Vector3> GetRotationPointPositions(float samplingRate) {
+        private List<Vector3> SampleForRotationPointPositions(float samplingRate) {
             var result = new List<Vector3>();
             var timestamps = GetSampledTimestamps(samplingRate);
             foreach (var timestamp in timestamps) {

@@ -325,15 +325,30 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
-            // TODO Move it to Awake() and OnDestroy().
+            // TODO Rename event handlers to use underscore.
             animatedObjectPath.PathChanged += AnimatedObjectPathOnPathChanged;
             animatedObjectPath.PathReset += AnimatedObjectPathOnPathReset;
+            animatedObjectPath.NodeAdded += AnimatedObjectPathOnNodeAdded;
+            animatedObjectPath.NodeRemoved += animatedObjectPath_NodeRemoved;
+            animatedObjectPath.NodeTimeChanged += animatedObjectPath_NodeTimeChanged;
 
             // Instantiate rotationCurves.
             if (rotationCurves == null) {
                 rotationCurves =
                     ScriptableObject.CreateInstance<AnimationPathCurves>();
             }
+        }
+
+        void animatedObjectPath_NodeTimeChanged(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        void animatedObjectPath_NodeRemoved(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        private void AnimatedObjectPathOnNodeAdded(object sender, EventArgs eventArgs) {
+            throw new NotImplementedException();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

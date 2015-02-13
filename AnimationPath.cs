@@ -53,6 +53,9 @@ namespace ATP.AnimationPathTools {
 
         public event EventHandler PathChanged;
         public event EventHandler PathReset;
+        public event EventHandler NodeTimeChanged;
+        public event EventHandler NodeAdded;
+        public event EventHandler NodeRemoved;
 
         /// <summary>
         /// Animation curves that make the animation path.
@@ -203,6 +206,21 @@ namespace ATP.AnimationPathTools {
 
         #endregion Unity Messages
         #region EVENT INVOCATORS
+        protected virtual void OnNodeRemoved() {
+            var handler = NodeRemoved;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnNodeAdded() {
+            var handler = NodeAdded;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnNodeTimeChanged() {
+            var handler = NodeTimeChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         public virtual void OnPathReset() {
             var handler = PathReset;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -289,14 +307,17 @@ namespace ATP.AnimationPathTools {
                             float newTimestamp) {
 
             animationCurves.ChangePointTimestamp(keyIndex, newTimestamp);
+            OnNodeTimeChanged();
         }
 
         public void CreateNode(float timestamp, Vector3 position) {
             animationCurves.CreateNewPoint(timestamp, position);
+            OnNodeAdded();
         }
 
         public void CreateNodeAtTime(float timestamp) {
             animationCurves.AddNodeAtTime(timestamp);
+            OnNodeAdded();
         }
         public void DistributeTimestamps() {
             // Calculate path curved length.
@@ -380,6 +401,7 @@ namespace ATP.AnimationPathTools {
 
         public void RemoveNode(int nodeIndex) {
             animationCurves.RemovePoint(nodeIndex);
+            OnNodeRemoved();
         }
 
         /// <summary>

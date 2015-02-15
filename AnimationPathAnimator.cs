@@ -337,15 +337,15 @@ namespace ATP.AnimationPathTools {
         }
 
         void animatedObjectPath_NodeTimeChanged(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void animatedObjectPath_NodeRemoved(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void AnimatedObjectPathOnNodeAdded(object sender, EventArgs eventArgs) {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

@@ -302,7 +302,7 @@ namespace ATP.AnimationPathTools {
             return sectionLength;
         }
 
-        public void ChangeNodeTangents(int index, Vector3 inOutTangent) {
+        public void SetNodeTangents(int index, Vector3 inOutTangent) {
             animationCurves.ChangePointTangents(index, inOutTangent);
         }
 

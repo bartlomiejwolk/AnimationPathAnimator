@@ -581,19 +581,6 @@ namespace ATP.AnimationPathTools {
             Script.OnPathChanged();
         }
 
-        protected virtual void DrawTangentHandlesCallbackHandler(
-                    int index,
-                    Vector3 inOutTangent) {
-
-            // Make snapshot of the target object.
-            HandleUndo();
-
-            Script.SetNodeTangents(index, inOutTangent);
-            Script.DistributeTimestamps();
-
-            Script.OnPathChanged();
-        }
-
         #endregion CALLBACK HANDLERS
 
         #region INSPECTOR
@@ -894,12 +881,12 @@ namespace ATP.AnimationPathTools {
             Script.CreateNode(0.5f, worldPoint + SecondNodeOffset);
             Script.CreateNode(1, endPoint);
 
-            // Ease tangents of the first node.
-            var nodeTangents = new Vector3(0, 0, 0);
-            Script.SetNodeTangents(0, nodeTangents);
-            // Ease tangents of the last node.
-            var lastNodeIndex = Script.NodesNo - 1;
-            Script.SetNodeTangents(lastNodeIndex, nodeTangents);
+            //// Ease tangents of the first node.
+            //var nodeTangents = new Vector3(0, 0, 0);
+            //Script.SetNodeTangents(0, nodeTangents);
+            //// Ease tangents of the last node.
+            //var lastNodeIndex = Script.NodesNo - 1;
+            //Script.SetNodeTangents(lastNodeIndex, nodeTangents);
             
             // Raise event.
             Script.OnPathReset();

@@ -6,10 +6,17 @@ using ATP.AnimationPathTools;
 public class AnimationPathCurvesDebug : MonoBehaviour {
 
     private AnimationPathAnimator animator;
+    private AnimationPath animationPath;
+
+    [Header("Animation Path")]
+    public AnimationCurve pathCurveX;
+    public AnimationCurve pathCurveY;
+    public AnimationCurve pathCurveZ;
+
     [Header("Rotation curves")]
-    public AnimationCurve curveX;
-    public AnimationCurve curveY;
-    public AnimationCurve curveZ;
+    public AnimationCurve rotationCurveX;
+    public AnimationCurve rotationCurveY;
+    public AnimationCurve rotationCurveZ;
 
     [Header("Ease curve")]
     public AnimationCurve easeCurve;
@@ -20,10 +27,16 @@ public class AnimationPathCurvesDebug : MonoBehaviour {
 
     void OnEnable() {
         animator = GetComponent<AnimationPathAnimator>();
+        animationPath = GetComponent<AnimationPath>();
 
-        curveX = animator.RotationCurves[0];
-        curveY = animator.RotationCurves[1];
-        curveZ = animator.RotationCurves[2];
+        rotationCurveX = animator.RotationCurves[0];
+        rotationCurveY = animator.RotationCurves[1];
+        rotationCurveZ = animator.RotationCurves[2];
+
+        pathCurveX = animationPath.AnimationCurves[0];
+        pathCurveY = animationPath.AnimationCurves[1];
+        pathCurveZ = animationPath.AnimationCurves[2];
+
         easeCurve = animator.EaseCurve;
     }
 

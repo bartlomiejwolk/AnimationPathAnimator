@@ -53,8 +53,6 @@ namespace ATP.AnimationPathTools {
 
         private SerializedProperty maxAnimationSpeed;
 
-        private SerializedProperty rotationMode;
-
         private SerializedProperty rotationSpeed;
         #endregion SERIALIZED PROPERTIES
 
@@ -77,10 +75,14 @@ namespace ATP.AnimationPathTools {
                     ""),
                 script.HandleMode);
 
-            EditorGUILayout.PropertyField(rotationMode);
-            if (rotationMode.enumValueIndex ==
-                (int)AnimatorRotationMode.Forward) {
+            //EditorGUILayout.PropertyField(rotationMode);
+            script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Rotation Mode",
+                    ""),
+                script.RotationMode);
 
+            if (script.RotationMode == AnimatorRotationMode.Forward) {
                 EditorGUILayout.PropertyField(forwardPointOffset);
             }
 
@@ -129,7 +131,6 @@ namespace ATP.AnimationPathTools {
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
-            rotationMode = serializedObject.FindProperty("rotationMode");
             forwardPointOffset =
                 serializedObject.FindProperty("forwardPointOffset");
             advancedSettingsFoldout =
@@ -198,8 +199,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingForwardPointGizmo() {
-            if (rotationMode.enumValueIndex !=
-                (int)AnimatorRotationMode.Forward) return;
+            if (script.RotationMode != AnimatorRotationMode.Forward) return;
 
             var targetPos = script.GetForwardPoint();
             // TODO Create class field with this style.

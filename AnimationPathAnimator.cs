@@ -193,6 +193,11 @@ namespace ATP.AnimationPathTools {
             set { handleMode = value; }
         }
 
+        public AnimatorRotationMode RotationMode {
+            get { return rotationMode; }
+            set { rotationMode = value; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES

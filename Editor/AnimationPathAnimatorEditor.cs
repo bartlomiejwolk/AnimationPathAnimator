@@ -44,24 +44,16 @@ namespace ATP.AnimationPathTools {
 
         // TODO Change this value directly.
         // TODO Rename to drawRotationHandles.
-        //protected SerializedProperty drawRotationHandle;
-        private SerializedProperty animatedObject;
+        private SerializedProperty animatedGO;
 
         private SerializedProperty animTimeRatio;
 
-        //private SerializedProperty duration;
-        //private SerializedProperty easeAnimationCurve;
-        //private SerializedProperty lookForwardCurve;
-        private SerializedProperty followedObject;
+        private SerializedProperty targetGO;
 
         private SerializedProperty forwardPointOffset;
 
-        //private SerializedProperty tiltingCurve;
-        //private SerializedProperty lookForwardMode;
         // TODO Change this value directly.
-        //private SerializedProperty displayEaseHandles;
         // TODO Rename to ???.
-        //private SerializedProperty tiltingMode;
         private SerializedProperty handleMode;
 
         private SerializedProperty maxAnimationSpeed;
@@ -142,13 +134,13 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(
-                animatedObject,
+                animatedGO,
                 new GUIContent(
                     "Animated Object",
                     "Object to animate."));
 
             EditorGUILayout.PropertyField(
-                followedObject,
+                targetGO,
                 new GUIContent(
                     "Target Object",
                     "Object that the animated object will be looking at."));
@@ -193,8 +185,8 @@ namespace ATP.AnimationPathTools {
             //easeAnimationCurve = serializedObject.FindProperty("easeCurve");
             //tiltingCurve = serializedObject.FindProperty("tiltingCurve");
             //lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
-            animatedObject = serializedObject.FindProperty("animatedObject");
-            followedObject = serializedObject.FindProperty("followedObject");
+            animatedGO = serializedObject.FindProperty("animatedGO");
+            targetGO = serializedObject.FindProperty("targetGO");
             //followedObjectPath = serializedObject.FindProperty("followedObjectPath");
             //lookForwardMode = serializedObject.FindProperty("lookForwardMode");
             //displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
@@ -302,10 +294,10 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingTargetGizmo() {
-            if (followedObject.objectReferenceValue == null) return;
+            if (targetGO.objectReferenceValue == null) return;
 
             var targetPos =
-                ((Transform)followedObject.objectReferenceValue).position;
+                ((Transform)targetGO.objectReferenceValue).position;
             // TODO Create class field with this style.
             var style = new GUIStyle {
                 normal = { textColor = Color.white },

@@ -60,7 +60,7 @@ namespace ATP.AnimationPathTools {
 
         #region FIELDS
         /// <summary>
-        /// Path used to animate the <c>animatedObject</c> transform.
+        /// Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
         [SerializeField]
         private AnimationPath animatedObjectPath;
@@ -107,7 +107,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
-        private Transform animatedObject;
+        private Transform animatedGO;
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
@@ -130,12 +130,11 @@ namespace ATP.AnimationPathTools {
         //[SerializeField]
         //private float duration = 10;
         /// <summary>
-        /// Transform that the <c>animatedObject</c> will be looking at.
+        /// Transform that the <c>animatedGO</c> will be looking at.
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
-        // TODO Rename to targetObject.
-        private Transform followedObject;
+        private Transform targetGO;
 
         //[SerializeField]
         //// TODO Replace with float value.
@@ -167,7 +166,7 @@ namespace ATP.AnimationPathTools {
         #region PUBLIC PROPERTIES
 
         /// <summary>
-        /// Path used to animate the <c>animatedObject</c> transform.
+        /// Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
         public AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
@@ -199,9 +198,9 @@ namespace ATP.AnimationPathTools {
             InitializeRotationCurve();
             //InitializeLookForwardCurve();
 
-            // Initialize animatedObject field.
-            if (animatedObject == null && Camera.main.transform != null) {
-                animatedObject = Camera.main.transform;
+            // Initialize animatedGO field.
+            if (animatedGO == null && Camera.main.transform != null) {
+                animatedGO = Camera.main.transform;
             }
             // Initialize animatedObjectPath field.
             animatedObjectPath = GetComponent<AnimationPath>();
@@ -599,7 +598,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void AnimateObject() {
-            if (animatedObject == null
+            if (animatedGO == null
                 || animatedObjectPath == null
                 || !animatedObjectPath.IsInitialized) {
 
@@ -607,7 +606,7 @@ namespace ATP.AnimationPathTools {
             }
 
             // Update position.
-            animatedObject.position =
+            animatedGO.position =
                 animatedObjectPath.GetVectorAtTime(animTimeRatio);
         }
 
@@ -631,11 +630,11 @@ namespace ATP.AnimationPathTools {
         //    GameObject followedGO = GameObject.Find(followedGOName);
         //    // If nothing was found, create a new one.
         //    if (followedGO == null) {
-        //        followedObject = new GameObject(followedGOName).transform;
-        //        //followedObject.parent = gameObject.transform;
+        //        targetGO = new GameObject(followedGOName).transform;
+        //        //targetGO.parent = gameObject.transform;
         //    }
         //    else {
-        //        followedObject = followedGO.transform;
+        //        targetGO = followedGO.transform;
         //    }
         //}
 
@@ -718,30 +717,30 @@ namespace ATP.AnimationPathTools {
             if (!animatedObjectPath.IsInitialized) return;
 
             // Look at target.
-            if (animatedObject != null
-                && followedObject != null
+            if (animatedGO != null
+                && targetGO != null
                 //&& !lookForwardMode) {
                 && rotationMode != AnimatorRotationMode.Forward) {
 
                 // In play mode use Quaternion.Slerp();
                 if (Application.isPlaying) {
-                    RotateObjectWithSlerp(followedObject.position);
+                    RotateObjectWithSlerp(targetGO.position);
                 }
                 // In editor mode use Transform.LookAt().
                 else {
-                    RotateObjectWithLookAt(followedObject.position);
+                    RotateObjectWithLookAt(targetGO.position);
                 }
             }
             // Use AnimationCurves.
-            if (animatedObject != null
-                && followedObject == null
+            if (animatedGO != null
+                && targetGO == null
                 //&& !lookForwardMode) {
                 && rotationMode != AnimatorRotationMode.Forward) {
 
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            else if (animatedObject != null
+            else if (animatedGO != null
                 && rotationMode == AnimatorRotationMode.Forward) {
 
                 Vector3 forwardPoint = GetForwardPoint();
@@ -757,7 +756,7 @@ namespace ATP.AnimationPathTools {
 
         private void RotateObjectWithAnimationCurves() {
             //var rotation = GetRotationAtTime(animTimeRatio);
-            //animatedObject.rotation = Quaternion.Euler(rotation);
+            //animatedGO.rotation = Quaternion.Euler(rotation);
 
             var lookAtTarget = rotationCurves.GetVectorAtTime(animTimeRatio);
 
@@ -772,29 +771,29 @@ namespace ATP.AnimationPathTools {
         }
 
         private void RotateObjectWithLookAt(Vector3 targetPos) {
-            animatedObject.LookAt(targetPos);
+            animatedGO.LookAt(targetPos);
         }
 
         private void RotateObjectWithSlerp(Vector3 targetPosition) {
             // There's no more points to look at.
-            if (targetPosition == animatedObject.position) return;
+            if (targetPosition == animatedGO.position) return;
 
             // Calculate direction to target.
-            var targetDirection = targetPosition - animatedObject.position;
+            var targetDirection = targetPosition - animatedGO.position;
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
             var speed = Time.deltaTime * rotationSpeed;
 
             // Lerp rotation.
-            animatedObject.rotation = Quaternion.Slerp(
-                animatedObject.rotation,
+            animatedGO.rotation = Quaternion.Slerp(
+                animatedGO.rotation,
                 rotation,
                 speed);
         }
 
         private void TiltObject() {
-            if (animatedObject == null
+            if (animatedGO == null
                 || !animatedObjectPath.IsInitialized) {
 
                 return;

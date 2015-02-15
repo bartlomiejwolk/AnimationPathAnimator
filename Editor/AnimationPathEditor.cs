@@ -17,6 +17,7 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathEditor : Editor {
 
         #region CONSTANS
+        private const float FirstNodeForwardMultiplied = 10f;
 
         private const int AddButtonH = 25;
         private const int AddButtonV = 10;
@@ -55,10 +56,10 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty skin;
         private SerializedProperty handlesMode;
         private SerializedProperty tangentMode;
-        private const float FirstNodeForwardMultiplied = 10f;
         //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
+        public Vector3 SecondNodeOffset { get; protected set; }
         public Vector3 LastNodeOffset { get; protected set; }
         #endregion SERIALIZED PROPERTIES
 
@@ -94,10 +95,11 @@ namespace ATP.AnimationPathTools {
 
             // Initialize public properties.
             FirstNodeOffset = new Vector3(0, 0, 0);
-            LastNodeOffset = new Vector3(1, 1, 1);
+            SecondNodeOffset = new Vector3(0, -1, 1);
+            LastNodeOffset = new Vector3(1, -2, 2);
 
             if (!Script.IsInitialized) {
-                ResetPath(FirstNodeOffset, LastNodeOffset);
+                ResetPath();
             }
         }
 
@@ -613,7 +615,7 @@ namespace ATP.AnimationPathTools {
                 // Allow undo this operation.
                 HandleUndo();
                 // Reset curves to its default state.
-                ResetPath(FirstNodeOffset, LastNodeOffset);
+                ResetPath();
             }
         }
 
@@ -869,17 +871,14 @@ namespace ATP.AnimationPathTools {
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
         // TODO Refactor.
-        protected void ResetPath(
-            Vector3 firstNodeOffset,
-            Vector3 lastNodeOffset) {
-
+        protected void ResetPath() {
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;
             // Get world point to place the Animation Path.
             var worldPoint = sceneCamera.transform.position
                 + sceneCamera.transform.forward * FirstNodeForwardMultiplied;
             // Calculate end point.
-            var endPoint = worldPoint + lastNodeOffset;
+            var endPoint = worldPoint + LastNodeOffset;
 
             // Get number of nodes to remove.
             var nodesToRemoveNo = Script.NodesNo;
@@ -891,7 +890,8 @@ namespace ATP.AnimationPathTools {
             }
 
             // Add beginning and end points.
-            Script.CreateNode(0, worldPoint + firstNodeOffset);
+            Script.CreateNode(0, worldPoint + FirstNodeOffset);
+            Script.CreateNode(0.5f, worldPoint + SecondNodeOffset);
             Script.CreateNode(1, endPoint);
             
             // Raise event.

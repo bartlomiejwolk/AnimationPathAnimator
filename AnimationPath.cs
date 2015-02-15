@@ -363,8 +363,7 @@ namespace ATP.AnimationPathTools {
             return animationCurves.GetVectorAtTime(timestamp);
         }
 
-        // TODO Rename to MoveNodesByDelta().
-        public void MoveAllNodes(Vector3 moveDelta) {
+        public void OffsetNodePositions(Vector3 moveDelta) {
             // For each node..
             for (var i = 0; i < NodesNo; i++) {
                 // Old node position.

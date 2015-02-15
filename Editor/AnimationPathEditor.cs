@@ -542,7 +542,7 @@ namespace ATP.AnimationPathTools {
             if (handlesMode.enumValueIndex ==
                 (int)AnimationPathHandlesMode.MoveAll) {
 
-                Script.MoveAllNodes(moveDelta);
+                Script.OffsetNodePositions(moveDelta);
             }
             // Move single node.
             else {

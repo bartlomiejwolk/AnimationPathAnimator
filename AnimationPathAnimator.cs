@@ -261,7 +261,7 @@ namespace ATP.AnimationPathTools {
             if (points.Count < 2) return;
 
             // TODO Create const.
-            Gizmos.color = Color.magenta;
+            Gizmos.color = Color.grey;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {

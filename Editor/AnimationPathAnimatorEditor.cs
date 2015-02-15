@@ -164,7 +164,7 @@ namespace ATP.AnimationPathTools {
             // Save changes
             serializedObject.ApplyModifiedProperties();
 
-            HandleDrawingForwardPointGizmo();
+            HandleDrawingForwardPointMarker();
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
@@ -198,7 +198,7 @@ namespace ATP.AnimationPathTools {
                 easeValueLabelStyle);
         }
 
-        private void HandleDrawingForwardPointGizmo() {
+        private void HandleDrawingForwardPointMarker() {
             if (script.RotationMode != AnimatorRotationMode.Forward) return;
 
             var targetPos = script.GetForwardPoint();

@@ -36,6 +36,8 @@ namespace ATP.AnimationPathTools {
         private AnimationPathAnimator script;
 
         private GUIStyle tiltValueLabelStyle;
+
+        private GUIStyle forwardPointMarkerStyle;
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
@@ -142,8 +144,8 @@ namespace ATP.AnimationPathTools {
                 normal = { textColor = Color.white },
                 fontStyle = FontStyle.Bold,
             };
-
             tiltValueLabelStyle = easeValueLabelStyle;
+            forwardPointMarkerStyle = easeValueLabelStyle;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -202,13 +204,8 @@ namespace ATP.AnimationPathTools {
             if (script.RotationMode != AnimatorRotationMode.Forward) return;
 
             var targetPos = script.GetForwardPoint();
-            // TODO Create class field with this style.
-            var style = new GUIStyle {
-                normal = { textColor = Color.white },
-                fontStyle = FontStyle.Bold,
-            };
 
-            Handles.Label(targetPos, "Point", style);
+            Handles.Label(targetPos, "Point", forwardPointMarkerStyle);
         }
 
         private void HandleDrawingRotationHandle() {

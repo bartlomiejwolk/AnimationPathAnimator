@@ -55,6 +55,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty skin;
         private SerializedProperty handlesMode;
         private SerializedProperty tangentMode;
+        private const float FirstNodeForwardMultiplied = 10f;
         //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
@@ -875,9 +876,8 @@ namespace ATP.AnimationPathTools {
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;
             // Get world point to place the Animation Path.
-            // TODO Create constant field.
             var worldPoint = sceneCamera.transform.position
-                + sceneCamera.transform.forward * 7;
+                + sceneCamera.transform.forward * FirstNodeForwardMultiplied;
             // Calculate end point.
             var endPoint = worldPoint + lastNodeOffset;
 

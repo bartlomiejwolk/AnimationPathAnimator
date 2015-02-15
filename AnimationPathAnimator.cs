@@ -218,6 +218,9 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
+            // Return if handle mode is not rotation mode.
+            if (handleMode != AnimatorHandleMode.Rotation) return;
+
             DrawRotationGizmoCurve();
             DrawCurrentRotationPointGizmo();
             DrawRotationPointGizmos();

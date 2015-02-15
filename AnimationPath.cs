@@ -402,7 +402,6 @@ namespace ATP.AnimationPathTools {
             int samplingFrequency,
             ref List<Vector3> points) {
 
-            // TODO Use curved path length.
             var linearPathLength = CalculatePathLinearLength();
 
             // Calculate amount of points to extract.

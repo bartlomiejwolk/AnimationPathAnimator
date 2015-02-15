@@ -21,6 +21,9 @@ public class AnimationPathCurvesDebug : MonoBehaviour {
     [Header("Ease curve")]
     public AnimationCurve easeCurve;
 
+    [Header("Ease curve")]
+    public AnimationCurve tiltingCurve;
+
     // Use this for initialization
     void Awake() {
     }
@@ -38,6 +41,7 @@ public class AnimationPathCurvesDebug : MonoBehaviour {
         pathCurveZ = animationPath.AnimationCurves[2];
 
         easeCurve = animator.EaseCurve;
+        tiltingCurve = animator.TiltingCurve;
     }
 
     void Start() {

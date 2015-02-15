@@ -524,16 +524,17 @@ namespace ATP.AnimationPathTools {
             var pathNodePositions = animatedObjectPath.GetNodePositions();
 
             rotationCurves.RemoveAllKeys();
-            //for (var i = 0; i < rotationCurves.KeysNo; i++) {
-            //    rotationCurves.MovePointToPosition(i, pathNodePositions[i]);
-            //}
-            var startRotation = pathNodePositions[0] + defaultStartRotationOffset;
-            var endRotation = pathNodePositions[1] + defaultEndRotationOffset;
 
-            rotationCurves.CreateNewPoint(0, startRotation);
-            rotationCurves.CreateNewPoint(1, endRotation);
+            var firstRotationPointPosition =
+                pathNodePositions[0] + defaultRotationPointOffset;
+            var secondRotationPointPosition =
+                pathNodePositions[1] + defaultRotationPointOffset;
+            var lastRotationPointPosition =
+                pathNodePositions[2] + defaultRotationPointOffset;
 
-            //EaseCurveExtremeNodes(easeCurve);
+            rotationCurves.CreateNewPoint(0, firstRotationPointPosition);
+            rotationCurves.CreateNewPoint(0.5f, secondRotationPointPosition);
+            rotationCurves.CreateNewPoint(1, lastRotationPointPosition);
         }
 
         private void ResetEaseCurve() {

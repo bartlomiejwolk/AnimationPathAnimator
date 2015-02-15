@@ -118,27 +118,12 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private float maxAnimationSpeed = 0.3f;
 
-        //[SerializeField]
-        //private bool displayEaseHandles;
-
-        //[SerializeField]
-        //private bool drawRotationHandle;
-
-        /// <summary>
-        /// Animation duration in seconds.
-        /// </summary>
-        //[SerializeField]
-        //private float duration = 10;
         /// <summary>
         /// Transform that the <c>animatedGO</c> will be looking at.
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
         private Transform targetGO;
-
-        //[SerializeField]
-        //// TODO Replace with float value.
-        //private AnimationCurve lookForwardCurve = new AnimationCurve();
 
         /// <summary>
         /// How much look forward point should be positioned away from the
@@ -147,12 +132,6 @@ namespace ATP.AnimationPathTools {
         /// <remarks>Value is a time in range from 0 to 1.</remarks>
         [SerializeField]
         private float forwardPointOffset = 0.05f;
-
-        //[SerializeField]
-        //private bool lookForwardMode;
-
-        //[SerializeField]
-        //private bool tiltingMode;
 
 
         [SerializeField]
@@ -262,7 +241,7 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationGizmoCurve() {
             // TODO Calculate samplingRate using rotatio path length.
-            var points = SampleForRotationPointPositions(100);
+            var points = SampleRotationPathForPoints(100);
 
             if (points.Count < 2) return;
 
@@ -297,7 +276,7 @@ namespace ATP.AnimationPathTools {
                 false);
         }
 
-        private List<Vector3> SampleForRotationPointPositions(float samplingRate) {
+        private List<Vector3> SampleRotationPathForPoints(float samplingRate) {
             var result = new List<Vector3>();
             var timestamps = GetSampledTimestamps(samplingRate);
             foreach (var timestamp in timestamps) {

@@ -73,7 +73,7 @@ namespace ATP.AnimationPathTools {
 
         public void ChangePointTangents(
                 int nodeIndex,
-                Vector3 tangentDelta) {
+                Vector3 newTangents) {
 
             // Copy keys.
             var keyXCopy = curves[0].keys[nodeIndex];
@@ -81,13 +81,13 @@ namespace ATP.AnimationPathTools {
             var keyZCopy = curves[2].keys[nodeIndex];
 
             // Update keys' values.
-            keyXCopy.inTangent += tangentDelta.x;
-            keyYCopy.inTangent += tangentDelta.y;
-            keyZCopy.inTangent += tangentDelta.z;
+            keyXCopy.inTangent = newTangents.x;
+            keyYCopy.inTangent = newTangents.y;
+            keyZCopy.inTangent = newTangents.z;
 
-            keyXCopy.outTangent += tangentDelta.x;
-            keyYCopy.outTangent += tangentDelta.y;
-            keyZCopy.outTangent += tangentDelta.z;
+            keyXCopy.outTangent = newTangents.x;
+            keyYCopy.outTangent = newTangents.y;
+            keyZCopy.outTangent = newTangents.z;
 
             // Update keys.
             curves[0].MoveKey(nodeIndex, keyXCopy);

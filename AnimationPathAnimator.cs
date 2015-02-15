@@ -188,6 +188,11 @@ namespace ATP.AnimationPathTools {
             get { return tiltingCurve; }
         }
 
+        public AnimatorHandleMode HandleMode {
+            get { return handleMode; }
+            set { handleMode = value; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES

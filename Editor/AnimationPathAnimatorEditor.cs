@@ -43,7 +43,6 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty advancedSettingsFoldout;
 
         // TODO Change this value directly.
-        // TODO Rename to drawRotationHandles.
         private SerializedProperty animatedGO;
 
         private SerializedProperty animTimeRatio;
@@ -52,15 +51,10 @@ namespace ATP.AnimationPathTools {
 
         private SerializedProperty forwardPointOffset;
 
-        // TODO Change this value directly.
-        // TODO Rename to ???.
-        private SerializedProperty handleMode;
-
         private SerializedProperty maxAnimationSpeed;
 
         private SerializedProperty rotationMode;
 
-        //private SerializedProperty followedObjectPath;
         private SerializedProperty rotationSpeed;
         #endregion SERIALIZED PROPERTIES
 
@@ -77,46 +71,12 @@ namespace ATP.AnimationPathTools {
                     0,
                     1);
 
-            //EditorGUILayout.PropertyField(
-            //    duration,
-            //    new GUIContent(
-            //        "Duration",
-            //        "Duration of the animation in seconds."));
+            script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Handle Mode",
+                    ""),
+                script.HandleMode);
 
-            //EditorGUILayout.PropertyField(
-            //    easeAnimationCurve,
-            //    new GUIContent(
-            //        "Ease Curve",
-            //        "Use it to control speed of the animated object."));
-
-            //EditorGUILayout.PropertyField(
-            //    tiltingCurve,
-            //    new GUIContent(
-            //        "Tilting Curve",
-            //        "Use it to control tilting of the animated object."));
-
-            //EditorGUILayout.Space();
-
-            //EditorGUILayout.BeginHorizontal();
-            //lookForwardMode.boolValue = EditorGUILayout.ToggleLeft(
-            //    new GUIContent(
-            //        "Look Forward",
-            //        "Ignore target object and look ahead."),
-            //        lookForwardMode.boolValue,
-            //        GUILayout.Width(116));
-
-            //EditorGUILayout.PropertyField(
-            //    lookForwardCurve,
-            //    new GUIContent(
-            //        "",
-            //        "Use it to control how far in time animated object will " +
-            //        "be looking ahead on its path."));
-            //EditorGUILayout.EndHorizontal();
-
-            //EditorGUILayout.PropertyField(displayEaseHandles);
-            //EditorGUILayout.PropertyField(drawRotationHandle);
-            //EditorGUILayout.PropertyField(tiltingMode);
-            EditorGUILayout.PropertyField(handleMode);
             EditorGUILayout.PropertyField(rotationMode);
             if (rotationMode.enumValueIndex ==
                 (int)AnimatorRotationMode.Forward) {
@@ -145,20 +105,6 @@ namespace ATP.AnimationPathTools {
                     "Target Object",
                     "Object that the animated object will be looking at."));
 
-            //EditorGUILayout.PropertyField(
-            //    followedObjectPath,
-            //    new GUIContent(
-            //        "Target Object Path",
-            //        "Path for the followed object."));
-
-            //EditorGUILayout.Space();
-
-            //if (GUILayout.Button(new GUIContent("Create Target", ""))) {
-            //    script.CreateTargetGO();
-            //}
-
-            // Save changes.
-
             EditorGUILayout.Space();
 
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
@@ -171,6 +117,7 @@ namespace ATP.AnimationPathTools {
             }
 
             serializedObject.ApplyModifiedProperties();
+            //if (GUI.changed) EditorUtility.SetDirty(target);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -178,21 +125,10 @@ namespace ATP.AnimationPathTools {
             // Get target script reference.
             script = (AnimationPathAnimator)target;
 
-            // Initialize serialized properties.
-            //duration = serializedObject.FindProperty("duration");
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
-            //easeAnimationCurve = serializedObject.FindProperty("easeCurve");
-            //tiltingCurve = serializedObject.FindProperty("tiltingCurve");
-            //lookForwardCurve = serializedObject.FindProperty("lookForwardCurve");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
-            //followedObjectPath = serializedObject.FindProperty("followedObjectPath");
-            //lookForwardMode = serializedObject.FindProperty("lookForwardMode");
-            //displayEaseHandles = serializedObject.FindProperty("displayEaseHandles");
-            //drawRotationHandle = serializedObject.FindProperty("drawRotationHandle");
-            //tiltingMode = serializedObject.FindProperty("tiltingMode");
-            handleMode = serializedObject.FindProperty("handleMode");
             rotationMode = serializedObject.FindProperty("rotationMode");
             forwardPointOffset =
                 serializedObject.FindProperty("forwardPointOffset");
@@ -213,8 +149,6 @@ namespace ATP.AnimationPathTools {
         private void OnSceneGUI() {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
-
-                //script.UpdateEaseCurve();
             }
 
             // TODO Is this update needed?
@@ -245,8 +179,7 @@ namespace ATP.AnimationPathTools {
         #region DRAWING HANDLERS
 
         private void HandleDrawingEaseHandles() {
-            if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Ease) return;
+            if (script.HandleMode != AnimatorHandleMode.Ease) return;
 
             Action<int, float> callbackHandler =
                 DrawEaseHandlesCallbackHandler;
@@ -255,8 +188,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingEaseLabel() {
-            if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Ease) return;
+            if (script.HandleMode != AnimatorHandleMode.Ease) return;
 
             DrawNodeLabels(
                 ConvertEaseToDegrees,
@@ -281,8 +213,7 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingRotationHandle() {
             //if (!drawRotationHandle.boolValue) return;
-            if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Rotation) return;
+            if (script.HandleMode != AnimatorHandleMode.Rotation) return;
 
             // Callback to call when node rotation is changed. TODO Pass func.
             // directly as an argument.
@@ -309,8 +240,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingTiltingHandles() {
-            if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Tilting) return;
+            if (script.HandleMode != AnimatorHandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
@@ -319,8 +249,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingTiltLabel() {
-            if (handleMode.enumValueIndex !=
-                (int)AnimatorHandleMode.Tilting) return;
+            if (script.HandleMode != AnimatorHandleMode.Tilting) return;
 
             DrawNodeLabels(
                 ConvertTiltToDegrees,

@@ -56,14 +56,6 @@ namespace ATP.AnimationPathTools {
         /// Value of the jump when modifier key is pressed.
         /// </summary>
         public const float ShortJumpValue = 0.002f;
-
-        /// <summary>
-        /// How much look forward point should be positioned away from the
-        /// animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        // TODO Rename to LookForwardTimeOffset.
-        private const float LookForwardTimeDelta = 0.03f;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -149,6 +141,11 @@ namespace ATP.AnimationPathTools {
         //// TODO Replace with float value.
         //private AnimationCurve lookForwardCurve = new AnimationCurve();
 
+        /// <summary>
+        /// How much look forward point should be positioned away from the
+        /// animated object.
+        /// </summary>
+        /// <remarks>Value is a time in range from 0 to 1.</remarks>
         [SerializeField]
         private float forwardPointOffset = 0.05f;
 
@@ -700,8 +697,8 @@ namespace ATP.AnimationPathTools {
         }
 
         //private void InitializeLookForwardCurve() {
-        //    var firstKey = new Keyframe(0, LookForwardTimeDelta, 0, 0);
-        //    var lastKey = new Keyframe(1, LookForwardTimeDelta, 0, 0);
+        //    var firstKey = new Keyframe(0, LookForwardTimeOffset, 0, 0);
+        //    var lastKey = new Keyframe(1, LookForwardTimeOffset, 0, 0);
 
         //    lookForwardCurve.AddKey(firstKey);
         //    lookForwardCurve.AddKey(lastKey);

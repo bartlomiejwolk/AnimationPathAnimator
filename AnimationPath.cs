@@ -454,12 +454,6 @@ namespace ATP.AnimationPathTools {
                     float samplingFrequency,
                     ref List<Vector3> points) {
 
-            // Throw exception when there's nothing to draw.
-            // TODO Use curved length.
-            //if (Math.Abs(linearPathLength) < 0.01f) {
-            //    throw new Exception("Path is too short.");
-            //}
-
             var sectionLinearLength = CalculateSectionLinearLength(
                 firstNodeIndex,
                 secondNodeIndex);
@@ -556,10 +550,9 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Smooth all tangents in the Animation Curves.
+        /// Smooth tangents in all nodes in all animation curves.
         /// </summary>
         /// <param name="weight">Weight to be applied to the tangents.</param>
-        // TODO Rename to SmoothAllNodeTangents().
         public void SmoothAllNodeTangents(float weight = 0) {
             // For each key..
             for (var j = 0; j < NodesNo; j++) {

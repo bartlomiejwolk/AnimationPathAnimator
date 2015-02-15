@@ -287,7 +287,7 @@ namespace ATP.AnimationPathTools {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 rotationPointPosition,
-                "rec_16x16",
+                "location_pointer-16x22",
                 false);
         }
 

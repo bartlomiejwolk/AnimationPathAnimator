@@ -30,6 +30,21 @@ namespace ATP.AnimationPathTools {
         //private const int SmoothButtonV = 10;
         //private const float TangentHandleSize = 0.25f;
 
+        /// <summary>
+        /// Key shortcut to enable handles mode.
+        /// </summary>
+        /// <remarks>
+        /// Handles mode will change only while key is pressed.
+        /// </remarks>
+        public const KeyCode TangentModeKey = KeyCode.J;
+
+        /// <summary>
+        /// Key shortcut to toggle movement mode.
+        /// </summary>
+        /// <remarks>
+        /// Movement mode will change only while key is pressed.
+        /// </remarks>
+        public const KeyCode MoveAllKey = KeyCode.H;
         #endregion CONSTANS
 
         #region FIELDS
@@ -690,7 +705,7 @@ namespace ATP.AnimationPathTools {
             var moveAllModeTooltip = String.Format(
                 "Move all nodes at once. " +
                 "Toggle it with {0} key.",
-                AnimationPath.MoveAllKey);
+                MoveAllKey);
 
             // Disable this control if Tangent Mode is enabled.
             //GUI.enabled = !Script.TangentMode;
@@ -705,7 +720,7 @@ namespace ATP.AnimationPathTools {
             var tangentModeTooltip = String.Format(
                 "Display handles that allow changing node tangents. " +
                 "Toggle it with {0} key.",
-                AnimationPath.TangentModeKey);
+                TangentModeKey);
 
             //GUI.enabled = !Script.MoveAllMode;
             //Script.TangentMode = GUILayout.Toggle(
@@ -826,7 +841,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private void HandleMoveAllOptionShortcut() {
             if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimationPath.MoveAllKey) return;
+                || Event.current.keyCode != MoveAllKey) return;
 
             handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveAll;
             serializedObject.ApplyModifiedProperties();

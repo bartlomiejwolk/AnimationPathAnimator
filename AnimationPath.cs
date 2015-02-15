@@ -24,23 +24,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public const int GizmoCurveSamplingFrequency = 20;
 
-        /// <summary>
-        /// Key shortcut to enable handles mode.
-        /// </summary>
-        /// <remarks>
-        /// Handles mode will change only while key is pressed.
-        /// </remarks>
-        // TODO Move to Editor class.
-        public const KeyCode TangentModeKey = KeyCode.J;
-
-        /// <summary>
-        /// Key shortcut to toggle movement mode.
-        /// </summary>
-        /// <remarks>
-        /// Movement mode will change only while key is pressed.
-        /// </remarks>
-        // TODO Move to Editor class.
-        public const KeyCode MoveAllKey = KeyCode.H;
         #endregion Constants
 
         #region FIELDS

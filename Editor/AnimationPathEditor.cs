@@ -878,25 +878,23 @@ namespace ATP.AnimationPathTools {
             // TODO Create constant field.
             var worldPoint = sceneCamera.transform.position
                 + sceneCamera.transform.forward * 7;
-            // Number of nodes to remove.
-            var noOfNodesToRemove = Script.NodesNo;
+            // Calculate end point.
+            var endPoint = worldPoint + lastNodeOffset;
 
+            // Get number of nodes to remove.
+            var nodesToRemoveNo = Script.NodesNo;
             // TODO Move to AnimationCurves class.
             // Remove all nodes.
-            for (var i = 0; i < noOfNodesToRemove; i++) {
+            for (var i = 0; i < nodesToRemoveNo; i++) {
                 // NOTE After each removal, next node gets index 0.
                 Script.RemoveNode(0);
             }
-
-            // Calculate end point.
-            var endPoint = worldPoint + lastNodeOffset;
 
             // Add beginning and end points.
             Script.CreateNode(0, worldPoint + firstNodeOffset);
             Script.CreateNode(1, endPoint);
             
             // Raise event.
-            //Script.OnPathChanged();
             Script.OnPathReset();
         }
 

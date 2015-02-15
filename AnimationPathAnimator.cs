@@ -504,6 +504,11 @@ namespace ATP.AnimationPathTools {
             ResetRotationData();
             ResetEaseCurve();
             ResetTiltCurve();
+
+            // Change handle mode to None.
+            handleMode = AnimatorHandleMode.None;
+            // Change rotation mode to None.
+            rotationMode = AnimatorRotationMode.Forward;
         }
         #endregion EVENT HANDLERS
 

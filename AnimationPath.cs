@@ -222,6 +222,10 @@ namespace ATP.AnimationPathTools {
         }
 
         public virtual void OnPathReset() {
+            // Change handle mode to MoveAll.
+            handlesMode = AnimationPathHandlesMode.MoveAll;
+
+            // Call handler methods.
             var handler = PathReset;
             if (handler != null) handler(this, EventArgs.Empty);
         }

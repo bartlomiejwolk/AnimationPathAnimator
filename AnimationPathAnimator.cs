@@ -20,9 +20,9 @@ namespace ATP.AnimationPathTools {
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
         #region CONSTANTS
-        private Vector3 defaultEndRotationOffset = new Vector3(0, -0.1f, 0);
-        private Vector3 defaultStartRotationOffset = new Vector3(0, -0.1f, 0);
-        private const float DefaultEndEaseValue = 0.05f;
+        private Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
+        private const float DefaultEndEaseValue = 0.01f;
+        private const float DefaultSecondEaseValue = 0.8f;
         private const float DefaultStartEaseValue = 0.01f;
 
         /// <summary>
@@ -541,6 +541,7 @@ namespace ATP.AnimationPathTools {
             RemoveAllCurveKeys(easeCurve);
 
             easeCurve.AddKey(0, DefaultStartEaseValue);
+            easeCurve.AddKey(0.5f, DefaultSecondEaseValue);
             easeCurve.AddKey(1, DefaultEndEaseValue);
 
             //EaseCurveExtremeNodes(easeCurve);

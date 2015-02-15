@@ -20,6 +20,8 @@ namespace ATP.AnimationPathTools {
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
         #region CONSTANTS
+        private Vector3 defaultEndRotationOffset = new Vector3(0, -0.1f, 0);
+        private Vector3 defaultStartRotationOffset = new Vector3(0, -0.1f, 0);
         private const float DefaultEndEaseValue = 0.05f;
         private const float DefaultStartEaseValue = 0.01f;
 
@@ -65,6 +67,20 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region FIELDS
+        /// <summary>
+        /// Path used to animate the <c>animatedObject</c> transform.
+        /// </summary>
+        [SerializeField]
+        private AnimationPath animatedObjectPath;
+
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private AnimationCurve tiltingCurve = new AnimationCurve();
+
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private AnimationCurve easeCurve = new AnimationCurve();
+
 
         /// <summary>
         /// Current animation time in seconds.
@@ -100,13 +116,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
 #pragma warning disable 649
         private Transform animatedObject;
-
-        /// <summary>
-        /// Path used to animate the <c>animatedObject</c> transform.
-        /// </summary>
-        [SerializeField]
-        private AnimationPath animatedObjectPath;
-
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
@@ -128,11 +137,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         //[SerializeField]
         //private float duration = 10;
-
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private AnimationCurve easeCurve = new AnimationCurve();
-
         /// <summary>
         /// Transform that the <c>animatedObject</c> will be looking at.
         /// </summary>
@@ -162,13 +166,6 @@ namespace ATP.AnimationPathTools {
 
 #pragma warning restore 649
 #pragma warning restore 649
-
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private AnimationCurve tiltingCurve = new AnimationCurve();
-
-        private Vector3 defaultStartRotationOffset = new Vector3(0, -0.1f, 0);
-        private Vector3 defaultEndRotationOffset = new Vector3(0, -0.1f, 0);
         #endregion EDITOR
         #region PUBLIC PROPERTIES
 
@@ -390,6 +387,18 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region PUBLIC METHODS
+        public float GetNodeTiltValue(int nodeIndex) {
+            return tiltingCurve.keys[nodeIndex].value;
+        }
+
+        public Vector3 GetNodePosition(int i) {
+            return animatedObjectPath.GetNodePosition(i);
+        }
+
+        public float GetNodeEaseValue(int i) {
+            return easeCurve.keys[i].value;
+        }
+
         public void SmoothCurve(AnimationCurve curve) {
             for (var i = 0; i < curve.length; i++) {
                 curve.SmoothTangents(i, 0);
@@ -950,17 +959,5 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
-
-        public float GetNodeEaseValue(int i) {
-            return easeCurve.keys[i].value;
-        }
-
-        public Vector3 GetNodePosition(int i) {
-            return animatedObjectPath.GetNodePosition(i);
-        }
-
-        public float GetNodeTiltValue(int nodeIndex) {
-            return tiltingCurve.keys[nodeIndex].value;
-        }
     }
 }

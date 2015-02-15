@@ -487,7 +487,10 @@ namespace ATP.AnimationPathTools {
                     EventArgs eventArgs) {
 
             SyncCurveWithPath(easeCurve);
+
             SyncCurveWithPath(tiltingCurve);
+            EaseCurveExtremeNodes(easeCurve);
+
             UpdateRotationCurves();
 
             // If there's not, create a new key with this value and the
@@ -531,7 +534,7 @@ namespace ATP.AnimationPathTools {
             easeCurve.AddKey(0, DefaultStartEaseValue);
             easeCurve.AddKey(1, DefaultEndEaseValue);
 
-            EaseCurveExtremeNodes(easeCurve);
+            //EaseCurveExtremeNodes(easeCurve);
         }
 
 
@@ -556,7 +559,7 @@ namespace ATP.AnimationPathTools {
             var value = curve.Evaluate(timestamp);
 
             curve.AddKey(timestamp, value);
-            EaseCurveExtremeNodes(curve);
+            //EaseCurveExtremeNodes(curve);
         }
 
         public void EaseCurveExtremeNodes(AnimationCurve curve) {

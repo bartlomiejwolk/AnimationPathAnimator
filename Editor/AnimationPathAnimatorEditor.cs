@@ -579,7 +579,7 @@ namespace ATP.AnimationPathTools {
             script.EaseCurve.RemoveKey(keyIndex);
             script.EaseCurve.AddKey(keyframeCopy);
             script.SmoothCurve(script.EaseCurve);
-            script.EaseCurveExtremeNodes(script.EaseCurve);
+            //script.EaseCurveExtremeNodes(script.EaseCurve);
 
             // If new timestamp is bigger than old timestamp..
             //if (newValue > oldTimestamp) {

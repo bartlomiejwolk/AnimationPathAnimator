@@ -22,7 +22,7 @@ namespace ATP.AnimationPathTools {
         #region CONSTANTS
         private Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
         private const float DefaultEndEaseValue = 0.01f;
-        private const float DefaultSecondEaseValue = 0.8f;
+        private const float DefaultSecondEaseValue = 0.08f;
         private const float DefaultStartEaseValue = 0.01f;
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace ATP.AnimationPathTools {
         private void AnimatedObjectPathOnPathReset(object sender, EventArgs eventArgs) {
             ResetRotationData();
             ResetEaseCurve();
-            ResetTiltCurve();
+            ResetTiltingCurve();
 
             // Change handle mode to None.
             handleMode = AnimatorHandleMode.None;
@@ -513,10 +513,11 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region PRIVATE METHODS
-        private void ResetTiltCurve() {
+        private void ResetTiltingCurve() {
             RemoveAllCurveKeys(tiltingCurve);
 
             tiltingCurve.AddKey(0, 0);
+            tiltingCurve.AddKey(0.5f, 0);
             tiltingCurve.AddKey(1, 0);
         }
 

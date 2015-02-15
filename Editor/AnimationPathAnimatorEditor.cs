@@ -391,7 +391,7 @@ namespace ATP.AnimationPathTools {
                 var scaleHandleSize = handleSize * 1.5f;
                 float newArcValue = Handles.ScaleValueHandle(
                     arcValue,
-                    nodePositions[i] + Vector3.up + Vector3.forward * arcRadius
+                    nodePositions[i] + Vector3.forward * arcRadius
                         * 1.3f,
                     Quaternion.identity,
                     scaleHandleSize,

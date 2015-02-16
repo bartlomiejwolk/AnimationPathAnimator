@@ -201,10 +201,10 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingMovementHandles() {
             // Callback to call when a node is moved on the scene.
             Action<int, Vector3, Vector3> handlerCallback =
-                DrawMovementHandlesCallbackHandler;
+                DrawPositionHandlesCallbackHandler;
 
             // Draw handles.
-            DrawMovementHandles(handlerCallback);
+            DrawPositionHandles(handlerCallback);
         }
 
         private void HandleDrawingRemoveButtons() {
@@ -327,7 +327,7 @@ namespace ATP.AnimationPathTools {
             return addButtonPressed;
         }
 
-        private void DrawMovementHandles(
+        private void DrawPositionHandles(
             Action<int, Vector3, Vector3> callback) {
 
             // Positions at which to draw movement handles.
@@ -523,8 +523,7 @@ namespace ATP.AnimationPathTools {
             Script.OnPathChanged();
         }
 
-        // TODO Refactor.
-        protected virtual void DrawMovementHandlesCallbackHandler(
+        protected virtual void DrawPositionHandlesCallbackHandler(
                     int movedNodeIndex,
                     Vector3 position,
                     Vector3 moveDelta) {

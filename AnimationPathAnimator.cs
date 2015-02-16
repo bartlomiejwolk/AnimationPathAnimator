@@ -199,7 +199,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
-            animationPathBuilder.PathReset -= AnimationPathBuilderOnPathReset;
+            animationPathBuilder.PathReset -= animationPathBuilder_PathReset;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -214,10 +214,10 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Subscribe to events.
-            animationPathBuilder.PathReset += AnimationPathBuilderOnPathReset;
-            animationPathBuilder.NodeAdded += AnimationPathBuilderOnNodeAdded;
-            animationPathBuilder.NodeRemoved += AnimationPathBuilderOnNodeRemoved;
-            animationPathBuilder.NodeTimeChanged += AnimationPathBuilderOnNodeTimeChanged;
+            animationPathBuilder.PathReset += animationPathBuilder_PathReset;
+            animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;
+            animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
+            animationPathBuilder.NodeTimeChanged += animationPathBuilder_NodeTimeChanged;
 
             // Instantiate rotationPath.
             if (rotationPath == null) {
@@ -374,26 +374,26 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region EVENT HANDLERS
-        void AnimationPathBuilderOnNodeRemoved(object sender, EventArgs e) {
+        void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
             UpdateCurveWithRemovedKeys(easeCurve);
             UpdateCurveWithRemovedKeys(tiltingCurve);
             UpdateRotationCurvesWithRemovedKeys();
         }
 
-        void AnimationPathBuilderOnNodeTimeChanged(object sender, EventArgs e) {
+        void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
             UpdateCurveTimestamps(easeCurve);
             UpdateCurveTimestamps(tiltingCurve);
             UpdateRotationCurvesTimestamps();
         }
 
-        private void AnimationPathBuilderOnNodeAdded(object sender, EventArgs eventArgs) {
+        private void animationPathBuilder_NodeAdded(object sender, EventArgs eventArgs) {
             UpdateCurveWithAddedKeys(easeCurve);
             UpdateCurveWithAddedKeys(tiltingCurve);
             UpdateRotationCurvesWithAddedKeys();
         }
 
 
-        private void AnimationPathBuilderOnPathReset(object sender, EventArgs eventArgs) {
+        private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
             ResetRotationPath();
             ResetEaseCurve();
             ResetTiltingCurve();

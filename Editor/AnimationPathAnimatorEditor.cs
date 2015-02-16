@@ -552,7 +552,7 @@ namespace ATP.AnimationPathTools {
         #region PRIVATE METHODS
 
         protected void RecordRotationObject() {
-            Undo.RecordObject(script.RotationCurves, "Ease curve changed.");
+            Undo.RecordObject(script.RotationPath, "Ease curve changed.");
         }
 
         /// <summary>

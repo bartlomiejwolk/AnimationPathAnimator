@@ -32,9 +32,9 @@ public class AnimationPathDebug : MonoBehaviour {
         animator = GetComponent<AnimationPathAnimator>();
         animationPathBuilder = GetComponent<AnimationPathBuilder>();
 
-        rotationCurveX = animator.RotationCurves[0];
-        rotationCurveY = animator.RotationCurves[1];
-        rotationCurveZ = animator.RotationCurves[2];
+        rotationCurveX = animator.RotationPath[0];
+        rotationCurveY = animator.RotationPath[1];
+        rotationCurveZ = animator.RotationPath[2];
 
         pathCurveX = animationPathBuilder.ObjectPath[0];
         pathCurveY = animationPathBuilder.ObjectPath[1];

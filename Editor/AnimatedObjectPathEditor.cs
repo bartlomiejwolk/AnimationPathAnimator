@@ -152,7 +152,7 @@ namespace ATP.AnimationPathTools {
             HandleMoveSingleModeShortcut();
 
             // Handle drawing movement handles.
-            HandleDrawingMovementHandles();
+            HandleDrawingPositionHandles();
 
             // Handle displaying tangent handles. Tangent handles allows
             // changing nodes' in/out tangents.
@@ -196,7 +196,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Handle drawing movement handles.
         /// </summary>
-        private void HandleDrawingMovementHandles() {
+        private void HandleDrawingPositionHandles() {
             // Callback to call when a node is moved on the scene.
             Action<int, Vector3, Vector3> handlerCallback =
                 DrawPositionHandlesCallbackHandler;

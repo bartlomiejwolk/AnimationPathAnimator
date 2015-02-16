@@ -526,7 +526,7 @@ namespace ATP.AnimationPathTools {
 
             RecordRotationObject();
 
-            script.ChangeRotationForTimestamp(timestamp, newPosition);
+            script.ChangeRotationAtTimestamp(timestamp, newPosition);
         }
 
         private void DrawTiltingHandlesCallbackHandler(

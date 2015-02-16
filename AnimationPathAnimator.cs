@@ -393,7 +393,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void ChangeRotationForTimestamp(
+        public void ChangeRotationAtTimestamp(
             float timestamp,
             Vector3 newPosition) {
 

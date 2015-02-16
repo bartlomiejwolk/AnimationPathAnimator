@@ -7,14 +7,14 @@ using UnityEngine;
 namespace ATP.AnimationPathTools {
 
     /// <summary>
-    /// Editor for AnimationPath class.
+    /// Editor for AnimatedObjectPath class.
     /// </summary>
     /// <remarks>
     /// It is composed of AnimationPathHandles class that is responsible for
     /// drawing handles, buttons and labels.
     /// </remarks>
-    [CustomEditor(typeof(AnimationPath))]
-    public class AnimationPathEditor : Editor {
+    [CustomEditor(typeof(AnimatedObjectPath))]
+    public class AnimatedObjectPathEditor : Editor {
 
         #region CONSTANS
         private const float FirstNodeForwardMultiplied = 10f;
@@ -59,7 +59,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
-        public AnimationPath Script { get; protected set; }
+        public AnimatedObjectPath Script { get; protected set; }
 
         #endregion FIELDS
 
@@ -100,7 +100,7 @@ namespace ATP.AnimationPathTools {
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
             tangentMode = serializedObject.FindProperty("tangentMode");
 
-            Script = (AnimationPath)target;
+            Script = (AnimatedObjectPath)target;
 
             // Remember active scene tool.
             if (Tools.current != Tool.None) {
@@ -817,7 +817,8 @@ namespace ATP.AnimationPathTools {
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = Script.SamplePathForPoints(exportSampling);
+                points = Script.AnimationCurves.SamplePathForPoints(
+                    exportSampling);
             }
 
             // Create parent GO.
@@ -854,7 +855,7 @@ namespace ATP.AnimationPathTools {
         //private void HandleTangentModeOptionShortcut() {
         //    // Return if Tangent Mode shortcut wasn't released.
         //    if (Event.current.type != EventType.keyUp
-        //        || Event.current.keyCode != AnimationPath.TangentModeKey) return;
+        //        || Event.current.keyCode != AnimatedObjectPath.TangentModeKey) return;
 
         //    handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
         //    serializedObject.ApplyModifiedProperties();
@@ -863,7 +864,7 @@ namespace ATP.AnimationPathTools {
         private void HandleMoveSingleModeShortcut() {
             // Return if Tangent Mode shortcut wasn't released.
             if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimationPath.MoveSingleModeKey) return;
+                || Event.current.keyCode != AnimatedObjectPath.MoveSingleModeKey) return;
 
             handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveSingle;
             serializedObject.ApplyModifiedProperties();

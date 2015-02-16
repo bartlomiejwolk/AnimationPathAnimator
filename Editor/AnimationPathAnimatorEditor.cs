@@ -260,7 +260,7 @@ namespace ATP.AnimationPathTools {
 
         // TODO Refactor.
         private void DrawEaseHandles(Action<int, float> callback) {
-            // Get AnimationPath node positions.
+            // Get AnimatedObjectPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
             // Get ease curve timestamps.
@@ -409,7 +409,7 @@ namespace ATP.AnimationPathTools {
 
         // TODO Extract methods. Do the same to ease curve drawing method.
         private void DrawTiltingHandles(Action<int, float> callback) {
-            // Get AnimationPath node positions.
+            // Get AnimatedObjectPath node positions.
             var nodePositions = script.AnimatedObjectPath.GetNodePositions();
 
             // Get rotation curve timestamps.

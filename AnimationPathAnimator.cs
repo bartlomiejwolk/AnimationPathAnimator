@@ -16,7 +16,7 @@ namespace ATP.AnimationPathTools {
     /// Animation Paths and also animate their rotation on x and y axis in
     /// time.
     /// </summary>
-    [RequireComponent(typeof(AnimationPath))]
+    [RequireComponent(typeof(AnimatedObjectPath))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
         #region CONSTANTS
@@ -63,7 +63,7 @@ namespace ATP.AnimationPathTools {
         /// Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
         [SerializeField]
-        private AnimationPath animatedObjectPath;
+        private AnimatedObjectPath animatedObjectPath;
 
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -88,7 +88,7 @@ namespace ATP.AnimationPathTools {
         private bool isPlaying;
 
         [SerializeField]
-        private AnimationPathCurves rotationCurves;
+        private AnimationPath rotationCurves;
 
         //private float timeStep;
 
@@ -147,7 +147,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
-        public AnimationPath AnimatedObjectPath {
+        public AnimatedObjectPath AnimatedObjectPath {
             get { return animatedObjectPath; }
         }
 
@@ -159,7 +159,7 @@ namespace ATP.AnimationPathTools {
             get { return easeCurve; }
         }
 
-        public AnimationPathCurves RotationCurves {
+        public AnimationPath RotationCurves {
             get { return rotationCurves; }
         }
 
@@ -192,7 +192,7 @@ namespace ATP.AnimationPathTools {
                 animatedGO = Camera.main.transform;
             }
             // Initialize animatedObjectPath field.
-            animatedObjectPath = GetComponent<AnimationPath>();
+            animatedObjectPath = GetComponent<AnimatedObjectPath>();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -241,7 +241,7 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationGizmoCurve() {
             // TODO Calculate samplingRate using rotatio path length.
-            var points = SampleRotationPathForPoints(100);
+            var points = rotationCurves.SamplePathForPoints(20);
 
             if (points.Count < 2) return;
 
@@ -274,17 +274,6 @@ namespace ATP.AnimationPathTools {
                 rotationPointPosition,
                 "rec_16x16-yellow",
                 false);
-        }
-
-        private List<Vector3> SampleRotationPathForPoints(float samplingRate) {
-            var result = new List<Vector3>();
-            var timestamps = GetSampledTimestamps(samplingRate);
-            foreach (var timestamp in timestamps) {
-                var point = GetNodeRotation(timestamp);
-                result.Add(point);
-            }
-
-            return result;
         }
 
         private Vector3 GetNodeRotation(float nodeTimestamp) {
@@ -320,7 +309,7 @@ namespace ATP.AnimationPathTools {
             // Instantiate rotationCurves.
             if (rotationCurves == null) {
                 rotationCurves =
-                    ScriptableObject.CreateInstance<AnimationPathCurves>();
+                    ScriptableObject.CreateInstance<AnimationPath>();
             }
         }
 
@@ -845,7 +834,7 @@ namespace ATP.AnimationPathTools {
             }
         }
         private void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
-            // AnimationPath node timestamps.
+            // AnimatedObjectPath node timestamps.
             var nodeTimestamps = animatedObjectPath.GetNodeTimestamps();
             // Get values from curve.
             var curveTimestamps = new float[curve.length];
@@ -897,7 +886,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void UpdateRotationCurvesWithAddedKeys() {
-            // AnimationPath node timestamps.
+            // AnimatedObjectPath node timestamps.
             var animationCurvesTimestamps = animatedObjectPath.GetNodeTimestamps();
             // Get values from rotationCurves.
             var rotationCurvesTimestamps = rotationCurves.GetTimestamps();
@@ -929,7 +918,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void UpdateRotationCurvesWithRemovedKeys() {
-            // AnimationPath node timestamps.
+            // AnimatedObjectPath node timestamps.
             var pathTimestamps = animatedObjectPath.GetNodeTimestamps();
             // Get values from rotationCurves.
             var rotationCurvesTimestamps = rotationCurves.GetTimestamps();

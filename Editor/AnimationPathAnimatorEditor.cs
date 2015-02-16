@@ -22,10 +22,18 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region FIELDS
-        private GUIStyle targetGizmoStyle;
+        private readonly GUIStyle targetGizmoStyle = new GUIStyle {
+            normal = { textColor = Color.white },
+            fontStyle = FontStyle.Bold,
+        };
 
         private readonly Color tiltingHandleColor = Color.green;
-        private GUIStyle easeValueLabelStyle;
+
+        private readonly GUIStyle easeValueLabelStyle = new GUIStyle {
+            normal = { textColor = Color.white },
+            fontStyle = FontStyle.Bold,
+        };
+
         /// <summary>
         /// If modifier is currently pressed.
         /// </summary>
@@ -36,9 +44,15 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
-        private GUIStyle tiltValueLabelStyle;
+        private readonly GUIStyle tiltValueLabelStyle = new GUIStyle {
+            normal = { textColor = Color.white },
+            fontStyle = FontStyle.Bold,
+        };
 
-        private GUIStyle forwardPointMarkerStyle;
+        private readonly GUIStyle forwardPointMarkerStyle = new GUIStyle {
+            normal = { textColor = Color.white },
+            fontStyle = FontStyle.Bold,
+        };
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
@@ -171,14 +185,6 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
-
-            easeValueLabelStyle = new GUIStyle {
-                normal = { textColor = Color.white },
-                fontStyle = FontStyle.Bold,
-            };
-            tiltValueLabelStyle = easeValueLabelStyle;
-            forwardPointMarkerStyle = easeValueLabelStyle;
-            targetGizmoStyle = easeValueLabelStyle;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

@@ -397,13 +397,32 @@ namespace ATP.AnimationPathTools {
             float timestamp,
             Vector3 newPosition) {
 
+            // Get node timestamps.
             var timestamps = rotationPath.GetTimestamps();
+            // If matching timestamp in the path was found.
+            var foundMatch = false;
+            // For each timestamp..
             for (var i = 0; i < rotationPath.KeysNo; i++) {
+                // Check if it is the timestamp to remove..
                 if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
+                    // Remove node.
                     rotationPath.RemoveNode(i);
+
+                    foundMatch = true;
                 }
             }
+
+            // If timestamp was not found..
+            if (!foundMatch) {
+                Debug.Log("You're trying to change rotation for nonexistent " +
+                    "node.");
+
+                return;
+            }
+
+            // Create new node.
             rotationPath.CreateNewNode(timestamp, newPosition);
+            // Smooth all nodes.
             rotationPath.SmoothAllNodes();
         }
 

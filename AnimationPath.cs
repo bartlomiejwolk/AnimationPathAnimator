@@ -176,7 +176,7 @@ namespace ATP.AnimationPathTools {
             curves[1].MoveKey(keyIndex, keyYCopy);
             curves[2].MoveKey(keyIndex, keyZCopy);
         }
-        public void RemovePoint(int nodeIndex) {
+        public void RemoveNode(int nodeIndex) {
             // For each animation curve..
             for (var i = 0; i < 3; i++) {
                 // Remove node keys.
@@ -201,7 +201,7 @@ namespace ATP.AnimationPathTools {
         public void RemoveAllKeys() {
             var keysToRemoveNo = KeysNo;
             for (var i = 0; i < keysToRemoveNo; i++) {
-                RemovePoint(0);
+                RemoveNode(0);
             }
         }
 

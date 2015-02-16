@@ -317,7 +317,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void RemoveNode(int nodeIndex) {
-            objectPath.RemovePoint(nodeIndex);
+            objectPath.RemoveNode(nodeIndex);
             OnNodeRemoved();
         }
 

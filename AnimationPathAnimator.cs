@@ -401,7 +401,7 @@ namespace ATP.AnimationPathTools {
             var timestamps = rotationPath.GetTimestamps();
             for (var i = 0; i < rotationPath.KeysNo; i++) {
                 if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
-                    rotationPath.RemovePoint(i);
+                    rotationPath.RemoveNode(i);
                 }
             }
             rotationPath.CreateNewPoint(timestamp, newPosition);
@@ -435,7 +435,7 @@ namespace ATP.AnimationPathTools {
             // Remove all nodes.
             for (var i = 0; i < rotationPath.KeysNo; i++) {
                 // NOTE After each removal, next node gets index 0.
-                rotationPath.RemovePoint(0);
+                rotationPath.RemoveNode(0);
             }
         }
         /// <summary>
@@ -866,7 +866,7 @@ namespace ATP.AnimationPathTools {
 
                 // Remove node from rotationPath.
                 if (!keyExists) {
-                    rotationPath.RemovePoint(i);
+                    rotationPath.RemoveNode(i);
 
                     break;
                 }

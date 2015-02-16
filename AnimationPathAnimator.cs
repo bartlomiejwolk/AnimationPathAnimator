@@ -222,7 +222,7 @@ namespace ATP.AnimationPathTools {
             var nodesNo = animationPathBuilder.NodesNo;
             var rotationPointPositions = new Vector3[nodesNo];
             for (int i = 0; i < nodesNo; i++) {
-                rotationPointPositions[i] = GetNodeRotation(i);
+                rotationPointPositions[i] = GetNodeRotationPointPosition(i);
             }
 
             //foreach (var rotationPointPosition in rotationPointPositions) {
@@ -275,7 +275,7 @@ namespace ATP.AnimationPathTools {
                 false);
         }
 
-        private Vector3 GetNodeRotation(float nodeTimestamp) {
+        private Vector3 GetNodeRotationPointPosition(float nodeTimestamp) {
             return rotationPath.GetVectorAtTime(nodeTimestamp);
         }
 
@@ -428,7 +428,6 @@ namespace ATP.AnimationPathTools {
 
         public Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
-            //var forwardPointDelta = lookForwardCurve.Evaluate(animTimeRatio);
             var forwardPointDelta = forwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
@@ -436,8 +435,7 @@ namespace ATP.AnimationPathTools {
             return animationPathBuilder.GetVectorAtTime(forwardPointTimestamp);
         }
 
-        // TODO Rename to GetRotationDirection().
-        public Vector3 GetNodeRotation(int nodeIndex) {
+        public Vector3 GetNodeRotationPointPosition(int nodeIndex) {
             return rotationPath.GetVectorAtKey(nodeIndex);
         }
 

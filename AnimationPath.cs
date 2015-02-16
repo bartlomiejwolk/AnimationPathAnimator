@@ -255,20 +255,19 @@ namespace ATP.AnimationPathTools {
 
         public void SampleSectionForPoints(
             int firstNodeIndex,
-            // TODO Rename to lastNodeIndex.
-            int secondNodeIndex,
+            int lastNodeIndex,
             float samplingFrequency,
             ref List<Vector3> points) {
 
             var sectionLinearLength = CalculateSectionLinearLength(
                 firstNodeIndex,
-                secondNodeIndex);
+                lastNodeIndex);
 
             // Calculate amount of points to extract.
             var samplingRate = (int)(sectionLinearLength * samplingFrequency);
 
             var firstNodeTime = GetTimeAtKey(firstNodeIndex);
-            var secondNodeTime = GetTimeAtKey(secondNodeIndex);
+            var secondNodeTime = GetTimeAtKey(lastNodeIndex);
 
             var timeInterval = secondNodeTime - firstNodeTime;
 
@@ -296,14 +295,14 @@ namespace ATP.AnimationPathTools {
 
         public List<Vector3> SampleSectionForPoints(
             int firstNodeIndex,
-            int secondNodeIndex,
+            int lastNodeIndex,
             float samplingFrequency) {
 
             var points = new List<Vector3>();
 
             SampleSectionForPoints(
                 firstNodeIndex,
-                secondNodeIndex,
+                lastNodeIndex,
                 samplingFrequency,
                 ref points);
 

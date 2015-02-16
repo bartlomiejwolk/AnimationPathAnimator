@@ -71,7 +71,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty skin;
         // TODO Replace serialized property with direct calls.
         //private SerializedProperty handlesMode;
-        private SerializedProperty tangentMode;
+        //private SerializedProperty tangentMode;
         //protected SerializedProperty rotationCurves;
 
         public Vector3 FirstNodeOffset { get; protected set; }
@@ -99,7 +99,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             //handlesMode = serializedObject.FindProperty("handlesMode");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
-            tangentMode = serializedObject.FindProperty("tangentMode");
+            //tangentMode = serializedObject.FindProperty("tangentMode");
 
             Script = (AnimationPathBuilder)target;
 
@@ -291,18 +291,13 @@ namespace ATP.AnimationPathTools {
 
         private void HandleTangentModeChange() {
             // If tangent mode was changed..
-            if (tangentMode.enumValueIndex !=
-                (int)Script.TangentMode) {
+            if (Script.TangentMode != Script.TangentMode) {
 
                 // Update path node tangents.
-                if (tangentMode.enumValueIndex ==
-                    (int)AnimationPathTangentMode.Smooth) {
-
+                if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
                     Script.SmoothAllNodeTangents();
                 }
-                else if (tangentMode.enumValueIndex ==
-                         (int)AnimationPathTangentMode.Linear) {
-
+                else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                     Script.SetNodesLinear();
                 }
 
@@ -318,24 +313,19 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleSmoothTangentMode() {
-            if (tangentMode.enumValueIndex ==
-                (int)AnimationPathTangentMode.Smooth) {
-
+            if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
             }
         }
 
         private void HandleLinearTangentMode() {
-            if (tangentMode.enumValueIndex ==
-                (int)AnimationPathTangentMode.Linear) {
-
+            if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
         }
 
         private void HandleMoveAllHandleMove(Vector3 moveDelta) {
             if (Script.HandleMode == AnimationPathHandlesMode.MoveAll) {
-
                 Script.OffsetNodePositions(moveDelta);
             }
         }
@@ -590,14 +580,10 @@ namespace ATP.AnimationPathTools {
 
             Script.DistributeTimestamps();
 
-            if (tangentMode.enumValueIndex ==
-                (int) AnimationPathTangentMode.Smooth) {
-                
+            if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
             }
-            else if (tangentMode.enumValueIndex ==
-                     (int) AnimationPathTangentMode.Linear) {
-                
+            else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
 
@@ -623,14 +609,10 @@ namespace ATP.AnimationPathTools {
             Script.RemoveNode(nodeIndex);
             Script.DistributeTimestamps();
 
-            if (tangentMode.enumValueIndex ==
-                (int)AnimationPathTangentMode.Smooth) {
-
+            if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
             }
-            else if (tangentMode.enumValueIndex ==
-                     (int)AnimationPathTangentMode.Linear) {
-
+            else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
 
@@ -724,15 +706,12 @@ namespace ATP.AnimationPathTools {
                     ""),
                 Script.HandleMode);
 
-            serializedObject.Update();
-            // TODO Don't use serialized property. Use script instead.
-            EditorGUILayout.PropertyField(
-                tangentMode,
+            Script.TangentMode =
+                (AnimationPathTangentMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Tangent Mode",
-                    ""));
-            HandleTangentModeChange();
-            serializedObject.ApplyModifiedProperties();
+                    ""),
+                    Script.TangentMode);
 
             DrawResetInspectorButton();
 

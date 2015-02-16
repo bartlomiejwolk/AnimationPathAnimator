@@ -146,6 +146,7 @@ namespace ATP.AnimationPathTools {
 
         public AnimationPathTangentMode TangentMode {
             get { return tangentMode; }
+            set { tangentMode = value; }
         }
 
         /// <summary>

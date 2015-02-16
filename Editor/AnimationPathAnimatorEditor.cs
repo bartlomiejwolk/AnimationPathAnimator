@@ -22,6 +22,7 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region FIELDS
+        private GUIStyle targetGizmoStyle;
 
         private readonly Color tiltingHandleColor = Color.green;
         private GUIStyle easeValueLabelStyle;
@@ -177,6 +178,7 @@ namespace ATP.AnimationPathTools {
             };
             tiltValueLabelStyle = easeValueLabelStyle;
             forwardPointMarkerStyle = easeValueLabelStyle;
+            targetGizmoStyle = easeValueLabelStyle;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -254,13 +256,8 @@ namespace ATP.AnimationPathTools {
 
             var targetPos =
                 ((Transform)targetGO.objectReferenceValue).position;
-            // TODO Create class field with this style.
-            var style = new GUIStyle {
-                normal = { textColor = Color.white },
-                fontStyle = FontStyle.Bold,
-            };
 
-            Handles.Label(targetPos, "Target", style);
+            Handles.Label(targetPos, "Target", targetGizmoStyle);
 
         }
 

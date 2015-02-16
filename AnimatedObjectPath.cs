@@ -15,7 +15,7 @@ namespace ATP.AnimationPathTools {
     /// inside <c>_animationCurves</c> are changed.
     /// </remarks>
     [ExecuteInEditMode]
-    public class AnimationPath : GameComponent {
+    public class AnimatedObjectPath : GameComponent {
 
         #region CONSTANTS
 

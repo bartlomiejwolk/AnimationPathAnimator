@@ -471,7 +471,7 @@ namespace ATP.AnimationPathTools {
             //SyncCurveWithPath(tiltingCurve);
             //EaseCurveExtremeNodes(easeCurve);
 
-            UpdateRotationCurves();
+            UpdateRotationPath();
 
             // If there's not, create a new key with this value and the
             // corresponding timestamp in the ease curve.
@@ -862,7 +862,7 @@ namespace ATP.AnimationPathTools {
                 }
             }
         }
-        private void UpdateRotationCurves() {
+        private void UpdateRotationPath() {
             if (animationPathBuilder.NodesNo > rotationPath.KeysNo) {
                 UpdateRotationCurvesWithAddedKeys();
             }

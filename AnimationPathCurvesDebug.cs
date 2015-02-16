@@ -6,7 +6,7 @@ using ATP.AnimationPathTools;
 public class AnimationPathCurvesDebug : MonoBehaviour {
 
     private AnimationPathAnimator animator;
-    private AnimatedObjectPath animatedObjectPath;
+    private AnimationPathBuilder animationPathBuilder;
 
     [Header("Animation Path")]
     public AnimationCurve pathCurveX;
@@ -30,15 +30,15 @@ public class AnimationPathCurvesDebug : MonoBehaviour {
 
     void OnEnable() {
         animator = GetComponent<AnimationPathAnimator>();
-        animatedObjectPath = GetComponent<AnimatedObjectPath>();
+        animationPathBuilder = GetComponent<AnimationPathBuilder>();
 
         rotationCurveX = animator.RotationCurves[0];
         rotationCurveY = animator.RotationCurves[1];
         rotationCurveZ = animator.RotationCurves[2];
 
-        pathCurveX = animatedObjectPath.ObjectPath[0];
-        pathCurveY = animatedObjectPath.ObjectPath[1];
-        pathCurveZ = animatedObjectPath.ObjectPath[2];
+        pathCurveX = animationPathBuilder.ObjectPath[0];
+        pathCurveY = animationPathBuilder.ObjectPath[1];
+        pathCurveZ = animationPathBuilder.ObjectPath[2];
 
         easeCurve = animator.EaseCurve;
         tiltingCurve = animator.TiltingCurve;

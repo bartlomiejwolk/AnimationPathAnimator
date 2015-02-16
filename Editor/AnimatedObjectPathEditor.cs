@@ -7,13 +7,13 @@ using UnityEngine;
 namespace ATP.AnimationPathTools {
 
     /// <summary>
-    /// Editor for AnimatedObjectPath class.
+    /// Editor for AnimationPathBuilder class.
     /// </summary>
     /// <remarks>
     /// It is composed of AnimationPathHandles class that is responsible for
     /// drawing handles, buttons and labels.
     /// </remarks>
-    [CustomEditor(typeof(AnimatedObjectPath))]
+    [CustomEditor(typeof(AnimationPathBuilder))]
     public class AnimatedObjectPathEditor : Editor {
 
         #region CONSTANS
@@ -59,7 +59,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Reference to serialized class.
         /// </summary>
-        public AnimatedObjectPath Script { get; protected set; }
+        public AnimationPathBuilder Script { get; protected set; }
 
         #endregion FIELDS
 
@@ -100,7 +100,7 @@ namespace ATP.AnimationPathTools {
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
             tangentMode = serializedObject.FindProperty("tangentMode");
 
-            Script = (AnimatedObjectPath)target;
+            Script = (AnimationPathBuilder)target;
 
             // Remember active scene tool.
             if (Tools.current != Tool.None) {
@@ -855,7 +855,7 @@ namespace ATP.AnimationPathTools {
         //private void HandleTangentModeOptionShortcut() {
         //    // Return if Tangent Mode shortcut wasn't released.
         //    if (Event.current.type != EventType.keyUp
-        //        || Event.current.keyCode != AnimatedObjectPath.TangentModeKey) return;
+        //        || Event.current.keyCode != AnimationPathBuilder.TangentModeKey) return;
 
         //    handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
         //    serializedObject.ApplyModifiedProperties();
@@ -864,7 +864,7 @@ namespace ATP.AnimationPathTools {
         private void HandleMoveSingleModeShortcut() {
             // Return if Tangent Mode shortcut wasn't released.
             if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimatedObjectPath.MoveSingleModeKey) return;
+                || Event.current.keyCode != AnimationPathBuilder.MoveSingleModeKey) return;
 
             handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveSingle;
             serializedObject.ApplyModifiedProperties();

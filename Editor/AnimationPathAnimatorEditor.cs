@@ -260,8 +260,8 @@ namespace ATP.AnimationPathTools {
 
         // TODO Refactor.
         private void DrawEaseHandles(Action<int, float> callback) {
-            // Get AnimatedObjectPath node positions.
-            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+            // Get AnimationPathBuilder node positions.
+            var nodePositions = script.AnimationPathBuilder.GetNodePositions();
 
             // Get ease curve timestamps.
             var easeTimestamps = new float[script.EaseCurve.length];
@@ -365,7 +365,7 @@ namespace ATP.AnimationPathTools {
                     int offsetY,
                     GUIStyle style) {
 
-            int nodesNo = script.AnimatedObjectPath.NodesNo;
+            int nodesNo = script.AnimationPathBuilder.NodesNo;
 
             // For each path node..
             for (int i = 0; i < nodesNo; i++) {
@@ -381,7 +381,7 @@ namespace ATP.AnimationPathTools {
         private void DrawRotationHandle(Action<float, Vector3> callback) {
             var currentAnimationTime = script.AnimationTimeRatio;
             var currentObjectPosition = script.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = script.AnimatedObjectPath.GetNodeTimestamps();
+            var nodeTimestamps = script.AnimationPathBuilder.GetNodeTimestamps();
 
             // Return if current animation time is not equal to any node
             // timestamp.
@@ -409,8 +409,8 @@ namespace ATP.AnimationPathTools {
 
         // TODO Extract methods. Do the same to ease curve drawing method.
         private void DrawTiltingHandles(Action<int, float> callback) {
-            // Get AnimatedObjectPath node positions.
-            var nodePositions = script.AnimatedObjectPath.GetNodePositions();
+            // Get AnimationPathBuilder node positions.
+            var nodePositions = script.AnimationPathBuilder.GetNodePositions();
 
             // Get rotation curve timestamps.
             //var easeTimestamps = new float[script.EaseCurve.length];

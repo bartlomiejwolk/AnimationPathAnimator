@@ -9,7 +9,7 @@ namespace ATP.AnimationPathTools {
     /// Allows creating and drawing 3d paths using Unity's animation curves.
     /// </summary>
     [ExecuteInEditMode]
-    public class AnimatedObjectPath : GameComponent {
+    public class AnimationPathBuilder : GameComponent {
 
         #region CONSTANTS
 

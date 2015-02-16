@@ -88,7 +88,7 @@ namespace ATP.AnimationPathTools {
         //[SerializeField]
         //private bool tangentMode;
 
-        [SerializeField] private AnimationPathHandlesMode handlesMode =
+        [SerializeField] private AnimationPathHandlesMode handleMode =
             AnimationPathHandlesMode.MoveSingle;
 
         [SerializeField] private AnimationPathTangentMode tangentMode =
@@ -148,6 +148,17 @@ namespace ATP.AnimationPathTools {
             get { return tangentMode; }
         }
 
+        /// <summary>
+        /// If enabled, on-scene handles will be use to change node's in/out
+        /// tangents.
+        /// </summary>
+//[SerializeField]
+//private bool tangentMode;
+        public AnimationPathHandlesMode HandleMode {
+            get { return handleMode; }
+            set { handleMode = value; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -194,7 +205,7 @@ namespace ATP.AnimationPathTools {
 
         public virtual void OnPathReset() {
             // Change handle mode to MoveAll.
-            handlesMode = AnimationPathHandlesMode.MoveAll;
+            handleMode = AnimationPathHandlesMode.MoveAll;
 
             // Call handler methods.
             var handler = PathReset;

@@ -70,7 +70,7 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
         // TODO Replace serialized property with direct calls.
-        private SerializedProperty handlesMode;
+        //private SerializedProperty handlesMode;
         private SerializedProperty tangentMode;
         //protected SerializedProperty rotationCurves;
 
@@ -97,7 +97,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
-            handlesMode = serializedObject.FindProperty("handlesMode");
+            //handlesMode = serializedObject.FindProperty("handlesMode");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
             tangentMode = serializedObject.FindProperty("tangentMode");
 
@@ -142,7 +142,7 @@ namespace ATP.AnimationPathTools {
 
             // Change handles mode. Each on-scene node has a handle to update
             // node's attribute. Based on inspector option/key pressed, this
-            // will change handles mode. See HandlesMode enum for available
+            // will change handles mode. See HandleMode enum for available
             // tools.
             //HandleTangentModeOptionShortcut();
 
@@ -274,7 +274,7 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != AnimationPathBuilder.MoveSingleModeKey) return;
 
-            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveSingle;
+            Script.HandleMode = AnimationPathHandlesMode.MoveSingle;
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -285,7 +285,7 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != MoveAllKey) return;
 
-            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveAll;
+            Script.HandleMode = AnimationPathHandlesMode.MoveAll;
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -334,16 +334,14 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleMoveAllHandleMove(Vector3 moveDelta) {
-            if (handlesMode.enumValueIndex ==
-                (int)AnimationPathHandlesMode.MoveAll) {
+            if (Script.HandleMode == AnimationPathHandlesMode.MoveAll) {
 
                 Script.OffsetNodePositions(moveDelta);
             }
         }
 
         private void HandleMoveSingleHandleMove(int movedNodeIndex, Vector3 position) {
-            if (handlesMode.enumValueIndex ==
-                (int)AnimationPathHandlesMode.MoveSingle) {
+            if (Script.HandleMode == AnimationPathHandlesMode.MoveSingle) {
 
                 Script.MoveNodeToPosition(movedNodeIndex, position);
                 Script.DistributeTimestamps();
@@ -436,8 +434,7 @@ namespace ATP.AnimationPathTools {
                 Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
                 // In Move All mode..
-                if (handlesMode.enumValueIndex ==
-                    (int)AnimationPathHandlesMode.MoveAll) {
+                if (Script.HandleMode == AnimationPathHandlesMode.MoveAll) {
 
                     //capFunction = Handles.DotCap;
                     //capFunction = Handles.SphereCap;
@@ -720,14 +717,12 @@ namespace ATP.AnimationPathTools {
                     new GUIContent("Curve Color", ""));
             serializedObject.ApplyModifiedProperties();
 
-            serializedObject.Update();
-            // TODO Don't use serialized property. Use script instead.
-            EditorGUILayout.PropertyField(
-                handlesMode,
+            Script.HandleMode =
+                (AnimationPathHandlesMode)EditorGUILayout.EnumPopup(
                 new GUIContent(
-                    "Movement Mode",
-                    ""));
-            serializedObject.ApplyModifiedProperties();
+                    "Handle Mode",
+                    ""),
+                Script.HandleMode);
 
             serializedObject.Update();
             // TODO Don't use serialized property. Use script instead.
@@ -739,12 +734,7 @@ namespace ATP.AnimationPathTools {
             HandleTangentModeChange();
             serializedObject.ApplyModifiedProperties();
 
-            //EditorGUILayout.BeginHorizontal();
-            //serializedObject.Update();
-            //DrawSmoothInspectorButton();
-            //DrawLinearInspectorButton();
             DrawResetInspectorButton();
-            //EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
@@ -754,36 +744,11 @@ namespace ATP.AnimationPathTools {
                 "Toggle it with {0} key.",
                 MoveAllKey);
 
-            // Disable this control if Tangent Mode is enabled.
-            //GUI.enabled = !Script.TangentMode;
-            //Script.MoveAllMode = GUILayout.Toggle(
-            //    Script.MoveAllMode,
-            //    new GUIContent(
-            //        "Move All Mode",
-            //        moveAllModeTooltip));
-            //GUI.enabled = true;
-
             // Tooltip for handlesMode property.
             var tangentModeTooltip = String.Format(
                 "Display handles that allow changing node tangents. " +
                 "Toggle it with {0} key.",
                 TangentModeKey);
-
-            //GUI.enabled = !Script.MoveAllMode;
-            //Script.TangentMode = GUILayout.Toggle(
-            //    Script.TangentMode,
-            //    new GUIContent(
-            //        "Tangent Mode",
-            //        tangentModeTooltip));
-            //GUI.enabled = true;
-
-            //Script.SceneControls = GUILayout.Toggle(
-            //    Script.SceneControls,
-            //    new GUIContent(
-            //        "Scene Controls",
-            //        "Toggle on-scene node controls."));
-
-            //EditorGUILayout.PropertyField(rotationCurves);
 
             EditorGUILayout.Space();
 
@@ -816,6 +781,8 @@ namespace ATP.AnimationPathTools {
                             "Styles used by on-scene GUI elements."));
             }
             serializedObject.ApplyModifiedProperties();
+
+            if (GUI.changed) EditorUtility.SetDirty(Script);
         }
         /// <summary>
         /// Export Animation Path nodes as transforms.

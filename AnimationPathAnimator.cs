@@ -394,17 +394,16 @@ namespace ATP.AnimationPathTools {
         }
 
         public void ChangeRotationForTimestamp(
-                    float timestamp,
-                    Vector3 newPosition) {
+            float timestamp,
+            Vector3 newPosition) {
 
-            // TODO Extract. Remove old key.
             var timestamps = rotationPath.GetTimestamps();
             for (var i = 0; i < rotationPath.KeysNo; i++) {
                 if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
                     rotationPath.RemoveNode(i);
                 }
             }
-            rotationPath.CreateNewPoint(timestamp, newPosition);
+            rotationPath.CreateNewNode(timestamp, newPosition);
             rotationPath.SmoothAllNodes();
         }
 
@@ -496,9 +495,9 @@ namespace ATP.AnimationPathTools {
             var lastRotationPointPosition =
                 pathNodePositions[2] + defaultRotationPointOffset;
 
-            rotationPath.CreateNewPoint(0, firstRotationPointPosition);
-            rotationPath.CreateNewPoint(0.5f, secondRotationPointPosition);
-            rotationPath.CreateNewPoint(1, lastRotationPointPosition);
+            rotationPath.CreateNewNode(0, firstRotationPointPosition);
+            rotationPath.CreateNewNode(0.5f, secondRotationPointPosition);
+            rotationPath.CreateNewNode(1, lastRotationPointPosition);
         }
 
         private void ResetEaseCurve() {
@@ -836,7 +835,7 @@ namespace ATP.AnimationPathTools {
                     var defaultRotation =
                         rotationPath.GetVectorAtTime(addedKeyTimestamp);
 
-                    rotationPath.CreateNewPoint(
+                    rotationPath.CreateNewNode(
                         animationCurvesTimestamps[i],
                         defaultRotation);
                 }

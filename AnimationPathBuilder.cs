@@ -229,7 +229,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void CreateNode(float timestamp, Vector3 position) {
-            objectPath.CreateNewPoint(timestamp, position);
+            objectPath.CreateNewNode(timestamp, position);
             OnNodeAdded();
         }
 

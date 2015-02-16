@@ -113,7 +113,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void CreateNewPoint(float timestamp, Vector3 position) {
+        public void CreateNewNode(float timestamp, Vector3 position) {
             curves[0].AddKey(timestamp, position.x);
             curves[1].AddKey(timestamp, position.y);
             curves[2].AddKey(timestamp, position.z);

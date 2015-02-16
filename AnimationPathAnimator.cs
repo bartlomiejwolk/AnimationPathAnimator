@@ -211,91 +211,6 @@ namespace ATP.AnimationPathTools {
             DrawCurrentRotationPointGizmo();
             DrawRotationPointGizmos();
         }
-
-        private void DrawRotationPointGizmos() {
-            // Get current animation time.
-            var currentAnimationTime = AnimationTimeRatio;
-
-            // Path node timestamps.
-            var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
-
-            var nodesNo = animationPathBuilder.NodesNo;
-            var rotationPointPositions = new Vector3[nodesNo];
-            for (int i = 0; i < nodesNo; i++) {
-                rotationPointPositions[i] = GetNodeRotationPointPosition(i);
-            }
-
-            //foreach (var rotationPointPosition in rotationPointPositions) {
-            for (int i = 0; i < rotationPointPositions.Length; i++) {
-                // Return if current animation time is the same as any node time.
-                if (Math.Abs(nodeTimestamps[i] - currentAnimationTime) < 0.001f) {
-                    continue;
-                }
-
-                //Draw rotation point gizmo.
-                Gizmos.DrawIcon(
-                    rotationPointPositions[i],
-                    "rec_16x16",
-                    false);
-            }
-        }
-
-        private void DrawRotationGizmoCurve() {
-            var points = rotationPath.SamplePathForPoints(RotationCurveSampling);
-
-            if (points.Count < 2) return;
-
-            Gizmos.color = rotationCurveColor;
-
-            // Draw curve.
-            for (var i = 0; i < points.Count - 1; i++) {
-                Gizmos.DrawLine(points[i], points[i + 1]);
-            }
-        }
-
-        private void DrawCurrentRotationPointGizmo() {
-            // Get current animation time.
-            var currentAnimationTime = AnimationTimeRatio;
-
-            // Node path node timestamps.
-            var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
-
-            // Return if current animation time is the same as any node time.
-            foreach (var nodeTimestamp in nodeTimestamps) {
-                if (Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f) return;
-            }
-
-            // Get rotation point position.
-            var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
-
-            //Draw rotation point gizmo.
-            Gizmos.DrawIcon(
-                rotationPointPosition,
-                "rec_16x16-yellow",
-                false);
-        }
-
-        private Vector3 GetNodeRotationPointPosition(float nodeTimestamp) {
-            return rotationPath.GetVectorAtTime(nodeTimestamp);
-        }
-
-        private List<float> GetSampledTimestamps(float samplingRate) {
-            var result = new List<float>();
-
-            float time = 0;
-
-            var timestep = 1f / samplingRate;
-
-            for (var i = 0; i < samplingRate + 1; i++) {
-                result.Add(time);
-
-                // Time goes towards 1.
-                time += timestep;
-            }
-
-            return result;
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Subscribe to events.
@@ -310,25 +225,6 @@ namespace ATP.AnimationPathTools {
                     ScriptableObject.CreateInstance<AnimationPath>();
             }
         }
-
-        void AnimationPathBuilderOnNodeTimeChanged(object sender, EventArgs e) {
-            UpdateCurveTimestamps(easeCurve);
-            UpdateCurveTimestamps(tiltingCurve);
-            UpdateRotationCurvesTimestamps();
-        }
-
-        void AnimationPathBuilderOnNodeRemoved(object sender, EventArgs e) {
-            UpdateCurveWithRemovedKeys(easeCurve);
-            UpdateCurveWithRemovedKeys(tiltingCurve);
-            UpdateRotationCurvesWithRemovedKeys();
-        }
-
-        private void AnimationPathBuilderOnNodeAdded(object sender, EventArgs eventArgs) {
-            UpdateCurveWithAddedKeys(easeCurve);
-            UpdateCurveWithAddedKeys(tiltingCurve);
-            UpdateRotationCurvesWithAddedKeys();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnValidate() {
             // Limit duration value.
@@ -478,6 +374,24 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region EVENT HANDLERS
+        void AnimationPathBuilderOnNodeRemoved(object sender, EventArgs e) {
+            UpdateCurveWithRemovedKeys(easeCurve);
+            UpdateCurveWithRemovedKeys(tiltingCurve);
+            UpdateRotationCurvesWithRemovedKeys();
+        }
+
+        void AnimationPathBuilderOnNodeTimeChanged(object sender, EventArgs e) {
+            UpdateCurveTimestamps(easeCurve);
+            UpdateCurveTimestamps(tiltingCurve);
+            UpdateRotationCurvesTimestamps();
+        }
+
+        private void AnimationPathBuilderOnNodeAdded(object sender, EventArgs eventArgs) {
+            UpdateCurveWithAddedKeys(easeCurve);
+            UpdateCurveWithAddedKeys(tiltingCurve);
+            UpdateRotationCurvesWithAddedKeys();
+        }
+
 
         private void AnimationPathBuilderOnPathReset(object sender, EventArgs eventArgs) {
             ResetRotationPath();
@@ -492,6 +406,90 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region PRIVATE METHODS
+        private void DrawCurrentRotationPointGizmo() {
+            // Get current animation time.
+            var currentAnimationTime = AnimationTimeRatio;
+
+            // Node path node timestamps.
+            var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            foreach (var nodeTimestamp in nodeTimestamps) {
+                if (Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f) return;
+            }
+
+            // Get rotation point position.
+            var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                rotationPointPosition,
+                "rec_16x16-yellow",
+                false);
+        }
+
+        private Vector3 GetNodeRotationPointPosition(float nodeTimestamp) {
+            return rotationPath.GetVectorAtTime(nodeTimestamp);
+        }
+
+        private void DrawRotationGizmoCurve() {
+            var points = rotationPath.SamplePathForPoints(RotationCurveSampling);
+
+            if (points.Count < 2) return;
+
+            Gizmos.color = rotationCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(points[i], points[i + 1]);
+            }
+        }
+
+        private void DrawRotationPointGizmos() {
+            // Get current animation time.
+            var currentAnimationTime = AnimationTimeRatio;
+
+            // Path node timestamps.
+            var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
+
+            var nodesNo = animationPathBuilder.NodesNo;
+            var rotationPointPositions = new Vector3[nodesNo];
+            for (int i = 0; i < nodesNo; i++) {
+                rotationPointPositions[i] = GetNodeRotationPointPosition(i);
+            }
+
+            //foreach (var rotationPointPosition in rotationPointPositions) {
+            for (int i = 0; i < rotationPointPositions.Length; i++) {
+                // Return if current animation time is the same as any node time.
+                if (Math.Abs(nodeTimestamps[i] - currentAnimationTime) < 0.001f) {
+                    continue;
+                }
+
+                //Draw rotation point gizmo.
+                Gizmos.DrawIcon(
+                    rotationPointPositions[i],
+                    "rec_16x16",
+                    false);
+            }
+        }
+
+        private List<float> GetSampledTimestamps(float samplingRate) {
+            var result = new List<float>();
+
+            float time = 0;
+
+            var timestep = 1f / samplingRate;
+
+            for (var i = 0; i < samplingRate + 1; i++) {
+                result.Add(time);
+
+                // Time goes towards 1.
+                time += timestep;
+            }
+
+            return result;
+        }
+
         private void ResetTiltingCurve() {
             RemoveAllCurveKeys(tiltingCurve);
 

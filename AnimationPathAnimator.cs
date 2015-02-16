@@ -200,7 +200,6 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
-            animationPathBuilder.PathChanged -= AnimationPathBuilderOnPathChanged;
             animationPathBuilder.PathReset -= AnimationPathBuilderOnPathReset;
         }
 
@@ -301,7 +300,6 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Subscribe to events.
-            animationPathBuilder.PathChanged += AnimationPathBuilderOnPathChanged;
             animationPathBuilder.PathReset += AnimationPathBuilderOnPathReset;
             animationPathBuilder.NodeAdded += AnimationPathBuilderOnNodeAdded;
             animationPathBuilder.NodeRemoved += AnimationPathBuilderOnNodeRemoved;
@@ -465,20 +463,6 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region EVENT HANDLERS
-
-        private void AnimationPathBuilderOnPathChanged(
-                    object sender,
-                    EventArgs eventArgs) {
-
-            //SyncCurveWithPath(easeCurve);
-            //SyncCurveWithPath(tiltingCurve);
-            //EaseCurveExtremeNodes(easeCurve);
-
-            //UpdateRotationPath();
-
-            // If there's not, create a new key with this value and the
-            // corresponding timestamp in the ease curve.
-        }
 
         private void AnimationPathBuilderOnPathReset(object sender, EventArgs eventArgs) {
             ResetRotationData();

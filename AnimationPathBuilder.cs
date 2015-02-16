@@ -22,7 +22,6 @@ namespace ATP.AnimationPathTools {
 
         #region FIELDS
 
-        public event EventHandler PathChanged;
         public event EventHandler PathReset;
         public event EventHandler NodeTimeChanged;
         public event EventHandler NodeAdded;
@@ -210,11 +209,6 @@ namespace ATP.AnimationPathTools {
 
             // Call handler methods.
             var handler = PathReset;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public virtual void OnPathChanged() {
-            var handler = PathChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

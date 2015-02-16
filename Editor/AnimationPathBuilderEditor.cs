@@ -291,8 +291,6 @@ namespace ATP.AnimationPathTools {
                 else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                     Script.SetNodesLinear();
                 }
-
-                Script.OnPathChanged();
             }
         }
 
@@ -577,8 +575,6 @@ namespace ATP.AnimationPathTools {
             else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
-
-            Script.OnPathChanged();
         }
 
         protected virtual void DrawPositionHandlesCallbackHandler(
@@ -590,8 +586,6 @@ namespace ATP.AnimationPathTools {
 
             HandleMoveAllHandleMove(moveDelta);
             HandleMoveSingleHandleMove(movedNodeIndex, position);
-
-            Script.OnPathChanged();
         }
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
             // Make snapshot of the target object.
@@ -606,8 +600,6 @@ namespace ATP.AnimationPathTools {
             else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
-
-            Script.OnPathChanged();
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
@@ -617,8 +609,6 @@ namespace ATP.AnimationPathTools {
             Script.SmoothSingleNodeTangents(index);
 
             Script.DistributeTimestamps();
-
-            Script.OnPathChanged();
         }
 
         #endregion CALLBACK HANDLERS

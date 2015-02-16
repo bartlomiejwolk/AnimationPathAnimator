@@ -3,7 +3,7 @@ using System.Collections;
 using ATP.AnimationPathTools;
 
 [ExecuteInEditMode]
-public class AnimationPathCurvesDebug : MonoBehaviour {
+public class AnimationPathDebug : MonoBehaviour {
 
     private AnimationPathAnimator animator;
     private AnimationPathBuilder animationPathBuilder;
@@ -21,7 +21,7 @@ public class AnimationPathCurvesDebug : MonoBehaviour {
     [Header("Ease curve")]
     public AnimationCurve easeCurve;
 
-    [Header("Ease curve")]
+    [Header("Tilting curve")]
     public AnimationCurve tiltingCurve;
 
     // Use this for initialization

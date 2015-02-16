@@ -199,19 +199,12 @@ namespace ATP.AnimationPathTools {
         /// Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingMovementHandles() {
-            //if (handlesMode.enumValueIndex ==
-            //    (int)AnimationPathHandlesMode.Tangent) return;
-
-            // Positions at which to draw movement handles.
-            // TODO Move to DrawmovementHandles().
-            var nodes = Script.GetNodePositions();
-
             // Callback to call when a node is moved on the scene.
             Action<int, Vector3, Vector3> handlerCallback =
                 DrawMovementHandlesCallbackHandler;
 
             // Draw handles.
-            DrawMovementHandles(nodes, handlerCallback);
+            DrawMovementHandles(handlerCallback);
         }
 
         private void HandleDrawingRemoveButtons() {
@@ -334,10 +327,12 @@ namespace ATP.AnimationPathTools {
             return addButtonPressed;
         }
 
-        // TODO Rename to DrawPositionHandles().
         private void DrawMovementHandles(
-            Vector3[] nodes,
             Action<int, Vector3, Vector3> callback) {
+
+            // Positions at which to draw movement handles.
+            var nodes = Script.GetNodePositions();
+
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
                 // Set handle color.

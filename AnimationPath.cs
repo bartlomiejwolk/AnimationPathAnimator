@@ -197,18 +197,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        #endregion PUBLIC METHODS
-        #region PRIVATE METHODS
-
-        /// <summary>
-        /// Initialize <c>curves</c> field with empty AnimationCurve objects.
-        /// </summary>
-        private void InitializeCurves() {
-            for (var i = 0; i < curves.Length; i++) {
-                curves[i] = new AnimationCurve();
-            }
-        }
-        #endregion PRIVATE METHODS
+        
 
         public void RemoveAllKeys() {
             var keysToRemoveNo = KeysNo;
@@ -383,5 +372,17 @@ namespace ATP.AnimationPathTools {
 
             return pathLength;
         }
+        #endregion
+        #region PRIVATE METHODS
+
+        /// <summary>
+        /// Initialize <c>curves</c> field with empty AnimationCurve objects.
+        /// </summary>
+        private void InitializeCurves() {
+            for (var i = 0; i < curves.Length; i++) {
+                curves[i] = new AnimationCurve();
+            }
+        }
+        #endregion PRIVATE METHODS
     }
 }

@@ -14,7 +14,7 @@ namespace ATP.AnimationPathTools {
     /// drawing handles, buttons and labels.
     /// </remarks>
     [CustomEditor(typeof(AnimationPathBuilder))]
-    public class AnimatedObjectPathEditor : Editor {
+    public class AnimationPathBuilderEditor : Editor {
 
         #region CONSTANS
         private const float FirstNodeForwardMultiplied = 10f;

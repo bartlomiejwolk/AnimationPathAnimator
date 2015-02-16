@@ -469,7 +469,7 @@ namespace ATP.AnimationPathTools {
 
             //SyncCurveWithPath(easeCurve);
             //SyncCurveWithPath(tiltingCurve);
-            EaseCurveExtremeNodes(easeCurve);
+            //EaseCurveExtremeNodes(easeCurve);
 
             UpdateRotationCurves();
 

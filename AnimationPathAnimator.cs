@@ -709,7 +709,7 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(targetGO.position);
                 }
             }
-            // Use AnimationCurves.
+            // Use objectPath.
             if (animatedGO != null
                 && targetGO == null
                 //&& !lookForwardMode) {

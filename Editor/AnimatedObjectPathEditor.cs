@@ -663,7 +663,7 @@ namespace ATP.AnimationPathTools {
         /// Record target object state for undo.
         /// </summary>
         protected void HandleUndo() {
-            Undo.RecordObject(Script.AnimationCurves, "Change path");
+            Undo.RecordObject(Script.ObjectPath, "Change path");
         }
 
         private void DrawInspector() {
@@ -817,7 +817,7 @@ namespace ATP.AnimationPathTools {
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = Script.AnimationCurves.SamplePathForPoints(
+                points = Script.ObjectPath.SamplePathForPoints(
                     exportSampling);
             }
 
@@ -885,7 +885,7 @@ namespace ATP.AnimationPathTools {
 
             // Get number of nodes to remove.
             var nodesToRemoveNo = Script.NodesNo;
-            // TODO Move to AnimationCurves class.
+            // TODO Move to objectPath class.
             // Remove all nodes.
             for (var i = 0; i < nodesToRemoveNo; i++) {
                 // NOTE After each removal, next node gets index 0.

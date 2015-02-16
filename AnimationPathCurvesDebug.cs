@@ -36,9 +36,9 @@ public class AnimationPathCurvesDebug : MonoBehaviour {
         rotationCurveY = animator.RotationCurves[1];
         rotationCurveZ = animator.RotationCurves[2];
 
-        pathCurveX = animatedObjectPath.AnimationCurves[0];
-        pathCurveY = animatedObjectPath.AnimationCurves[1];
-        pathCurveZ = animatedObjectPath.AnimationCurves[2];
+        pathCurveX = animatedObjectPath.ObjectPath[0];
+        pathCurveY = animatedObjectPath.ObjectPath[1];
+        pathCurveZ = animatedObjectPath.ObjectPath[2];
 
         easeCurve = animator.EaseCurve;
         tiltingCurve = animator.TiltingCurve;

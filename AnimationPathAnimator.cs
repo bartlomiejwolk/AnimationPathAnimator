@@ -263,6 +263,38 @@ namespace ATP.AnimationPathTools {
         }
         #endregion UNITY MESSAGES
 
+        #region EVENT HANDLERS
+        void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
+            UpdateCurveWithRemovedKeys(easeCurve);
+            UpdateCurveWithRemovedKeys(tiltingCurve);
+            UpdateRotationCurvesWithRemovedKeys();
+        }
+
+        void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
+            UpdateCurveTimestamps(easeCurve);
+            UpdateCurveTimestamps(tiltingCurve);
+            UpdateRotationCurvesTimestamps();
+        }
+
+        private void animationPathBuilder_NodeAdded(object sender, EventArgs eventArgs) {
+            UpdateCurveWithAddedKeys(easeCurve);
+            UpdateCurveWithAddedKeys(tiltingCurve);
+            UpdateRotationCurvesWithAddedKeys();
+        }
+
+
+        private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
+            ResetRotationPath();
+            ResetEaseCurve();
+            ResetTiltingCurve();
+
+            // Change handle mode to None.
+            handleMode = AnimatorHandleMode.None;
+            // Change rotation mode to None.
+            rotationMode = AnimatorRotationMode.Forward;
+        }
+        #endregion EVENT HANDLERS
+
         #region PUBLIC METHODS
         public float GetNodeTiltValue(int nodeIndex) {
             return tiltingCurve.keys[nodeIndex].value;
@@ -372,39 +404,6 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PUBLIC METHODS
-
-        #region EVENT HANDLERS
-        void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
-            UpdateCurveWithRemovedKeys(easeCurve);
-            UpdateCurveWithRemovedKeys(tiltingCurve);
-            UpdateRotationCurvesWithRemovedKeys();
-        }
-
-        void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
-            UpdateCurveTimestamps(easeCurve);
-            UpdateCurveTimestamps(tiltingCurve);
-            UpdateRotationCurvesTimestamps();
-        }
-
-        private void animationPathBuilder_NodeAdded(object sender, EventArgs eventArgs) {
-            UpdateCurveWithAddedKeys(easeCurve);
-            UpdateCurveWithAddedKeys(tiltingCurve);
-            UpdateRotationCurvesWithAddedKeys();
-        }
-
-
-        private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
-            ResetRotationPath();
-            ResetEaseCurve();
-            ResetTiltingCurve();
-
-            // Change handle mode to None.
-            handleMode = AnimatorHandleMode.None;
-            // Change rotation mode to None.
-            rotationMode = AnimatorRotationMode.Forward;
-        }
-        #endregion EVENT HANDLERS
-
         #region PRIVATE METHODS
         private void DrawCurrentRotationPointGizmo() {
             // Get current animation time.

@@ -65,18 +65,14 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
-        protected SerializedProperty GizmoCurveColor;
-        protected SerializedProperty advancedSettingsFoldout;
-        protected SerializedProperty exportSamplingFrequency;
+        private SerializedProperty GizmoCurveColor;
+        private SerializedProperty advancedSettingsFoldout;
+        private SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
-        // TODO Replace serialized property with direct calls.
-        //private SerializedProperty handlesMode;
-        //private SerializedProperty tangentMode;
-        //protected SerializedProperty rotationCurves;
 
-        public Vector3 FirstNodeOffset { get; protected set; }
-        public Vector3 SecondNodeOffset { get; protected set; }
-        public Vector3 LastNodeOffset { get; protected set; }
+        private Vector3 firstNodeOffset = new Vector3(0, 0, 0);
+        private Vector3 secondNodeOffset = new Vector3(1, -2, 0.5f);
+        private Vector3 lastNodeOffset = new Vector3(2, -2.5f, 2.5f);
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -108,11 +104,6 @@ namespace ATP.AnimationPathTools {
                 LastTool = Tools.current;
                 Tools.current = Tool.None;
             }
-
-            // Initialize public properties.
-            FirstNodeOffset = new Vector3(0, 0, 0);
-            SecondNodeOffset = new Vector3(1, -2, 0.5f);
-            LastNodeOffset = new Vector3(2, -2.5f, 2.5f);
 
             if (!Script.IsInitialized) {
                 ResetPath();
@@ -830,7 +821,7 @@ namespace ATP.AnimationPathTools {
             var worldPoint = sceneCamera.transform.position
                 + sceneCamera.transform.forward * FirstNodeForwardMultiplied;
             // Calculate end point.
-            var endPoint = worldPoint + LastNodeOffset;
+            var endPoint = worldPoint + lastNodeOffset;
 
             // Get number of nodes to remove.
             var nodesToRemoveNo = Script.NodesNo;
@@ -842,8 +833,8 @@ namespace ATP.AnimationPathTools {
             }
 
             // Add beginning and end points.
-            Script.CreateNode(0, worldPoint + FirstNodeOffset);
-            Script.CreateNode(0.5f, worldPoint + SecondNodeOffset);
+            Script.CreateNode(0, worldPoint + firstNodeOffset);
+            Script.CreateNode(0.5f, worldPoint + secondNodeOffset);
             Script.CreateNode(1, endPoint);
 
             //// Ease tangents of the first node.

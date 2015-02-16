@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -214,6 +215,173 @@ namespace ATP.AnimationPathTools {
             for (var i = 0; i < keysToRemoveNo; i++) {
                 RemovePoint(0);
             }
+        }
+
+        /// <summary>
+        /// Extract 3d points from path.
+        /// </summary>
+        /// <param name="samplingFrequency"></param>
+        /// <returns></returns>
+        public List<Vector3> SamplePathForPoints(int samplingFrequency) {
+            var points = new List<Vector3>();
+
+            // Call reference overload.
+            SamplePathForPoints(samplingFrequency, ref points);
+
+            return points;
+        }
+
+        public void SamplePathForPoints(
+            int samplingFrequency,
+            ref List<Vector3> points) {
+
+            var linearPathLength = CalculatePathLinearLength();
+
+            // Calculate amount of points to extract.
+            var samplingRate = (int)(linearPathLength * samplingFrequency);
+
+            // NOTE Cannot do any sampling if sampling rate is less than 1.
+            if (samplingRate < 1) return;
+
+            // Used to read values from animation curves.
+            float time = 0;
+
+            // Time step between each point.
+            var timestep = 1f / samplingRate;
+
+            // Clear points list.
+            points.Clear();
+
+            // Fill points array with 3d points.
+            for (var i = 0; i < samplingRate + 1; i++) {
+                // Calculate single point.
+                var point = GetVectorAtTime(time);
+
+                // Construct 3d point from animation curves at a given time.
+                points.Add(point);
+
+                // Time goes towards 1.
+                time += timestep;
+            }
+        }
+
+        public void SampleSectionForPoints(
+            int firstNodeIndex,
+            // TODO Rename to lastNodeIndex.
+            int secondNodeIndex,
+            float samplingFrequency,
+            ref List<Vector3> points) {
+
+            var sectionLinearLength = CalculateSectionLinearLength(
+                firstNodeIndex,
+                secondNodeIndex);
+
+            // Calculate amount of points to extract.
+            var samplingRate = (int)(sectionLinearLength * samplingFrequency);
+
+            var firstNodeTime = GetTimeAtKey(firstNodeIndex);
+            var secondNodeTime = GetTimeAtKey(secondNodeIndex);
+
+            var timeInterval = secondNodeTime - firstNodeTime;
+
+            // Used to read values from animation curves.
+            var time = firstNodeTime;
+
+            // Time step between each point.
+            var timestep = timeInterval / samplingRate;
+
+            // Clear points list.
+            points.Clear();
+
+            // Fill points array with 3d points.
+            for (var i = 0; i < samplingRate + 1; i++) {
+                // Calculate single point.
+                var point = GetVectorAtTime(time);
+
+                // Construct 3d point from animation curves at a given time.
+                points.Add(point);
+
+                // Time goes towards 1.
+                time += timestep;
+            }
+        }
+
+        public List<Vector3> SampleSectionForPoints(
+            int firstNodeIndex,
+            int secondNodeIndex,
+            float samplingFrequency) {
+
+            var points = new List<Vector3>();
+
+            SampleSectionForPoints(
+                firstNodeIndex,
+                secondNodeIndex,
+                samplingFrequency,
+                ref points);
+
+            return points;
+        }
+
+        /// <summary>
+        /// Calculate path length as if all nodes were in linear mode.
+        /// </summary>
+        /// <returns>Path length.</returns>
+        public float CalculatePathLinearLength() {
+            // Result distance.
+            float dist = 0;
+
+            // For each node (exclude the first one)..
+            for (var i = 0; i < KeysNo - 1; i++) {
+                dist += CalculateSectionLinearLength(i, i + 1);
+            }
+
+            return dist;
+        }
+
+        public float CalculateSectionCurvedLength(
+            int firstNodeIndex,
+            int secondNodeIndex,
+            int samplingFrequency) {
+
+            // Result path length.
+            float pathLength = 0;
+
+            var points = SampleSectionForPoints(
+                firstNodeIndex,
+                secondNodeIndex,
+                samplingFrequency);
+
+            for (var i = 1; i < points.Count; i++) {
+                pathLength += Vector3.Distance(points[i - 1], points[i]);
+            }
+
+            return pathLength;
+        }
+
+        public float CalculateSectionLinearLength(
+            int firstNodeIndex,
+            int secondNodeIndex) {
+
+            var firstNodePosition = GetVectorAtKey(firstNodeIndex);
+            var secondNodePosition = GetVectorAtKey(secondNodeIndex);
+
+            var sectionLength =
+                Vector3.Distance(firstNodePosition, secondNodePosition);
+
+            return sectionLength;
+        }
+
+        public float CalculatePathCurvedLength(int samplingFrequency) {
+            float pathLength = 0;
+
+            for (var i = 0; i < KeysNo - 1; i++) {
+                pathLength += CalculateSectionCurvedLength(
+                    i,
+                    i + 1,
+                    samplingFrequency);
+            }
+
+            return pathLength;
         }
     }
 }

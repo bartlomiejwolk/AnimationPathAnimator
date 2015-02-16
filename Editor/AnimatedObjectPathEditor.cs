@@ -817,7 +817,8 @@ namespace ATP.AnimationPathTools {
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = Script.SamplePathForPoints(exportSampling);
+                points = Script.AnimationCurves.SamplePathForPoints(
+                    exportSampling);
             }
 
             // Create parent GO.

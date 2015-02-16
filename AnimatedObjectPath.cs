@@ -8,12 +8,6 @@ namespace ATP.AnimationPathTools {
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.
     /// </summary>
-    /// <remarks>
-    /// - It uses array of three AnimationCurve objects to construct the path.
-    /// - Class fields are updated in <c>AnimationPath_PathChanged</c> event
-    /// handler. <c>CurvesChanged</c> event is called after animation curves
-    /// inside <c>_animationCurves</c> are changed.
-    /// </remarks>
     [ExecuteInEditMode]
     public class AnimatedObjectPath : GameComponent {
 
@@ -216,69 +210,6 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region PUBLIC METHODS
-        public float CalculatePathCurvedLength(int samplingFrequency) {
-            float pathLength = 0;
-
-            for (var i = 0; i < NodesNo - 1; i++) {
-                pathLength += CalculateSectionCurvedLength(
-                    i,
-                    i + 1,
-                    GizmoCurveSamplingFrequency);
-            }
-
-            return pathLength;
-        }
-
-        /// <summary>
-        /// Calculate path length as if all nodes were in linear mode.
-        /// </summary>
-        /// <returns>Path length.</returns>
-        public float CalculatePathLinearLength() {
-            // Result distance.
-            float dist = 0;
-
-            // For each node (exclude the first one)..
-            for (var i = 0; i < animationCurves.KeysNo - 1; i++) {
-                dist += CalculateSectionLinearLength(i, i + 1);
-            }
-
-            return dist;
-        }
-
-        public float CalculateSectionCurvedLength(
-                    int firstNodeIndex,
-                    int secondNodeIndex,
-                    int samplingFrequency) {
-
-            // Result path length.
-            float pathLength = 0;
-
-            var points = SampleSectionForPoints(
-                firstNodeIndex,
-                secondNodeIndex,
-                samplingFrequency);
-
-            for (var i = 1; i < points.Count; i++) {
-                pathLength += Vector3.Distance(points[i - 1], points[i]);
-            }
-
-            return pathLength;
-        }
-
-        public float CalculateSectionLinearLength(
-            int firstNodeIndex,
-            int secondNodeIndex) {
-
-            var firstNodePosition =
-                animationCurves.GetVectorAtKey(firstNodeIndex);
-            var secondNodePosition =
-                animationCurves.GetVectorAtKey(secondNodeIndex);
-
-            var sectionLength =
-                Vector3.Distance(firstNodePosition, secondNodePosition);
-
-            return sectionLength;
-        }
 
         public void SetNodeTangents(int index, Vector3 inOutTangent) {
             animationCurves.ChangePointTangents(index, inOutTangent);
@@ -303,7 +234,7 @@ namespace ATP.AnimationPathTools {
         }
         public void DistributeTimestamps() {
             // Calculate path curved length.
-            var pathLength = CalculatePathCurvedLength(
+            var pathLength = AnimationCurves.CalculatePathCurvedLength(
                 GizmoCurveSamplingFrequency);
             // Calculate time for one meter of curve length.
             var timeForMeter = 1 / pathLength;
@@ -313,7 +244,7 @@ namespace ATP.AnimationPathTools {
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
-                var sectionLength = CalculateSectionCurvedLength(
+                var sectionLength = AnimationCurves.CalculateSectionCurvedLength(
                     i - 1,
                     i,
                     GizmoCurveSamplingFrequency);
@@ -386,118 +317,13 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Extract 3d points from path.
-        /// </summary>
-        /// <param name="samplingFrequency"></param>
-        /// <returns></returns>
-        public List<Vector3> SamplePathForPoints(int samplingFrequency) {
-            var points = new List<Vector3>();
-
-            // Call reference overload.
-            SamplePathForPoints(samplingFrequency, ref points);
-
-            return points;
-        }
-
-        public void SamplePathForPoints(
-            int samplingFrequency,
-            ref List<Vector3> points) {
-
-            var linearPathLength = CalculatePathLinearLength();
-
-            // Calculate amount of points to extract.
-            var samplingRate = (int)(linearPathLength * samplingFrequency);
-
-            // NOTE Cannot do any sampling if sampling rate is less than 1.
-            if (samplingRate < 1) return;
-
-            // Used to read values from animation curves.
-            float time = 0;
-
-            // Time step between each point.
-            var timestep = 1f / samplingRate;
-
-            // Clear points list.
-            points.Clear();
-
-            // Fill points array with 3d points.
-            for (var i = 0; i < samplingRate + 1; i++) {
-                // Calculate single point.
-                var point = animationCurves.GetVectorAtTime(time);
-
-                // Construct 3d point from animation curves at a given time.
-                points.Add(point);
-
-                // Time goes towards 1.
-                time += timestep;
-            }
-        }
-
-        public List<Vector3> SampleSectionForPoints(
-                    int firstNodeIndex,
-                    int secondNodeIndex,
-                    float samplingFrequency) {
-
-            var points = new List<Vector3>();
-
-            SampleSectionForPoints(
-                firstNodeIndex,
-                secondNodeIndex,
-                samplingFrequency,
-                ref points);
-
-            return points;
-        }
-
-        public void SampleSectionForPoints(
-                    int firstNodeIndex,
-                    int secondNodeIndex,
-                    float samplingFrequency,
-                    ref List<Vector3> points) {
-
-            var sectionLinearLength = CalculateSectionLinearLength(
-                firstNodeIndex,
-                secondNodeIndex);
-
-            // Calculate amount of points to extract.
-            var samplingRate = (int)(sectionLinearLength * samplingFrequency);
-
-            var firstNodeTime =
-                animationCurves.GetTimeAtKey(firstNodeIndex);
-            var secondNodeTime =
-                animationCurves.GetTimeAtKey(secondNodeIndex);
-
-            var timeInterval = secondNodeTime - firstNodeTime;
-
-            // Used to read values from animation curves.
-            var time = firstNodeTime;
-
-            // Time step between each point.
-            var timestep = timeInterval / samplingRate;
-
-            // Clear points list.
-            points.Clear();
-
-            // Fill points array with 3d points.
-            for (var i = 0; i < samplingRate + 1; i++) {
-                // Calculate single point.
-                var point = animationCurves.GetVectorAtTime(time);
-
-                // Construct 3d point from animation curves at a given time.
-                points.Add(point);
-
-                // Time goes towards 1.
-                time += timestep;
-            }
-        }
-
-        /// <summary>
         /// </summary>
         /// <remarks>
         /// http:
         ///       //forum.unity3d.com/threads/how-to-set-an-animation-curve-to-linear-through-scripting.151683/#post-1121021
         /// </remarks>
         /// <param name="curve"></param>
+        // TODO Move to Utility class.
         public void SetCurveLinear(AnimationCurve curve) {
             for (var i = 0; i < curve.keys.Length; ++i) {
                 float intangent = 0;
@@ -573,7 +399,8 @@ namespace ATP.AnimationPathTools {
 
 
         private void DrawGizmoCurve() {
-            var points = SamplePathForPoints(GizmoCurveSamplingFrequency);
+            var points = AnimationCurves.SamplePathForPoints(
+                GizmoCurveSamplingFrequency);
 
             if (points.Count < 3) return;
 

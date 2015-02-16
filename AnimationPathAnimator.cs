@@ -270,12 +270,6 @@ namespace ATP.AnimationPathTools {
                 //StartEaseTimeCoroutine();
             //}
         }
-
-        public void StartEaseTimeCoroutine() {
-            // Check for play mode.
-            StartCoroutine(EaseTime());
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
@@ -318,6 +312,20 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region PUBLIC METHODS
+        public void StartEaseTimeCoroutine() {
+            // Check for play mode.
+            StartCoroutine("EaseTime");
+        }
+
+        public void StopEaseTimeCoroutine() {
+            StopCoroutine("EaseTime");
+
+            // Reset animation.
+            isPlaying = false;
+            pause = false;
+            animTimeRatio = 0;
+        }
+
         public float GetNodeTiltValue(int nodeIndex) {
             return tiltingCurve.keys[nodeIndex].value;
         }

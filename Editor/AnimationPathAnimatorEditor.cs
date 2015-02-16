@@ -136,6 +136,8 @@ namespace ATP.AnimationPathTools {
             if (GUILayout.Button(new GUIContent(
                             "Stop",
                             ""))) {
+
+                script.StopEaseTimeCoroutine();
             }
             EditorGUILayout.EndHorizontal();
 

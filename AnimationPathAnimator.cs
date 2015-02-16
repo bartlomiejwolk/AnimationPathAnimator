@@ -200,8 +200,8 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
-            animationPathBuilder.PathChanged -= AnimationPathBuilderOnPathBuilderChanged;
-            animationPathBuilder.PathReset -= AnimationPathBuilderOnPathBuilderReset;
+            animationPathBuilder.PathChanged -= AnimationPathBuilderOnPathChanged;
+            animationPathBuilder.PathReset -= AnimationPathBuilderOnPathReset;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -300,12 +300,12 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
-            // TODO Rename event handlers to use underscore.
-            animationPathBuilder.PathChanged += AnimationPathBuilderOnPathBuilderChanged;
-            animationPathBuilder.PathReset += AnimationPathBuilderOnPathBuilderReset;
+            // Subscribe to events.
+            animationPathBuilder.PathChanged += AnimationPathBuilderOnPathChanged;
+            animationPathBuilder.PathReset += AnimationPathBuilderOnPathReset;
             animationPathBuilder.NodeAdded += AnimationPathBuilderOnNodeAdded;
-            animationPathBuilder.NodeRemoved += AnimationPathBuilderNodeRemoved;
-            animationPathBuilder.NodeTimeChanged += AnimationPathBuilderNodeTimeChanged;
+            animationPathBuilder.NodeRemoved += AnimationPathBuilderOnNodeRemoved;
+            animationPathBuilder.NodeTimeChanged += AnimationPathBuilderOnNodeTimeChanged;
 
             // Instantiate rotationPath.
             if (rotationPath == null) {
@@ -314,11 +314,11 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        void AnimationPathBuilderNodeTimeChanged(object sender, EventArgs e) {
+        void AnimationPathBuilderOnNodeTimeChanged(object sender, EventArgs e) {
             //throw new NotImplementedException();
         }
 
-        void AnimationPathBuilderNodeRemoved(object sender, EventArgs e) {
+        void AnimationPathBuilderOnNodeRemoved(object sender, EventArgs e) {
             //throw new NotImplementedException();
         }
 
@@ -460,7 +460,7 @@ namespace ATP.AnimationPathTools {
 
         #region EVENT HANDLERS
 
-        private void AnimationPathBuilderOnPathBuilderChanged(
+        private void AnimationPathBuilderOnPathChanged(
                     object sender,
                     EventArgs eventArgs) {
 
@@ -475,7 +475,7 @@ namespace ATP.AnimationPathTools {
             // corresponding timestamp in the ease curve.
         }
 
-        private void AnimationPathBuilderOnPathBuilderReset(object sender, EventArgs eventArgs) {
+        private void AnimationPathBuilderOnPathReset(object sender, EventArgs eventArgs) {
             ResetRotationData();
             ResetEaseCurve();
             ResetTiltingCurve();

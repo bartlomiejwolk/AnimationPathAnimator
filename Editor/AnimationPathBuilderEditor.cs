@@ -837,13 +837,6 @@ namespace ATP.AnimationPathTools {
             Script.CreateNode(0.5f, worldPoint + secondNodeOffset);
             Script.CreateNode(1, endPoint);
 
-            //// Ease tangents of the first node.
-            //var nodeTangents = new Vector3(0, 0, 0);
-            //Script.SetNodeTangents(0, nodeTangents);
-            //// Ease tangents of the last node.
-            //var lastNodeIndex = Script.NodesNo - 1;
-            //Script.SetNodeTangents(lastNodeIndex, nodeTangents);
-            
             // Raise event.
             Script.OnPathReset();
         }

@@ -20,7 +20,7 @@ namespace ATP.AnimationPathTools {
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
         #region CONSTANTS
-        private Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
+        private const int RotationCurveSampling = 20;
         private const float DefaultEndEaseValue = 0.01f;
         private const float DefaultSecondEaseValue = 0.08f;
         private const float DefaultStartEaseValue = 0.01f;
@@ -59,6 +59,13 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region FIELDS
+        [SerializeField]
+        private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
+
+        [SerializeField]
+        private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
+
+        private Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
         /// <summary>
         /// Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
@@ -95,13 +102,6 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region EDITOR
-        [SerializeField]
-        private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
-
-        [SerializeField]
-        private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
-
-
         /// <summary>
         /// Transform to be animated.
         /// </summary>
@@ -138,7 +138,6 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
         // disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
-
 #pragma warning restore 649
 #pragma warning restore 649
         #endregion EDITOR
@@ -240,8 +239,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawRotationGizmoCurve() {
-            // TODO Calculate samplingRate using rotatio path length.
-            var points = rotationCurves.SamplePathForPoints(20);
+            var points = rotationCurves.SamplePathForPoints(RotationCurveSampling);
 
             if (points.Count < 2) return;
 

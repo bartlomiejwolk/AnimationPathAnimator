@@ -115,6 +115,23 @@ namespace ATP.AnimationPathTools {
             if (GUILayout.Button(new GUIContent(
                             "Start/Pause",
                             ""))) {
+
+                // Pause animation.
+                if (script.IsPlaying) {
+                    script.Pause = true;
+                    script.IsPlaying = false;
+                }
+                // Unpause animation.
+                else if (script.Pause) {
+                    script.Pause = false;
+                    script.IsPlaying = true;
+                }
+                // Start animation.
+                else {
+                    script.IsPlaying = true;
+                    // Start animation.
+                    script.StartEaseTimeCoroutine();
+                }
             }
             if (GUILayout.Button(new GUIContent(
                             "Stop",

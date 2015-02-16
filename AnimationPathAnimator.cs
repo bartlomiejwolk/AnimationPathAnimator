@@ -98,6 +98,8 @@ namespace ATP.AnimationPathTools {
         /// </remarks>
         private bool isPlaying;
 
+        private bool pause;
+
         [SerializeField]
         private AnimationPath rotationPath;
 
@@ -180,6 +182,22 @@ namespace ATP.AnimationPathTools {
             set { rotationMode = value; }
         }
 
+        /// <summary>
+        /// If animation is currently enabled.
+        /// </summary>
+        /// <remarks>
+        /// Used in play mode. You can use it to stop animation.
+        /// </remarks>
+        public bool IsPlaying {
+            get { return isPlaying; }
+            set { isPlaying = value; }
+        }
+
+        public bool Pause {
+            get { return pause; }
+            set { pause = value; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -242,18 +260,16 @@ namespace ATP.AnimationPathTools {
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
-
             // Start playing animation on Start().
-            isPlaying = true;
+            //isPlaying = true;
 
             // Start animation from time ratio specified in the inspector.
             //currentAnimTime = animTimeRatio * duration;
 
-            if (Application.isPlaying) {
-                StartCoroutine(EaseTime());
-            }
+            //if (Application.isPlaying) {
+                //StartEaseTimeCoroutine();
+            //}
         }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
@@ -296,6 +312,20 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region PUBLIC METHODS
+        public void StartEaseTimeCoroutine() {
+            // Check for play mode.
+            StartCoroutine("EaseTime");
+        }
+
+        public void StopEaseTimeCoroutine() {
+            StopCoroutine("EaseTime");
+
+            // Reset animation.
+            isPlaying = false;
+            pause = false;
+            animTimeRatio = 0;
+        }
+
         public float GetNodeTiltValue(int nodeIndex) {
             return tiltingCurve.keys[nodeIndex].value;
         }
@@ -583,11 +613,19 @@ namespace ATP.AnimationPathTools {
         // TODO Add possibility to stop when isPlaying is disabled.
         private IEnumerator EaseTime() {
             do {
+                // Return if animation is paused.
+                if (pause) yield return null;
+
+                // Ease time.
                 var timeStep = easeCurve.Evaluate(animTimeRatio);
                 animTimeRatio += timeStep * Time.deltaTime;
 
                 yield return null;
             } while (animTimeRatio < 1.0f);
+
+            // Reset animation.
+            isPlaying = false;
+            animTimeRatio = 0;
         }
 
         private double EvaluateTimestamp(double x) {

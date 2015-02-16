@@ -315,15 +315,18 @@ namespace ATP.AnimationPathTools {
         }
 
         void AnimationPathBuilderOnNodeTimeChanged(object sender, EventArgs e) {
-            //throw new NotImplementedException();
+            UpdateCurveTimestamps(easeCurve);
+            UpdateCurveTimestamps(tiltingCurve);
         }
 
         void AnimationPathBuilderOnNodeRemoved(object sender, EventArgs e) {
-            //throw new NotImplementedException();
+            UpdateCurveWithRemovedKeys(easeCurve);
+            UpdateCurveWithRemovedKeys(tiltingCurve);
         }
 
         private void AnimationPathBuilderOnNodeAdded(object sender, EventArgs eventArgs) {
-            //throw new NotImplementedException();
+            UpdateCurveWithAddedKeys(easeCurve);
+            UpdateCurveWithAddedKeys(tiltingCurve);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -464,9 +467,8 @@ namespace ATP.AnimationPathTools {
                     object sender,
                     EventArgs eventArgs) {
 
-            SyncCurveWithPath(easeCurve);
-
-            SyncCurveWithPath(tiltingCurve);
+            //SyncCurveWithPath(easeCurve);
+            //SyncCurveWithPath(tiltingCurve);
             EaseCurveExtremeNodes(easeCurve);
 
             UpdateRotationCurves();

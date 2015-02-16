@@ -603,11 +603,9 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
-            // Make snapshot of the target object.
             HandleUndo();
 
             Script.SmoothSingleNodeTangents(index);
-
             Script.DistributeTimestamps();
         }
 

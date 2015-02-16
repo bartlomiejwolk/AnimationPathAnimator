@@ -188,7 +188,6 @@ namespace ATP.AnimationPathTools {
         private void Awake() {
             InitializeEaseCurve();
             InitializeRotationCurve();
-            //InitializeLookForwardCurve();
 
             // Initialize animatedGO field.
             if (animatedGO == null && Camera.main.transform != null) {
@@ -465,7 +464,7 @@ namespace ATP.AnimationPathTools {
         #region EVENT HANDLERS
 
         private void AnimationPathBuilderOnPathReset(object sender, EventArgs eventArgs) {
-            ResetRotationData();
+            ResetRotationPath();
             ResetEaseCurve();
             ResetTiltingCurve();
 
@@ -485,7 +484,7 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(1, 0);
         }
 
-        private void ResetRotationData() {
+        private void ResetRotationPath() {
             var pathNodePositions = animationPathBuilder.GetNodePositions();
 
             rotationPath.RemoveAllKeys();
@@ -508,25 +507,8 @@ namespace ATP.AnimationPathTools {
             easeCurve.AddKey(0, DefaultStartEaseValue);
             easeCurve.AddKey(0.5f, DefaultSecondEaseValue);
             easeCurve.AddKey(1, DefaultEndEaseValue);
-
-            //EaseCurveExtremeNodes(easeCurve);
         }
 
-
-
-        /// <summary>
-        /// </summary>
-        /// <param name="value">
-        /// Value for the new key in <c>easeCurve</c>.
-        /// </param>
-        //private void AddKeyToEaseCurve(float value) {
-        //     TODO Make it a class field.
-        //    const float precision = 0.001f;
-        //    float time = FindTimestampForValue(easeCurve, value, precision);
-        //    easeCurve.AddKey(time, value);
-
-        //    EaseCurveExtremeNodes(easeCurve);
-        //}
         private void AddKeyToCurve(
             AnimationCurve curve,
             float timestamp) {
@@ -534,7 +516,6 @@ namespace ATP.AnimationPathTools {
             var value = curve.Evaluate(timestamp);
 
             curve.AddKey(timestamp, value);
-            //EaseCurveExtremeNodes(curve);
         }
 
         public void EaseCurveExtremeNodes(AnimationCurve curve) {
@@ -553,15 +534,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Animate() {
-            // Animate target.
-            //AnimateTarget();
-
-            // Animate transform.
             AnimateObject();
-
-            // Rotate transform.
             RotateObject();
-
             TiltObject();
         }
 
@@ -593,37 +567,11 @@ namespace ATP.AnimationPathTools {
             return (float)newTimestamp;
         }
 
-        //private void CreateTargetGO() {
-        //    string followedGOName = name + "-target";
-        //    GameObject followedGO = GameObject.Find(followedGOName);
-        //    // If nothing was found, create a new one.
-        //    if (followedGO == null) {
-        //        targetGO = new GameObject(followedGOName).transform;
-        //        //targetGO.parent = gameObject.transform;
-        //    }
-        //    else {
-        //        targetGO = followedGO.transform;
-        //    }
-        //}
-
         // TODO Add possibility to stop when isPlaying is disabled.
         private IEnumerator EaseTime() {
             do {
-                // Increase animation time.
-                //currentAnimTime += Time.deltaTime;
-                //currentAnimTime = 0;
-
-                // Convert animation time to <0; 1> ratio.
-                //var timeStep = Time.deltaTime;
-                //var timeStep = easeCurve.Evaluate(currentAnimTime);
                 var timeStep = easeCurve.Evaluate(animTimeRatio);
-                //Debug.Log("timeStep: " + timeStep);
-
-                //animTimeRatio = easeCurve.Evaluate(timeStep);
                 animTimeRatio += timeStep * Time.deltaTime;
-                //Debug.Log("animTimeRatio: " + animTimeRatio);
-
-                //currentAnimTime += timeStep * Time.deltaTime;
 
                 yield return null;
             } while (animTimeRatio < 1.0f);
@@ -663,14 +611,6 @@ namespace ATP.AnimationPathTools {
             easeCurve.AddKey(lastKey);
         }
 
-        //private void InitializeLookForwardCurve() {
-        //    var firstKey = new Keyframe(0, LookForwardTimeOffset, 0, 0);
-        //    var lastKey = new Keyframe(1, LookForwardTimeOffset, 0, 0);
-
-        //    lookForwardCurve.AddKey(firstKey);
-        //    lookForwardCurve.AddKey(lastKey);
-        //}
-
         private void InitializeRotationCurve() {
             var firstKey = new Keyframe(0, 0, 0, 0);
             var lastKey = new Keyframe(1, 0, 0, 0);
@@ -687,7 +627,6 @@ namespace ATP.AnimationPathTools {
             // Look at target.
             if (animatedGO != null
                 && targetGO != null
-                //&& !lookForwardMode) {
                 && rotationMode != AnimatorRotationMode.Forward) {
 
                 // In play mode use Quaternion.Slerp();
@@ -723,9 +662,6 @@ namespace ATP.AnimationPathTools {
         }
 
         private void RotateObjectWithAnimationCurves() {
-            //var rotation = GetRotationAtTime(animTimeRatio);
-            //animatedGO.rotation = Quaternion.Euler(rotation);
-
             var lookAtTarget = rotationPath.GetVectorAtTime(animTimeRatio);
 
             // In play mode use Quaternion.Slerp();

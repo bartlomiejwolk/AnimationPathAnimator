@@ -10,7 +10,7 @@ namespace ATP.AnimationPathTools {
     /// respective keys' timestamps are the same.
     /// - Three keys with the same timestamp make a point.
     /// </remarks>
-    public class AnimationPathCurves : ScriptableObject {
+    public class AnimationPath : ScriptableObject {
 
         #region FIELDS
 

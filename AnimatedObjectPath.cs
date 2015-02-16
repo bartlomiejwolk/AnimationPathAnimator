@@ -39,7 +39,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         // TODO Rename.
-        private AnimationPathCurves animationCurves;
+        private AnimationPath animationCurves;
 
         #endregion Fields
 
@@ -109,7 +109,7 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC PROPERTIES
 
-        public AnimationPathCurves AnimationCurves {
+        public AnimationPath AnimationCurves {
             get { return animationCurves; }
         }
 
@@ -177,7 +177,7 @@ namespace ATP.AnimationPathTools {
             // Instantiate animationCurves.
             if (animationCurves == null) {
                 animationCurves =
-                    ScriptableObject.CreateInstance<AnimationPathCurves>();
+                    ScriptableObject.CreateInstance<AnimationPath>();
             }
 
         }

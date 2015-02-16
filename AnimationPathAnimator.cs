@@ -88,7 +88,7 @@ namespace ATP.AnimationPathTools {
         private bool isPlaying;
 
         [SerializeField]
-        private AnimationPathCurves rotationCurves;
+        private AnimationPath rotationCurves;
 
         //private float timeStep;
 
@@ -159,7 +159,7 @@ namespace ATP.AnimationPathTools {
             get { return easeCurve; }
         }
 
-        public AnimationPathCurves RotationCurves {
+        public AnimationPath RotationCurves {
             get { return rotationCurves; }
         }
 
@@ -320,7 +320,7 @@ namespace ATP.AnimationPathTools {
             // Instantiate rotationCurves.
             if (rotationCurves == null) {
                 rotationCurves =
-                    ScriptableObject.CreateInstance<AnimationPathCurves>();
+                    ScriptableObject.CreateInstance<AnimationPath>();
             }
         }
 

@@ -578,7 +578,7 @@ namespace ATP.AnimationPathTools {
 
         private void Animate() {
             AnimateObject();
-            RotateObject();
+            HandleAnimatedGORotation();
             TiltObject();
         }
 
@@ -610,7 +610,6 @@ namespace ATP.AnimationPathTools {
             return (float)newTimestamp;
         }
 
-        // TODO Add possibility to stop when isPlaying is disabled.
         private IEnumerator EaseTime() {
             do {
                 // Return if animation is paused.
@@ -670,8 +669,8 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(lastKey);
         }
 
-        // TODO Rename to HandleObjectRotation(). TODO Refactor.
-        private void RotateObject() {
+        // TODO Refactor.
+        private void HandleAnimatedGORotation() {
             // TODO Move this condition to Animate().
             if (!animationPathBuilder.IsInitialized) return;
 

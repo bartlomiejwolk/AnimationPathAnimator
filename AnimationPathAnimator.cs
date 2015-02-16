@@ -317,16 +317,19 @@ namespace ATP.AnimationPathTools {
         void AnimationPathBuilderOnNodeTimeChanged(object sender, EventArgs e) {
             UpdateCurveTimestamps(easeCurve);
             UpdateCurveTimestamps(tiltingCurve);
+            UpdateRotationCurvesTimestamps();
         }
 
         void AnimationPathBuilderOnNodeRemoved(object sender, EventArgs e) {
             UpdateCurveWithRemovedKeys(easeCurve);
             UpdateCurveWithRemovedKeys(tiltingCurve);
+            UpdateRotationCurvesWithRemovedKeys();
         }
 
         private void AnimationPathBuilderOnNodeAdded(object sender, EventArgs eventArgs) {
             UpdateCurveWithAddedKeys(easeCurve);
             UpdateCurveWithAddedKeys(tiltingCurve);
+            UpdateRotationCurvesWithAddedKeys();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -471,7 +474,7 @@ namespace ATP.AnimationPathTools {
             //SyncCurveWithPath(tiltingCurve);
             //EaseCurveExtremeNodes(easeCurve);
 
-            UpdateRotationPath();
+            //UpdateRotationPath();
 
             // If there's not, create a new key with this value and the
             // corresponding timestamp in the ease curve.

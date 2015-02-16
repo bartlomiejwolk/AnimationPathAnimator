@@ -880,7 +880,7 @@ namespace ATP.AnimationPathTools {
             for (var i = 1; i < rotationCurves.KeysNo - 1; i++) {
                 // If resp. node timestamp is different from key value..
                 if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i]) > 0.001f) {
-                    rotationCurves.ChangePointTimestamp(i, nodeTimestamps[i]);
+                    rotationCurves.ChangeNodeTimestamp(i, nodeTimestamps[i]);
                 }
             }
         }

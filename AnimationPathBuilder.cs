@@ -230,7 +230,7 @@ namespace ATP.AnimationPathTools {
                             int keyIndex,
                             float newTimestamp) {
 
-            objectPath.ChangePointTimestamp(keyIndex, newTimestamp);
+            objectPath.ChangeNodeTimestamp(keyIndex, newTimestamp);
             OnNodeTimeChanged();
         }
 

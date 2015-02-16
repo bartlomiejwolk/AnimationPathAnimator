@@ -96,8 +96,7 @@ namespace ATP.AnimationPathTools {
             curves[2].MoveKey(nodeIndex, keyZCopy);
         }
 
-        // TODO Rename Point to Node.
-        public void ChangePointTimestamp(
+        public void ChangeNodeTimestamp(
             int keyIndex,
             float newTimestamp) {
 

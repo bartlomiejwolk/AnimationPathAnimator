@@ -672,7 +672,6 @@ namespace ATP.AnimationPathTools {
             tiltingCurve.AddKey(lastKey);
         }
 
-        // TODO Refactor.
         private void HandleAnimatedGORotation() {
             // Look at target.
             if (animatedGO != null

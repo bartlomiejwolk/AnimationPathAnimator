@@ -44,7 +44,6 @@ namespace ATP.AnimationPathTools {
 
         private SerializedProperty advancedSettingsFoldout;
 
-        // TODO Change this value directly.
         private SerializedProperty animatedGO;
 
         private SerializedProperty animTimeRatio;
@@ -185,17 +184,14 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
             }
-
-            // TODO Is this update needed?
-            serializedObject.Update();
-
             // Update modifier key state.
             UpdateModifierKey();
+
+            serializedObject.Update();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
 
-            // Save changes
             serializedObject.ApplyModifiedProperties();
 
             HandleDrawingForwardPointMarker();

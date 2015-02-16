@@ -577,6 +577,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Animate() {
+            if (!animationPathBuilder.IsInitialized) return;
+
             AnimateObject();
             HandleAnimatedGORotation();
             TiltObject();
@@ -671,9 +673,6 @@ namespace ATP.AnimationPathTools {
 
         // TODO Refactor.
         private void HandleAnimatedGORotation() {
-            // TODO Move this condition to Animate().
-            if (!animationPathBuilder.IsInitialized) return;
-
             // Look at target.
             if (animatedGO != null
                 && targetGO != null

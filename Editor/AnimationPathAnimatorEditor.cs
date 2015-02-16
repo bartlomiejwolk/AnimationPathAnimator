@@ -111,6 +111,19 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(new GUIContent(
+                            "Start/Pause",
+                            ""))) {
+            }
+            if (GUILayout.Button(new GUIContent(
+                            "Stop",
+                            ""))) {
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                     advancedSettingsFoldout.boolValue,
                     new GUIContent(

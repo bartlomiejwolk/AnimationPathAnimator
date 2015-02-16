@@ -69,6 +69,7 @@ namespace ATP.AnimationPathTools {
         protected SerializedProperty advancedSettingsFoldout;
         protected SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
+        // TODO Replace serialized property with direct calls.
         private SerializedProperty handlesMode;
         private SerializedProperty tangentMode;
         //protected SerializedProperty rotationCurves;
@@ -173,10 +174,7 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion UNITY MESSAGES
-
         #region DRAWING HANDLERS
-
-
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
             var nodePositions = Script.GetNodePositions();
@@ -269,6 +267,92 @@ namespace ATP.AnimationPathTools {
         //}
 
         #endregion DRAWING HANDLERS
+
+        #region OTHER HANDLERS
+        private void HandleMoveSingleModeShortcut() {
+            // Return if Tangent Mode shortcut wasn't released.
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != AnimationPathBuilder.MoveSingleModeKey) return;
+
+            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveSingle;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        /// <summary>
+        /// Update <c>moveAllMode</c> option with keyboard shortcut.
+        /// </summary>
+        private void HandleMoveAllOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != MoveAllKey) return;
+
+            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveAll;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleTangentModeChange() {
+            // If tangent mode was changed..
+            if (tangentMode.enumValueIndex !=
+                (int)Script.TangentMode) {
+
+                // Update path node tangents.
+                if (tangentMode.enumValueIndex ==
+                    (int)AnimationPathTangentMode.Smooth) {
+
+                    Script.SmoothAllNodeTangents();
+                }
+                else if (tangentMode.enumValueIndex ==
+                         (int)AnimationPathTangentMode.Linear) {
+
+                    Script.SetNodesLinear();
+                }
+
+                Script.OnPathChanged();
+            }
+        }
+
+        /// <summary>
+        /// Record target object state for undo.
+        /// </summary>
+        protected void HandleUndo() {
+            Undo.RecordObject(Script.ObjectPath, "Change path");
+        }
+
+        private void HandleSmoothTangentMode() {
+            if (tangentMode.enumValueIndex ==
+                (int)AnimationPathTangentMode.Smooth) {
+
+                Script.SmoothAllNodeTangents();
+            }
+        }
+
+        private void HandleLinearTangentMode() {
+            if (tangentMode.enumValueIndex ==
+                (int)AnimationPathTangentMode.Linear) {
+
+                Script.SetNodesLinear();
+            }
+        }
+
+        private void HandleMoveAllHandleMove(Vector3 moveDelta) {
+            if (handlesMode.enumValueIndex ==
+                (int)AnimationPathHandlesMode.MoveAll) {
+
+                Script.OffsetNodePositions(moveDelta);
+            }
+        }
+
+        private void HandleMoveSingleHandleMove(int movedNodeIndex, Vector3 position) {
+            if (handlesMode.enumValueIndex ==
+                (int)AnimationPathHandlesMode.MoveSingle) {
+
+                Script.MoveNodeToPosition(movedNodeIndex, position);
+                Script.DistributeTimestamps();
+
+                HandleSmoothTangentMode();
+                HandleLinearTangentMode();
+            }
+        }
+        #endregion
 
         #region DRAWING METHODS
 
@@ -524,40 +608,17 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawPositionHandlesCallbackHandler(
-                    int movedNodeIndex,
-                    Vector3 position,
-                    Vector3 moveDelta) {
+            int movedNodeIndex,
+            Vector3 position,
+            Vector3 moveDelta) {
 
-            // Make snapshot of the target object.
             HandleUndo();
 
-            // If Move All mode enabled, move all nodes.
-            // TODO Create HandleDrawingMoveAllHandles().
-            if (handlesMode.enumValueIndex ==
-                (int)AnimationPathHandlesMode.MoveAll) {
-
-                Script.OffsetNodePositions(moveDelta);
-            }
-            // Move single node.
-            else {
-                Script.MoveNodeToPosition(movedNodeIndex, position);
-                Script.DistributeTimestamps();
-
-                if (tangentMode.enumValueIndex ==
-                    (int)AnimationPathTangentMode.Smooth) {
-
-                    Script.SmoothAllNodeTangents();
-                }
-                else if (tangentMode.enumValueIndex ==
-                         (int)AnimationPathTangentMode.Linear) {
-
-                    Script.SetNodesLinear();
-                }
-            }
+            HandleMoveAllHandleMove(moveDelta);
+            HandleMoveSingleHandleMove(movedNodeIndex, position);
 
             Script.OnPathChanged();
         }
-
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
             // Make snapshot of the target object.
             HandleUndo();
@@ -652,14 +713,6 @@ namespace ATP.AnimationPathTools {
             // Add node to the animation curves.
             Script.CreateNodeAtTime(newKeyTime);
         }
-
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        protected void HandleUndo() {
-            Undo.RecordObject(Script.ObjectPath, "Change path");
-        }
-
         private void DrawInspector() {
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -764,28 +817,6 @@ namespace ATP.AnimationPathTools {
             }
             serializedObject.ApplyModifiedProperties();
         }
-
-        private void HandleTangentModeChange() {
-            // If tangent mode was changed..
-            if (tangentMode.enumValueIndex !=
-                (int) Script.TangentMode) {
-
-                // Update path node tangents.
-                if (tangentMode.enumValueIndex ==
-                    (int)AnimationPathTangentMode.Smooth) {
-
-                    Script.SmoothAllNodeTangents();
-                }
-                else if (tangentMode.enumValueIndex ==
-                         (int)AnimationPathTangentMode.Linear) {
-
-                    Script.SetNodesLinear();
-                }
-
-                Script.OnPathChanged();
-            }
-        }
-
         /// <summary>
         /// Export Animation Path nodes as transforms.
         /// </summary>
@@ -830,18 +861,6 @@ namespace ATP.AnimationPathTools {
                 node.transform.localPosition = points[i];
             }
         }
-
-        /// <summary>
-        /// Update <c>moveAllMode</c> option with keyboard shortcut.
-        /// </summary>
-        private void HandleMoveAllOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveAllKey) return;
-
-            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveAll;
-            serializedObject.ApplyModifiedProperties();
-        }
-
         /// <summary>
         /// Toggle handles mode with key shortcut.
         /// </summary>
@@ -854,16 +873,6 @@ namespace ATP.AnimationPathTools {
         //    handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
         //    serializedObject.ApplyModifiedProperties();
         //}
-
-        private void HandleMoveSingleModeShortcut() {
-            // Return if Tangent Mode shortcut wasn't released.
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimationPathBuilder.MoveSingleModeKey) return;
-
-            handlesMode.enumValueIndex = (int)AnimationPathHandlesMode.MoveSingle;
-            serializedObject.ApplyModifiedProperties();
-        }
-
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>

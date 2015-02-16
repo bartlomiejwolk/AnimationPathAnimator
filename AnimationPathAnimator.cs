@@ -241,7 +241,7 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationGizmoCurve() {
             // TODO Calculate samplingRate using rotatio path length.
-            var points = SampleRotationPathForPoints(100);
+            var points = rotationCurves.SamplePathForPoints(20);
 
             if (points.Count < 2) return;
 
@@ -274,17 +274,6 @@ namespace ATP.AnimationPathTools {
                 rotationPointPosition,
                 "rec_16x16-yellow",
                 false);
-        }
-
-        private List<Vector3> SampleRotationPathForPoints(float samplingRate) {
-            var result = new List<Vector3>();
-            var timestamps = GetSampledTimestamps(samplingRate);
-            foreach (var timestamp in timestamps) {
-                var point = GetNodeRotation(timestamp);
-                result.Add(point);
-            }
-
-            return result;
         }
 
         private Vector3 GetNodeRotation(float nodeTimestamp) {

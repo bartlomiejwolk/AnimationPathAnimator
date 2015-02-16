@@ -38,6 +38,7 @@ namespace ATP.AnimationPathTools {
         /// Animation curves that make the animation path.
         /// </summary>
         [SerializeField]
+        // TODO Rename.
         private AnimationPathCurves animationCurves;
 
         #endregion Fields

@@ -577,6 +577,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Animate() {
+            // Return if animated object path is not initialized.
             if (!animationPathBuilder.IsInitialized) return;
 
             AnimateObject();
@@ -687,10 +688,9 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(targetGO.position);
                 }
             }
-            // Use objectPath.
+            // Use rotation path.
             if (animatedGO != null
                 && targetGO == null
-                //&& !lookForwardMode) {
                 && rotationMode != AnimatorRotationMode.Forward) {
 
                 RotateObjectWithAnimationCurves();
@@ -701,6 +701,7 @@ namespace ATP.AnimationPathTools {
 
                 Vector3 forwardPoint = GetForwardPoint();
 
+                // In play mode..
                 if (Application.isPlaying) {
                     RotateObjectWithSlerp(forwardPoint);
                 }

@@ -58,6 +58,11 @@ namespace ATP.AnimationPathTools {
         public const float ShortJumpValue = 0.002f;
         #endregion CONSTANTS
 
+        #region READ-ONLY
+
+        private readonly Color rotationCurveColor = Color.gray;
+        private readonly Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
+        #endregion
         #region FIELDS
         [SerializeField]
         private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
@@ -65,7 +70,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
 
-        private Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
         /// <summary>
         /// Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
@@ -95,6 +99,7 @@ namespace ATP.AnimationPathTools {
         private bool isPlaying;
 
         [SerializeField]
+        // TODO Rename to rotationPath.
         private AnimationPath rotationCurves;
 
         //private float timeStep;
@@ -243,8 +248,7 @@ namespace ATP.AnimationPathTools {
 
             if (points.Count < 2) return;
 
-            // TODO Create const.
-            Gizmos.color = Color.grey;
+            Gizmos.color = rotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {

@@ -281,16 +281,12 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleTangentModeChange() {
-            // If tangent mode was changed..
-            if (Script.TangentMode != Script.TangentMode) {
-
-                // Update path node tangents.
-                if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                    Script.SmoothAllNodeTangents();
-                }
-                else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                    Script.SetNodesLinear();
-                }
+            // Update path node tangents.
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.SmoothAllNodeTangents();
+            }
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.SetNodesLinear();
             }
         }
 
@@ -685,12 +681,17 @@ namespace ATP.AnimationPathTools {
                     ""),
                 Script.HandleMode);
 
+            // Remember current tangent mode.
+            var prevTangentMode = Script.TangentMode;
+            // Draw tangent mode dropdown.
             Script.TangentMode =
                 (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Tangent Mode",
                     ""),
                     Script.TangentMode);
+            // Update gizmo curve is tangent mode changed.
+            if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
             DrawResetInspectorButton();
 

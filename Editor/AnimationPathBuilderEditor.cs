@@ -36,7 +36,7 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         /// Handles mode will change only while key is pressed.
         /// </remarks>
-        public const KeyCode TangentModeKey = KeyCode.J;
+        //public const KeyCode TangentModeKey = KeyCode.J;
 
         /// <summary>
         /// Key shortcut to toggle movement mode.
@@ -44,7 +44,8 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         /// Movement mode will change only while key is pressed.
         /// </remarks>
-        public const KeyCode MoveAllKey = KeyCode.H;
+        public const KeyCode MoveAllKey = KeyCode.J;
+        public const KeyCode MoveSingleModeKey = KeyCode.K;
         #endregion CONSTANS
 
         #region FIELDS
@@ -263,7 +264,7 @@ namespace ATP.AnimationPathTools {
         private void HandleMoveSingleModeShortcut() {
             // Return if Tangent Mode shortcut wasn't released.
             if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != AnimationPathBuilder.MoveSingleModeKey) return;
+                || Event.current.keyCode != MoveSingleModeKey) return;
 
             Script.HandleMode = AnimationPathBuilderHandleMode.MoveSingle;
             serializedObject.ApplyModifiedProperties();
@@ -702,12 +703,6 @@ namespace ATP.AnimationPathTools {
                 "Move all nodes at once. " +
                 "Toggle it with {0} key.",
                 MoveAllKey);
-
-            // Tooltip for handlesMode property.
-            var tangentModeTooltip = String.Format(
-                "Display handles that allow changing node tangents. " +
-                "Toggle it with {0} key.",
-                TangentModeKey);
 
             EditorGUILayout.Space();
 

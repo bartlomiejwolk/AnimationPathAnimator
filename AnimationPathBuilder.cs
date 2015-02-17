@@ -93,8 +93,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
             AnimationPathBuilderTangentMode.Smooth;
 
-        public const KeyCode MoveSingleModeKey = KeyCode.G;
-
 #pragma warning restore 0414
 
         #endregion Editor

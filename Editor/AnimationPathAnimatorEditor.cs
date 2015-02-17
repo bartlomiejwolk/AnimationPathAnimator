@@ -485,7 +485,7 @@ namespace ATP.AnimationPathTools {
         #region CALLBACK HANDLERS
 
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
-            RecordTargetObject();
+            Undo.RecordObject(script, "Ease curve changed.");
 
             // Copy keyframe.
             var keyframeCopy = script.EaseCurve.keys[keyIndex];
@@ -502,7 +502,7 @@ namespace ATP.AnimationPathTools {
                             float timestamp,
                             Vector3 newPosition) {
 
-            RecordRotationObject();
+            Undo.RecordObject(script.RotationPath, "Rotation path changed.");
 
             script.ChangeRotationAtTimestamp(timestamp, newPosition);
         }
@@ -511,7 +511,7 @@ namespace ATP.AnimationPathTools {
                     int keyIndex,
                     float newValue) {
 
-            RecordTargetObject();
+            Undo.RecordObject(script, "Tilting curve changed.");
 
             // Copy keyframe.
             var keyframeCopy = script.TiltingCurve.keys[keyIndex];
@@ -528,18 +528,6 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region PRIVATE METHODS
-
-        protected void RecordRotationObject() {
-            Undo.RecordObject(script.RotationPath, "Ease curve changed.");
-        }
-
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        // TODO Remove these methods and use record directly.
-        protected void RecordTargetObject() {
-            Undo.RecordObject(script, "Ease curve changed.");
-        }
 
         /// <summary>
         /// Change current animation time with arrow keys.

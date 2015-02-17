@@ -68,7 +68,7 @@ namespace ATP.AnimationPathTools {
         private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
 
         [SerializeField]
-        private bool autoPlay;
+        private bool autoPlay = true;
 
         [SerializeField]
         private AnimatorHandleMode handleMode = AnimatorHandleMode.None;

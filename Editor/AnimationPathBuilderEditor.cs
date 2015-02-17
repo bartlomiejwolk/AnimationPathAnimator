@@ -71,9 +71,9 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
 
-        private Vector3 firstNodeOffset = new Vector3(0, 0, 0);
+        //private Vector3 firstNodeOffset = new Vector3(0, 0, 0);
         //private Vector3 secondNodeOffset = new Vector3(1, -2, 0.5f);
-        private Vector3 lastNodeOffset = new Vector3(0, 0, 1);
+        private readonly Vector3 lastNodeOffset = new Vector3(1, 0, 1);
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES

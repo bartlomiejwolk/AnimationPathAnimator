@@ -631,10 +631,22 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawExportNodesInspectorButton() {
-            if (GUILayout.Button("Export Nodes")) {
+        private void DrawExportControls() {
+            EditorGUILayout.BeginHorizontal();
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                exportSamplingFrequency,
+                new GUIContent(
+                    "Export Sampling",
+                    "Number of points to export for 1 m of the curve. " +
+                    "If set to 0, it'll export only keys defined in " +
+                    "the curve."));
+            serializedObject.ApplyModifiedProperties();
+
+            if (GUILayout.Button("Export")) {
                 ExportNodes(exportSamplingFrequency.intValue);
             }
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawLinearInspectorButton() {
@@ -706,17 +718,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                    exportSamplingFrequency,
-                    new GUIContent(
-                        "Export Sampling",
-                        "Number of points to export for 1 m of the curve. " +
-                        "If set to 0, it'll export only keys defined in " +
-                        "the curve."));
-            serializedObject.ApplyModifiedProperties();
-
-            DrawExportNodesInspectorButton();
+            DrawExportControls();
 
             EditorGUILayout.Space();
 

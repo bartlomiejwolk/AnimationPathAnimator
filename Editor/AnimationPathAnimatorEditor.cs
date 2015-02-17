@@ -289,7 +289,6 @@ namespace ATP.AnimationPathTools {
 
         #region DRAWING METHODS
 
-        // TODO Refactor.
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get path node positions.
             var nodePositions = script.AnimationPathBuilder.GetNodePositions();
@@ -300,33 +299,40 @@ namespace ATP.AnimationPathTools {
                 easeCurveValues[i] = script.EaseCurve.keys[i].value;
             }
 
+            var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
+
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
-                DrawEaseHandle(
+                DrawArcHandle(
                     easeCurveValues[i],
                     nodePositions[i],
+                    arcValueMultiplier,
+                    0,
+                    360,
+                    Color.red,
                     (value) => callback(i, value));
             }
         }
 
-        private void DrawEaseHandle(
+        private void DrawArcHandle(
             float easeCurveValue,
             Vector3 nodePosition,
+            float arcValueMultiplier,
+            int minDegrees,
+            int maxDegrees,
+            Color handleColor,
             Action<float> callback) {
 
-            var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
             var arcValue = easeCurveValue * arcValueMultiplier;
             var handleSize = HandleUtility.GetHandleSize(nodePosition);
             var arcRadius = handleSize*ArcHandleRadius;
 
             // TODO Create const.
-            Handles.color = Color.red;
+            Handles.color = handleColor;
 
             Handles.DrawWireArc(
                 nodePosition,
                 Vector3.up,
-                // Make the arc simetrical on the left and right side of
-                // the object.
                 Quaternion.AngleAxis(
                     0,
                     Vector3.up)*Vector3.forward,
@@ -334,7 +340,7 @@ namespace ATP.AnimationPathTools {
                 arcRadius);
 
             // TODO Create const.
-            Handles.color = Color.red;
+            Handles.color = handleColor;
 
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
@@ -352,8 +358,10 @@ namespace ATP.AnimationPathTools {
                 1);
 
             // Limit handle value.
-            if (newArcValue > 360) newArcValue = 360;
-            if (newArcValue < 0) newArcValue = 0;
+            //if (newArcValue > 360) newArcValue = 360;
+            //if (newArcValue < 0) newArcValue = 0;
+            if (newArcValue > maxDegrees) newArcValue = maxDegrees;
+            if (newArcValue < minDegrees) newArcValue = minDegrees;
 
             // TODO Create float precision const.
             if (Math.Abs(newArcValue - arcValue) > 0.001f) {
@@ -442,73 +450,81 @@ namespace ATP.AnimationPathTools {
 
         // TODO Extract methods. Do the same to ease curve drawing method.
         private void DrawTiltingHandles(Action<int, float> callback) {
-            // Get AnimationPathBuilder node positions.
+            // Get path node positions.
             var nodePositions = script.AnimationPathBuilder.GetNodePositions();
 
-            // Get rotation curve timestamps.
-            //var easeTimestamps = new float[script.EaseCurve.length];
-            //for (var i = 0; i < script.EaseCurve.length; i++) {
-            //    easeTimestamps[i] = script.EaseCurve.keys[i].time;
-            //}
-
-            // Get rotation curve values.
+            // Get tilting curve values.
             var tiltingCurveValues = new float[script.EaseCurve.length];
             for (var i = 0; i < script.TiltingCurve.length; i++) {
                 tiltingCurveValues[i] = script.TiltingCurve.keys[i].value;
             }
 
+            var arcValueMultiplier = 1;
+
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
-                var rotationValue = tiltingCurveValues[i];
-                //var arcValue = rotationValue * 2;
-                var arcValue = rotationValue;
-                var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
-                var arcHandleSize = handleSize * ArcHandleRadius;
-
-                // TODO Create const.
-                Handles.color = tiltingHandleColor;
-
-                Handles.DrawWireArc(
+                DrawArcHandle(
+                    tiltingCurveValues[i],
                     nodePositions[i],
-                    Vector3.up,
-                    // Make the arc simetrical on the left and right side of
-                    // the object.
-                    Quaternion.AngleAxis(
-                    //-arcValue / 2,
-                        0,
-                        Vector3.up) * Vector3.forward,
-                    arcValue,
-                    arcHandleSize);
-
-                // TODO Create const.
-                Handles.color = tiltingHandleColor;
-
-                // TODO Create constant.
-                var scaleHandleSize = handleSize * 1.5f;
-
-                // Set initial arc value to other than zero. If initial value
-                // is zero, handle will always return zero.
-                arcValue = Math.Abs(arcValue) < 0.001f ? 15f : arcValue;
-
-                float newArcValue = Handles.ScaleValueHandle(
-                    arcValue,
-                    nodePositions[i] + Vector3.forward * arcHandleSize
-                        * 1.3f,
-                    Quaternion.identity,
-                    scaleHandleSize,
-                    Handles.ConeCap,
-                    1);
-
-                // Limit handle value.
-                if (newArcValue > 90) newArcValue = 90;
-                if (newArcValue < -90) newArcValue = -90;
-
-                // TODO Create float precision const.
-                if (Math.Abs(newArcValue - arcValue) > 0.001f) {
-                    // Execute callback.
-                    callback(i, newArcValue);
-                }
+                    arcValueMultiplier,
+                    -90,
+                    90,
+                    Color.green,
+                    (value) => callback(i, value));
             }
+
+            //// For each path node..
+            //for (var i = 0; i < nodePositions.Length; i++) {
+            //    var rotationValue = tiltingCurveValues[i];
+            //    //var arcValue = rotationValue * 2;
+            //    var arcValue = rotationValue;
+            //    var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
+            //    var arcHandleSize = handleSize * ArcHandleRadius;
+
+            //    // TODO Create const.
+            //    Handles.color = tiltingHandleColor;
+
+            //    Handles.DrawWireArc(
+            //        nodePositions[i],
+            //        Vector3.up,
+            //        // Make the arc simetrical on the left and right side of
+            //        // the object.
+            //        Quaternion.AngleAxis(
+            //        //-arcValue / 2,
+            //            0,
+            //            Vector3.up) * Vector3.forward,
+            //        arcValue,
+            //        arcHandleSize);
+
+            //    // TODO Create const.
+            //    Handles.color = tiltingHandleColor;
+
+            //    // TODO Create constant.
+            //    var scaleHandleSize = handleSize * 1.5f;
+
+            //    // Set initial arc value to other than zero. If initial value
+            //    // is zero, handle will always return zero.
+            //    arcValue = Math.Abs(arcValue) < 0.001f ? 15f : arcValue;
+
+            //    float newArcValue = Handles.ScaleValueHandle(
+            //        arcValue,
+            //        nodePositions[i] + Vector3.forward * arcHandleSize
+            //            * 1.3f,
+            //        Quaternion.identity,
+            //        scaleHandleSize,
+            //        Handles.ConeCap,
+            //        1);
+
+            //    // Limit handle value.
+            //    if (newArcValue > 90) newArcValue = 90;
+            //    if (newArcValue < -90) newArcValue = -90;
+
+            //    // TODO Create float precision const.
+            //    if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+            //        // Execute callback.
+            //        callback(i, newArcValue);
+            //    }
+            //}
         }
         #endregion DRAWING METHODS
 

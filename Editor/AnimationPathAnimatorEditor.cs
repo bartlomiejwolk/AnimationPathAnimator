@@ -562,7 +562,7 @@ namespace ATP.AnimationPathTools {
 
             return rotationValue;
         }
-        // TODO Rename to GetNearestBackwardNodeTimestamp().
+
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = script.GetPathTimestamps();
 
@@ -576,7 +576,6 @@ namespace ATP.AnimationPathTools {
             return 0;
         }
 
-        // TODO Rename to GetNearestForwardNodeTimestamp().
         private float GetNearestForwardNodeTimestamp() {
             var pathTimestamps = script.GetPathTimestamps();
 

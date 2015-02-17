@@ -70,6 +70,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty maxAnimationSpeed;
 
         private SerializedProperty rotationSpeed;
+        private const float ScaleHandleSize = 1.5f;
+
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -337,7 +339,6 @@ namespace ATP.AnimationPathTools {
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize*ArcHandleRadius;
 
-            // TODO Create const.
             Handles.color = handleColor;
 
             Handles.DrawWireArc(
@@ -349,15 +350,13 @@ namespace ATP.AnimationPathTools {
                 arcValue,
                 arcRadius);
 
-            // TODO Create const.
             Handles.color = handleColor;
 
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
             arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
 
-            // TODO Create constant.
-            var scaleHandleSize = handleSize*1.5f;
+            var scaleHandleSize = handleSize * ScaleHandleSize;
             float newArcValue = Handles.ScaleValueHandle(
                 arcValue,
                 position + Vector3.forward*arcRadius

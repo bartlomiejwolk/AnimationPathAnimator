@@ -19,6 +19,9 @@ namespace ATP.AnimationPathTools {
         private const float RotationHandleSize = 0.25f;
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
+        public const KeyCode EaseMode = KeyCode.G;
+        public const KeyCode RotationMode = KeyCode.H;
+        public const KeyCode TiltingMode = KeyCode.J;
         #endregion CONSTANTS
 
         #region FIELDS

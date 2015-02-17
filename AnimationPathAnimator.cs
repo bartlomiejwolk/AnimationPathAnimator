@@ -773,6 +773,8 @@ namespace ATP.AnimationPathTools {
                     keyCopy.time = pathNodeTimestamps[i];
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
+
+                    SmoothCurve(curve);
                 }
             }
         }
@@ -803,7 +805,8 @@ namespace ATP.AnimationPathTools {
                 // Add missing key.
                 if (!valueExists) {
                     AddKeyToCurve(curve, nodeTimestamps[i]);
-                    // Only one node could be added to the path in one frame.
+                    SmoothCurve(curve);
+
                     break;
                 }
             }
@@ -830,6 +833,8 @@ namespace ATP.AnimationPathTools {
 
                 if (!keyExists) {
                     curve.RemoveKey(i);
+                    SmoothCurve(curve);
+
                     break;
                 }
             }

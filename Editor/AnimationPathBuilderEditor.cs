@@ -786,18 +786,7 @@ namespace ATP.AnimationPathTools {
                 node.transform.localPosition = points[i];
             }
         }
-        /// <summary>
-        /// Toggle handles mode with key shortcut.
-        /// </summary>
-        // TODO Rename to HandleTangentModeShortcut().
-        //private void HandleTangentModeOptionShortcut() {
-        //    // Return if Tangent Mode shortcut wasn't released.
-        //    if (Event.current.type != EventType.keyUp
-        //        || Event.current.keyCode != AnimationPathBuilder.TangentModeKey) return;
-
-        //    handlesMode.enumValueIndex = (int) AnimationPathHandlesMode.Tangent;
-        //    serializedObject.ApplyModifiedProperties();
-        //}
+       
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
@@ -811,14 +800,7 @@ namespace ATP.AnimationPathTools {
             // Calculate end point.
             var endPoint = worldPoint + lastNodeOffset;
 
-            // Get number of nodes to remove.
-            var nodesToRemoveNo = Script.NodesNo;
-            // TODO Move to objectPath class.
-            // Remove all nodes.
-            for (var i = 0; i < nodesToRemoveNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                Script.RemoveNode(0);
-            }
+            Script.RemoveAllNodes();
 
             // Add beginning and end points.
             Script.CreateNode(0, worldPoint + firstNodeOffset);

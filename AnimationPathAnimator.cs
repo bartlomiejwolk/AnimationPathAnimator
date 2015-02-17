@@ -533,7 +533,7 @@ namespace ATP.AnimationPathTools {
             RemoveAllCurveKeys(tiltingCurve);
 
             tiltingCurve.AddKey(0, 0);
-            tiltingCurve.AddKey(0.5f, 0);
+            //tiltingCurve.AddKey(0.5f, 0);
             tiltingCurve.AddKey(1, 0);
         }
 
@@ -544,13 +544,13 @@ namespace ATP.AnimationPathTools {
 
             var firstRotationPointPosition =
                 pathNodePositions[0] + defaultRotationPointOffset;
-            var secondRotationPointPosition =
-                pathNodePositions[1] + defaultRotationPointOffset;
+            //var secondRotationPointPosition =
+            //    pathNodePositions[1] + defaultRotationPointOffset;
             var lastRotationPointPosition =
-                pathNodePositions[2] + defaultRotationPointOffset;
+                pathNodePositions[1] + defaultRotationPointOffset;
 
             rotationPath.CreateNewNode(0, firstRotationPointPosition);
-            rotationPath.CreateNewNode(0.5f, secondRotationPointPosition);
+            //rotationPath.CreateNewNode(0.5f, secondRotationPointPosition);
             rotationPath.CreateNewNode(1, lastRotationPointPosition);
         }
 
@@ -558,7 +558,7 @@ namespace ATP.AnimationPathTools {
             RemoveAllCurveKeys(easeCurve);
 
             easeCurve.AddKey(0, DefaultStartEaseValue);
-            easeCurve.AddKey(0.5f, DefaultSecondEaseValue);
+            //easeCurve.AddKey(0.5f, DefaultSecondEaseValue);
             easeCurve.AddKey(1, DefaultEndEaseValue);
         }
 

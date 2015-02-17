@@ -363,7 +363,8 @@ namespace ATP.AnimationPathTools {
         #endregion PRIVATE METHODS
 
         public void RemoveAllNodes() {
-            for (var i = 0; i < NodesNo; i++) {
+            var nodesNo = NodesNo;
+            for (var i = 0; i < nodesNo; i++) {
                 // NOTE After each removal, next node gets index 0.
                 RemoveNode(0);
             }

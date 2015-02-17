@@ -17,7 +17,7 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathBuilderEditor : Editor {
 
         #region CONSTANS
-        private const float FirstNodeForwardMultiplied = 10f;
+        //private const float ResetPathCameraDistance = 20f;
 
         private const int AddButtonH = 25;
         private const int AddButtonV = 10;
@@ -72,8 +72,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty skin;
 
         private Vector3 firstNodeOffset = new Vector3(0, 0, 0);
-        private Vector3 secondNodeOffset = new Vector3(1, -2, 0.5f);
-        private Vector3 lastNodeOffset = new Vector3(2, -2.5f, 2.5f);
+        //private Vector3 secondNodeOffset = new Vector3(1, -2, 0.5f);
+        private Vector3 lastNodeOffset = new Vector3(0, 0, 1);
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -790,17 +790,24 @@ namespace ATP.AnimationPathTools {
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;
             // Get world point to place the Animation Path.
-            var worldPoint = sceneCamera.transform.position
-                + sceneCamera.transform.forward * FirstNodeForwardMultiplied;
-            // Calculate end point.
-            var endPoint = worldPoint + lastNodeOffset;
+            var worldPoint = sceneCamera.transform.position;
+                //+ sceneCamera.transform.forward * ResetPathCameraDistance;
+
+            // First node position.
+            var firstNodePos = worldPoint;
+            // Set y to 0.
+            firstNodePos = new Vector3(firstNodePos.x, 0, firstNodePos.z);
+
+            // Last node position.
+            var lastNodePos = worldPoint + lastNodeOffset;
+            // Set y to 0.
+            lastNodePos = new Vector3(lastNodePos.x, 0, lastNodePos.z);
 
             Script.RemoveAllNodes();
 
-            // Add beginning and end points.
-            Script.CreateNode(0, worldPoint + firstNodeOffset);
-            Script.CreateNode(0.5f, worldPoint + secondNodeOffset);
-            Script.CreateNode(1, endPoint);
+            // Create beginning and end nodes.
+            Script.CreateNode(0, firstNodePos);
+            Script.CreateNode(1, lastNodePos);
 
             // Raise event.
             Script.OnPathReset();

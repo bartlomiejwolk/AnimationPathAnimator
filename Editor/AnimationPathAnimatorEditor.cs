@@ -130,7 +130,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(new GUIContent(
-                            "Start/Pause",
+                            "Play/Pause",
                             ""))) {
 
                 // Pause animation.

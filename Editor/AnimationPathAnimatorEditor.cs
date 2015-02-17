@@ -158,6 +158,12 @@ namespace ATP.AnimationPathTools {
             }
             EditorGUILayout.EndHorizontal();
 
+            script.AutoPlay = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Auto Play",
+                    ""),
+                    script.AutoPlay);
+
             EditorGUILayout.Space();
 
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(

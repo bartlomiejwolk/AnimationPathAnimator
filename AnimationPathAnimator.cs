@@ -68,6 +68,9 @@ namespace ATP.AnimationPathTools {
         private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
 
         [SerializeField]
+        private bool autoPlay;
+
+        [SerializeField]
         private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
 
         /// <summary>
@@ -91,10 +94,10 @@ namespace ATP.AnimationPathTools {
         private float currentAnimTime;
 
         /// <summary>
-        /// If animation is currently enabled.
+        /// If animation is currently enabled (may be paused).
         /// </summary>
         /// <remarks>
-        /// Used in play mode. You can use it to stop animation.
+        /// Used in play mode.
         /// </remarks>
         private bool isPlaying;
 
@@ -198,6 +201,11 @@ namespace ATP.AnimationPathTools {
             set { pause = value; }
         }
 
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -266,14 +274,16 @@ namespace ATP.AnimationPathTools {
             // Start animation from time ratio specified in the inspector.
             //currentAnimTime = animTimeRatio * duration;
 
-            //if (Application.isPlaying) {
-                //StartEaseTimeCoroutine();
-            //}
+            if (Application.isPlaying && autoPlay) {
+                isPlaying = true;
+
+                StartEaseTimeCoroutine();
+            }
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
-            if (Application.isPlaying && isPlaying) {
+            if (Application.isPlaying && isPlaying && !pause) {
                 Animate();
             }
         }
@@ -615,12 +625,11 @@ namespace ATP.AnimationPathTools {
 
         private IEnumerator EaseTime() {
             do {
-                // Return if animation is paused.
-                if (pause) yield return null;
-
-                // Ease time.
-                var timeStep = easeCurve.Evaluate(animTimeRatio);
-                animTimeRatio += timeStep * Time.deltaTime;
+                if (!pause) {
+                    // Ease time.
+                    var timeStep = easeCurve.Evaluate(animTimeRatio);
+                    animTimeRatio += timeStep * Time.deltaTime;
+                }
 
                 yield return null;
             } while (animTimeRatio < 1.0f);

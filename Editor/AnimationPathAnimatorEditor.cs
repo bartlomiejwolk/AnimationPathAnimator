@@ -70,6 +70,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty maxAnimationSpeed;
 
         private SerializedProperty rotationSpeed;
+        private const float FloatPrecision = 0.001f;
         private const float ScaleHandleSize = 1.5f;
 
         #endregion SERIALIZED PROPERTIES
@@ -354,7 +355,7 @@ namespace ATP.AnimationPathTools {
 
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < 0.001f ? 10f : arcValue;
+            arcValue = Math.Abs(arcValue) < FloatPrecision ? 10f : arcValue;
 
             var scaleHandleSize = handleSize * ScaleHandleSize;
             float newArcValue = Handles.ScaleValueHandle(
@@ -367,13 +368,10 @@ namespace ATP.AnimationPathTools {
                 1);
 
             // Limit handle value.
-            //if (newArcValue > 360) newArcValue = 360;
-            //if (newArcValue < 0) newArcValue = 0;
             if (newArcValue > maxDegrees) newArcValue = maxDegrees;
             if (newArcValue < minDegrees) newArcValue = minDegrees;
 
-            // TODO Create float precision const.
-            if (Math.Abs(newArcValue - arcValue) > 0.001f) {
+            if (Math.Abs(newArcValue - arcValue) > FloatPrecision) {
                 callback(newArcValue/arcValueMultiplier);
             }
         }
@@ -436,7 +434,7 @@ namespace ATP.AnimationPathTools {
             // Return if current animation time is not equal to any node
             // timestamp.
             var index = Array.FindIndex(
-                nodeTimestamps, x => Math.Abs(x - currentAnimationTime) < 0.001f);
+                nodeTimestamps, x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
             if (index < 0) return;
 
             Handles.color = Color.magenta;

@@ -242,7 +242,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         //private void HandleDrawingTangentHandles() {
         //    if (handlesMode.enumValueIndex !=
-        //        (int)AnimationPathHandlesMode.Tangent) return;
+        //        (int)AnimationPathBuilderHandleMode.Tangent) return;
 
         //    // Positions at which to draw tangent handles.
         //    var nodes = Script.GetNodePositions();
@@ -265,7 +265,7 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != AnimationPathBuilder.MoveSingleModeKey) return;
 
-            Script.HandleMode = AnimationPathHandlesMode.MoveSingle;
+            Script.HandleMode = AnimationPathBuilderHandleMode.MoveSingle;
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -276,7 +276,7 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != MoveAllKey) return;
 
-            Script.HandleMode = AnimationPathHandlesMode.MoveAll;
+            Script.HandleMode = AnimationPathBuilderHandleMode.MoveAll;
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -285,10 +285,10 @@ namespace ATP.AnimationPathTools {
             if (Script.TangentMode != Script.TangentMode) {
 
                 // Update path node tangents.
-                if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
+                if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                     Script.SmoothAllNodeTangents();
                 }
-                else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
+                else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                     Script.SetNodesLinear();
                 }
             }
@@ -302,25 +302,25 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleSmoothTangentMode() {
-            if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
             }
         }
 
         private void HandleLinearTangentMode() {
-            if (Script.TangentMode == AnimationPathTangentMode.Linear) {
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
         }
 
         private void HandleMoveAllHandleMove(Vector3 moveDelta) {
-            if (Script.HandleMode == AnimationPathHandlesMode.MoveAll) {
+            if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveAll) {
                 Script.OffsetNodePositions(moveDelta);
             }
         }
 
         private void HandleMoveSingleHandleMove(int movedNodeIndex, Vector3 position) {
-            if (Script.HandleMode == AnimationPathHandlesMode.MoveSingle) {
+            if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveSingle) {
 
                 Script.MoveNodeToPosition(movedNodeIndex, position);
                 Script.DistributeTimestamps();
@@ -413,7 +413,7 @@ namespace ATP.AnimationPathTools {
                 Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
                 // In Move All mode..
-                if (Script.HandleMode == AnimationPathHandlesMode.MoveAll) {
+                if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveAll) {
 
                     //capFunction = Handles.DotCap;
                     //capFunction = Handles.SphereCap;
@@ -569,10 +569,10 @@ namespace ATP.AnimationPathTools {
 
             Script.DistributeTimestamps();
 
-            if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
             }
-            else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
         }
@@ -594,10 +594,10 @@ namespace ATP.AnimationPathTools {
             Script.RemoveNode(nodeIndex);
             Script.DistributeTimestamps();
 
-            if (Script.TangentMode == AnimationPathTangentMode.Smooth) {
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
             }
-            else if (Script.TangentMode == AnimationPathTangentMode.Linear) {
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.SetNodesLinear();
             }
         }
@@ -679,14 +679,14 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
 
             Script.HandleMode =
-                (AnimationPathHandlesMode)EditorGUILayout.EnumPopup(
+                (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
                 Script.HandleMode);
 
             Script.TangentMode =
-                (AnimationPathTangentMode) EditorGUILayout.EnumPopup(
+                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Tangent Mode",
                     ""),
@@ -790,7 +790,6 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        // TODO Refactor.
         protected void ResetPath() {
             // Get scene view camera.
             var sceneCamera = SceneView.lastActiveSceneView.camera;

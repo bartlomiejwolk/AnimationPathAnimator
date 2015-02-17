@@ -87,11 +87,11 @@ namespace ATP.AnimationPathTools {
         //[SerializeField]
         //private bool tangentMode;
 
-        [SerializeField] private AnimationPathHandlesMode handleMode =
-            AnimationPathHandlesMode.MoveSingle;
+        [SerializeField] private AnimationPathBuilderHandleMode handleMode =
+            AnimationPathBuilderHandleMode.MoveSingle;
 
-        [SerializeField] private AnimationPathTangentMode tangentMode =
-            AnimationPathTangentMode.Smooth;
+        [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
+            AnimationPathBuilderTangentMode.Smooth;
 
         public const KeyCode MoveSingleModeKey = KeyCode.G;
 
@@ -143,7 +143,7 @@ namespace ATP.AnimationPathTools {
             get { return (objectPath.KeysNo >= 2); }
         }
 
-        public AnimationPathTangentMode TangentMode {
+        public AnimationPathBuilderTangentMode TangentMode {
             get { return tangentMode; }
             set { tangentMode = value; }
         }
@@ -154,7 +154,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
 //[SerializeField]
 //private bool tangentMode;
-        public AnimationPathHandlesMode HandleMode {
+        public AnimationPathBuilderHandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
         }
@@ -205,7 +205,7 @@ namespace ATP.AnimationPathTools {
 
         public virtual void OnPathReset() {
             // Change handle mode to MoveAll.
-            handleMode = AnimationPathHandlesMode.MoveAll;
+            handleMode = AnimationPathBuilderHandleMode.MoveAll;
 
             // Call handler methods.
             var handler = PathReset;

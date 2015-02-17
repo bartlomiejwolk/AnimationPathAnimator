@@ -314,24 +314,34 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        /// <summary>
+        /// Draw arc handle.
+        /// </summary>
+        /// <param name="value">Arc value.</param>
+        /// <param name="position">Arc position.</param>
+        /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
+        /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
+        /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
+        /// <param name="handleColor">Handle color.</param>
+        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         private void DrawArcHandle(
-            float easeCurveValue,
-            Vector3 nodePosition,
+            float value,
+            Vector3 position,
             float arcValueMultiplier,
             int minDegrees,
             int maxDegrees,
             Color handleColor,
             Action<float> callback) {
 
-            var arcValue = easeCurveValue * arcValueMultiplier;
-            var handleSize = HandleUtility.GetHandleSize(nodePosition);
+            var arcValue = value * arcValueMultiplier;
+            var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize*ArcHandleRadius;
 
             // TODO Create const.
             Handles.color = handleColor;
 
             Handles.DrawWireArc(
-                nodePosition,
+                position,
                 Vector3.up,
                 Quaternion.AngleAxis(
                     0,
@@ -350,7 +360,7 @@ namespace ATP.AnimationPathTools {
             var scaleHandleSize = handleSize*1.5f;
             float newArcValue = Handles.ScaleValueHandle(
                 arcValue,
-                nodePosition + Vector3.forward*arcRadius
+                position + Vector3.forward*arcRadius
                 *1.3f,
                 Quaternion.identity,
                 scaleHandleSize,
@@ -472,59 +482,6 @@ namespace ATP.AnimationPathTools {
                     Color.green,
                     (value) => callback(i, value));
             }
-
-            //// For each path node..
-            //for (var i = 0; i < nodePositions.Length; i++) {
-            //    var rotationValue = tiltingCurveValues[i];
-            //    //var arcValue = rotationValue * 2;
-            //    var arcValue = rotationValue;
-            //    var handleSize = HandleUtility.GetHandleSize(nodePositions[i]);
-            //    var arcHandleSize = handleSize * ArcHandleRadius;
-
-            //    // TODO Create const.
-            //    Handles.color = tiltingHandleColor;
-
-            //    Handles.DrawWireArc(
-            //        nodePositions[i],
-            //        Vector3.up,
-            //        // Make the arc simetrical on the left and right side of
-            //        // the object.
-            //        Quaternion.AngleAxis(
-            //        //-arcValue / 2,
-            //            0,
-            //            Vector3.up) * Vector3.forward,
-            //        arcValue,
-            //        arcHandleSize);
-
-            //    // TODO Create const.
-            //    Handles.color = tiltingHandleColor;
-
-            //    // TODO Create constant.
-            //    var scaleHandleSize = handleSize * 1.5f;
-
-            //    // Set initial arc value to other than zero. If initial value
-            //    // is zero, handle will always return zero.
-            //    arcValue = Math.Abs(arcValue) < 0.001f ? 15f : arcValue;
-
-            //    float newArcValue = Handles.ScaleValueHandle(
-            //        arcValue,
-            //        nodePositions[i] + Vector3.forward * arcHandleSize
-            //            * 1.3f,
-            //        Quaternion.identity,
-            //        scaleHandleSize,
-            //        Handles.ConeCap,
-            //        1);
-
-            //    // Limit handle value.
-            //    if (newArcValue > 90) newArcValue = 90;
-            //    if (newArcValue < -90) newArcValue = -90;
-
-            //    // TODO Create float precision const.
-            //    if (Math.Abs(newArcValue - arcValue) > 0.001f) {
-            //        // Execute callback.
-            //        callback(i, newArcValue);
-            //    }
-            //}
         }
         #endregion DRAWING METHODS
 

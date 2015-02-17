@@ -19,9 +19,9 @@ namespace ATP.AnimationPathTools {
         private const float RotationHandleSize = 0.25f;
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
-        public const KeyCode EaseMode = KeyCode.G;
-        public const KeyCode RotationMode = KeyCode.H;
-        public const KeyCode TiltingMode = KeyCode.J;
+        public const KeyCode EaseModeShortcut = KeyCode.G;
+        public const KeyCode RotationModeShortcut = KeyCode.H;
+        public const KeyCode TiltingModeShortcut = KeyCode.J;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -213,6 +213,10 @@ namespace ATP.AnimationPathTools {
             ChangeTimeWithArrowKeys();
 
             serializedObject.ApplyModifiedProperties();
+
+            HandleEaseModeOptionShortcut();
+            HandleRotationModeOptionShortcut();
+            HandleTiltingModeOptionShortcut();
 
             HandleDrawingForwardPointMarker();
             HandleDrawingTargetGizmo();
@@ -554,6 +558,26 @@ namespace ATP.AnimationPathTools {
                 HandleUnmodifiedShortcuts();
             }
 
+        }
+        private void HandleEaseModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != EaseModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Ease;
+        }
+
+        private void HandleRotationModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != RotationModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Rotation;
+        }
+
+        private void HandleTiltingModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != TiltingModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Tilting;
         }
 
         private float ConvertEaseToDegrees(int nodeIndex) {

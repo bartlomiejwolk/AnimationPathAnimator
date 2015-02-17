@@ -44,8 +44,8 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         /// Movement mode will change only while key is pressed.
         /// </remarks>
-        public const KeyCode MoveAllKey = KeyCode.J;
-        public const KeyCode MoveSingleModeKey = KeyCode.K;
+        public const KeyCode MoveAllKey = KeyCode.U;
+        public const KeyCode MoveSingleModeKey = KeyCode.Y;
         #endregion CONSTANS
 
         #region FIELDS

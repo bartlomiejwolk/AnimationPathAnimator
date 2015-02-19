@@ -207,12 +207,12 @@ namespace ATP.AnimationPathTools {
             // Update modifier key state.
             UpdateModifierKey();
 
-            serializedObject.Update();
+            //serializedObject.Update();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
 
-            serializedObject.ApplyModifiedProperties();
+            //serializedObject.ApplyModifiedProperties();
 
             HandleEaseModeOptionShortcut();
             HandleRotationModeOptionShortcut();
@@ -624,6 +624,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleModifiedShortcuts() {
+			serializedObject.Update();
+
             // Check what key is pressed..
             switch (Event.current.keyCode) {
                 // Jump backward.
@@ -661,9 +663,13 @@ namespace ATP.AnimationPathTools {
 
                     break;
             }
+
+			serializedObject.ApplyModifiedProperties();
         }
 
         private void HandleUnmodifiedShortcuts() {
+			serializedObject.Update();
+
             // Helper variable.
             float newAnimationTimeRatio;
             switch (Event.current.keyCode) {
@@ -704,6 +710,8 @@ namespace ATP.AnimationPathTools {
 
                     break;
             }
+
+			serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>

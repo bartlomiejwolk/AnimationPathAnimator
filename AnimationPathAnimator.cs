@@ -587,7 +587,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void Animate() {
-            // Return if animated object path is not initialized.
+            // Return if AnimationPathBuilder is not initialized.
             if (!animationPathBuilder.IsInitialized) return;
 
             AnimateObject();

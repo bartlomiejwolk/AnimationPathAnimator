@@ -226,7 +226,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
 
-            script.UpdateAnimation();
+            //script.UpdateAnimation();
         }
 
         #endregion UNITY MESSAGES
@@ -552,12 +552,13 @@ namespace ATP.AnimationPathTools {
                     && modKeyPressed) {
 
                 HandleModifiedShortcuts();
+				script.UpdateAnimation();
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
                 HandleUnmodifiedShortcuts();
+				script.UpdateAnimation();
             }
-
         }
         private void HandleEaseModeOptionShortcut() {
             if (Event.current.type != EventType.keyUp
@@ -726,4 +727,4 @@ namespace ATP.AnimationPathTools {
         }
         #endregion PRIVATE METHODS
     }
-}
+}	

@@ -244,6 +244,7 @@ namespace ATP.AnimationPathTools {
             animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;
             animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
             animationPathBuilder.NodeTimeChanged += animationPathBuilder_NodeTimeChanged;
+			animationPathBuilder.NodePositionChanged += animationPathBuilder_NodePositionChanged;
 
             // Instantiate rotationPath.
             if (rotationPath == null) {
@@ -251,6 +252,11 @@ namespace ATP.AnimationPathTools {
                     ScriptableObject.CreateInstance<AnimationPath>();
             }
         }
+
+		void animationPathBuilder_NodePositionChanged (object sender, EventArgs e) {
+			UpdateAnimation();
+		}
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnValidate() {
             // Limit duration value.

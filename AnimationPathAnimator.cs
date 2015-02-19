@@ -63,6 +63,12 @@ namespace ATP.AnimationPathTools {
         private readonly Color rotationCurveColor = Color.gray;
         private readonly Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
         #endregion
+
+		#region EVENTS
+		public event EventHandler RotationPointPositionChanged;
+		public event EventHandler NodeTiltChanged;
+		#endregion
+
         #region FIELDS
         [SerializeField]
         private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
@@ -245,6 +251,8 @@ namespace ATP.AnimationPathTools {
             animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
             animationPathBuilder.NodeTimeChanged += animationPathBuilder_NodeTimeChanged;
 			animationPathBuilder.NodePositionChanged += animationPathBuilder_NodePositionChanged;
+			RotationPointPositionChanged += this_RotationPointPositionChanged;
+			NodeTiltChanged += this_NodeTiltChanged;
 
             // Instantiate rotationPath.
             if (rotationPath == null) {
@@ -253,7 +261,15 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+		void this_RotationPointPositionChanged (object sender, EventArgs e) {
+			UpdateAnimation();
+		}
+
 		void animationPathBuilder_NodePositionChanged (object sender, EventArgs e) {
+			UpdateAnimation();
+		}
+
+		void this_NodeTiltChanged(object sender, EventArgs e) {
 			UpdateAnimation();
 		}
 
@@ -294,6 +310,18 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion UNITY MESSAGES
+		
+		#region EVENT INVOCATORS
+		protected virtual void OnRotationPointPositionChanged() {
+			var handler = RotationPointPositionChanged;
+			if (handler != null) handler(this, EventArgs.Empty);
+		}
+
+		protected virtual void OnNodeTiltChanged() {
+			var handler = NodeTiltChanged;
+			if (handler != null) handler(this, EventArgs.Empty);
+		}
+		#endregion
 
         #region EVENT HANDLERS
         void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
@@ -328,6 +356,21 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region PUBLIC METHODS
+
+		public void UpdateNodeTilting (int keyIndex, float newValue) {
+			// Copy keyframe.
+			var keyframeCopy = TiltingCurve.keys[keyIndex];
+			// Update keyframe value.
+			keyframeCopy.value = newValue;
+
+			// Replace old key with updated one.
+			TiltingCurve.RemoveKey(keyIndex);
+			TiltingCurve.AddKey(keyframeCopy);
+			SmoothCurve(TiltingCurve);
+			EaseCurveExtremeNodes(TiltingCurve);
+
+			OnNodeTiltChanged();
+		}
         public void StartEaseTimeCoroutine() {
             // Check for play mode.
             StartCoroutine("EaseTime");
@@ -398,6 +441,9 @@ namespace ATP.AnimationPathTools {
             rotationPath.CreateNewNode(timestamp, newPosition);
             // Smooth all nodes.
             rotationPath.SmoothAllNodes();
+
+			OnRotationPointPositionChanged();
+			//UpdateAnimation();
         }
 
         public Vector3 GetForwardPoint() {

@@ -526,17 +526,8 @@ namespace ATP.AnimationPathTools {
 
             Undo.RecordObject(script, "Tilting curve changed.");
 
-            // Copy keyframe.
-            var keyframeCopy = script.TiltingCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
-            //var oldTimestamp = script.EaseCurve.keys[keyIndex].time;
+			script.UpdateNodeTilting(keyIndex, newValue);
 
-            // Replace old key with updated one.
-            script.TiltingCurve.RemoveKey(keyIndex);
-            script.TiltingCurve.AddKey(keyframeCopy);
-            script.SmoothCurve(script.TiltingCurve);
-            script.EaseCurveExtremeNodes(script.TiltingCurve);
         }
         #endregion CALLBACK HANDLERS
 

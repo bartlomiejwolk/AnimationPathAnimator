@@ -207,12 +207,12 @@ namespace ATP.AnimationPathTools {
             // Update modifier key state.
             UpdateModifierKey();
 
-            serializedObject.Update();
+            //serializedObject.Update();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
 
-            serializedObject.ApplyModifiedProperties();
+            //serializedObject.ApplyModifiedProperties();
 
             HandleEaseModeOptionShortcut();
             HandleRotationModeOptionShortcut();
@@ -226,7 +226,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
 
-            script.UpdateAnimation();
+            //script.UpdateAnimation();
         }
 
         #endregion UNITY MESSAGES
@@ -552,12 +552,13 @@ namespace ATP.AnimationPathTools {
                     && modKeyPressed) {
 
                 HandleModifiedShortcuts();
+				script.UpdateAnimation();
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
                 HandleUnmodifiedShortcuts();
+				script.UpdateAnimation();
             }
-
         }
         private void HandleEaseModeOptionShortcut() {
             if (Event.current.type != EventType.keyUp
@@ -623,6 +624,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleModifiedShortcuts() {
+			serializedObject.Update();
+
             // Check what key is pressed..
             switch (Event.current.keyCode) {
                 // Jump backward.
@@ -660,9 +663,13 @@ namespace ATP.AnimationPathTools {
 
                     break;
             }
+
+			serializedObject.ApplyModifiedProperties();
         }
 
         private void HandleUnmodifiedShortcuts() {
+			serializedObject.Update();
+
             // Helper variable.
             float newAnimationTimeRatio;
             switch (Event.current.keyCode) {
@@ -703,6 +710,8 @@ namespace ATP.AnimationPathTools {
 
                     break;
             }
+
+			serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
@@ -726,4 +735,4 @@ namespace ATP.AnimationPathTools {
         }
         #endregion PRIVATE METHODS
     }
-}
+}	

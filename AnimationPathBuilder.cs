@@ -26,6 +26,7 @@ namespace ATP.AnimationPathTools {
         public event EventHandler NodeTimeChanged;
         public event EventHandler NodeAdded;
         public event EventHandler NodeRemoved;
+		public event EventHandler NodePositionChanged;
 
         /// <summary>
         /// Animation curves that make the animation path.
@@ -201,6 +202,11 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+		protected virtual void OnNodePositionChanged() {
+			var handler = NodePositionChanged;
+			if (handler != null) handler(this, EventArgs.Empty);
+		}
+
         public virtual void OnPathReset() {
             // Change handle mode to MoveAll.
             handleMode = AnimationPathBuilderHandleMode.MoveAll;
@@ -307,11 +313,14 @@ namespace ATP.AnimationPathTools {
                 var newPosition = oldPosition + moveDelta;
                 // Update node positions.
                 objectPath.MovePointToPosition(i, newPosition);
+
+				OnNodePositionChanged();
             }
         }
 
         public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
             objectPath.MovePointToPosition(nodeIndex, position);
+			OnNodePositionChanged();
         }
 
         public void RemoveNode(int nodeIndex) {

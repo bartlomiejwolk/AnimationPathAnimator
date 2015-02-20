@@ -838,7 +838,7 @@ namespace ATP.AnimationPathTools {
             // Get rotation from AnimationCurve.
             var zRotation = tiltingCurve.Evaluate(animTimeRatio);
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-            transform.rotation = Quaternion.Euler(eulerAngles);
+            animatedGO.rotation = Quaternion.Euler(eulerAngles);
 
         }
 

@@ -697,16 +697,18 @@ namespace ATP.AnimationPathTools {
         }
 
         private IEnumerator EaseTime() {
-            do {
+            while (true) {
 				// If animation is not paused..
                 if (!pause) {
                     // Ease time.
                     var timeStep = easeCurve.Evaluate(animTimeRatio);
+					Debug.Log (timeStep);
                     animTimeRatio += timeStep * Time.deltaTime;
+					Debug.Log (animTimeRatio);
                 }
 
                 yield return null;
-            } while (animTimeRatio < 1.0f);
+            }
 
             // Reset animation.
             isPlaying = false;

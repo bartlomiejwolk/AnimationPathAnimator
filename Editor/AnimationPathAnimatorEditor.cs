@@ -83,13 +83,11 @@ namespace ATP.AnimationPathTools {
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
-            animTimeRatio.floatValue = EditorGUILayout.Slider(
+            animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
-                    animTimeRatio.floatValue,
-                    0,
-                    1);
+				animTimeRatio.floatValue);
 
             script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(

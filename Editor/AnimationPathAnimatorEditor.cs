@@ -256,8 +256,9 @@ namespace ATP.AnimationPathTools {
             if (script.RotationMode != AnimatorRotationMode.Forward) return;
 
             var targetPos = script.GetForwardPoint();
+			var globalTargetPos = script.transform.TransformPoint(targetPos);
 
-            Handles.Label(targetPos, "Point", forwardPointMarkerStyle);
+            Handles.Label(globalTargetPos, "Point", forwardPointMarkerStyle);
         }
 
         private void HandleDrawingRotationHandle() {

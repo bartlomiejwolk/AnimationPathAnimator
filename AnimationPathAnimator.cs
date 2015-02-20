@@ -761,13 +761,14 @@ namespace ATP.AnimationPathTools {
                 && rotationMode == AnimatorRotationMode.Forward) {
 
                 Vector3 forwardPoint = GetForwardPoint();
+				var globalForwardPoint = transform.TransformPoint(forwardPoint);
 
                 // In play mode..
                 if (Application.isPlaying) {
-                    RotateObjectWithSlerp(forwardPoint);
+                    RotateObjectWithSlerp(globalForwardPoint);
                 }
                 else {
-                    RotateObjectWithLookAt(forwardPoint);
+                    RotateObjectWithLookAt(globalForwardPoint);
                 }
             }
         }

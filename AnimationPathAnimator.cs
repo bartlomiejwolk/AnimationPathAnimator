@@ -837,7 +837,7 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
-            var eulerAngles = transform.rotation.eulerAngles;
+            var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from AnimationCurve.
             var zRotation = tiltingCurve.Evaluate(animTimeRatio);
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);

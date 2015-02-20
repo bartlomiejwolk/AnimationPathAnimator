@@ -672,10 +672,13 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
+			var positionAtTimestamp = animationPathBuilder.GetVectorAtTime(animTimeRatio);
+			var globalPositionAtTimestamp = transform.TransformPoint(positionAtTimestamp);
+
             // Update position.
-            //animatedGO.position =
-			animatedGO.localPosition =
-			animationPathBuilder.GetVectorAtTime(animTimeRatio);
+			animatedGO.position = globalPositionAtTimestamp;
+			//animatedGO.localPosition =
+			//animationPathBuilder.GetVectorAtTime(animTimeRatio);
         }
 
         private float CalculateNewTestTimestamp(

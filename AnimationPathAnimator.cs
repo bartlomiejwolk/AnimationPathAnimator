@@ -698,6 +698,7 @@ namespace ATP.AnimationPathTools {
 
         private IEnumerator EaseTime() {
             do {
+				// If animation is not paused..
                 if (!pause) {
                     // Ease time.
                     var timeStep = easeCurve.Evaluate(animTimeRatio);

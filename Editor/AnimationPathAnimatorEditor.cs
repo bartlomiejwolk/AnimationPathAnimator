@@ -308,7 +308,7 @@ namespace ATP.AnimationPathTools {
 
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get path node positions.
-            var nodePositions = script.AnimationPathBuilder.GetNodePositions();
+            var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get ease values.
             var easeCurveValues = new float[script.EaseCurve.length];
@@ -398,7 +398,8 @@ namespace ATP.AnimationPathTools {
                     GUIStyle style) {
 
             // Get node position.
-            var nodePosition = script.GetNodePosition(nodeIndex);
+            //var nodePosition = script.GetNodePosition(nodeIndex);
+			var nodePosition = script.GetGlobalNodePosition(nodeIndex);
 
             // Translate node's 3d position into screen coordinates.
             var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);

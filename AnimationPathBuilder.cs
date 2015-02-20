@@ -283,6 +283,18 @@ namespace ATP.AnimationPathTools {
 
             return result;
         }
+
+		public Vector3[] GetNodeGlobalPositions() {
+			var nodePositions = GetNodePositions();
+
+			for (var i = 0; i < nodePositions.Length; i++) {
+				// Convert each position to global coordinate.
+				nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+			}
+
+			return nodePositions;
+		}
+
         public float GetNodeTimestamp(int nodeIndex) {
             return objectPath.GetTimeAtKey(nodeIndex);
         }

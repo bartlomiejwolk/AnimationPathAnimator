@@ -393,6 +393,13 @@ namespace ATP.AnimationPathTools {
             return animationPathBuilder.GetNodePosition(i);
         }
 
+		public Vector3 GetGlobalNodePosition(int nodeIndex) {
+			var localNodePosition = animationPathBuilder.GetNodePosition(nodeIndex);
+			var globalNodePosition = transform.TransformPoint(localNodePosition);
+
+			return globalNodePosition;
+		}
+
         public float GetNodeEaseValue(int i) {
             return easeCurve.keys[i].value;
         }

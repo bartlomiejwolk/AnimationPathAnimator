@@ -472,7 +472,8 @@ namespace ATP.AnimationPathTools {
 
         private void DrawTiltingHandles(Action<int, float> callback) {
             // Get path node positions.
-            var nodePositions = script.AnimationPathBuilder.GetNodePositions();
+            //var nodePositions = script.AnimationPathBuilder.GetNodePositions();
+			var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = new float[script.EaseCurve.length];

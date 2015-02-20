@@ -805,7 +805,7 @@ namespace ATP.AnimationPathTools {
             //var worldPoint = sceneCamera.transform.position;
                 //+ sceneCamera.transform.forward * ResetPathCameraDistance;
 
-			Script.transform.localPosition = Vector3.zero;
+			//Script.transform.localPosition = Vector3.zero;
 
             // First node position.
             var firstNodePos = Script.transform.localPosition;

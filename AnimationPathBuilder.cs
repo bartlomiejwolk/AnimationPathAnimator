@@ -362,10 +362,18 @@ namespace ATP.AnimationPathTools {
 
             if (points.Count < 3) return;
 
+			var transform = GetComponent<Transform>();
+
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
+				// TODO Create array with all converted points instead of doing it for
+				// each point separately.
+				var globalStartPointPosition = transform.TransformPoint(points[i]);
+				var globalEndPointPosition = transform.TransformPoint(points[i + 1]);
+
                 Gizmos.color = gizmoCurveColor;
-                Gizmos.DrawLine(points[i], points[i + 1]);
+                //Gizmos.DrawLine(points[i], points[i + 1]);
+				Gizmos.DrawLine(globalStartPointPosition, globalEndPointPosition);
             }
         }
 

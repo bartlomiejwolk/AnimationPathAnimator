@@ -89,6 +89,12 @@ namespace ATP.AnimationPathTools {
                     "Current animation time."),
 				animTimeRatio.floatValue);
 
+			script.WrapMode = (AnimatorWrapMode) EditorGUILayout.EnumPopup(
+				new GUIContent(
+					"Wrap Mode",
+					""),
+				script.WrapMode);
+
             script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",

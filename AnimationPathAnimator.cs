@@ -393,6 +393,13 @@ namespace ATP.AnimationPathTools {
             return animationPathBuilder.GetNodePosition(i);
         }
 
+		public Vector3 GetGlobalNodePosition(int nodeIndex) {
+			var localNodePosition = animationPathBuilder.GetNodePosition(nodeIndex);
+			var globalNodePosition = transform.TransformPoint(localNodePosition);
+
+			return globalNodePosition;
+		}
+
         public float GetNodeEaseValue(int i) {
             return easeCurve.keys[i].value;
         }
@@ -511,6 +518,8 @@ namespace ATP.AnimationPathTools {
 
             // Get rotation point position.
             var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+			// Convert position to global coordinate.
+			rotationPointPosition = transform.TransformPoint(rotationPointPosition);
 
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
@@ -525,6 +534,11 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationGizmoCurve() {
             var points = rotationPath.SamplePathForPoints(RotationCurveSampling);
+
+			for (var i = 0; i < points.Count; i++){
+				// Convert point positions to global coordinates.
+				points[i] = transform.TransformPoint(points[i]);
+			}
 
             if (points.Count < 2) return;
 
@@ -545,8 +559,11 @@ namespace ATP.AnimationPathTools {
 
             var nodesNo = animationPathBuilder.NodesNo;
             var rotationPointPositions = new Vector3[nodesNo];
+			// TODO Create GetRotationPathPositions() and GetRotationPathGlobalPositions().
             for (int i = 0; i < nodesNo; i++) {
                 rotationPointPositions[i] = GetNodeRotationPointPosition(i);
+				// Convert position to global coordinate.
+				rotationPointPositions[i] = transform.TransformPoint(rotationPointPositions[i]);
             }
 
             //foreach (var rotationPointPosition in rotationPointPositions) {
@@ -655,9 +672,13 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
+			var positionAtTimestamp = animationPathBuilder.GetVectorAtTime(animTimeRatio);
+			var globalPositionAtTimestamp = transform.TransformPoint(positionAtTimestamp);
+
             // Update position.
-            animatedGO.position =
-                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+			animatedGO.position = globalPositionAtTimestamp;
+			//animatedGO.localPosition =
+			//animationPathBuilder.GetVectorAtTime(animTimeRatio);
         }
 
         private float CalculateNewTestTimestamp(
@@ -677,6 +698,7 @@ namespace ATP.AnimationPathTools {
 
         private IEnumerator EaseTime() {
             do {
+				// If animation is not paused..
                 if (!pause) {
                     // Ease time.
                     var timeStep = easeCurve.Evaluate(animTimeRatio);
@@ -760,27 +782,30 @@ namespace ATP.AnimationPathTools {
                 && rotationMode == AnimatorRotationMode.Forward) {
 
                 Vector3 forwardPoint = GetForwardPoint();
+				var globalForwardPoint = transform.TransformPoint(forwardPoint);
 
                 // In play mode..
                 if (Application.isPlaying) {
-                    RotateObjectWithSlerp(forwardPoint);
+                    RotateObjectWithSlerp(globalForwardPoint);
                 }
                 else {
-                    RotateObjectWithLookAt(forwardPoint);
+                    RotateObjectWithLookAt(globalForwardPoint);
                 }
             }
         }
 
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget = rotationPath.GetVectorAtTime(animTimeRatio);
+			// Convert target position to global coordinates.
+			var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
 
             // In play mode use Quaternion.Slerp();
             if (Application.isPlaying) {
-                RotateObjectWithSlerp(lookAtTarget);
+                RotateObjectWithSlerp(lookAtTargetGlobal);
             }
             // In editor mode use Transform.LookAt().
             else {
-                RotateObjectWithLookAt(lookAtTarget);
+                RotateObjectWithLookAt(lookAtTargetGlobal);
             }
         }
 
@@ -813,11 +838,11 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
-            var eulerAngles = transform.rotation.eulerAngles;
+            var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from AnimationCurve.
             var zRotation = tiltingCurve.Evaluate(animTimeRatio);
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-            transform.rotation = Quaternion.Euler(eulerAngles);
+            animatedGO.rotation = Quaternion.Euler(eulerAngles);
 
         }
 

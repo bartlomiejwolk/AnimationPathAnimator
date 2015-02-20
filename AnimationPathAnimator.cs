@@ -10,6 +10,7 @@ namespace ATP.AnimationPathTools {
 
     public enum AnimatorHandleMode { None, Ease, Rotation, Tilting }
     public enum AnimatorRotationMode { Forward, Custom, Target }
+	//public enum AnimatorWrapMode { Clamp, Loop, PingPong }
 
     /// <summary>
     /// Component that allows animating transforms position along predefined
@@ -19,6 +20,15 @@ namespace ATP.AnimationPathTools {
     [RequireComponent(typeof(AnimationPathBuilder))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
+
+		[SerializeField]
+		private WrapMode wrapMode = WrapMode.Clamp;
+
+		public WrapMode WrapMode {
+			get { return wrapMode; }
+			set { wrapMode = value; }
+		}
+
         #region CONSTANTS
         private const int RotationCurveSampling = 20;
         private const float DefaultEndEaseValue = 0.01f;
@@ -274,7 +284,7 @@ namespace ATP.AnimationPathTools {
 		}
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnValidate() {
+		private void OnValidate() {
             // Limit duration value.
             //if (duration < 1) {
             //    duration = 1;
@@ -490,6 +500,10 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+		public void UpdateWrapMode () {
+			animationPathBuilder.SetWrapMode(wrapMode);
+		}
+
         public void SyncCurveWithPath(AnimationCurve curve) {
             if (animationPathBuilder.NodesNo > curve.length) {
                 UpdateCurveWithAddedKeys(curve);
@@ -697,7 +711,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private IEnumerator EaseTime() {
-            do {
+            while (true) {
 				// If animation is not paused..
                 if (!pause) {
                     // Ease time.
@@ -706,7 +720,7 @@ namespace ATP.AnimationPathTools {
                 }
 
                 yield return null;
-            } while (animTimeRatio < 1.0f);
+            }
 
             // Reset animation.
             isPlaying = false;

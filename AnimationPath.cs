@@ -205,6 +205,12 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+		public void SetWrapMode (WrapMode wrapMode) {
+			foreach (var curve in curves) {
+				curve.postWrapMode = wrapMode;
+			}
+		}
+
         /// <summary>
         /// Extract 3d points from path.
         /// </summary>

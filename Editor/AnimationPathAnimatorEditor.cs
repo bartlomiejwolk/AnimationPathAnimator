@@ -83,13 +83,17 @@ namespace ATP.AnimationPathTools {
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
-            animTimeRatio.floatValue = EditorGUILayout.Slider(
+            animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
-                    animTimeRatio.floatValue,
-                    0,
-                    1);
+				animTimeRatio.floatValue);
+
+			script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+				new GUIContent(
+					"Wrap Mode",
+					""),
+				script.WrapMode);
 
             script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
@@ -218,6 +222,8 @@ namespace ATP.AnimationPathTools {
             HandleRotationModeOptionShortcut();
             HandleTiltingModeOptionShortcut();
 
+			HandleWrapModeDropdown();
+
             HandleDrawingForwardPointMarker();
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
@@ -232,6 +238,10 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
+
+		void HandleWrapModeDropdown () {
+			script.UpdateWrapMode();
+		}
 
         private void HandleDrawingEaseHandles() {
             if (script.HandleMode != AnimatorHandleMode.Ease) return;

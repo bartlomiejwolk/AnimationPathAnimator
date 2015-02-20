@@ -89,7 +89,7 @@ namespace ATP.AnimationPathTools {
                     "Current animation time."),
 				animTimeRatio.floatValue);
 
-			script.WrapMode = (AnimatorWrapMode) EditorGUILayout.EnumPopup(
+			script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
 				new GUIContent(
 					"Wrap Mode",
 					""),
@@ -222,6 +222,8 @@ namespace ATP.AnimationPathTools {
             HandleRotationModeOptionShortcut();
             HandleTiltingModeOptionShortcut();
 
+			HandleWrapModeDropdown();
+
             HandleDrawingForwardPointMarker();
             HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
@@ -236,6 +238,10 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
+
+		void HandleWrapModeDropdown () {
+			script.UpdateWrapMode();
+		}
 
         private void HandleDrawingEaseHandles() {
             if (script.HandleMode != AnimatorHandleMode.Ease) return;

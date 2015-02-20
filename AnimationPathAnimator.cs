@@ -10,7 +10,7 @@ namespace ATP.AnimationPathTools {
 
     public enum AnimatorHandleMode { None, Ease, Rotation, Tilting }
     public enum AnimatorRotationMode { Forward, Custom, Target }
-	public enum AnimatorWrapMode { Clamp, Loop, PingPong }
+	//public enum AnimatorWrapMode { Clamp, Loop, PingPong }
 
     /// <summary>
     /// Component that allows animating transforms position along predefined
@@ -22,9 +22,9 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
 		[SerializeField]
-		private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
+		private WrapMode wrapMode = WrapMode.Clamp;
 
-		public AnimatorWrapMode WrapMode {
+		public WrapMode WrapMode {
 			get { return wrapMode; }
 			set { wrapMode = value; }
 		}
@@ -500,6 +500,10 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+		public void UpdateWrapMode () {
+			animationPathBuilder.SetWrapMode(wrapMode);
+		}
+
         public void SyncCurveWithPath(AnimationCurve curve) {
             if (animationPathBuilder.NodesNo > curve.length) {
                 UpdateCurveWithAddedKeys(curve);
@@ -712,9 +716,7 @@ namespace ATP.AnimationPathTools {
                 if (!pause) {
                     // Ease time.
                     var timeStep = easeCurve.Evaluate(animTimeRatio);
-					Debug.Log (timeStep);
                     animTimeRatio += timeStep * Time.deltaTime;
-					Debug.Log (animTimeRatio);
                 }
 
                 yield return null;

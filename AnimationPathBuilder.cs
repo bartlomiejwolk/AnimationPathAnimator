@@ -220,6 +220,10 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC METHODS
 
+		public void SetWrapMode (WrapMode wrapMode) {
+			objectPath.SetWrapMode(wrapMode);
+		}
+
         public void SetNodeTangents(int index, Vector3 inOutTangent) {
             objectPath.ChangePointTangents(index, inOutTangent);
         }

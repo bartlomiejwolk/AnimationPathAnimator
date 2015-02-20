@@ -169,7 +169,7 @@ namespace ATP.AnimationPathTools {
         #region DRAWING HANDLERS
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            var nodePositions = Script.GetNodePositions();
+            var nodePositions = Script.GetNodeGlobalPositions();
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(

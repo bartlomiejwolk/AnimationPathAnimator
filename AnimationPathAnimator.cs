@@ -518,6 +518,8 @@ namespace ATP.AnimationPathTools {
 
             // Get rotation point position.
             var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+			// Convert position to global coordinate.
+			rotationPointPosition = transform.TransformPoint(rotationPointPosition);
 
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
@@ -532,6 +534,11 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationGizmoCurve() {
             var points = rotationPath.SamplePathForPoints(RotationCurveSampling);
+
+			for (var i = 0; i < points.Count; i++){
+				// Convert point positions to global coordinates.
+				points[i] = transform.TransformPoint(points[i]);
+			}
 
             if (points.Count < 2) return;
 
@@ -552,8 +559,11 @@ namespace ATP.AnimationPathTools {
 
             var nodesNo = animationPathBuilder.NodesNo;
             var rotationPointPositions = new Vector3[nodesNo];
+			// TODO Create GetRotationPathPositions() and GetRotationPathGlobalPositions().
             for (int i = 0; i < nodesNo; i++) {
                 rotationPointPositions[i] = GetNodeRotationPointPosition(i);
+				// Convert position to global coordinate.
+				rotationPointPositions[i] = transform.TransformPoint(rotationPointPositions[i]);
             }
 
             //foreach (var rotationPointPosition in rotationPointPositions) {
@@ -782,14 +792,16 @@ namespace ATP.AnimationPathTools {
 
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget = rotationPath.GetVectorAtTime(animTimeRatio);
+			// Convert target position to global coordinates.
+			var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
 
             // In play mode use Quaternion.Slerp();
             if (Application.isPlaying) {
-                RotateObjectWithSlerp(lookAtTarget);
+                RotateObjectWithSlerp(lookAtTargetGlobal);
             }
             // In editor mode use Transform.LookAt().
             else {
-                RotateObjectWithLookAt(lookAtTarget);
+                RotateObjectWithLookAt(lookAtTargetGlobal);
             }
         }
 

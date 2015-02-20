@@ -385,6 +385,7 @@ namespace ATP.AnimationPathTools {
             return addButtonPressed;
         }
 
+		// TODO Refactor.
         private void DrawPositionHandles(
             Action<int, Vector3, Vector3> callback) {
 
@@ -425,21 +426,30 @@ namespace ATP.AnimationPathTools {
 
                 //}
 
+				//var nodeLocalPosition = Script.transform.InverseTransformPoint(nodes[i]);
+				var nodeGlobalPosition = Script.transform.TransformPoint(nodes[i]);
+
                 // Draw handle.
                 var newPos = Handles.FreeMoveHandle(
-                    nodes[i],
+                    //nodes[i],
+					nodeGlobalPosition,
                     Quaternion.identity,
                     sphereSize,
                     Vector3.zero,
                     capFunction);
 
+				var newNodeLocalPosition = Script.transform.InverseTransformPoint(newPos);
+
                 // If node was moved..
-                if (newPos != nodes[i]) {
+                //if (newPos != nodes[i]) {
+				if (newPos != nodeGlobalPosition) {
                     // Calculate movement delta.
-                    var moveDelta = newPos - nodes[i];
+                    //var moveDelta = newPos - nodes[i];
+					var moveDelta = newNodeLocalPosition - nodes[i];
 
                     // Execute callback.
-                    callback(i, newPos, moveDelta);
+                    //callback(i, newPos, moveDelta);
+					callback(i, newNodeLocalPosition, moveDelta);
                 }
             }
         }
@@ -790,18 +800,20 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         protected void ResetPath() {
             // Get scene view camera.
-            var sceneCamera = SceneView.lastActiveSceneView.camera;
+            //var sceneCamera = SceneView.lastActiveSceneView.camera;
             // Get world point to place the Animation Path.
-            var worldPoint = sceneCamera.transform.position;
+            //var worldPoint = sceneCamera.transform.position;
                 //+ sceneCamera.transform.forward * ResetPathCameraDistance;
 
+			Script.transform.localPosition = Vector3.zero;
+
             // First node position.
-            var firstNodePos = worldPoint;
+            var firstNodePos = Script.transform.localPosition;
             // Set y to 0.
             firstNodePos = new Vector3(firstNodePos.x, 0, firstNodePos.z);
 
             // Last node position.
-            var lastNodePos = worldPoint + lastNodeOffset;
+            var lastNodePos = firstNodePos + lastNodeOffset;
             // Set y to 0.
             lastNodePos = new Vector3(lastNodePos.x, 0, lastNodePos.z);
 

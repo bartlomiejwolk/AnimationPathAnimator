@@ -656,8 +656,9 @@ namespace ATP.AnimationPathTools {
             }
 
             // Update position.
-            animatedGO.position =
-                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+            //animatedGO.position =
+			animatedGO.localPosition =
+			animationPathBuilder.GetVectorAtTime(animTimeRatio);
         }
 
         private float CalculateNewTestTimestamp(

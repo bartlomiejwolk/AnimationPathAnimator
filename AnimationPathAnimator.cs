@@ -575,9 +575,9 @@ namespace ATP.AnimationPathTools {
             var rotationPointPositions = new Vector3[nodesNo];
 			// TODO Create GetRotationPathPositions() and GetRotationPathGlobalPositions().
             for (int i = 0; i < nodesNo; i++) {
-                rotationPointPositions[i] = GetNodeRotationPointPosition(i);
+                var localPos = GetNodeRotationPointPosition(i);
 				// Convert position to global coordinate.
-				rotationPointPositions[i] = transform.TransformPoint(rotationPointPositions[i]);
+				rotationPointPositions[i] = transform.TransformPoint(localPos);
             }
 
             //foreach (var rotationPointPosition in rotationPointPositions) {

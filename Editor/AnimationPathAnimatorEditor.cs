@@ -101,6 +101,12 @@ namespace ATP.AnimationPathTools {
                     ""),
                 script.HandleMode);
 
+			script.UpdateAllMode = EditorGUILayout.Toggle(
+				new GUIContent(
+				"Update All",
+				""),
+				script.UpdateAllMode);
+
             //EditorGUILayout.PropertyField(rotationMode);
             script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
@@ -514,18 +520,21 @@ namespace ATP.AnimationPathTools {
 
         #region CALLBACK HANDLERS
 
+		// TODO Check if you can pass also timestamp as arg. without adding
+		// much overhead.
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
             Undo.RecordObject(script, "Ease curve changed.");
 
-            // Copy keyframe.
-            var keyframeCopy = script.EaseCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
+			if (script.UpdateAllMode) {
+				var keyTime = script.EaseCurve.keys[keyIndex].time;
+				var oldValue = script.EaseCurve.Evaluate(keyTime);
+				var delta = newValue - oldValue;
+				script.UpdateEaseValues(delta);
+			}
+			else {
+				script.UpdateEaseValue(keyIndex, newValue);
+			}
 
-            // Replace old key with updated one.
-            script.EaseCurve.RemoveKey(keyIndex);
-            script.EaseCurve.AddKey(keyframeCopy);
-            script.SmoothCurve(script.EaseCurve);
         }
 
         private void DrawRotationHandlesCallbackHandler(

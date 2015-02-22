@@ -122,6 +122,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationPath rotationPath;
 
+		[SerializeField]
+		private bool updateAllMode;
+
         //private float timeStep;
 
         #endregion FIELDS
@@ -167,6 +170,15 @@ namespace ATP.AnimationPathTools {
 #pragma warning restore 649
         #endregion EDITOR
         #region PUBLIC PROPERTIES
+
+		public bool UpdateAllMode {
+			get {
+				return updateAllMode;
+			}
+			set {
+				updateAllMode = value;
+			}
+		}
 
         /// <summary>
         /// Path used to animate the <c>animatedGO</c> transform.
@@ -472,6 +484,24 @@ namespace ATP.AnimationPathTools {
             return animationPathBuilder.GetVectorAtTime(forwardPointTimestamp);
         }
 
+		public void UpdateEaseValues (float delta) {
+			for (var i = 0; i < easeCurve.length; i++) {
+				// Copy key.
+				var keyCopy = easeCurve[i];
+				// Update key value.
+				keyCopy.value += delta;
+
+				// Remove old key.
+				easeCurve.RemoveKey(i);
+
+				// Add key.
+				easeCurve.AddKey(keyCopy);
+
+				// Smooth all tangents.
+				SmoothCurve(EaseCurve);
+			}
+		}
+
         public Vector3 GetNodeRotationPointPosition(int nodeIndex) {
             return rotationPath.GetVectorAtKey(nodeIndex);
         }
@@ -491,6 +521,20 @@ namespace ATP.AnimationPathTools {
                 rotationPath.RemoveNode(0);
             }
         }
+
+		public void UpdateEaseValue (int keyIndex, float newValue) {
+			// Copy keyframe.
+			var keyframeCopy = EaseCurve.keys[keyIndex];
+			// Update keyframe value.
+			keyframeCopy.value = newValue;
+			
+			// Replace old key with updated one.
+			EaseCurve.RemoveKey(keyIndex);
+			EaseCurve.AddKey(keyframeCopy);
+
+			SmoothCurve(EaseCurve);
+		}
+
         /// <summary>
         /// Call in edit mode to update animation.
         /// </summary>

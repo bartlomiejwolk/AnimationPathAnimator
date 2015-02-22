@@ -523,15 +523,8 @@ namespace ATP.AnimationPathTools {
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
             Undo.RecordObject(script, "Ease curve changed.");
 
-            // Copy keyframe.
-            var keyframeCopy = script.EaseCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
+			script.UpdateEaseValue(keyIndex, newValue);
 
-            // Replace old key with updated one.
-            script.EaseCurve.RemoveKey(keyIndex);
-            script.EaseCurve.AddKey(keyframeCopy);
-            script.SmoothCurve(script.EaseCurve);
         }
 
         private void DrawRotationHandlesCallbackHandler(

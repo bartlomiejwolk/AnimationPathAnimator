@@ -503,6 +503,20 @@ namespace ATP.AnimationPathTools {
                 rotationPath.RemoveNode(0);
             }
         }
+
+		public void UpdateEaseValue (int keyIndex, float newValue) {
+			// Copy keyframe.
+			var keyframeCopy = EaseCurve.keys[keyIndex];
+			// Update keyframe value.
+			keyframeCopy.value = newValue;
+			
+			// Replace old key with updated one.
+			EaseCurve.RemoveKey(keyIndex);
+			EaseCurve.AddKey(keyframeCopy);
+
+			SmoothCurve(EaseCurve);
+		}
+
         /// <summary>
         /// Call in edit mode to update animation.
         /// </summary>

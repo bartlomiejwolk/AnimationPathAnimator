@@ -879,7 +879,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void RotateObjectWithSlerp(Vector3 targetPosition) {
-            // There's no more points to look at.
+            // Return when point to look at is at the same position
+			// as the animated object.
             if (targetPosition == animatedGO.position) return;
 
             // Calculate direction to target.

@@ -101,6 +101,12 @@ namespace ATP.AnimationPathTools {
                     ""),
                 script.HandleMode);
 
+			script.UpdateAllMode = EditorGUILayout.Toggle(
+				new GUIContent(
+				"Update All",
+				""),
+				script.UpdateAllMode);
+
             //EditorGUILayout.PropertyField(rotationMode);
             script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                 new GUIContent(

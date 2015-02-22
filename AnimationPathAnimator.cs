@@ -122,6 +122,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationPath rotationPath;
 
+		[SerializeField]
+		private bool updateAllMode;
+
         //private float timeStep;
 
         #endregion FIELDS
@@ -167,6 +170,15 @@ namespace ATP.AnimationPathTools {
 #pragma warning restore 649
         #endregion EDITOR
         #region PUBLIC PROPERTIES
+
+		public bool UpdateAllMode {
+			get {
+				return updateAllMode;
+			}
+			set {
+				updateAllMode = value;
+			}
+		}
 
         /// <summary>
         /// Path used to animate the <c>animatedGO</c> transform.

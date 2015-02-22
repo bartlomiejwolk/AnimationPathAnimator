@@ -76,6 +76,8 @@ namespace ATP.AnimationPathTools {
         private const float FloatPrecision = 0.001f;
         private const float ScaleHandleSize = 1.5f;
 
+		private SerializedProperty positionLerpSpeed;
+
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -106,6 +108,14 @@ namespace ATP.AnimationPathTools {
 				"Update All",
 				""),
 				script.UpdateAllMode);
+
+			serializedObject.Update();
+			EditorGUILayout.PropertyField(
+				positionLerpSpeed,
+				new GUIContent(
+				"Position Lerp Speed",
+				""));
+			serializedObject.ApplyModifiedProperties();
 
             //EditorGUILayout.PropertyField(rotationMode);
             script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
@@ -207,6 +217,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
+			positionLerpSpeed = serializedObject.FindProperty("positionLerpSpeed");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

@@ -130,6 +130,9 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region EDITOR
+
+		[SerializeField]
+		private float positionLerpSpeed = 0.1f;
         /// <summary>
         /// Transform to be animated.
         /// </summary>
@@ -733,10 +736,14 @@ namespace ATP.AnimationPathTools {
 			var positionAtTimestamp = animationPathBuilder.GetVectorAtTime(animTimeRatio);
 			var globalPositionAtTimestamp = transform.TransformPoint(positionAtTimestamp);
 
-            // Update position.
-			animatedGO.position = globalPositionAtTimestamp;
-			//animatedGO.localPosition =
-			//animationPathBuilder.GetVectorAtTime(animTimeRatio);
+			if (Application.isPlaying) {
+				var lerpSpeed = positionLerpSpeed * Time.deltaTime;
+            	// Update position.
+				animatedGO.position = Vector3.Lerp(animatedGO.position, globalPositionAtTimestamp, positionLerpSpeed);
+			}
+			else {
+				animatedGO.position = globalPositionAtTimestamp;
+			}
         }
 
         private float CalculateNewTestTimestamp(

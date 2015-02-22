@@ -22,6 +22,7 @@ namespace ATP.AnimationPathTools {
         public const KeyCode EaseModeShortcut = KeyCode.G;
         public const KeyCode RotationModeShortcut = KeyCode.H;
         public const KeyCode TiltingModeShortcut = KeyCode.J;
+		public const KeyCode NoneModeShortcut = KeyCode.K;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -238,6 +239,7 @@ namespace ATP.AnimationPathTools {
             HandleEaseModeOptionShortcut();
             HandleRotationModeOptionShortcut();
             HandleTiltingModeOptionShortcut();
+			HandleNoneModeOptionShortcut();
 
 			HandleWrapModeDropdown();
 
@@ -258,6 +260,13 @@ namespace ATP.AnimationPathTools {
 
 		void HandleWrapModeDropdown () {
 			script.UpdateWrapMode();
+		}
+
+		void HandleNoneModeOptionShortcut () {
+			if (Event.current.type != EventType.keyUp
+			    || Event.current.keyCode != NoneModeShortcut) return;
+			
+			script.HandleMode = AnimatorHandleMode.None;
 		}
 
         private void HandleDrawingEaseHandles() {

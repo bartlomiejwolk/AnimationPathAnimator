@@ -484,6 +484,24 @@ namespace ATP.AnimationPathTools {
             return animationPathBuilder.GetVectorAtTime(forwardPointTimestamp);
         }
 
+		public void UpdateEaseValues (float delta) {
+			for (var i = 0; i < easeCurve.length; i++) {
+				// Copy key.
+				var keyCopy = easeCurve[i];
+				// Update key value.
+				keyCopy.value += delta;
+
+				// Remove old key.
+				easeCurve.RemoveKey(i);
+
+				// Add key.
+				easeCurve.AddKey(keyCopy);
+
+				// Smooth all tangents.
+				SmoothCurve(EaseCurve);
+			}
+		}
+
         public Vector3 GetNodeRotationPointPosition(int nodeIndex) {
             return rotationPath.GetVectorAtKey(nodeIndex);
         }

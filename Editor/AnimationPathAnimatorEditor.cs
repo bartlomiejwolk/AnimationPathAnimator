@@ -520,10 +520,20 @@ namespace ATP.AnimationPathTools {
 
         #region CALLBACK HANDLERS
 
+		// TODO Check if you can pass also timestamp as arg. without adding
+		// much overhead.
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
             Undo.RecordObject(script, "Ease curve changed.");
 
-			script.UpdateEaseValue(keyIndex, newValue);
+			if (script.UpdateAllMode) {
+				var keyTime = script.EaseCurve.keys[keyIndex].time;
+				var oldValue = script.EaseCurve.Evaluate(keyTime);
+				var delta = newValue - oldValue;
+				script.UpdateEaseValues(delta);
+			}
+			else {
+				script.UpdateEaseValue(keyIndex, newValue);
+			}
 
         }
 

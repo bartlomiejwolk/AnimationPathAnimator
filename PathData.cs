@@ -16,5 +16,14 @@ namespace ATP.AnimationPathTools {
 
 		[SerializeField]
 		private AnimationCurve tiltingCurve;
+
+	    private void OnEnable() {
+	        animatedObjectPath =
+                ScriptableObject.CreateInstance<AnimationPath>();
+	        rotationPath =
+	            ScriptableObject.CreateInstance<AnimationPath>();
+            easeCurve = new AnimationCurve();
+            tiltingCurve = new AnimationCurve();
+	    }
 	}
 }

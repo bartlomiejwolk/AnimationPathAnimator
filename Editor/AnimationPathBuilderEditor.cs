@@ -70,6 +70,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
+        private SerializedProperty pathData;
 
         //private Vector3 firstNodeOffset = new Vector3(0, 0, 0);
         //private Vector3 secondNodeOffset = new Vector3(1, -2, 0.5f);
@@ -94,6 +95,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            pathData = serializedObject.FindProperty("pathData");
             //handlesMode = serializedObject.FindProperty("handlesMode");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
             //tangentMode = serializedObject.FindProperty("tangentMode");
@@ -716,6 +718,13 @@ namespace ATP.AnimationPathTools {
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
+            EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
+
+            // TODO Rename to DrawResetPathInspectorButton().
             DrawResetInspectorButton();
 
             EditorGUILayout.Space();

@@ -94,6 +94,8 @@ namespace ATP.AnimationPathTools {
         [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
             AnimationPathBuilderTangentMode.Smooth;
 
+        [SerializeField] private PathData pathData;
+
 #pragma warning restore 0414
 
         #endregion Editor
@@ -156,6 +158,11 @@ namespace ATP.AnimationPathTools {
         public AnimationPathBuilderHandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
+        }
+
+        public PathData Data {
+            get { return pathData; }
+            set { pathData = value; }
         }
 
         #endregion PUBLIC PROPERTIES

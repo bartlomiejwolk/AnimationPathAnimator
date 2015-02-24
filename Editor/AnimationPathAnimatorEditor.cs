@@ -250,7 +250,7 @@ namespace ATP.AnimationPathTools {
 			HandleUpdateAllOptionShortcut();
 
             // Return if path asset does not exist.
-            if (script.AnimationPathBuilder.PathData == null) return;
+            if (script.PathData == null) return;
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();

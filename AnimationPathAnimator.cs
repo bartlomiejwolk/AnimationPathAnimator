@@ -276,15 +276,15 @@ namespace ATP.AnimationPathTools {
         }
 
 		void this_RotationPointPositionChanged (object sender, EventArgs e) {
-            if (!Application.isPlaying) UpdateAnimation();
+            if (!Application.isPlaying) Animate();
 		}
 
 		void animationPathBuilder_NodePositionChanged (object sender, EventArgs e) {
-            if (!Application.isPlaying) UpdateAnimation();
+            if (!Application.isPlaying) Animate();
 		}
 
 		void this_NodeTiltChanged(object sender, EventArgs e) {
-            if (!Application.isPlaying) UpdateAnimation();
+            if (!Application.isPlaying) Animate();
 		}
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -527,13 +527,6 @@ namespace ATP.AnimationPathTools {
 			SmoothCurve(PathData.EaseCurve);
 		}
 
-        /// <summary>
-        /// Call in edit mode to update animation.
-        /// </summary>
-        public void UpdateAnimation() {
-            Animate();
-        }
-
 		public void UpdateWrapMode () {
 			animationPathBuilder.SetWrapMode(wrapMode);
 		}
@@ -703,7 +696,7 @@ namespace ATP.AnimationPathTools {
             curve.AddKey(lastKeyCopy);
         }
 
-        private void Animate() {
+        public void Animate() {
             // Return if AnimationPathBuilder is not initialized.
             //if (!animationPathBuilder.IsInitialized) return;
 

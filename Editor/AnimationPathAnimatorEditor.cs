@@ -663,12 +663,13 @@ namespace ATP.AnimationPathTools {
                     && modKeyPressed) {
 
                 HandleModifiedShortcuts();
-				script.UpdateAnimation();
+                if (!Application.isPlaying) script.Animate();
+
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
                 HandleUnmodifiedShortcuts();
-				script.UpdateAnimation();
+                if (!Application.isPlaying) script.Animate();
             }
         }
         private float ConvertEaseToDegrees(int nodeIndex) {

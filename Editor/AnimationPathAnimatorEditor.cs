@@ -538,8 +538,8 @@ namespace ATP.AnimationPathTools {
 
             // Get tilting curve values.
             var tiltingCurveValues = new float[script.PathData.EaseCurve.length];
-            for (var i = 0; i < script.TiltingCurve.length; i++) {
-                tiltingCurveValues[i] = script.TiltingCurve.keys[i].value;
+            for (var i = 0; i < script.PathData.TiltingCurve.length; i++) {
+                tiltingCurveValues[i] = script.PathData.TiltingCurve.keys[i].value;
             }
 
             // Set arc value multiplier.

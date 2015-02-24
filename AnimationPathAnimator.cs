@@ -95,9 +95,9 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private AnimationPathBuilder animationPathBuilder;
 
-        [SerializeField]
+        //[SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private AnimationCurve tiltingCurve = new AnimationCurve();
+        //private AnimationCurve tiltingCurve = new AnimationCurve();
 
         //[SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -204,9 +204,9 @@ namespace ATP.AnimationPathTools {
         //    get { return rotationPath; }
         //}
 
-        public AnimationCurve TiltingCurve {
-            get { return tiltingCurve; }
-        }
+        //public AnimationCurve TiltingCurve {
+        //    get { return tiltingCurve; }
+        //}
 
         public AnimatorHandleMode HandleMode {
             get { return handleMode; }
@@ -361,19 +361,19 @@ namespace ATP.AnimationPathTools {
         #region EVENT HANDLERS
         void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
             UpdateCurveWithRemovedKeys(PathData.EaseCurve);
-            UpdateCurveWithRemovedKeys(tiltingCurve);
+            UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
             UpdateRotationCurvesWithRemovedKeys();
         }
 
         void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
             UpdateCurveTimestamps(PathData.EaseCurve);
-            UpdateCurveTimestamps(tiltingCurve);
+            UpdateCurveTimestamps(PathData.TiltingCurve);
             UpdateRotationCurvesTimestamps();
         }
 
         private void animationPathBuilder_NodeAdded(object sender, EventArgs eventArgs) {
             UpdateCurveWithAddedKeys(PathData.EaseCurve);
-            UpdateCurveWithAddedKeys(tiltingCurve);
+            UpdateCurveWithAddedKeys(PathData.TiltingCurve);
             UpdateRotationCurvesWithAddedKeys();
         }
 
@@ -394,15 +394,15 @@ namespace ATP.AnimationPathTools {
 
 		public void UpdateNodeTilting (int keyIndex, float newValue) {
 			// Copy keyframe.
-			var keyframeCopy = TiltingCurve.keys[keyIndex];
+			var keyframeCopy = PathData.TiltingCurve.keys[keyIndex];
 			// Update keyframe value.
 			keyframeCopy.value = newValue;
 
 			// Replace old key with updated one.
-			TiltingCurve.RemoveKey(keyIndex);
-			TiltingCurve.AddKey(keyframeCopy);
-			SmoothCurve(TiltingCurve);
-			EaseCurveExtremeNodes(TiltingCurve);
+			PathData.TiltingCurve.RemoveKey(keyIndex);
+			PathData.TiltingCurve.AddKey(keyframeCopy);
+			SmoothCurve(PathData.TiltingCurve);
+			EaseCurveExtremeNodes(PathData.TiltingCurve);
 
 			OnNodeTiltChanged();
 		}
@@ -421,7 +421,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public float GetNodeTiltValue(int nodeIndex) {
-            return tiltingCurve.keys[nodeIndex].value;
+            return PathData.TiltingCurve.keys[nodeIndex].value;
         }
 
         public Vector3 GetNodePosition(int i) {
@@ -670,11 +670,11 @@ namespace ATP.AnimationPathTools {
         }
 
         private void ResetTiltingCurve() {
-            RemoveAllCurveKeys(tiltingCurve);
+            RemoveAllCurveKeys(PathData.TiltingCurve);
 
-            tiltingCurve.AddKey(0, 0);
-            //tiltingCurve.AddKey(0.5f, 0);
-            tiltingCurve.AddKey(1, 0);
+            PathData.TiltingCurve.AddKey(0, 0);
+            //PathData.TiltingCurve.AddKey(0.5f, 0);
+            PathData.TiltingCurve.AddKey(1, 0);
         }
 
         private void ResetRotationPath() {
@@ -826,8 +826,8 @@ namespace ATP.AnimationPathTools {
             var firstKey = new Keyframe(0, 0, 0, 0);
             var lastKey = new Keyframe(1, 0, 0, 0);
 
-            tiltingCurve.AddKey(firstKey);
-            tiltingCurve.AddKey(lastKey);
+            PathData.TiltingCurve.AddKey(firstKey);
+            PathData.TiltingCurve.AddKey(lastKey);
         }
 
         private void HandleAnimatedGORotation() {
@@ -912,7 +912,7 @@ namespace ATP.AnimationPathTools {
 
             var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from AnimationCurve.
-            var zRotation = tiltingCurve.Evaluate(animTimeRatio);
+            var zRotation = PathData.TiltingCurve.Evaluate(animTimeRatio);
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
             animatedGO.rotation = Quaternion.Euler(eulerAngles);
 

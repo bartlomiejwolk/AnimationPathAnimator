@@ -80,16 +80,35 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
-        // TODO Make it property.
-        private readonly GUIStyle tiltValueLabelStyle = new GUIStyle {
-            normal = { textColor = Color.white },
-            fontStyle = FontStyle.Bold,
-        };
+        private GUIStyle TiltValueLabelStyle {
+            get {
+                return new GUIStyle {
+                    normal = {textColor = Color.white},
+                    fontStyle = FontStyle.Bold,
+                };
+            }
+        }
 
-        private readonly GUIStyle forwardPointMarkerStyle = new GUIStyle {
-            normal = { textColor = Color.white },
-            fontStyle = FontStyle.Bold,
-        };
+        private GUIStyle ForwardPointMarkerStyle {
+            get {
+                return new GUIStyle {
+                    normal = {textColor = Color.white},
+                    fontStyle = FontStyle.Bold,
+                };
+            }
+        }
+
+
+        //}
+        //private readonly GUIStyle TiltValueLabelStyle = new GUIStyle {
+        //    normal = { textColor = Color.white },
+        //    fontStyle = FontStyle.Bold,
+        //};
+
+        //private readonly GUIStyle ForwardPointMarkerStyle = new GUIStyle {
+        //    normal = { textColor = Color.white },
+        //    fontStyle = FontStyle.Bold,
+        //};
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
@@ -363,7 +382,7 @@ namespace ATP.AnimationPathTools {
             var targetPos = script.GetForwardPoint();
 			var globalTargetPos = script.transform.TransformPoint(targetPos);
 
-            Handles.Label(globalTargetPos, "Point", forwardPointMarkerStyle);
+            Handles.Label(globalTargetPos, "Point", ForwardPointMarkerStyle);
         }
 
         private void HandleDrawingRotationHandle() {
@@ -399,7 +418,7 @@ namespace ATP.AnimationPathTools {
                 ConvertTiltToDegrees,
                 TiltValueLabelOffsetX,
                 TiltValueLabelOffsetY,
-                tiltValueLabelStyle);
+                TiltValueLabelStyle);
         }
         #endregion DRAWING HANDLERS
 
@@ -636,10 +655,10 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void DrawEaseHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
 
-		// TODO Check if you can pass also timestamp as arg. without adding
-		// much overhead.
-        private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
             Undo.RecordObject(script.PathData, "Ease curve changed.");
 
 			if (script.UpdateAllMode) {
@@ -651,7 +670,6 @@ namespace ATP.AnimationPathTools {
 			else {
 				script.UpdateEaseValue(keyIndex, newValue);
 			}
-
         }
 
         private void DrawRotationHandlesCallbackHandler(

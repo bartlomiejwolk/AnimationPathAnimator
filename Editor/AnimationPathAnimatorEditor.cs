@@ -723,19 +723,58 @@ namespace ATP.AnimationPathTools {
                 // and modifier key is pressed also..
                     && modKeyPressed) {
 
-                HandleModifiedShortcuts();
-                if (!Application.isPlaying) script.Animate();
-
+                HandleModifiedShortcuts(
+                    modJumpForwardCallbackHandler,
+                    modJumpBackwardCallbackHandler,
+                    jumpToNextNodeCallbackHandler,
+                    jumpToPreviousNodeCallbackHandler);
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
                 HandleUnmodifiedShortcuts(
-                    jumpForwardCallback: JumpForwardCallbackHandler,
-                    jumpBackwardCallback: JumpBackwardCallbackHandler,
-                    jumpToStartCallback: JumpToStartCallbackHandler,
-                    jumpToEndCallback: JumpToEndCallbackHandler);
+                    JumpForwardCallbackHandler,
+                    JumpBackwardCallbackHandler,
+                    JumpToStartCallbackHandler,
+                    JumpToEndCallbackHandler);
             }
         }
+
+        private void jumpToPreviousNodeCallbackHandler() {
+            // Jump to next node.
+            animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
+            serializedObject.ApplyModifiedProperties();
+
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void jumpToNextNodeCallbackHandler() {
+            // Jump to next node.
+            animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
+            serializedObject.ApplyModifiedProperties();
+
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void modJumpBackwardCallbackHandler() {
+            // Update animation time.
+            animTimeRatio.floatValue -= JumpValue;
+            serializedObject.ApplyModifiedProperties();
+
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void modJumpForwardCallbackHandler() {
+            // Update animation time.
+            animTimeRatio.floatValue += JumpValue;
+            serializedObject.ApplyModifiedProperties();
+
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
+        }
+
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = script.GetNodeEaseValue(nodeIndex);
@@ -800,8 +839,12 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        // TODO Create callbacks.
-        private void HandleModifiedShortcuts() {
+        private void HandleModifiedShortcuts(
+            Action jumpForwardCallback = null,
+            Action jumpBackwardCallback = null,
+            Action jumpToNextNodeCallback = null,
+            Action jumpToPreviousNodeCallback = null) {
+
             serializedObject.Update();
 
             // Check what key is pressed..
@@ -810,38 +853,48 @@ namespace ATP.AnimationPathTools {
                 case JumpBackward:
                     Event.current.Use();
 
-                    // Update animation time.
-                    animTimeRatio.floatValue -= JumpValue;
-                    serializedObject.ApplyModifiedProperties();
+                    //// Update animation time.
+                    //animTimeRatio.floatValue -= JumpValue;
+                    //serializedObject.ApplyModifiedProperties();
+
+                    if (jumpBackwardCallback!= null) jumpBackwardCallback();
 
                     break;
                 // Jump forward.
                 case JumpForward:
                     Event.current.Use();
 
-                    // Update animation time.
-                    animTimeRatio.floatValue += JumpValue;
-                    serializedObject.ApplyModifiedProperties();
+                    //// Update animation time.
+                    //animTimeRatio.floatValue += JumpValue;
+                    //serializedObject.ApplyModifiedProperties();
+
+                    if (jumpForwardCallback != null) jumpForwardCallback();
 
                     break;
 
                 case JumpToNextNode:
                     Event.current.Use();
 
-                    // Jump to next node.
-                    animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
-                    serializedObject.ApplyModifiedProperties();
-                    if (Application.isPlaying) script.UpdateAnimatedGO();
+                    //// Jump to next node.
+                    //animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
+                    //serializedObject.ApplyModifiedProperties();
+                    //if (Application.isPlaying) script.UpdateAnimatedGO();
+
+                    if (jumpToNextNodeCallback != null) jumpToNextNodeCallback();
 
                     break;
 
                 case JumpToPreviousNode:
                     Event.current.Use();
 
-                    // Jump to next node.
-                    animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
-                    serializedObject.ApplyModifiedProperties();
-                    if (Application.isPlaying) script.UpdateAnimatedGO();
+                    //// Jump to next node.
+                    //animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
+                    //serializedObject.ApplyModifiedProperties();
+                    //if (Application.isPlaying) script.UpdateAnimatedGO();
+
+                    if (jumpToPreviousNodeCallback != null) {
+                        jumpToPreviousNodeCallback();
+                    }
 
                     break;
             }
@@ -942,7 +995,6 @@ namespace ATP.AnimationPathTools {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != PlayPauseShortcut) return;
 
-            Debug.Log("HandlePlayPauseShortcut");
             HandlePlayPause();
         }
         #endregion

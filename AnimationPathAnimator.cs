@@ -169,6 +169,8 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
         // disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
+
+        [SerializeField] private PathData pathData;
 #pragma warning restore 649
 #pragma warning restore 649
         #endregion EDITOR

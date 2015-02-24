@@ -49,6 +49,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
+        // TODO Make it property.
         private readonly GUIStyle tiltValueLabelStyle = new GUIStyle {
             normal = { textColor = Color.white },
             fontStyle = FontStyle.Bold,
@@ -79,6 +80,7 @@ namespace ATP.AnimationPathTools {
         private const float ScaleHandleSize = 1.5f;
 
 		private SerializedProperty positionLerpSpeed;
+		private SerializedProperty pathData;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -86,6 +88,12 @@ namespace ATP.AnimationPathTools {
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
 
             animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
@@ -111,12 +119,12 @@ namespace ATP.AnimationPathTools {
 				""),
 				script.UpdateAllMode);
 
-			serializedObject.Update();
 			EditorGUILayout.PropertyField(
 				positionLerpSpeed,
 				new GUIContent(
 				"Position Lerp Speed",
 				""));
+
 			serializedObject.ApplyModifiedProperties();
 
             //EditorGUILayout.PropertyField(rotationMode);
@@ -220,6 +228,7 @@ namespace ATP.AnimationPathTools {
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
 			positionLerpSpeed = serializedObject.FindProperty("positionLerpSpeed");
+            pathData = serializedObject.FindProperty("pathData");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

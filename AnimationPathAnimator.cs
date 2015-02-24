@@ -1060,13 +1060,29 @@ namespace ATP.AnimationPathTools {
         }
         #endregion PRIVATE METHODS
 
+        /// <summary>
+        /// Update animatedGO position, rotation and tilting based on current
+        /// animTimeRatio.
+        /// </summary>
         public void UpdateAnimation() {
+            // Get animatedGO position at current animation time.
             var positionAtTimestamp =
                 animationPathBuilder.GetVectorAtTime(animTimeRatio);
             var globalPositionAtTimestamp =
                 transform.TransformPoint(positionAtTimestamp);
 
+            // Update animatedGO position.
             animatedGO.position = globalPositionAtTimestamp;
+
+            // Get rotation point position.
+            var rotationPointPos =
+                PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+            // Convert target position to global coordinates.
+            var rotationPointGlobalPos =
+                transform.TransformPoint(rotationPointPos);
+
+            // Update animatedGO rotation.
+            RotateObjectWithLookAt(rotationPointGlobalPos);
         }
     }
 }

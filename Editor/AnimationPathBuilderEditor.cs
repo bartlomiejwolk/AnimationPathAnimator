@@ -297,7 +297,7 @@ namespace ATP.AnimationPathTools {
         /// Record target object state for undo.
         /// </summary>
         protected void HandleUndo() {
-            Undo.RecordObject(Script.ObjectPath, "Change path");
+            Undo.RecordObject(Script.PathData.AnimatedObjectPath, "Change path");
         }
 
         private void HandleSmoothTangentMode() {
@@ -784,7 +784,7 @@ namespace ATP.AnimationPathTools {
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = Script.ObjectPath.SamplePathForPoints(
+                points = Script.PathData.AnimatedObjectPath.SamplePathForPoints(
                     exportSampling);
             }
 

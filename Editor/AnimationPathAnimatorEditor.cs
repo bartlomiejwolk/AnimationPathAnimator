@@ -129,7 +129,6 @@ namespace ATP.AnimationPathTools {
 
 			serializedObject.ApplyModifiedProperties();
 
-            //EditorGUILayout.PropertyField(rotationMode);
             script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Rotation Mode",
@@ -164,18 +163,32 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
+
+            // Play/Pause button text.
+            string playPauseBtnText;
+            if (!script.IsPlaying || (script.IsPlaying && script.Pause)) {
+                playPauseBtnText = "Play";
+            }
+            else {
+                playPauseBtnText = "Pause";
+            }
+
+            // Draw Play/Pause button.
             if (GUILayout.Button(new GUIContent(
-                            "Play/Pause",
+                            playPauseBtnText,
                             ""))) {
 
                 HandlePlayPause();
             }
+
+            // Draw Stop button.
             if (GUILayout.Button(new GUIContent(
                             "Stop",
                             ""))) {
 
                 script.StopEaseTimeCoroutine();
             }
+
             EditorGUILayout.EndHorizontal();
 
             script.AutoPlay = EditorGUILayout.Toggle(
@@ -206,26 +219,6 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
-
-        private void HandlePlayPause() {
-            // Pause animation.
-            if (script.IsPlaying) {
-                script.Pause = true;
-                script.IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (script.Pause) {
-                script.Pause = false;
-                script.IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                script.IsPlaying = true;
-                // Start animation.
-                script.StartEaseTimeCoroutine();
-            }
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Get target script reference.
@@ -613,6 +606,25 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region PRIVATE METHODS
+        private void HandlePlayPause() {
+            // Pause animation.
+            if (script.IsPlaying) {
+                script.Pause = true;
+                script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (script.Pause) {
+                script.Pause = false;
+                script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                script.IsPlaying = true;
+                // Start animation.
+                script.StartEaseTimeCoroutine();
+            }
+        }
+
 
         /// <summary>
         /// Change current animation time with arrow keys.

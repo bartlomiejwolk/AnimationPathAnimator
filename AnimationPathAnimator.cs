@@ -823,6 +823,7 @@ namespace ATP.AnimationPathTools {
             }
             // Use rotation path.
             if (animatedGO != null
+                // TODO Remove this condition.
                 && targetGO == null
                 && rotationMode != AnimatorRotationMode.Forward) {
 
@@ -1088,6 +1089,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void UpdateAnimatedGORotation() {
+            if (animatedGO == null) return;
+
             switch (rotationMode) {
                 case AnimatorRotationMode.Forward:
                     Vector3 forwardPoint = GetForwardPoint();
@@ -1109,6 +1112,9 @@ namespace ATP.AnimationPathTools {
 
                     break;
                 case AnimatorRotationMode.Target:
+                    if (targetGO == null) return;
+
+                    RotateObjectWithLookAt(targetGO.position);
                     break;
             }
         }

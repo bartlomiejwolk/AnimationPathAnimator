@@ -35,32 +35,6 @@ namespace ATP.AnimationPathTools {
         private const float DefaultSecondEaseValue = 0.08f;
         private const float DefaultStartEaseValue = 0.01f;
 
-        /// <summary>
-        /// Key shortcut to jump backward.
-        /// </summary>
-        public const KeyCode JumpBackward = KeyCode.LeftArrow;
-
-        /// <summary>
-        /// Key shortcut to jump forward.
-        /// </summary>
-        public const KeyCode JumpForward = KeyCode.RightArrow;
-
-        /// <summary>
-        /// Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public const KeyCode JumpToEnd = KeyCode.DownArrow;
-
-        /// <summary>
-        /// Key shortcut to jump to the beginning of the animation.
-        /// </summary>
-        public const KeyCode JumpToStart = KeyCode.UpArrow;
-
-        public const float JumpValue = 0.01f;
-        /// <summary>
-        /// Keycode used as a modifier key.
-        /// </summary>
-        /// <remarks>Modifier key changes how other keys works.</remarks>
-        public const KeyCode ModKey = KeyCode.A;
 
         /// <summary>
         /// Value of the jump when modifier key is pressed.

@@ -25,6 +25,33 @@ namespace ATP.AnimationPathTools {
 		public const KeyCode NoneModeShortcut = KeyCode.K;
 		public const KeyCode UpdateAllShortcut = KeyCode.L;
 		public const KeyCode PlayPauseShortcut = KeyCode.Space;
+
+        /// <summary>
+        /// Key shortcut to jump backward.
+        /// </summary>
+        public const KeyCode JumpBackward = KeyCode.LeftArrow;
+
+        /// <summary>
+        /// Key shortcut to jump forward.
+        /// </summary>
+        public const KeyCode JumpForward = KeyCode.RightArrow;
+
+        /// <summary>
+        /// Key shortcut to jump to the end of the animation.
+        /// </summary>
+        public const KeyCode JumpToEnd = KeyCode.UpArrow;
+
+        /// <summary>
+        /// Key shortcut to jump to the beginning of the animation.
+        /// </summary>
+        public const KeyCode JumpToStart = KeyCode.DownArrow;
+
+        public const float JumpValue = 0.01f;
+        /// <summary>
+        /// Keycode used as a modifier key.
+        /// </summary>
+        /// <remarks>Modifier key changes how other keys works.</remarks>
+        public const KeyCode ModKey = KeyCode.A;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -695,14 +722,14 @@ namespace ATP.AnimationPathTools {
         private void UpdateModifierKey() {
             // Check if modifier key is currently pressed.
             if (Event.current.type == EventType.keyDown
-                    && Event.current.keyCode == AnimationPathAnimator.ModKey) {
+                    && Event.current.keyCode == ModKey) {
 
                 // Remember key state.
                 modKeyPressed = true;
             }
             // If modifier key was released..
             if (Event.current.type == EventType.keyUp
-                    && Event.current.keyCode == AnimationPathAnimator.ModKey) {
+                    && Event.current.keyCode == ModKey) {
 
                 modKeyPressed = false;
             }
@@ -714,25 +741,25 @@ namespace ATP.AnimationPathTools {
             // Check what key is pressed..
             switch (Event.current.keyCode) {
                 // Jump backward.
-                case AnimationPathAnimator.JumpBackward:
+                case JumpBackward:
                     Event.current.Use();
 
                     // Update animation time.
                     animTimeRatio.floatValue -=
-                        AnimationPathAnimator.JumpValue;
+                        JumpValue;
 
                     break;
                 // Jump forward.
-                case AnimationPathAnimator.JumpForward:
+                case JumpForward:
                     Event.current.Use();
 
                     // Update animation time.
                     animTimeRatio.floatValue +=
-                        AnimationPathAnimator.JumpValue;
+                        JumpValue;
 
                     break;
 
-                case AnimationPathAnimator.JumpToStart:
+                case JumpToStart:
                     Event.current.Use();
 
                     // Jump to next node.
@@ -740,7 +767,7 @@ namespace ATP.AnimationPathTools {
 
                     break;
 
-                case AnimationPathAnimator.JumpToEnd:
+                case JumpToEnd:
                     Event.current.Use();
 
                     // Jump to next node.
@@ -757,9 +784,10 @@ namespace ATP.AnimationPathTools {
 
             // Helper variable.
             float newAnimationTimeRatio;
+
             switch (Event.current.keyCode) {
                 // Jump backward.
-                case AnimationPathAnimator.JumpBackward:
+                case JumpBackward:
                     Event.current.Use();
 
                     // Calculate new time ratio.
@@ -771,7 +799,7 @@ namespace ATP.AnimationPathTools {
 
                     break;
                 // Jump forward.
-                case AnimationPathAnimator.JumpForward:
+                case JumpForward:
                     Event.current.Use();
 
                     newAnimationTimeRatio = animTimeRatio.floatValue
@@ -780,18 +808,18 @@ namespace ATP.AnimationPathTools {
                         (float)(Math.Round(newAnimationTimeRatio, 3));
 
                     break;
-
-                case AnimationPathAnimator.JumpToStart:
-                    Event.current.Use();
-
-                    animTimeRatio.floatValue = 1;
-
-                    break;
-
-                case AnimationPathAnimator.JumpToEnd:
+                // Jump to start.
+                case JumpToStart:
                     Event.current.Use();
 
                     animTimeRatio.floatValue = 0;
+
+                    break;
+                // Jump to end.
+                case JumpToEnd:
+                    Event.current.Use();
+
+                    animTimeRatio.floatValue = 1;
 
                     break;
             }

@@ -129,7 +129,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion FIELDS
 
-        #region EDITOR
+        #region SERIALIZED FIELDS
 
 		[SerializeField]
 		private float positionLerpSpeed = 0.1f;
@@ -171,6 +171,11 @@ namespace ATP.AnimationPathTools {
         private float rotationSpeed = 3.0f;
 
         [SerializeField] private PathData pathData;
+
+#pragma warning disable 169
+        [SerializeField] private bool enableControlsInPlayMode = true;
+#pragma warning restore 169
+
 #pragma warning restore 649
 #pragma warning restore 649
         #endregion EDITOR

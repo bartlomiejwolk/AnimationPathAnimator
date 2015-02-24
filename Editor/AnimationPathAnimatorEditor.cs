@@ -81,6 +81,7 @@ namespace ATP.AnimationPathTools {
 
 		private SerializedProperty positionLerpSpeed;
 		private SerializedProperty pathData;
+		private SerializedProperty enableControlsInPlayMode;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -197,6 +198,14 @@ namespace ATP.AnimationPathTools {
                     ""),
                     script.AutoPlay);
 
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                enableControlsInPlayMode,
+                new GUIContent(
+                    "Play Mode Controls",
+                    "Enable keybord controls in play mode."));
+            serializedObject.ApplyModifiedProperties();
+
             EditorGUILayout.Space();
 
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
@@ -229,6 +238,8 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("maxAnimationSpeed");
 			positionLerpSpeed = serializedObject.FindProperty("positionLerpSpeed");
             pathData = serializedObject.FindProperty("pathData");
+            enableControlsInPlayMode =
+                serializedObject.FindProperty("enableControlsInPlayMode");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

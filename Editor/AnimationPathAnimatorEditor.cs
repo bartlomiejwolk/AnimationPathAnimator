@@ -68,12 +68,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private Color TiltingHandleColor {
-            get {
-                return Color.green;
-            }    
-        }
-
         private GUIStyle EaseValueLabelStyle {
             get {
                 return new GUIStyle {

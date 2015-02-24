@@ -140,9 +140,9 @@ namespace ATP.AnimationPathTools {
         //    set { tangentMode = value; }
         //}
 
-        public bool IsInitialized {
-            get { return (pathData.AnimatedObjectPath.KeysNo >= 2); }
-        }
+        //public bool IsInitialized {
+        //    get { return (pathData.AnimatedObjectPath.KeysNo >= 2); }
+        //}
 
         public AnimationPathBuilderTangentMode TangentMode {
             get { return tangentMode; }
@@ -381,6 +381,8 @@ namespace ATP.AnimationPathTools {
 
 
         private void DrawGizmoCurve() {
+            if (pathData == null) return;
+
             var points = pathData.AnimatedObjectPath.SamplePathForPoints(
                 GizmoCurveSamplingFrequency);
 

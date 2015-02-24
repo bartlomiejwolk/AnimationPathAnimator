@@ -108,9 +108,9 @@ namespace ATP.AnimationPathTools {
                 Tools.current = Tool.None;
             }
 
-            if (!Script.IsInitialized) {
-                ResetPath();
-            }
+            //if (!Script.IsInitialized) {
+            //    ResetPath();
+            //}
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -144,6 +144,9 @@ namespace ATP.AnimationPathTools {
             HandleMoveAllOptionShortcut();
 
             HandleMoveSingleModeShortcut();
+
+            // Return if path asset does not exist.
+            if (Script.PathData == null) return;
 
             // Handle drawing movement handles.
             HandleDrawingPositionHandles();

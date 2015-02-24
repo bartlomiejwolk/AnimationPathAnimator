@@ -718,7 +718,7 @@ namespace ATP.AnimationPathTools {
 
         private void Animate() {
             // Return if AnimationPathBuilder is not initialized.
-            if (!animationPathBuilder.IsInitialized) return;
+            //if (!animationPathBuilder.IsInitialized) return;
 
             AnimateObject();
             HandleAnimatedGORotation();
@@ -727,8 +727,8 @@ namespace ATP.AnimationPathTools {
 
         private void AnimateObject() {
             if (animatedGO == null
-                || animationPathBuilder == null
-                || !animationPathBuilder.IsInitialized) {
+                || animationPathBuilder == null) {
+                //|| !animationPathBuilder.IsInitialized) {
 
                 return;
             }
@@ -898,11 +898,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void TiltObject() {
-            if (animatedGO == null
-                || !animationPathBuilder.IsInitialized) {
-
-                return;
-            }
+            if (animatedGO == null) return;
 
             var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from AnimationCurve.

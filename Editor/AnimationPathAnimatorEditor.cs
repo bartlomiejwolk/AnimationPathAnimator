@@ -232,9 +232,6 @@ namespace ATP.AnimationPathTools {
 
             //serializedObject.Update();
 
-            // Change current animation time with arrow keys.
-            ChangeTimeWithArrowKeys();
-
             //serializedObject.ApplyModifiedProperties();
 
             HandleEaseModeOptionShortcut();
@@ -242,6 +239,12 @@ namespace ATP.AnimationPathTools {
             HandleTiltingModeOptionShortcut();
 			HandleNoneModeOptionShortcut();
 			HandleUpdateAllOptionShortcut();
+
+            // Return if path asset does not exist.
+            if (script.AnimationPathBuilder.PathData == null) return;
+
+            // Change current animation time with arrow keys.
+            ChangeTimeWithArrowKeys();
 
 			HandleWrapModeDropdown();
 

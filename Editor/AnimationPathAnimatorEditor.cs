@@ -370,16 +370,10 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingRotationHandle() {
-            //if (!drawRotationHandle.boolValue) return;
             if (script.HandleMode != AnimatorHandleMode.Rotation) return;
 
-            // Callback to call when node rotation is changed. TODO Pass func.
-            // directly as an argument.
-            Action<float, Vector3> callbackHandler =
-                DrawRotationHandlesCallbackHandler;
-
             // Draw handles.
-            DrawRotationHandle(callbackHandler);
+            DrawRotationHandle(DrawRotationHandlesCallbackHandler);
         }
 
         private void HandleDrawingTargetGizmo() {

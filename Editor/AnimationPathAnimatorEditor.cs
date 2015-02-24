@@ -159,13 +159,13 @@ namespace ATP.AnimationPathTools {
 				""));
 			serializedObject.ApplyModifiedProperties();
 
-            serializedObject.Update();
-
             script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Rotation Mode",
                     ""),
                 script.RotationMode);
+
+            serializedObject.Update();
 
             if (script.RotationMode == AnimatorRotationMode.Forward) {
                 EditorGUILayout.PropertyField(forwardPointOffset);
@@ -186,7 +186,6 @@ namespace ATP.AnimationPathTools {
                     "Animated Object",
                     "Object to animate."));
 
-            serializedObject.Update();
             EditorGUILayout.PropertyField(
                 targetGO,
                 new GUIContent(

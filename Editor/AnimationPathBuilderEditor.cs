@@ -698,6 +698,14 @@ namespace ATP.AnimationPathTools {
         private void DrawInspector() {
             serializedObject.Update();
             EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
                     GizmoCurveColor,
                     new GUIContent("Curve Color", ""));
             serializedObject.ApplyModifiedProperties();
@@ -720,14 +728,6 @@ namespace ATP.AnimationPathTools {
                     Script.TangentMode);
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                pathData,
-                new GUIContent(
-                    "Path Asset",
-                    ""));
-            serializedObject.ApplyModifiedProperties();
 
             // TODO Rename to DrawResetPathInspectorButton().
             DrawResetInspectorButton();

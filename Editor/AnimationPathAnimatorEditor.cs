@@ -24,6 +24,7 @@ namespace ATP.AnimationPathTools {
         public const KeyCode TiltingModeShortcut = KeyCode.J;
 		public const KeyCode NoneModeShortcut = KeyCode.K;
 		public const KeyCode UpdateAllShortcut = KeyCode.L;
+		public const KeyCode PlayPauseShortcut = KeyCode.Space;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -167,22 +168,7 @@ namespace ATP.AnimationPathTools {
                             "Play/Pause",
                             ""))) {
 
-                // Pause animation.
-                if (script.IsPlaying) {
-                    script.Pause = true;
-                    script.IsPlaying = false;
-                }
-                // Unpause animation.
-                else if (script.Pause) {
-                    script.Pause = false;
-                    script.IsPlaying = true;
-                }
-                // Start animation.
-                else {
-                    script.IsPlaying = true;
-                    // Start animation.
-                    script.StartEaseTimeCoroutine();
-                }
+                HandlePlayPause();
             }
             if (GUILayout.Button(new GUIContent(
                             "Stop",
@@ -221,6 +207,25 @@ namespace ATP.AnimationPathTools {
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
 
+        private void HandlePlayPause() {
+            // Pause animation.
+            if (script.IsPlaying) {
+                script.Pause = true;
+                script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (script.Pause) {
+                script.Pause = false;
+                script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                script.IsPlaying = true;
+                // Start animation.
+                script.StartEaseTimeCoroutine();
+            }
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Get target script reference.
@@ -244,24 +249,22 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
+            // Handle undo event.
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
             }
+
+            // Return if path asset does not exist.
+            if (script.PathData == null) return;
+
             // Update modifier key state.
             UpdateModifierKey();
-
-            //serializedObject.Update();
-
-            //serializedObject.ApplyModifiedProperties();
-
             HandleEaseModeOptionShortcut();
             HandleRotationModeOptionShortcut();
             HandleTiltingModeOptionShortcut();
 			HandleNoneModeOptionShortcut();
 			HandleUpdateAllOptionShortcut();
-
-            // Return if path asset does not exist.
-            if (script.PathData == null) return;
+            HandlePlayPauseShortcut();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
@@ -805,6 +808,13 @@ namespace ATP.AnimationPathTools {
             script.HandleMode = AnimatorHandleMode.Ease;
         }
 
+        private void HandlePlayPauseShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != PlayPauseShortcut) return;
+
+            Debug.Log("HandlePlayPauseShortcut");
+            HandlePlayPause();
+        }
         #endregion
     }
 }	

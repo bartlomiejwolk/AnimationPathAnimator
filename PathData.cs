@@ -24,6 +24,15 @@ namespace ATP.AnimationPathTools {
 
 	    private void AssignDefaultValues() {
 	        InitializeAnimatedObjectPath();
+	        InitializeRotationPath();
+	    }
+
+	    private void InitializeRotationPath() {
+            var firstNodePos = new Vector3(0, 0, 0);
+            rotationPath.CreateNewNode(0, firstNodePos);
+
+            var lastNodePos = new Vector3(1, 0, 1);
+            rotationPath.CreateNewNode(1, lastNodePos);
 	    }
 
 	    private void InitializeAnimatedObjectPath() {

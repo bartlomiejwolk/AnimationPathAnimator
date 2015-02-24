@@ -629,27 +629,6 @@ namespace ATP.AnimationPathTools {
 				script.UpdateAnimation();
             }
         }
-        private void HandleEaseModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != EaseModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Ease;
-        }
-
-        private void HandleRotationModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != RotationModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Rotation;
-        }
-
-        private void HandleTiltingModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != TiltingModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Tilting;
-        }
-
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = script.GetNodeEaseValue(nodeIndex);
@@ -691,9 +670,31 @@ namespace ATP.AnimationPathTools {
             // Return timestamp of the last node.
             return 1.0f;
         }
+        #endregion PRIVATE METHODS
+
+        #region SHORTCUT HANDLERS
+        /// <summary>
+        /// Checked if modifier key is pressed and remember it in a class
+        /// field.
+        /// </summary>
+        private void UpdateModifierKey() {
+            // Check if modifier key is currently pressed.
+            if (Event.current.type == EventType.keyDown
+                    && Event.current.keyCode == AnimationPathAnimator.ModKey) {
+
+                // Remember key state.
+                modKeyPressed = true;
+            }
+            // If modifier key was released..
+            if (Event.current.type == EventType.keyUp
+                    && Event.current.keyCode == AnimationPathAnimator.ModKey) {
+
+                modKeyPressed = false;
+            }
+        }
 
         private void HandleModifiedShortcuts() {
-			serializedObject.Update();
+            serializedObject.Update();
 
             // Check what key is pressed..
             switch (Event.current.keyCode) {
@@ -733,11 +734,11 @@ namespace ATP.AnimationPathTools {
                     break;
             }
 
-			serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void HandleUnmodifiedShortcuts() {
-			serializedObject.Update();
+            serializedObject.Update();
 
             // Helper variable.
             float newAnimationTimeRatio;
@@ -780,28 +781,30 @@ namespace ATP.AnimationPathTools {
                     break;
             }
 
-			serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
-        /// <summary>
-        /// Checked if modifier key is pressed and remember it in a class
-        /// field.
-        /// </summary>
-        private void UpdateModifierKey() {
-            // Check if modifier key is currently pressed.
-            if (Event.current.type == EventType.keyDown
-                    && Event.current.keyCode == AnimationPathAnimator.ModKey) {
+        private void HandleTiltingModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != TiltingModeShortcut) return;
 
-                // Remember key state.
-                modKeyPressed = true;
-            }
-            // If modifier key was released..
-            if (Event.current.type == EventType.keyUp
-                    && Event.current.keyCode == AnimationPathAnimator.ModKey) {
-
-                modKeyPressed = false;
-            }
+            script.HandleMode = AnimatorHandleMode.Tilting;
         }
-        #endregion PRIVATE METHODS
+
+        private void HandleRotationModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != RotationModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Rotation;
+        }
+
+        private void HandleEaseModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != EaseModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Ease;
+        }
+
+        #endregion
     }
 }	

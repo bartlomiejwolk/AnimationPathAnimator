@@ -120,12 +120,12 @@ namespace ATP.AnimationPathTools {
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
-
             EditorGUILayout.PropertyField(
                 pathData,
                 new GUIContent(
                     "Path Asset",
                     ""));
+            serializedObject.ApplyModifiedProperties();
 
             animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
@@ -151,13 +151,15 @@ namespace ATP.AnimationPathTools {
 				""),
 				script.UpdateAllMode);
 
+            serializedObject.Update();
 			EditorGUILayout.PropertyField(
 				positionLerpSpeed,
 				new GUIContent(
 				"Position Lerp Speed",
 				""));
-
 			serializedObject.ApplyModifiedProperties();
+
+            serializedObject.Update();
 
             script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
@@ -184,11 +186,13 @@ namespace ATP.AnimationPathTools {
                     "Animated Object",
                     "Object to animate."));
 
+            serializedObject.Update();
             EditorGUILayout.PropertyField(
                 targetGO,
                 new GUIContent(
                     "Target Object",
                     "Object that the animated object will be looking at."));
+            serializedObject.ApplyModifiedProperties();
 
             EditorGUILayout.Space();
 
@@ -246,7 +250,6 @@ namespace ATP.AnimationPathTools {
                 EditorGUILayout.PropertyField(maxAnimationSpeed);
             }
 
-            serializedObject.ApplyModifiedProperties();
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

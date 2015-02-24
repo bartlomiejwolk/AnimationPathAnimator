@@ -1090,6 +1090,11 @@ namespace ATP.AnimationPathTools {
         private void UpdateAnimatedGORotation() {
             switch (rotationMode) {
                 case AnimatorRotationMode.Forward:
+                    Vector3 forwardPoint = GetForwardPoint();
+                    var globalForwardPoint = transform.TransformPoint(forwardPoint);
+
+                    RotateObjectWithLookAt(globalForwardPoint);
+
                     break;
                 case AnimatorRotationMode.Custom:
                     // Get rotation point position.

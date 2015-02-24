@@ -25,6 +25,16 @@ namespace ATP.AnimationPathTools {
 	    private void AssignDefaultValues() {
 	        InitializeAnimatedObjectPath();
 	        InitializeRotationPath();
+	        InitializeEaseCurve();
+	    }
+
+	    private void InitializeEaseCurve() {
+	        easeCurve.AddKey(0, DefaultEaseCurveValue);
+	        easeCurve.AddKey(1, DefaultEaseCurveValue);
+	    }
+
+	    private float DefaultEaseCurveValue {
+            get { return 0.05f; }
 	    }
 
 	    private void InitializeRotationPath() {

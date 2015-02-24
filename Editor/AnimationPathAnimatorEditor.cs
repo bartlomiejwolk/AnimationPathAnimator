@@ -159,18 +159,7 @@ namespace ATP.AnimationPathTools {
 				""));
 			serializedObject.ApplyModifiedProperties();
 
-            // Remember current RotationMode.
-            var prevRotationMode = script.RotationMode;
-            // Draw RotationMode dropdown.
-            script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Rotation Mode",
-                    ""),
-                script.RotationMode);
-            // If value changed, update animated GO in the scene.
-            if (script.RotationMode != prevRotationMode) {
-                script.UpdateAnimatedGO();
-            }
+            DrawRotationModeDropdown();
 
             serializedObject.Update();
 
@@ -258,6 +247,22 @@ namespace ATP.AnimationPathTools {
 
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
+
+        private void DrawRotationModeDropdown() {
+            // Remember current RotationMode.
+            var prevRotationMode = script.RotationMode;
+            // Draw RotationMode dropdown.
+            script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Rotation Mode",
+                    ""),
+                script.RotationMode);
+            // If value changed, update animated GO in the scene.
+            if (script.RotationMode != prevRotationMode) {
+                script.UpdateAnimatedGO();
+            }
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Get target script reference.

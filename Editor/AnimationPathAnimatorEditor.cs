@@ -564,7 +564,7 @@ namespace ATP.AnimationPathTools {
 		// TODO Check if you can pass also timestamp as arg. without adding
 		// much overhead.
         private void DrawEaseHandlesCallbackHandler(int keyIndex, float newValue) {
-            Undo.RecordObject(script, "Ease curve changed.");
+            Undo.RecordObject(script.PathData, "Ease curve changed.");
 
 			if (script.UpdateAllMode) {
 				var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
@@ -591,7 +591,7 @@ namespace ATP.AnimationPathTools {
                     int keyIndex,
                     float newValue) {
 
-            Undo.RecordObject(script, "Tilting curve changed.");
+            Undo.RecordObject(script.PathData, "Tilting curve changed.");
 
 			script.UpdateNodeTilting(keyIndex, newValue);
 

@@ -344,10 +344,7 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingEaseHandles() {
             if (script.HandleMode != AnimatorHandleMode.Ease) return;
 
-            Action<int, float> callbackHandler =
-                DrawEaseHandlesCallbackHandler;
-
-            DrawEaseHandles(callbackHandler);
+            DrawEaseHandles(DrawEaseHandlesCallbackHandler);
         }
 
         private void HandleDrawingEaseLabel() {

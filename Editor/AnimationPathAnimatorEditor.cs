@@ -709,8 +709,8 @@ namespace ATP.AnimationPathTools {
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
                 HandleUnmodifiedShortcuts(
-                    JumpForwardCallbackHandler,
                     JumpBackwardCallbackHandler,
+                    JumpForwardCallbackHandler,
                     JumpToStartCallbackHandler,
                     JumpToEndCallbackHandler,
                     AnyJumpKeyPressedCallbackHandler);

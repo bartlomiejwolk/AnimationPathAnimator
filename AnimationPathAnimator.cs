@@ -281,10 +281,12 @@ namespace ATP.AnimationPathTools {
 
 		void animationPathBuilder_NodePositionChanged (object sender, EventArgs e) {
             if (!Application.isPlaying) Animate();
+            if (Application.isPlaying) UpdateAnimatedGO();
 		}
 
 		void this_NodeTiltChanged(object sender, EventArgs e) {
             if (!Application.isPlaying) Animate();
+            if (Application.isPlaying) UpdateAnimatedGO();
 		}
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -1069,9 +1071,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public void UpdateAnimatedGO() {
             UpdateAnimatedGOPosition();
-
             UpdateAnimatedGORotation();
-
             // Update animatedGO tilting.
             TiltObject();
         }

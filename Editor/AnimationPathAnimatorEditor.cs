@@ -801,6 +801,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Create callbacks.
         private void HandleModifiedShortcuts() {
             serializedObject.Update();
 

@@ -18,12 +18,29 @@ namespace ATP.AnimationPathTools {
 		private AnimationCurve tiltingCurve;
 
 	    private void OnEnable() {
+	        InstantiateReferenceTypes();
+	        AssignDefaultValues();
+	    }
+
+	    private void AssignDefaultValues() {
+	        InitializeAnimatedObjectPath();
+	    }
+
+	    private void InitializeAnimatedObjectPath() {
+            var firstNodePos = new Vector3(0, 0, 0);
+            animatedObjectPath.CreateNewNode(0, firstNodePos);
+
+            var lastNodePos = new Vector3(1, 0, 1);
+            animatedObjectPath.CreateNewNode(1, lastNodePos);
+	    }
+
+	    private void InstantiateReferenceTypes() {
 	        animatedObjectPath =
-                ScriptableObject.CreateInstance<AnimationPath>();
+	            ScriptableObject.CreateInstance<AnimationPath>();
 	        rotationPath =
 	            ScriptableObject.CreateInstance<AnimationPath>();
-            easeCurve = new AnimationCurve();
-            tiltingCurve = new AnimationCurve();
+	        easeCurve = new AnimationCurve();
+	        tiltingCurve = new AnimationCurve();
 	    }
 	}
 }

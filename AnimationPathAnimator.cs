@@ -1059,5 +1059,14 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
+
+        public void UpdateAnimation() {
+            var positionAtTimestamp =
+                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+            var globalPositionAtTimestamp =
+                transform.TransformPoint(positionAtTimestamp);
+
+            animatedGO.position = globalPositionAtTimestamp;
+        }
     }
 }

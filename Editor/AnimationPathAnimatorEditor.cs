@@ -798,6 +798,8 @@ namespace ATP.AnimationPathTools {
                     animTimeRatio.floatValue =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
 
+                    serializedObject.ApplyModifiedProperties();
+
                     break;
                 // Jump forward.
                 case JumpForward:
@@ -808,12 +810,18 @@ namespace ATP.AnimationPathTools {
                     animTimeRatio.floatValue =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
 
+                    serializedObject.ApplyModifiedProperties();
+
                     break;
                 // Jump to start.
                 case JumpToStart:
                     Event.current.Use();
 
                     animTimeRatio.floatValue = 0;
+                    serializedObject.ApplyModifiedProperties();
+
+                    // Update camera position, rotation and tilting.
+                    if (Application.isPlaying) script.UpdateAnimation();
 
                     break;
                 // Jump to end.
@@ -821,11 +829,12 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     animTimeRatio.floatValue = 1;
+                    serializedObject.ApplyModifiedProperties();
+
+                    if (Application.isPlaying) script.UpdateAnimation();
 
                     break;
             }
-
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void HandleTiltingModeOptionShortcut() {

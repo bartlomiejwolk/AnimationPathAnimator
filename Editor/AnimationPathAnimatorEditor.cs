@@ -602,12 +602,6 @@ namespace ATP.AnimationPathTools {
             serializedObject.Update();
             animTimeRatio.floatValue = 1;
             serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
         }
 
         private void JumpForwardCallbackHandler() {
@@ -618,12 +612,6 @@ namespace ATP.AnimationPathTools {
             animTimeRatio.floatValue =
                 (float)(Math.Round(newAnimationTimeRatio, 3));
             serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
         }
 
         private void JumpToStartCallbackHandler() {
@@ -631,12 +619,6 @@ namespace ATP.AnimationPathTools {
             serializedObject.Update();
             animTimeRatio.floatValue = 0;
             serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
         }
 
         private void JumpBackwardCallbackHandler() {
@@ -647,12 +629,6 @@ namespace ATP.AnimationPathTools {
             animTimeRatio.floatValue =
                 (float)(Math.Round(newAnimationTimeRatio, 3));
             serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
         }
 
 
@@ -735,8 +711,14 @@ namespace ATP.AnimationPathTools {
                     JumpForwardCallbackHandler,
                     JumpBackwardCallbackHandler,
                     JumpToStartCallbackHandler,
-                    JumpToEndCallbackHandler);
+                    JumpToEndCallbackHandler,
+                    AnyJumpKeyPressedCallbackHandler);
             }
+        }
+
+        private void AnyJumpKeyPressedCallbackHandler() {
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
         }
 
         private void jumpToPreviousNodeCallbackHandler() {
@@ -904,7 +886,8 @@ namespace ATP.AnimationPathTools {
             Action jumpBackwardCallback = null,
             Action jumpForwardCallback = null,
             Action jumpToStartCallback = null,
-            Action jumpToEndCallback = null) {
+            Action jumpToEndCallback = null,
+            Action anyJumpKeyPressedCallback = null) {
 
             //serializedObject.Update();
 
@@ -926,6 +909,9 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
 
                     if (jumpBackwardCallback != null) jumpBackwardCallback();
+                    if (anyJumpKeyPressedCallback != null) {
+                        anyJumpKeyPressedCallback();
+                    }
 
                     break;
                 // Jump forward.
@@ -940,6 +926,9 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
 
                     if (jumpForwardCallback != null) jumpForwardCallback();
+                    if (anyJumpKeyPressedCallback != null) {
+                        anyJumpKeyPressedCallback();
+                    }
 
                     break;
                 // Jump to start.
@@ -950,6 +939,9 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
 
                     if (jumpToStartCallback != null) jumpToStartCallback();
+                    if (anyJumpKeyPressedCallback != null) {
+                        anyJumpKeyPressedCallback();
+                    }
 
                     // Update camera position, rotation and tilting.
                     //if (Application.isPlaying) script.UpdateAnimatedGO();
@@ -963,6 +955,9 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
 
                     if (jumpToEndCallback != null) jumpToEndCallback();
+                    if (anyJumpKeyPressedCallback != null) {
+                        anyJumpKeyPressedCallback();
+                    }
 
                     //if (Application.isPlaying) script.UpdateAnimatedGO();
 

@@ -299,8 +299,9 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Record target object state for undo.
         /// </summary>
+        // TODO Remove and use undo inline.
         protected void HandleUndo() {
-            Undo.RecordObject(Script.PathData.AnimatedObjectPath, "Change path");
+            Undo.RecordObject(Script.PathData, "Change path");
         }
 
         private void HandleSmoothTangentMode() {

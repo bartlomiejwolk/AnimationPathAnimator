@@ -807,10 +807,11 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleAnimatedGORotation() {
+            if (animatedGO == null) return;
+
             // Look at target.
-            if (animatedGO != null
-                && targetGO != null
-                && rotationMode != AnimatorRotationMode.Forward) {
+            if (targetGO != null
+                && rotationMode == AnimatorRotationMode.Target) {
 
                 // In play mode use Quaternion.Slerp();
                 if (Application.isPlaying) {
@@ -822,17 +823,11 @@ namespace ATP.AnimationPathTools {
                 }
             }
             // Use rotation path.
-            if (animatedGO != null
-                // TODO Remove this condition.
-                && targetGO == null
-                && rotationMode != AnimatorRotationMode.Forward) {
-
+            if (rotationMode == AnimatorRotationMode.Custom) {
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            else if (animatedGO != null
-                && rotationMode == AnimatorRotationMode.Forward) {
-
+            else if (rotationMode == AnimatorRotationMode.Forward) {
                 Vector3 forwardPoint = GetForwardPoint();
 				var globalForwardPoint = transform.TransformPoint(forwardPoint);
 

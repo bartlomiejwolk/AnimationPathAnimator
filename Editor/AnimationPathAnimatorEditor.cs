@@ -703,7 +703,8 @@ namespace ATP.AnimationPathTools {
                     modJumpForwardCallbackHandler,
                     modJumpBackwardCallbackHandler,
                     jumpToNextNodeCallbackHandler,
-                    jumpToPreviousNodeCallbackHandler);
+                    jumpToPreviousNodeCallbackHandler,
+                    AnyModJumpKeyPressedCallbackHandler);
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
@@ -716,6 +717,11 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private void AnyModJumpKeyPressedCallbackHandler() {
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
+        }
+
         private void AnyJumpKeyPressedCallbackHandler() {
             if (Application.isPlaying) script.UpdateAnimatedGO();
             if (!Application.isPlaying) script.Animate();
@@ -725,36 +731,24 @@ namespace ATP.AnimationPathTools {
             // Jump to next node.
             animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
             serializedObject.ApplyModifiedProperties();
-
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
         }
 
         private void jumpToNextNodeCallbackHandler() {
             // Jump to next node.
             animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
             serializedObject.ApplyModifiedProperties();
-
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
         }
 
         private void modJumpBackwardCallbackHandler() {
             // Update animation time.
             animTimeRatio.floatValue -= JumpValue;
             serializedObject.ApplyModifiedProperties();
-
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
         }
 
         private void modJumpForwardCallbackHandler() {
             // Update animation time.
             animTimeRatio.floatValue += JumpValue;
             serializedObject.ApplyModifiedProperties();
-
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
         }
 
         private float ConvertEaseToDegrees(int nodeIndex) {
@@ -825,7 +819,8 @@ namespace ATP.AnimationPathTools {
             Action jumpForwardCallback = null,
             Action jumpBackwardCallback = null,
             Action jumpToNextNodeCallback = null,
-            Action jumpToPreviousNodeCallback = null) {
+            Action jumpToPreviousNodeCallback = null,
+            Action anyModJumpKeyPressedCallback = null) {
 
             serializedObject.Update();
 
@@ -840,6 +835,9 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
 
                     if (jumpBackwardCallback!= null) jumpBackwardCallback();
+                    if (anyModJumpKeyPressedCallback != null) {
+                        anyModJumpKeyPressedCallback();
+                    }
 
                     break;
                 // Jump forward.
@@ -851,6 +849,9 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
 
                     if (jumpForwardCallback != null) jumpForwardCallback();
+                    if (anyModJumpKeyPressedCallback != null) {
+                        anyModJumpKeyPressedCallback();
+                    }
 
                     break;
 
@@ -863,6 +864,9 @@ namespace ATP.AnimationPathTools {
                     //if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     if (jumpToNextNodeCallback != null) jumpToNextNodeCallback();
+                    if (anyModJumpKeyPressedCallback != null) {
+                        anyModJumpKeyPressedCallback();
+                    }
 
                     break;
 
@@ -876,6 +880,9 @@ namespace ATP.AnimationPathTools {
 
                     if (jumpToPreviousNodeCallback != null) {
                         jumpToPreviousNodeCallback();
+                    }
+                    if (anyModJumpKeyPressedCallback != null) {
+                        anyModJumpKeyPressedCallback();
                     }
 
                     break;

@@ -884,12 +884,14 @@ namespace ATP.AnimationPathTools {
         private void TiltObject() {
             if (animatedGO == null) return;
 
+            // Get current animatedGO rotation.
             var eulerAngles = animatedGO.rotation.eulerAngles;
-            // Get rotation from AnimationCurve.
+            // Get rotation from tiltingCurve.
             var zRotation = PathData.TiltingCurve.Evaluate(animTimeRatio);
+            // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            // Update animatedGO rotation.
             animatedGO.rotation = Quaternion.Euler(eulerAngles);
-
         }
 
         private void UpdateCurveTimestamps(AnimationCurve curve) {
@@ -1083,6 +1085,9 @@ namespace ATP.AnimationPathTools {
 
             // Update animatedGO rotation.
             RotateObjectWithLookAt(rotationPointGlobalPos);
+
+            // Update animatedGO tilting.
+            TiltObject();
         }
     }
 }

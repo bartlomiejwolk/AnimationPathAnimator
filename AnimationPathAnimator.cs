@@ -1068,7 +1068,16 @@ namespace ATP.AnimationPathTools {
         /// <remarks>Used to update animatedGO with keys, in play mode.</remarks>
         /// </summary>
         public void UpdateAnimatedGO() {
-            // Get animatedGO position at current animation time.
+            UpdateAnimatedGOPosition();
+
+            UpdateAnimatedGORotation();
+
+            // Update animatedGO tilting.
+            TiltObject();
+        }
+
+        private void UpdateAnimatedGOPosition() {
+// Get animatedGO position at current animation time.
             var positionAtTimestamp =
                 animationPathBuilder.GetVectorAtTime(animTimeRatio);
             var globalPositionAtTimestamp =
@@ -1076,19 +1085,27 @@ namespace ATP.AnimationPathTools {
 
             // Update animatedGO position.
             animatedGO.position = globalPositionAtTimestamp;
+        }
 
-            // Get rotation point position.
-            var rotationPointPos =
-                PathData.RotationPath.GetVectorAtTime(animTimeRatio);
-            // Convert target position to global coordinates.
-            var rotationPointGlobalPos =
-                transform.TransformPoint(rotationPointPos);
+        private void UpdateAnimatedGORotation() {
+            switch (rotationMode) {
+                case AnimatorRotationMode.Forward:
+                    break;
+                case AnimatorRotationMode.Custom:
+                    // Get rotation point position.
+                    var rotationPointPos =
+                        PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+                    // Convert target position to global coordinates.
+                    var rotationPointGlobalPos =
+                        transform.TransformPoint(rotationPointPos);
 
-            // Update animatedGO rotation.
-            RotateObjectWithLookAt(rotationPointGlobalPos);
+                    // Update animatedGO rotation.
+                    RotateObjectWithLookAt(rotationPointGlobalPos);
 
-            // Update animatedGO tilting.
-            TiltObject();
+                    break;
+                case AnimatorRotationMode.Target:
+                    break;
+            }
         }
     }
 }

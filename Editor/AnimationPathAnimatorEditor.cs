@@ -302,7 +302,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
 
-            //script.UpdateAnimation();
+            //script.UpdateAnimatedGO();
         }
 
         #endregion UNITY MESSAGES
@@ -769,7 +769,7 @@ namespace ATP.AnimationPathTools {
                     // Jump to next node.
                     animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
                     serializedObject.ApplyModifiedProperties();
-                    if (Application.isPlaying) script.UpdateAnimation();
+                    if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     break;
 
@@ -779,7 +779,7 @@ namespace ATP.AnimationPathTools {
                     // Jump to next node.
                     animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
                     serializedObject.ApplyModifiedProperties();
-                    if (Application.isPlaying) script.UpdateAnimation();
+                    if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     break;
             }
@@ -826,7 +826,7 @@ namespace ATP.AnimationPathTools {
                     serializedObject.ApplyModifiedProperties();
 
                     // Update camera position, rotation and tilting.
-                    if (Application.isPlaying) script.UpdateAnimation();
+                    if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     break;
                 // Jump to end.
@@ -836,7 +836,7 @@ namespace ATP.AnimationPathTools {
                     animTimeRatio.floatValue = 1;
                     serializedObject.ApplyModifiedProperties();
 
-                    if (Application.isPlaying) script.UpdateAnimation();
+                    if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     break;
             }

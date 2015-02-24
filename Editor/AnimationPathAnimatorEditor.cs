@@ -58,17 +58,30 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region FIELDS
-        private readonly GUIStyle targetGizmoStyle = new GUIStyle {
-            normal = { textColor = Color.white },
-            fontStyle = FontStyle.Bold,
-        };
 
-        private readonly Color tiltingHandleColor = Color.green;
+        private GUIStyle TargetGizmoStyle {
+            get {
+                return new GUIStyle {
+                    normal = {textColor = Color.white},
+                    fontStyle = FontStyle.Bold,
+                };
+            }
+        }
 
-        private readonly GUIStyle easeValueLabelStyle = new GUIStyle {
-            normal = { textColor = Color.white },
-            fontStyle = FontStyle.Bold,
-        };
+        private Color TiltingHandleColor {
+            get {
+                return Color.green;
+            }    
+        }
+
+        private GUIStyle EaseValueLabelStyle {
+            get {
+                return new GUIStyle {
+                    normal = { textColor = Color.white },
+                    fontStyle = FontStyle.Bold,
+                };
+            }
+        }
 
         /// <summary>
         /// If modifier is currently pressed.
@@ -373,7 +386,7 @@ namespace ATP.AnimationPathTools {
                 ConvertEaseToDegrees,
                 EaseValueLabelOffsetX,
                 EaseValueLabelOffsetY,
-                easeValueLabelStyle);
+                EaseValueLabelStyle);
         }
 
         private void HandleDrawingForwardPointMarker() {
@@ -398,7 +411,7 @@ namespace ATP.AnimationPathTools {
             var targetPos =
                 ((Transform)targetGO.objectReferenceValue).position;
 
-            Handles.Label(targetPos, "Target", targetGizmoStyle);
+            Handles.Label(targetPos, "Target", TargetGizmoStyle);
 
         }
 

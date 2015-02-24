@@ -464,7 +464,7 @@ namespace ATP.AnimationPathTools {
             PathData.RotationPath.SmoothAllNodes();
 
 			OnRotationPointPositionChanged();
-			//UpdateAnimation();
+			//UpdateAnimatedGO();
         }
 
         public Vector3 GetForwardPoint() {
@@ -1065,8 +1065,9 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Update animatedGO position, rotation and tilting based on current
         /// animTimeRatio.
+        /// <remarks>Used to update animatedGO with keys, in play mode.</remarks>
         /// </summary>
-        public void UpdateAnimation() {
+        public void UpdateAnimatedGO() {
             // Get animatedGO position at current animation time.
             var positionAtTimestamp =
                 animationPathBuilder.GetVectorAtTime(animTimeRatio);

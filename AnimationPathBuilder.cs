@@ -31,8 +31,8 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Animation curves that make the animation path.
         /// </summary>
-        [SerializeField]
-        private AnimationPath objectPath;
+        //[SerializeField]
+        //private AnimationPath pathData.AnimatedObjectPath;
 
         #endregion Fields
 
@@ -94,15 +94,17 @@ namespace ATP.AnimationPathTools {
         [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
             AnimationPathBuilderTangentMode.Smooth;
 
+        [SerializeField] private PathData pathData;
+
 #pragma warning restore 0414
 
         #endregion Editor
 
         #region PUBLIC PROPERTIES
 
-        public AnimationPath ObjectPath {
-            get { return objectPath; }
-        }
+        //public AnimationPath pathData.AnimatedObjectPath {
+        //    get { return pathData.AnimatedObjectPath; }
+        //}
 
         /// <summary>
         /// Color of the gizmo curve.
@@ -121,7 +123,7 @@ namespace ATP.AnimationPathTools {
         /// Number of keys in an animation curve.
         /// </summary>
         public int NodesNo {
-            get { return objectPath.KeysNo; }
+            get { return pathData.AnimatedObjectPath.KeysNo; }
         }
 
         //public bool SceneControls {
@@ -138,9 +140,9 @@ namespace ATP.AnimationPathTools {
         //    set { tangentMode = value; }
         //}
 
-        public bool IsInitialized {
-            get { return (objectPath.KeysNo >= 2); }
-        }
+        //public bool IsInitialized {
+        //    get { return (pathData.AnimatedObjectPath.KeysNo >= 2); }
+        //}
 
         public AnimationPathBuilderTangentMode TangentMode {
             get { return tangentMode; }
@@ -156,6 +158,11 @@ namespace ATP.AnimationPathTools {
         public AnimationPathBuilderHandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
+        }
+
+        public PathData PathData {
+            get { return pathData; }
+            set { pathData = value; }
         }
 
         #endregion PUBLIC PROPERTIES
@@ -177,11 +184,11 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
-            // Instantiate objectPath.
-            if (objectPath == null) {
-                objectPath =
-                    ScriptableObject.CreateInstance<AnimationPath>();
-            }
+            //// Instantiate pathData.AnimatedObjectPath.
+            //if (pathData.AnimatedObjectPath == null) {
+            //    pathData.AnimatedObjectPath =
+            //        ScriptableObject.CreateInstance<AnimationPath>();
+            //}
 
         }
 
@@ -222,33 +229,33 @@ namespace ATP.AnimationPathTools {
         #region PUBLIC METHODS
 
 		public void SetWrapMode (WrapMode wrapMode) {
-			objectPath.SetWrapMode(wrapMode);
+			pathData.AnimatedObjectPath.SetWrapMode(wrapMode);
 		}
 
         public void SetNodeTangents(int index, Vector3 inOutTangent) {
-            objectPath.ChangePointTangents(index, inOutTangent);
+            pathData.AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
         }
 
         public void ChangeNodeTimestamp(
                             int keyIndex,
                             float newTimestamp) {
 
-            objectPath.ChangeNodeTimestamp(keyIndex, newTimestamp);
+            pathData.AnimatedObjectPath.ChangeNodeTimestamp(keyIndex, newTimestamp);
             OnNodeTimeChanged();
         }
 
         public void CreateNode(float timestamp, Vector3 position) {
-            objectPath.CreateNewNode(timestamp, position);
+            pathData.AnimatedObjectPath.CreateNewNode(timestamp, position);
             OnNodeAdded();
         }
 
         public void CreateNodeAtTime(float timestamp) {
-            objectPath.AddNodeAtTime(timestamp);
+            pathData.AnimatedObjectPath.AddNodeAtTime(timestamp);
             OnNodeAdded();
         }
         public void DistributeTimestamps() {
             // Calculate path curved length.
-            var pathLength = ObjectPath.CalculatePathCurvedLength(
+            var pathLength = pathData.AnimatedObjectPath.CalculatePathCurvedLength(
                 GizmoCurveSamplingFrequency);
             // Calculate time for one meter of curve length.
             var timeForMeter = 1 / pathLength;
@@ -258,7 +265,7 @@ namespace ATP.AnimationPathTools {
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
-                var sectionLength = ObjectPath.CalculateSectionCurvedLength(
+                var sectionLength = pathData.AnimatedObjectPath.CalculateSectionCurvedLength(
                     i - 1,
                     i,
                     GizmoCurveSamplingFrequency);
@@ -275,7 +282,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public Vector3 GetNodePosition(int nodeIndex) {
-            return objectPath.GetVectorAtKey(nodeIndex);
+            return pathData.AnimatedObjectPath.GetVectorAtKey(nodeIndex);
         }
 
         public Vector3[] GetNodePositions() {
@@ -283,7 +290,7 @@ namespace ATP.AnimationPathTools {
 
             for (var i = 0; i < NodesNo; i++) {
                 // Get node 3d position.
-                result[i] = objectPath.GetVectorAtKey(i);
+                result[i] = pathData.AnimatedObjectPath.GetVectorAtKey(i);
             }
 
             return result;
@@ -301,7 +308,7 @@ namespace ATP.AnimationPathTools {
 		}
 
         public float GetNodeTimestamp(int nodeIndex) {
-            return objectPath.GetTimeAtKey(nodeIndex);
+            return pathData.AnimatedObjectPath.GetTimeAtKey(nodeIndex);
         }
 
         public float[] GetNodeTimestamps() {
@@ -311,14 +318,14 @@ namespace ATP.AnimationPathTools {
             // For each key..
             for (var i = 0; i < NodesNo; i++) {
                 // Get key time.
-                result[i] = objectPath.GetTimeAtKey(i);
+                result[i] = pathData.AnimatedObjectPath.GetTimeAtKey(i);
             }
 
             return result;
         }
 
         public Vector3 GetVectorAtTime(float timestamp) {
-            return objectPath.GetVectorAtTime(timestamp);
+            return pathData.AnimatedObjectPath.GetVectorAtTime(timestamp);
         }
 
         public void OffsetNodePositions(Vector3 moveDelta) {
@@ -329,25 +336,25 @@ namespace ATP.AnimationPathTools {
                 // New node position.
                 var newPosition = oldPosition + moveDelta;
                 // Update node positions.
-                objectPath.MovePointToPosition(i, newPosition);
+                pathData.AnimatedObjectPath.MovePointToPosition(i, newPosition);
 
 				OnNodePositionChanged();
             }
         }
 
         public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
-            objectPath.MovePointToPosition(nodeIndex, position);
+            pathData.AnimatedObjectPath.MovePointToPosition(nodeIndex, position);
 			OnNodePositionChanged();
         }
 
         public void RemoveNode(int nodeIndex) {
-            objectPath.RemoveNode(nodeIndex);
+            pathData.AnimatedObjectPath.RemoveNode(nodeIndex);
             OnNodeRemoved();
         }
 
         public void SetNodesLinear() {
             for (var i = 0; i < 3; i++) {
-                Utilities.SetCurveLinear(objectPath[i]);
+                Utilities.SetCurveLinear(pathData.AnimatedObjectPath[i]);
             }
         }
 
@@ -359,12 +366,12 @@ namespace ATP.AnimationPathTools {
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
-                objectPath.SmoothPointTangents(j);
+                pathData.AnimatedObjectPath.SmoothPointTangents(j);
             }
         }
 
         public void SmoothSingleNodeTangents(int nodeIndex) {
-            objectPath.SmoothPointTangents(nodeIndex);
+            pathData.AnimatedObjectPath.SmoothPointTangents(nodeIndex);
         }
 
         #endregion Public Methods
@@ -374,7 +381,9 @@ namespace ATP.AnimationPathTools {
 
 
         private void DrawGizmoCurve() {
-            var points = ObjectPath.SamplePathForPoints(
+            if (pathData == null) return;
+
+            var points = pathData.AnimatedObjectPath.SamplePathForPoints(
                 GizmoCurveSamplingFrequency);
 
             if (points.Count < 3) return;

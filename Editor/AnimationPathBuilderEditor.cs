@@ -70,6 +70,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
+        private SerializedProperty pathData;
 
         //private Vector3 firstNodeOffset = new Vector3(0, 0, 0);
         //private Vector3 secondNodeOffset = new Vector3(1, -2, 0.5f);
@@ -94,6 +95,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
+            pathData = serializedObject.FindProperty("pathData");
             //handlesMode = serializedObject.FindProperty("handlesMode");
             //rotationCurves = serializedObject.FindProperty("rotationCurves");
             //tangentMode = serializedObject.FindProperty("tangentMode");
@@ -106,9 +108,9 @@ namespace ATP.AnimationPathTools {
                 Tools.current = Tool.None;
             }
 
-            if (!Script.IsInitialized) {
-                ResetPath();
-            }
+            //if (!Script.IsInitialized) {
+            //    ResetPath();
+            //}
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -142,6 +144,9 @@ namespace ATP.AnimationPathTools {
             HandleMoveAllOptionShortcut();
 
             HandleMoveSingleModeShortcut();
+
+            // Return if path asset does not exist.
+            if (Script.PathData == null) return;
 
             // Handle drawing movement handles.
             HandleDrawingPositionHandles();
@@ -295,7 +300,7 @@ namespace ATP.AnimationPathTools {
         /// Record target object state for undo.
         /// </summary>
         protected void HandleUndo() {
-            Undo.RecordObject(Script.ObjectPath, "Change path");
+            Undo.RecordObject(Script.PathData.AnimatedObjectPath, "Change path");
         }
 
         private void HandleSmoothTangentMode() {
@@ -693,6 +698,14 @@ namespace ATP.AnimationPathTools {
         private void DrawInspector() {
             serializedObject.Update();
             EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
                     GizmoCurveColor,
                     new GUIContent("Curve Color", ""));
             serializedObject.ApplyModifiedProperties();
@@ -716,6 +729,7 @@ namespace ATP.AnimationPathTools {
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
+            // TODO Rename to DrawResetPathInspectorButton().
             DrawResetInspectorButton();
 
             EditorGUILayout.Space();
@@ -775,7 +789,7 @@ namespace ATP.AnimationPathTools {
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = Script.ObjectPath.SamplePathForPoints(
+                points = Script.PathData.AnimatedObjectPath.SamplePathForPoints(
                     exportSampling);
             }
 

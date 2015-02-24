@@ -49,6 +49,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
+        // TODO Make it property.
         private readonly GUIStyle tiltValueLabelStyle = new GUIStyle {
             normal = { textColor = Color.white },
             fontStyle = FontStyle.Bold,
@@ -79,6 +80,7 @@ namespace ATP.AnimationPathTools {
         private const float ScaleHandleSize = 1.5f;
 
 		private SerializedProperty positionLerpSpeed;
+		private SerializedProperty pathData;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -86,6 +88,12 @@ namespace ATP.AnimationPathTools {
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
 
             animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
@@ -111,12 +119,12 @@ namespace ATP.AnimationPathTools {
 				""),
 				script.UpdateAllMode);
 
-			serializedObject.Update();
 			EditorGUILayout.PropertyField(
 				positionLerpSpeed,
 				new GUIContent(
 				"Position Lerp Speed",
 				""));
+
 			serializedObject.ApplyModifiedProperties();
 
             //EditorGUILayout.PropertyField(rotationMode);
@@ -220,6 +228,7 @@ namespace ATP.AnimationPathTools {
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
 			positionLerpSpeed = serializedObject.FindProperty("positionLerpSpeed");
+            pathData = serializedObject.FindProperty("pathData");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -232,9 +241,6 @@ namespace ATP.AnimationPathTools {
 
             //serializedObject.Update();
 
-            // Change current animation time with arrow keys.
-            ChangeTimeWithArrowKeys();
-
             //serializedObject.ApplyModifiedProperties();
 
             HandleEaseModeOptionShortcut();
@@ -242,6 +248,12 @@ namespace ATP.AnimationPathTools {
             HandleTiltingModeOptionShortcut();
 			HandleNoneModeOptionShortcut();
 			HandleUpdateAllOptionShortcut();
+
+            // Return if path asset does not exist.
+            if (script.PathData == null) return;
+
+            // Change current animation time with arrow keys.
+            ChangeTimeWithArrowKeys();
 
 			HandleWrapModeDropdown();
 
@@ -356,9 +368,9 @@ namespace ATP.AnimationPathTools {
             var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get ease values.
-            var easeCurveValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < script.EaseCurve.length; i++) {
-                easeCurveValues[i] = script.EaseCurve.keys[i].value;
+            var easeCurveValues = new float[script.PathData.EaseCurve.length];
+            for (var i = 0; i < script.PathData.EaseCurve.length; i++) {
+                easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
             }
 
             var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
@@ -525,9 +537,9 @@ namespace ATP.AnimationPathTools {
 			var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get tilting curve values.
-            var tiltingCurveValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < script.TiltingCurve.length; i++) {
-                tiltingCurveValues[i] = script.TiltingCurve.keys[i].value;
+            var tiltingCurveValues = new float[script.PathData.EaseCurve.length];
+            for (var i = 0; i < script.PathData.TiltingCurve.length; i++) {
+                tiltingCurveValues[i] = script.PathData.TiltingCurve.keys[i].value;
             }
 
             // Set arc value multiplier.
@@ -555,8 +567,8 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(script, "Ease curve changed.");
 
 			if (script.UpdateAllMode) {
-				var keyTime = script.EaseCurve.keys[keyIndex].time;
-				var oldValue = script.EaseCurve.Evaluate(keyTime);
+				var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
+				var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
 				var delta = newValue - oldValue;
 				script.UpdateEaseValues(delta);
 			}
@@ -570,7 +582,7 @@ namespace ATP.AnimationPathTools {
                             float timestamp,
                             Vector3 newPosition) {
 
-            Undo.RecordObject(script.RotationPath, "Rotation path changed.");
+            Undo.RecordObject(script.PathData.RotationPath, "Rotation path changed.");
 
             script.ChangeRotationAtTimestamp(timestamp, newPosition);
         }

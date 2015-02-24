@@ -276,15 +276,15 @@ namespace ATP.AnimationPathTools {
         }
 
 		void this_RotationPointPositionChanged (object sender, EventArgs e) {
-			UpdateAnimation();
+            if (!Application.isPlaying) UpdateAnimation();
 		}
 
 		void animationPathBuilder_NodePositionChanged (object sender, EventArgs e) {
-			UpdateAnimation();
+            if (!Application.isPlaying) UpdateAnimation();
 		}
 
 		void this_NodeTiltChanged(object sender, EventArgs e) {
-			UpdateAnimation();
+            if (!Application.isPlaying) UpdateAnimation();
 		}
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -531,9 +531,7 @@ namespace ATP.AnimationPathTools {
         /// Call in edit mode to update animation.
         /// </summary>
         public void UpdateAnimation() {
-            if (!Application.isPlaying) {
-                Animate();
-            }
+            Animate();
         }
 
 		public void UpdateWrapMode () {

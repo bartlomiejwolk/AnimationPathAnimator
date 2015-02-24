@@ -99,9 +99,9 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private AnimationCurve tiltingCurve = new AnimationCurve();
 
-        [SerializeField]
+        //[SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private AnimationCurve easeCurve = new AnimationCurve();
+        //private AnimationCurve easeCurve = new AnimationCurve();
 
 
         /// <summary>
@@ -196,9 +196,9 @@ namespace ATP.AnimationPathTools {
             get { return animTimeRatio; }
         }
 
-        public AnimationCurve EaseCurve {
-            get { return easeCurve; }
-        }
+        //public AnimationCurve EaseCurve {
+        //    get { return easeCurve; }
+        //}
 
         //public AnimationPath RotationPath {
         //    get { return rotationPath; }
@@ -360,19 +360,19 @@ namespace ATP.AnimationPathTools {
 
         #region EVENT HANDLERS
         void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
-            UpdateCurveWithRemovedKeys(easeCurve);
+            UpdateCurveWithRemovedKeys(PathData.EaseCurve);
             UpdateCurveWithRemovedKeys(tiltingCurve);
             UpdateRotationCurvesWithRemovedKeys();
         }
 
         void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
-            UpdateCurveTimestamps(easeCurve);
+            UpdateCurveTimestamps(PathData.EaseCurve);
             UpdateCurveTimestamps(tiltingCurve);
             UpdateRotationCurvesTimestamps();
         }
 
         private void animationPathBuilder_NodeAdded(object sender, EventArgs eventArgs) {
-            UpdateCurveWithAddedKeys(easeCurve);
+            UpdateCurveWithAddedKeys(PathData.EaseCurve);
             UpdateCurveWithAddedKeys(tiltingCurve);
             UpdateRotationCurvesWithAddedKeys();
         }
@@ -436,7 +436,7 @@ namespace ATP.AnimationPathTools {
 		}
 
         public float GetNodeEaseValue(int i) {
-            return easeCurve.keys[i].value;
+            return PathData.EaseCurve.keys[i].value;
         }
 
         public void SmoothCurve(AnimationCurve curve) {
@@ -498,20 +498,20 @@ namespace ATP.AnimationPathTools {
         }
 
 		public void UpdateEaseValues (float delta) {
-			for (var i = 0; i < easeCurve.length; i++) {
+			for (var i = 0; i < PathData.EaseCurve.length; i++) {
 				// Copy key.
-				var keyCopy = easeCurve[i];
+				var keyCopy = PathData.EaseCurve[i];
 				// Update key value.
 				keyCopy.value += delta;
 
 				// Remove old key.
-				easeCurve.RemoveKey(i);
+				PathData.EaseCurve.RemoveKey(i);
 
 				// Add key.
-				easeCurve.AddKey(keyCopy);
+				PathData.EaseCurve.AddKey(keyCopy);
 
 				// Smooth all tangents.
-				SmoothCurve(EaseCurve);
+				SmoothCurve(PathData.EaseCurve);
 			}
 		}
 
@@ -537,15 +537,15 @@ namespace ATP.AnimationPathTools {
 
 		public void UpdateEaseValue (int keyIndex, float newValue) {
 			// Copy keyframe.
-			var keyframeCopy = EaseCurve.keys[keyIndex];
+			var keyframeCopy = PathData.EaseCurve.keys[keyIndex];
 			// Update keyframe value.
 			keyframeCopy.value = newValue;
 			
 			// Replace old key with updated one.
-			EaseCurve.RemoveKey(keyIndex);
-			EaseCurve.AddKey(keyframeCopy);
+			PathData.EaseCurve.RemoveKey(keyIndex);
+			PathData.EaseCurve.AddKey(keyframeCopy);
 
-			SmoothCurve(EaseCurve);
+			SmoothCurve(PathData.EaseCurve);
 		}
 
         /// <summary>
@@ -695,11 +695,11 @@ namespace ATP.AnimationPathTools {
         }
 
         private void ResetEaseCurve() {
-            RemoveAllCurveKeys(easeCurve);
+            RemoveAllCurveKeys(PathData.EaseCurve);
 
-            easeCurve.AddKey(0, DefaultStartEaseValue);
-            //easeCurve.AddKey(0.5f, DefaultSecondEaseValue);
-            easeCurve.AddKey(1, DefaultEndEaseValue);
+            PathData.EaseCurve.AddKey(0, DefaultStartEaseValue);
+            //PathData.EaseCurve.AddKey(0.5f, DefaultSecondEaseValue);
+            PathData.EaseCurve.AddKey(1, DefaultEndEaseValue);
         }
 
         private void AddKeyToCurve(
@@ -776,7 +776,7 @@ namespace ATP.AnimationPathTools {
 				// If animation is not paused..
                 if (!pause) {
                     // Ease time.
-                    var timeStep = easeCurve.Evaluate(animTimeRatio);
+                    var timeStep = PathData.EaseCurve.Evaluate(animTimeRatio);
                     animTimeRatio += timeStep * Time.deltaTime;
                 }
 
@@ -789,7 +789,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private double EvaluateTimestamp(double x) {
-            return easeCurve.Evaluate((float)x);
+            return PathData.EaseCurve.Evaluate((float)x);
         }
 
         private float FindTimestampForValue(
@@ -818,8 +818,8 @@ namespace ATP.AnimationPathTools {
             var firstKey = new Keyframe(0, 0, 0, 0);
             var lastKey = new Keyframe(1, 1, 0, 0);
 
-            easeCurve.AddKey(firstKey);
-            easeCurve.AddKey(lastKey);
+            PathData.EaseCurve.AddKey(firstKey);
+            PathData.EaseCurve.AddKey(lastKey);
         }
 
         private void InitializeRotationCurve() {

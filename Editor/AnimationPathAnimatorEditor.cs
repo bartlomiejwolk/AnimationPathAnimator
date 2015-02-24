@@ -368,9 +368,9 @@ namespace ATP.AnimationPathTools {
             var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get ease values.
-            var easeCurveValues = new float[script.EaseCurve.length];
-            for (var i = 0; i < script.EaseCurve.length; i++) {
-                easeCurveValues[i] = script.EaseCurve.keys[i].value;
+            var easeCurveValues = new float[script.PathData.EaseCurve.length];
+            for (var i = 0; i < script.PathData.EaseCurve.length; i++) {
+                easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
             }
 
             var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
@@ -537,7 +537,7 @@ namespace ATP.AnimationPathTools {
 			var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get tilting curve values.
-            var tiltingCurveValues = new float[script.EaseCurve.length];
+            var tiltingCurveValues = new float[script.PathData.EaseCurve.length];
             for (var i = 0; i < script.TiltingCurve.length; i++) {
                 tiltingCurveValues[i] = script.TiltingCurve.keys[i].value;
             }
@@ -567,8 +567,8 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(script, "Ease curve changed.");
 
 			if (script.UpdateAllMode) {
-				var keyTime = script.EaseCurve.keys[keyIndex].time;
-				var oldValue = script.EaseCurve.Evaluate(keyTime);
+				var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
+				var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
 				var delta = newValue - oldValue;
 				script.UpdateEaseValues(delta);
 			}

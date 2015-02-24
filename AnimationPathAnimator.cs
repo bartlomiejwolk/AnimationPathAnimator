@@ -713,13 +713,17 @@ namespace ATP.AnimationPathTools {
                 return;
             }
 
-			var positionAtTimestamp = animationPathBuilder.GetVectorAtTime(animTimeRatio);
-			var globalPositionAtTimestamp = transform.TransformPoint(positionAtTimestamp);
+			var positionAtTimestamp =
+                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+			var globalPositionAtTimestamp =
+                transform.TransformPoint(positionAtTimestamp);
 
 			if (Application.isPlaying) {
-				var lerpSpeed = positionLerpSpeed * Time.deltaTime;
             	// Update position.
-				animatedGO.position = Vector3.Lerp(animatedGO.position, globalPositionAtTimestamp, positionLerpSpeed);
+				animatedGO.position = Vector3.Lerp(
+                    animatedGO.position,
+                    globalPositionAtTimestamp,
+                    positionLerpSpeed);
 			}
 			else {
 				animatedGO.position = globalPositionAtTimestamp;

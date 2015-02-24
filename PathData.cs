@@ -82,11 +82,17 @@ namespace ATP.AnimationPathTools {
             AnimatedObjectPath.CreateNewNode(1, lastNodePos);
 	    }
 
+	    private void InstantiateAnimationPathCurves(AnimationPath animationPath) {
+	        for (var i = 0; i < 3; i++) {
+	            animationPath[i] = new AnimationCurve();
+	        }
+	    }
+
 	    private void InstantiateReferenceTypes() {
-	        AnimatedObjectPath =
-	            ScriptableObject.CreateInstance<AnimationPath>();
-	        RotationPath =
-	            ScriptableObject.CreateInstance<AnimationPath>();
+	        AnimatedObjectPath = new AnimationPath();
+            InstantiateAnimationPathCurves(animatedObjectPath);
+	        RotationPath = new AnimationPath();
+            InstantiateAnimationPathCurves(rotationPath);
 	        EaseCurve = new AnimationCurve();
 	        TiltingCurve = new AnimationCurve();
 	    }

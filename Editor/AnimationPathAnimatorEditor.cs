@@ -593,7 +593,7 @@ namespace ATP.AnimationPathTools {
                             float timestamp,
                             Vector3 newPosition) {
 
-            Undo.RecordObject(script.PathData.RotationPath, "Rotation path changed.");
+            Undo.RecordObject(script.PathData, "Rotation path changed.");
 
             script.ChangeRotationAtTimestamp(timestamp, newPosition);
         }

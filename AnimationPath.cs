@@ -11,7 +11,8 @@ namespace ATP.AnimationPathTools {
     /// respective keys' timestamps are the same.
     /// - Three keys with the same timestamp make a point.
     /// </remarks>
-    public class AnimationPath : ScriptableObject {
+    [System.Serializable]
+    public class AnimationPath {
 
         #region FIELDS
 
@@ -37,15 +38,15 @@ namespace ATP.AnimationPathTools {
 
         #endregion FIELDS
 
-        #region UNITY MESSAGES
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnEnable() {
-            // Initialize curves field.
-            if (curves[0] == null) {
-                InitializeCurves();
-            }
-        }
-        #endregion
+        //#region UNITY MESSAGES
+        //[SuppressMessage("ReSharper", "UnusedMember.Local")]
+        //private void OnEnable() {
+        //    // Initialize curves field.
+        //    if (curves[0] == null) {
+        //        InitializeCurves();
+        //    }
+        //}
+        //#endregion
 
         #region PUBLIC METHODS
         public float[] GetTimestamps() {

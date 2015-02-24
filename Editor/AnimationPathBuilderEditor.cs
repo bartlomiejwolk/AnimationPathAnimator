@@ -301,7 +301,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         // TODO Remove and use undo inline.
         protected void HandleUndo() {
-            Undo.RecordObject(Script.PathData.AnimatedObjectPath, "Change path");
+            Undo.RecordObject(Script.PathData, "Change path");
         }
 
         private void HandleSmoothTangentMode() {

@@ -26,6 +26,12 @@ namespace ATP.AnimationPathTools {
 	        InitializeAnimatedObjectPath();
 	        InitializeRotationPath();
 	        InitializeEaseCurve();
+	        InitializeTiltingCurve();
+	    }
+
+	    private void InitializeTiltingCurve() {
+	        tiltingCurve.AddKey(0, 0);
+	        tiltingCurve.AddKey(1, 0);
 	    }
 
 	    private void InitializeEaseCurve() {
@@ -33,7 +39,7 @@ namespace ATP.AnimationPathTools {
 	        easeCurve.AddKey(1, DefaultEaseCurveValue);
 	    }
 
-	    private float DefaultEaseCurveValue {
+	    protected virtual float DefaultEaseCurveValue {
             get { return 0.05f; }
 	    }
 

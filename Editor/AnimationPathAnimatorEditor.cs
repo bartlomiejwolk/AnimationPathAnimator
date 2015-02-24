@@ -45,6 +45,9 @@ namespace ATP.AnimationPathTools {
         /// Key shortcut to jump to the beginning of the animation.
         /// </summary>
         public const KeyCode JumpToStart = KeyCode.DownArrow;
+        
+        public const KeyCode JumpToNextNode = KeyCode.UpArrow;
+        public const KeyCode JumpToPreviousNode = KeyCode.DownArrow;
 
         public const float JumpValue = 0.01f;
         /// <summary>
@@ -760,7 +763,7 @@ namespace ATP.AnimationPathTools {
 
                     break;
 
-                case JumpToStart:
+                case JumpToNextNode:
                     Event.current.Use();
 
                     // Jump to next node.
@@ -768,7 +771,7 @@ namespace ATP.AnimationPathTools {
 
                     break;
 
-                case JumpToEnd:
+                case JumpToPreviousNode:
                     Event.current.Use();
 
                     // Jump to next node.

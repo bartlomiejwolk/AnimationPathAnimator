@@ -721,11 +721,13 @@ namespace ATP.AnimationPathTools {
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
+            serializedObject.Update();
             EditorGUILayout.PropertyField(
                 pathData,
                 new GUIContent(
                     "Path Asset",
                     ""));
+            serializedObject.ApplyModifiedProperties();
 
             // TODO Rename to DrawResetPathInspectorButton().
             DrawResetInspectorButton();

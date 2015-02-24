@@ -18,6 +18,9 @@ namespace ATP.AnimationPathTools {
 		private AnimationCurve tiltingCurve;
 
 	    private void OnEnable() {
+            // Return if fields are initialized.
+	        if (animatedObjectPath != null) return;
+
 	        InstantiateReferenceTypes();
 	        AssignDefaultValues();
 	    }

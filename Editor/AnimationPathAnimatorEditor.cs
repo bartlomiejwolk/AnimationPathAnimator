@@ -597,6 +597,64 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING METHODS
 
         #region CALLBACK HANDLERS
+        private void JumpToEndCallbackHandler() {
+            // Update animTimeRatio.
+            serializedObject.Update();
+            animTimeRatio.floatValue = 1;
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void JumpForwardCallbackHandler() {
+            // Update animTimeRatio.
+            var newAnimationTimeRatio = animTimeRatio.floatValue
+                + AnimationPathAnimator.ShortJumpValue;
+            serializedObject.Update();
+            animTimeRatio.floatValue =
+                (float)(Math.Round(newAnimationTimeRatio, 3));
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void JumpToStartCallbackHandler() {
+            // Update animTimeRatio.
+            serializedObject.Update();
+            animTimeRatio.floatValue = 0;
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void JumpBackwardCallbackHandler() {
+            // Update animTimeRatio.
+            var newAnimationTimeRatio = animTimeRatio.floatValue
+                - AnimationPathAnimator.ShortJumpValue;
+            serializedObject.Update();
+            animTimeRatio.floatValue =
+                (float)(Math.Round(newAnimationTimeRatio, 3));
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
 
 		// TODO Check if you can pass also timestamp as arg. without adding
 		// much overhead.
@@ -678,65 +736,6 @@ namespace ATP.AnimationPathTools {
                     jumpToEndCallback: JumpToEndCallbackHandler);
             }
         }
-
-        private void JumpBackwardCallbackHandler() {
-            // Update animTimeRatio.
-            var newAnimationTimeRatio = animTimeRatio.floatValue
-                - AnimationPathAnimator.ShortJumpValue;
-            serializedObject.Update();
-            animTimeRatio.floatValue =
-                (float)(Math.Round(newAnimationTimeRatio, 3));
-            serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
-        }
-
-
-        private void JumpForwardCallbackHandler() {
-            // Update animTimeRatio.
-            var newAnimationTimeRatio = animTimeRatio.floatValue
-                + AnimationPathAnimator.ShortJumpValue;
-            serializedObject.Update();
-            animTimeRatio.floatValue =
-                (float)(Math.Round(newAnimationTimeRatio, 3));
-            serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
-        }
-
-        private void JumpToStartCallbackHandler() {
-            // Update animTimeRatio.
-            serializedObject.Update();
-            animTimeRatio.floatValue = 0;
-            serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
-        }
-        private void JumpToEndCallbackHandler() {
-            // Update animTimeRatio.
-            serializedObject.Update();
-            animTimeRatio.floatValue = 1;
-            serializedObject.ApplyModifiedProperties();
-
-            // In play mode.
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-
-            // In editor mode.
-            if (!Application.isPlaying) script.Animate();
-        }
-
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = script.GetNodeEaseValue(nodeIndex);

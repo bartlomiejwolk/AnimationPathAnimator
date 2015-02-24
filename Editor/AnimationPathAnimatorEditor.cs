@@ -671,10 +671,72 @@ namespace ATP.AnimationPathTools {
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
-                HandleUnmodifiedShortcuts();
-                if (!Application.isPlaying) script.Animate();
+                HandleUnmodifiedShortcuts(
+                    jumpForwardCallback: JumpForwardCallbackHandler,
+                    jumpBackwardCallback: JumpBackwardCallbackHandler,
+                    jumpToStartCallback: JumpToStartCallbackHandler,
+                    jumpToEndCallback: JumpToEndCallbackHandler);
             }
         }
+
+        private void JumpBackwardCallbackHandler() {
+            // Update animTimeRatio.
+            var newAnimationTimeRatio = animTimeRatio.floatValue
+                - AnimationPathAnimator.ShortJumpValue;
+            serializedObject.Update();
+            animTimeRatio.floatValue =
+                (float)(Math.Round(newAnimationTimeRatio, 3));
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
+
+        private void JumpForwardCallbackHandler() {
+            // Update animTimeRatio.
+            var newAnimationTimeRatio = animTimeRatio.floatValue
+                + AnimationPathAnimator.ShortJumpValue;
+            serializedObject.Update();
+            animTimeRatio.floatValue =
+                (float)(Math.Round(newAnimationTimeRatio, 3));
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
+        private void JumpToStartCallbackHandler() {
+            // Update animTimeRatio.
+            serializedObject.Update();
+            animTimeRatio.floatValue = 0;
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+        private void JumpToEndCallbackHandler() {
+            // Update animTimeRatio.
+            serializedObject.Update();
+            animTimeRatio.floatValue = 1;
+            serializedObject.ApplyModifiedProperties();
+
+            // In play mode.
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+
+            // In editor mode.
+            if (!Application.isPlaying) script.Animate();
+        }
+
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = script.GetNodeEaseValue(nodeIndex);
@@ -785,58 +847,71 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void HandleUnmodifiedShortcuts() {
-            serializedObject.Update();
+        private void HandleUnmodifiedShortcuts(
+            Action jumpBackwardCallback = null,
+            Action jumpForwardCallback = null,
+            Action jumpToStartCallback = null,
+            Action jumpToEndCallback = null) {
+
+            //serializedObject.Update();
 
             // Helper variable.
-            float newAnimationTimeRatio;
+            //float newAnimationTimeRatio;
 
             switch (Event.current.keyCode) {
                 // Jump backward.
                 case JumpBackward:
                     Event.current.Use();
 
-                    // Calculate new time ratio.
-                    newAnimationTimeRatio = animTimeRatio.floatValue
-                                            - AnimationPathAnimator.ShortJumpValue;
-                    // Apply rounded value.
-                    animTimeRatio.floatValue =
-                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                    //// Calculate new time ratio.
+                    //newAnimationTimeRatio = animTimeRatio.floatValue
+                    //                        - AnimationPathAnimator.ShortJumpValue;
+                    //// Apply rounded value.
+                    //animTimeRatio.floatValue =
+                    //    (float)(Math.Round(newAnimationTimeRatio, 3));
 
-                    serializedObject.ApplyModifiedProperties();
+                    //serializedObject.ApplyModifiedProperties();
+
+                    if (jumpBackwardCallback != null) jumpBackwardCallback();
 
                     break;
                 // Jump forward.
                 case JumpForward:
                     Event.current.Use();
 
-                    newAnimationTimeRatio = animTimeRatio.floatValue
-                                            + AnimationPathAnimator.ShortJumpValue;
-                    animTimeRatio.floatValue =
-                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                    //newAnimationTimeRatio = animTimeRatio.floatValue
+                    //                        + AnimationPathAnimator.ShortJumpValue;
+                    //animTimeRatio.floatValue =
+                    //    (float)(Math.Round(newAnimationTimeRatio, 3));
 
-                    serializedObject.ApplyModifiedProperties();
+                    //serializedObject.ApplyModifiedProperties();
+
+                    if (jumpForwardCallback != null) jumpForwardCallback();
 
                     break;
                 // Jump to start.
                 case JumpToStart:
                     Event.current.Use();
 
-                    animTimeRatio.floatValue = 0;
-                    serializedObject.ApplyModifiedProperties();
+                    //animTimeRatio.floatValue = 0;
+                    //serializedObject.ApplyModifiedProperties();
+
+                    if (jumpToStartCallback != null) jumpToStartCallback();
 
                     // Update camera position, rotation and tilting.
-                    if (Application.isPlaying) script.UpdateAnimatedGO();
+                    //if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     break;
                 // Jump to end.
                 case JumpToEnd:
                     Event.current.Use();
 
-                    animTimeRatio.floatValue = 1;
-                    serializedObject.ApplyModifiedProperties();
+                    //animTimeRatio.floatValue = 1;
+                    //serializedObject.ApplyModifiedProperties();
 
-                    if (Application.isPlaying) script.UpdateAnimatedGO();
+                    if (jumpToEndCallback != null) jumpToEndCallback();
+
+                    //if (Application.isPlaying) script.UpdateAnimatedGO();
 
                     break;
             }

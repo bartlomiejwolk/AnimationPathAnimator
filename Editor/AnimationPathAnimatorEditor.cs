@@ -749,8 +749,8 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     // Update animation time.
-                    animTimeRatio.floatValue -=
-                        JumpValue;
+                    animTimeRatio.floatValue -= JumpValue;
+                    serializedObject.ApplyModifiedProperties();
 
                     break;
                 // Jump forward.
@@ -758,8 +758,8 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     // Update animation time.
-                    animTimeRatio.floatValue +=
-                        JumpValue;
+                    animTimeRatio.floatValue += JumpValue;
+                    serializedObject.ApplyModifiedProperties();
 
                     break;
 
@@ -768,6 +768,8 @@ namespace ATP.AnimationPathTools {
 
                     // Jump to next node.
                     animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
+                    serializedObject.ApplyModifiedProperties();
+                    if (Application.isPlaying) script.UpdateAnimation();
 
                     break;
 
@@ -776,11 +778,11 @@ namespace ATP.AnimationPathTools {
 
                     // Jump to next node.
                     animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
+                    serializedObject.ApplyModifiedProperties();
+                    if (Application.isPlaying) script.UpdateAnimation();
 
                     break;
             }
-
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void HandleUnmodifiedShortcuts() {

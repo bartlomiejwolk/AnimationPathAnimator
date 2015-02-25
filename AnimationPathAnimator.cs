@@ -275,27 +275,6 @@ namespace ATP.AnimationPathTools {
                 DrawRotationPointGizmos();
             }
         }
-
-        private void DrawForwardPointIcon() {
-            var forwardPointPosition = GetForwardPoint(true);
-
-            //Draw rotation point gizmo.
-            Gizmos.DrawIcon(
-                forwardPointPosition,
-                ForwardPointIcon,
-                false);
-        }
-
-        private void DrawTargetIcon() {
-            if (targetGO == null) return;
-
-            //Draw rotation point gizmo.
-            Gizmos.DrawIcon(
-                targetGO.position,
-                TargetGizmoIcon,
-                false);
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Subscribe to events.
@@ -313,21 +292,6 @@ namespace ATP.AnimationPathTools {
             //        ScriptableObject.CreateInstance<AnimationPath>();
             //}
         }
-
-		void this_RotationPointPositionChanged (object sender, EventArgs e) {
-            if (!Application.isPlaying) Animate();
-		}
-
-		void animationPathBuilder_NodePositionChanged (object sender, EventArgs e) {
-            if (!Application.isPlaying) Animate();
-            if (Application.isPlaying) UpdateAnimatedGO();
-		}
-
-		void this_NodeTiltChanged(object sender, EventArgs e) {
-            if (!Application.isPlaying) Animate();
-            if (Application.isPlaying) UpdateAnimatedGO();
-		}
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
 		private void OnValidate() {
             // Limit duration value.
@@ -379,6 +343,20 @@ namespace ATP.AnimationPathTools {
 		#endregion
 
         #region EVENT HANDLERS
+        void animationPathBuilder_NodePositionChanged(object sender, EventArgs e) {
+            if (!Application.isPlaying) Animate();
+            if (Application.isPlaying) UpdateAnimatedGO();
+        }
+
+        void this_NodeTiltChanged(object sender, EventArgs e) {
+            if (!Application.isPlaying) Animate();
+            if (Application.isPlaying) UpdateAnimatedGO();
+        }
+
+        void this_RotationPointPositionChanged(object sender, EventArgs e) {
+            if (!Application.isPlaying) Animate();
+        }
+
         void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
             UpdateCurveWithRemovedKeys(PathData.EaseCurve);
             UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
@@ -595,6 +573,80 @@ namespace ATP.AnimationPathTools {
         }
         #endregion PUBLIC METHODS
         #region PRIVATE METHODS
+        private void UpdateAnimatedGORotation() {
+            if (animatedGO == null) return;
+
+            switch (rotationMode) {
+                case AnimatorRotationMode.Forward:
+                    Vector3 globalForwardPoint = GetForwardPoint(true);
+                    //var globalForwardPoint = transform.TransformPoint(forwardPoint);
+
+                    RotateObjectWithLookAt(globalForwardPoint);
+
+                    break;
+                case AnimatorRotationMode.Custom:
+                    // Get rotation point position.
+                    var rotationPointPos =
+                        PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+                    // Convert target position to global coordinates.
+                    var rotationPointGlobalPos =
+                        transform.TransformPoint(rotationPointPos);
+
+                    // Update animatedGO rotation.
+                    RotateObjectWithLookAt(rotationPointGlobalPos);
+
+                    break;
+                case AnimatorRotationMode.Target:
+                    if (targetGO == null) return;
+
+                    RotateObjectWithLookAt(targetGO.position);
+                    break;
+            }
+        }
+
+        private void UpdateAnimatedGOPosition() {
+            // Get animatedGO position at current animation time.
+            var positionAtTimestamp =
+                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+            var globalPositionAtTimestamp =
+                transform.TransformPoint(positionAtTimestamp);
+
+            // Update animatedGO position.
+            animatedGO.position = globalPositionAtTimestamp;
+        }
+
+        /// <summary>
+        /// Update animatedGO position, rotation and tilting based on current
+        /// animTimeRatio.
+        /// <remarks>Used to update animatedGO with keys, in play mode.</remarks>
+        /// </summary>
+        public void UpdateAnimatedGO() {
+            UpdateAnimatedGOPosition();
+            UpdateAnimatedGORotation();
+            // Update animatedGO tilting.
+            TiltObject();
+        }
+
+        private void DrawTargetIcon() {
+            if (targetGO == null) return;
+
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                targetGO.position,
+                TargetGizmoIcon,
+                false);
+        }
+
+        private void DrawForwardPointIcon() {
+            var forwardPointPosition = GetForwardPoint(true);
+
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                forwardPointPosition,
+                ForwardPointIcon,
+                false);
+        }
+
         private void DrawCurrentRotationPointGizmo() {
             // Get current animation time.
             var currentAnimationTime = AnimationTimeRatio;
@@ -1122,59 +1174,5 @@ namespace ATP.AnimationPathTools {
             }
         }
         #endregion PRIVATE METHODS
-
-        /// <summary>
-        /// Update animatedGO position, rotation and tilting based on current
-        /// animTimeRatio.
-        /// <remarks>Used to update animatedGO with keys, in play mode.</remarks>
-        /// </summary>
-        public void UpdateAnimatedGO() {
-            UpdateAnimatedGOPosition();
-            UpdateAnimatedGORotation();
-            // Update animatedGO tilting.
-            TiltObject();
-        }
-
-        private void UpdateAnimatedGOPosition() {
-// Get animatedGO position at current animation time.
-            var positionAtTimestamp =
-                animationPathBuilder.GetVectorAtTime(animTimeRatio);
-            var globalPositionAtTimestamp =
-                transform.TransformPoint(positionAtTimestamp);
-
-            // Update animatedGO position.
-            animatedGO.position = globalPositionAtTimestamp;
-        }
-
-        private void UpdateAnimatedGORotation() {
-            if (animatedGO == null) return;
-
-            switch (rotationMode) {
-                case AnimatorRotationMode.Forward:
-                    Vector3 globalForwardPoint = GetForwardPoint(true);
-                    //var globalForwardPoint = transform.TransformPoint(forwardPoint);
-
-                    RotateObjectWithLookAt(globalForwardPoint);
-
-                    break;
-                case AnimatorRotationMode.Custom:
-                    // Get rotation point position.
-                    var rotationPointPos =
-                        PathData.RotationPath.GetVectorAtTime(animTimeRatio);
-                    // Convert target position to global coordinates.
-                    var rotationPointGlobalPos =
-                        transform.TransformPoint(rotationPointPos);
-
-                    // Update animatedGO rotation.
-                    RotateObjectWithLookAt(rotationPointGlobalPos);
-
-                    break;
-                case AnimatorRotationMode.Target:
-                    if (targetGO == null) return;
-
-                    RotateObjectWithLookAt(targetGO.position);
-                    break;
-            }
-        }
     }
 }

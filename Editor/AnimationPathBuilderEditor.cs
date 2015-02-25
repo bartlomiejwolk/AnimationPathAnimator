@@ -838,8 +838,7 @@ namespace ATP.AnimationPathTools {
             Script.CreateNode(0, firstNodePos);
             Script.CreateNode(1, lastNodePos);
 
-            // Raise event.
-            Script.OnPathReset();
+            Script.this_PathReset();
         }
 
         #endregion PRIVATE

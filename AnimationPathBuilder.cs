@@ -189,7 +189,13 @@ namespace ATP.AnimationPathTools {
             //    pathData.AnimatedObjectPath =
             //        ScriptableObject.CreateInstance<AnimationPath>();
             //}
+            PathReset += this_PathReset;
 
+        }
+
+        private void this_PathReset(object sender, EventArgs eventArgs) {
+            // Change handle mode to MoveAll.
+            handleMode = AnimationPathBuilderHandleMode.MoveAll;
         }
 
         #endregion Unity Messages
@@ -214,11 +220,9 @@ namespace ATP.AnimationPathTools {
 			if (handler != null) handler(this, EventArgs.Empty);
 		}
 
-        public virtual void OnPathReset() {
-			// TODO Move to an event handler method.
+        public virtual void this_PathReset() {
             // Change handle mode to MoveAll.
-            handleMode = AnimationPathBuilderHandleMode.MoveSingle;
-
+            //handleMode = AnimationPathBuilderHandleMode.MoveSingle;
             // Call handler methods.
             var handler = PathReset;
             if (handler != null) handler(this, EventArgs.Empty);

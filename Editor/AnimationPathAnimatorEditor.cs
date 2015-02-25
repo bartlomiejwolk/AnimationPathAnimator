@@ -59,25 +59,6 @@ namespace ATP.AnimationPathTools {
 
         #region FIELDS
 
-        // TODO Use gizmo icon instead.
-        //private GUIStyle TargetGizmoStyle {
-        //    get {
-        //        return new GUIStyle {
-        //            normal = {textColor = Color.white},
-        //            fontStyle = FontStyle.Bold,
-        //        };
-        //    }
-        //}
-
-        //private GUIStyle EaseValueLabelStyle {
-        //    get {
-        //        return new GUIStyle {
-        //            normal = { textColor = Color.white },
-        //            fontStyle = FontStyle.Bold,
-        //        };
-        //    }
-        //}
-
         /// <summary>
         /// If modifier is currently pressed.
         /// </summary>
@@ -97,15 +78,14 @@ namespace ATP.AnimationPathTools {
         //    }
         //}
 
-        // TODO Use gizmo icon instead.
-        private GUIStyle ForwardPointMarkerStyle {
-            get {
-                return new GUIStyle {
-                    normal = {textColor = Color.white},
-                    fontStyle = FontStyle.Bold,
-                };
-            }
-        }
+        //private GUIStyle ForwardPointMarkerStyle {
+        //    get {
+        //        return new GUIStyle {
+        //            normal = {textColor = Color.white},
+        //            fontStyle = FontStyle.Bold,
+        //        };
+        //    }
+        //}
 
 
         //}
@@ -345,7 +325,7 @@ namespace ATP.AnimationPathTools {
 
 			HandleWrapModeDropdown();
 
-            HandleDrawingForwardPointMarker();
+            //HandleDrawingForwardPointMarker();
             //HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
@@ -394,14 +374,14 @@ namespace ATP.AnimationPathTools {
                 script.Skin.GetStyle("EaseValueLabel"));
         }
 
-        private void HandleDrawingForwardPointMarker() {
-            if (script.RotationMode != AnimatorRotationMode.Forward) return;
+        //private void HandleDrawingForwardPointMarker() {
+        //    if (script.RotationMode != AnimatorRotationMode.Forward) return;
 
-            var targetPos = script.GetForwardPoint();
-			var globalTargetPos = script.transform.TransformPoint(targetPos);
+        //    var targetPos = script.GetForwardPoint();
+        //    var globalTargetPos = script.transform.TransformPoint(targetPos);
 
-            Handles.Label(globalTargetPos, "Point", ForwardPointMarkerStyle);
-        }
+        //    Handles.Label(globalTargetPos, "Point", ForwardPointMarkerStyle);
+        //}
 
         private void HandleDrawingRotationHandle() {
             if (script.HandleMode != AnimatorHandleMode.Rotation) return;

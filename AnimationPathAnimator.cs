@@ -42,6 +42,7 @@ namespace ATP.AnimationPathTools {
         public const float ShortJumpValue = 0.002f;
 
         private const string TargetGizmoIcon = "target_22x22-blue";
+        private const string ForwardPointIcon = "target_22x22-pink";
         private const string CurrentRotationPointGizmoIcon = "rec_16x16-yellow";
         private const string RotationPointGizmoIcon = "rec_16x16";
         #endregion CONSTANTS
@@ -265,6 +266,10 @@ namespace ATP.AnimationPathTools {
                 DrawTargetIcon();
             }
 
+            if (rotationMode == AnimatorRotationMode.Forward) {
+                DrawForwardPointIcon();
+            }
+
             // Return if handle mode is not rotation mode.
             if (handleMode == AnimatorHandleMode.Rotation) {
                 DrawRotationGizmoCurve();
@@ -273,10 +278,19 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private void DrawForwardPointIcon() {
+            var forwardPointPosition = GetForwardPoint(true);
+
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                forwardPointPosition,
+                ForwardPointIcon,
+                false);
+        }
+
         private void DrawTargetIcon() {
             if (targetGO == null) return;
 
-            // TODO Use const for icon file name.
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetGO.position,
@@ -496,13 +510,20 @@ namespace ATP.AnimationPathTools {
 			//UpdateAnimatedGO();
         }
 
-        public Vector3 GetForwardPoint() {
+        public Vector3 GetForwardPoint(bool globalPosition) {
             // Timestamp offset of the forward point.
             var forwardPointDelta = forwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
+            var localPosition =
+                animationPathBuilder.GetVectorAtTime(forwardPointTimestamp);
 
-            return animationPathBuilder.GetVectorAtTime(forwardPointTimestamp);
+            // Return global position.
+            if (globalPosition) {
+                return transform.TransformPoint(localPosition);
+            }
+
+            return localPosition;
         }
 
 		public void UpdateEaseValues (float delta) {
@@ -874,8 +895,8 @@ namespace ATP.AnimationPathTools {
             }
             // Look forward.
             else if (rotationMode == AnimatorRotationMode.Forward) {
-                Vector3 forwardPoint = GetForwardPoint();
-				var globalForwardPoint = transform.TransformPoint(forwardPoint);
+                Vector3 globalForwardPoint = GetForwardPoint(true);
+                //var globalForwardPoint = transform.TransformPoint(forwardPoint);
 
                 // In play mode..
                 if (Application.isPlaying) {
@@ -1134,8 +1155,8 @@ namespace ATP.AnimationPathTools {
 
             switch (rotationMode) {
                 case AnimatorRotationMode.Forward:
-                    Vector3 forwardPoint = GetForwardPoint();
-                    var globalForwardPoint = transform.TransformPoint(forwardPoint);
+                    Vector3 globalForwardPoint = GetForwardPoint(true);
+                    //var globalForwardPoint = transform.TransformPoint(forwardPoint);
 
                     RotateObjectWithLookAt(globalForwardPoint);
 

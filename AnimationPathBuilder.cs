@@ -27,13 +27,6 @@ namespace ATP.AnimationPathTools {
         public event EventHandler NodeAdded;
         public event EventHandler NodeRemoved;
 		public event EventHandler NodePositionChanged;
-
-        /// <summary>
-        /// Animation curves that make the animation path.
-        /// </summary>
-        //[SerializeField]
-        //private AnimationPath pathData.AnimatedObjectPath;
-
         #endregion Fields
 
         #region EDITOR
@@ -65,15 +58,6 @@ namespace ATP.AnimationPathTools {
         private Color gizmoCurveColor = Color.yellow;
 
         /// <summary>
-        /// If "Move All" mode is enabled.
-        /// </summary>
-        //[SerializeField]
-        //private bool moveAllMode;
-
-        //[SerializeField]
-        //private bool sceneControls = true;
-
-        /// <summary>
         /// Styles for multiple GUI elements.
         /// </summary>
         [SerializeField]
@@ -81,12 +65,7 @@ namespace ATP.AnimationPathTools {
 
 #pragma warning disable 0414
 
-        /// <summary>
-        /// If enabled, on-scene handles will be use to change node's in/out
-        /// tangents.
-        /// </summary>
-        //[SerializeField]
-        //private bool tangentMode;
+;
 
         [SerializeField] private AnimationPathBuilderHandleMode handleMode =
             AnimationPathBuilderHandleMode.MoveSingle;
@@ -102,9 +81,6 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC PROPERTIES
 
-        //public AnimationPath pathData.AnimatedObjectPath {
-        //    get { return pathData.AnimatedObjectPath; }
-        //}
 
         /// <summary>
         /// Color of the gizmo curve.
@@ -113,12 +89,6 @@ namespace ATP.AnimationPathTools {
             get { return gizmoCurveColor; }
             set { gizmoCurveColor = value; }
         }
-
-        //public bool MoveAllMode {
-        //    get { return moveAllMode; }
-        //    set { moveAllMode = value; }
-        //}
-
         /// <summary>
         /// Number of keys in an animation curve.
         /// </summary>
@@ -126,35 +96,19 @@ namespace ATP.AnimationPathTools {
             get { return pathData.AnimatedObjectPath.KeysNo; }
         }
 
-        //public bool SceneControls {
-        //    get { return sceneControls; }
-        //    set { sceneControls = value; }
-        //}
 
         public GUISkin Skin {
             get { return skin; }
         }
 
-        //public bool TangentMode {
-        //    get { return tangentMode; }
-        //    set { tangentMode = value; }
-        //}
-
-        //public bool IsInitialized {
-        //    get { return (pathData.AnimatedObjectPath.KeysNo >= 2); }
-        //}
+    
 
         public AnimationPathBuilderTangentMode TangentMode {
             get { return tangentMode; }
             set { tangentMode = value; }
         }
 
-        /// <summary>
-        /// If enabled, on-scene handles will be use to change node's in/out
-        /// tangents.
-        /// </summary>
-//[SerializeField]
-//private bool tangentMode;
+   
         public AnimationPathBuilderHandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
@@ -184,11 +138,6 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
-            //// Instantiate pathData.AnimatedObjectPath.
-            //if (pathData.AnimatedObjectPath == null) {
-            //    pathData.AnimatedObjectPath =
-            //        ScriptableObject.CreateInstance<AnimationPath>();
-            //}
             PathReset += this_PathReset;
 
         }
@@ -221,9 +170,6 @@ namespace ATP.AnimationPathTools {
 		}
 
         public virtual void this_PathReset() {
-            // Change handle mode to MoveAll.
-            //handleMode = AnimationPathBuilderHandleMode.MoveSingle;
-            // Call handler methods.
             var handler = PathReset;
             if (handler != null) handler(this, EventArgs.Empty);
         }

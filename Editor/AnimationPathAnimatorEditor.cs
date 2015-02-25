@@ -68,14 +68,14 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private GUIStyle EaseValueLabelStyle {
-            get {
-                return new GUIStyle {
-                    normal = { textColor = Color.white },
-                    fontStyle = FontStyle.Bold,
-                };
-            }
-        }
+        //private GUIStyle EaseValueLabelStyle {
+        //    get {
+        //        return new GUIStyle {
+        //            normal = { textColor = Color.white },
+        //            fontStyle = FontStyle.Bold,
+        //        };
+        //    }
+        //}
 
         /// <summary>
         /// If modifier is currently pressed.
@@ -87,14 +87,14 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
-        private GUIStyle TiltValueLabelStyle {
-            get {
-                return new GUIStyle {
-                    normal = {textColor = Color.white},
-                    fontStyle = FontStyle.Bold,
-                };
-            }
-        }
+        //private GUIStyle TiltValueLabelStyle {
+        //    get {
+        //        return new GUIStyle {
+        //            normal = {textColor = Color.white},
+        //            fontStyle = FontStyle.Bold,
+        //        };
+        //    }
+        //}
 
         private GUIStyle ForwardPointMarkerStyle {
             get {
@@ -139,6 +139,7 @@ namespace ATP.AnimationPathTools {
 		private SerializedProperty positionLerpSpeed;
 		private SerializedProperty pathData;
 		private SerializedProperty enableControlsInPlayMode;
+		private SerializedProperty skin;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -262,14 +263,21 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
+            serializedObject.Update();
+
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                     advancedSettingsFoldout.boolValue,
                     new GUIContent(
                         "Advanced Settings",
                         ""));
+
+            // Display advanced foldout content.
             if (advancedSettingsFoldout.boolValue) {
                 EditorGUILayout.PropertyField(maxAnimationSpeed);
+                EditorGUILayout.PropertyField(skin);
             }
+
+            serializedObject.ApplyModifiedProperties();
 
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
@@ -308,6 +316,7 @@ namespace ATP.AnimationPathTools {
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
                 serializedObject.FindProperty("enableControlsInPlayMode");
+            skin = serializedObject.FindProperty("skin");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -380,7 +389,7 @@ namespace ATP.AnimationPathTools {
                 ConvertEaseToDegrees,
                 EaseValueLabelOffsetX,
                 EaseValueLabelOffsetY,
-                EaseValueLabelStyle);
+                script.Skin.GetStyle("EaseValueLabel"));
         }
 
         private void HandleDrawingForwardPointMarker() {
@@ -425,7 +434,7 @@ namespace ATP.AnimationPathTools {
                 ConvertTiltToDegrees,
                 TiltValueLabelOffsetX,
                 TiltValueLabelOffsetY,
-                TiltValueLabelStyle);
+                script.Skin.GetStyle("TiltValueLabel"));
         }
         #endregion DRAWING HANDLERS
 

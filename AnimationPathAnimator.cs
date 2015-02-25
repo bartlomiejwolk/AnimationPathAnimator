@@ -150,6 +150,8 @@ namespace ATP.AnimationPathTools {
         [SerializeField] private bool enableControlsInPlayMode = true;
 #pragma warning restore 169
 
+        [SerializeField] private GUISkin skin;
+
 #pragma warning restore 649
 #pragma warning restore 649
         #endregion EDITOR
@@ -221,6 +223,11 @@ namespace ATP.AnimationPathTools {
         public PathData PathData {
             get { return pathData; }
             set { pathData = value; }
+        }
+
+        public GUISkin Skin {
+            get { return skin; }
+            set { skin = value; }
         }
 
         #endregion PUBLIC PROPERTIES

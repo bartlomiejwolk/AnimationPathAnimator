@@ -45,7 +45,6 @@ namespace ATP.AnimationPathTools {
 	        EaseCurve.AddKey(1, DefaultEaseCurveValue);
 	    }
 
-        // TODO Should be visible in the inspector.
 	    protected virtual float DefaultEaseCurveValue {
             get { return 0.05f; }
 	    }

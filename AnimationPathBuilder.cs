@@ -1,10 +1,10 @@
-﻿using System;
-using ATP.ReorderableList;
-using System.Collections.Generic;
+﻿using ATP.ReorderableList;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
+
     /// <summary>
     /// Allows creating and drawing 3d paths using Unity's animation curves.
     /// </summary>
@@ -18,16 +18,20 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public const int GizmoCurveSamplingFrequency = 20;
 
-        #endregion Constants
+        #endregion CONSTANTS
 
         #region FIELDS
 
-        public event EventHandler PathReset;
-        public event EventHandler NodeTimeChanged;
         public event EventHandler NodeAdded;
+
+        public event EventHandler NodePositionChanged;
+
         public event EventHandler NodeRemoved;
-		public event EventHandler NodePositionChanged;
-        #endregion Fields
+
+        public event EventHandler NodeTimeChanged;
+
+        public event EventHandler PathReset;
+        #endregion FIELDS
 
         #region EDITOR
 
@@ -57,6 +61,13 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Color gizmoCurveColor = Color.yellow;
 
+        [SerializeField]
+        private AnimationPathBuilderHandleMode handleMode =
+            AnimationPathBuilderHandleMode.MoveSingle;
+
+        [SerializeField]
+        private PathData pathData;
+
         /// <summary>
         /// Styles for multiple GUI elements.
         /// </summary>
@@ -64,23 +75,13 @@ namespace ATP.AnimationPathTools {
         private GUISkin skin;
 
 #pragma warning disable 0414
-
-;
-
-        [SerializeField] private AnimationPathBuilderHandleMode handleMode =
-            AnimationPathBuilderHandleMode.MoveSingle;
-
         [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
             AnimationPathBuilderTangentMode.Smooth;
-
-        [SerializeField] private PathData pathData;
-
 #pragma warning restore 0414
 
-        #endregion Editor
+        #endregion EDITOR
 
         #region PUBLIC PROPERTIES
-
 
         /// <summary>
         /// Color of the gizmo curve.
@@ -89,6 +90,12 @@ namespace ATP.AnimationPathTools {
             get { return gizmoCurveColor; }
             set { gizmoCurveColor = value; }
         }
+
+        public AnimationPathBuilderHandleMode HandleMode {
+            get { return handleMode; }
+            set { handleMode = value; }
+        }
+
         /// <summary>
         /// Number of keys in an animation curve.
         /// </summary>
@@ -96,29 +103,19 @@ namespace ATP.AnimationPathTools {
             get { return pathData.AnimatedObjectPath.KeysNo; }
         }
 
-
-        public GUISkin Skin {
-            get { return skin; }
-        }
-
-    
-
-        public AnimationPathBuilderTangentMode TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
-        }
-
-   
-        public AnimationPathBuilderHandleMode HandleMode {
-            get { return handleMode; }
-            set { handleMode = value; }
-        }
-
         public PathData PathData {
             get { return pathData; }
             set { pathData = value; }
         }
 
+        public GUISkin Skin {
+            get { return skin; }
+        }
+
+        public AnimationPathBuilderTangentMode TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -131,6 +128,7 @@ namespace ATP.AnimationPathTools {
 
         private void OnDestroy() {
         }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
             DrawGizmoCurve();
@@ -147,10 +145,12 @@ namespace ATP.AnimationPathTools {
             handleMode = AnimationPathBuilderHandleMode.MoveAll;
         }
 
-        #endregion Unity Messages
+        #endregion UNITY MESSAGES
+
         #region EVENT INVOCATORS
-        protected virtual void OnNodeRemoved() {
-            var handler = NodeRemoved;
+
+        public virtual void this_PathReset() {
+            var handler = PathReset;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -159,32 +159,22 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        protected virtual void OnNodePositionChanged() {
+            var handler = NodePositionChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnNodeRemoved() {
+            var handler = NodeRemoved;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
         protected virtual void OnNodeTimeChanged() {
             var handler = NodeTimeChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-
-		protected virtual void OnNodePositionChanged() {
-			var handler = NodePositionChanged;
-			if (handler != null) handler(this, EventArgs.Empty);
-		}
-
-        public virtual void this_PathReset() {
-            var handler = PathReset;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        #endregion
+        #endregion EVENT INVOCATORS
 
         #region PUBLIC METHODS
-
-		public void SetWrapMode (WrapMode wrapMode) {
-			pathData.AnimatedObjectPath.SetWrapMode(wrapMode);
-		}
-
-        public void SetNodeTangents(int index, Vector3 inOutTangent) {
-            pathData.AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
-        }
 
         public void ChangeNodeTimestamp(
                             int keyIndex,
@@ -203,6 +193,7 @@ namespace ATP.AnimationPathTools {
             pathData.AnimatedObjectPath.AddNodeAtTime(timestamp);
             OnNodeAdded();
         }
+
         public void DistributeTimestamps() {
             // Calculate path curved length.
             var pathLength =
@@ -233,13 +224,24 @@ namespace ATP.AnimationPathTools {
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
-                // NOTE When nodes on the scene overlap, it's possible that
-                // new timestamp is > 0, which is invalid.
+                // NOTE When nodes on the scene overlap, it's possible that new
+                // timestamp is > 0, which is invalid.
                 if (newTimestamp > 1) break;
 
                 // Update node timestamp.
                 ChangeNodeTimestamp(i, newTimestamp);
             }
+        }
+
+        public Vector3[] GetNodeGlobalPositions() {
+            var nodePositions = GetNodePositions();
+
+            for (var i = 0; i < nodePositions.Length; i++) {
+                // Convert each position to global coordinate.
+                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+            }
+
+            return nodePositions;
         }
 
         public Vector3 GetNodePosition(int nodeIndex) {
@@ -262,17 +264,6 @@ namespace ATP.AnimationPathTools {
             return result;
         }
 
-		public Vector3[] GetNodeGlobalPositions() {
-			var nodePositions = GetNodePositions();
-
-			for (var i = 0; i < nodePositions.Length; i++) {
-				// Convert each position to global coordinate.
-				nodePositions[i] = transform.TransformPoint(nodePositions[i]);
-			}
-
-			return nodePositions;
-		}
-
         public float GetNodeTimestamp(int nodeIndex) {
             return pathData.AnimatedObjectPath.GetTimeAtKey(nodeIndex);
         }
@@ -294,6 +285,11 @@ namespace ATP.AnimationPathTools {
             return pathData.AnimatedObjectPath.GetVectorAtTime(timestamp);
         }
 
+        public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
+            pathData.AnimatedObjectPath.MovePointToPosition(nodeIndex, position);
+            OnNodePositionChanged();
+        }
+
         public void OffsetNodePositions(Vector3 moveDelta) {
             // For each node..
             for (var i = 0; i < NodesNo; i++) {
@@ -304,13 +300,8 @@ namespace ATP.AnimationPathTools {
                 // Update node positions.
                 pathData.AnimatedObjectPath.MovePointToPosition(i, newPosition);
 
-				OnNodePositionChanged();
+                OnNodePositionChanged();
             }
-        }
-
-        public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
-            pathData.AnimatedObjectPath.MovePointToPosition(nodeIndex, position);
-			OnNodePositionChanged();
         }
 
         public void RemoveNode(int nodeIndex) {
@@ -324,6 +315,13 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public void SetNodeTangents(int index, Vector3 inOutTangent) {
+            pathData.AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
+        }
+
+        public void SetWrapMode(WrapMode wrapMode) {
+			pathData.AnimatedObjectPath.SetWrapMode(wrapMode);
+		}
         /// <summary>
         /// Smooth tangents in all nodes in all animation curves.
         /// </summary>
@@ -340,11 +338,9 @@ namespace ATP.AnimationPathTools {
             pathData.AnimatedObjectPath.SmoothPointTangents(nodeIndex);
         }
 
-        #endregion Public Methods
+        #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
-
-
 
         private void DrawGizmoCurve() {
             // Return if path asset is not assigned.

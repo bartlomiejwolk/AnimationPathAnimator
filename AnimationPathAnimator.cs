@@ -31,20 +31,7 @@ namespace ATP.AnimationPathTools {
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
     
-        #region CONSTANTS
-
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public const float ShortJumpValue = 0.002f;
-
-        private const string CurrentRotationPointGizmoIcon = "rec_16x16-yellow";
-        private const string ForwardPointIcon = "target_22x22-pink";
-        private const int RotationCurveSampling = 20;
-        private const string RotationPointGizmoIcon = "rec_16x16";
-        private const string TargetGizmoIcon = "target_22x22-blue";
-
-        #endregion CONSTANTS
+      
 
         #region EVENTS
 
@@ -55,35 +42,43 @@ namespace ATP.AnimationPathTools {
         #endregion EVENTS
 
         #region FIELDS
-        private readonly Color rotationCurveColor = Color.gray;
-        [SerializeField]
-        private WrapMode wrapMode = WrapMode.Clamp;
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        private float shortJumpValue = 0.002f;
 
+        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
+        private string forwardPointIcon = "target_22x22-pink";
+        private int rotationCurveSampling = 20;
+        private string rotationPointGizmoIcon = "rec_16x16";
+        private string targetGizmoIcon = "target_22x22-blue";
+
+        private readonly Color rotationCurveColor = Color.gray;
         /// <summary>
         ///     Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
         [SerializeField] private AnimationPathBuilder animationPathBuilder;
-
-        [SerializeField] private bool autoPlay = true;
-
-        [SerializeField] private AnimatorHandleMode handleMode =
-            AnimatorHandleMode.None;
-
         /// <summary>
         ///     If animation is currently enabled (may be paused).
         /// </summary>
         /// <remarks>Used in play mode.</remarks>
         private bool isPlaying;
-
-        [SerializeField] private AnimatorRotationMode rotationMode =
-            AnimatorRotationMode.Forward;
-
-
-        [SerializeField] private bool updateAllMode;
-
         #endregion FIELDS
 
         #region SERIALIZED FIELDS
+        [SerializeField]
+        private AnimatorRotationMode rotationMode =
+            AnimatorRotationMode.Forward;
+
+        [SerializeField]
+        private AnimatorHandleMode handleMode =
+            AnimatorHandleMode.None;
+
+        [SerializeField]
+        private WrapMode wrapMode = WrapMode.Clamp;
+
+        [SerializeField]
+        private bool autoPlay = true;
 
         [SerializeField]
 #pragma warning disable 169
@@ -142,7 +137,15 @@ namespace ATP.AnimationPathTools {
 
         #endregion SERIALIZED FIELDS
 
+        [SerializeField]
+        private bool updateAllMode;
+
         #region PUBLIC PROPERTIES
+        public string CurrentRotationPointGizmoIcon {
+            get { return currentRotationPointGizmoIcon; }
+            set { currentRotationPointGizmoIcon = value; }
+        }
+
         public float FloatPrecision {
             get { return 0.001f; }
         }
@@ -207,6 +210,34 @@ namespace ATP.AnimationPathTools {
             set { updateAllMode = value; }
         }
 
+        public string ForwardPointIcon {
+            get { return forwardPointIcon; }
+            protected set { forwardPointIcon = value; }
+        }
+
+        public int RotationCurveSampling {
+            get { return rotationCurveSampling; }
+            protected set { rotationCurveSampling = value; }
+        }
+
+        public string RotationPointGizmoIcon {
+            get { return rotationPointGizmoIcon; }
+            protected set { rotationPointGizmoIcon = value; }
+        }
+
+        public string TargetGizmoIcon {
+            get { return targetGizmoIcon; }
+            protected set { targetGizmoIcon = value; }
+        }
+
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        public float ShortJumpValue {
+            get { return shortJumpValue; }
+            protected set { shortJumpValue = value; }
+        }
+
         //public AnimationCurve EaseCurve {
         //    get { return easeCurve; }
         //}
@@ -255,7 +286,7 @@ namespace ATP.AnimationPathTools {
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnEnable() {
+        public virtual void OnEnable() {
             // Subscribe to events.
             animationPathBuilder.PathReset += animationPathBuilder_PathReset;
             animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;

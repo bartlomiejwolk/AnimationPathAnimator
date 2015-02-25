@@ -6,34 +6,35 @@ using ATP.ReorderableList;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
+
 namespace ATP.AnimationPathTools {
+    public enum AnimatorHandleMode {
+        None,
+        Ease,
+        Rotation,
+        Tilting
+    }
 
-    public enum AnimatorHandleMode { None, Ease, Rotation, Tilting }
-
-    public enum AnimatorRotationMode { Forward, Custom, Target }
+    public enum AnimatorRotationMode {
+        Forward,
+        Custom,
+        Target
+    }
 
 
     /// <summary>
-    /// Component that allows animating transforms position along predefined
-    /// Animation Paths and also animate their rotation on x and y axis in
-    /// time.
+    ///     Component that allows animating transforms position along predefined
+    ///     Animation Paths and also animate their rotation on x and y axis in
+    ///     time.
     /// </summary>
-    [RequireComponent(typeof(AnimationPathBuilder))]
+    [RequireComponent(typeof (AnimationPathBuilder))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
-
-        [SerializeField]
-        private WrapMode wrapMode = WrapMode.Clamp;
-
-        public WrapMode WrapMode {
-            get { return wrapMode; }
-            set { wrapMode = value; }
-        }
-
+    
         #region CONSTANTS
 
         /// <summary>
-        /// Value of the jump when modifier key is pressed.
+        ///     Value of the jump when modifier key is pressed.
         /// </summary>
         public const float ShortJumpValue = 0.002f;
 
@@ -42,57 +43,43 @@ namespace ATP.AnimationPathTools {
         private const int RotationCurveSampling = 20;
         private const string RotationPointGizmoIcon = "rec_16x16";
         private const string TargetGizmoIcon = "target_22x22-blue";
+
         #endregion CONSTANTS
-
-        #region READ-ONLY
-
-        private readonly Color rotationCurveColor = Color.gray;
-        #endregion READ-ONLY
 
         #region EVENTS
 
         public event EventHandler NodeTiltChanged;
 
         public event EventHandler RotationPointPositionChanged;
+
         #endregion EVENTS
 
         #region FIELDS
+        private readonly Color rotationCurveColor = Color.gray;
+        [SerializeField]
+        private WrapMode wrapMode = WrapMode.Clamp;
 
         /// <summary>
-        /// Path used to animate the <c>animatedGO</c> transform.
+        ///     Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
-        [SerializeField]
-        private AnimationPathBuilder animationPathBuilder;
+        [SerializeField] private AnimationPathBuilder animationPathBuilder;
 
-        [SerializeField]
-        private bool autoPlay = true;
+        [SerializeField] private bool autoPlay = true;
 
-        [SerializeField]
-        private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
+        [SerializeField] private AnimatorHandleMode handleMode =
+            AnimatorHandleMode.None;
 
-        //[SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        //private AnimationCurve easeCurve = new AnimationCurve();
         /// <summary>
-        /// If animation is currently enabled (may be paused).
+        ///     If animation is currently enabled (may be paused).
         /// </summary>
         /// <remarks>Used in play mode.</remarks>
         private bool isPlaying;
 
-        //[SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        //private AnimationCurve tiltingCurve = new AnimationCurve();
-        private bool pause;
+        [SerializeField] private AnimatorRotationMode rotationMode =
+            AnimatorRotationMode.Forward;
 
-        [SerializeField]
-        private AnimatorRotationMode rotationMode = AnimatorRotationMode.Forward;
-        //[SerializeField]
-        //private AnimationPath rotationPath;
 
-        [SerializeField]
-        private bool updateAllMode;
-
-        //private float timeStep;
+        [SerializeField] private bool updateAllMode;
 
         #endregion FIELDS
 
@@ -100,27 +87,25 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
 #pragma warning disable 169
-        private bool advancedSettingsFoldout;
+            private bool advancedSettingsFoldout;
 #pragma warning restore 169
 
         /// <summary>
-        /// Transform to be animated.
+        ///     Transform to be animated.
         /// </summary>
-        [SerializeField]
-        private Transform animatedGO;
+        [SerializeField] private Transform animatedGO;
 
         /// Current play time represented as a number between 0 and 1.
-        [SerializeField]
-        private float animTimeRatio;
+        [SerializeField] private float animTimeRatio;
 
         [SerializeField]
 #pragma warning disable 169
-        private bool enableControlsInPlayMode = true;
+            private bool enableControlsInPlayMode = true;
 #pragma warning restore 169
 
         /// <summary>
-        /// How much look forward point should be positioned away from the
-        /// animated object.
+        ///     How much look forward point should be positioned away from the
+        ///     animated object.
         /// </summary>
         /// <remarks>Value is a time in range from 0 to 1.</remarks>
         [SerializeField]
@@ -130,11 +115,10 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
 #pragma warning disable 169
-        private float maxAnimationSpeed = 0.3f;
+            private float maxAnimationSpeed = 0.3f;
 #pragma warning restore 169
 
-        [SerializeField]
-        private PathData pathData;
+        [SerializeField] private PathData pathData;
 
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -146,23 +130,31 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
 
-        [SerializeField]
-        private GUISkin skin;
+        [SerializeField] private GUISkin skin;
 
         /// <summary>
-        /// Transform that the <c>animatedGO</c> will be looking at.
+        ///     Transform that the <c>animatedGO</c> will be looking at.
         /// </summary>
         [SerializeField]
 #pragma warning disable 649
-        private Transform targetGO;
+            private Transform targetGO;
 #pragma warning restore 649
 
         #endregion SERIALIZED FIELDS
 
         #region PUBLIC PROPERTIES
+        public float FloatPrecision {
+            get { return 0.001f; }
+        }
+
+        public WrapMode WrapMode {
+            get { return wrapMode; }
+            set { wrapMode = value; }
+        }
+
 
         /// <summary>
-        /// Path used to animate the <c>animatedGO</c> transform.
+        ///     Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
         public AnimationPathBuilder AnimationPathBuilder {
             get { return animationPathBuilder; }
@@ -183,10 +175,10 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// If animation is currently enabled.
+        ///     If animation is currently enabled.
         /// </summary>
         /// <remarks>
-        /// Used in play mode. You can use it to stop animation.
+        ///     Used in play mode. You can use it to stop animation.
         /// </remarks>
         public bool IsPlaying {
             get { return isPlaying; }
@@ -198,38 +190,27 @@ namespace ATP.AnimationPathTools {
             set { pathData = value; }
         }
 
-        public bool Pause {
-            get { return pause; }
-            set { pause = value; }
-        }
+        public bool Pause { get; set; }
 
-        //public AnimationCurve TiltingCurve {
-        //    get { return tiltingCurve; }
-        //}
         public AnimatorRotationMode RotationMode {
             get { return rotationMode; }
             set { rotationMode = value; }
         }
 
-        //public AnimationPath RotationPath {
-        //    get { return rotationPath; }
-        //}
         public GUISkin Skin {
             get { return skin; }
             set { skin = value; }
         }
 
         public bool UpdateAllMode {
-            get {
-                return updateAllMode;
-            }
-            set {
-                updateAllMode = value;
-            }
+            get { return updateAllMode; }
+            set { updateAllMode = value; }
         }
+
         //public AnimationCurve EaseCurve {
         //    get { return easeCurve; }
         //}
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -279,8 +260,10 @@ namespace ATP.AnimationPathTools {
             animationPathBuilder.PathReset += animationPathBuilder_PathReset;
             animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;
             animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
-            animationPathBuilder.NodeTimeChanged += animationPathBuilder_NodeTimeChanged;
-            animationPathBuilder.NodePositionChanged += animationPathBuilder_NodePositionChanged;
+            animationPathBuilder.NodeTimeChanged +=
+                animationPathBuilder_NodeTimeChanged;
+            animationPathBuilder.NodePositionChanged +=
+                animationPathBuilder_NodePositionChanged;
             RotationPointPositionChanged += this_RotationPointPositionChanged;
             NodeTiltChanged += this_NodeTiltChanged;
         }
@@ -301,7 +284,7 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
-            if (Application.isPlaying && isPlaying && !pause) {
+            if (Application.isPlaying && isPlaying && !Pause) {
                 Animate();
             }
         }
@@ -319,11 +302,13 @@ namespace ATP.AnimationPathTools {
             var handler = RotationPointPositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
+
         #endregion EVENT INVOCATORS
 
         #region EVENT HANDLERS
 
-        private void animationPathBuilder_NodeAdded(object sender, EventArgs eventArgs) {
+        private void animationPathBuilder_NodeAdded(object sender,
+            EventArgs eventArgs) {
             UpdateCurveWithAddedKeys(PathData.EaseCurve);
             UpdateCurveWithAddedKeys(PathData.TiltingCurve);
             UpdateRotationCurvesWithAddedKeys();
@@ -332,24 +317,29 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodePositionChanged(
             object sender,
             EventArgs e) {
-
             if (!Application.isPlaying) Animate();
             if (Application.isPlaying) UpdateAnimatedGO();
         }
 
-        private void animationPathBuilder_NodeRemoved(object sender, EventArgs e) {
+        private void animationPathBuilder_NodeRemoved(
+            object sender,
+            EventArgs e) {
             UpdateCurveWithRemovedKeys(PathData.EaseCurve);
             UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
             UpdateRotationCurvesWithRemovedKeys();
         }
 
-        private void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
+        private void animationPathBuilder_NodeTimeChanged(
+            object sender,
+            EventArgs e) {
             UpdateRotationCurvesTimestamps();
             UpdateCurveTimestamps(PathData.EaseCurve);
             UpdateCurveTimestamps(PathData.TiltingCurve);
         }
 
-        private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
+        private void animationPathBuilder_PathReset(
+            object sender,
+            EventArgs eventArgs) {
             PathData.Reset();
 
             // Change handle mode to None.
@@ -363,9 +353,11 @@ namespace ATP.AnimationPathTools {
             if (Application.isPlaying) UpdateAnimatedGO();
         }
 
-        private void this_RotationPointPositionChanged(object sender, EventArgs e) {
+        private void this_RotationPointPositionChanged(object sender,
+            EventArgs e) {
             if (!Application.isPlaying) Animate();
         }
+
         #endregion EVENT HANDLERS
 
         #region PUBLIC METHODS
@@ -373,7 +365,6 @@ namespace ATP.AnimationPathTools {
         public void ChangeRotationAtTimestamp(
             float timestamp,
             Vector3 newPosition) {
-
             // Get node timestamps.
             var timestamps = PathData.RotationPath.GetTimestamps();
             // If matching timestamp in the path was found.
@@ -381,7 +372,7 @@ namespace ATP.AnimationPathTools {
             // For each timestamp..
             for (var i = 0; i < PathData.RotationPath.KeysNo; i++) {
                 // Check if it is the timestamp to remove..
-                if (Math.Abs(timestamps[i] - timestamp) < 0.001f) {
+                if (Math.Abs(timestamps[i] - timestamp) < FloatPrecision) {
                     // Remove node.
                     PathData.RotationPath.RemoveNode(i);
 
@@ -392,7 +383,7 @@ namespace ATP.AnimationPathTools {
             // If timestamp was not found..
             if (!foundMatch) {
                 Debug.Log("You're trying to change rotation for nonexistent " +
-                    "node.");
+                          "node.");
 
                 return;
             }
@@ -429,7 +420,8 @@ namespace ATP.AnimationPathTools {
         }
 
         public Vector3 GetGlobalNodePosition(int nodeIndex) {
-            var localNodePosition = animationPathBuilder.GetNodePosition(nodeIndex);
+            var localNodePosition =
+                animationPathBuilder.GetNodePosition(nodeIndex);
             var globalNodePosition = transform.TransformPoint(localNodePosition);
 
             return globalNodePosition;
@@ -483,7 +475,7 @@ namespace ATP.AnimationPathTools {
 
             // Reset animation.
             isPlaying = false;
-            pause = false;
+            Pause = false;
             animTimeRatio = 0;
         }
 
@@ -545,9 +537,11 @@ namespace ATP.AnimationPathTools {
 
             OnNodeTiltChanged();
         }
+
         public void UpdateWrapMode() {
             animationPathBuilder.SetWrapMode(wrapMode);
         }
+
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
@@ -574,10 +568,13 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Update animatedGO position, rotation and tilting based on current
-        /// animTimeRatio. <remarks>Used to update animatedGO with keys, in
-        /// play mode.</remarks>
+        ///     Update animatedGO position, rotation and tilting based on current
+        ///     animTimeRatio.
         /// </summary>
+        /// <remarks>
+        ///     Used to update animatedGO with keys, in
+        ///     play mode.
+        /// </remarks>
         public void UpdateAnimatedGO() {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
@@ -588,22 +585,21 @@ namespace ATP.AnimationPathTools {
         private void AddKeyToCurve(
             AnimationCurve curve,
             float timestamp) {
-
             var value = curve.Evaluate(timestamp);
 
             curve.AddKey(timestamp, value);
         }
 
-     
+
         private void AnimateObject() {
             if (animatedGO == null
                 || animationPathBuilder == null) {
-
                 return;
             }
 
             var positionAtTimestamp =
                 animationPathBuilder.GetVectorAtTime(animTimeRatio);
+
             var globalPositionAtTimestamp =
                 transform.TransformPoint(positionAtTimestamp);
 
@@ -628,15 +624,18 @@ namespace ATP.AnimationPathTools {
 
             // Return if current animation time is the same as any node time.
             if (nodeTimestamps.Any(nodeTimestamp =>
-                Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f)) {
+                Math.Abs(nodeTimestamp - currentAnimationTime)
+                < FloatPrecision)) {
 
                 return;
             }
 
             // Get rotation point position.
             var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+
             // Convert position to global coordinate.
-            rotationPointPosition = transform.TransformPoint(rotationPointPosition);
+            rotationPointPosition =
+                transform.TransformPoint(rotationPointPosition);
 
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
@@ -656,7 +655,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawRotationGizmoCurve() {
-            var points = PathData.RotationPath.SamplePathForPoints(RotationCurveSampling);
+            var points = PathData.RotationPath.SamplePathForPoints(
+                RotationCurveSampling);
 
             for (var i = 0; i < points.Count; i++) {
                 // Convert point positions to global coordinates.
@@ -682,10 +682,11 @@ namespace ATP.AnimationPathTools {
 
             var rotationPointPositions = GetRotationPointPositions(true);
 
-            for (int i = 0; i < rotationPointPositions.Length; i++) {
+            for (var i = 0; i < rotationPointPositions.Length; i++) {
                 // Return if current animation time is the same as any node
                 // time.
-                if (Math.Abs(nodeTimestamps[i] - currentAnimationTime) < 0.001f) {
+                if (Math.Abs(nodeTimestamps[i] - currentAnimationTime) <
+                    FloatPrecision) {
                     continue;
                 }
 
@@ -711,10 +712,10 @@ namespace ATP.AnimationPathTools {
         private IEnumerator EaseTime() {
             while (true) {
                 // If animation is not paused..
-                if (!pause) {
+                if (!Pause) {
                     // Ease time.
                     var timeStep = PathData.EaseCurve.Evaluate(animTimeRatio);
-                    animTimeRatio += timeStep * Time.deltaTime;
+                    animTimeRatio += timeStep*Time.deltaTime;
                 }
 
                 yield return null;
@@ -734,7 +735,7 @@ namespace ATP.AnimationPathTools {
             var rotationPointPositions = new Vector3[rotationPointsNo];
 
             // For each rotation point..
-            for (int i = 0; i < rotationPointsNo; i++) {
+            for (var i = 0; i < rotationPointsNo; i++) {
                 // Get rotation point local position.
                 var localPos = GetRotationPointPosition(i);
 
@@ -760,7 +761,6 @@ namespace ATP.AnimationPathTools {
             // Look at target.
             if (targetGO != null
                 && rotationMode == AnimatorRotationMode.Target) {
-
                 // In play mode use Quaternion.Slerp();
                 if (Application.isPlaying) {
                     RotateObjectWithSlerp(targetGO.position);
@@ -776,7 +776,7 @@ namespace ATP.AnimationPathTools {
             }
             // Look forward.
             else if (rotationMode == AnimatorRotationMode.Forward) {
-                Vector3 globalForwardPoint = GetForwardPoint(true);
+                var globalForwardPoint = GetForwardPoint(true);
 
                 // In play mode..
                 if (Application.isPlaying) {
@@ -806,7 +806,8 @@ namespace ATP.AnimationPathTools {
 
 
         private void RotateObjectWithAnimationCurves() {
-            var lookAtTarget = PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+            var lookAtTarget =
+                PathData.RotationPath.GetVectorAtTime(animTimeRatio);
             // Convert target position to global coordinates.
             var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
 
@@ -834,7 +835,7 @@ namespace ATP.AnimationPathTools {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime * rotationSpeed;
+            var speed = Time.deltaTime*rotationSpeed;
 
             // Lerp rotation.
             animatedGO.rotation = Quaternion.Slerp(
@@ -872,7 +873,7 @@ namespace ATP.AnimationPathTools {
 
             switch (rotationMode) {
                 case AnimatorRotationMode.Forward:
-                    Vector3 globalForwardPoint = GetForwardPoint(true);
+                    var globalForwardPoint = GetForwardPoint(true);
 
                     RotateObjectWithLookAt(globalForwardPoint);
 
@@ -882,6 +883,7 @@ namespace ATP.AnimationPathTools {
                     // Get rotation point position.
                     var rotationPointPos =
                         PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =
                         transform.TransformPoint(rotationPointPos);
@@ -898,6 +900,7 @@ namespace ATP.AnimationPathTools {
                     break;
             }
         }
+
         private void UpdateCurveTimestamps(AnimationCurve curve) {
             // Get node timestamps.
             var pathNodeTimestamps = animationPathBuilder.GetNodeTimestamps();
@@ -905,7 +908,8 @@ namespace ATP.AnimationPathTools {
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from easeCurve
                 // timestamp..
-                if (Math.Abs(pathNodeTimestamps[i] - curve.keys[i].value) > 0.001f) {
+                if (Math.Abs(pathNodeTimestamps[i] - curve.keys[i].value) >
+                    FloatPrecision) {
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp
@@ -919,7 +923,7 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Update AnimationCurve with keys added to the path.
+        ///     Update AnimationCurve with keys added to the path.
         /// </summary>
         /// <param name="curve"></param>
         private void UpdateCurveWithAddedKeys(AnimationCurve curve) {
@@ -982,7 +986,6 @@ namespace ATP.AnimationPathTools {
                 // point timestamp..
                 if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
                     > FloatPrecision) {
-
                     // Update rotation point timestamp.
                     PathData.RotationPath.ChangeNodeTimestamp(
                         i,
@@ -990,12 +993,10 @@ namespace ATP.AnimationPathTools {
                 }
             }
         }
-
-        public float FloatPrecision { get { return 0.001f; } }
-
         private void UpdateRotationCurvesWithAddedKeys() {
             // AnimationPathBuilder node timestamps.
-            var animationCurvesTimestamps = animationPathBuilder.GetNodeTimestamps();
+            var animationCurvesTimestamps =
+                animationPathBuilder.GetNodeTimestamps();
             // Get values from rotationPath.
             var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
             var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
@@ -1005,8 +1006,8 @@ namespace ATP.AnimationPathTools {
                 var keyExists = false;
                 for (var j = 0; j < rotationCurvesKeysNo; j++) {
                     if (Math.Abs(rotationCurvesTimestamps[j]
-                        - animationCurvesTimestamps[i]) < 0.001f) {
-
+                                 - animationCurvesTimestamps[i]) <
+                        FloatPrecision) {
                         keyExists = true;
                         break;
                     }

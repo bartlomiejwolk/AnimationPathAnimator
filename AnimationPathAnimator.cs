@@ -354,7 +354,10 @@ namespace ATP.AnimationPathTools {
             UpdateRotationCurvesWithAddedKeys();
         }
 
-        private void animationPathBuilder_NodePositionChanged(object sender, EventArgs e) {
+        private void animationPathBuilder_NodePositionChanged(
+            object sender,
+            EventArgs e) {
+
             if (!Application.isPlaying) Animate();
             if (Application.isPlaying) UpdateAnimatedGO();
         }
@@ -366,9 +369,9 @@ namespace ATP.AnimationPathTools {
         }
 
         private void animationPathBuilder_NodeTimeChanged(object sender, EventArgs e) {
+            UpdateRotationCurvesTimestamps();
             UpdateCurveTimestamps(PathData.EaseCurve);
             UpdateCurveTimestamps(PathData.TiltingCurve);
-            UpdateRotationCurvesTimestamps();
         }
 
         private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
@@ -1097,15 +1100,26 @@ namespace ATP.AnimationPathTools {
         private void UpdateRotationCurvesTimestamps() {
             // Get node timestamps.
             var nodeTimestamps = animationPathBuilder.GetNodeTimestamps();
-            var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
+            // Get rotation point timestamps.
+            var rotationCurvesTimestamps =
+                PathData.RotationPath.GetTimestamps();
+
             // For each node in rotationPath..
             for (var i = 1; i < PathData.RotationPath.KeysNo - 1; i++) {
-                // If resp. node timestamp is different from key value..
-                if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i]) > 0.001f) {
-                    PathData.RotationPath.ChangeNodeTimestamp(i, nodeTimestamps[i]);
+                // If resp. path node timestamp is different from rotation
+                // point timestamp..
+                if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
+                    > FloatPrecision) {
+
+                    // Update rotation point timestamp.
+                    PathData.RotationPath.ChangeNodeTimestamp(
+                        i,
+                        nodeTimestamps[i]);
                 }
             }
         }
+
+        public float FloatPrecision { get { return 0.001f; } }
 
         private void UpdateRotationCurvesWithAddedKeys() {
             // AnimationPathBuilder node timestamps.

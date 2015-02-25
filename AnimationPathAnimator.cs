@@ -257,13 +257,29 @@ namespace ATP.AnimationPathTools {
             // Return if path asset file is not assigned.
             if (PathData == null) return;
 
-            // Return if handle mode is not rotation mode.
-            if (handleMode != AnimatorHandleMode.Rotation) return;
+            if (rotationMode == AnimatorRotationMode.Target) {
+                DrawTargetIcon();
+            }
 
-            DrawRotationGizmoCurve();
-            DrawCurrentRotationPointGizmo();
-            DrawRotationPointGizmos();
+            // Return if handle mode is not rotation mode.
+            if (handleMode == AnimatorHandleMode.Rotation) {
+                DrawRotationGizmoCurve();
+                DrawCurrentRotationPointGizmo();
+                DrawRotationPointGizmos();
+            }
         }
+
+        private void DrawTargetIcon() {
+            if (targetGO == null) return;
+
+            // TODO Use const for icon file name.
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                targetGO.position,
+                "target_22x22",
+                false);
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Subscribe to events.

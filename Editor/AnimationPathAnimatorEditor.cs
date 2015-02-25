@@ -60,14 +60,14 @@ namespace ATP.AnimationPathTools {
         #region FIELDS
 
         // TODO Use gizmo icon instead.
-        private GUIStyle TargetGizmoStyle {
-            get {
-                return new GUIStyle {
-                    normal = {textColor = Color.white},
-                    fontStyle = FontStyle.Bold,
-                };
-            }
-        }
+        //private GUIStyle TargetGizmoStyle {
+        //    get {
+        //        return new GUIStyle {
+        //            normal = {textColor = Color.white},
+        //            fontStyle = FontStyle.Bold,
+        //        };
+        //    }
+        //}
 
         //private GUIStyle EaseValueLabelStyle {
         //    get {
@@ -346,7 +346,7 @@ namespace ATP.AnimationPathTools {
 			HandleWrapModeDropdown();
 
             HandleDrawingForwardPointMarker();
-            HandleDrawingTargetGizmo();
+            //HandleDrawingTargetGizmo();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
             HandleDrawingTiltingHandles();
@@ -410,15 +410,15 @@ namespace ATP.AnimationPathTools {
             DrawRotationHandle(DrawRotationHandlesCallbackHandler);
         }
 
-        private void HandleDrawingTargetGizmo() {
-            if (targetGO.objectReferenceValue == null) return;
+        //private void HandleDrawingTargetGizmo() {
+        //    if (targetGO.objectReferenceValue == null) return;
 
-            var targetPos =
-                ((Transform)targetGO.objectReferenceValue).position;
+        //    var targetPos =
+        //        ((Transform)targetGO.objectReferenceValue).position;
 
-            Handles.Label(targetPos, "Target", TargetGizmoStyle);
+        //    Handles.Label(targetPos, "Target", TargetGizmoStyle);
 
-        }
+        //}
 
         private void HandleDrawingTiltingHandles() {
             if (script.HandleMode != AnimatorHandleMode.Tilting) return;

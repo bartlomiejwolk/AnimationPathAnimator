@@ -31,9 +31,9 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANTS
         private const int RotationCurveSampling = 20;
-        private const float DefaultEndEaseValue = 0.01f;
+        private const float DefaultEndEaseValue = 0.05f;
         private const float DefaultSecondEaseValue = 0.08f;
-        private const float DefaultStartEaseValue = 0.01f;
+        private const float DefaultStartEaseValue = 0.05f;
 
 
         /// <summary>
@@ -733,8 +733,8 @@ namespace ATP.AnimationPathTools {
         private void ResetEaseCurve() {
             RemoveAllCurveKeys(PathData.EaseCurve);
 
+            // TODO Create PathData.ResetEaseCurve().
             PathData.EaseCurve.AddKey(0, DefaultStartEaseValue);
-            //PathData.EaseCurve.AddKey(0.5f, DefaultSecondEaseValue);
             PathData.EaseCurve.AddKey(1, DefaultEndEaseValue);
         }
 

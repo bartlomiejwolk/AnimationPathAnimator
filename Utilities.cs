@@ -55,5 +55,12 @@ namespace ATP.AnimationPathTools {
                 curve.MoveKey(i, key);
             }
         }
+
+        public static void RemoveAllCurveKeys(AnimationCurve curve) {
+            var keysToRemoveNo = curve.length;
+            for (var i = 0; i < keysToRemoveNo; i++) {
+                curve.RemoveKey(0);
+            }
+        }
     }
 }

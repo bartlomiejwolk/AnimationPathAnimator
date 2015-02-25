@@ -31,9 +31,7 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANTS
         private const int RotationCurveSampling = 20;
-        private const float DefaultEndEaseValue = 0.05f;
         private const float DefaultSecondEaseValue = 0.08f;
-        private const float DefaultStartEaseValue = 0.05f;
 
 
         /// <summary>
@@ -402,7 +400,8 @@ namespace ATP.AnimationPathTools {
 
         private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
             ResetRotationPath();
-            ResetEaseCurve();
+            //ResetEaseCurve();
+            PathData.ResetEaseCurve();
             ResetTiltingCurve();
 
             // Change handle mode to None.
@@ -467,12 +466,12 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public static void RemoveAllCurveKeys(AnimationCurve curve) {
-            var keysToRemoveNo = curve.length;
-            for (var i = 0; i < keysToRemoveNo; i++) {
-                curve.RemoveKey(0);
-            }
-        }
+        //public static void RemoveAllCurveKeys(AnimationCurve curve) {
+        //    var keysToRemoveNo = curve.length;
+        //    for (var i = 0; i < keysToRemoveNo; i++) {
+        //        curve.RemoveKey(0);
+        //    }
+        //}
 
         public void ChangeRotationAtTimestamp(
             float timestamp,
@@ -709,7 +708,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void ResetTiltingCurve() {
-            RemoveAllCurveKeys(PathData.TiltingCurve);
+            Utilities.RemoveAllCurveKeys(PathData.TiltingCurve);
 
             PathData.TiltingCurve.AddKey(0, 0);
             //PathData.TiltingCurve.AddKey(0.5f, 0);
@@ -730,13 +729,12 @@ namespace ATP.AnimationPathTools {
             PathData.RotationPath.CreateNewNode(1, lastRotationPointPosition);
         }
 
-        private void ResetEaseCurve() {
-            RemoveAllCurveKeys(PathData.EaseCurve);
+        //private void ResetEaseCurve() {
+        //    Utilities.RemoveAllCurveKeys(PathData.EaseCurve);
 
-            // TODO Create PathData.ResetEaseCurve().
-            PathData.EaseCurve.AddKey(0, DefaultStartEaseValue);
-            PathData.EaseCurve.AddKey(1, DefaultEndEaseValue);
-        }
+        //    PathData.EaseCurve.AddKey(0, DefaultStartEaseValue);
+        //    PathData.EaseCurve.AddKey(1, DefaultEndEaseValue);
+        //}
 
         private void AddKeyToCurve(
             AnimationCurve curve,

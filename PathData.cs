@@ -5,6 +5,9 @@ namespace ATP.AnimationPathTools {
 
 	public class PathData : ScriptableObject {
 
+        private const float DefaultEndEaseValue = 0.05f;
+        private const float DefaultStartEaseValue = 0.05f;
+
 		[SerializeField]
 		private AnimationPath animatedObjectPath;
 
@@ -96,6 +99,13 @@ namespace ATP.AnimationPathTools {
             InstantiateAnimationPathCurves(rotationPath);
 	        EaseCurve = new AnimationCurve();
 	        TiltingCurve = new AnimationCurve();
+	    }
+
+	    public void ResetEaseCurve() {
+            Utilities.RemoveAllCurveKeys(EaseCurve);
+
+            EaseCurve.AddKey(0, DefaultStartEaseValue);
+            EaseCurve.AddKey(1, DefaultEndEaseValue);
 	    }
 	}
 }

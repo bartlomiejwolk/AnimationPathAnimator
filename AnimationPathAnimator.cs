@@ -1,11 +1,11 @@
-﻿using ATP.ReorderableList;
-using DemoApplication;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using ATP.ReorderableList;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 namespace ATP.AnimationPathTools {
 
     public enum AnimatorHandleMode { None, Ease, Rotation, Tilting }
@@ -38,7 +38,6 @@ namespace ATP.AnimationPathTools {
         public const float ShortJumpValue = 0.002f;
 
         private const string CurrentRotationPointGizmoIcon = "rec_16x16-yellow";
-        private const float DefaultSecondEaseValue = 0.08f;
         private const string ForwardPointIcon = "target_22x22-pink";
         private const int RotationCurveSampling = 20;
         private const string RotationPointGizmoIcon = "rec_16x16";
@@ -47,7 +46,6 @@ namespace ATP.AnimationPathTools {
 
         #region READ-ONLY
 
-        private readonly Vector3 defaultRotationPointOffset = new Vector3(0, 0, 0);
         private readonly Color rotationCurveColor = Color.gray;
         #endregion READ-ONLY
 
@@ -68,11 +66,6 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
         private bool autoPlay = true;
-
-        /// <summary>
-        /// Current animation time in seconds.
-        /// </summary>
-        private float currentAnimTime;
 
         [SerializeField]
         private AnimatorHandleMode handleMode = AnimatorHandleMode.None;
@@ -106,13 +99,14 @@ namespace ATP.AnimationPathTools {
         #region SERIALIZED FIELDS
 
         [SerializeField]
+#pragma warning disable 169
         private bool advancedSettingsFoldout;
+#pragma warning restore 169
 
         /// <summary>
         /// Transform to be animated.
         /// </summary>
         [SerializeField]
-#pragma warning disable 649
         private Transform animatedGO;
 
         /// Current play time represented as a number between 0 and 1.
@@ -120,7 +114,9 @@ namespace ATP.AnimationPathTools {
         private float animTimeRatio;
 
         [SerializeField]
+#pragma warning disable 169
         private bool enableControlsInPlayMode = true;
+#pragma warning restore 169
 
         /// <summary>
         /// How much look forward point should be positioned away from the
@@ -128,19 +124,26 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <remarks>Value is a time in range from 0 to 1.</remarks>
         [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
         private float forwardPointOffset = 0.05f;
 
         [SerializeField]
+#pragma warning disable 169
         private float maxAnimationSpeed = 0.3f;
+#pragma warning restore 169
 
         [SerializeField]
         private PathData pathData;
 
         [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
         private float positionLerpSpeed = 0.1f;
+
         [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
-        // disable once ConvertToConstant.Local
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
 
         [SerializeField]
@@ -152,9 +155,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
 #pragma warning disable 649
         private Transform targetGO;
-#pragma warning disable 169
-#pragma warning restore 169
-#pragma warning restore 649
 #pragma warning restore 649
 
         #endregion SERIALIZED FIELDS
@@ -619,22 +619,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-       
-        private float CalculateNewTestTimestamp(
-                    AnimationCurve curve,
-                    float currentTimestamp,
-                    float desiredValue) {
-
-            var newTimestamp = RootFinding.Brent(
-                EvaluateTimestamp,
-                0,
-                1,
-                1e-10,
-                desiredValue);
-
-            return (float)newTimestamp;
-        }
-
         private void DrawCurrentRotationPointGizmo() {
             // Get current animation time.
             var currentAnimationTime = AnimationTimeRatio;
@@ -643,8 +627,10 @@ namespace ATP.AnimationPathTools {
             var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
 
             // Return if current animation time is the same as any node time.
-            foreach (var nodeTimestamp in nodeTimestamps) {
-                if (Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f) return;
+            if (nodeTimestamps.Any(nodeTimestamp =>
+                Math.Abs(nodeTimestamp - currentAnimationTime) < 0.001f)) {
+
+                return;
             }
 
             // Get rotation point position.
@@ -721,6 +707,7 @@ namespace ATP.AnimationPathTools {
                 false);
         }
 
+        // ReSharper disable once UnusedMember.Local
         private IEnumerator EaseTime() {
             while (true) {
                 // If animation is not paused..
@@ -732,11 +719,10 @@ namespace ATP.AnimationPathTools {
 
                 yield return null;
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
-        private double EvaluateTimestamp(double x) {
-            return PathData.EaseCurve.Evaluate((float)x);
-        }
+        // ReSharper disable once UnusedMember.Local
         private Vector3 GetRotationPointPosition(float nodeTimestamp) {
             return PathData.RotationPath.GetVectorAtTime(nodeTimestamp);
         }
@@ -945,23 +931,17 @@ namespace ATP.AnimationPathTools {
             }
 
             // For each path timestamp..
-            for (var i = 0; i < nodeTimestamps.Length; i++) {
-                bool valueExists = false;
-                // For each curve timestamp..
-                for (var j = 0; j < curveTimestamps.Length; j++) {
-                    if (Math.Abs(nodeTimestamps[i] - curveTimestamps[j]) < 0.001f) {
-                        valueExists = true;
-                        break;
-                    }
-                }
+            foreach (var nodeTimestamp in nodeTimestamps) {
+                var valueExists = curveTimestamps.Any(t =>
+                    Math.Abs(nodeTimestamp - t) < FloatPrecision);
 
                 // Add missing key.
-                if (!valueExists) {
-                    AddKeyToCurve(curve, nodeTimestamps[i]);
-                    SmoothCurve(curve);
+                if (valueExists) continue;
 
-                    break;
-                }
+                AddKeyToCurve(curve, nodeTimestamp);
+                SmoothCurve(curve);
+
+                break;
             }
         }
 
@@ -976,21 +956,16 @@ namespace ATP.AnimationPathTools {
 
             // For each curve timestamp..
             for (var i = 0; i < curveTimestamps.Length; i++) {
-                var keyExists = false;
-                // For each path node timestamp..
-                for (var j = 0; j < nodeTimestamps.Length; j++) {
-                    if (Math.Abs(curveTimestamps[i] - nodeTimestamps[j]) < 0.001f) {
-                        keyExists = true;
-                        break;
-                    }
-                }
+                // Check if key at this timestamp exists..
+                var keyExists = nodeTimestamps.Any(t =>
+                    Math.Abs(curveTimestamps[i] - t) < FloatPrecision);
 
-                if (!keyExists) {
-                    curve.RemoveKey(i);
-                    SmoothCurve(curve);
+                if (keyExists) continue;
 
-                    break;
-                }
+                curve.RemoveKey(i);
+                SmoothCurve(curve);
+
+                break;
             }
         }
 
@@ -1058,25 +1033,18 @@ namespace ATP.AnimationPathTools {
 
             // For each timestamp in rotationPath..
             for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
-                var keyExists = false;
-                // For each timestamp in AnimationPathBuilder..
-                for (var j = 0; j < pathTimestamps.Length; j++) {
-                    // If both timestamps are equal..
-                    if (Math.Abs(rotationCurvesTimestamps[i]
-                        - pathTimestamps[j]) < 0.001f) {
+                // Check if same timestamp exist in rotationPath.
+                var keyExists = pathTimestamps.Any(nodeTimestamp =>
+                    Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
+                    < FloatPrecision);
 
-                        keyExists = true;
-
-                        break;
-                    }
-                }
+                // If key exists check next timestamp.
+                if (keyExists) continue;
 
                 // Remove node from rotationPath.
-                if (!keyExists) {
-                    PathData.RotationPath.RemoveNode(i);
+                PathData.RotationPath.RemoveNode(i);
 
-                    break;
-                }
+                break;
             }
         }
 

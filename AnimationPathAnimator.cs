@@ -50,24 +50,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         private AnimationPathBuilder animationPathBuilder;
-
-        [SerializeField]
-        private bool updateAllMode;
-
-        [SerializeField]
-        private AnimatorRotationMode rotationMode =
-            AnimatorRotationMode.Forward;
-
-        [SerializeField]
-        private AnimatorHandleMode handleMode =
-            AnimatorHandleMode.None;
-
-        [SerializeField]
-        private WrapMode wrapMode = WrapMode.Clamp;
-
-        [SerializeField]
-        private bool autoPlay = true;
-
         [SerializeField]
 #pragma warning disable 169
             private bool advancedSettingsFoldout;
@@ -80,11 +62,30 @@ namespace ATP.AnimationPathTools {
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField] private float animTimeRatio;
+#pragma warning restore 169
+#pragma warning restore 169
+
+        [SerializeField] private PathData pathData;
+        [SerializeField] private GUISkin skin;
+
+        /// <summary>
+        ///     Transform that the <c>animatedGO</c> will be looking at.
+        /// </summary>
+        [SerializeField]
+#pragma warning disable 649
+            private Transform targetGO;
+#pragma warning restore 649
+        #region OPTIONS
+        [SerializeField]
+        private WrapMode wrapMode = WrapMode.Clamp;
 
         [SerializeField]
 #pragma warning disable 169
-            private bool enableControlsInPlayMode = true;
-#pragma warning restore 169
+        private bool enableControlsInPlayMode = true;
+
+        [SerializeField]
+#pragma warning disable 169
+        private float maxAnimationSpeed = 0.3f;
 
         /// <summary>
         ///     How much look forward point should be positioned away from the
@@ -97,11 +98,18 @@ namespace ATP.AnimationPathTools {
         private float forwardPointOffset = 0.05f;
 
         [SerializeField]
-#pragma warning disable 169
-            private float maxAnimationSpeed = 0.3f;
-#pragma warning restore 169
+        private AnimatorRotationMode rotationMode =
+            AnimatorRotationMode.Forward;
 
-        [SerializeField] private PathData pathData;
+        [SerializeField]
+        private AnimatorHandleMode handleMode =
+            AnimatorHandleMode.None;
+
+        [SerializeField]
+        private bool updateAllMode;
+
+        [SerializeField]
+        private bool autoPlay = true;
 
         [SerializeField]
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -113,15 +121,7 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
 
-        [SerializeField] private GUISkin skin;
-
-        /// <summary>
-        ///     Transform that the <c>animatedGO</c> will be looking at.
-        /// </summary>
-        [SerializeField]
-#pragma warning disable 649
-            private Transform targetGO;
-#pragma warning restore 649
+        #endregion
 
         #endregion SERIALIZED FIELDS
         #region PUBLIC PROPERTIES

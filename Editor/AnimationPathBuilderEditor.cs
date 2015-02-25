@@ -619,7 +619,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawResetInspectorButton() {
+        private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(new GUIContent(
                 "Reset Path",
                 "Reset path to default."))) {
@@ -714,8 +714,7 @@ namespace ATP.AnimationPathTools {
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
-            // TODO Rename to DrawResetPathInspectorButton().
-            DrawResetInspectorButton();
+            DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();
 

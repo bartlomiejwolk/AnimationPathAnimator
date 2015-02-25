@@ -402,7 +402,6 @@ namespace ATP.AnimationPathTools {
             //PathData.ResetRotationPath();
             //ResetEaseCurve();
             //PathData.ResetEaseCurve();
-            // TODO Move to pathData.
             //ResetTiltingCurve();
             PathData.Reset();
 

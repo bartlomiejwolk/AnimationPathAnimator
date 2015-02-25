@@ -59,6 +59,7 @@ namespace ATP.AnimationPathTools {
 
         #region FIELDS
 
+        // TODO Use gizmo icon instead.
         private GUIStyle TargetGizmoStyle {
             get {
                 return new GUIStyle {
@@ -96,6 +97,7 @@ namespace ATP.AnimationPathTools {
         //    }
         //}
 
+        // TODO Use gizmo icon instead.
         private GUIStyle ForwardPointMarkerStyle {
             get {
                 return new GUIStyle {

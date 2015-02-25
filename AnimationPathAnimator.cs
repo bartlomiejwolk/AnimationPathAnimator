@@ -631,6 +631,32 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private Vector3[] GetRotationPointPositions(bool globalPositions) {
+            // Get number of existing rotation points.
+            var rotationPointsNo = pathData.RotationPath.KeysNo;
+            // Result array.
+            var rotationPointPositions = new Vector3[rotationPointsNo];
+
+            // For each rotation point..
+            for (int i = 0; i < rotationPointsNo; i++) {
+                // Get rotation point local position.
+                var localPos = GetNodeRotationPointPosition(i);
+
+                // If global position arg. is true..
+                if (globalPositions) {
+                    // Convert position to global coordinate.
+                    rotationPointPositions[i] =
+                        transform.TransformPoint(localPos);
+                }
+                else {
+                    // Add local position.
+                    rotationPointPositions[i] = localPos;
+                }
+            }
+
+            return rotationPointPositions;
+        }
+
         private List<float> GetSampledTimestamps(float samplingRate) {
             var result = new List<float>();
 

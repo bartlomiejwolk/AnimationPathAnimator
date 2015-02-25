@@ -6,22 +6,7 @@ using ATP.ReorderableList;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-
 namespace ATP.AnimationPathTools {
-    public enum AnimatorHandleMode {
-        None,
-        Ease,
-        Rotation,
-        Tilting
-    }
-
-    public enum AnimatorRotationMode {
-        Forward,
-        Custom,
-        Target
-    }
-
-
     /// <summary>
     ///     Component that allows animating transforms position along predefined
     ///     Animation Paths and also animate their rotation on x and y axis in

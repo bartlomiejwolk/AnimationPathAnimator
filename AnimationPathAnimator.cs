@@ -1116,6 +1116,15 @@ namespace ATP.AnimationPathTools {
                         i,
                         nodeTimestamps[i]);
                 }
+
+                // DEBUG
+                //rotationCurvesTimestamps =
+                //    PathData.RotationPath.GetTimestamps();
+                //if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
+                //    > FloatPrecision) {
+
+                //    Debug.Log("timestamps differ");
+                //}
             }
         }
 

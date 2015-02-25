@@ -399,10 +399,12 @@ namespace ATP.AnimationPathTools {
 
 
         private void animationPathBuilder_PathReset(object sender, EventArgs eventArgs) {
-            ResetRotationPath();
+            //PathData.ResetRotationPath();
             //ResetEaseCurve();
-            PathData.ResetEaseCurve();
-            ResetTiltingCurve();
+            //PathData.ResetEaseCurve();
+            // TODO Move to pathData.
+            //ResetTiltingCurve();
+            PathData.Reset();
 
             // Change handle mode to None.
             handleMode = AnimatorHandleMode.None;

@@ -101,11 +101,30 @@ namespace ATP.AnimationPathTools {
 	        TiltingCurve = new AnimationCurve();
 	    }
 
-	    public void ResetEaseCurve() {
-            Utilities.RemoveAllCurveKeys(EaseCurve);
-
-            EaseCurve.AddKey(0, DefaultStartEaseValue);
-            EaseCurve.AddKey(1, DefaultEndEaseValue);
+	    public void Reset() {
+            InstantiateReferenceTypes();
+	        AssignDefaultValues();
 	    }
+
+        //public void ResetEaseCurve() {
+        //    Utilities.RemoveAllCurveKeys(EaseCurve);
+
+        //    EaseCurve.AddKey(0, DefaultStartEaseValue);
+        //    EaseCurve.AddKey(1, DefaultEndEaseValue);
+        //}
+
+        //public void ResetRotationPath() {
+        //    var pathNodePositions = animationPathBuilder.GetNodePositions();
+
+        //    PathData.RotationPath.RemoveAllKeys();
+
+        //    var firstRotationPointPosition =
+        //        pathNodePositions[0] + defaultRotationPointOffset;
+        //    var lastRotationPointPosition =
+        //        pathNodePositions[1] + defaultRotationPointOffset;
+
+        //    PathData.RotationPath.CreateNewNode(0, firstRotationPointPosition);
+        //    PathData.RotationPath.CreateNewNode(1, lastRotationPointPosition);
+        //}
 	}
 }

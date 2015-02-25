@@ -629,7 +629,7 @@ namespace ATP.AnimationPathTools {
         private void JumpForwardCallbackHandler() {
             // Update animTimeRatio.
             var newAnimationTimeRatio = animTimeRatio.floatValue
-                + AnimationPathAnimator.ShortJumpValue;
+                + script.ShortJumpValue;
             serializedObject.Update();
             animTimeRatio.floatValue =
                 (float)(Math.Round(newAnimationTimeRatio, 3));
@@ -646,7 +646,7 @@ namespace ATP.AnimationPathTools {
         private void JumpBackwardCallbackHandler() {
             // Update animTimeRatio.
             var newAnimationTimeRatio = animTimeRatio.floatValue
-                - AnimationPathAnimator.ShortJumpValue;
+                - script.ShortJumpValue;
             serializedObject.Update();
             animTimeRatio.floatValue =
                 (float)(Math.Round(newAnimationTimeRatio, 3));

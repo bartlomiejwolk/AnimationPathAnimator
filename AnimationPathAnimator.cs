@@ -30,8 +30,6 @@ namespace ATP.AnimationPathTools {
     [RequireComponent(typeof (AnimationPathBuilder))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
-    
-      
 
         #region EVENTS
 
@@ -53,11 +51,7 @@ namespace ATP.AnimationPathTools {
         private string rotationPointGizmoIcon = "rec_16x16";
         private string targetGizmoIcon = "target_22x22-blue";
 
-        private readonly Color rotationCurveColor = Color.gray;
-        /// <summary>
-        ///     Path used to animate the <c>animatedGO</c> transform.
-        /// </summary>
-        [SerializeField] private AnimationPathBuilder animationPathBuilder;
+        private Color rotationCurveColor = Color.gray;
         /// <summary>
         ///     If animation is currently enabled (may be paused).
         /// </summary>
@@ -66,6 +60,15 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region SERIALIZED FIELDS
+        /// <summary>
+        ///     Path used to animate the <c>animatedGO</c> transform.
+        /// </summary>
+        [SerializeField]
+        private AnimationPathBuilder animationPathBuilder;
+
+        [SerializeField]
+        private bool updateAllMode;
+
         [SerializeField]
         private AnimatorRotationMode rotationMode =
             AnimatorRotationMode.Forward;
@@ -136,10 +139,6 @@ namespace ATP.AnimationPathTools {
 #pragma warning restore 649
 
         #endregion SERIALIZED FIELDS
-
-        [SerializeField]
-        private bool updateAllMode;
-
         #region PUBLIC PROPERTIES
         public string CurrentRotationPointGizmoIcon {
             get { return currentRotationPointGizmoIcon; }
@@ -236,6 +235,11 @@ namespace ATP.AnimationPathTools {
         public float ShortJumpValue {
             get { return shortJumpValue; }
             protected set { shortJumpValue = value; }
+        }
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
         }
 
         //public AnimationCurve EaseCurve {
@@ -696,7 +700,7 @@ namespace ATP.AnimationPathTools {
 
             if (points.Count < 2) return;
 
-            Gizmos.color = rotationCurveColor;
+            Gizmos.color = RotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {

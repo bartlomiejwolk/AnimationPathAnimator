@@ -503,8 +503,7 @@ namespace ATP.AnimationPathTools {
 			}
 		}
 
-        // TODO Rename to GetRotationPointPosition.
-        public Vector3 GetNodeRotationPointPosition(int nodeIndex) {
+        public Vector3 GetRotationPointPosition(int nodeIndex) {
             return PathData.RotationPath.GetVectorAtKey(nodeIndex);
         }
 
@@ -579,7 +578,7 @@ namespace ATP.AnimationPathTools {
                 false);
         }
 
-        private Vector3 GetNodeRotationPointPosition(float nodeTimestamp) {
+        private Vector3 GetRotationPointPosition(float nodeTimestamp) {
             return PathData.RotationPath.GetVectorAtTime(nodeTimestamp);
         }
 
@@ -634,7 +633,7 @@ namespace ATP.AnimationPathTools {
             // For each rotation point..
             for (int i = 0; i < rotationPointsNo; i++) {
                 // Get rotation point local position.
-                var localPos = GetNodeRotationPointPosition(i);
+                var localPos = GetRotationPointPosition(i);
 
                 // If global position arg. is true..
                 if (globalPositions) {

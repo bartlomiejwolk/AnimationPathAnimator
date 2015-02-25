@@ -40,6 +40,10 @@ namespace ATP.AnimationPathTools {
         /// Value of the jump when modifier key is pressed.
         /// </summary>
         public const float ShortJumpValue = 0.002f;
+
+        private const string TargetGizmoIcon = "target_22x22-blue";
+        private const string CurrentRotationPointGizmoIcon = "rec_16x16-yellow";
+        private const string RotationPointGizmoIcon = "rec_16x16";
         #endregion CONSTANTS
 
         #region READ-ONLY
@@ -276,7 +280,7 @@ namespace ATP.AnimationPathTools {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetGO.position,
-                "target_22x22",
+                TargetGizmoIcon,
                 false);
         }
 
@@ -590,7 +594,7 @@ namespace ATP.AnimationPathTools {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 rotationPointPosition,
-                "rec_16x16-yellow",
+                CurrentRotationPointGizmoIcon,
                 false);
         }
 
@@ -635,7 +639,7 @@ namespace ATP.AnimationPathTools {
                 //Draw rotation point gizmo.
                 Gizmos.DrawIcon(
                     rotationPointPositions[i],
-                    "rec_16x16",
+                    RotationPointGizmoIcon,
                     false);
             }
         }

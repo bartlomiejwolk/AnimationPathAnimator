@@ -289,12 +289,17 @@ namespace ATP.AnimationPathTools {
             return pathData.AnimatedObjectPath.GetVectorAtKey(nodeIndex);
         }
 
-        public Vector3[] GetNodePositions() {
+        public Vector3[] GetNodePositions(bool globalPositions = false) {
             var result = new Vector3[NodesNo];
 
             for (var i = 0; i < NodesNo; i++) {
                 // Get node 3d position.
                 result[i] = pathData.AnimatedObjectPath.GetVectorAtKey(i);
+
+                // Convert position to global coordinate.
+                if (globalPositions) {
+                    result[i] = transform.TransformPoint(result[i]);
+                }
             }
 
             return result;

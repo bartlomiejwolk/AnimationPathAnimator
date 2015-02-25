@@ -383,22 +383,16 @@ namespace ATP.AnimationPathTools {
             return addButtonPressed;
         }
 
-		// TODO Refactor.
         private void DrawPositionHandles(
             Action<int, Vector3, Vector3> callback) {
 
             // Positions at which to draw movement handles.
-            var nodes = Script.GetNodePositions();
+            var nodes = Script.GetNodePositions(true);
 
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
                 // Set handle color.
                 Handles.color = Script.GizmoCurveColor;
-
-                // Set node color for Move All mode.
-                //if (Script.MoveAllMode) {
-                //    Handles.color = moveAllModeColor;
-                //}
 
                 // Get handle size.
                 var handleSize = HandleUtility.GetHandleSize(nodes[i]);
@@ -410,43 +404,33 @@ namespace ATP.AnimationPathTools {
 
                 // In Move All mode..
                 if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveAll) {
-
-                    //capFunction = Handles.DotCap;
-                    //capFunction = Handles.SphereCap;
                     Handles.color = moveAllModeColor;
                     sphereSize = handleSize * MoveAllModeSize;
                 }
 
-                // Set first node handle properties.
-                //if (i == 0) {
-                //    capFunction = Handles.CircleCap;
-                //    sphereSize = handleSize * MoveAllModeSize;
-
-                //}
-
-				//var nodeLocalPosition = Script.transform.InverseTransformPoint(nodes[i]);
-				var nodeGlobalPosition = Script.transform.TransformPoint(nodes[i]);
+                //var nodeGlobalPosition = Script.transform.TransformPoint(nodes[i]);
 
                 // Draw handle.
                 var newPos = Handles.FreeMoveHandle(
-                    //nodes[i],
-					nodeGlobalPosition,
+                    nodes[i],
                     Quaternion.identity,
                     sphereSize,
                     Vector3.zero,
                     capFunction);
 
-				var newNodeLocalPosition = Script.transform.InverseTransformPoint(newPos);
+                // Calculate node old local position.
+                var oldNodeLocalPosition =
+                    Script.transform.InverseTransformPoint(nodes[i]);
+                // Calculate node new local position.
+				var newNodeLocalPosition =
+                    Script.transform.InverseTransformPoint(newPos);
 
                 // If node was moved..
-                //if (newPos != nodes[i]) {
-				if (newPos != nodeGlobalPosition) {
+				if (newPos != nodes[i]) {
                     // Calculate movement delta.
-                    //var moveDelta = newPos - nodes[i];
-					var moveDelta = newNodeLocalPosition - nodes[i];
+					var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
 
                     // Execute callback.
-                    //callback(i, newPos, moveDelta);
 					callback(i, newNodeLocalPosition, moveDelta);
                 }
             }

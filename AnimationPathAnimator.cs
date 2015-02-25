@@ -723,13 +723,10 @@ namespace ATP.AnimationPathTools {
 
             var firstRotationPointPosition =
                 pathNodePositions[0] + defaultRotationPointOffset;
-            //var secondRotationPointPosition =
-            //    pathNodePositions[1] + defaultRotationPointOffset;
             var lastRotationPointPosition =
                 pathNodePositions[1] + defaultRotationPointOffset;
 
             PathData.RotationPath.CreateNewNode(0, firstRotationPointPosition);
-            //pathData.RotationPath.CreateNewNode(0.5f, secondRotationPointPosition);
             PathData.RotationPath.CreateNewNode(1, lastRotationPointPosition);
         }
 

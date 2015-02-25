@@ -385,25 +385,30 @@ namespace ATP.AnimationPathTools {
 
 
         private void DrawGizmoCurve() {
+            // Return if path asset is not assigned.
             if (pathData == null) return;
 
+            // Get transform component.
+            var transform = GetComponent<Transform>();
+
+            // Get path points.
             var points = pathData.AnimatedObjectPath.SamplePathForPoints(
                 GizmoCurveSamplingFrequency);
 
+            // Convert points to global coordinates.
+            var globalPoints = new Vector3[points.Count];
+            for (int i = 0; i < points.Count; i++) {
+                globalPoints[i] = transform.TransformPoint(points[i]);
+            }
+
+            // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-			var transform = GetComponent<Transform>();
+            Gizmos.color = gizmoCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
-				// TODO Create array with all converted points instead of doing it for
-				// each point separately.
-				var globalStartPointPosition = transform.TransformPoint(points[i]);
-				var globalEndPointPosition = transform.TransformPoint(points[i + 1]);
-
-                Gizmos.color = gizmoCurveColor;
-                //Gizmos.DrawLine(points[i], points[i + 1]);
-				Gizmos.DrawLine(globalStartPointPosition, globalEndPointPosition);
+				Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
             }
         }
 

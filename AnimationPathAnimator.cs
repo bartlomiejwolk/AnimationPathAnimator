@@ -25,18 +25,11 @@ namespace ATP.AnimationPathTools {
         #endregion EVENTS
 
         #region FIELDS
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        private float shortJumpValue = 0.002f;
-
         private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
         private string forwardPointIcon = "target_22x22-pink";
         private int rotationCurveSampling = 20;
         private string rotationPointGizmoIcon = "rec_16x16";
         private string targetGizmoIcon = "target_22x22-blue";
-
-        private Color rotationCurveColor = Color.gray;
         /// <summary>
         ///     If animation is currently enabled (may be paused).
         /// </summary>
@@ -76,6 +69,15 @@ namespace ATP.AnimationPathTools {
             private Transform targetGO;
 #pragma warning restore 649
         #region OPTIONS
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        [SerializeField]
+        private float shortJumpValue = 0.002f;
+
         [SerializeField]
         private WrapMode wrapMode = WrapMode.Clamp;
 
@@ -194,37 +196,37 @@ namespace ATP.AnimationPathTools {
             set { updateAllMode = value; }
         }
 
-        public string ForwardPointIcon {
+        public virtual string ForwardPointIcon {
             get { return forwardPointIcon; }
-            protected set { forwardPointIcon = value; }
+            //protected set { forwardPointIcon = value; }
         }
 
-        public int RotationCurveSampling {
+        public virtual int RotationCurveSampling {
             get { return rotationCurveSampling; }
-            protected set { rotationCurveSampling = value; }
+            //protected set { rotationCurveSampling = value; }
         }
 
-        public string RotationPointGizmoIcon {
+        public virtual string RotationPointGizmoIcon {
             get { return rotationPointGizmoIcon; }
-            protected set { rotationPointGizmoIcon = value; }
+            //protected set { rotationPointGizmoIcon = value; }
         }
 
-        public string TargetGizmoIcon {
+        public virtual string TargetGizmoIcon {
             get { return targetGizmoIcon; }
-            protected set { targetGizmoIcon = value; }
+            //protected set { targetGizmoIcon = value; }
         }
 
         /// <summary>
         ///     Value of the jump when modifier key is pressed.
         /// </summary>
-        public float ShortJumpValue {
+        public virtual float ShortJumpValue {
             get { return shortJumpValue; }
-            protected set { shortJumpValue = value; }
+            //protected set { shortJumpValue = value; }
         }
 
-        public Color RotationCurveColor {
+        public virtual Color RotationCurveColor {
             get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
+            //protected set { rotationCurveColor = value; }
         }
 
         //public AnimationCurve EaseCurve {

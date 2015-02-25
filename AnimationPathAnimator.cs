@@ -737,29 +737,6 @@ namespace ATP.AnimationPathTools {
         private double EvaluateTimestamp(double x) {
             return PathData.EaseCurve.Evaluate((float)x);
         }
-
-        private float FindTimestampForValue(
-                    AnimationCurve curve,
-                    float value,
-                    float precision) {
-
-            var timestamp = 0f;
-            bool timestampFound = false;
-
-            // Search for timestamp.
-            while (timestampFound == false) {
-                var easeCurveValue = curve.Evaluate(timestamp);
-                // Check the given timestamp generates expected value;
-                if (Math.Abs(easeCurveValue - value) < precision) {
-                    timestampFound = true;
-                }
-
-                timestamp = CalculateNewTestTimestamp(curve, timestamp, value);
-            }
-
-            return timestamp;
-        }
-
         private Vector3 GetRotationPointPosition(float nodeTimestamp) {
             return PathData.RotationPath.GetVectorAtTime(nodeTimestamp);
         }
@@ -790,22 +767,6 @@ namespace ATP.AnimationPathTools {
             return rotationPointPositions;
         }
 
-        private List<float> GetSampledTimestamps(float samplingRate) {
-            var result = new List<float>();
-
-            float time = 0;
-
-            var timestep = 1f / samplingRate;
-
-            for (var i = 0; i < samplingRate + 1; i++) {
-                result.Add(time);
-
-                // Time goes towards 1.
-                time += timestep;
-            }
-
-            return result;
-        }
 
         private void HandleAnimatedGORotation() {
             if (animatedGO == null) return;
@@ -857,26 +818,6 @@ namespace ATP.AnimationPathTools {
             PathData.TiltingCurve.AddKey(lastKey);
         }
 
-        private void ResetRotationPath() {
-            var pathNodePositions = animationPathBuilder.GetNodePositions();
-
-            PathData.RotationPath.RemoveAllKeys();
-
-            var firstRotationPointPosition =
-                pathNodePositions[0] + defaultRotationPointOffset;
-            var lastRotationPointPosition =
-                pathNodePositions[1] + defaultRotationPointOffset;
-
-            PathData.RotationPath.CreateNewNode(0, firstRotationPointPosition);
-            PathData.RotationPath.CreateNewNode(1, lastRotationPointPosition);
-        }
-
-        private void ResetTiltingCurve() {
-            Utilities.RemoveAllCurveKeys(PathData.TiltingCurve);
-
-            PathData.TiltingCurve.AddKey(0, 0);
-            PathData.TiltingCurve.AddKey(1, 0);
-        }
 
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget = PathData.RotationPath.GetVectorAtTime(animTimeRatio);
@@ -1139,18 +1080,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void UpdateRotationPath() {
-            if (animationPathBuilder.NodesNo > PathData.RotationPath.KeysNo) {
-                UpdateRotationCurvesWithAddedKeys();
-            }
-            else if (animationPathBuilder.NodesNo < PathData.RotationPath.KeysNo) {
-                UpdateRotationCurvesWithRemovedKeys();
-            }
-            // Update rotationPath timestamps.
-            else {
-                UpdateRotationCurvesTimestamps();
-            }
-        }
         #endregion PRIVATE METHODS
     }
 }

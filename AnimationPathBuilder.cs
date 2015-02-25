@@ -1,25 +1,22 @@
-﻿using ATP.ReorderableList;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using ATP.ReorderableList;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
-
     /// <summary>
-    /// Allows creating and drawing 3d paths using Unity's animation curves.
+    ///     Allows creating and drawing 3d paths using Unity's animation curves.
     /// </summary>
     [ExecuteInEditMode]
     public class AnimationPathBuilder : GameComponent {
-
         #region CONSTANTS
 
         /// <summary>
-        /// How many points should be drawn for one meter of a gizmo curve.
+        ///     How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
         public const int GizmoCurveSamplingFrequency = 20;
 
         #endregion CONSTANTS
-
         #region FIELDS
 
         public event EventHandler NodeAdded;
@@ -31,48 +28,45 @@ namespace ATP.AnimationPathTools {
         public event EventHandler NodeTimeChanged;
 
         public event EventHandler PathReset;
+
         #endregion FIELDS
 
         #region EDITOR
 
         /// <summary>
-        /// If true, advenced setting in the inspector will be folded out.
+        ///     If true, advenced setting in the inspector will be folded out.
         /// </summary>
         [SerializeField]
 #pragma warning disable 414
-        private bool advancedSettingsFoldout;
+            private bool advancedSettingsFoldout;
 
 #pragma warning restore 414
 
         /// <summary>
-        /// How many transforms should be created for 1 m of gizmo curve when
-        /// exporting nodes to transforms.
+        ///     How many transforms should be created for 1 m of gizmo curve when
+        ///     exporting nodes to transforms.
         /// </summary>
         /// <remarks>Exporting is implemented in <c>Editor</c> class.</remarks>
         [SerializeField]
 #pragma warning disable 414
-        private int exportSamplingFrequency = 5;
+            private int exportSamplingFrequency = 5;
 
 #pragma warning restore 414
 
         /// <summary>
-        /// Color of the gizmo curve.
+        ///     Color of the gizmo curve.
         /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
+        [SerializeField] private Color gizmoCurveColor = Color.yellow;
 
-        [SerializeField]
-        private AnimationPathBuilderHandleMode handleMode =
+        [SerializeField] private AnimationPathBuilderHandleMode handleMode =
             AnimationPathBuilderHandleMode.MoveSingle;
 
-        [SerializeField]
-        private PathData pathData;
+        [SerializeField] private PathData pathData;
 
         /// <summary>
-        /// Styles for multiple GUI elements.
+        ///     Styles for multiple GUI elements.
         /// </summary>
-        [SerializeField]
-        private GUISkin skin;
+        [SerializeField] private GUISkin skin;
 
 #pragma warning disable 0414
         [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
@@ -84,7 +78,7 @@ namespace ATP.AnimationPathTools {
         #region PUBLIC PROPERTIES
 
         /// <summary>
-        /// Color of the gizmo curve.
+        ///     Color of the gizmo curve.
         /// </summary>
         public Color GizmoCurveColor {
             get { return gizmoCurveColor; }
@@ -97,7 +91,7 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Number of keys in an animation curve.
+        ///     Number of keys in an animation curve.
         /// </summary>
         public int NodesNo {
             get { return pathData.AnimatedObjectPath.KeysNo; }
@@ -116,6 +110,7 @@ namespace ATP.AnimationPathTools {
             get { return tangentMode; }
             set { tangentMode = value; }
         }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -137,7 +132,6 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             PathReset += this_PathReset;
-
         }
 
         private void this_PathReset(object sender, EventArgs eventArgs) {
@@ -168,18 +162,19 @@ namespace ATP.AnimationPathTools {
             var handler = NodeRemoved;
             if (handler != null) handler(this, EventArgs.Empty);
         }
+
         protected virtual void OnNodeTimeChanged() {
             var handler = NodeTimeChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
+
         #endregion EVENT INVOCATORS
 
         #region PUBLIC METHODS
 
         public void ChangeNodeTimestamp(
-                            int keyIndex,
-                            float newTimestamp) {
-
+            int keyIndex,
+            float newTimestamp) {
             pathData.AnimatedObjectPath.ChangeNodeTimestamp(keyIndex, newTimestamp);
             OnNodeTimeChanged();
         }
@@ -198,10 +193,10 @@ namespace ATP.AnimationPathTools {
             // Calculate path curved length.
             var pathLength =
                 pathData.AnimatedObjectPath.CalculatePathCurvedLength(
-                GizmoCurveSamplingFrequency);
+                    GizmoCurveSamplingFrequency);
 
             // Calculate time for one meter of curve length.
-            var timeForMeter = 1 / pathLength;
+            var timeForMeter = 1/pathLength;
 
             // Helper variable.
             float prevTimestamp = 0;
@@ -211,12 +206,12 @@ namespace ATP.AnimationPathTools {
                 // Calculate section curved length.
                 var sectionLength =
                     pathData.AnimatedObjectPath.CalculateSectionCurvedLength(
-                    i - 1,
-                    i,
-                    GizmoCurveSamplingFrequency);
+                        i - 1,
+                        i,
+                        GizmoCurveSamplingFrequency);
 
                 // Calculate time interval for the section.
-                var sectionTimeInterval = sectionLength * timeForMeter;
+                var sectionTimeInterval = sectionLength*timeForMeter;
 
                 // Calculate new timestamp.
                 var newTimestamp = prevTimestamp + sectionTimeInterval;
@@ -320,10 +315,11 @@ namespace ATP.AnimationPathTools {
         }
 
         public void SetWrapMode(WrapMode wrapMode) {
-			pathData.AnimatedObjectPath.SetWrapMode(wrapMode);
-		}
+            pathData.AnimatedObjectPath.SetWrapMode(wrapMode);
+        }
+
         /// <summary>
-        /// Smooth tangents in all nodes in all animation curves.
+        ///     Smooth tangents in all nodes in all animation curves.
         /// </summary>
         /// <param name="weight">Weight to be applied to the tangents.</param>
         public void SmoothAllNodeTangents(float weight = 0) {
@@ -341,6 +337,14 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC METHODS
 
         #region PRIVATE METHODS
+        public void RemoveAllNodes() {
+            var nodesNo = NodesNo;
+            for (var i = 0; i < nodesNo; i++) {
+                // NOTE After each removal, next node gets index 0.
+                RemoveNode(0);
+            }
+        }
+
 
         private void DrawGizmoCurve() {
             // Return if path asset is not assigned.
@@ -355,7 +359,7 @@ namespace ATP.AnimationPathTools {
 
             // Convert points to global coordinates.
             var globalPoints = new Vector3[points.Count];
-            for (int i = 0; i < points.Count; i++) {
+            for (var i = 0; i < points.Count; i++) {
                 globalPoints[i] = transform.TransformPoint(points[i]);
             }
 
@@ -366,18 +370,10 @@ namespace ATP.AnimationPathTools {
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
-				Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
             }
         }
 
         #endregion PRIVATE METHODS
-
-        public void RemoveAllNodes() {
-            var nodesNo = NodesNo;
-            for (var i = 0; i < nodesNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                RemoveNode(0);
-            }
-        }
     }
 }

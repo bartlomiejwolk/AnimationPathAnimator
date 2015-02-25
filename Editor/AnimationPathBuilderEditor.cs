@@ -296,14 +296,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        /// <summary>
-        /// Record target object state for undo.
-        /// </summary>
-        // TODO Remove and use undo inline.
-        protected void HandleUndo() {
-            Undo.RecordObject(Script.PathData, "Change path");
-        }
-
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
@@ -575,7 +567,7 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
-            HandleUndo();
+            Undo.RecordObject(Script.PathData, "Change path");
 
             // Add a new node.
             AddNodeBetween(nodeIndex);
@@ -595,14 +587,13 @@ namespace ATP.AnimationPathTools {
             Vector3 position,
             Vector3 moveDelta) {
 
-            HandleUndo();
+            Undo.RecordObject(Script.PathData, "Change path");
 
             HandleMoveAllHandleMove(moveDelta);
             HandleMoveSingleHandleMove(movedNodeIndex, position);
         }
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
-            // Make snapshot of the target object.
-            HandleUndo();
+            Undo.RecordObject(Script.PathData, "Change path");
 
             Script.RemoveNode(nodeIndex);
             Script.DistributeTimestamps();
@@ -616,7 +607,7 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
-            HandleUndo();
+            Undo.RecordObject(Script.PathData, "Change path");
 
             Script.SmoothSingleNodeTangents(index);
             Script.DistributeTimestamps();
@@ -630,7 +621,8 @@ namespace ATP.AnimationPathTools {
             if (GUILayout.Button(new GUIContent(
                 "Smooth",
                 "Use AnimationCurve.SmoothAllNodeTangents on every node in the path."))) {
-                HandleUndo();
+
+                Undo.RecordObject(Script.PathData, "Change path");
                 Script.SmoothAllNodeTangents();
                 Script.DistributeTimestamps();
             }
@@ -641,7 +633,8 @@ namespace ATP.AnimationPathTools {
                 "Reset Path",
                 "Reset path to default."))) {
                 // Allow undo this operation.
-                HandleUndo();
+                Undo.RecordObject(Script.PathData, "Change path");
+
                 // Reset curves to its default state.
                 ResetPath();
             }
@@ -670,7 +663,7 @@ namespace ATP.AnimationPathTools {
                 "Linear",
                 "Set tangent mode to linear for all nodePositions."))) {
                 // Allow undo this operation.
-                HandleUndo();
+                Undo.RecordObject(Script.PathData, "Change path");
 
                 Script.SetNodesLinear();
                 Script.DistributeTimestamps();

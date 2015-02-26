@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 namespace ATP.AnimationPathTools {
 
 	public class PathData : ScriptableObject {
+
+        public event EventHandler RotationPointPositionChanged;
 
         #region SERIALIZED FIELDS
         [SerializeField]
@@ -19,7 +22,7 @@ namespace ATP.AnimationPathTools {
 		private AnimationCurve tiltingCurve;
         #endregion
 
-        #region PROPERTIES
+        #region PUBLIC PROPERTIES
 
         protected virtual float DefaultEaseCurveValue {
             get { return 0.05f; }
@@ -46,6 +49,13 @@ namespace ATP.AnimationPathTools {
         }
         #endregion
 
+        #region PRIVATE/PROTECTED PROPERTIES
+        protected virtual float FloatPrecision {
+            get { return 0.001f; }
+        }
+
+        #endregion
+
         #region UNITY MESSAGES
 
         private void OnEnable() {
@@ -56,13 +66,58 @@ namespace ATP.AnimationPathTools {
 	        AssignDefaultValues();
 	    }
         #endregion
+
+        #region EVENTINVOCATORS
+
+        protected virtual void OnRotationPointPositionChanged() {
+            var handler = RotationPointPositionChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        #endregion
+
         #region PUBLIC METHODS
 
         public void Reset() {
             InstantiateReferenceTypes();
             AssignDefaultValues();
         }
-        #endregion
+
+        public void ChangeRotationAtTimestamp(
+            float timestamp,
+            Vector3 newPosition) {
+            // Get node timestamps.
+            var timestamps = RotationPath.GetTimestamps();
+            // If matching timestamp in the path was found.
+            var foundMatch = false;
+            // For each timestamp..
+            for (var i = 0; i < RotationPath.KeysNo; i++) {
+                // Check if it is the timestamp to remove..
+                if (Math.Abs(timestamps[i] - timestamp) < FloatPrecision) {
+                    // Remove node.
+                    RotationPath.RemoveNode(i);
+
+                    foundMatch = true;
+                }
+            }
+
+            // If timestamp was not found..
+            if (!foundMatch) {
+                Debug.Log("You're trying to change rotation for nonexistent " +
+                          "node.");
+
+                return;
+            }
+
+            // Create new node.
+            RotationPath.CreateNewNode(timestamp, newPosition);
+            // Smooth all nodes.
+            RotationPath.SmoothAllNodes();
+
+            OnRotationPointPositionChanged();
+        }
+
+	    #endregion
 
         #region PRIVATE METHODS
 

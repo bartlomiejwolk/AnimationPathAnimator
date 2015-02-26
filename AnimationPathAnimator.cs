@@ -20,7 +20,7 @@ namespace ATP.AnimationPathTools {
 
         public event EventHandler NodeTiltChanged;
 
-        public event EventHandler RotationPointPositionChanged;
+        //public event EventHandler RotationPointPositionChanged;
 
         #endregion EVENTS
 
@@ -133,11 +133,6 @@ namespace ATP.AnimationPathTools {
             get { return currentRotationPointGizmoIcon; }
             set { currentRotationPointGizmoIcon = value; }
         }
-
-        public float FloatPrecision {
-            get { return 0.001f; }
-        }
-
         public WrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
@@ -200,22 +195,18 @@ namespace ATP.AnimationPathTools {
 
         public virtual string ForwardPointIcon {
             get { return forwardPointIcon; }
-            //protected set { forwardPointIcon = value; }
         }
 
         public virtual int RotationCurveSampling {
             get { return rotationCurveSampling; }
-            //protected set { rotationCurveSampling = value; }
         }
 
         public virtual string RotationPointGizmoIcon {
             get { return rotationPointGizmoIcon; }
-            //protected set { rotationPointGizmoIcon = value; }
         }
 
         public virtual string TargetGizmoIcon {
             get { return targetGizmoIcon; }
-            //protected set { targetGizmoIcon = value; }
         }
 
         /// <summary>
@@ -223,19 +214,20 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public virtual float ShortJumpValue {
             get { return shortJumpValue; }
-            //protected set { shortJumpValue = value; }
         }
 
         public virtual Color RotationCurveColor {
             get { return rotationCurveColor; }
-            //protected set { rotationCurveColor = value; }
         }
 
-        //public AnimationCurve EaseCurve {
-        //    get { return easeCurve; }
-        //}
-
         #endregion PUBLIC PROPERTIES
+
+        #region PRIVATE/PROTECTED PROPERTIES
+        protected virtual float FloatPrecision {
+            get { return 0.001f; }
+        }
+
+        #endregion
 
         #region UNITY MESSAGES
 
@@ -288,7 +280,7 @@ namespace ATP.AnimationPathTools {
                 animationPathBuilder_NodeTimeChanged;
             animationPathBuilder.NodePositionChanged +=
                 animationPathBuilder_NodePositionChanged;
-            RotationPointPositionChanged += this_RotationPointPositionChanged;
+            //RotationPointPositionChanged += this_RotationPointPositionChanged;
             NodeTiltChanged += this_NodeTiltChanged;
         }
 
@@ -322,10 +314,10 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnRotationPointPositionChanged() {
-            var handler = RotationPointPositionChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
+        //protected virtual void OnRotationPointPositionChanged() {
+        //    var handler = RotationPointPositionChanged;
+        //    if (handler != null) handler(this, EventArgs.Empty);
+        //}
 
         #endregion EVENT INVOCATORS
 
@@ -377,56 +369,49 @@ namespace ATP.AnimationPathTools {
             if (Application.isPlaying) UpdateAnimatedGO();
         }
 
-        private void this_RotationPointPositionChanged(object sender,
-            EventArgs e) {
-            if (!Application.isPlaying) Animate();
-        }
+        //private void this_RotationPointPositionChanged(object sender,
+        //    EventArgs e) {
+        //    if (!Application.isPlaying) Animate();
+        //}
 
         #endregion EVENT HANDLERS
 
         #region PUBLIC METHODS
 
-        public void ChangeRotationAtTimestamp(
-            float timestamp,
-            Vector3 newPosition) {
-            // Get node timestamps.
-            var timestamps = PathData.RotationPath.GetTimestamps();
-            // If matching timestamp in the path was found.
-            var foundMatch = false;
-            // For each timestamp..
-            for (var i = 0; i < PathData.RotationPath.KeysNo; i++) {
-                // Check if it is the timestamp to remove..
-                if (Math.Abs(timestamps[i] - timestamp) < FloatPrecision) {
-                    // Remove node.
-                    PathData.RotationPath.RemoveNode(i);
+        //public void ChangeRotationAtTimestamp(
+        //    float timestamp,
+        //    Vector3 newPosition) {
+        //    // Get node timestamps.
+        //    var timestamps = PathData.RotationPath.GetTimestamps();
+        //    // If matching timestamp in the path was found.
+        //    var foundMatch = false;
+        //    // For each timestamp..
+        //    for (var i = 0; i < PathData.RotationPath.KeysNo; i++) {
+        //        // Check if it is the timestamp to remove..
+        //        if (Math.Abs(timestamps[i] - timestamp) < FloatPrecision) {
+        //            // Remove node.
+        //            PathData.RotationPath.RemoveNode(i);
 
-                    foundMatch = true;
-                }
-            }
-
-            // If timestamp was not found..
-            if (!foundMatch) {
-                Debug.Log("You're trying to change rotation for nonexistent " +
-                          "node.");
-
-                return;
-            }
-
-            // Create new node.
-            PathData.RotationPath.CreateNewNode(timestamp, newPosition);
-            // Smooth all nodes.
-            PathData.RotationPath.SmoothAllNodes();
-
-            OnRotationPointPositionChanged();
-            //UpdateAnimatedGO();
-        }
-
-        //public static void RemoveAllCurveKeys(AnimationCurve curve) {
-        //    var keysToRemoveNo = curve.length;
-        //    for (var i = 0; i < keysToRemoveNo; i++) {
-        //        curve.RemoveKey(0);
+        //            foundMatch = true;
+        //        }
         //    }
+
+        //    // If timestamp was not found..
+        //    if (!foundMatch) {
+        //        Debug.Log("You're trying to change rotation for nonexistent " +
+        //                  "node.");
+
+        //        return;
+        //    }
+
+        //    // Create new node.
+        //    PathData.RotationPath.CreateNewNode(timestamp, newPosition);
+        //    // Smooth all nodes.
+        //    PathData.RotationPath.SmoothAllNodes();
+
+        //    OnRotationPointPositionChanged();
         //}
+
         public Vector3 GetForwardPoint(bool globalPosition) {
             // Timestamp offset of the forward point.
             var forwardPointDelta = forwardPointOffset;

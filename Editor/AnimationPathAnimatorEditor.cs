@@ -676,7 +676,7 @@ namespace ATP.AnimationPathTools {
 
             Undo.RecordObject(script.PathData, "Rotation path changed.");
 
-            script.ChangeRotationAtTimestamp(timestamp, newPosition);
+            script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
         }
 
         private void DrawTiltingHandlesCallbackHandler(

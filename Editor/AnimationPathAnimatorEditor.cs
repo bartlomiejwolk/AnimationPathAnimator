@@ -384,7 +384,6 @@ namespace ATP.AnimationPathTools {
             DrawTiltingHandles(callbackHandler);
         }
 
-        //}
         private void HandleDrawingTiltLabel() {
             if (script.HandleMode != AnimatorHandleMode.Tilting) return;
 

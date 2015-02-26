@@ -663,10 +663,10 @@ namespace ATP.AnimationPathTools {
 				var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
 				var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
 				var delta = newValue - oldValue;
-				script.UpdateEaseValues(delta);
+				script.PathData.UpdateEaseValues(delta);
 			}
 			else {
-				script.UpdateEaseValue(keyIndex, newValue);
+				script.PathData.UpdateEaseValue(keyIndex, newValue);
 			}
         }
 

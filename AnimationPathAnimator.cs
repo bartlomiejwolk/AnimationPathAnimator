@@ -421,37 +421,6 @@ namespace ATP.AnimationPathTools {
             animTimeRatio = 0;
         }
 
-        public void UpdateEaseValue(int keyIndex, float newValue) {
-            // Copy keyframe.
-            var keyframeCopy = PathData.EaseCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
-
-            // Replace old key with updated one.
-            PathData.EaseCurve.RemoveKey(keyIndex);
-            PathData.EaseCurve.AddKey(keyframeCopy);
-
-            PathData.SmoothCurve(PathData.EaseCurve);
-        }
-
-        public void UpdateEaseValues(float delta) {
-            for (var i = 0; i < PathData.EaseCurve.length; i++) {
-                // Copy key.
-                var keyCopy = PathData.EaseCurve[i];
-                // Update key value.
-                keyCopy.value += delta;
-
-                // Remove old key.
-                PathData.EaseCurve.RemoveKey(i);
-
-                // Add key.
-                PathData.EaseCurve.AddKey(keyCopy);
-
-                // Smooth all tangents.
-                PathData.SmoothCurve(PathData.EaseCurve);
-            }
-        }
-
         public void UpdateNodeTilting(int keyIndex, float newValue) {
             // Copy keyframe.
             var keyframeCopy = PathData.TiltingCurve.keys[keyIndex];

@@ -232,5 +232,36 @@ namespace ATP.AnimationPathTools {
 	            curve.SmoothTangents(i, 0);
 	        }
 	    }
+
+	    public void UpdateEaseValue(int keyIndex, float newValue) {
+	        // Copy keyframe.
+	        var keyframeCopy = EaseCurve.keys[keyIndex];
+	        // Update keyframe value.
+	        keyframeCopy.value = newValue;
+
+	        // Replace old key with updated one.
+	        EaseCurve.RemoveKey(keyIndex);
+	        EaseCurve.AddKey(keyframeCopy);
+
+	        SmoothCurve(EaseCurve);
+	    }
+
+	    public void UpdateEaseValues(float delta) {
+	        for (var i = 0; i < EaseCurve.length; i++) {
+	            // Copy key.
+	            var keyCopy = EaseCurve[i];
+	            // Update key value.
+	            keyCopy.value += delta;
+
+	            // Remove old key.
+	            EaseCurve.RemoveKey(i);
+
+	            // Add key.
+	            EaseCurve.AddKey(keyCopy);
+
+	            // Smooth all tangents.
+	            SmoothCurve(EaseCurve);
+	        }
+	    }
 	}
 }

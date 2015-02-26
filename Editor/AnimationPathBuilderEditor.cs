@@ -387,7 +387,7 @@ namespace ATP.AnimationPathTools {
             Action<int, Vector3, Vector3> callback) {
 
             // Node global positions.
-            var nodes = Script.GetNodePositions(true);
+            var nodes = Script.GetNodeGlobalPositions();
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;

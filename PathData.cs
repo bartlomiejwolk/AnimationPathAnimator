@@ -511,5 +511,16 @@ namespace ATP.AnimationPathTools {
             return AnimatedObjectPath.GetVectorAtKey(nodeIndex);
         }
 
+        public Vector3[] GetNodePositions() {
+            var result = new Vector3[NodesNo];
+
+            for (var i = 0; i < NodesNo; i++) {
+                // Get node 3d position.
+                result[i] = AnimatedObjectPath.GetVectorAtKey(i);
+            }
+
+            return result;
+        }
+
     }
 }

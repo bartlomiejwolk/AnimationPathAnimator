@@ -190,7 +190,7 @@ namespace ATP.AnimationPathTools {
         //}
 
         public Vector3[] GetNodeGlobalPositions() {
-            var nodePositions = GetNodePositions();
+            var nodePositions = PathData.GetNodePositions();
 
             for (var i = 0; i < nodePositions.Length; i++) {
                 // Convert each position to global coordinate.
@@ -198,22 +198,6 @@ namespace ATP.AnimationPathTools {
             }
 
             return nodePositions;
-        }
-
-        public Vector3[] GetNodePositions(bool globalPositions = false) {
-            var result = new Vector3[NodesNo];
-
-            for (var i = 0; i < NodesNo; i++) {
-                // Get node 3d position.
-                result[i] = pathData.AnimatedObjectPath.GetVectorAtKey(i);
-
-                // Convert position to global coordinate.
-                if (globalPositions) {
-                    result[i] = transform.TransformPoint(result[i]);
-                }
-            }
-
-            return result;
         }
 
         public Vector3 GetVectorAtTime(float timestamp) {

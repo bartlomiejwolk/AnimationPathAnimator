@@ -5,10 +5,8 @@ namespace ATP.AnimationPathTools {
 
 	public class PathData : ScriptableObject {
 
-        private const float DefaultEndEaseValue = 0.05f;
-        private const float DefaultStartEaseValue = 0.05f;
-
-		[SerializeField]
+        #region SERIALIZED FIELDS
+        [SerializeField]
 		private AnimationPath animatedObjectPath;
 
 		[SerializeField]
@@ -19,16 +17,56 @@ namespace ATP.AnimationPathTools {
 
 		[SerializeField]
 		private AnimationCurve tiltingCurve;
+        #endregion
 
-	    private void OnEnable() {
+        #region PROPERTIES
+
+        protected virtual float DefaultEaseCurveValue {
+            get { return 0.05f; }
+        }
+
+        public AnimationPath AnimatedObjectPath {
+            get { return animatedObjectPath; }
+            set { animatedObjectPath = value; }
+        }
+
+        public AnimationPath RotationPath {
+            get { return rotationPath; }
+            set { rotationPath = value; }
+        }
+
+        public AnimationCurve EaseCurve {
+            get { return easeCurve; }
+            set { easeCurve = value; }
+        }
+
+        public AnimationCurve TiltingCurve {
+            get { return tiltingCurve; }
+            set { tiltingCurve = value; }
+        }
+        #endregion
+
+        #region UNITY MESSAGES
+
+        private void OnEnable() {
             // Return if fields are initialized.
 	        if (animatedObjectPath != null) return;
 
 	        InstantiateReferenceTypes();
 	        AssignDefaultValues();
 	    }
+        #endregion
+        #region PUBLIC METHODS
 
-	    private void AssignDefaultValues() {
+        public void Reset() {
+            InstantiateReferenceTypes();
+            AssignDefaultValues();
+        }
+        #endregion
+
+        #region PRIVATE METHODS
+
+        private void AssignDefaultValues() {
 	        InitializeAnimatedObjectPath();
 	        InitializeRotationPath();
 	        InitializeEaseCurve();
@@ -45,29 +83,6 @@ namespace ATP.AnimationPathTools {
 	        EaseCurve.AddKey(1, DefaultEaseCurveValue);
 	    }
 
-	    protected virtual float DefaultEaseCurveValue {
-            get { return 0.05f; }
-	    }
-
-	    public AnimationPath AnimatedObjectPath {
-	        get { return animatedObjectPath; }
-	        set { animatedObjectPath = value; }
-	    }
-
-	    public AnimationPath RotationPath {
-	        get { return rotationPath; }
-	        set { rotationPath = value; }
-	    }
-
-	    public AnimationCurve EaseCurve {
-	        get { return easeCurve; }
-	        set { easeCurve = value; }
-	    }
-
-	    public AnimationCurve TiltingCurve {
-	        get { return tiltingCurve; }
-	        set { tiltingCurve = value; }
-	    }
 
 	    private void InitializeRotationPath() {
             var firstNodePos = new Vector3(0, 0, 0);
@@ -99,31 +114,6 @@ namespace ATP.AnimationPathTools {
 	        EaseCurve = new AnimationCurve();
 	        TiltingCurve = new AnimationCurve();
 	    }
-
-	    public void Reset() {
-            InstantiateReferenceTypes();
-	        AssignDefaultValues();
-	    }
-
-        //public void ResetEaseCurve() {
-        //    Utilities.RemoveAllCurveKeys(EaseCurve);
-
-        //    EaseCurve.AddKey(0, DefaultStartEaseValue);
-        //    EaseCurve.AddKey(1, DefaultEndEaseValue);
-        //}
-
-        //public void ResetRotationPath() {
-        //    var pathNodePositions = animationPathBuilder.GetNodePositions();
-
-        //    PathData.RotationPath.RemoveAllKeys();
-
-        //    var firstRotationPointPosition =
-        //        pathNodePositions[0] + defaultRotationPointOffset;
-        //    var lastRotationPointPosition =
-        //        pathNodePositions[1] + defaultRotationPointOffset;
-
-        //    PathData.RotationPath.CreateNewNode(0, firstRotationPointPosition);
-        //    PathData.RotationPath.CreateNewNode(1, lastRotationPointPosition);
-        //}
-	}
+        #endregion
+    }
 }

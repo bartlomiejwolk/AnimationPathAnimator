@@ -16,13 +16,6 @@ namespace ATP.AnimationPathTools {
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
 
-        #region EVENTS
-
-
-        //public event EventHandler RotationPointPositionChanged;
-
-        #endregion EVENTS
-
         #region FIELDS
         private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
         private string forwardPointIcon = "target_22x22-pink";
@@ -225,16 +218,6 @@ namespace ATP.AnimationPathTools {
 
         public virtual float FloatPrecision {
             get { return 0.001f; }
-        }
-
-        public PathData PathData1 {
-            set { pathData = value; }
-            get { return pathData; }
-        }
-
-        public AnimationPathBuilder AnimationPathBuilder1 {
-            set { animationPathBuilder = value; }
-            get { return animationPathBuilder; }
         }
 
         #endregion

@@ -306,5 +306,20 @@ namespace ATP.AnimationPathTools {
 
 	        curve.AddKey(timestamp, value);
 	    }
+
+	    public Vector3[] GetRotationPointPositions() {
+	        // Get number of existing rotation points.
+	        var rotationPointsNo = RotationPath.KeysNo;
+	        // Result array.
+	        var rotationPointPositions = new Vector3[rotationPointsNo];
+
+	        // For each rotation point..
+	        for (var i = 0; i < rotationPointsNo; i++) {
+	            // Get rotation point local position.
+	            rotationPointPositions[i] = GetRotationPointPosition(i);
+	        }
+
+	        return rotationPointPositions;
+	    }
 	}
 }

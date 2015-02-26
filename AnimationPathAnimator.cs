@@ -226,6 +226,11 @@ namespace ATP.AnimationPathTools {
             get { return 0.001f; }
         }
 
+        public PathData PathData1 {
+            set { pathData = value; }
+            get { return pathData; }
+        }
+
         #endregion
 
         #region UNITY MESSAGES
@@ -549,7 +554,7 @@ namespace ATP.AnimationPathTools {
             // Path node timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
 
-            var rotationPointPositions = GetRotationPointPositions(true);
+            var rotationPointPositions = GetGlobalRotationPointPositions();
 
             for (var i = 0; i < rotationPointPositions.Length; i++) {
                 // Return if current animation time is the same as any node
@@ -592,30 +597,16 @@ namespace ATP.AnimationPathTools {
             // ReSharper disable once FunctionNeverReturns
         }
 
-        private Vector3[] GetRotationPointPositions(bool globalPositions) {
-            // Get number of existing rotation points.
-            var rotationPointsNo = pathData.RotationPath.KeysNo;
-            // Result array.
-            var rotationPointPositions = new Vector3[rotationPointsNo];
+        // NOTE Animator.
+        private Vector3[] GetGlobalRotationPointPositions() {
+            var localPositions = PathData.GetRotationPointPositions();
+            Vector3[] globalPositions = new Vector3[localPositions.Length];
 
-            // For each rotation point..
-            for (var i = 0; i < rotationPointsNo; i++) {
-                // Get rotation point local position.
-                var localPos = PathData.GetRotationPointPosition(i);
-
-                // If global position arg. is true..
-                if (globalPositions) {
-                    // Convert position to global coordinate.
-                    rotationPointPositions[i] =
-                        transform.TransformPoint(localPos);
-                }
-                else {
-                    // Add local position.
-                    rotationPointPositions[i] = localPos;
-                }
+            for (int i = 0; i < localPositions.Length; i++) {
+                globalPositions[i] = transform.TransformPoint(localPositions[i]);
             }
 
-            return rotationPointPositions;
+            return globalPositions;
         }
 
 

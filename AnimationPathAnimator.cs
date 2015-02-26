@@ -340,9 +340,8 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodeRemoved(
             object sender,
             EventArgs e) {
-
-            UpdateCurveWithRemovedKeys(PathData.EaseCurve);
-            UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
+            PathData.UpdateCurveWithRemovedKeys(PathData.EaseCurve);
+            PathData.UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
             pathData.UpdateRotationPathWithRemovedKeys();
         }
 
@@ -754,30 +753,6 @@ namespace ATP.AnimationPathTools {
 
                     RotateObjectWithLookAt(targetGO.position);
                     break;
-            }
-        }
-
-        private void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
-            // AnimationPathBuilder node timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-            // Get values from curve.
-            var curveTimestamps = new float[curve.length];
-            for (var i = 0; i < curveTimestamps.Length; i++) {
-                curveTimestamps[i] = curve.keys[i].time;
-            }
-
-            // For each curve timestamp..
-            for (var i = 0; i < curveTimestamps.Length; i++) {
-                // Check if key at this timestamp exists..
-                var keyExists = nodeTimestamps.Any(t =>
-                    Math.Abs(curveTimestamps[i] - t) < FloatPrecision);
-
-                if (keyExists) continue;
-
-                curve.RemoveKey(i);
-                PathData.SmoothCurve(curve);
-
-                break;
             }
         }
 

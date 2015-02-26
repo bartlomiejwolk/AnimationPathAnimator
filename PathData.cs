@@ -370,5 +370,29 @@ namespace ATP.AnimationPathTools {
 	            }
 	        }
 	    }
+
+	    public void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
+	        // AnimationPathBuilder node timestamps.
+	        var nodeTimestamps = GetPathTimestamps();
+	        // Get values from curve.
+	        var curveTimestamps = new float[curve.length];
+	        for (var i = 0; i < curveTimestamps.Length; i++) {
+	            curveTimestamps[i] = curve.keys[i].time;
+	        }
+
+	        // For each curve timestamp..
+	        for (var i = 0; i < curveTimestamps.Length; i++) {
+	            // Check if key at this timestamp exists..
+	            var keyExists = nodeTimestamps.Any(t =>
+	                Math.Abs(curveTimestamps[i] - t) < FloatPrecision);
+
+	            if (keyExists) continue;
+
+	            curve.RemoveKey(i);
+	            SmoothCurve(curve);
+
+	            break;
+	        }
+	    }
 	}
 }

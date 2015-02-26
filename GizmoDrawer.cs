@@ -10,11 +10,6 @@ namespace ATP.AnimationPathTools {
     public class GizmoDrawer {
 
         #region FIELDS
-        //private AnimationPathAnimator animationPathAnimator;
-        private string rotationPointGizmoIcon = "rec_16x16";
-        private string targetGizmoIcon = "target_22x22-blue";
-        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
-        private string forwardPointIcon = "target_22x22-pink";
 
         [SerializeField]
         private Color rotationCurveColor = Color.gray;
@@ -26,26 +21,20 @@ namespace ATP.AnimationPathTools {
             get { return 0.001f; }
         }
 
-        public virtual string RotationPointGizmoIcon {
-            set {
-                rotationPointGizmoIcon = value;
-            }
-            get { return rotationPointGizmoIcon; }
+        protected virtual string RotationPointGizmoIcon {
+            get { return "rec_16x16"; }
         }
 
-        public virtual string TargetGizmoIcon {
-            set {
-                targetGizmoIcon = value;
-            }
-            get { return targetGizmoIcon; }
+        protected virtual string TargetGizmoIcon {
+            get { return "target_22x22-blue"; }
         }
 
         protected virtual string CurrentRotationPointGizmoIcon {
-            get { return currentRotationPointGizmoIcon; }
+            get { return "rec_16x16-yellow"; }
         }
 
         protected virtual string ForwardPointIcon {
-            get { return forwardPointIcon; }
+            get { return "target_22x22-pink"; }
         }
 
         public Color RotationCurveColor {

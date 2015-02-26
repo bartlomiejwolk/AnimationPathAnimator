@@ -204,7 +204,6 @@ namespace ATP.AnimationPathTools {
         public virtual void OnEnable() {
             // Subscribe to events.
             animationPathBuilder.PathReset += animationPathBuilder_PathReset;
-            animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;
             animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
             animationPathBuilder.NodeTimeChanged +=
                 animationPathBuilder_NodeTimeChanged;
@@ -213,6 +212,7 @@ namespace ATP.AnimationPathTools {
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
 
             if (pathData != null) {
+                PathData.NodeAdded += animationPathBuilder_NodeAdded;
                 pathData.NodeTiltChanged += this_NodeTiltChanged;
             }
         }

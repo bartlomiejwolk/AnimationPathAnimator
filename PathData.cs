@@ -9,6 +9,7 @@ namespace ATP.AnimationPathTools {
     public class PathData : ScriptableObject {
 
         public event EventHandler NodeTiltChanged;
+        public event EventHandler NodeAdded;
 
         public event EventHandler RotationPointPositionChanged;
         #region SERIALIZED FIELDS
@@ -79,6 +80,11 @@ namespace ATP.AnimationPathTools {
 
         #region EVENTINVOCATORS
 
+        protected virtual void OnNodeAdded() {
+            var handler = NodeAdded;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         protected virtual void OnNodeTiltChanged() {
             var handler = NodeTiltChanged;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -90,7 +96,7 @@ namespace ATP.AnimationPathTools {
         }
         #endregion EVENTINVOCATORS
 
-        #region PUBLIC METHODS
+        #region METHODS
 
         public void AddKeyToCurve(
             AnimationCurve curve,
@@ -384,9 +390,6 @@ namespace ATP.AnimationPathTools {
                 break;
             }
         }
-        #endregion PUBLIC METHODS
-
-        #region PRIVATE METHODS
 
         private void AssignDefaultValues() {
             InitializeAnimatedObjectPath();
@@ -447,6 +450,16 @@ namespace ATP.AnimationPathTools {
             InstantiateAnimationPathCurves(rotationPath);
             EaseCurve = new AnimationCurve();
             TiltingCurve = new AnimationCurve();
+        }
+
+        public void CreateNode(float timestamp, Vector3 position) {
+            AnimatedObjectPath.CreateNewNode(timestamp, position);
+            OnNodeAdded();
+        }
+
+        public void CreateNodeAtTime(float timestamp) {
+            AnimatedObjectPath.AddNodeAtTime(timestamp);
+            OnNodeAdded();
         }
 
         #endregion PRIVATE METHODS

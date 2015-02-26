@@ -19,7 +19,7 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
         #region FIELDS
 
-        public event EventHandler NodeAdded;
+        //public event EventHandler NodeAdded;
 
         public event EventHandler NodePositionChanged;
 
@@ -148,10 +148,10 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnNodeAdded() {
-            var handler = NodeAdded;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
+        //protected virtual void OnNodeAdded() {
+        //    var handler = NodeAdded;
+        //    if (handler != null) handler(this, EventArgs.Empty);
+        //}
 
         protected virtual void OnNodePositionChanged() {
             var handler = NodePositionChanged;
@@ -172,22 +172,22 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC METHODS
 
-        public void ChangeNodeTimestamp(
-            int keyIndex,
-            float newTimestamp) {
-            pathData.AnimatedObjectPath.ChangeNodeTimestamp(keyIndex, newTimestamp);
-            OnNodeTimeChanged();
-        }
+        //public void ChangeNodeTimestamp(
+        //    int keyIndex,
+        //    float newTimestamp) {
+        //    pathData.AnimatedObjectPath.ChangeNodeTimestamp(keyIndex, newTimestamp);
+        //    OnNodeTimeChanged();
+        //}
 
-        public void CreateNode(float timestamp, Vector3 position) {
-            pathData.AnimatedObjectPath.CreateNewNode(timestamp, position);
-            OnNodeAdded();
-        }
+        //public void CreateNode(float timestamp, Vector3 position) {
+        //    pathData.AnimatedObjectPath.CreateNewNode(timestamp, position);
+        //    OnNodeAdded();
+        //}
 
-        public void CreateNodeAtTime(float timestamp) {
-            pathData.AnimatedObjectPath.AddNodeAtTime(timestamp);
-            OnNodeAdded();
-        }
+        //public void CreateNodeAtTime(float timestamp) {
+        //    pathData.AnimatedObjectPath.AddNodeAtTime(timestamp);
+        //    OnNodeAdded();
+        //}
 
         public void DistributeTimestamps() {
             // Calculate path curved length.
@@ -224,7 +224,7 @@ namespace ATP.AnimationPathTools {
                 if (newTimestamp > 1) break;
 
                 // Update node timestamp.
-                ChangeNodeTimestamp(i, newTimestamp);
+                PathData.AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
             }
         }
 

@@ -678,7 +678,7 @@ namespace ATP.AnimationPathTools {
                 ((nextKeyTime - currentKeyTime) / 2);
 
             // Add node to the animation curves.
-            Script.CreateNodeAtTime(newKeyTime);
+            Script.PathData.CreateNodeAtTime(newKeyTime);
         }
         private void DrawInspector() {
             serializedObject.Update();
@@ -818,8 +818,8 @@ namespace ATP.AnimationPathTools {
             Script.RemoveAllNodes();
 
             // Create beginning and end nodes.
-            Script.CreateNode(0, firstNodePos);
-            Script.CreateNode(1, lastNodePos);
+            Script.PathData.AnimatedObjectPath.CreateNewNode(0, firstNodePos);
+            Script.PathData.CreateNode(0, lastNodePos);
 
             Script.this_PathReset();
         }

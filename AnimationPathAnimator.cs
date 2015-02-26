@@ -378,40 +378,7 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC METHODS
 
-        //public void ChangeRotationAtTimestamp(
-        //    float timestamp,
-        //    Vector3 newPosition) {
-        //    // Get node timestamps.
-        //    var timestamps = PathData.RotationPath.GetTimestamps();
-        //    // If matching timestamp in the path was found.
-        //    var foundMatch = false;
-        //    // For each timestamp..
-        //    for (var i = 0; i < PathData.RotationPath.KeysNo; i++) {
-        //        // Check if it is the timestamp to remove..
-        //        if (Math.Abs(timestamps[i] - timestamp) < FloatPrecision) {
-        //            // Remove node.
-        //            PathData.RotationPath.RemoveNode(i);
-
-        //            foundMatch = true;
-        //        }
-        //    }
-
-        //    // If timestamp was not found..
-        //    if (!foundMatch) {
-        //        Debug.Log("You're trying to change rotation for nonexistent " +
-        //                  "node.");
-
-        //        return;
-        //    }
-
-        //    // Create new node.
-        //    PathData.RotationPath.CreateNewNode(timestamp, newPosition);
-        //    // Smooth all nodes.
-        //    PathData.RotationPath.SmoothAllNodes();
-
-        //    OnRotationPointPositionChanged();
-        //}
-
+        // NOTE Animator.
         public Vector3 GetForwardPoint(bool globalPosition) {
             // Timestamp offset of the forward point.
             var forwardPointDelta = forwardPointOffset;
@@ -428,6 +395,7 @@ namespace ATP.AnimationPathTools {
             return localPosition;
         }
 
+        // NOTE Animator.
         public Vector3 GetGlobalNodePosition(int nodeIndex) {
             var localNodePosition =
                 animationPathBuilder.GetNodePosition(nodeIndex);

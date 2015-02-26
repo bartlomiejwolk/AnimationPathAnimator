@@ -259,10 +259,6 @@ namespace ATP.AnimationPathTools {
             return result;
         }
 
-        public float GetNodeTimestamp(int nodeIndex) {
-            return pathData.AnimatedObjectPath.GetTimeAtKey(nodeIndex);
-        }
-
         public Vector3 GetVectorAtTime(float timestamp) {
             return pathData.AnimatedObjectPath.GetVectorAtTime(timestamp);
         }

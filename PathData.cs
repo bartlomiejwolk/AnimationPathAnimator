@@ -415,5 +415,41 @@ namespace ATP.AnimationPathTools {
 	            }
 	        }
 	    }
+
+	    public void UpdateRotationCurvesWithAddedKeys() {
+	        // AnimationPathBuilder node timestamps.
+	        var animationCurvesTimestamps = GetPathTimestamps();
+	        // Get values from rotationPath.
+	        var rotationCurvesTimestamps = RotationPath.GetTimestamps();
+	        var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
+
+	        // For each timestamp in rotationPath..
+	        for (var i = 0; i < animationCurvesTimestamps.Length; i++) {
+	            var keyExists = false;
+	            for (var j = 0; j < rotationCurvesKeysNo; j++) {
+	                if (Math.Abs(rotationCurvesTimestamps[j]
+	                             - animationCurvesTimestamps[i])
+                                 < FloatPrecision) {
+
+	                    keyExists = true;
+	                    break;
+	                }
+	            }
+
+	            if (!keyExists) {
+	                var addedKeyTimestamp = GetNodeTimestamp(i);
+	                var defaultRotation =
+	                    RotationPath.GetVectorAtTime(addedKeyTimestamp);
+
+	                RotationPath.CreateNewNode(
+	                    animationCurvesTimestamps[i],
+	                    defaultRotation);
+	            }
+	        }
+	    }
+
+	    public float GetNodeTimestamp(int nodeIndex) {
+	        return AnimatedObjectPath.GetTimeAtKey(nodeIndex);
+	    }
 	}
 }

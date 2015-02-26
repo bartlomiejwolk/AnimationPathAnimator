@@ -232,6 +232,11 @@ namespace ATP.AnimationPathTools {
             get { return pathData; }
         }
 
+        public AnimationPathBuilder AnimationPathBuilder1 {
+            set { animationPathBuilder = value; }
+            get { return animationPathBuilder; }
+        }
+
         #endregion
 
         #region UNITY MESSAGES
@@ -327,7 +332,7 @@ namespace ATP.AnimationPathTools {
             EventArgs eventArgs) {
             PathData.UpdateCurveWithAddedKeys(PathData.EaseCurve);
             PathData.UpdateCurveWithAddedKeys(PathData.TiltingCurve);
-            UpdateRotationCurvesWithAddedKeys();
+            PathData.UpdateRotationCurvesWithAddedKeys();
         }
 
         private void animationPathBuilder_NodePositionChanged(
@@ -753,39 +758,6 @@ namespace ATP.AnimationPathTools {
 
                     RotateObjectWithLookAt(targetGO.position);
                     break;
-            }
-        }
-
-        private void UpdateRotationCurvesWithAddedKeys() {
-            // AnimationPathBuilder node timestamps.
-            var animationCurvesTimestamps =
-                animationPathBuilder.PathData.GetPathTimestamps();
-            // Get values from rotationPath.
-            var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
-            var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
-
-            // For each timestamp in rotationPath..
-            for (var i = 0; i < animationCurvesTimestamps.Length; i++) {
-                var keyExists = false;
-                for (var j = 0; j < rotationCurvesKeysNo; j++) {
-                    if (Math.Abs(rotationCurvesTimestamps[j]
-                                 - animationCurvesTimestamps[i]) <
-                        FloatPrecision) {
-                        keyExists = true;
-                        break;
-                    }
-                }
-
-                if (!keyExists) {
-                    var addedKeyTimestamp =
-                        animationPathBuilder.GetNodeTimestamp(i);
-                    var defaultRotation =
-                        PathData.RotationPath.GetVectorAtTime(addedKeyTimestamp);
-
-                    PathData.RotationPath.CreateNewNode(
-                        animationCurvesTimestamps[i],
-                        defaultRotation);
-                }
             }
         }
 

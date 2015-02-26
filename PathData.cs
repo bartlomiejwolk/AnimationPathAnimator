@@ -298,5 +298,13 @@ namespace ATP.AnimationPathTools {
 
             OnNodeTiltChanged();
         }
+
+	    public void AddKeyToCurve(
+	        AnimationCurve curve,
+	        float timestamp) {
+	        var value = curve.Evaluate(timestamp);
+
+	        curve.AddKey(timestamp, value);
+	    }
 	}
 }

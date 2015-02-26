@@ -592,11 +592,6 @@ namespace ATP.AnimationPathTools {
             // ReSharper disable once FunctionNeverReturns
         }
 
-        // ReSharper disable once UnusedMember.Local
-        private Vector3 GetRotationPointPosition(float nodeTimestamp) {
-            return PathData.RotationPath.GetVectorAtTime(nodeTimestamp);
-        }
-
         private Vector3[] GetRotationPointPositions(bool globalPositions) {
             // Get number of existing rotation points.
             var rotationPointsNo = pathData.RotationPath.KeysNo;

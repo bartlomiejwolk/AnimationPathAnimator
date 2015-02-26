@@ -724,10 +724,10 @@ namespace ATP.AnimationPathTools {
                 // and modifier key is pressed also..
                 && modKeyPressed) {
                 HandleModifiedShortcuts(
-                    modJumpForwardCallbackHandler,
-                    modJumpBackwardCallbackHandler,
-                    jumpToNextNodeCallbackHandler,
-                    jumpToPreviousNodeCallbackHandler,
+                    ModJumpForwardCallbackHandler,
+                    ModJumpBackwardCallbackHandler,
+                    JumpToNextNodeCallbackHandler,
+                    JumpToPreviousNodeCallbackHandler,
                     AnyModJumpKeyPressedCallbackHandler);
             }
             // Modifier key not pressed.
@@ -801,26 +801,25 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        // TODO Rename to uppercase.
-        private void jumpToNextNodeCallbackHandler() {
+        private void JumpToNextNodeCallbackHandler() {
             // Jump to next node.
             animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void jumpToPreviousNodeCallbackHandler() {
+        private void JumpToPreviousNodeCallbackHandler() {
             // Jump to next node.
             animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void modJumpBackwardCallbackHandler() {
+        private void ModJumpBackwardCallbackHandler() {
             // Update animation time.
             animTimeRatio.floatValue -= JumpValue;
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void modJumpForwardCallbackHandler() {
+        private void ModJumpForwardCallbackHandler() {
             // Update animation time.
             animTimeRatio.floatValue += JumpValue;
             serializedObject.ApplyModifiedProperties();

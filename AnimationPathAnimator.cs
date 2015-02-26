@@ -405,21 +405,13 @@ namespace ATP.AnimationPathTools {
             return globalNodePosition;
         }
 
-        //public float[] GetPathTimestamps() {
-        //    return animationPathBuilder.PathData.GetPathTimestamps(animationPathBuilder);
-        //}
-
-        public void SmoothCurve(AnimationCurve curve) {
-            for (var i = 0; i < curve.length; i++) {
-                curve.SmoothTangents(i, 0);
-            }
-        }
-
+        // NOTE Animator.
         public void StartEaseTimeCoroutine() {
             // Check for play mode.
             StartCoroutine("EaseTime");
         }
 
+        // NOTE Animator.
         public void StopEaseTimeCoroutine() {
             StopCoroutine("EaseTime");
 
@@ -439,7 +431,7 @@ namespace ATP.AnimationPathTools {
             PathData.EaseCurve.RemoveKey(keyIndex);
             PathData.EaseCurve.AddKey(keyframeCopy);
 
-            SmoothCurve(PathData.EaseCurve);
+            PathData.SmoothCurve(PathData.EaseCurve);
         }
 
         public void UpdateEaseValues(float delta) {
@@ -456,7 +448,7 @@ namespace ATP.AnimationPathTools {
                 PathData.EaseCurve.AddKey(keyCopy);
 
                 // Smooth all tangents.
-                SmoothCurve(PathData.EaseCurve);
+                PathData.SmoothCurve(PathData.EaseCurve);
             }
         }
 
@@ -469,7 +461,7 @@ namespace ATP.AnimationPathTools {
             // Replace old key with updated one.
             PathData.TiltingCurve.RemoveKey(keyIndex);
             PathData.TiltingCurve.AddKey(keyframeCopy);
-            SmoothCurve(PathData.TiltingCurve);
+            PathData.SmoothCurve(PathData.TiltingCurve);
             EaseCurveExtremeNodes(PathData.TiltingCurve);
 
             OnNodeTiltChanged();
@@ -854,7 +846,7 @@ namespace ATP.AnimationPathTools {
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
 
-                    SmoothCurve(curve);
+                    PathData.SmoothCurve(curve);
                 }
             }
         }
@@ -880,7 +872,7 @@ namespace ATP.AnimationPathTools {
                 if (valueExists) continue;
 
                 AddKeyToCurve(curve, nodeTimestamp);
-                SmoothCurve(curve);
+                PathData.SmoothCurve(curve);
 
                 break;
             }
@@ -904,7 +896,7 @@ namespace ATP.AnimationPathTools {
                 if (keyExists) continue;
 
                 curve.RemoveKey(i);
-                SmoothCurve(curve);
+                PathData.SmoothCurve(curve);
 
                 break;
             }

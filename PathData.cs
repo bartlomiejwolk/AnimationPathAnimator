@@ -226,5 +226,11 @@ namespace ATP.AnimationPathTools {
 	    public int NodesNo {
             get { return animatedObjectPath[0].length; }
 	    }
+
+	    public void SmoothCurve(AnimationCurve curve) {
+	        for (var i = 0; i < curve.length; i++) {
+	            curve.SmoothTangents(i, 0);
+	        }
+	    }
 	}
 }

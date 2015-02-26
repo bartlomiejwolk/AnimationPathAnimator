@@ -82,7 +82,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion UNITY MESSAGES
 
-        #region EVENTINVOCATORS
+        #region EVENT INVOCATORS
 
         protected virtual void OnNodeAdded() {
             var handler = NodeAdded;

@@ -109,16 +109,6 @@ namespace ATP.AnimationPathTools {
             set { tangentMode = value; }
         }
 
-        public PathData PathData1 {
-            set { pathData = value; }
-            get { return pathData; }
-        }
-
-        public PathData PathData2 {
-            set { pathData = value; }
-            get { return pathData; }
-        }
-
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES

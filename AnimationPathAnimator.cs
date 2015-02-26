@@ -222,7 +222,8 @@ namespace ATP.AnimationPathTools {
         #endregion PUBLIC PROPERTIES
 
         #region PRIVATE/PROTECTED PROPERTIES
-        protected virtual float FloatPrecision {
+
+        public virtual float FloatPrecision {
             get { return 0.001f; }
         }
 
@@ -324,8 +325,8 @@ namespace ATP.AnimationPathTools {
 
         private void animationPathBuilder_NodeAdded(object sender,
             EventArgs eventArgs) {
-            UpdateCurveWithAddedKeys(PathData.EaseCurve);
-            UpdateCurveWithAddedKeys(PathData.TiltingCurve);
+            PathData.UpdateCurveWithAddedKeys(PathData.EaseCurve);
+            PathData.UpdateCurveWithAddedKeys(PathData.TiltingCurve);
             UpdateRotationCurvesWithAddedKeys();
         }
 
@@ -774,33 +775,6 @@ namespace ATP.AnimationPathTools {
 
                     PathData.SmoothCurve(curve);
                 }
-            }
-        }
-
-        /// <summary>
-        ///     Update AnimationCurve with keys added to the path.
-        /// </summary>
-        /// <param name="curve"></param>
-        private void UpdateCurveWithAddedKeys(AnimationCurve curve) {
-            var nodeTimestamps = PathData.GetPathTimestamps();
-            // Get curve value.
-            var curveTimestamps = new float[curve.length];
-            for (var i = 0; i < curve.length; i++) {
-                curveTimestamps[i] = curve.keys[i].time;
-            }
-
-            // For each path timestamp..
-            foreach (var nodeTimestamp in nodeTimestamps) {
-                var valueExists = curveTimestamps.Any(t =>
-                    Math.Abs(nodeTimestamp - t) < FloatPrecision);
-
-                // Add missing key.
-                if (valueExists) continue;
-
-                PathData.AddKeyToCurve(curve, nodeTimestamp);
-                PathData.SmoothCurve(curve);
-
-                break;
             }
         }
 

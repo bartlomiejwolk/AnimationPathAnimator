@@ -321,5 +321,32 @@ namespace ATP.AnimationPathTools {
 
 	        return rotationPointPositions;
 	    }
+
+	    /// <summary>
+	    ///     Update AnimationCurve with keys added to the path.
+	    /// </summary>
+	    /// <param name="curve"></param>
+	    public void UpdateCurveWithAddedKeys(AnimationCurve curve) {
+	        var nodeTimestamps = GetPathTimestamps();
+	        // Get curve value.
+	        var curveTimestamps = new float[curve.length];
+	        for (var i = 0; i < curve.length; i++) {
+	            curveTimestamps[i] = curve.keys[i].time;
+	        }
+
+	        // For each path timestamp..
+	        foreach (var nodeTimestamp in nodeTimestamps) {
+	            var valueExists = curveTimestamps.Any(t =>
+	                Math.Abs(nodeTimestamp - t) < FloatPrecision);
+
+	            // Add missing key.
+	            if (valueExists) continue;
+
+	            AddKeyToCurve(curve, nodeTimestamp);
+	            SmoothCurve(curve);
+
+	            break;
+	        }
+	    }
 	}
 }

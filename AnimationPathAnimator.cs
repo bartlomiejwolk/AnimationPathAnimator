@@ -340,9 +340,10 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodeRemoved(
             object sender,
             EventArgs e) {
+
             UpdateCurveWithRemovedKeys(PathData.EaseCurve);
             UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
-            UpdateRotationPathWithRemovedKeys();
+            pathData.UpdateRotationPathWithRemovedKeys();
         }
 
         private void animationPathBuilder_NodeTimeChanged(
@@ -962,28 +963,28 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void UpdateRotationPathWithRemovedKeys() {
-            // AnimationPathBuilder node timestamps.
-            var pathTimestamps = PathData.GetPathTimestamps();
-            // Get values from rotationPath.
-            var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
+        //private void UpdateRotationPathWithRemovedKeys() {
+        //    // AnimationPathBuilder node timestamps.
+        //    var pathTimestamps = PathData.GetPathTimestamps();
+        //    // Get values from rotationPath.
+        //    var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
 
-            // For each timestamp in rotationPath..
-            for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
-                // Check if same timestamp exist in rotationPath.
-                var keyExists = pathTimestamps.Any(nodeTimestamp =>
-                    Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
-                    < FloatPrecision);
+        //    // For each timestamp in rotationPath..
+        //    for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
+        //        // Check if same timestamp exist in rotationPath.
+        //        var keyExists = pathTimestamps.Any(nodeTimestamp =>
+        //            Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
+        //            < FloatPrecision);
 
-                // If key exists check next timestamp.
-                if (keyExists) continue;
+        //        // If key exists check next timestamp.
+        //        if (keyExists) continue;
 
-                // Remove node from rotationPath.
-                PathData.RotationPath.RemoveNode(i);
+        //        // Remove node from rotationPath.
+        //        PathData.RotationPath.RemoveNode(i);
 
-                break;
-            }
-        }
+        //        break;
+        //    }
+        //}
 
         #endregion PRIVATE METHODS
     }

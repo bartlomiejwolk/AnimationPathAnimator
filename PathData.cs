@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 namespace ATP.AnimationPathTools {
 
@@ -198,6 +199,29 @@ namespace ATP.AnimationPathTools {
 
 	        return result;
 	    }
+
+        public void UpdateRotationPathWithRemovedKeys() {
+            // AnimationPathBuilder node timestamps.
+            var pathTimestamps = GetPathTimestamps();
+            // Get values from rotationPath.
+            var rotationCurvesTimestamps = RotationPath.GetTimestamps();
+
+            // For each timestamp in rotationPath..
+            for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
+                // Check if same timestamp exist in rotationPath.
+                var keyExists = pathTimestamps.Any(nodeTimestamp =>
+                    Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
+                    < FloatPrecision);
+
+                // If key exists check next timestamp.
+                if (keyExists) continue;
+
+                // Remove node from rotationPath.
+                RotationPath.RemoveNode(i);
+
+                break;
+            }
+        }
 
 	    public int NodesNo {
             get { return animatedObjectPath[0].length; }

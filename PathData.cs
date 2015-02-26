@@ -25,6 +25,10 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region PUBLIC PROPERTIES
+        public int NodesNo {
+            get { return animatedObjectPath[0].length; }
+        }
+
         public AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
             set { animatedObjectPath = value; }
@@ -83,6 +87,95 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region PUBLIC METHODS
+        public void UpdateEaseValues(float delta) {
+            for (var i = 0; i < EaseCurve.length; i++) {
+                // Copy key.
+                var keyCopy = EaseCurve[i];
+                // Update key value.
+                keyCopy.value += delta;
+
+                // Remove old key.
+                EaseCurve.RemoveKey(i);
+
+                // Add key.
+                EaseCurve.AddKey(keyCopy);
+
+                // Smooth all tangents.
+                SmoothCurve(EaseCurve);
+            }
+        }
+
+        public float GetNodeEaseValue(int i) {
+            return EaseCurve.keys[i].value;
+        }
+
+        public void UpdateEaseValue(int keyIndex, float newValue) {
+            // Copy keyframe.
+            var keyframeCopy = EaseCurve.keys[keyIndex];
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+
+            // Replace old key with updated one.
+            EaseCurve.RemoveKey(keyIndex);
+            EaseCurve.AddKey(keyframeCopy);
+
+            SmoothCurve(EaseCurve);
+        }
+
+        public void UpdateRotationPathWithRemovedKeys() {
+            // AnimationPathBuilder node timestamps.
+            var pathTimestamps = GetPathTimestamps();
+            // Get values from rotationPath.
+            var rotationCurvesTimestamps = RotationPath.GetTimestamps();
+
+            // For each timestamp in rotationPath..
+            for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
+                // Check if same timestamp exist in rotationPath.
+                var keyExists = pathTimestamps.Any(nodeTimestamp =>
+                    Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
+                    < FloatPrecision);
+
+                // If key exists check next timestamp.
+                if (keyExists) continue;
+
+                // Remove node from rotationPath.
+                RotationPath.RemoveNode(i);
+
+                break;
+            }
+        }
+
+        public void SmoothCurve(AnimationCurve curve) {
+            for (var i = 0; i < curve.length; i++) {
+                curve.SmoothTangents(i, 0);
+            }
+        }
+
+        public float GetNodeTiltValue(int nodeIndex) {
+            return TiltingCurve.keys[nodeIndex].value;
+        }
+
+        public Vector3 GetRotationAtTime(float timestamp) {
+            return RotationPath.GetVectorAtTime(timestamp);
+        }
+
+        public float[] GetPathTimestamps() {
+            // Output array.
+            var result = new float[NodesNo];
+
+            // For each key..
+            for (var i = 0; i < NodesNo; i++) {
+                // Get key time.
+                result[i] = AnimatedObjectPath.GetTimeAtKey(i);
+            }
+
+            return result;
+        }
+
+        public Vector3 GetRotationPointPosition(int nodeIndex) {
+            return RotationPath.GetVectorAtKey(nodeIndex);
+        }
+
 
         public void Reset() {
             InstantiateReferenceTypes();
@@ -191,100 +284,6 @@ namespace ATP.AnimationPathTools {
 	        TiltingCurve = new AnimationCurve();
 	    }
         #endregion
-
-	    public Vector3 GetRotationPointPosition(int nodeIndex) {
-	        return RotationPath.GetVectorAtKey(nodeIndex);
-	    }
-
-	    public Vector3 GetRotationAtTime(float timestamp) {
-	        return RotationPath.GetVectorAtTime(timestamp);
-	    }
-
-	    public float GetNodeEaseValue(int i) {
-	        return EaseCurve.keys[i].value;
-	    }
-
-	    public float GetNodeTiltValue(int nodeIndex) {
-	        return TiltingCurve.keys[nodeIndex].value;
-	    }
-
-	    public float[] GetPathTimestamps() {
-	        // Output array.
-	        var result = new float[NodesNo];
-
-	        // For each key..
-	        for (var i = 0; i < NodesNo; i++) {
-	            // Get key time.
-	            result[i] = AnimatedObjectPath.GetTimeAtKey(i);
-	        }
-
-	        return result;
-	    }
-
-        public void UpdateRotationPathWithRemovedKeys() {
-            // AnimationPathBuilder node timestamps.
-            var pathTimestamps = GetPathTimestamps();
-            // Get values from rotationPath.
-            var rotationCurvesTimestamps = RotationPath.GetTimestamps();
-
-            // For each timestamp in rotationPath..
-            for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
-                // Check if same timestamp exist in rotationPath.
-                var keyExists = pathTimestamps.Any(nodeTimestamp =>
-                    Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
-                    < FloatPrecision);
-
-                // If key exists check next timestamp.
-                if (keyExists) continue;
-
-                // Remove node from rotationPath.
-                RotationPath.RemoveNode(i);
-
-                break;
-            }
-        }
-
-	    public int NodesNo {
-            get { return animatedObjectPath[0].length; }
-	    }
-
-	    public void SmoothCurve(AnimationCurve curve) {
-	        for (var i = 0; i < curve.length; i++) {
-	            curve.SmoothTangents(i, 0);
-	        }
-	    }
-
-	    public void UpdateEaseValue(int keyIndex, float newValue) {
-	        // Copy keyframe.
-	        var keyframeCopy = EaseCurve.keys[keyIndex];
-	        // Update keyframe value.
-	        keyframeCopy.value = newValue;
-
-	        // Replace old key with updated one.
-	        EaseCurve.RemoveKey(keyIndex);
-	        EaseCurve.AddKey(keyframeCopy);
-
-	        SmoothCurve(EaseCurve);
-	    }
-
-	    public void UpdateEaseValues(float delta) {
-	        for (var i = 0; i < EaseCurve.length; i++) {
-	            // Copy key.
-	            var keyCopy = EaseCurve[i];
-	            // Update key value.
-	            keyCopy.value += delta;
-
-	            // Remove old key.
-	            EaseCurve.RemoveKey(i);
-
-	            // Add key.
-	            EaseCurve.AddKey(keyCopy);
-
-	            // Smooth all tangents.
-	            SmoothCurve(EaseCurve);
-	        }
-	    }
-
         public void UpdateNodeTilting(int keyIndex, float newValue) {
             // Copy keyframe.
             var keyframeCopy = TiltingCurve.keys[keyIndex];

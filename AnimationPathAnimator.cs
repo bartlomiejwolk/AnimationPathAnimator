@@ -19,10 +19,6 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
         #region FIELDS
 
-        #endregion FIELDS
-
-        #region SERIALIZED FIELDS
-
         [SerializeField]
         private GizmoDrawer gizmoDrawer;
 
@@ -46,8 +42,6 @@ namespace ATP.AnimationPathTools {
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
-#pragma warning restore 169
-#pragma warning restore 169
 
         [SerializeField]
         private PathData pathData;
@@ -76,12 +70,12 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
 #pragma warning disable 169
-            private bool enableControlsInPlayMode = true;
+            protected bool enableControlsInPlayMode = true;
 #pragma warning restore 169
 
         [SerializeField]
 #pragma warning disable 169
-            private float maxAnimationSpeed = 0.3f;
+            protected float maxAnimationSpeed = 0.3f;
 #pragma warning restore 169
 
         /// <summary>
@@ -123,6 +117,18 @@ namespace ATP.AnimationPathTools {
         #endregion SERIALIZED FIELDS
 
         #region PUBLIC PROPERTIES
+
+        protected virtual int RotationCurveSampling {
+            get { return 20; }
+        }
+
+        public GizmoDrawer GizmoDrawer {
+            get { return gizmoDrawer; }
+        }
+
+        public virtual float FloatPrecision {
+            get { return 0.001f; }
+        }
 
         public WrapMode WrapMode {
             get { return wrapMode; }
@@ -188,18 +194,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PUBLIC PROPERTIES
-
-        public virtual float FloatPrecision {
-            get { return 0.001f; }
-        }
-
-        public GizmoDrawer GizmoDrawer {
-            get { return gizmoDrawer; }
-        }
-
-        protected virtual int RotationCurveSampling {
-            get { return 20; }
-        }
 
         #region UNITY MESSAGES
 
@@ -500,7 +494,7 @@ namespace ATP.AnimationPathTools {
                 if (!Pause) {
                     // Ease time.
                     var timeStep = PathData.EaseCurve.Evaluate(animTimeRatio);
-                    animTimeRatio += timeStep*Time.deltaTime;
+                    animTimeRatio += timeStep * Time.deltaTime;
                 }
 
                 yield return null;
@@ -582,7 +576,7 @@ namespace ATP.AnimationPathTools {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime*rotationSpeed;
+            var speed = Time.deltaTime * rotationSpeed;
 
             // Lerp rotation.
             animatedGO.rotation = Quaternion.Slerp(

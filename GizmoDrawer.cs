@@ -8,6 +8,8 @@ namespace ATP.AnimationPathTools {
     // TODO Make it inherit from ScriptableObject and then create
     // SerializedObject in the Editor class to display curve color field.
     public class GizmoDrawer {
+
+        #region FIELDS
         //private AnimationPathAnimator animationPathAnimator;
         private string rotationPointGizmoIcon = "rec_16x16";
         private string targetGizmoIcon = "target_22x22-blue";
@@ -16,6 +18,9 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
         private Color rotationCurveColor = Color.gray;
+        #endregion
+
+        #region PROPERIES
 
         public virtual float FloatPrecision {
             get { return 0.001f; }
@@ -47,6 +52,9 @@ namespace ATP.AnimationPathTools {
             get { return rotationCurveColor; }
             set { rotationCurveColor = value; }
         }
+        #endregion
+
+        #region METHODS
 
         public void DrawCurrentRotationPointGizmo(Vector3 rotationPointPosition) {
             //Draw rotation point gizmo.
@@ -91,5 +99,6 @@ namespace ATP.AnimationPathTools {
                 TargetGizmoIcon,
                 false);
         }
+        #endregion
     }
 }

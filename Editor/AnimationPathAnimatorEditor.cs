@@ -685,7 +685,7 @@ namespace ATP.AnimationPathTools {
 
             Undo.RecordObject(script.PathData, "Tilting curve changed.");
 
-			script.UpdateNodeTilting(keyIndex, newValue);
+			script.PathData.UpdateNodeTilting(keyIndex, newValue);
 
         }
         #endregion CALLBACK HANDLERS

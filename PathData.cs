@@ -8,6 +8,7 @@ namespace ATP.AnimationPathTools {
 	public class PathData : ScriptableObject {
 
         public event EventHandler RotationPointPositionChanged;
+        public event EventHandler NodeTiltChanged;
 
         #region SERIALIZED FIELDS
         [SerializeField]
@@ -74,6 +75,11 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        protected virtual void OnNodeTiltChanged() {
+            var handler = NodeTiltChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         #endregion
 
         #region PUBLIC METHODS
@@ -120,6 +126,21 @@ namespace ATP.AnimationPathTools {
 	    #endregion
 
         #region PRIVATE METHODS
+        private void EaseCurveExtremeNodes(AnimationCurve curve) {
+            // Ease first node.
+            var firstKeyCopy = curve.keys[0];
+            firstKeyCopy.outTangent = 0;
+            curve.RemoveKey(0);
+            curve.AddKey(firstKeyCopy);
+
+            // Ease last node.
+            var lastKeyIndex = curve.length - 1;
+            var lastKeyCopy = curve.keys[lastKeyIndex];
+            lastKeyCopy.inTangent = 0;
+            curve.RemoveKey(lastKeyIndex);
+            curve.AddKey(lastKeyCopy);
+        }
+
 
         private void AssignDefaultValues() {
 	        InitializeAnimatedObjectPath();
@@ -263,5 +284,20 @@ namespace ATP.AnimationPathTools {
 	            SmoothCurve(EaseCurve);
 	        }
 	    }
+
+        public void UpdateNodeTilting(int keyIndex, float newValue) {
+            // Copy keyframe.
+            var keyframeCopy = TiltingCurve.keys[keyIndex];
+            // Update keyframe value.
+            keyframeCopy.value = newValue;
+
+            // Replace old key with updated one.
+            TiltingCurve.RemoveKey(keyIndex);
+            TiltingCurve.AddKey(keyframeCopy);
+            SmoothCurve(TiltingCurve);
+            EaseCurveExtremeNodes(TiltingCurve);
+
+            OnNodeTiltChanged();
+        }
 	}
 }

@@ -18,7 +18,6 @@ namespace ATP.AnimationPathTools {
 
         #region EVENTS
 
-        public event EventHandler NodeTiltChanged;
 
         //public event EventHandler RotationPointPositionChanged;
 
@@ -281,7 +280,7 @@ namespace ATP.AnimationPathTools {
             animationPathBuilder.NodePositionChanged +=
                 animationPathBuilder_NodePositionChanged;
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
-            NodeTiltChanged += this_NodeTiltChanged;
+            pathData.NodeTiltChanged += this_NodeTiltChanged;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -308,11 +307,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
-
-        protected virtual void OnNodeTiltChanged() {
-            var handler = NodeTiltChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
 
         //protected virtual void OnRotationPointPositionChanged() {
         //    var handler = RotationPointPositionChanged;
@@ -421,20 +415,20 @@ namespace ATP.AnimationPathTools {
             animTimeRatio = 0;
         }
 
-        public void UpdateNodeTilting(int keyIndex, float newValue) {
-            // Copy keyframe.
-            var keyframeCopy = PathData.TiltingCurve.keys[keyIndex];
-            // Update keyframe value.
-            keyframeCopy.value = newValue;
+        //public void UpdateNodeTilting(int keyIndex, float newValue) {
+        //    // Copy keyframe.
+        //    var keyframeCopy = PathData.TiltingCurve.keys[keyIndex];
+        //    // Update keyframe value.
+        //    keyframeCopy.value = newValue;
 
-            // Replace old key with updated one.
-            PathData.TiltingCurve.RemoveKey(keyIndex);
-            PathData.TiltingCurve.AddKey(keyframeCopy);
-            PathData.SmoothCurve(PathData.TiltingCurve);
-            EaseCurveExtremeNodes(PathData.TiltingCurve);
+        //    // Replace old key with updated one.
+        //    PathData.TiltingCurve.RemoveKey(keyIndex);
+        //    PathData.TiltingCurve.AddKey(keyframeCopy);
+        //    PathData.SmoothCurve(PathData.TiltingCurve);
+        //    EaseCurveExtremeNodes(PathData.TiltingCurve);
 
-            OnNodeTiltChanged();
-        }
+        //    OnNodeTiltChanged();
+        //}
 
         public void UpdateWrapMode() {
             animationPathBuilder.SetWrapMode(wrapMode);
@@ -448,21 +442,6 @@ namespace ATP.AnimationPathTools {
             AnimateObject();
             HandleAnimatedGORotation();
             TiltObject();
-        }
-
-        public void EaseCurveExtremeNodes(AnimationCurve curve) {
-            // Ease first node.
-            var firstKeyCopy = curve.keys[0];
-            firstKeyCopy.outTangent = 0;
-            curve.RemoveKey(0);
-            curve.AddKey(firstKeyCopy);
-
-            // Ease last node.
-            var lastKeyIndex = curve.length - 1;
-            var lastKeyCopy = curve.keys[lastKeyIndex];
-            lastKeyCopy.inTangent = 0;
-            curve.RemoveKey(lastKeyIndex);
-            curve.AddKey(lastKeyCopy);
         }
 
         /// <summary>

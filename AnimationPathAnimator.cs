@@ -459,14 +459,6 @@ namespace ATP.AnimationPathTools {
             TiltObject();
         }
 
-        private void AddKeyToCurve(
-            AnimationCurve curve,
-            float timestamp) {
-            var value = curve.Evaluate(timestamp);
-
-            curve.AddKey(timestamp, value);
-        }
-
 
         private void AnimateObject() {
             if (animatedGO == null
@@ -819,7 +811,7 @@ namespace ATP.AnimationPathTools {
                 // Add missing key.
                 if (valueExists) continue;
 
-                AddKeyToCurve(curve, nodeTimestamp);
+                PathData.AddKeyToCurve(curve, nodeTimestamp);
                 PathData.SmoothCurve(curve);
 
                 break;

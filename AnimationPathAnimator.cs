@@ -369,7 +369,7 @@ namespace ATP.AnimationPathTools {
             // Forward point timestamp.
             var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
             var localPosition =
-                animationPathBuilder.GetVectorAtTime(forwardPointTimestamp);
+                animationPathBuilder.PathData.GetVectorAtTime(forwardPointTimestamp);
 
             // Return global position.
             if (globalPosition) {
@@ -426,7 +426,7 @@ namespace ATP.AnimationPathTools {
             }
 
             var positionAtTimestamp =
-                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+                animationPathBuilder.PathData.GetVectorAtTime(animTimeRatio);
 
             var globalPositionAtTimestamp =
                 transform.TransformPoint(positionAtTimestamp);
@@ -599,7 +599,7 @@ namespace ATP.AnimationPathTools {
         private void UpdateAnimatedGOPosition() {
             // Get animatedGO position at current animation time.
             var positionAtTimestamp =
-                animationPathBuilder.GetVectorAtTime(animTimeRatio);
+                animationPathBuilder.PathData.GetVectorAtTime(animTimeRatio);
             var globalPositionAtTimestamp =
                 transform.TransformPoint(positionAtTimestamp);
 

@@ -522,5 +522,9 @@ namespace ATP.AnimationPathTools {
             return result;
         }
 
+        public Vector3 GetVectorAtTime(float timestamp) {
+            return AnimatedObjectPath.GetVectorAtTime(timestamp);
+        }
+
     }
 }

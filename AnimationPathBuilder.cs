@@ -75,7 +75,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion EDITOR
 
-        #region PUBLIC PROPERTIES
+        #region PROPERTIES
 
         /// <summary>
         ///     Color of the gizmo curve.
@@ -170,7 +170,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion EVENT INVOCATORS
 
-        #region PUBLIC METHODS
+        #region METHODS
 
         //public void ChangeNodeTimestamp(
         //    int keyIndex,
@@ -198,10 +198,6 @@ namespace ATP.AnimationPathTools {
             }
 
             return nodePositions;
-        }
-
-        public Vector3 GetVectorAtTime(float timestamp) {
-            return pathData.AnimatedObjectPath.GetVectorAtTime(timestamp);
         }
 
         public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
@@ -258,9 +254,6 @@ namespace ATP.AnimationPathTools {
             pathData.AnimatedObjectPath.SmoothPointTangents(nodeIndex);
         }
 
-        #endregion PUBLIC METHODS
-
-        #region PRIVATE METHODS
         public void RemoveAllNodes() {
             var nodesNo = NodesNo;
             for (var i = 0; i < nodesNo; i++) {

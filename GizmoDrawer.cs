@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 namespace ATP.AnimationPathTools {
-    [System.Serializable]
-    // TODO Make it inherit from ScriptableObject and then create
-    // SerializedObject in the Editor class to display curve color field.
-    public class GizmoDrawer {
+
+    public class GizmoDrawer : ScriptableObject {
 
         #region FIELDS
 

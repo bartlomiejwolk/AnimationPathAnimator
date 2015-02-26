@@ -59,6 +59,8 @@ namespace ATP.AnimationPathTools {
 
         #region FIELDS
 
+        private SerializedObject gizmoDrawer;
+
         /// <summary>
         /// If modifier is currently pressed.
         /// </summary>
@@ -115,6 +117,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty maxAnimationSpeed;
 
         private SerializedProperty rotationSpeed;
+
+        private SerializedProperty rotationCurveColor;
         private const float FloatPrecision = 0.001f;
         private const float ScaleHandleSize = 1.5f;
 
@@ -253,13 +257,20 @@ namespace ATP.AnimationPathTools {
                         "Advanced Settings",
                         ""));
 
+            serializedObject.ApplyModifiedProperties();
+
             // Display advanced foldout content.
             if (advancedSettingsFoldout.boolValue) {
+                gizmoDrawer.Update();
+                EditorGUILayout.PropertyField(rotationCurveColor);
+                gizmoDrawer.ApplyModifiedProperties();
+
+                serializedObject.Update();
                 EditorGUILayout.PropertyField(maxAnimationSpeed);
                 EditorGUILayout.PropertyField(skin);
+                serializedObject.ApplyModifiedProperties();
             }
 
-            serializedObject.ApplyModifiedProperties();
 
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
@@ -284,6 +295,8 @@ namespace ATP.AnimationPathTools {
             // Get target script reference.
             script = (AnimationPathAnimator)target;
 
+            gizmoDrawer = new SerializedObject(script.GizmoDrawer);
+
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
             animatedGO = serializedObject.FindProperty("animatedGO");
@@ -299,6 +312,8 @@ namespace ATP.AnimationPathTools {
             enableControlsInPlayMode =
                 serializedObject.FindProperty("enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
+            rotationCurveColor = gizmoDrawer.FindProperty("rotationCurveColor");
+
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

@@ -17,7 +17,6 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
 
         #region FIELDS
-
         /// <summary>
         ///     If animation is currently enabled (may be paused).
         /// </summary>
@@ -27,6 +26,9 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region SERIALIZED FIELDS
+        [SerializeField]
+        private GizmoDrawer gizmoDrawer;
+
         /// <summary>
         ///     Path used to animate the <c>animatedGO</c> transform.
         /// </summary>
@@ -111,10 +113,6 @@ namespace ATP.AnimationPathTools {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         // ReSharper disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
-
-        [SerializeField]
-        private GizmoDrawer gizmoDrawer;
-
         #endregion
 
         #endregion SERIALIZED FIELDS
@@ -215,8 +213,6 @@ namespace ATP.AnimationPathTools {
             if (animatedGO == null && Camera.main.transform != null) {
                 animatedGO = Camera.main.transform;
             }
-
-            gizmoDrawer = new GizmoDrawer();
 
             // Initialize AnimationPathBuilder field.
             animationPathBuilder = GetComponent<AnimationPathBuilder>();
@@ -319,6 +315,10 @@ namespace ATP.AnimationPathTools {
                 animationPathBuilder_NodePositionChanged;
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
             pathData.NodeTiltChanged += this_NodeTiltChanged;
+
+            if (gizmoDrawer == null) {
+                gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            }
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

@@ -475,14 +475,6 @@ namespace ATP.AnimationPathTools {
             return PathData.RotationPath.GetVectorAtKey(nodeIndex);
         }
 
-        public void ResetRotation() {
-            // Remove all nodes.
-            for (var i = 0; i < PathData.RotationPath.KeysNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                PathData.RotationPath.RemoveNode(0);
-            }
-        }
-
         public void SmoothCurve(AnimationCurve curve) {
             for (var i = 0; i < curve.length; i++) {
                 curve.SmoothTangents(i, 0);
@@ -501,19 +493,6 @@ namespace ATP.AnimationPathTools {
             isPlaying = false;
             Pause = false;
             animTimeRatio = 0;
-        }
-
-        public void SyncCurveWithPath(AnimationCurve curve) {
-            if (animationPathBuilder.NodesNo > curve.length) {
-                UpdateCurveWithAddedKeys(curve);
-            }
-            else if (animationPathBuilder.NodesNo < curve.length) {
-                UpdateCurveWithRemovedKeys(curve);
-            }
-            // Update curve timestamps.
-            else {
-                UpdateCurveTimestamps(curve);
-            }
         }
 
         public void UpdateEaseValue(int keyIndex, float newValue) {

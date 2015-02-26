@@ -289,7 +289,7 @@ namespace ATP.AnimationPathTools {
         private void HandleTangentModeChange() {
             // Update path node tangents.
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.SmoothAllNodeTangents();
+                Script.PathData.SmoothAllNodeTangents();
             }
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
@@ -298,7 +298,7 @@ namespace ATP.AnimationPathTools {
 
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.SmoothAllNodeTangents();
+                Script.PathData.SmoothAllNodeTangents();
             }
         }
 
@@ -566,7 +566,7 @@ namespace ATP.AnimationPathTools {
             Script.PathData.DistributeTimestamps();
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.SmoothAllNodeTangents();
+                Script.PathData.SmoothAllNodeTangents();
             }
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
@@ -590,7 +590,7 @@ namespace ATP.AnimationPathTools {
             Script.PathData.DistributeTimestamps();
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.SmoothAllNodeTangents();
+                Script.PathData.SmoothAllNodeTangents();
             }
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
@@ -614,7 +614,7 @@ namespace ATP.AnimationPathTools {
                 "Use AnimationCurve.SmoothAllNodeTangents on every node in the path."))) {
 
                 Undo.RecordObject(Script.PathData, "Change path");
-                Script.SmoothAllNodeTangents();
+                Script.PathData.SmoothAllNodeTangents();
                 Script.PathData.DistributeTimestamps();
             }
         }

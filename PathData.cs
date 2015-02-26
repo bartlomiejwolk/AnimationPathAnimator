@@ -576,5 +576,17 @@ namespace ATP.AnimationPathTools {
             AnimatedObjectPath.SetWrapMode(wrapMode);
         }
 
+        /// <summary>
+        ///     Smooth tangents in all nodes in all animation curves.
+        /// </summary>
+        /// <param name="weight">Weight to be applied to the tangents.</param>
+        public void SmoothAllNodeTangents(float weight = 0) {
+            // For each key..
+            for (var j = 0; j < NodesNo; j++) {
+                // Smooth in and out tangents.
+                AnimatedObjectPath.SmoothPointTangents(j);
+            }
+        }
+
     }
 }

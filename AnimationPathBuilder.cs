@@ -198,18 +198,6 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
-        /// <summary>
-        ///     Smooth tangents in all nodes in all animation curves.
-        /// </summary>
-        /// <param name="weight">Weight to be applied to the tangents.</param>
-        public void SmoothAllNodeTangents(float weight = 0) {
-            // For each key..
-            for (var j = 0; j < NodesNo; j++) {
-                // Smooth in and out tangents.
-                pathData.AnimatedObjectPath.SmoothPointTangents(j);
-            }
-        }
-
         public void SmoothSingleNodeTangents(int nodeIndex) {
             pathData.AnimatedObjectPath.SmoothPointTangents(nodeIndex);
         }

@@ -562,5 +562,11 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        public void SetNodesLinear() {
+            for (var i = 0; i < 3; i++) {
+                Utilities.SetCurveLinear(AnimatedObjectPath[i]);
+            }
+        }
+
     }
 }

@@ -198,12 +198,6 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
-        public void SetNodesLinear() {
-            for (var i = 0; i < 3; i++) {
-                Utilities.SetCurveLinear(pathData.AnimatedObjectPath[i]);
-            }
-        }
-
         public void SetNodeTangents(int index, Vector3 inOutTangent) {
             pathData.AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
         }

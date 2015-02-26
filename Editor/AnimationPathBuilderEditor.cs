@@ -292,7 +292,7 @@ namespace ATP.AnimationPathTools {
                 Script.SmoothAllNodeTangents();
             }
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.SetNodesLinear();
+                Script.PathData.SetNodesLinear();
             }
         }
 
@@ -304,7 +304,7 @@ namespace ATP.AnimationPathTools {
 
         private void HandleLinearTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.SetNodesLinear();
+                Script.PathData.SetNodesLinear();
             }
         }
 
@@ -569,7 +569,7 @@ namespace ATP.AnimationPathTools {
                 Script.SmoothAllNodeTangents();
             }
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.SetNodesLinear();
+                Script.PathData.SetNodesLinear();
             }
         }
 
@@ -593,7 +593,7 @@ namespace ATP.AnimationPathTools {
                 Script.SmoothAllNodeTangents();
             }
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.SetNodesLinear();
+                Script.PathData.SetNodesLinear();
             }
         }
 
@@ -656,7 +656,7 @@ namespace ATP.AnimationPathTools {
                 // Allow undo this operation.
                 Undo.RecordObject(Script.PathData, "Change path");
 
-                Script.SetNodesLinear();
+                Script.PathData.SetNodesLinear();
                 Script.PathData.DistributeTimestamps();
             }
         }

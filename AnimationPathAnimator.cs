@@ -84,10 +84,12 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
 #pragma warning disable 169
         private bool enableControlsInPlayMode = true;
+#pragma warning restore 169
 
         [SerializeField]
 #pragma warning disable 169
         private float maxAnimationSpeed = 0.3f;
+#pragma warning restore 169
 
         /// <summary>
         ///     How much look forward point should be positioned away from the

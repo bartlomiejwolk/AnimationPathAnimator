@@ -19,14 +19,6 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
         #region FIELDS
 
-        /// <summary>
-        ///     If animation is currently enabled (may be paused).
-        /// </summary>
-        /// <remarks>Used in play mode.</remarks>
-        private bool isPlaying;
-
-        private readonly int rotationCurveSampling = 20;
-
         #endregion FIELDS
 
         #region SERIALIZED FIELDS
@@ -164,10 +156,7 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         ///     Used in play mode. You can use it to stop animation.
         /// </remarks>
-        public bool IsPlaying {
-            get { return isPlaying; }
-            set { isPlaying = value; }
-        }
+        public bool IsPlaying { get; set; }
 
         public PathData PathData {
             get { return pathData; }
@@ -200,8 +189,6 @@ namespace ATP.AnimationPathTools {
 
         #endregion PUBLIC PROPERTIES
 
-        #region PRIVATE/PROTECTED PROPERTIES
-
         public virtual float FloatPrecision {
             get { return 0.001f; }
         }
@@ -211,10 +198,8 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual int RotationCurveSampling {
-            get { return rotationCurveSampling; }
+            get { return 20; }
         }
-
-        #endregion
 
         #region UNITY MESSAGES
 
@@ -347,7 +332,7 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
             if (Application.isPlaying && autoPlay) {
-                isPlaying = true;
+                IsPlaying = true;
 
                 StartEaseTimeCoroutine();
             }
@@ -356,7 +341,7 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
             // In play mode, update animation time with delta time.
-            if (Application.isPlaying && isPlaying && !Pause) {
+            if (Application.isPlaying && IsPlaying && !Pause) {
                 Animate();
             }
         }
@@ -450,7 +435,7 @@ namespace ATP.AnimationPathTools {
             StopCoroutine("EaseTime");
 
             // Reset animation.
-            isPlaying = false;
+            IsPlaying = false;
             Pause = false;
             animTimeRatio = 0;
         }

@@ -20,18 +20,8 @@ namespace ATP.AnimationPathTools {
         #region FIELDS
 
         [SerializeField]
-        private GizmoDrawer gizmoDrawer;
-
-        /// <summary>
-        ///     Path used to animate the <c>animatedGO</c> transform.
-        /// </summary>
-        [SerializeField]
-        private AnimationPathBuilder animationPathBuilder;
-
-        [SerializeField]
 #pragma warning disable 169
             private bool advancedSettingsFoldout;
-#pragma warning restore 169
 
         /// <summary>
         ///     Transform to be animated.
@@ -39,9 +29,20 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Transform animatedGO;
 
+        /// <summary>
+        ///     Path used to animate the <c>animatedGO</c> transform.
+        /// </summary>
+        [SerializeField]
+        private AnimationPathBuilder animationPathBuilder;
+
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
+
+        [SerializeField]
+        private GizmoDrawer gizmoDrawer;
+
+#pragma warning restore 169
 
         [SerializeField]
         private PathData pathData;
@@ -55,9 +56,18 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
 #pragma warning disable 649
             private Transform targetGO;
+
 #pragma warning restore 649
 
         #region OPTIONS
+
+        [SerializeField]
+#pragma warning disable 169
+            protected bool EnableControlsInPlayMode = true;
+
+        [SerializeField]
+#pragma warning disable 169
+            protected float MaxAnimationSpeed = 0.3f;
 
         /// <summary>
         ///     Value of the jump when modifier key is pressed.
@@ -66,17 +76,7 @@ namespace ATP.AnimationPathTools {
         private readonly float shortJumpValue = 0.002f;
 
         [SerializeField]
-        private WrapMode wrapMode = WrapMode.Clamp;
-
-        [SerializeField]
-#pragma warning disable 169
-            protected bool EnableControlsInPlayMode = true;
-#pragma warning restore 169
-
-        [SerializeField]
-#pragma warning disable 169
-            protected float MaxAnimationSpeed = 0.3f;
-#pragma warning restore 169
+        private bool autoPlay = true;
 
         /// <summary>
         ///     How much look forward point should be positioned away from the
@@ -84,56 +84,42 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <remarks>Value is a time in range from 0 to 1.</remarks>
         [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        // ReSharper disable once ConvertToConstant.Local
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
+        // disable once ConvertToConstant.Local
         private float forwardPointOffset = 0.05f;
-
-        [SerializeField]
-        private AnimatorRotationMode rotationMode =
-            AnimatorRotationMode.Forward;
 
         [SerializeField]
         private AnimatorHandleMode handleMode =
             AnimatorHandleMode.None;
 
         [SerializeField]
-        private bool updateAllMode;
-
-        [SerializeField]
-        private bool autoPlay = true;
-
-        [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        // ReSharper disable once ConvertToConstant.Local
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
+        // disable once ConvertToConstant.Local
         private float positionLerpSpeed = 0.1f;
 
         [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        // ReSharper disable once ConvertToConstant.Local
+        private AnimatorRotationMode rotationMode =
+            AnimatorRotationMode.Forward;
+
+        [SerializeField]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
+        // disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
 
-        #endregion
+        [SerializeField]
+        private bool updateAllMode;
 
-        #endregion SERIALIZED FIELDS
+        [SerializeField]
+        private WrapMode wrapMode = WrapMode.Clamp;
 
-        #region PUBLIC PROPERTIES
+#pragma warning restore 169
+#pragma warning restore 169
 
-        protected virtual int RotationCurveSampling {
-            get { return 20; }
-        }
+        #endregion OPTIONS
 
-        public GizmoDrawer GizmoDrawer {
-            get { return gizmoDrawer; }
-        }
+        #endregion FIELDS
 
-        public virtual float FloatPrecision {
-            get { return 0.001f; }
-        }
-
-        public WrapMode WrapMode {
-            get { return wrapMode; }
-            set { wrapMode = value; }
-        }
+        #region PROPERTIES
 
         /// <summary>
         ///     Path used to animate the <c>animatedGO</c> transform.
@@ -149,6 +135,14 @@ namespace ATP.AnimationPathTools {
         public bool AutoPlay {
             get { return autoPlay; }
             set { autoPlay = value; }
+        }
+
+        public virtual float FloatPrecision {
+            get { return 0.001f; }
+        }
+
+        public GizmoDrawer GizmoDrawer {
+            get { return gizmoDrawer; }
         }
 
         public AnimatorHandleMode HandleMode {
@@ -176,6 +170,13 @@ namespace ATP.AnimationPathTools {
             set { rotationMode = value; }
         }
 
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        public virtual float ShortJumpValue {
+            get { return shortJumpValue; }
+        }
+
         public GUISkin Skin {
             get { return skin; }
             set { skin = value; }
@@ -186,16 +187,35 @@ namespace ATP.AnimationPathTools {
             set { updateAllMode = value; }
         }
 
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public virtual float ShortJumpValue {
-            get { return shortJumpValue; }
+        public WrapMode WrapMode {
+            get { return wrapMode; }
+            set { wrapMode = value; }
         }
 
-        #endregion PUBLIC PROPERTIES
+        protected virtual int RotationCurveSampling {
+            get { return 20; }
+        }
+
+        #endregion PROPERTIES
 
         #region UNITY MESSAGES
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        public virtual void OnEnable() {
+            // Subscribe to events.
+            animationPathBuilder.PathReset += animationPathBuilder_PathReset;
+            animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;
+            animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
+            animationPathBuilder.NodeTimeChanged +=
+                animationPathBuilder_NodeTimeChanged;
+            animationPathBuilder.NodePositionChanged +=
+                animationPathBuilder_NodePositionChanged;
+            //RotationPointPositionChanged += this_RotationPointPositionChanged;
+
+            if (pathData != null) {
+                pathData.NodeTiltChanged += this_NodeTiltChanged;
+            }
+        }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
@@ -252,65 +272,6 @@ namespace ATP.AnimationPathTools {
                 HandleDrawingCurrentRotationPointGizmo();
 
                 DrawRotationPointGizmos();
-            }
-        }
-
-        private void DrawRotationPointGizmos() {
-            var rotationPointPositions = GetGlobalRotationPointPositions();
-
-            // Path node timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            for (var i = 0; i < rotationPointPositions.Length; i++) {
-                // Return if current animation time is the same as any node
-                // time.
-                if (Math.Abs(nodeTimestamps[i] - AnimationTimeRatio) <
-                    FloatPrecision) {
-                    continue;
-                }
-
-                GizmoDrawer.DrawRotationPointGizmo(rotationPointPositions[i]);
-            }
-        }
-
-        private void HandleDrawingCurrentRotationPointGizmo() {
-            // Get current animation time.
-            var currentAnimationTime = AnimationTimeRatio;
-
-            // Node path node timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            // Return if current animation time is the same as any node time.
-            if (nodeTimestamps.Any(
-                nodeTimestamp =>
-                    Math.Abs(nodeTimestamp - currentAnimationTime)
-                    < FloatPrecision)) {
-                return;
-            }
-
-            // Get rotation point position.
-            var localRotationPointPosition =
-                PathData.GetRotationAtTime(currentAnimationTime);
-            var globalRotationPointPosition =
-                transform.TransformPoint(localRotationPointPosition);
-            GizmoDrawer.DrawCurrentRotationPointGizmo(
-                globalRotationPointPosition);
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        public virtual void OnEnable() {
-            // Subscribe to events.
-            animationPathBuilder.PathReset += animationPathBuilder_PathReset;
-            animationPathBuilder.NodeAdded += animationPathBuilder_NodeAdded;
-            animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
-            animationPathBuilder.NodeTimeChanged +=
-                animationPathBuilder_NodeTimeChanged;
-            animationPathBuilder.NodePositionChanged +=
-                animationPathBuilder_NodePositionChanged;
-            //RotationPointPositionChanged += this_RotationPointPositionChanged;
-
-            if (pathData != null) {
-                pathData.NodeTiltChanged += this_NodeTiltChanged;
             }
         }
 
@@ -393,7 +354,13 @@ namespace ATP.AnimationPathTools {
 
         #endregion EVENT HANDLERS
 
-        #region PUBLIC METHODS
+        #region METHODS
+
+        public void Animate() {
+            AnimateObject();
+            HandleAnimatedGORotation();
+            TiltObject();
+        }
 
         // TODO Remove the globalPosition arg. and create separate method.
         public Vector3 GetForwardPoint(bool globalPosition) {
@@ -434,33 +401,22 @@ namespace ATP.AnimationPathTools {
             animTimeRatio = 0;
         }
 
-        public void UpdateWrapMode() {
-            animationPathBuilder.SetWrapMode(wrapMode);
-        }
-
-        #endregion PUBLIC METHODS
-
-        #region PRIVATE METHODS
-
-        public void Animate() {
-            AnimateObject();
-            HandleAnimatedGORotation();
-            TiltObject();
-        }
-
         /// <summary>
         ///     Update animatedGO position, rotation and tilting based on current
         ///     animTimeRatio.
         /// </summary>
         /// <remarks>
-        ///     Used to update animatedGO with keys, in
-        ///     play mode.
+        ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
         public void UpdateAnimatedGO() {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
             // Update animatedGO tilting.
             TiltObject();
+        }
+
+        public void UpdateWrapMode() {
+            animationPathBuilder.SetWrapMode(wrapMode);
         }
 
         private void AnimateObject() {
@@ -487,6 +443,23 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private void DrawRotationPointGizmos() {
+            var rotationPointPositions = GetGlobalRotationPointPositions();
+
+            // Path node timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            for (var i = 0; i < rotationPointPositions.Length; i++) {
+                // Return if current animation time is the same as any node
+                // time.
+                if (Math.Abs(nodeTimestamps[i] - AnimationTimeRatio) <
+                    FloatPrecision) {
+                    continue;
+                }
+
+                GizmoDrawer.DrawRotationPointGizmo(rotationPointPositions[i]);
+            }
+        }
         // ReSharper disable once UnusedMember.Local
         private IEnumerator EaseTime() {
             while (true) {
@@ -544,6 +517,30 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(globalForwardPoint);
                 }
             }
+        }
+
+        private void HandleDrawingCurrentRotationPointGizmo() {
+            // Get current animation time.
+            var currentAnimationTime = AnimationTimeRatio;
+
+            // Node path node timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            if (nodeTimestamps.Any(
+                nodeTimestamp =>
+                    Math.Abs(nodeTimestamp - currentAnimationTime)
+                    < FloatPrecision)) {
+                return;
+            }
+
+            // Get rotation point position.
+            var localRotationPointPosition =
+                PathData.GetRotationAtTime(currentAnimationTime);
+            var globalRotationPointPosition =
+                transform.TransformPoint(localRotationPointPosition);
+            GizmoDrawer.DrawCurrentRotationPointGizmo(
+                globalRotationPointPosition);
         }
 
         private void RotateObjectWithAnimationCurves() {
@@ -642,7 +639,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        #endregion PRIVATE METHODS
+        #endregion METHODS
     }
 
 }

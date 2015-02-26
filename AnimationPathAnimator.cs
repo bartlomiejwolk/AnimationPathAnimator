@@ -350,8 +350,8 @@ namespace ATP.AnimationPathTools {
             object sender,
             EventArgs e) {
             UpdateRotationCurvesTimestamps();
-            UpdateCurveTimestamps(PathData.EaseCurve);
-            UpdateCurveTimestamps(PathData.TiltingCurve);
+            PathData.UpdateCurveTimestamps(PathData.EaseCurve);
+            PathData.UpdateCurveTimestamps(PathData.TiltingCurve);
         }
 
         private void animationPathBuilder_PathReset(
@@ -754,27 +754,6 @@ namespace ATP.AnimationPathTools {
 
                     RotateObjectWithLookAt(targetGO.position);
                     break;
-            }
-        }
-
-        private void UpdateCurveTimestamps(AnimationCurve curve) {
-            // Get node timestamps.
-            var pathNodeTimestamps = PathData.GetPathTimestamps();
-            // For each key in easeCurve..
-            for (var i = 1; i < curve.length - 1; i++) {
-                // If resp. node timestamp is different from easeCurve
-                // timestamp..
-                if (Math.Abs(pathNodeTimestamps[i] - curve.keys[i].value) >
-                    FloatPrecision) {
-                    // Copy key
-                    var keyCopy = curve.keys[i];
-                    // Update timestamp
-                    keyCopy.time = pathNodeTimestamps[i];
-                    // Move key to new value.
-                    curve.MoveKey(i, keyCopy);
-
-                    PathData.SmoothCurve(curve);
-                }
             }
         }
 

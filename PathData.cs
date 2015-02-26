@@ -13,6 +13,7 @@ namespace ATP.AnimationPathTools {
         public event EventHandler NodeTiltChanged;
         public event EventHandler NodeAdded;
         public event EventHandler NodePositionChanged;
+        public event EventHandler NodeRemoved;
 
         public event EventHandler RotationPointPositionChanged;
         #region SERIALIZED FIELDS
@@ -549,6 +550,16 @@ namespace ATP.AnimationPathTools {
 
                 OnNodePositionChanged();
             }
+        }
+
+        public void RemoveNode(int nodeIndex) {
+            AnimatedObjectPath.RemoveNode(nodeIndex);
+            OnNodeRemoved();
+        }
+
+        public virtual void OnNodeRemoved() {
+            var handler = NodeRemoved;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
     }

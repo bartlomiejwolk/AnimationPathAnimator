@@ -586,7 +586,7 @@ namespace ATP.AnimationPathTools {
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
             Undo.RecordObject(Script.PathData, "Change path");
 
-            Script.RemoveNode(nodeIndex);
+            Script.PathData.RemoveNode(nodeIndex);
             Script.PathData.DistributeTimestamps();
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {

@@ -22,7 +22,6 @@ namespace ATP.AnimationPathTools {
         //public event EventHandler NodeAdded;
 
 
-        public event EventHandler NodeRemoved;
 
         public event EventHandler NodeTimeChanged;
 
@@ -115,6 +114,11 @@ namespace ATP.AnimationPathTools {
             get { return pathData; }
         }
 
+        public PathData PathData2 {
+            set { pathData = value; }
+            get { return pathData; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -157,11 +161,6 @@ namespace ATP.AnimationPathTools {
         //    if (handler != null) handler(this, EventArgs.Empty);
         //}
 
-        protected virtual void OnNodeRemoved() {
-            var handler = NodeRemoved;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         protected virtual void OnNodeTimeChanged() {
             var handler = NodeTimeChanged;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -199,11 +198,6 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
-        public void RemoveNode(int nodeIndex) {
-            pathData.AnimatedObjectPath.RemoveNode(nodeIndex);
-            OnNodeRemoved();
-        }
-
         public void SetNodesLinear() {
             for (var i = 0; i < 3; i++) {
                 Utilities.SetCurveLinear(pathData.AnimatedObjectPath[i]);
@@ -238,7 +232,7 @@ namespace ATP.AnimationPathTools {
             var nodesNo = NodesNo;
             for (var i = 0; i < nodesNo; i++) {
                 // NOTE After each removal, next node gets index 0.
-                RemoveNode(0);
+                PathData.RemoveNode(0);
             }
         }
 

@@ -394,5 +394,26 @@ namespace ATP.AnimationPathTools {
 	            break;
 	        }
 	    }
+
+	    public void UpdateRotationCurvesTimestamps() {
+	        // Get node timestamps.
+	        var nodeTimestamps = GetPathTimestamps();
+	        // Get rotation point timestamps.
+	        var rotationCurvesTimestamps =
+	            RotationPath.GetTimestamps();
+
+	        // For each node in rotationPath..
+	        for (var i = 1; i < RotationPath.KeysNo - 1; i++) {
+	            // If resp. path node timestamp is different from rotation
+	            // point timestamp..
+	            if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
+	                > FloatPrecision) {
+	                // Update rotation point timestamp.
+	                RotationPath.ChangeNodeTimestamp(
+	                    i,
+	                    nodeTimestamps[i]);
+	            }
+	        }
+	    }
 	}
 }

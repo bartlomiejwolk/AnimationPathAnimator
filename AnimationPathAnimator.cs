@@ -381,7 +381,7 @@ namespace ATP.AnimationPathTools {
 
         public Vector3 GetGlobalNodePosition(int nodeIndex) {
             var localNodePosition =
-                animationPathBuilder.GetNodePosition(nodeIndex);
+                animationPathBuilder.PathData.GetNodePosition(nodeIndex);
             var globalNodePosition = transform.TransformPoint(localNodePosition);
 
             return globalNodePosition;

@@ -507,5 +507,9 @@ namespace ATP.AnimationPathTools {
             get { return 20; }
         }
 
+        public Vector3 GetNodePosition(int nodeIndex) {
+            return AnimatedObjectPath.GetVectorAtKey(nodeIndex);
+        }
+
     }
 }

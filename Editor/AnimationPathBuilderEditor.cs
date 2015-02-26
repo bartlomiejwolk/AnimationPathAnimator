@@ -318,7 +318,7 @@ namespace ATP.AnimationPathTools {
             if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveSingle) {
 
                 Script.MoveNodeToPosition(movedNodeIndex, position);
-                Script.PathData.DistributeTimestamps(Script);
+                Script.PathData.DistributeTimestamps();
 
                 HandleSmoothTangentMode();
                 HandleLinearTangentMode();
@@ -563,7 +563,7 @@ namespace ATP.AnimationPathTools {
             // Add a new node.
             AddNodeBetween(nodeIndex);
 
-            Script.PathData.DistributeTimestamps(Script);
+            Script.PathData.DistributeTimestamps();
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
@@ -587,7 +587,7 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(Script.PathData, "Change path");
 
             Script.RemoveNode(nodeIndex);
-            Script.PathData.DistributeTimestamps(Script);
+            Script.PathData.DistributeTimestamps();
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
@@ -601,7 +601,7 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(Script.PathData, "Change path");
 
             Script.SmoothSingleNodeTangents(index);
-            Script.PathData.DistributeTimestamps(Script);
+            Script.PathData.DistributeTimestamps();
         }
 
         #endregion CALLBACK HANDLERS
@@ -615,7 +615,7 @@ namespace ATP.AnimationPathTools {
 
                 Undo.RecordObject(Script.PathData, "Change path");
                 Script.SmoothAllNodeTangents();
-                Script.PathData.DistributeTimestamps(Script);
+                Script.PathData.DistributeTimestamps();
             }
         }
 
@@ -657,7 +657,7 @@ namespace ATP.AnimationPathTools {
                 Undo.RecordObject(Script.PathData, "Change path");
 
                 Script.SetNodesLinear();
-                Script.PathData.DistributeTimestamps(Script);
+                Script.PathData.DistributeTimestamps();
             }
         }
 
@@ -767,7 +767,7 @@ namespace ATP.AnimationPathTools {
                 // For each node in the path..
                 for (var i = 0; i < Script.NodesNo; i++) {
                     // Get it 3d position.
-                    points[i] = Script.GetNodePosition(i);
+                    points[i] = Script.PathData.GetNodePosition(i);
                 }
             }
             // exportSampling not zero..

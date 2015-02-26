@@ -200,10 +200,6 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
-        public Vector3 GetNodePosition(int nodeIndex) {
-            return pathData.AnimatedObjectPath.GetVectorAtKey(nodeIndex);
-        }
-
         public Vector3[] GetNodePositions(bool globalPositions = false) {
             var result = new Vector3[NodesNo];
 
@@ -233,7 +229,7 @@ namespace ATP.AnimationPathTools {
             // For each node..
             for (var i = 0; i < NodesNo; i++) {
                 // Old node position.
-                var oldPosition = GetNodePosition(i);
+                var oldPosition = PathData.GetNodePosition(i);
                 // New node position.
                 var newPosition = oldPosition + moveDelta;
                 // Update node positions.

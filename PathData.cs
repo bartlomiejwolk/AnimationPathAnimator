@@ -23,11 +23,6 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region PUBLIC PROPERTIES
-
-        protected virtual float DefaultEaseCurveValue {
-            get { return 0.05f; }
-        }
-
         public AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
             set { animatedObjectPath = value; }
@@ -50,6 +45,10 @@ namespace ATP.AnimationPathTools {
         #endregion
 
         #region PRIVATE/PROTECTED PROPERTIES
+        protected virtual float DefaultEaseCurveValue {
+            get { return 0.05f; }
+        }
+
         protected virtual float FloatPrecision {
             get { return 0.001f; }
         }

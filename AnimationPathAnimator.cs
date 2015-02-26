@@ -416,7 +416,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public void UpdateWrapMode() {
-            animationPathBuilder.SetWrapMode(wrapMode);
+            PathData.SetWrapMode(wrapMode);
         }
 
         private void AnimateObject() {

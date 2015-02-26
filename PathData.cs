@@ -568,5 +568,13 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public void SetNodeTangents(int index, Vector3 inOutTangent) {
+            AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
+        }
+
+        public void SetWrapMode(WrapMode wrapMode) {
+            AnimatedObjectPath.SetWrapMode(wrapMode);
+        }
+
     }
 }

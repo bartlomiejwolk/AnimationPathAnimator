@@ -198,14 +198,6 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
-        public void SetNodeTangents(int index, Vector3 inOutTangent) {
-            pathData.AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
-        }
-
-        public void SetWrapMode(WrapMode wrapMode) {
-            pathData.AnimatedObjectPath.SetWrapMode(wrapMode);
-        }
-
         /// <summary>
         ///     Smooth tangents in all nodes in all animation curves.
         /// </summary>

@@ -6,11 +6,48 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
-    [CustomEditor(typeof(AnimationPathAnimator))]
+    [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
-
         #region CONSTANTS
 
+        public const KeyCode EaseModeShortcut = KeyCode.G;
+
+        /// <summary>
+        ///     Key shortcut to jump backward.
+        /// </summary>
+        public const KeyCode JumpBackward = KeyCode.LeftArrow;
+
+        /// <summary>
+        ///     Key shortcut to jump forward.
+        /// </summary>
+        public const KeyCode JumpForward = KeyCode.RightArrow;
+
+        /// <summary>
+        ///     Key shortcut to jump to the end of the animation.
+        /// </summary>
+        public const KeyCode JumpToEnd = KeyCode.UpArrow;
+
+        public const KeyCode JumpToNextNode = KeyCode.UpArrow;
+        public const KeyCode JumpToPreviousNode = KeyCode.DownArrow;
+
+        /// <summary>
+        ///     Key shortcut to jump to the beginning of the animation.
+        /// </summary>
+        public const KeyCode JumpToStart = KeyCode.DownArrow;
+
+        public const float JumpValue = 0.01f;
+
+        /// <summary>
+        ///     Keycode used as a modifier key.
+        /// </summary>
+        /// <remarks>Modifier key changes how other keys works.</remarks>
+        public const KeyCode ModKey = KeyCode.A;
+
+        public const KeyCode NoneModeShortcut = KeyCode.K;
+        public const KeyCode PlayPauseShortcut = KeyCode.Space;
+        public const KeyCode RotationModeShortcut = KeyCode.H;
+        public const KeyCode TiltingModeShortcut = KeyCode.J;
+        public const KeyCode UpdateAllShortcut = KeyCode.L;
         private const float ArcHandleRadius = 0.6f;
         private const int DefaultLabelHeight = 10;
         private const int DefaultLabelWidth = 30;
@@ -19,42 +56,7 @@ namespace ATP.AnimationPathTools {
         private const float RotationHandleSize = 0.25f;
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
-        public const KeyCode EaseModeShortcut = KeyCode.G;
-        public const KeyCode RotationModeShortcut = KeyCode.H;
-        public const KeyCode TiltingModeShortcut = KeyCode.J;
-		public const KeyCode NoneModeShortcut = KeyCode.K;
-		public const KeyCode UpdateAllShortcut = KeyCode.L;
-		public const KeyCode PlayPauseShortcut = KeyCode.Space;
 
-        /// <summary>
-        /// Key shortcut to jump backward.
-        /// </summary>
-        public const KeyCode JumpBackward = KeyCode.LeftArrow;
-
-        /// <summary>
-        /// Key shortcut to jump forward.
-        /// </summary>
-        public const KeyCode JumpForward = KeyCode.RightArrow;
-
-        /// <summary>
-        /// Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public const KeyCode JumpToEnd = KeyCode.UpArrow;
-
-        /// <summary>
-        /// Key shortcut to jump to the beginning of the animation.
-        /// </summary>
-        public const KeyCode JumpToStart = KeyCode.DownArrow;
-        
-        public const KeyCode JumpToNextNode = KeyCode.UpArrow;
-        public const KeyCode JumpToPreviousNode = KeyCode.DownArrow;
-
-        public const float JumpValue = 0.01f;
-        /// <summary>
-        /// Keycode used as a modifier key.
-        /// </summary>
-        /// <remarks>Modifier key changes how other keys works.</remarks>
-        public const KeyCode ModKey = KeyCode.A;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -62,12 +64,12 @@ namespace ATP.AnimationPathTools {
         private SerializedObject gizmoDrawer;
 
         /// <summary>
-        /// If modifier is currently pressed.
+        ///     If modifier is currently pressed.
         /// </summary>
         private bool modKeyPressed;
 
         /// <summary>
-        /// Reference to target script.
+        ///     Reference to target script.
         /// </summary>
         private AnimationPathAnimator script;
 
@@ -89,7 +91,6 @@ namespace ATP.AnimationPathTools {
         //    }
         //}
 
-
         //}
         //private readonly GUIStyle TiltValueLabelStyle = new GUIStyle {
         //    normal = { textColor = Color.white },
@@ -100,32 +101,28 @@ namespace ATP.AnimationPathTools {
         //    normal = { textColor = Color.white },
         //    fontStyle = FontStyle.Bold,
         //};
+
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
 
+        private const float FloatPrecision = 0.001f;
+        private const float ScaleHandleSize = 1.5f;
         private SerializedProperty advancedSettingsFoldout;
 
         private SerializedProperty animatedGO;
 
         private SerializedProperty animTimeRatio;
 
-        private SerializedProperty targetGO;
-
+        private SerializedProperty enableControlsInPlayMode;
         private SerializedProperty forwardPointOffset;
-
         private SerializedProperty maxAnimationSpeed;
-
-        private SerializedProperty rotationSpeed;
-
+        private SerializedProperty pathData;
+        private SerializedProperty positionLerpSpeed;
         private SerializedProperty rotationCurveColor;
-        private const float FloatPrecision = 0.001f;
-        private const float ScaleHandleSize = 1.5f;
-
-		private SerializedProperty positionLerpSpeed;
-		private SerializedProperty pathData;
-		private SerializedProperty enableControlsInPlayMode;
-		private SerializedProperty skin;
+        private SerializedProperty rotationSpeed;
+        private SerializedProperty skin;
+        private SerializedProperty targetGO;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -144,13 +141,13 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
-				animTimeRatio.floatValue);
+                animTimeRatio.floatValue);
 
-			script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
-				new GUIContent(
-					"Wrap Mode",
-					""),
-				script.WrapMode);
+            script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Wrap Mode",
+                    ""),
+                script.WrapMode);
 
             script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
@@ -158,19 +155,19 @@ namespace ATP.AnimationPathTools {
                     ""),
                 script.HandleMode);
 
-			script.UpdateAllMode = EditorGUILayout.Toggle(
-				new GUIContent(
-				"Update All",
-				""),
-				script.UpdateAllMode);
+            script.UpdateAllMode = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Update All",
+                    ""),
+                script.UpdateAllMode);
 
             serializedObject.Update();
-			EditorGUILayout.PropertyField(
-				positionLerpSpeed,
-				new GUIContent(
-				"Position Lerp Speed",
-				""));
-			serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.PropertyField(
+                positionLerpSpeed,
+                new GUIContent(
+                    "Position Lerp Speed",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
 
             DrawRotationModeDropdown();
 
@@ -216,18 +213,18 @@ namespace ATP.AnimationPathTools {
             }
 
             // Draw Play/Pause button.
-            if (GUILayout.Button(new GUIContent(
-                            playPauseBtnText,
-                            ""))) {
-
+            if (GUILayout.Button(
+                new GUIContent(
+                    playPauseBtnText,
+                    ""))) {
                 HandlePlayPause();
             }
 
             // Draw Stop button.
-            if (GUILayout.Button(new GUIContent(
-                            "Stop",
-                            ""))) {
-
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Stop",
+                    ""))) {
                 script.StopEaseTimeCoroutine();
             }
 
@@ -237,7 +234,7 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Auto Play",
                     ""),
-                    script.AutoPlay);
+                script.AutoPlay);
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -252,10 +249,10 @@ namespace ATP.AnimationPathTools {
             serializedObject.Update();
 
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                    advancedSettingsFoldout.boolValue,
-                    new GUIContent(
-                        "Advanced Settings",
-                        ""));
+                advancedSettingsFoldout.boolValue,
+                new GUIContent(
+                    "Advanced Settings",
+                    ""));
 
             serializedObject.ApplyModifiedProperties();
 
@@ -271,7 +268,6 @@ namespace ATP.AnimationPathTools {
                 serializedObject.ApplyModifiedProperties();
             }
 
-
             //if (GUI.changed) EditorUtility.SetDirty(target);
         }
 
@@ -279,11 +275,12 @@ namespace ATP.AnimationPathTools {
             // Remember current RotationMode.
             var prevRotationMode = script.RotationMode;
             // Draw RotationMode dropdown.
-            script.RotationMode = (AnimatorRotationMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Rotation Mode",
-                    ""),
-                script.RotationMode);
+            script.RotationMode =
+                (AnimatorRotationMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Rotation Mode",
+                        ""),
+                    script.RotationMode);
             // If value changed, update animated GO in the scene.
             if (script.RotationMode != prevRotationMode) {
                 script.UpdateAnimatedGO();
@@ -293,7 +290,7 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Get target script reference.
-            script = (AnimationPathAnimator)target;
+            script = (AnimationPathAnimator) target;
 
             gizmoDrawer = new SerializedObject(script.GizmoDrawer);
 
@@ -307,13 +304,13 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 serializedObject.FindProperty("maxAnimationSpeed");
-			positionLerpSpeed = serializedObject.FindProperty("positionLerpSpeed");
+            positionLerpSpeed =
+                serializedObject.FindProperty("positionLerpSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
                 serializedObject.FindProperty("enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = gizmoDrawer.FindProperty("rotationCurveColor");
-
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -331,14 +328,14 @@ namespace ATP.AnimationPathTools {
             HandleEaseModeOptionShortcut();
             HandleRotationModeOptionShortcut();
             HandleTiltingModeOptionShortcut();
-			HandleNoneModeOptionShortcut();
-			HandleUpdateAllOptionShortcut();
+            HandleNoneModeOptionShortcut();
+            HandleUpdateAllOptionShortcut();
             HandlePlayPauseShortcut();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
 
-			HandleWrapModeDropdown();
+            HandleWrapModeDropdown();
 
             //HandleDrawingForwardPointMarker();
             //HandleDrawingTargetGizmo();
@@ -354,24 +351,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
-
-		void HandleWrapModeDropdown () {
-			script.UpdateWrapMode();
-		}
-
-		void HandleNoneModeOptionShortcut () {
-			if (Event.current.type != EventType.keyUp
-			    || Event.current.keyCode != NoneModeShortcut) return;
-			
-			script.HandleMode = AnimatorHandleMode.None;
-		}
-
-		void HandleUpdateAllOptionShortcut () {
-			if (Event.current.type != EventType.keyUp
-			    || Event.current.keyCode != UpdateAllShortcut) return;
-			
-			script.UpdateAllMode = !script.UpdateAllMode;
-		}
 
         private void HandleDrawingEaseHandles() {
             if (script.HandleMode != AnimatorHandleMode.Ease) return;
@@ -389,31 +368,12 @@ namespace ATP.AnimationPathTools {
                 script.Skin.GetStyle("EaseValueLabel"));
         }
 
-        //private void HandleDrawingForwardPointMarker() {
-        //    if (script.RotationMode != AnimatorRotationMode.Forward) return;
-
-        //    var targetPos = script.GetForwardPoint();
-        //    var globalTargetPos = script.transform.TransformPoint(targetPos);
-
-        //    Handles.Label(globalTargetPos, "Point", ForwardPointMarkerStyle);
-        //}
-
         private void HandleDrawingRotationHandle() {
             if (script.HandleMode != AnimatorHandleMode.Rotation) return;
 
             // Draw handles.
             DrawRotationHandle(DrawRotationHandlesCallbackHandler);
         }
-
-        //private void HandleDrawingTargetGizmo() {
-        //    if (targetGO.objectReferenceValue == null) return;
-
-        //    var targetPos =
-        //        ((Transform)targetGO.objectReferenceValue).position;
-
-        //    Handles.Label(targetPos, "Target", TargetGizmoStyle);
-
-        //}
 
         private void HandleDrawingTiltingHandles() {
             if (script.HandleMode != AnimatorHandleMode.Tilting) return;
@@ -424,6 +384,7 @@ namespace ATP.AnimationPathTools {
             DrawTiltingHandles(callbackHandler);
         }
 
+        //}
         private void HandleDrawingTiltLabel() {
             if (script.HandleMode != AnimatorHandleMode.Tilting) return;
 
@@ -433,37 +394,47 @@ namespace ATP.AnimationPathTools {
                 TiltValueLabelOffsetY,
                 script.Skin.GetStyle("TiltValueLabel"));
         }
+
+        private void HandleNoneModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != NoneModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.None;
+        }
+
+        private void HandleUpdateAllOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != UpdateAllShortcut) return;
+
+            script.UpdateAllMode = !script.UpdateAllMode;
+        }
+
+        private void HandleWrapModeDropdown() {
+            script.UpdateWrapMode();
+        }
+
+        //private void HandleDrawingForwardPointMarker() {
+        //    if (script.RotationMode != AnimatorRotationMode.Forward) return;
+
+        //    var targetPos = script.GetForwardPoint();
+        //    var globalTargetPos = script.transform.TransformPoint(targetPos);
+
+        //    Handles.Label(globalTargetPos, "Point", ForwardPointMarkerStyle);
+        //}
+        //private void HandleDrawingTargetGizmo() {
+        //    if (targetGO.objectReferenceValue == null) return;
+
+        //    var targetPos =
+        //        ((Transform)targetGO.objectReferenceValue).position;
+
+        //    Handles.Label(targetPos, "Target", TargetGizmoStyle);
+
         #endregion DRAWING HANDLERS
 
         #region DRAWING METHODS
 
-        private void DrawEaseHandles(Action<int, float> callback) {
-            // Get path node positions.
-            var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
-
-            // Get ease values.
-            var easeCurveValues = new float[script.PathData.EaseCurve.length];
-            for (var i = 0; i < script.PathData.EaseCurve.length; i++) {
-                easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
-            }
-
-            var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
-
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                DrawArcHandle(
-                    easeCurveValues[i],
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    0,
-                    360,
-                    Color.red,
-                    (value) => callback(i, value));
-            }
-        }
-
         /// <summary>
-        /// Draw arc handle.
+        ///     Draw arc handle.
         /// </summary>
         /// <param name="value">Arc value.</param>
         /// <param name="position">Arc position.</param>
@@ -480,8 +451,7 @@ namespace ATP.AnimationPathTools {
             int maxDegrees,
             Color handleColor,
             Action<float> callback) {
-
-            var arcValue = value * arcValueMultiplier;
+            var arcValue = value*arcValueMultiplier;
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize*ArcHandleRadius;
 
@@ -502,8 +472,8 @@ namespace ATP.AnimationPathTools {
             // is zero, handle will always return zero.
             arcValue = Math.Abs(arcValue) < FloatPrecision ? 10f : arcValue;
 
-            var scaleHandleSize = handleSize * ScaleHandleSize;
-            float newArcValue = Handles.ScaleValueHandle(
+            var scaleHandleSize = handleSize*ScaleHandleSize;
+            var newArcValue = Handles.ScaleValueHandle(
                 arcValue,
                 position + Vector3.forward*arcRadius
                 *1.3f,
@@ -521,16 +491,41 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawNodeLabel(
-                    int nodeIndex,
-                    string value,
-                    int offsetX,
-                    int offsetY,
-                    GUIStyle style) {
+        private void DrawEaseHandles(Action<int, float> callback) {
+            // Get path node positions.
+            var nodePositions =
+                script.AnimationPathBuilder.GetNodeGlobalPositions();
 
+            // Get ease values.
+            var easeCurveValues = new float[script.PathData.EaseCurve.length];
+            for (var i = 0; i < script.PathData.EaseCurve.length; i++) {
+                easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
+            }
+
+            var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                DrawArcHandle(
+                    easeCurveValues[i],
+                    nodePositions[i],
+                    arcValueMultiplier,
+                    0,
+                    360,
+                    Color.red,
+                    value => callback(i, value));
+            }
+        }
+
+        private void DrawNodeLabel(
+            int nodeIndex,
+            string value,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
             // Get node position.
             //var nodePosition = script.GetNodePosition(nodeIndex);
-			var nodePosition = script.GetGlobalNodePosition(nodeIndex);
+            var nodePosition = script.GetGlobalNodePosition(nodeIndex);
 
             // Translate node's 3d position into screen coordinates.
             var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
@@ -554,15 +549,14 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawNodeLabels(
-                    Func<int, float> calculateValueCallback,
-                    int offsetX,
-                    int offsetY,
-                    GUIStyle style) {
-
-            int nodesNo = script.AnimationPathBuilder.NodesNo;
+            Func<int, float> calculateValueCallback,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
+            var nodesNo = script.AnimationPathBuilder.NodesNo;
 
             // For each path node..
-            for (int i = 0; i < nodesNo; i++) {
+            for (var i = 0; i < nodesNo; i++) {
                 // Get value to display.
                 var arcValue = String.Format(
                     "{0:0}",
@@ -574,32 +568,36 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationHandle(Action<float, Vector3> callback) {
             var currentAnimationTime = script.AnimationTimeRatio;
-            var rotationPointPosition = script.PathData.GetRotationAtTime(currentAnimationTime);
+            var rotationPointPosition =
+                script.PathData.GetRotationAtTime(currentAnimationTime);
             var nodeTimestamps = script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
             // timestamp.
             var index = Array.FindIndex(
-                nodeTimestamps, x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
+                nodeTimestamps,
+                x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
             if (index < 0) return;
 
             Handles.color = Color.magenta;
             var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
-            var sphereSize = handleSize * RotationHandleSize;
+            var sphereSize = handleSize*RotationHandleSize;
 
-			var rotationPointGlobalPos = script.transform.TransformPoint(rotationPointPosition);
+            var rotationPointGlobalPos =
+                script.transform.TransformPoint(rotationPointPosition);
 
             // draw node's handle.
             var newGlobalPosition = Handles.FreeMoveHandle(
                 //rotationPointPosition,
-				rotationPointGlobalPos,
+                rotationPointGlobalPos,
                 Quaternion.identity,
                 sphereSize,
                 Vector3.zero,
                 Handles.SphereCap);
 
             if (newGlobalPosition != rotationPointGlobalPos) {
-				var newPointLocalPosition = script.transform.InverseTransformPoint(newGlobalPosition);
+                var newPointLocalPosition =
+                    script.transform.InverseTransformPoint(newGlobalPosition);
                 // Execute callback.
                 callback(currentAnimationTime, newPointLocalPosition);
             }
@@ -608,12 +606,14 @@ namespace ATP.AnimationPathTools {
         private void DrawTiltingHandles(Action<int, float> callback) {
             // Get path node positions.
             //var nodePositions = script.AnimationPathBuilder.GetNodePositions();
-			var nodePositions = script.AnimationPathBuilder.GetNodeGlobalPositions();
+            var nodePositions =
+                script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = new float[script.PathData.EaseCurve.length];
             for (var i = 0; i < script.PathData.TiltingCurve.length; i++) {
-                tiltingCurveValues[i] = script.PathData.TiltingCurve.keys[i].value;
+                tiltingCurveValues[i] =
+                    script.PathData.TiltingCurve.keys[i].value;
             }
 
             // Set arc value multiplier.
@@ -628,26 +628,70 @@ namespace ATP.AnimationPathTools {
                     -90,
                     90,
                     Color.green,
-                    (value) => callback(i, value));
+                    value => callback(i, value));
             }
         }
+
         #endregion DRAWING METHODS
 
         #region CALLBACK HANDLERS
-        private void JumpToEndCallbackHandler() {
+
+        private void DrawEaseHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+            Undo.RecordObject(script.PathData, "Ease curve changed.");
+
+            if (script.UpdateAllMode) {
+                var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
+                var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
+                var delta = newValue - oldValue;
+                script.PathData.UpdateEaseValues(delta);
+            }
+            else {
+                script.PathData.UpdateEaseValue(keyIndex, newValue);
+            }
+        }
+
+        private void DrawRotationHandlesCallbackHandler(
+            float timestamp,
+            Vector3 newPosition) {
+            Undo.RecordObject(script.PathData, "Rotation path changed.");
+
+            script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
+        }
+
+        private void DrawTiltingHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+            Undo.RecordObject(script.PathData, "Tilting curve changed.");
+
+            script.PathData.UpdateNodeTilting(keyIndex, newValue);
+        }
+
+        private void JumpBackwardCallbackHandler() {
             // Update animTimeRatio.
+            var newAnimationTimeRatio = animTimeRatio.floatValue
+                                        - script.ShortJumpValue;
             serializedObject.Update();
-            animTimeRatio.floatValue = 1;
+            animTimeRatio.floatValue =
+                (float) (Math.Round(newAnimationTimeRatio, 3));
             serializedObject.ApplyModifiedProperties();
         }
 
         private void JumpForwardCallbackHandler() {
             // Update animTimeRatio.
             var newAnimationTimeRatio = animTimeRatio.floatValue
-                + script.ShortJumpValue;
+                                        + script.ShortJumpValue;
             serializedObject.Update();
             animTimeRatio.floatValue =
-                (float)(Math.Round(newAnimationTimeRatio, 3));
+                (float) (Math.Round(newAnimationTimeRatio, 3));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void JumpToEndCallbackHandler() {
+            // Update animTimeRatio.
+            serializedObject.Update();
+            animTimeRatio.floatValue = 1;
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -658,83 +702,28 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void JumpBackwardCallbackHandler() {
-            // Update animTimeRatio.
-            var newAnimationTimeRatio = animTimeRatio.floatValue
-                - script.ShortJumpValue;
-            serializedObject.Update();
-            animTimeRatio.floatValue =
-                (float)(Math.Round(newAnimationTimeRatio, 3));
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawEaseHandlesCallbackHandler(
-            int keyIndex,
-            float newValue) {
-
-            Undo.RecordObject(script.PathData, "Ease curve changed.");
-
-			if (script.UpdateAllMode) {
-				var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
-				var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
-				var delta = newValue - oldValue;
-				script.PathData.UpdateEaseValues(delta);
-			}
-			else {
-				script.PathData.UpdateEaseValue(keyIndex, newValue);
-			}
-        }
-
-        private void DrawRotationHandlesCallbackHandler(
-                            float timestamp,
-                            Vector3 newPosition) {
-
-            Undo.RecordObject(script.PathData, "Rotation path changed.");
-
-            script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
-        }
-
-        private void DrawTiltingHandlesCallbackHandler(
-                    int keyIndex,
-                    float newValue) {
-
-            Undo.RecordObject(script.PathData, "Tilting curve changed.");
-
-			script.PathData.UpdateNodeTilting(keyIndex, newValue);
-
-        }
         #endregion CALLBACK HANDLERS
 
         #region PRIVATE METHODS
-        private void HandlePlayPause() {
-            // Pause animation.
-            if (script.IsPlaying) {
-                script.Pause = true;
-                script.IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (script.Pause) {
-                script.Pause = false;
-                script.IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                script.IsPlaying = true;
-                // Start animation.
-                script.StartEaseTimeCoroutine();
-            }
+
+        private void AnyJumpKeyPressedCallbackHandler() {
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
         }
 
+        private void AnyModJumpKeyPressedCallbackHandler() {
+            if (Application.isPlaying) script.UpdateAnimatedGO();
+            if (!Application.isPlaying) script.Animate();
+        }
 
         /// <summary>
-        /// Change current animation time with arrow keys.
+        ///     Change current animation time with arrow keys.
         /// </summary>
         private void ChangeTimeWithArrowKeys() {
             // If a key is pressed..
             if (Event.current.type == EventType.keyDown
                 // and modifier key is pressed also..
-                    && modKeyPressed) {
-
+                && modKeyPressed) {
                 HandleModifiedShortcuts(
                     modJumpForwardCallbackHandler,
                     modJumpBackwardCallbackHandler,
@@ -753,45 +742,11 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void AnyModJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
-        }
-
-        private void AnyJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
-        }
-
-        private void jumpToPreviousNodeCallbackHandler() {
-            // Jump to next node.
-            animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void jumpToNextNodeCallbackHandler() {
-            // Jump to next node.
-            animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void modJumpBackwardCallbackHandler() {
-            // Update animation time.
-            animTimeRatio.floatValue -= JumpValue;
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void modJumpForwardCallbackHandler() {
-            // Update animation time.
-            animTimeRatio.floatValue += JumpValue;
-            serializedObject.ApplyModifiedProperties();
-        }
-
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = script.PathData.GetNodeEaseValue(nodeIndex);
-            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
-            var easeValueInDegrees = easeValue * arcValueMultiplier;
+            var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
+            var easeValueInDegrees = easeValue*arcValueMultiplier;
 
             return easeValueInDegrees;
         }
@@ -821,34 +776,66 @@ namespace ATP.AnimationPathTools {
 
             foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
-
                 return timestamp;
             }
 
             // Return timestamp of the last node.
             return 1.0f;
         }
+
+        private void HandlePlayPause() {
+            // Pause animation.
+            if (script.IsPlaying) {
+                script.Pause = true;
+                script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (script.Pause) {
+                script.Pause = false;
+                script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                script.IsPlaying = true;
+                // Start animation.
+                script.StartEaseTimeCoroutine();
+            }
+        }
+
+        // TODO Rename to uppercase.
+        private void jumpToNextNodeCallbackHandler() {
+            // Jump to next node.
+            animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void jumpToPreviousNodeCallbackHandler() {
+            // Jump to next node.
+            animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void modJumpBackwardCallbackHandler() {
+            // Update animation time.
+            animTimeRatio.floatValue -= JumpValue;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void modJumpForwardCallbackHandler() {
+            // Update animation time.
+            animTimeRatio.floatValue += JumpValue;
+            serializedObject.ApplyModifiedProperties();
+        }
+
         #endregion PRIVATE METHODS
 
         #region SHORTCUT HANDLERS
-        /// <summary>
-        /// Checked if modifier key is pressed and remember it in a class
-        /// field.
-        /// </summary>
-        private void UpdateModifierKey() {
-            // Check if modifier key is currently pressed.
-            if (Event.current.type == EventType.keyDown
-                    && Event.current.keyCode == ModKey) {
 
-                // Remember key state.
-                modKeyPressed = true;
-            }
-            // If modifier key was released..
-            if (Event.current.type == EventType.keyUp
-                    && Event.current.keyCode == ModKey) {
+        private void HandleEaseModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != EaseModeShortcut) return;
 
-                modKeyPressed = false;
-            }
+            script.HandleMode = AnimatorHandleMode.Ease;
         }
 
         private void HandleModifiedShortcuts(
@@ -857,7 +844,6 @@ namespace ATP.AnimationPathTools {
             Action jumpToNextNodeCallback = null,
             Action jumpToPreviousNodeCallback = null,
             Action anyModJumpKeyPressedCallback = null) {
-
             serializedObject.Update();
 
             // Check what key is pressed..
@@ -870,7 +856,7 @@ namespace ATP.AnimationPathTools {
                     //animTimeRatio.floatValue -= JumpValue;
                     //serializedObject.ApplyModifiedProperties();
 
-                    if (jumpBackwardCallback!= null) jumpBackwardCallback();
+                    if (jumpBackwardCallback != null) jumpBackwardCallback();
                     if (anyModJumpKeyPressedCallback != null) {
                         anyModJumpKeyPressedCallback();
                     }
@@ -899,7 +885,8 @@ namespace ATP.AnimationPathTools {
                     //serializedObject.ApplyModifiedProperties();
                     //if (Application.isPlaying) script.UpdateAnimatedGO();
 
-                    if (jumpToNextNodeCallback != null) jumpToNextNodeCallback();
+                    if (jumpToNextNodeCallback != null)
+                        jumpToNextNodeCallback();
                     if (anyModJumpKeyPressedCallback != null) {
                         anyModJumpKeyPressedCallback();
                     }
@@ -925,13 +912,33 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private void HandlePlayPauseShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != PlayPauseShortcut) return;
+
+            HandlePlayPause();
+        }
+
+        private void HandleRotationModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != RotationModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Rotation;
+        }
+
+        private void HandleTiltingModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != TiltingModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.Tilting;
+        }
+
         private void HandleUnmodifiedShortcuts(
             Action jumpBackwardCallback = null,
             Action jumpForwardCallback = null,
             Action jumpToStartCallback = null,
             Action jumpToEndCallback = null,
             Action anyJumpKeyPressedCallback = null) {
-
             //serializedObject.Update();
 
             // Helper variable.
@@ -1008,33 +1015,25 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void HandleTiltingModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != TiltingModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Tilting;
+        /// <summary>
+        ///     Checked if modifier key is pressed and remember it in a class
+        ///     field.
+        /// </summary>
+        private void UpdateModifierKey() {
+            // Check if modifier key is currently pressed.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == ModKey) {
+                // Remember key state.
+                modKeyPressed = true;
+            }
+            // If modifier key was released..
+            if (Event.current.type == EventType.keyUp
+                && Event.current.keyCode == ModKey) {
+                modKeyPressed = false;
+            }
         }
 
-        private void HandleRotationModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != RotationModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Rotation;
-        }
-
-        private void HandleEaseModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != EaseModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Ease;
-        }
-
-        private void HandlePlayPauseShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != PlayPauseShortcut) return;
-
-            HandlePlayPause();
-        }
         #endregion
     }
-}	
+
+}

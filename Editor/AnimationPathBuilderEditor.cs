@@ -600,7 +600,7 @@ namespace ATP.AnimationPathTools {
         protected virtual void DrawSmoothTangentButtonsCallbackHandler(int index) {
             Undo.RecordObject(Script.PathData, "Change path");
 
-            Script.SmoothSingleNodeTangents(index);
+            Script.PathData.SmoothSingleNodeTangents(index);
             Script.PathData.DistributeTimestamps();
         }
 
@@ -815,7 +815,7 @@ namespace ATP.AnimationPathTools {
             // Set y to 0.
             lastNodePos = new Vector3(lastNodePos.x, 0, lastNodePos.z);
 
-            Script.RemoveAllNodes();
+            Script.PathData.RemoveAllNodes();
 
             // Create beginning and end nodes.
             Script.PathData.AnimatedObjectPath.CreateNewNode(0, firstNodePos);

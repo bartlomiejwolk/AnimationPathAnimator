@@ -198,18 +198,6 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
-        public void SmoothSingleNodeTangents(int nodeIndex) {
-            pathData.AnimatedObjectPath.SmoothPointTangents(nodeIndex);
-        }
-
-        public void RemoveAllNodes() {
-            var nodesNo = NodesNo;
-            for (var i = 0; i < nodesNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                PathData.RemoveNode(0);
-            }
-        }
-
 
         private void DrawGizmoCurve() {
             // Return if path asset is not assigned.

@@ -588,5 +588,17 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public void SmoothSingleNodeTangents(int nodeIndex) {
+            AnimatedObjectPath.SmoothPointTangents(nodeIndex);
+        }
+
+        public void RemoveAllNodes() {
+            var nodesNo = NodesNo;
+            for (var i = 0; i < nodesNo; i++) {
+                // NOTE After each removal, next node gets index 0.
+                RemoveNode(0);
+            }
+        }
+
     }
 }

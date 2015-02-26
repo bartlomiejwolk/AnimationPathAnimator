@@ -342,7 +342,7 @@ namespace ATP.AnimationPathTools {
             EventArgs e) {
             UpdateCurveWithRemovedKeys(PathData.EaseCurve);
             UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
-            UpdateRotationCurvesWithRemovedKeys();
+            UpdateRotationPathWithRemovedKeys();
         }
 
         private void animationPathBuilder_NodeTimeChanged(
@@ -962,7 +962,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void UpdateRotationCurvesWithRemovedKeys() {
+        private void UpdateRotationPathWithRemovedKeys() {
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = PathData.GetPathTimestamps();
             // Get values from rotationPath.

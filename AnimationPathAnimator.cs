@@ -404,29 +404,9 @@ namespace ATP.AnimationPathTools {
             return globalNodePosition;
         }
 
-        public float GetNodeEaseValue(int i) {
-            return PathData.EaseCurve.keys[i].value;
-        }
-
-        public Vector3 GetNodePosition(int i) {
-            return animationPathBuilder.GetNodePosition(i);
-        }
-
-        public float GetNodeTiltValue(int nodeIndex) {
-            return PathData.TiltingCurve.keys[nodeIndex].value;
-        }
-
-        public float[] GetPathTimestamps() {
-            return animationPathBuilder.GetNodeTimestamps();
-        }
-
-        public Vector3 GetRotationAtTime(float timestamp) {
-            return PathData.RotationPath.GetVectorAtTime(timestamp);
-        }
-
-        public Vector3 GetRotationPointPosition(int nodeIndex) {
-            return PathData.RotationPath.GetVectorAtKey(nodeIndex);
-        }
+        //public float[] GetPathTimestamps() {
+        //    return animationPathBuilder.PathData.GetPathTimestamps(animationPathBuilder);
+        //}
 
         public void SmoothCurve(AnimationCurve curve) {
             for (var i = 0; i < curve.length; i++) {
@@ -576,7 +556,7 @@ namespace ATP.AnimationPathTools {
             var currentAnimationTime = AnimationTimeRatio;
 
             // Node path node timestamps.
-            var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
+            var nodeTimestamps = PathData.GetPathTimestamps();
 
             // Return if current animation time is the same as any node time.
             if (nodeTimestamps.Any(nodeTimestamp =>
@@ -587,7 +567,7 @@ namespace ATP.AnimationPathTools {
             }
 
             // Get rotation point position.
-            var rotationPointPosition = GetRotationAtTime(currentAnimationTime);
+            var rotationPointPosition = PathData.GetRotationAtTime(currentAnimationTime);
 
             // Convert position to global coordinate.
             rotationPointPosition =
@@ -634,7 +614,7 @@ namespace ATP.AnimationPathTools {
             var currentAnimationTime = AnimationTimeRatio;
 
             // Path node timestamps.
-            var nodeTimestamps = AnimationPathBuilder.GetNodeTimestamps();
+            var nodeTimestamps = PathData.GetPathTimestamps();
 
             var rotationPointPositions = GetRotationPointPositions(true);
 
@@ -693,7 +673,7 @@ namespace ATP.AnimationPathTools {
             // For each rotation point..
             for (var i = 0; i < rotationPointsNo; i++) {
                 // Get rotation point local position.
-                var localPos = GetRotationPointPosition(i);
+                var localPos = PathData.GetRotationPointPosition(i);
 
                 // If global position arg. is true..
                 if (globalPositions) {
@@ -859,7 +839,7 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateCurveTimestamps(AnimationCurve curve) {
             // Get node timestamps.
-            var pathNodeTimestamps = animationPathBuilder.GetNodeTimestamps();
+            var pathNodeTimestamps = PathData.GetPathTimestamps();
             // For each key in easeCurve..
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from easeCurve
@@ -883,7 +863,7 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <param name="curve"></param>
         private void UpdateCurveWithAddedKeys(AnimationCurve curve) {
-            var nodeTimestamps = animationPathBuilder.GetNodeTimestamps();
+            var nodeTimestamps = PathData.GetPathTimestamps();
             // Get curve value.
             var curveTimestamps = new float[curve.length];
             for (var i = 0; i < curve.length; i++) {
@@ -907,7 +887,7 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
             // AnimationPathBuilder node timestamps.
-            var nodeTimestamps = animationPathBuilder.GetNodeTimestamps();
+            var nodeTimestamps = PathData.GetPathTimestamps();
             // Get values from curve.
             var curveTimestamps = new float[curve.length];
             for (var i = 0; i < curveTimestamps.Length; i++) {
@@ -931,7 +911,7 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateRotationCurvesTimestamps() {
             // Get node timestamps.
-            var nodeTimestamps = animationPathBuilder.GetNodeTimestamps();
+            var nodeTimestamps = PathData.GetPathTimestamps();
             // Get rotation point timestamps.
             var rotationCurvesTimestamps =
                 PathData.RotationPath.GetTimestamps();
@@ -952,7 +932,7 @@ namespace ATP.AnimationPathTools {
         private void UpdateRotationCurvesWithAddedKeys() {
             // AnimationPathBuilder node timestamps.
             var animationCurvesTimestamps =
-                animationPathBuilder.GetNodeTimestamps();
+                animationPathBuilder.PathData.GetPathTimestamps();
             // Get values from rotationPath.
             var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
             var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
@@ -984,7 +964,7 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateRotationCurvesWithRemovedKeys() {
             // AnimationPathBuilder node timestamps.
-            var pathTimestamps = animationPathBuilder.GetNodeTimestamps();
+            var pathTimestamps = PathData.GetPathTimestamps();
             // Get values from rotationPath.
             var rotationCurvesTimestamps = PathData.RotationPath.GetTimestamps();
 

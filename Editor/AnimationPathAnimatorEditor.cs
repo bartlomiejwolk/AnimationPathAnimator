@@ -559,8 +559,8 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationHandle(Action<float, Vector3> callback) {
             var currentAnimationTime = script.AnimationTimeRatio;
-            var rotationPointPosition = script.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = script.AnimationPathBuilder.GetNodeTimestamps();
+            var rotationPointPosition = script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
             // timestamp.
@@ -774,7 +774,7 @@ namespace ATP.AnimationPathTools {
 
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
-            var easeValue = script.GetNodeEaseValue(nodeIndex);
+            var easeValue = script.PathData.GetNodeEaseValue(nodeIndex);
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
@@ -782,14 +782,14 @@ namespace ATP.AnimationPathTools {
         }
 
         private float ConvertTiltToDegrees(int nodeIndex) {
-            var rotationValue = script.GetNodeTiltValue(nodeIndex);
+            var rotationValue = script.PathData.GetNodeTiltValue(nodeIndex);
             //var arcValue = rotationValue * 2;
 
             return rotationValue;
         }
 
         private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = script.GetPathTimestamps();
+            var pathTimestamps = script.PathData.GetPathTimestamps();
 
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
                 if (pathTimestamps[i] < animTimeRatio.floatValue) {
@@ -802,7 +802,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = script.GetPathTimestamps();
+            var pathTimestamps = script.PathData.GetPathTimestamps();
 
             foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > animTimeRatio.floatValue)) {

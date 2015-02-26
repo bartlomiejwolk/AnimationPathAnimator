@@ -169,5 +169,38 @@ namespace ATP.AnimationPathTools {
 	        TiltingCurve = new AnimationCurve();
 	    }
         #endregion
-    }
+
+	    public Vector3 GetRotationPointPosition(int nodeIndex) {
+	        return RotationPath.GetVectorAtKey(nodeIndex);
+	    }
+
+	    public Vector3 GetRotationAtTime(float timestamp) {
+	        return RotationPath.GetVectorAtTime(timestamp);
+	    }
+
+	    public float GetNodeEaseValue(int i) {
+	        return EaseCurve.keys[i].value;
+	    }
+
+	    public float GetNodeTiltValue(int nodeIndex) {
+	        return TiltingCurve.keys[nodeIndex].value;
+	    }
+
+	    public float[] GetPathTimestamps() {
+	        // Output array.
+	        var result = new float[NodesNo];
+
+	        // For each key..
+	        for (var i = 0; i < NodesNo; i++) {
+	            // Get key time.
+	            result[i] = AnimatedObjectPath.GetTimeAtKey(i);
+	        }
+
+	        return result;
+	    }
+
+	    public int NodesNo {
+            get { return animatedObjectPath[0].length; }
+	    }
+	}
 }

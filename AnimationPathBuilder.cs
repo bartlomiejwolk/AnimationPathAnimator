@@ -263,19 +263,6 @@ namespace ATP.AnimationPathTools {
             return pathData.AnimatedObjectPath.GetTimeAtKey(nodeIndex);
         }
 
-        public float[] GetNodeTimestamps() {
-            // Output array.
-            var result = new float[NodesNo];
-
-            // For each key..
-            for (var i = 0; i < NodesNo; i++) {
-                // Get key time.
-                result[i] = pathData.AnimatedObjectPath.GetTimeAtKey(i);
-            }
-
-            return result;
-        }
-
         public Vector3 GetVectorAtTime(float timestamp) {
             return pathData.AnimatedObjectPath.GetVectorAtTime(timestamp);
         }

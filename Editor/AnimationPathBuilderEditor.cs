@@ -318,7 +318,7 @@ namespace ATP.AnimationPathTools {
             if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveSingle) {
 
                 Script.MoveNodeToPosition(movedNodeIndex, position);
-                Script.DistributeTimestamps();
+                Script.PathData.DistributeTimestamps(Script);
 
                 HandleSmoothTangentMode();
                 HandleLinearTangentMode();
@@ -563,7 +563,7 @@ namespace ATP.AnimationPathTools {
             // Add a new node.
             AddNodeBetween(nodeIndex);
 
-            Script.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script);
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
@@ -587,7 +587,7 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(Script.PathData, "Change path");
 
             Script.RemoveNode(nodeIndex);
-            Script.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script);
 
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.SmoothAllNodeTangents();
@@ -601,7 +601,7 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(Script.PathData, "Change path");
 
             Script.SmoothSingleNodeTangents(index);
-            Script.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script);
         }
 
         #endregion CALLBACK HANDLERS
@@ -615,7 +615,7 @@ namespace ATP.AnimationPathTools {
 
                 Undo.RecordObject(Script.PathData, "Change path");
                 Script.SmoothAllNodeTangents();
-                Script.DistributeTimestamps();
+                Script.PathData.DistributeTimestamps(Script);
             }
         }
 
@@ -657,7 +657,7 @@ namespace ATP.AnimationPathTools {
                 Undo.RecordObject(Script.PathData, "Change path");
 
                 Script.SetNodesLinear();
-                Script.DistributeTimestamps();
+                Script.PathData.DistributeTimestamps(Script);
             }
         }
 

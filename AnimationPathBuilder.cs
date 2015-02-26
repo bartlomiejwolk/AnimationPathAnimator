@@ -189,45 +189,6 @@ namespace ATP.AnimationPathTools {
         //    OnNodeAdded();
         //}
 
-        public void DistributeTimestamps() {
-            // Calculate path curved length.
-            var pathLength =
-                pathData.AnimatedObjectPath.CalculatePathCurvedLength(
-                    GizmoCurveSamplingFrequency);
-
-            // Calculate time for one meter of curve length.
-            var timeForMeter = 1/pathLength;
-
-            // Helper variable.
-            float prevTimestamp = 0;
-
-            // For each node calculate and apply new timestamp.
-            for (var i = 1; i < NodesNo - 1; i++) {
-                // Calculate section curved length.
-                var sectionLength =
-                    pathData.AnimatedObjectPath.CalculateSectionCurvedLength(
-                        i - 1,
-                        i,
-                        GizmoCurveSamplingFrequency);
-
-                // Calculate time interval for the section.
-                var sectionTimeInterval = sectionLength*timeForMeter;
-
-                // Calculate new timestamp.
-                var newTimestamp = prevTimestamp + sectionTimeInterval;
-
-                // Update previous timestamp.
-                prevTimestamp = newTimestamp;
-
-                // NOTE When nodes on the scene overlap, it's possible that new
-                // timestamp is > 0, which is invalid.
-                if (newTimestamp > 1) break;
-
-                // Update node timestamp.
-                PathData.AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
-            }
-        }
-
         public Vector3[] GetNodeGlobalPositions() {
             var nodePositions = GetNodePositions();
 

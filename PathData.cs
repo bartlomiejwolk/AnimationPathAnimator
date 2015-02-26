@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
+    // TODO Use public API instead of using path and curve fields
+    // directly.
     public class PathData : ScriptableObject {
 
         public event EventHandler NodeTiltChanged;
@@ -463,5 +465,47 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
+
+        public void DistributeTimestamps() {
+            // Calculate path curved length.
+            var pathLength = AnimatedObjectPath.CalculatePathCurvedLength(
+                PathLengthSamplingFrequency);
+
+            // Calculate time for one meter of curve length.
+            var timeForMeter = 1/pathLength;
+
+            // Helper variable.
+            float prevTimestamp = 0;
+
+            // For each node calculate and apply new timestamp.
+            for (var i = 1; i < NodesNo - 1; i++) {
+                // Calculate section curved length.
+                var sectionLength = AnimatedObjectPath.CalculateSectionCurvedLength(
+                    i - 1,
+                    i,
+                    PathLengthSamplingFrequency);
+
+                // Calculate time interval for the section.
+                var sectionTimeInterval = sectionLength*timeForMeter;
+
+                // Calculate new timestamp.
+                var newTimestamp = prevTimestamp + sectionTimeInterval;
+
+                // Update previous timestamp.
+                prevTimestamp = newTimestamp;
+
+                // NOTE When nodes on the scene overlap, it's possible that new
+                // timestamp is > 0, which is invalid.
+                if (newTimestamp > 1) break;
+
+                // Update node timestamp.
+                AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
+            }
+        }
+
+        protected virtual int PathLengthSamplingFrequency {
+            get { return 20; }
+        }
+
     }
 }

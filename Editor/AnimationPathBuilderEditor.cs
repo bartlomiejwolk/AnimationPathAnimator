@@ -667,9 +667,9 @@ namespace ATP.AnimationPathTools {
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
-            var currentKeyTime = Script.GetNodeTimestamp(nodeIndex);
+            var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
-            var nextKeyTime = Script.GetNodeTimestamp(nodeIndex + 1);
+            var nextKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex + 1);
 
             // Calculate timestamps for new key. It'll be placed exactly
             // between the two nodes.

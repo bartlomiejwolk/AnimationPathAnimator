@@ -460,6 +460,7 @@ namespace ATP.AnimationPathTools {
                 GizmoDrawer.DrawRotationPointGizmo(rotationPointPositions[i]);
             }
         }
+
         // ReSharper disable once UnusedMember.Local
         private IEnumerator EaseTime() {
             while (true) {

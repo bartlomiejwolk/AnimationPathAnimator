@@ -214,6 +214,7 @@ namespace ATP.AnimationPathTools {
                 animatedGO = Camera.main.transform;
             }
 
+            gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
             // Initialize AnimationPathBuilder field.
             animationPathBuilder = GetComponent<AnimationPathBuilder>();
         }
@@ -314,15 +315,23 @@ namespace ATP.AnimationPathTools {
             animationPathBuilder.NodePositionChanged +=
                 animationPathBuilder_NodePositionChanged;
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
-            pathData.NodeTiltChanged += this_NodeTiltChanged;
 
-            if (gizmoDrawer == null) {
-                gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            if (pathData != null) {
+                pathData.NodeTiltChanged += this_NodeTiltChanged;
             }
+
+            //if (gizmoDrawer == null) {
+            //    gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnValidate() {
+            // Subscribe to event.
+            if (pathData != null) {
+                pathData.NodeTiltChanged -= this_NodeTiltChanged;
+                pathData.NodeTiltChanged += this_NodeTiltChanged;
+            }
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

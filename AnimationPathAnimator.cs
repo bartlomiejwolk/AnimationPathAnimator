@@ -70,12 +70,12 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
 #pragma warning disable 169
-            protected bool enableControlsInPlayMode = true;
+            protected bool EnableControlsInPlayMode = true;
 #pragma warning restore 169
 
         [SerializeField]
 #pragma warning disable 169
-            protected float maxAnimationSpeed = 0.3f;
+            protected float MaxAnimationSpeed = 0.3f;
 #pragma warning restore 169
 
         /// <summary>

@@ -303,12 +303,12 @@ namespace ATP.AnimationPathTools {
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
-                serializedObject.FindProperty("maxAnimationSpeed");
+                serializedObject.FindProperty("MaxAnimationSpeed");
             positionLerpSpeed =
                 serializedObject.FindProperty("positionLerpSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
-                serializedObject.FindProperty("enableControlsInPlayMode");
+                serializedObject.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = gizmoDrawer.FindProperty("rotationCurveColor");
         }

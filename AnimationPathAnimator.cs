@@ -237,8 +237,8 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
-            InitializeEaseCurve();
-            InitializeRotationCurve();
+            //InitializeEaseCurve();
+            //InitializeRotationCurve();
 
             // Initialize animatedGO field.
             if (animatedGO == null && Camera.main.transform != null) {
@@ -643,21 +643,21 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void InitializeEaseCurve() {
-            var firstKey = new Keyframe(0, 0, 0, 0);
-            var lastKey = new Keyframe(1, 1, 0, 0);
+        //private void InitializeEaseCurve() {
+        //    var firstKey = new Keyframe(0, 0, 0, 0);
+        //    var lastKey = new Keyframe(1, 1, 0, 0);
 
-            PathData.EaseCurve.AddKey(firstKey);
-            PathData.EaseCurve.AddKey(lastKey);
-        }
+        //    PathData.EaseCurve.AddKey(firstKey);
+        //    PathData.EaseCurve.AddKey(lastKey);
+        //}
 
-        private void InitializeRotationCurve() {
-            var firstKey = new Keyframe(0, 0, 0, 0);
-            var lastKey = new Keyframe(1, 0, 0, 0);
+        //private void InitializeRotationCurve() {
+        //    var firstKey = new Keyframe(0, 0, 0, 0);
+        //    var lastKey = new Keyframe(1, 0, 0, 0);
 
-            PathData.TiltingCurve.AddKey(firstKey);
-            PathData.TiltingCurve.AddKey(lastKey);
-        }
+        //    PathData.TiltingCurve.AddKey(firstKey);
+        //    PathData.TiltingCurve.AddKey(lastKey);
+        //}
 
 
         private void RotateObjectWithAnimationCurves() {

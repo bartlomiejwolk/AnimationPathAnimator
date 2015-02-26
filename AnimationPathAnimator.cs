@@ -207,11 +207,11 @@ namespace ATP.AnimationPathTools {
             animationPathBuilder.NodeRemoved += animationPathBuilder_NodeRemoved;
             animationPathBuilder.NodeTimeChanged +=
                 animationPathBuilder_NodeTimeChanged;
-            animationPathBuilder.NodePositionChanged +=
-                animationPathBuilder_NodePositionChanged;
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
 
             if (pathData != null) {
+                PathData.NodePositionChanged +=
+                    animationPathBuilder_NodePositionChanged;
                 PathData.NodeAdded += animationPathBuilder_NodeAdded;
                 pathData.NodeTiltChanged += this_NodeTiltChanged;
             }

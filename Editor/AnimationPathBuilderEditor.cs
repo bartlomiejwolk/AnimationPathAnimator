@@ -310,14 +310,14 @@ namespace ATP.AnimationPathTools {
 
         private void HandleMoveAllHandleMove(Vector3 moveDelta) {
             if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveAll) {
-                Script.OffsetNodePositions(moveDelta);
+                Script.PathData.OffsetNodePositions(moveDelta);
             }
         }
 
         private void HandleMoveSingleHandleMove(int movedNodeIndex, Vector3 position) {
             if (Script.HandleMode == AnimationPathBuilderHandleMode.MoveSingle) {
 
-                Script.MoveNodeToPosition(movedNodeIndex, position);
+                Script.PathData.MoveNodeToPosition(movedNodeIndex, position, Script);
                 Script.PathData.DistributeTimestamps();
 
                 HandleSmoothTangentMode();

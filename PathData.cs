@@ -12,6 +12,7 @@ namespace ATP.AnimationPathTools {
 
         public event EventHandler NodeTiltChanged;
         public event EventHandler NodeAdded;
+        public event EventHandler NodePositionChanged;
 
         public event EventHandler RotationPointPositionChanged;
         #region SERIALIZED FIELDS
@@ -524,6 +525,30 @@ namespace ATP.AnimationPathTools {
 
         public Vector3 GetVectorAtTime(float timestamp) {
             return AnimatedObjectPath.GetVectorAtTime(timestamp);
+        }
+
+        public void MoveNodeToPosition(int nodeIndex, Vector3 position, AnimationPathBuilder animationPathBuilder) {
+            AnimatedObjectPath.MovePointToPosition(nodeIndex, position);
+            OnNodePositionChanged();
+        }
+
+        public virtual void OnNodePositionChanged() {
+            var handler = NodePositionChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public void OffsetNodePositions(Vector3 moveDelta) {
+            // For each node..
+            for (var i = 0; i < NodesNo; i++) {
+                // Old node position.
+                var oldPosition = GetNodePosition(i);
+                // New node position.
+                var newPosition = oldPosition + moveDelta;
+                // Update node positions.
+                AnimatedObjectPath.MovePointToPosition(i, newPosition);
+
+                OnNodePositionChanged();
+            }
         }
 
     }

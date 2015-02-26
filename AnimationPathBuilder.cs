@@ -21,7 +21,6 @@ namespace ATP.AnimationPathTools {
 
         //public event EventHandler NodeAdded;
 
-        public event EventHandler NodePositionChanged;
 
         public event EventHandler NodeRemoved;
 
@@ -111,6 +110,11 @@ namespace ATP.AnimationPathTools {
             set { tangentMode = value; }
         }
 
+        public PathData PathData1 {
+            set { pathData = value; }
+            get { return pathData; }
+        }
+
         #endregion PUBLIC PROPERTIES
 
         #region UNITY MESSAGES
@@ -153,11 +157,6 @@ namespace ATP.AnimationPathTools {
         //    if (handler != null) handler(this, EventArgs.Empty);
         //}
 
-        protected virtual void OnNodePositionChanged() {
-            var handler = NodePositionChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         protected virtual void OnNodeRemoved() {
             var handler = NodeRemoved;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -198,25 +197,6 @@ namespace ATP.AnimationPathTools {
             }
 
             return nodePositions;
-        }
-
-        public void MoveNodeToPosition(int nodeIndex, Vector3 position) {
-            pathData.AnimatedObjectPath.MovePointToPosition(nodeIndex, position);
-            OnNodePositionChanged();
-        }
-
-        public void OffsetNodePositions(Vector3 moveDelta) {
-            // For each node..
-            for (var i = 0; i < NodesNo; i++) {
-                // Old node position.
-                var oldPosition = PathData.GetNodePosition(i);
-                // New node position.
-                var newPosition = oldPosition + moveDelta;
-                // Update node positions.
-                pathData.AnimatedObjectPath.MovePointToPosition(i, newPosition);
-
-                OnNodePositionChanged();
-            }
         }
 
         public void RemoveNode(int nodeIndex) {

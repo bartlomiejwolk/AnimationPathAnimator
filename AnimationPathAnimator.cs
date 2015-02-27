@@ -317,6 +317,7 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodePositionChanged(
             object sender,
             EventArgs e) {
+
             if (!Application.isPlaying) Animate();
             if (Application.isPlaying) UpdateAnimatedGO();
         }

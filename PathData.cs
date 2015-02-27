@@ -97,6 +97,19 @@ namespace ATP.AnimationPathTools {
             NodeAdded += PathData_NodeAdded;
             NodeRemoved += PathData_NodeRemoved;
             NodeTiltChanged += PathData_NodeTiltChanged;
+            NodeTimeChanged += PathData_NodeTimeChanged;
+            NodePositionChanged += PathData_NodePositionChanged;
+        }
+
+        void PathData_NodePositionChanged(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        void PathData_NodeTimeChanged(object sender, EventArgs e) {
+            UpdateCurveTimestamps(EaseCurve);
+            UpdateCurveTimestamps(TiltingCurve);
+            // TODO Rename to UpdateRotationPathTimestamps().
+            UpdateRotationCurvesTimestamps();
         }
 
         void PathData_NodeRemoved(object sender, EventArgs e) {
@@ -106,10 +119,6 @@ namespace ATP.AnimationPathTools {
         }
 
         void PathData_NodeTiltChanged(object sender, EventArgs e) {
-            UpdateCurveTimestamps(EaseCurve);
-            UpdateCurveTimestamps(TiltingCurve);
-            // TODO Rename to UpdateRotationPathTimestamps().
-            UpdateRotationCurvesTimestamps();
         }
 
         void PathData_NodeAdded(object sender, EventArgs e) {

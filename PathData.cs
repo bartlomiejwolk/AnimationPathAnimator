@@ -61,7 +61,7 @@ namespace ATP.AnimationPathTools {
         public int NodesNo {
             get { return animatedObjectPath[0].length; }
         }
-        public AnimationPath RotationPath {
+        private AnimationPath RotationPath {
             get { return rotationPath; }
             set { rotationPath = value; }
         }
@@ -154,6 +154,15 @@ namespace ATP.AnimationPathTools {
             int samplingFrequency) {
 
             return animatedObjectPath.SamplePathForPoints(samplingFrequency);
+        }
+        public List<Vector3> SampleRotationPathForPoints(
+            int samplingFrequency) {
+
+            return RotationPath.SamplePathForPoints(samplingFrequency);
+        }
+
+        public Vector3 GetRotationValueAtTime(float timestamp) {
+            return RotationPath.GetVectorAtTime(timestamp);
         }
 
         public void AddKeyToCurve(

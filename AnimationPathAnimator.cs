@@ -257,7 +257,7 @@ namespace ATP.AnimationPathTools {
             // Return if handle mode is not rotation mode.
             if (handleMode == AnimatorHandleMode.Rotation) {
                 var localPointPositions =
-                    PathData.RotationPath.SamplePathForPoints(
+                    PathData.SampleRotationPathForPoints(
                         RotationCurveSampling);
 
                 var globalPointPositions =
@@ -548,7 +548,7 @@ namespace ATP.AnimationPathTools {
 
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget =
-                PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+                PathData.GetRotationAtTime(animTimeRatio);
             // Convert target position to global coordinates.
             var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
 
@@ -624,7 +624,7 @@ namespace ATP.AnimationPathTools {
                 case AnimatorRotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
-                        PathData.RotationPath.GetVectorAtTime(animTimeRatio);
+                        PathData.GetRotationValueAtTime(animTimeRatio);
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =

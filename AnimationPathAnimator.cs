@@ -203,8 +203,8 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             // Subscribe to events.
-            animationPathBuilder.PathReset += animationPathBuilder_PathReset;
-            //RotationPointPositionChanged += this_RotationPointPositionChanged;
+            //animationPathBuilder.PathReset += animationPathBuilder_PathReset;
+            pathData.RotationPointPositionChanged += pathData_RotationPointPositionChanged;
 
             // TODO First unsubscribe from events. Make separate method.
             //if (pathData != null) {
@@ -217,7 +217,6 @@ namespace ATP.AnimationPathTools {
             //    pathData.NodeTiltChanged += this_NodeTiltChanged;
             //}
         }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
             //InitializeEaseCurve();
@@ -235,7 +234,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
-            animationPathBuilder.PathReset -= animationPathBuilder_PathReset;
+            //animationPathBuilder.PathReset -= animationPathBuilder_PathReset;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -279,10 +278,10 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnValidate() {
             // Subscribe to event.
-            if (pathData != null) {
-                pathData.NodeTiltChanged -= this_NodeTiltChanged;
-                pathData.NodeTiltChanged += this_NodeTiltChanged;
-            }
+            //if (pathData != null) {
+            //    pathData.NodeTiltChanged -= this_NodeTiltChanged;
+            //    pathData.NodeTiltChanged += this_NodeTiltChanged;
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -305,54 +304,8 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
-
-        private void animationPathBuilder_NodeAdded(
-            object sender,
-            EventArgs eventArgs) {
-            //PathData.UpdateCurveWithAddedKeys(PathData.EaseCurve);
-            //PathData.UpdateCurveWithAddedKeys(PathData.TiltingCurve);
-            //PathData.UpdateRotationPathWithAddedKeys();
-        }
-
-        private void animationPathBuilder_NodePositionChanged(
-            object sender,
-            EventArgs e) {
-
-            if (!Application.isPlaying) Animate();
-            if (Application.isPlaying) UpdateAnimatedGO();
-        }
-
-        private void animationPathBuilder_NodeRemoved(
-            object sender,
-            EventArgs e) {
-            //PathData.UpdateCurveWithRemovedKeys(PathData.EaseCurve);
-            //PathData.UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
-            //pathData.UpdateRotationPathWithRemovedKeys();
-        }
-
-        private void animationPathBuilder_NodeTimeChanged(
-            object sender,
-            EventArgs e) {
-
-            //PathData.UpdateCurveTimestamps(PathData.EaseCurve);
-            //PathData.UpdateCurveTimestamps(PathData.TiltingCurve);
-            //PathData.UpdateRotationCurvesTimestamps();
-        }
-
-        private void animationPathBuilder_PathReset(
-            object sender,
-            EventArgs eventArgs) {
-            //PathData.Reset();
-
-            // Change handle mode to None.
-            handleMode = AnimatorHandleMode.None;
-            // Change rotation mode to None.
-            rotationMode = AnimatorRotationMode.Forward;
-        }
-
-        private void this_NodeTiltChanged(object sender, EventArgs e) {
-            if (!Application.isPlaying) Animate();
-            if (Application.isPlaying) UpdateAnimatedGO();
+        void pathData_RotationPointPositionChanged(object sender, EventArgs e) {
+            UpdateAnimatedGO();
         }
 
         #endregion EVENT HANDLERS

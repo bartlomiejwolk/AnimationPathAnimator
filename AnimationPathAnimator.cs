@@ -6,7 +6,6 @@ using ATP.ReorderableList;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-
 namespace ATP.AnimationPathTools {
 
     /// <summary>
@@ -77,8 +76,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         /// <remarks>Value is a time in range from 0 to 1.</remarks>
         [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
-        // disable once ConvertToConstant.Local
         private float forwardPointOffset = 0.05f;
 
         [SerializeField]
@@ -86,8 +83,6 @@ namespace ATP.AnimationPathTools {
             AnimatorHandleMode.None;
 
         [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
-        // disable once ConvertToConstant.Local
         private float positionLerpSpeed = 0.1f;
 
         [SerializeField]
@@ -95,8 +90,6 @@ namespace ATP.AnimationPathTools {
             AnimatorRotationMode.Forward;
 
         [SerializeField]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local ReSharper
-        // disable once ConvertToConstant.Local
         private float rotationSpeed = 3.0f;
 
         [SerializeField]
@@ -219,29 +212,15 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             // Subscribe to events.
-            //animationPathBuilder.PathReset += animationPathBuilder_PathReset;
             pathData.RotationPointPositionChanged +=
                 pathData_RotationPointPositionChanged;
 
             if (gizmoDrawer == null) {
                 gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
             }
-
-            // TODO First unsubscribe from events. Make separate method.
-            //if (pathData != null) {
-            //    PathData.NodeTimeChanged +=
-            //        animationPathBuilder_NodeTimeChanged;
-            //    PathData.NodeRemoved += animationPathBuilder_NodeRemoved;
-            //    PathData.NodePositionChanged +=
-            //        animationPathBuilder_NodePositionChanged;
-            //    PathData.NodeAdded += animationPathBuilder_NodeAdded;
-            //    pathData.NodeTiltChanged += this_NodeTiltChanged;
-            //}
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
-            //InitializeEaseCurve();
-            //InitializeRotationCurve();
             skin = Resources.Load("GUISkin/default") as GUISkin;
 
             // Initialize animatedGO field.
@@ -250,11 +229,6 @@ namespace ATP.AnimationPathTools {
             }
 
             gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnDisable() {
-            //animationPathBuilder.PathReset -= animationPathBuilder_PathReset;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -287,22 +261,12 @@ namespace ATP.AnimationPathTools {
                 }
                 GizmoDrawer.DrawRotationGizmoCurve(globalPointPositions);
 
-                //GizmoDrawer.DrawCurrentRotationPointGizmo();
                 HandleDrawingCurrentRotationPointGizmo();
 
                 DrawRotationPointGizmos();
             }
 
             DrawGizmoCurve();
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnValidate() {
-            // Subscribe to event.
-            //if (pathData != null) {
-            //    pathData.NodeTiltChanged -= this_NodeTiltChanged;
-            //    pathData.NodeTiltChanged += this_NodeTiltChanged;
-            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -472,7 +436,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        // ReSharper disable once UnusedMember.Local
         private IEnumerator EaseTime() {
             while (true) {
                 // If animation is not paused..
@@ -600,7 +563,6 @@ namespace ATP.AnimationPathTools {
             // Get current animatedGO rotation.
             var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from tiltingCurve.
-            //var zRotation = PathData.TiltingCurve.Evaluate(animTimeRatio);
             var zRotation = PathData.GetTiltingValueAtTime(animTimeRatio);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);

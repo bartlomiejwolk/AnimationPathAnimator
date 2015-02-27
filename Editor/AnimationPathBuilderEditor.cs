@@ -619,17 +619,17 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawResetPathInspectorButton() {
-            if (GUILayout.Button(new GUIContent(
-                "Reset Path",
-                "Reset path to default."))) {
-                // Allow undo this operation.
-                Undo.RecordObject(Script.PathData, "Change path");
+        //private void DrawResetPathInspectorButton() {
+        //    if (GUILayout.Button(new GUIContent(
+        //        "Reset Path",
+        //        "Reset path to default."))) {
+        //        // Allow undo this operation.
+        //        Undo.RecordObject(Script.PathData, "Change path");
 
-                // Reset curves to its default state.
-                ResetPath();
-            }
-        }
+        //        // Reset curves to its default state.
+        //        ResetPath();
+        //    }
+        //}
 
         private void DrawExportControls() {
             EditorGUILayout.BeginHorizontal();
@@ -714,7 +714,7 @@ namespace ATP.AnimationPathTools {
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
-            DrawResetPathInspectorButton();
+            //DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();
 
@@ -796,33 +796,33 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.
         /// </summary>
-        protected void ResetPath() {
-            // Get scene view camera.
-            //var sceneCamera = SceneView.lastActiveSceneView.camera;
-            // Get world point to place the Animation Path.
-            //var worldPoint = sceneCamera.transform.position;
-                //+ sceneCamera.transform.forward * ResetPathCameraDistance;
+        //protected void ResetPath() {
+        //    // Get scene view camera.
+        //    //var sceneCamera = SceneView.lastActiveSceneView.camera;
+        //    // Get world point to place the Animation Path.
+        //    //var worldPoint = sceneCamera.transform.position;
+        //        //+ sceneCamera.transform.forward * ResetPathCameraDistance;
 
-			//Script.transform.localPosition = Vector3.zero;
+        //    //Script.transform.localPosition = Vector3.zero;
 
-            // First node position.
-            var firstNodePos = Script.transform.localPosition;
-            // Set y to 0.
-            firstNodePos = new Vector3(firstNodePos.x, 0, firstNodePos.z);
+        //    // First node position.
+        //    var firstNodePos = Script.transform.localPosition;
+        //    // Set y to 0.
+        //    firstNodePos = new Vector3(firstNodePos.x, 0, firstNodePos.z);
 
-            // Last node position.
-            var lastNodePos = firstNodePos + lastNodeOffset;
-            // Set y to 0.
-            lastNodePos = new Vector3(lastNodePos.x, 0, lastNodePos.z);
+        //    // Last node position.
+        //    var lastNodePos = firstNodePos + lastNodeOffset;
+        //    // Set y to 0.
+        //    lastNodePos = new Vector3(lastNodePos.x, 0, lastNodePos.z);
 
-            Script.PathData.RemoveAllNodes();
+        //    Script.PathData.RemoveAllNodes();
 
-            // Create beginning and end nodes.
-            Script.PathData.CreateNewNode(0, firstNodePos);
-            Script.PathData.CreateNewNode(1, lastNodePos);
+        //    // Create beginning and end nodes.
+        //    Script.PathData.CreateNewNode(0, firstNodePos);
+        //    Script.PathData.CreateNewNode(1, lastNodePos);
 
-            Script.this_PathReset();
-        }
+        //    Script.this_PathReset();
+        //}
 
         #endregion PRIVATE
     }

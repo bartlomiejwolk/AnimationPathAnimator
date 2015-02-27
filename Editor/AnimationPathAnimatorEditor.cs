@@ -497,7 +497,7 @@ namespace ATP.AnimationPathTools {
 
             // Get ease values.
             //var easeCurveValues = new float[script.PathData.EaseCurveKeysNo];
-            var easeCurveValues = script.PathData.GetEaseValues();
+            var easeCurveValues = script.PathData.GetEaseCurveValues();
             //for (var i = 0; i < script.PathData.EaseCurveKeysNo; i++) {
             //    easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
             //}
@@ -610,11 +610,12 @@ namespace ATP.AnimationPathTools {
                 script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get tilting curve values.
-            var tiltingCurveValues = new float[script.PathData.EaseCurveKeysNo];
-            for (var i = 0; i < script.PathData.TiltingCurve.length; i++) {
-                tiltingCurveValues[i] =
-                    script.PathData.TiltingCurve.keys[i].value;
-            }
+            //var tiltingCurveValues = new float[script.PathData.EaseCurveKeysNo];
+            var tiltingCurveValues = script.PathData.GetTiltingCurveValues();
+            //for (var i = 0; i < script.PathData.TiltingCurveKeysNo; i++) {
+            //    tiltingCurveValues[i] =
+            //        script.PathData.TiltingCurve.keys[i].value;
+            //}
 
             // Set arc value multiplier.
             const int arcValueMultiplier = 1;

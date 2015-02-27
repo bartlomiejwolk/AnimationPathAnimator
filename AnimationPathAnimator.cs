@@ -591,7 +591,8 @@ namespace ATP.AnimationPathTools {
             // Get current animatedGO rotation.
             var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from tiltingCurve.
-            var zRotation = PathData.TiltingCurve.Evaluate(animTimeRatio);
+            //var zRotation = PathData.TiltingCurve.Evaluate(animTimeRatio);
+            var zRotation = PathData.GetTiltingValueAtTime(animTimeRatio);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
             // Update animatedGO rotation.

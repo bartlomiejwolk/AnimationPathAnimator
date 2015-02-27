@@ -45,6 +45,10 @@ namespace ATP.AnimationPathTools {
             get { return animatedObjectPath.KeysNo; }
         }
 
+        public int TiltingCurveKeysNo {
+            get { return TiltingCurve.length; }
+        }
+
         private AnimationCurve EaseCurve {
             get { return easeCurve; }
             set { easeCurve = value; }
@@ -61,7 +65,7 @@ namespace ATP.AnimationPathTools {
             get { return rotationPath; }
             set { rotationPath = value; }
         }
-        public AnimationCurve TiltingCurve {
+        private AnimationCurve TiltingCurve {
             get { return tiltingCurve; }
             set { tiltingCurve = value; }
         }
@@ -677,15 +681,19 @@ namespace ATP.AnimationPathTools {
             return value;
         }
 
-        public float GetEaseValueAtTime(float animTimeRatio) {
-            return EaseCurve.Evaluate(animTimeRatio);
+        public float GetEaseValueAtTime(float timestamp) {
+            return EaseCurve.Evaluate(timestamp);
+        }
+
+        public float GetTiltingValueAtTime(float timestamp) {
+            return TiltingCurve.Evaluate(timestamp);
         }
 
         public float GetEaseTimestampAtIndex(int keyIndex) {
             return EaseCurve.keys[keyIndex].time;
         }
 
-        public float[] GetEaseValues() {
+        public float[] GetEaseCurveValues() {
             var values = new float[EaseCurveKeysNo];
 
             for (int i = 0; i < values.Length; i++) {
@@ -694,6 +702,17 @@ namespace ATP.AnimationPathTools {
 
             return values;
         }
+
+        public float[] GetTiltingCurveValues() {
+            var values = new float[TiltingCurveKeysNo];
+
+            for (int i = 0; i < values.Length; i++) {
+                values[i] = TiltingCurve.keys[i].value;
+            }
+
+            return values;
+        }
+
 
     }
 }

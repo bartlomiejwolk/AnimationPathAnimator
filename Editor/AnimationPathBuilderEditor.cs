@@ -818,8 +818,8 @@ namespace ATP.AnimationPathTools {
             Script.PathData.RemoveAllNodes();
 
             // Create beginning and end nodes.
-            Script.PathData.CreateAnimationPathNode(0, firstNodePos);
-            Script.PathData.CreateAnimationPathNode(1, lastNodePos);
+            Script.PathData.CreateNewNode(0, firstNodePos);
+            Script.PathData.CreateNewNode(1, lastNodePos);
 
             Script.this_PathReset();
         }

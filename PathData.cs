@@ -1,12 +1,8 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ATP.LoggingTools;
 using UnityEngine;
-
-#endregion
 
 // ReSharper disable once CheckNamespace
 
@@ -14,10 +10,9 @@ namespace ATP.AnimationPathTools {
 
     // TODO Use public API instead of using path and curve fields directly.
     public class PathData : ScriptableObject {
-
+        #region EVENTS
         public event EventHandler RotationPointPositionChanged;
 
-        #region EVENTS
 
         public event EventHandler NodeAdded;
 
@@ -174,7 +169,7 @@ namespace ATP.AnimationPathTools {
 
         #region METHODS
 
-        //public void CreateAnimationPathNode(int index, Vector3 value) {
+        //public void CreateNewNode(int index, Vector3 value) {
         //    animatedObjectPath.CreateNewNode(index, value);
         //}
 
@@ -221,7 +216,7 @@ namespace ATP.AnimationPathTools {
             OnRotationPointPositionChanged();
         }
 
-        public void CreateAnimationPathNode(float timestamp, Vector3 position) {
+        public void CreateNewNode(float timestamp, Vector3 position) {
             AnimatedObjectPath.CreateNewNode(timestamp, position);
 
             OnNodeAdded();

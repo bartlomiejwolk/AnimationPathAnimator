@@ -161,7 +161,7 @@ namespace ATP.AnimationPathTools {
         //    OnNodeTimeChanged();
         //}
 
-        //public void CreateAnimationPathNode(float timestamp, Vector3 position) {
+        //public void CreateNewNode(float timestamp, Vector3 position) {
         //    pathData.AnimatedObjectPath.CreateNewNode(timestamp, position);
         //    OnNodeAdded();
         //}

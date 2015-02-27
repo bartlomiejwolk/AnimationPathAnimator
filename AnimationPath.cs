@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
+using ATP.LoggingTools;
 
 namespace ATP.AnimationPathTools {
 
@@ -101,6 +102,8 @@ namespace ATP.AnimationPathTools {
             int keyIndex,
             float newTimestamp) {
 
+            //Logger.LogStackTrace();
+
             // For each curve..
             for (var i = 0; i < 3; i++) {
                 // Get copy of the key from animation curves.
@@ -111,6 +114,12 @@ namespace ATP.AnimationPathTools {
 
                 // Replace old key with a new one.
                 curves[i].MoveKey(keyIndex, keyCopy);
+
+                //if (i == 0)
+                //    Logger.LogString(
+                //        "INDEX: {0}, TIME: {1}",
+                //        keyIndex,
+                //        keyCopy.time);
             }
         }
 

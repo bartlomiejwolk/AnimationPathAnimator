@@ -130,6 +130,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
+        private SerializedProperty gizmoCurveColor;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -278,6 +279,12 @@ namespace ATP.AnimationPathTools {
 
             // Display advanced foldout content.
             if (advancedSettingsFoldout.boolValue) {
+                serializedObject.Update();
+                EditorGUILayout.PropertyField(
+                        gizmoCurveColor,
+                        new GUIContent("Curve Color", ""));
+                serializedObject.ApplyModifiedProperties();
+
                 gizmoDrawer.Update();
                 EditorGUILayout.PropertyField(rotationCurveColor);
                 gizmoDrawer.ApplyModifiedProperties();
@@ -331,6 +338,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = gizmoDrawer.FindProperty("rotationCurveColor");
+            gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

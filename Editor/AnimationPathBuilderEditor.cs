@@ -66,7 +66,7 @@ namespace ATP.AnimationPathTools {
 
         #region SERIALIZED PROPERTIES
 
-        private SerializedProperty GizmoCurveColor;
+        //private SerializedProperty GizmoCurveColor;
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
@@ -89,7 +89,7 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void OnEnable() {
             // Initialize serialized properties.
-            GizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
+            //GizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
@@ -693,11 +693,11 @@ namespace ATP.AnimationPathTools {
                     ""));
             serializedObject.ApplyModifiedProperties();
 
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                    GizmoCurveColor,
-                    new GUIContent("Curve Color", ""));
-            serializedObject.ApplyModifiedProperties();
+            //serializedObject.Update();
+            //EditorGUILayout.PropertyField(
+            //        GizmoCurveColor,
+            //        new GUIContent("Curve Color", ""));
+            //serializedObject.ApplyModifiedProperties();
 
             //Script.HandleMode =
             //    (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(

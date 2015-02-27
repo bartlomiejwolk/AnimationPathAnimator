@@ -14,7 +14,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     How many points should be drawn for one meter of a gizmo curve.
         /// </summary>
-        public const int GizmoCurveSamplingFrequency = 20;
+        //public const int GizmoCurveSamplingFrequency = 20;
 
         #endregion CONSTANTS
         #region FIELDS
@@ -50,10 +50,10 @@ namespace ATP.AnimationPathTools {
 
 #pragma warning restore 414
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField] private Color gizmoCurveColor = Color.yellow;
+        ///// <summary>
+        /////     Color of the gizmo curve.
+        ///// </summary>
+        //[SerializeField] private Color gizmoCurveColor = Color.yellow;
 
         [SerializeField] private AnimationPathBuilderHandleMode handleMode =
             AnimationPathBuilderHandleMode.MoveSingle;
@@ -77,10 +77,10 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     Color of the gizmo curve.
         /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
-        }
+        //public Color GizmoCurveColor {
+        //    get { return gizmoCurveColor; }
+        //    set { gizmoCurveColor = value; }
+        //}
 
         public AnimationPathBuilderHandleMode HandleMode {
             get { return handleMode; }
@@ -123,7 +123,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDrawGizmosSelected() {
-            DrawGizmoCurve();
+            //DrawGizmoCurve();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -171,45 +171,45 @@ namespace ATP.AnimationPathTools {
         //    OnNodeAdded();
         //}
 
-        public Vector3[] GetNodeGlobalPositions() {
-            var nodePositions = PathData.GetNodePositions();
+        //public Vector3[] GetNodeGlobalPositions() {
+        //    var nodePositions = PathData.GetNodePositions();
 
-            for (var i = 0; i < nodePositions.Length; i++) {
-                // Convert each position to global coordinate.
-                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
-            }
+        //    for (var i = 0; i < nodePositions.Length; i++) {
+        //        // Convert each position to global coordinate.
+        //        nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+        //    }
 
-            return nodePositions;
-        }
+        //    return nodePositions;
+        //}
 
 
-        private void DrawGizmoCurve() {
-            // Return if path asset is not assigned.
-            if (pathData == null) return;
+        //private void DrawGizmoCurve() {
+        //    // Return if path asset is not assigned.
+        //    if (pathData == null) return;
 
-            // Get transform component.
-            var transform = GetComponent<Transform>();
+        //    // Get transform component.
+        //    var transform = GetComponent<Transform>();
 
-            // Get path points.
-            var points = pathData.SampleAnimationPathForPoints(
-                GizmoCurveSamplingFrequency);
+        //    // Get path points.
+        //    var points = pathData.SampleAnimationPathForPoints(
+        //        GizmoCurveSamplingFrequency);
 
-            // Convert points to global coordinates.
-            var globalPoints = new Vector3[points.Count];
-            for (var i = 0; i < points.Count; i++) {
-                globalPoints[i] = transform.TransformPoint(points[i]);
-            }
+        //    // Convert points to global coordinates.
+        //    var globalPoints = new Vector3[points.Count];
+        //    for (var i = 0; i < points.Count; i++) {
+        //        globalPoints[i] = transform.TransformPoint(points[i]);
+        //    }
 
-            // There must be at least 3 points to draw a line.
-            if (points.Count < 3) return;
+        //    // There must be at least 3 points to draw a line.
+        //    if (points.Count < 3) return;
 
-            Gizmos.color = gizmoCurveColor;
+        //    Gizmos.color = gizmoCurveColor;
 
-            // Draw curve.
-            for (var i = 0; i < points.Count - 1; i++) {
-                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
-            }
-        }
+        //    // Draw curve.
+        //    for (var i = 0; i < points.Count - 1; i++) {
+        //        Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+        //    }
+        //}
 
         #endregion PRIVATE METHODS
     }

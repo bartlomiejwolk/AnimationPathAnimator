@@ -58,6 +58,7 @@ namespace ATP.AnimationPathTools {
             private Transform targetGO;
 
 #pragma warning restore 649
+        public const int GizmoCurveSamplingFrequency = 20;
 
         #region OPTIONS
 
@@ -116,8 +117,16 @@ namespace ATP.AnimationPathTools {
         private AnimationPathBuilderHandleMode movementMode =
             AnimationPathBuilderHandleMode.MoveAll;
 
-#pragma warning restore 169
-#pragma warning restore 169
+#pragma warning disable 0414
+        [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
+            AnimationPathBuilderTangentMode.Smooth;
+#pragma warning restore 0414
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
 
         #endregion OPTIONS
 
@@ -205,6 +214,19 @@ namespace ATP.AnimationPathTools {
             set { movementMode = value; }
         }
 
+        public AnimationPathBuilderTangentMode TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -262,7 +284,6 @@ namespace ATP.AnimationPathTools {
                 GizmoDrawer.DrawForwardPointIcon(globalForwardPointPosition);
             }
 
-            // Return if handle mode is not rotation mode.
             if (handleMode == AnimatorHandleMode.Rotation) {
                 var localPointPositions =
                     PathData.SampleRotationPathForPoints(
@@ -282,6 +303,8 @@ namespace ATP.AnimationPathTools {
 
                 DrawRotationPointGizmos();
             }
+
+            DrawGizmoCurve();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -320,6 +343,46 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region METHODS
+
+        // Move to GizmoDrawer class.
+        private void DrawGizmoCurve() {
+            // Return if path asset is not assigned.
+            if (pathData == null) return;
+
+            // Get transform component.
+            var transform = GetComponent<Transform>();
+
+            // Get path points.
+            var points = pathData.SampleAnimationPathForPoints(
+                GizmoCurveSamplingFrequency);
+
+            // Convert points to global coordinates.
+            var globalPoints = new Vector3[points.Count];
+            for (var i = 0; i < points.Count; i++) {
+                globalPoints[i] = transform.TransformPoint(points[i]);
+            }
+
+            // There must be at least 3 points to draw a line.
+            if (points.Count < 3) return;
+
+            Gizmos.color = gizmoCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+            }
+        }
+
+        public Vector3[] GetNodeGlobalPositions() {
+            var nodePositions = PathData.GetNodePositions();
+
+            for (var i = 0; i < nodePositions.Length; i++) {
+                // Convert each position to global coordinate.
+                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+            }
+
+            return nodePositions;
+        }
 
         public void Animate() {
             AnimateObject();

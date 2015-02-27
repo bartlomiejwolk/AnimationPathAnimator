@@ -56,7 +56,13 @@ namespace ATP.AnimationPathTools {
         private const float RotationHandleSize = 0.25f;
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
-
+        private const float MovementHandleSize = 0.12f;
+        private readonly Color moveAllModeColor = Color.red;
+        private const float MoveAllModeSize = 0.15f;
+        private const int AddButtonH = 25;
+        private const int AddButtonV = 10;
+        private const int RemoveButtonH = 44;
+        private const int RemoveButtonV = 10;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -359,12 +365,35 @@ namespace ATP.AnimationPathTools {
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
 
+            HandleDrawingPositionHandles();
+            HandleDrawingAddButtons();
+            HandleDrawingRemoveButtons();
+
             //script.UpdateAnimatedGO();
         }
 
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
+
+        private void HandleDrawingRemoveButtons() {
+            // Positions at which to draw movement handles.
+            var nodes = script.GetNodeGlobalPositions();
+
+            // Get style for add button.
+            var removeButtonStyle = script.Skin.GetStyle(
+                        "RemoveButton");
+
+            // Callback to add a new node after add button was pressed.
+            Action<int> removeNodeCallback =
+                DrawRemoveNodeButtonsCallbackHandles;
+
+            // Draw add node buttons.
+            DrawRemoveNodeButtons(
+                nodes,
+                removeNodeCallback,
+                removeButtonStyle);
+        }
 
         private void HandleDrawingEaseHandles() {
             if (script.HandleMode != AnimatorHandleMode.Ease) return;
@@ -407,23 +436,34 @@ namespace ATP.AnimationPathTools {
                 TiltValueLabelOffsetY,
                 script.Skin.GetStyle("TiltValueLabel"));
         }
+        /// <summary>
+        /// Handle drawing movement handles.
+        /// </summary>
+        private void HandleDrawingPositionHandles() {
+            // Callback to call when a node is moved on the scene.
+            Action<int, Vector3, Vector3> handlerCallback =
+                DrawPositionHandlesCallbackHandler;
 
-        private void HandleNoneModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != NoneModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.None;
+            // Draw handles.
+            DrawPositionHandles(handlerCallback);
         }
 
-        private void HandleUpdateAllOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != UpdateAllShortcut) return;
+        private void HandleDrawingAddButtons() {
+            // Get positions at which to draw movement handles.
+            var nodePositions = script.GetNodeGlobalPositions();
 
-            script.UpdateAllMode = !script.UpdateAllMode;
-        }
+            // Get style for add button.
+            var addButtonStyle = script.Skin.GetStyle(
+                        "AddButton");
 
-        private void HandleWrapModeDropdown() {
-            script.UpdateWrapMode();
+            // Callback executed after add button was pressed.
+            Action<int> callbackHandler = DrawAddNodeButtonsCallbackHandler;
+
+            // Draw add node buttons.
+            DrawAddNodeButtons(
+                nodePositions,
+                callbackHandler,
+                addButtonStyle);
         }
 
         //private void HandleDrawingForwardPointMarker() {
@@ -444,7 +484,178 @@ namespace ATP.AnimationPathTools {
 
         #endregion DRAWING HANDLERS
 
+        #region OTHER HANDLERS
+        private void HandleWrapModeDropdown() {
+            script.UpdateWrapMode();
+        }
+
+        private void HandleMoveAllMovementMode(Vector3 moveDelta) {
+            if (script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+                script.PathData.OffsetNodePositions(moveDelta);
+            }
+        }
+
+        private void HandleMoveSingleHandleMove(int movedNodeIndex, Vector3 position) {
+            if (script.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
+
+                script.PathData.MoveNodeToPosition(movedNodeIndex, position);
+                script.PathData.DistributeTimestamps();
+
+                HandleSmoothTangentMode();
+                HandleLinearTangentMode();
+            }
+        }
+
+        private void HandleSmoothTangentMode() {
+            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                script.PathData.SmoothAllNodeTangents();
+            }
+        }
+
+        private void HandleLinearTangentMode() {
+            if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                script.PathData.SetNodesLinear();
+            }
+        }
+        #endregion
+
+        #region SHORTCUT HANDLERS
+        private void HandleUpdateAllOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != UpdateAllShortcut) return;
+
+            script.UpdateAllMode = !script.UpdateAllMode;
+        }
+
+        private void HandleNoneModeOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != NoneModeShortcut) return;
+
+            script.HandleMode = AnimatorHandleMode.None;
+        }
+
+        #endregion
+
         #region DRAWING METHODS
+
+        private void DrawRemoveNodeButtons(
+            Vector3[] nodePositions,
+            Action<int> callback,
+            GUIStyle buttonStyle) {
+
+            Handles.BeginGUI();
+
+            // Draw remove buttons for each node except for the first and the
+            // last one. Execute callback on button press.
+            for (var i = 1; i < nodePositions.Length - 1; i++) {
+                // Translate node's 3d position into screen coordinates.
+                var guiPoint = HandleUtility.WorldToGUIPoint(
+                        nodePositions[i]);
+
+                // Draw button.
+                var buttonPressed = DrawButton(
+                    guiPoint,
+                    RemoveButtonH,
+                    RemoveButtonV,
+                    15,
+                    15,
+                    buttonStyle);
+
+                // Execute callback.
+                if (buttonPressed) {
+                    callback(i);
+                }
+            }
+
+            Handles.EndGUI();
+        }
+
+        private bool DrawButton(
+            Vector2 position,
+            int relativeXPos,
+            int relativeYPos,
+            int width,
+            int height,
+            GUIStyle style,
+            string buttonText = "") {
+
+            // Create rectangle for the "+" button.
+            var rectAdd = new Rect(
+                    position.x + relativeXPos,
+                    position.y + relativeYPos,
+                    width,
+                    height);
+
+            // Draw the "+" button.
+            var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
+
+            return addButtonPressed;
+        }
+
+        private void DrawAddNodeButtons(
+            Vector3[] nodePositions,
+            Action<int> callback,
+            GUIStyle buttonStyle) {
+
+            Handles.BeginGUI();
+
+            // Draw add buttons for each node (except the last one). Execute
+            // callback on button press.
+            for (var i = 0; i < nodePositions.Length - 1; i++) {
+                // Translate node's 3d position into screen coordinates.
+                var guiPoint = HandleUtility.WorldToGUIPoint(
+                        nodePositions[i]);
+
+                // Draw button.
+                var buttonPressed = DrawButton(
+                    guiPoint,
+                    AddButtonH,
+                    AddButtonV,
+                    15,
+                    15,
+                    buttonStyle);
+
+                // Execute callback.
+                if (buttonPressed) {
+                    callback(i);
+                }
+            }
+
+            Handles.EndGUI();
+        }
+
+        private void DrawPositionHandles(
+            Action<int, Vector3, Vector3> callback) {
+
+            // Node global positions.
+            var nodes = script.GetNodeGlobalPositions();
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                // Draw position handle.
+                var newPos = DrawPositionHandle(nodes[i], capFunction);
+
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition =
+                        script.transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition =
+                        script.transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
+            }
+        }
 
         /// <summary>
         ///     Draw arc handle.
@@ -507,7 +718,7 @@ namespace ATP.AnimationPathTools {
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get path node positions.
             var nodePositions =
-                script.AnimationPathBuilder.GetNodeGlobalPositions();
+                script.GetNodeGlobalPositions();
 
             // Get ease values.
             //var easeCurveValues = new float[script.PathData.EaseCurveKeysNo];
@@ -621,7 +832,7 @@ namespace ATP.AnimationPathTools {
             // Get path node positions.
             //var nodePositions = script.AnimationPathBuilder.GetNodePositions();
             var nodePositions =
-                script.AnimationPathBuilder.GetNodeGlobalPositions();
+                script.GetNodeGlobalPositions();
 
             // Get tilting curve values.
             //var tiltingCurveValues = new float[script.PathData.EaseCurveKeysNo];
@@ -647,9 +858,50 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        private Vector3 DrawPositionHandle(
+            Vector3 nodePosition,
+            Handles.DrawCapFunction capFunction) {
+
+            // Set handle color.
+            Handles.color = script.GizmoCurveColor;
+
+            // Get handle size.
+            var handleSize = HandleUtility.GetHandleSize(nodePosition);
+            var sphereSize = handleSize * MovementHandleSize;
+
+            // In Move All mode..
+            if (script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+                Handles.color = moveAllModeColor;
+                sphereSize = handleSize * MoveAllModeSize;
+            }
+
+            // Draw handle.
+            var newPos = Handles.FreeMoveHandle(
+                nodePosition,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                capFunction);
+            return newPos;
+        }
+
         #endregion DRAWING METHODS
 
         #region CALLBACK HANDLERS
+
+        protected virtual void DrawRemoveNodeButtonsCallbackHandles(int nodeIndex) {
+            Undo.RecordObject(script.PathData, "Change path");
+
+            script.PathData.RemoveNode(nodeIndex);
+            script.PathData.DistributeTimestamps();
+
+            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                script.PathData.SmoothAllNodeTangents();
+            }
+            else if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                script.PathData.SetNodesLinear();
+            }
+        }
 
         private void DrawEaseHandlesCallbackHandler(
             int keyIndex,
@@ -683,6 +935,17 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(script.PathData, "Tilting curve changed.");
 
             script.PathData.UpdateNodeTilting(keyIndex, newValue);
+        }
+
+        protected virtual void DrawPositionHandlesCallbackHandler(
+            int movedNodeIndex,
+            Vector3 position,
+            Vector3 moveDelta) {
+
+            Undo.RecordObject(script.PathData, "Change path");
+
+            HandleMoveAllMovementMode(moveDelta);
+            HandleMoveSingleHandleMove(movedNodeIndex, position);
         }
 
         private void JumpBackwardCallbackHandler() {
@@ -719,9 +982,26 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
+        protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
+            // Make snapshot of the target object.
+            Undo.RecordObject(script.PathData, "Change path");
+
+            // Add a new node.
+            AddNodeBetween(nodeIndex);
+
+            script.PathData.DistributeTimestamps();
+
+            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                script.PathData.SmoothAllNodeTangents();
+            }
+            else if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                script.PathData.SetNodesLinear();
+            }
+        }
+
         #endregion CALLBACK HANDLERS
 
-        #region PRIVATE METHODS
+        #region METHODS
 
         private void AnyJumpKeyPressedCallbackHandler() {
             if (Application.isPlaying) script.UpdateAnimatedGO();
@@ -854,6 +1134,23 @@ namespace ATP.AnimationPathTools {
                 script.PathData.ResetPath();
             }
         }
+
+        protected void AddNodeBetween(int nodeIndex) {
+            // Timestamp of node on which was taken action.
+            var currentKeyTime = script.PathData.GetNodeTimestamp(nodeIndex);
+            // Get timestamp of the next node.
+            var nextKeyTime = script.PathData.GetNodeTimestamp(nodeIndex + 1);
+
+            // Calculate timestamps for new key. It'll be placed exactly
+            // between the two nodes.
+            var newKeyTime =
+                currentKeyTime +
+                ((nextKeyTime - currentKeyTime) / 2);
+
+            // Add node to the animation curves.
+            script.PathData.CreateNodeAtTime(newKeyTime);
+        }
+
         #endregion PRIVATE METHODS
 
         #region SHORTCUT HANDLERS

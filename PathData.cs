@@ -392,9 +392,10 @@ namespace ATP.AnimationPathTools {
 
         public void MoveNodeToPosition(
             int nodeIndex,
-            Vector3 position,
-            AnimationPathBuilder animationPathBuilder) {
+            Vector3 position) {
+
             AnimatedObjectPath.MovePointToPosition(nodeIndex, position);
+
             OnNodePositionChanged();
         }
 

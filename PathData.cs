@@ -95,6 +95,13 @@ namespace ATP.AnimationPathTools {
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
+        public void OnBeforeSerialize() {
+        }
+
+        public void OnAfterDeserialize() {
+            SubscribeToEvents();
+        }
+
 
         // ReSharper disable once UnusedMember.Local
         private void OnEnable() {
@@ -110,6 +117,16 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
+        public virtual void OnNodePositionChanged() {
+            var handler = NodePositionChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public virtual void OnNodeRemoved() {
+            var handler = NodeRemoved;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
 
         protected virtual void OnNodeAdded() {
             var handler = NodeAdded;
@@ -134,7 +151,6 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT INVOCATORS
 
         #region EVENT HANDLERS
-
         private void PathData_NodeAdded(object sender, EventArgs e) {
             UpdateCurveWithAddedKeys(EaseCurve);
             UpdateCurveWithAddedKeys(TiltingCurve);
@@ -393,17 +409,6 @@ namespace ATP.AnimationPathTools {
                 OnNodePositionChanged();
             }
         }
-
-        public virtual void OnNodePositionChanged() {
-            var handler = NodePositionChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public virtual void OnNodeRemoved() {
-            var handler = NodeRemoved;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         public void RemoveAllNodes() {
             var nodesNo = NodesNo;
             for (var i = 0; i < nodesNo; i++) {
@@ -741,15 +746,6 @@ namespace ATP.AnimationPathTools {
             TiltingCurve = new AnimationCurve();
         }
 
-        #endregion METHODS
-
-        public void OnBeforeSerialize() {
-        }
-
-        public void OnAfterDeserialize() {
-            SubscribeToEvents();
-        }
-
         private void SubscribeToEvents() {
             NodeAdded += PathData_NodeAdded;
             NodeRemoved += PathData_NodeRemoved;
@@ -758,6 +754,7 @@ namespace ATP.AnimationPathTools {
             NodePositionChanged += PathData_NodePositionChanged;
         }
 
+        #endregion METHODS
     }
 
 }

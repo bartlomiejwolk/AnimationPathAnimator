@@ -204,11 +204,12 @@ namespace ATP.AnimationPathTools {
         public virtual void OnEnable() {
             // Subscribe to events.
             animationPathBuilder.PathReset += animationPathBuilder_PathReset;
-            animationPathBuilder.NodeTimeChanged +=
-                animationPathBuilder_NodeTimeChanged;
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
 
+            // TODO First unsubscribe from events. Make separate method.
             if (pathData != null) {
+                PathData.NodeTimeChanged +=
+                    animationPathBuilder_NodeTimeChanged;
                 PathData.NodeRemoved += animationPathBuilder_NodeRemoved;
                 PathData.NodePositionChanged +=
                     animationPathBuilder_NodePositionChanged;
@@ -331,9 +332,10 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodeTimeChanged(
             object sender,
             EventArgs e) {
-            PathData.UpdateRotationCurvesTimestamps();
+
             PathData.UpdateCurveTimestamps(PathData.EaseCurve);
             PathData.UpdateCurveTimestamps(PathData.TiltingCurve);
+            PathData.UpdateRotationCurvesTimestamps();
         }
 
         private void animationPathBuilder_PathReset(

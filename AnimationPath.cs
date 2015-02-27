@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
+using ATP.LoggingTools;
 
 namespace ATP.AnimationPathTools {
 
@@ -101,6 +102,8 @@ namespace ATP.AnimationPathTools {
             int keyIndex,
             float newTimestamp) {
 
+            //Logger.LogStackTrace();
+
             // For each curve..
             for (var i = 0; i < 3; i++) {
                 // Get copy of the key from animation curves.
@@ -111,10 +114,18 @@ namespace ATP.AnimationPathTools {
 
                 // Replace old key with a new one.
                 curves[i].MoveKey(keyIndex, keyCopy);
+
+                //if (i == 0)
+                //    Logger.LogString(
+                //        "INDEX: {0}, TIME: {1}",
+                //        keyIndex,
+                //        keyCopy.time);
             }
         }
 
         public void CreateNewNode(float timestamp, Vector3 position) {
+            Logger.LogString("ADD NEW NODE : {0}", timestamp);
+
             curves[0].AddKey(timestamp, position.x);
             curves[1].AddKey(timestamp, position.y);
             curves[2].AddKey(timestamp, position.z);
@@ -178,6 +189,7 @@ namespace ATP.AnimationPathTools {
             curves[2].MoveKey(keyIndex, keyZCopy);
         }
         public void RemoveNode(int nodeIndex) {
+            Logger.LogString("REMOVE NODE: {0}", nodeIndex);
             // For each animation curve..
             for (var i = 0; i < 3; i++) {
                 // Remove node keys.

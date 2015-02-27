@@ -773,7 +773,7 @@ namespace ATP.AnimationPathTools {
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = Script.PathData.AnimatedObjectPath.SamplePathForPoints(
+                points = Script.PathData.SampleAnimationPathForPoints(
                     exportSampling);
             }
 
@@ -818,8 +818,8 @@ namespace ATP.AnimationPathTools {
             Script.PathData.RemoveAllNodes();
 
             // Create beginning and end nodes.
-            Script.PathData.AnimatedObjectPath.CreateNewNode(0, firstNodePos);
-            Script.PathData.CreateNode(0, lastNodePos);
+            Script.PathData.CreateAnimationPathNode(0, firstNodePos);
+            Script.PathData.CreateAnimationPathNode(1, lastNodePos);
 
             Script.this_PathReset();
         }

@@ -23,7 +23,6 @@ namespace ATP.AnimationPathTools {
 
 
 
-        public event EventHandler NodeTimeChanged;
 
         public event EventHandler PathReset;
 
@@ -92,7 +91,7 @@ namespace ATP.AnimationPathTools {
         ///     Number of keys in an animation curve.
         /// </summary>
         public int NodesNo {
-            get { return pathData.AnimatedObjectPath.KeysNo; }
+            get { return pathData.AnimationPathKeysNo; }
         }
 
         public PathData PathData {
@@ -151,11 +150,6 @@ namespace ATP.AnimationPathTools {
         //    if (handler != null) handler(this, EventArgs.Empty);
         //}
 
-        protected virtual void OnNodeTimeChanged() {
-            var handler = NodeTimeChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         #endregion EVENT INVOCATORS
 
         #region METHODS
@@ -167,7 +161,7 @@ namespace ATP.AnimationPathTools {
         //    OnNodeTimeChanged();
         //}
 
-        //public void CreateNode(float timestamp, Vector3 position) {
+        //public void CreateAnimationPathNode(float timestamp, Vector3 position) {
         //    pathData.AnimatedObjectPath.CreateNewNode(timestamp, position);
         //    OnNodeAdded();
         //}
@@ -197,7 +191,7 @@ namespace ATP.AnimationPathTools {
             var transform = GetComponent<Transform>();
 
             // Get path points.
-            var points = pathData.AnimatedObjectPath.SamplePathForPoints(
+            var points = pathData.SampleAnimationPathForPoints(
                 GizmoCurveSamplingFrequency);
 
             // Convert points to global coordinates.

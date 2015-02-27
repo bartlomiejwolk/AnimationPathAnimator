@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ATP.LoggingTools;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -13,6 +15,7 @@ namespace ATP.AnimationPathTools {
         public event EventHandler NodeTiltChanged;
         public event EventHandler NodeAdded;
         public event EventHandler NodePositionChanged;
+        public event EventHandler NodeTimeChanged;
         public event EventHandler NodeRemoved;
 
         public event EventHandler RotationPointPositionChanged;
@@ -33,9 +36,13 @@ namespace ATP.AnimationPathTools {
 
         #region PUBLIC PROPERTIES
 
-        public AnimationPath AnimatedObjectPath {
+        private AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
             set { animatedObjectPath = value; }
+        }
+
+        public int AnimationPathKeysNo {
+            get { return animatedObjectPath.KeysNo; }
         }
 
         public AnimationCurve EaseCurve {
@@ -98,9 +105,25 @@ namespace ATP.AnimationPathTools {
             var handler = RotationPointPositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
+
+        protected virtual void OnNodeTimeChanged() {
+            var handler = NodeTimeChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         #endregion EVENTINVOCATORS
 
         #region METHODS
+
+        //public void CreateAnimationPathNode(int index, Vector3 value) {
+        //    animatedObjectPath.CreateNewNode(index, value);
+        //}
+
+        public List<Vector3> SampleAnimationPathForPoints(
+            int samplingFrequency) {
+
+            return animatedObjectPath.SamplePathForPoints(samplingFrequency);
+        }
 
         public void AddKeyToCurve(
             AnimationCurve curve,
@@ -334,6 +357,12 @@ namespace ATP.AnimationPathTools {
                 // point timestamp..
                 if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
                     > FloatPrecision) {
+
+                    if (i == 1)
+                        Logger.LogString(
+                            "Rotation NEW TIMESTAMP: {0}",
+                            nodeTimestamps[i]);
+
                     // Update rotation point timestamp.
                     RotationPath.ChangeNodeTimestamp(
                         i,
@@ -343,31 +372,41 @@ namespace ATP.AnimationPathTools {
         }
 
         public void UpdateRotationCurvesWithAddedKeys() {
-            // AnimationPathBuilder node timestamps.
-            var animationCurvesTimestamps = GetPathTimestamps();
-            // Get values from rotationPath.
-            var rotationCurvesTimestamps = RotationPath.GetTimestamps();
-            var rotationCurvesKeysNo = rotationCurvesTimestamps.Length;
+            // Get animatedObjectPath timestamps.
+            var pathTimestamps = GetPathTimestamps();
 
-            // For each timestamp in rotationPath..
-            for (var i = 0; i < animationCurvesTimestamps.Length; i++) {
+            // Get rotationPath values.
+            var rotationPathTimestamps = RotationPath.GetTimestamps();
+
+            // Get number of nodes in the rotation path.
+            var rotationPathNodeNo = rotationPathTimestamps.Length;
+
+            // For each timestamp in animatedObjectPath ..
+            for (var i = 0; i < pathTimestamps.Length; i++) {
                 var keyExists = false;
-                for (var j = 0; j < rotationCurvesKeysNo; j++) {
-                    if (Math.Abs(rotationCurvesTimestamps[j]
-                                 - animationCurvesTimestamps[i])
+                // For each node in rotationPath..
+                for (var j = 0; j < rotationPathNodeNo; j++) {
+                    // If both timestamps are the same..
+                    if (Math.Abs(rotationPathTimestamps[j] - pathTimestamps[i])
                         < FloatPrecision) {
+
                         keyExists = true;
+
                         break;
                     }
                 }
 
+                // If both timestamps are different..
                 if (!keyExists) {
+                    // Get timestamp of the added key.
                     var addedKeyTimestamp = GetNodeTimestamp(i);
+                    // Calculate value for new rotation point.
                     var defaultRotation =
                         RotationPath.GetVectorAtTime(addedKeyTimestamp);
 
+                    // Create new rotation point.
                     RotationPath.CreateNewNode(
-                        animationCurvesTimestamps[i],
+                        pathTimestamps[i],
                         defaultRotation);
                 }
             }
@@ -456,8 +495,9 @@ namespace ATP.AnimationPathTools {
             TiltingCurve = new AnimationCurve();
         }
 
-        public void CreateNode(float timestamp, Vector3 position) {
+        public void CreateAnimationPathNode(float timestamp, Vector3 position) {
             AnimatedObjectPath.CreateNewNode(timestamp, position);
+
             OnNodeAdded();
         }
 
@@ -499,6 +539,9 @@ namespace ATP.AnimationPathTools {
                 // NOTE When nodes on the scene overlap, it's possible that new
                 // timestamp is > 0, which is invalid.
                 if (newTimestamp > 1) break;
+
+                if (i == 1)
+                    Logger.LogString("OBJECT NEW TIMESTAMP: {0}", newTimestamp);
 
                 // Update node timestamp.
                 AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);

@@ -11,46 +11,9 @@ namespace ATP.AnimationPathTools {
     public class AnimatorEditor : Editor {
         #region CONSTANTS
 
-        public const KeyCode EaseModeShortcut = KeyCode.G;
-
-        /// <summary>
-        ///     Key shortcut to jump backward.
-        /// </summary>
-        public const KeyCode JumpBackward = KeyCode.LeftArrow;
-
-        /// <summary>
-        ///     Key shortcut to jump forward.
-        /// </summary>
-        public const KeyCode JumpForward = KeyCode.RightArrow;
-
-        /// <summary>
-        ///     Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public const KeyCode JumpToEnd = KeyCode.UpArrow;
-
-        public const KeyCode JumpToNextNode = KeyCode.UpArrow;
-        public const KeyCode JumpToPreviousNode = KeyCode.DownArrow;
-
-        /// <summary>
-        ///     Key shortcut to jump to the beginning of the animation.
-        /// </summary>
-        public const KeyCode JumpToStart = KeyCode.DownArrow;
 
         public const float JumpValue = 0.01f;
 
-        /// <summary>
-        ///     Keycode used as a modifier key.
-        /// </summary>
-        /// <remarks>Modifier key changes how other keys works.</remarks>
-        public const KeyCode ModKey = KeyCode.A;
-
-        public const KeyCode MoveAllKey = KeyCode.U;
-        public const KeyCode MoveSingleModeKey = KeyCode.Y;
-        public const KeyCode NoneModeShortcut = KeyCode.K;
-        public const KeyCode PlayPauseShortcut = KeyCode.Space;
-        public const KeyCode RotationModeShortcut = KeyCode.H;
-        public const KeyCode TiltingModeShortcut = KeyCode.J;
-        public const KeyCode UpdateAllShortcut = KeyCode.L;
         private const int AddButtonH = 25;
         private const int AddButtonV = 10;
         private const float ArcHandleRadius = 0.6f;
@@ -67,17 +30,13 @@ namespace ATP.AnimationPathTools {
         private const int TiltValueLabelOffsetY = -25;
         private const float FloatPrecision = 0.001f;
         private const float ScaleHandleSize = 1.5f;
+
         #endregion CONSTANTS
 
         #region FIELDS
         private readonly Color moveAllModeColor = Color.red;
 
         private SerializedObject gizmoDrawer;
-
-        /// <summary>
-        ///     If modifier is currently pressed.
-        /// </summary>
-        private bool modKeyPressed;
 
         /// <summary>
         ///     Reference to target script.
@@ -103,6 +62,17 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
+        private ShortcutHandler shortcutHandler;
+
+        public AnimationPathAnimator Script {
+            set { script = value; }
+            get { return script; }
+        }
+
+        public AnimationPathAnimator Script1 {
+            set { script = value; }
+            get { return script; }
+        }
 
         #endregion SERIALIZED PROPERTIES
 
@@ -222,7 +192,8 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     playPauseBtnText,
                     ""))) {
-                HandlePlayPause();
+
+                script.HandlePlayPause();
             }
 
             // Draw Stop button.
@@ -313,6 +284,7 @@ namespace ATP.AnimationPathTools {
             SceneTool.RememberCurrentTool();
 
             gizmoDrawer = new SerializedObject(script.GizmoDrawer);
+            shortcutHandler = new ShortcutHandler(script);
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
@@ -354,15 +326,15 @@ namespace ATP.AnimationPathTools {
             if (script.PathData == null) return;
 
             // Update modifier key state.
-            UpdateModifierKey();
-            HandleEaseModeOptionShortcut();
-            HandleRotationModeOptionShortcut();
-            HandleTiltingModeOptionShortcut();
-            HandleNoneModeOptionShortcut();
-            HandleUpdateAllOptionShortcut();
-            HandlePlayPauseShortcut();
-            HandleMoveAllOptionShortcut();
-            HandleMoveSingleModeShortcut();
+            shortcutHandler.UpdateModifierKey();
+            shortcutHandler.HandleEaseModeOptionShortcut();
+            shortcutHandler.HandleRotationModeOptionShortcut();
+            shortcutHandler.HandleTiltingModeOptionShortcut();
+            shortcutHandler.HandleNoneModeOptionShortcut();
+            shortcutHandler.HandleUpdateAllOptionShortcut();
+            shortcutHandler.HandlePlayPauseShortcut();
+            shortcutHandler.HandleMoveAllOptionShortcut();
+            shortcutHandler.HandleMoveSingleModeShortcut();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
@@ -522,24 +494,6 @@ namespace ATP.AnimationPathTools {
 
         private void HandleWrapModeDropdown() {
             script.UpdateWrapMode();
-        }
-
-        #endregion
-
-        #region SHORTCUT HANDLERS
-
-        private void HandleNoneModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != NoneModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.None;
-        }
-
-        private void HandleUpdateAllOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != UpdateAllShortcut) return;
-
-            script.UpdateAllMode = !script.UpdateAllMode;
         }
 
         #endregion
@@ -1031,8 +985,9 @@ namespace ATP.AnimationPathTools {
             // If a key is pressed..
             if (Event.current.type == EventType.keyDown
                 // and modifier key is pressed also..
-                && modKeyPressed) {
-                HandleModifiedShortcuts(
+                && shortcutHandler.ModKeyPressed) {
+
+                shortcutHandler.HandleModifiedShortcuts(
                     ModJumpForwardCallbackHandler,
                     ModJumpBackwardCallbackHandler,
                     JumpToNextNodeCallbackHandler,
@@ -1041,7 +996,7 @@ namespace ATP.AnimationPathTools {
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
-                HandleUnmodifiedShortcuts(
+                shortcutHandler.HandleUnmodifiedShortcuts(
                     JumpBackwardCallbackHandler,
                     JumpForwardCallbackHandler,
                     JumpToStartCallbackHandler,
@@ -1166,25 +1121,6 @@ namespace ATP.AnimationPathTools {
             return 1.0f;
         }
 
-        private void HandlePlayPause() {
-            // Pause animation.
-            if (script.IsPlaying) {
-                script.Pause = true;
-                script.IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (script.Pause) {
-                script.Pause = false;
-                script.IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                script.IsPlaying = true;
-                // Start animation.
-                script.StartEaseTimeCoroutine();
-            }
-        }
-
         private void JumpToNextNodeCallbackHandler() {
             // Jump to next node.
             animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
@@ -1210,185 +1146,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion PRIVATE METHODS
-
-        #region SHORTCUT HANDLERS
-
-        private void HandleEaseModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != EaseModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Ease;
-        }
-
-        private void HandleModifiedShortcuts(
-            Action jumpForwardCallback = null,
-            Action jumpBackwardCallback = null,
-            Action jumpToNextNodeCallback = null,
-            Action jumpToPreviousNodeCallback = null,
-            Action anyModJumpKeyPressedCallback = null) {
-            serializedObject.Update();
-
-            // Check what key is pressed..
-            switch (Event.current.keyCode) {
-                // Jump backward.
-                case JumpBackward:
-                    Event.current.Use();
-
-                    if (jumpBackwardCallback != null) jumpBackwardCallback();
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump forward.
-                case JumpForward:
-                    Event.current.Use();
-
-                    if (jumpForwardCallback != null) jumpForwardCallback();
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-
-                case JumpToNextNode:
-                    Event.current.Use();
-
-                    if (jumpToNextNodeCallback != null)
-                        jumpToNextNodeCallback();
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-
-                case JumpToPreviousNode:
-                    Event.current.Use();
-
-                    if (jumpToPreviousNodeCallback != null) {
-                        jumpToPreviousNodeCallback();
-                    }
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-            }
-        }
-
-        /// <summary>
-        ///     Update <c>moveAllMode</c> option with keyboard shortcut.
-        /// </summary>
-        private void HandleMoveAllOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveAllKey) return;
-
-            script.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void HandleMoveSingleModeShortcut() {
-            // Return if Tangent Mode shortcut wasn't released.
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveSingleModeKey) return;
-
-            script.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void HandlePlayPauseShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != PlayPauseShortcut) return;
-
-            HandlePlayPause();
-        }
-
-        private void HandleRotationModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != RotationModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Rotation;
-        }
-
-        private void HandleTiltingModeOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != TiltingModeShortcut) return;
-
-            script.HandleMode = AnimatorHandleMode.Tilting;
-        }
-
-        private void HandleUnmodifiedShortcuts(
-            Action jumpBackwardCallback = null,
-            Action jumpForwardCallback = null,
-            Action jumpToStartCallback = null,
-            Action jumpToEndCallback = null,
-            Action anyJumpKeyPressedCallback = null) {
-
-            // Helper variable.
-
-            switch (Event.current.keyCode) {
-                // Jump backward.
-                case JumpBackward:
-                    Event.current.Use();
-
-                    if (jumpBackwardCallback != null) jumpBackwardCallback();
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump forward.
-                case JumpForward:
-                    Event.current.Use();
-
-                    if (jumpForwardCallback != null) jumpForwardCallback();
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump to start.
-                case JumpToStart:
-                    Event.current.Use();
-
-                    if (jumpToStartCallback != null) jumpToStartCallback();
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump to end.
-                case JumpToEnd:
-                    Event.current.Use();
-
-                    if (jumpToEndCallback != null) jumpToEndCallback();
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-            }
-        }
-
-        /// <summary>
-        ///     Checked if modifier key is pressed and remember it in a class
-        ///     field.
-        /// </summary>
-        private void UpdateModifierKey() {
-            // Check if modifier key is currently pressed.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == ModKey) {
-                // Remember key state.
-                modKeyPressed = true;
-            }
-            // If modifier key was released..
-            if (Event.current.type == EventType.keyUp
-                && Event.current.keyCode == ModKey) {
-                modKeyPressed = false;
-            }
-        }
-
-        #endregion
     }
 
 }

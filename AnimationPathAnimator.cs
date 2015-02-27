@@ -112,6 +112,10 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private WrapMode wrapMode = WrapMode.Clamp;
 
+        [SerializeField]
+        private AnimationPathBuilderHandleMode movementMode =
+            AnimationPathBuilderHandleMode.MoveAll;
+
 #pragma warning restore 169
 #pragma warning restore 169
 
@@ -194,6 +198,11 @@ namespace ATP.AnimationPathTools {
 
         protected virtual int RotationCurveSampling {
             get { return 20; }
+        }
+
+        public AnimationPathBuilderHandleMode MovementMode {
+            get { return movementMode; }
+            set { movementMode = value; }
         }
 
         #endregion PROPERTIES

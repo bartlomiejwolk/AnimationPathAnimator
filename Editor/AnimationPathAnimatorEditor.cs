@@ -187,6 +187,15 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
+            script.MovementMode =
+                (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Movement Mode",
+                    ""),
+                script.MovementMode);
+
+            EditorGUILayout.Space();
+
             DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();

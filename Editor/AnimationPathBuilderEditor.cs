@@ -287,15 +287,15 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleTangentModeChange() {
-            // Update path node tangents.
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
-            }
-            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
-            }
-        }
+        //private void HandleTangentModeChange() {
+        //    // Update path node tangents.
+        //    if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+        //        Script.PathData.SmoothAllNodeTangents();
+        //    }
+        //    else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+        //        Script.PathData.SetNodesLinear();
+        //    }
+        //}
 
         //private void HandleSmoothTangentMode() {
         //    if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
@@ -706,17 +706,17 @@ namespace ATP.AnimationPathTools {
             //        ""),
             //    Script.HandleMode);
 
-            // Remember current tangent mode.
-            var prevTangentMode = Script.TangentMode;
-            // Draw tangent mode dropdown.
-            Script.TangentMode =
-                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Tangent Mode",
-                    ""),
-                    Script.TangentMode);
-            // Update gizmo curve is tangent mode changed.
-            if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
+            //// Remember current tangent mode.
+            //var prevTangentMode = Script.TangentMode;
+            //// Draw tangent mode dropdown.
+            //Script.TangentMode =
+            //    (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
+            //    new GUIContent(
+            //        "Tangent Mode",
+            //        ""),
+            //        Script.TangentMode);
+            //// Update gizmo curve is tangent mode changed.
+            //if (Script.TangentMode != prevTangentMode) HandleTangentModeChange();
 
             //DrawResetPathInspectorButton();
 

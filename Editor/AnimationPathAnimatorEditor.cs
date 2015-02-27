@@ -194,6 +194,18 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
+            // Remember current tangent mode.
+            var prevTangentMode = script.TangentMode;
+            // Draw tangent mode dropdown.
+            script.TangentMode =
+                (AnimationPathBuilderTangentMode)EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Tangent Mode",
+                    ""),
+                    script.TangentMode);
+            // Update gizmo curve is tangent mode changed.
+            if (script.TangentMode != prevTangentMode) HandleTangentModeChange();
+
             script.MovementMode =
                 (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(
                 new GUIContent(
@@ -493,6 +505,17 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING HANDLERS
 
         #region OTHER HANDLERS
+
+        private void HandleTangentModeChange() {
+            // Update path node tangents.
+            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                script.PathData.SmoothAllNodeTangents();
+            }
+            else if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                script.PathData.SetNodesLinear();
+            }
+        }
+
         private void HandleWrapModeDropdown() {
             script.UpdateWrapMode();
         }

@@ -65,11 +65,12 @@ namespace ATP.AnimationPathTools {
         private const float RotationHandleSize = 0.25f;
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
-        private readonly Color moveAllModeColor = Color.red;
-
+        private const float FloatPrecision = 0.001f;
+        private const float ScaleHandleSize = 1.5f;
         #endregion CONSTANTS
 
         #region FIELDS
+        private readonly Color moveAllModeColor = Color.red;
 
         public static Tool LastTool = Tool.None;
         private SerializedObject gizmoDrawer;
@@ -85,12 +86,7 @@ namespace ATP.AnimationPathTools {
         // TODO Create property.
         private AnimationPathAnimator script;
 
-        #endregion FIELDS
-
         #region SERIALIZED PROPERTIES
-
-        private const float FloatPrecision = 0.001f;
-        private const float ScaleHandleSize = 1.5f;
         private SerializedProperty advancedSettingsFoldout;
 
         private SerializedProperty animatedGO;
@@ -111,6 +107,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion SERIALIZED PROPERTIES
 
+        #endregion FIELDS
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {

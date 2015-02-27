@@ -11,9 +11,8 @@ namespace ATP.AnimationPathTools {
     public class AnimatorEditor : Editor {
         #region CONSTANTS
 
-
+        // TODO Replace with properties.
         public const float JumpValue = 0.01f;
-
         private const int AddButtonH = 25;
         private const int AddButtonV = 10;
         private const float ArcHandleRadius = 0.6f;
@@ -34,23 +33,17 @@ namespace ATP.AnimationPathTools {
         #endregion CONSTANTS
 
         #region FIELDS
-        private readonly Color moveAllModeColor = Color.red;
-
         private SerializedObject gizmoDrawer;
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        // TODO Create property.
         private AnimationPathAnimator script;
 
         #region SERIALIZED PROPERTIES
         private SerializedProperty advancedSettingsFoldout;
-
         private SerializedProperty animatedGO;
-
         private SerializedProperty animTimeRatio;
-
         private SerializedProperty enableControlsInPlayMode;
         private SerializedProperty exportSamplingFrequency;
         private SerializedProperty forwardPointOffset;
@@ -62,21 +55,27 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
-        //private ShortcutHandler shortcutHandler;
-
-        public AnimationPathAnimator Script {
-            set { script = value; }
-            get { return script; }
-        }
-
-        public AnimationPathAnimator Script1 {
-            set { script = value; }
-            get { return script; }
-        }
 
         #endregion SERIALIZED PROPERTIES
-
         #endregion FIELDS
+        #region PROPERTIES
+        public virtual Color MoveAllModeColor {
+            get { return Color.red; }
+        }
+
+        public SerializedObject GizmoDrawer {
+            get { return gizmoDrawer; }
+        }
+
+        /// <summary>
+        ///     Reference to target script.
+        /// </summary>
+        public AnimationPathAnimator Script {
+            get { return script; }
+        }
+
+        #endregion
+
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
@@ -94,23 +93,23 @@ namespace ATP.AnimationPathTools {
                     "Current animation time."),
                 animTimeRatio.floatValue);
 
-            script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+            Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),
-                script.WrapMode);
+                Script.WrapMode);
 
-            script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+            Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
-                script.HandleMode);
+                Script.HandleMode);
 
-            script.UpdateAllMode = EditorGUILayout.Toggle(
+            Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All",
                     ""),
-                script.UpdateAllMode);
+                Script.UpdateAllMode);
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -124,7 +123,7 @@ namespace ATP.AnimationPathTools {
 
             serializedObject.Update();
 
-            if (script.RotationMode == AnimatorRotationMode.Forward) {
+            if (Script.RotationMode == AnimatorRotationMode.Forward) {
                 EditorGUILayout.PropertyField(forwardPointOffset);
             }
 
@@ -138,24 +137,24 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             // Remember current tangent mode.
-            var prevTangentMode = script.TangentMode;
+            var prevTangentMode = Script.TangentMode;
             // Draw tangent mode dropdown.
-            script.TangentMode =
+            Script.TangentMode =
                 (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         ""),
-                    script.TangentMode);
+                    Script.TangentMode);
             // Update gizmo curve is tangent mode changed.
-            if (script.TangentMode != prevTangentMode)
+            if (Script.TangentMode != prevTangentMode)
                 HandleTangentModeChange();
 
-            script.MovementMode =
+            Script.MovementMode =
                 (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
                         ""),
-                    script.MovementMode);
+                    Script.MovementMode);
 
             DrawResetPathInspectorButton();
 
@@ -180,7 +179,7 @@ namespace ATP.AnimationPathTools {
 
             // Play/Pause button text.
             string playPauseBtnText;
-            if (!script.IsPlaying || (script.IsPlaying && script.Pause)) {
+            if (!Script.IsPlaying || (Script.IsPlaying && Script.Pause)) {
                 playPauseBtnText = "Play";
             }
             else {
@@ -201,16 +200,16 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Stop",
                     ""))) {
-                script.StopEaseTimeCoroutine();
+                Script.StopEaseTimeCoroutine();
             }
 
             EditorGUILayout.EndHorizontal();
 
-            script.AutoPlay = EditorGUILayout.Toggle(
+            Script.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
                     ""),
-                script.AutoPlay);
+                Script.AutoPlay);
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -244,9 +243,9 @@ namespace ATP.AnimationPathTools {
                     new GUIContent("Curve Color", ""));
                 serializedObject.ApplyModifiedProperties();
 
-                gizmoDrawer.Update();
+                GizmoDrawer.Update();
                 EditorGUILayout.PropertyField(rotationCurveColor);
-                gizmoDrawer.ApplyModifiedProperties();
+                GizmoDrawer.ApplyModifiedProperties();
 
                 serializedObject.Update();
                 EditorGUILayout.PropertyField(maxAnimationSpeed);
@@ -257,17 +256,17 @@ namespace ATP.AnimationPathTools {
 
         private void DrawRotationModeDropdown() {
             // Remember current RotationMode.
-            var prevRotationMode = script.RotationMode;
+            var prevRotationMode = Script.RotationMode;
             // Draw RotationMode dropdown.
-            script.RotationMode =
+            Script.RotationMode =
                 (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         ""),
-                    script.RotationMode);
+                    Script.RotationMode);
             // If value changed, update animated GO in the scene.
-            if (script.RotationMode != prevRotationMode) {
-                script.UpdateAnimatedGO();
+            if (Script.RotationMode != prevRotationMode) {
+                Script.UpdateAnimatedGO();
             }
         }
 
@@ -283,7 +282,7 @@ namespace ATP.AnimationPathTools {
 
             SceneTool.RememberCurrentTool();
 
-            gizmoDrawer = new SerializedObject(script.GizmoDrawer);
+            gizmoDrawer = new SerializedObject(Script.GizmoDrawer);
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
@@ -301,7 +300,7 @@ namespace ATP.AnimationPathTools {
             enableControlsInPlayMode =
                 serializedObject.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
-            rotationCurveColor = gizmoDrawer.FindProperty("rotationCurveColor");
+            rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
             gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
@@ -309,8 +308,8 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
-            if (script.Skin == null) {
-                script.MissingReferenceError(
+            if (Script.Skin == null) {
+                Script.MissingReferenceError(
                     "Skin",
                     "Skin field cannot be empty. You will find default " +
                     "GUISkin in the Animation PathTools/GUISkin folder");
@@ -322,34 +321,34 @@ namespace ATP.AnimationPathTools {
             }
 
             // Return if path asset does not exist.
-            if (script.PathData == null) return;
+            if (Script.PathData == null) return;
 
             // Update modifier key state.
             ShortcutHandler.UpdateModifierKey();
 
             ShortcutHandler.HandleEaseModeOptionShortcut(
-                () => script.HandleMode = AnimatorHandleMode.Ease);
+                () => Script.HandleMode = AnimatorHandleMode.Ease);
 
             ShortcutHandler.HandleRotationModeOptionShortcut(
-                () => script.HandleMode = AnimatorHandleMode.Rotation);
+                () => Script.HandleMode = AnimatorHandleMode.Rotation);
 
             ShortcutHandler.HandleTiltingModeOptionShortcut(
-                () => script.HandleMode = AnimatorHandleMode.Tilting);
+                () => Script.HandleMode = AnimatorHandleMode.Tilting);
 
             ShortcutHandler.HandleNoneModeOptionShortcut(
-                () => script.HandleMode = AnimatorHandleMode.None);
+                () => Script.HandleMode = AnimatorHandleMode.None);
 
             ShortcutHandler.HandleUpdateAllOptionShortcut(
-                () => script.UpdateAllMode = !script.UpdateAllMode);
+                () => Script.UpdateAllMode = !Script.UpdateAllMode);
 
             ShortcutHandler.HandlePlayPauseShortcut(HandlePlayPause);
 
             ShortcutHandler.HandleMoveAllOptionShortcut(
-                () => script.MovementMode =
+                () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveAll);
 
             ShortcutHandler.HandleMoveSingleModeShortcut(
-                () => script.MovementMode =
+                () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveSingle);
 
             // Change current animation time with arrow keys.
@@ -386,10 +385,10 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            var nodePositions = script.GetNodeGlobalPositions();
+            var nodePositions = Script.GetNodeGlobalPositions();
 
             // Get style for add button.
-            var addButtonStyle = script.Skin.GetStyle(
+            var addButtonStyle = Script.Skin.GetStyle(
                 "AddButton");
 
             // Callback executed after add button was pressed.
@@ -403,19 +402,19 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingEaseHandles() {
-            if (script.HandleMode != AnimatorHandleMode.Ease) return;
+            if (Script.HandleMode != AnimatorHandleMode.Ease) return;
 
             DrawEaseHandles(DrawEaseHandlesCallbackHandler);
         }
 
         private void HandleDrawingEaseLabel() {
-            if (script.HandleMode != AnimatorHandleMode.Ease) return;
+            if (Script.HandleMode != AnimatorHandleMode.Ease) return;
 
             DrawNodeLabels(
                 ConvertEaseToDegrees,
                 EaseValueLabelOffsetX,
                 EaseValueLabelOffsetY,
-                script.Skin.GetStyle("EaseValueLabel"));
+                Script.Skin.GetStyle("EaseValueLabel"));
         }
 
         /// <summary>
@@ -432,10 +431,10 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = script.GetNodeGlobalPositions();
+            var nodes = Script.GetNodeGlobalPositions();
 
             // Get style for add button.
-            var removeButtonStyle = script.Skin.GetStyle(
+            var removeButtonStyle = Script.Skin.GetStyle(
                 "RemoveButton");
 
             // Callback to add a new node after add button was pressed.
@@ -450,14 +449,14 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingRotationHandle() {
-            if (script.HandleMode != AnimatorHandleMode.Rotation) return;
+            if (Script.HandleMode != AnimatorHandleMode.Rotation) return;
 
             // Draw handles.
             DrawRotationHandle(DrawRotationHandlesCallbackHandler);
         }
 
         private void HandleDrawingTiltingHandles() {
-            if (script.HandleMode != AnimatorHandleMode.Tilting) return;
+            if (Script.HandleMode != AnimatorHandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
@@ -466,13 +465,13 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingTiltLabel() {
-            if (script.HandleMode != AnimatorHandleMode.Tilting) return;
+            if (Script.HandleMode != AnimatorHandleMode.Tilting) return;
 
             DrawNodeLabels(
                 ConvertTiltToDegrees,
                 TiltValueLabelOffsetX,
                 TiltValueLabelOffsetY,
-                script.Skin.GetStyle("TiltValueLabel"));
+                Script.Skin.GetStyle("TiltValueLabel"));
         }
 
         #endregion DRAWING HANDLERS
@@ -480,24 +479,24 @@ namespace ATP.AnimationPathTools {
         #region OTHER HANDLERS
 
         private void HandleLinearTangentMode() {
-            if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                script.PathData.SetNodesLinear();
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
             }
         }
 
         private void HandleMoveAllMovementMode(Vector3 moveDelta) {
-            if (script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
-                script.PathData.OffsetNodePositions(moveDelta);
+            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+                Script.PathData.OffsetNodePositions(moveDelta);
             }
         }
 
         private void HandleMoveSingleHandleMove(
             int movedNodeIndex,
             Vector3 position) {
-            if (script.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
+            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
 
-                script.PathData.MoveNodeToPosition(movedNodeIndex, position);
-                script.PathData.DistributeTimestamps();
+                Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
+                Script.PathData.DistributeTimestamps();
 
                 HandleSmoothTangentMode();
                 HandleLinearTangentMode();
@@ -505,41 +504,41 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleSmoothTangentMode() {
-            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                script.PathData.SmoothAllNodeTangents();
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.PathData.SmoothAllNodeTangents();
             }
         }
 
         private void HandleTangentModeChange() {
             // Update path node tangents.
-            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                script.PathData.SmoothAllNodeTangents();
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.PathData.SmoothAllNodeTangents();
             }
-            else if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                script.PathData.SetNodesLinear();
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
             }
         }
 
         private void HandleWrapModeDropdown() {
-            script.UpdateWrapMode();
+            Script.UpdateWrapMode();
         }
 
         public void HandlePlayPause() {
             // Pause animation.
-            if (script.IsPlaying) {
-                script.Pause = true;
-                script.IsPlaying = false;
+            if (Script.IsPlaying) {
+                Script.Pause = true;
+                Script.IsPlaying = false;
             }
             // Unpause animation.
-            else if (script.Pause) {
-                script.Pause = false;
-                script.IsPlaying = true;
+            else if (Script.Pause) {
+                Script.Pause = false;
+                Script.IsPlaying = true;
             }
             // Start animation.
             else {
-                script.IsPlaying = true;
+                Script.IsPlaying = true;
                 // Start animation.
-                script.StartEaseTimeCoroutine();
+                Script.StartEaseTimeCoroutine();
             }
         }
 
@@ -663,10 +662,10 @@ namespace ATP.AnimationPathTools {
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get path node positions.
             var nodePositions =
-                script.GetNodeGlobalPositions();
+                Script.GetNodeGlobalPositions();
 
             // Get ease values.
-            var easeCurveValues = script.PathData.GetEaseCurveValues();
+            var easeCurveValues = Script.PathData.GetEaseCurveValues();
 
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
 
@@ -690,7 +689,7 @@ namespace ATP.AnimationPathTools {
             int offsetY,
             GUIStyle style) {
             // Get node position.
-            var nodePosition = script.GetGlobalNodePosition(nodeIndex);
+            var nodePosition = Script.GetGlobalNodePosition(nodeIndex);
 
             // Translate node's 3d position into screen coordinates.
             var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
@@ -718,7 +717,7 @@ namespace ATP.AnimationPathTools {
             int offsetX,
             int offsetY,
             GUIStyle style) {
-            var nodesNo = script.PathData.NodesNo;
+            var nodesNo = Script.PathData.NodesNo;
 
             // For each path node..
             for (var i = 0; i < nodesNo; i++) {
@@ -736,15 +735,15 @@ namespace ATP.AnimationPathTools {
             Handles.DrawCapFunction capFunction) {
 
             // Set handle color.
-            Handles.color = script.GizmoCurveColor;
+            Handles.color = Script.GizmoCurveColor;
 
             // Get handle size.
             var handleSize = HandleUtility.GetHandleSize(nodePosition);
             var sphereSize = handleSize * MovementHandleSize;
 
             // In Move All mode..
-            if (script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
-                Handles.color = moveAllModeColor;
+            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+                Handles.color = MoveAllModeColor;
                 sphereSize = handleSize * MoveAllModeSize;
             }
 
@@ -762,7 +761,7 @@ namespace ATP.AnimationPathTools {
             Action<int, Vector3, Vector3> callback) {
 
             // Node global positions.
-            var nodes = script.GetNodeGlobalPositions();
+            var nodes = Script.GetNodeGlobalPositions();
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -776,11 +775,11 @@ namespace ATP.AnimationPathTools {
                 if (newPos != nodes[i]) {
                     // Calculate node old local position.
                     var oldNodeLocalPosition =
-                        script.transform.InverseTransformPoint(nodes[i]);
+                        Script.transform.InverseTransformPoint(nodes[i]);
 
                     // Calculate node new local position.
                     var newNodeLocalPosition =
-                        script.transform.InverseTransformPoint(newPos);
+                        Script.transform.InverseTransformPoint(newPos);
 
                     // Calculate movement delta.
                     var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
@@ -824,10 +823,10 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawRotationHandle(Action<float, Vector3> callback) {
-            var currentAnimationTime = script.AnimationTimeRatio;
+            var currentAnimationTime = Script.AnimationTimeRatio;
             var rotationPointPosition =
-                script.PathData.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = script.PathData.GetPathTimestamps();
+                Script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = Script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
             // timestamp.
@@ -841,7 +840,7 @@ namespace ATP.AnimationPathTools {
             var sphereSize = handleSize * RotationHandleSize;
 
             var rotationPointGlobalPos =
-                script.transform.TransformPoint(rotationPointPosition);
+                Script.transform.TransformPoint(rotationPointPosition);
 
             // draw node's handle.
             var newGlobalPosition = Handles.FreeMoveHandle(
@@ -853,7 +852,7 @@ namespace ATP.AnimationPathTools {
 
             if (newGlobalPosition != rotationPointGlobalPos) {
                 var newPointLocalPosition =
-                    script.transform.InverseTransformPoint(newGlobalPosition);
+                    Script.transform.InverseTransformPoint(newGlobalPosition);
                 // Execute callback.
                 callback(currentAnimationTime, newPointLocalPosition);
             }
@@ -862,10 +861,10 @@ namespace ATP.AnimationPathTools {
         private void DrawTiltingHandles(Action<int, float> callback) {
             // Get path node positions.
             var nodePositions =
-                script.GetNodeGlobalPositions();
+                Script.GetNodeGlobalPositions();
 
             // Get tilting curve values.
-            var tiltingCurveValues = script.PathData.GetTiltingCurveValues();
+            var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
 
             // Set arc value multiplier.
             const int arcValueMultiplier = 1;
@@ -889,18 +888,18 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
-            Undo.RecordObject(script.PathData, "Change path");
+            Undo.RecordObject(Script.PathData, "Change path");
 
             // Add a new node.
             AddNodeBetween(nodeIndex);
 
-            script.PathData.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps();
 
-            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                script.PathData.SmoothAllNodeTangents();
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.PathData.SmoothAllNodeTangents();
             }
-            else if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                script.PathData.SetNodesLinear();
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
             }
         }
 
@@ -909,7 +908,7 @@ namespace ATP.AnimationPathTools {
             Vector3 position,
             Vector3 moveDelta) {
 
-            Undo.RecordObject(script.PathData, "Change path");
+            Undo.RecordObject(Script.PathData, "Change path");
 
             HandleMoveAllMovementMode(moveDelta);
             HandleMoveSingleHandleMove(movedNodeIndex, position);
@@ -917,76 +916,76 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawRemoveNodeButtonsCallbackHandles(
             int nodeIndex) {
-            Undo.RecordObject(script.PathData, "Change path");
+            Undo.RecordObject(Script.PathData, "Change path");
 
-            script.PathData.RemoveNode(nodeIndex);
-            script.PathData.DistributeTimestamps();
+            Script.PathData.RemoveNode(nodeIndex);
+            Script.PathData.DistributeTimestamps();
 
-            if (script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                script.PathData.SmoothAllNodeTangents();
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.PathData.SmoothAllNodeTangents();
             }
-            else if (script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                script.PathData.SetNodesLinear();
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
             }
         }
 
         private void DrawEaseHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
-            Undo.RecordObject(script.PathData, "Ease curve changed.");
+            Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
-            if (script.UpdateAllMode) {
-                var oldValue = script.PathData.GetEaseValueAtIndex(keyIndex);
+            if (Script.UpdateAllMode) {
+                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
-                script.PathData.UpdateEaseValues(delta);
+                Script.PathData.UpdateEaseValues(delta);
             }
             else {
-                script.PathData.UpdateEaseValue(keyIndex, newValue);
+                Script.PathData.UpdateEaseValue(keyIndex, newValue);
             }
         }
 
         private void DrawRotationHandlesCallbackHandler(
             float timestamp,
             Vector3 newPosition) {
-            Undo.RecordObject(script.PathData, "Rotation path changed.");
+            Undo.RecordObject(Script.PathData, "Rotation path changed.");
 
-            script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
+            Script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
         }
 
         private void DrawTiltingHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
-            Undo.RecordObject(script.PathData, "Tilting curve changed.");
+            Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            script.PathData.UpdateNodeTilting(keyIndex, newValue);
+            Script.PathData.UpdateNodeTilting(keyIndex, newValue);
         }
 
         private void JumpBackwardCallbackHandler() {
             // Update animTimeRatio.
             var newAnimationTimeRatio =
-                script.AnimationTimeRatio - script.ShortJumpValue;
+                Script.AnimationTimeRatio - Script.ShortJumpValue;
 
-            script.AnimationTimeRatio =
+            Script.AnimationTimeRatio =
                 (float) (Math.Round(newAnimationTimeRatio, 3));
         }
 
         private void JumpForwardCallbackHandler() {
             // Update animTimeRatio.
             var newAnimationTimeRatio =
-                script.AnimationTimeRatio + script.ShortJumpValue;
+                Script.AnimationTimeRatio + Script.ShortJumpValue;
 
-            script.AnimationTimeRatio =
+            Script.AnimationTimeRatio =
                 (float) (Math.Round(newAnimationTimeRatio, 3));
         }
 
         private void JumpToEndCallbackHandler() {
             // Update animTimeRatio.
-            script.AnimationTimeRatio = 1;
+            Script.AnimationTimeRatio = 1;
         }
 
         private void JumpToStartCallbackHandler() {
             // Update animTimeRatio.
-            script.AnimationTimeRatio = 0;
+            Script.AnimationTimeRatio = 0;
         }
 
         #endregion CALLBACK HANDLERS
@@ -995,9 +994,9 @@ namespace ATP.AnimationPathTools {
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
-            var currentKeyTime = script.PathData.GetNodeTimestamp(nodeIndex);
+            var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
-            var nextKeyTime = script.PathData.GetNodeTimestamp(nodeIndex + 1);
+            var nextKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex + 1);
 
             // Calculate timestamps for new key. It'll be placed exactly
             // between the two nodes.
@@ -1006,22 +1005,22 @@ namespace ATP.AnimationPathTools {
                 ((nextKeyTime - currentKeyTime) / 2);
 
             // Add node to the animation curves.
-            script.PathData.CreateNodeAtTime(newKeyTime);
+            Script.PathData.CreateNodeAtTime(newKeyTime);
         }
 
         private void AnyJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
+            if (Application.isPlaying) Script.UpdateAnimatedGO();
+            if (!Application.isPlaying) Script.Animate();
         }
 
         private void AnyModJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) script.UpdateAnimatedGO();
-            if (!Application.isPlaying) script.Animate();
+            if (Application.isPlaying) Script.UpdateAnimatedGO();
+            if (!Application.isPlaying) Script.Animate();
         }
 
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
-            var easeValue = script.PathData.GetNodeEaseValue(nodeIndex);
+            var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
@@ -1029,7 +1028,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private float ConvertTiltToDegrees(int nodeIndex) {
-            var rotationValue = script.PathData.GetNodeTiltValue(nodeIndex);
+            var rotationValue = Script.PathData.GetNodeTiltValue(nodeIndex);
 
             return rotationValue;
         }
@@ -1058,10 +1057,10 @@ namespace ATP.AnimationPathTools {
                     "Reset Path",
                     "Reset path to default."))) {
                 // Allow undo this operation.
-                Undo.RecordObject(script.PathData, "Change path");
+                Undo.RecordObject(Script.PathData, "Change path");
 
                 // Reset curves to its default state.
-                script.PathData.ResetPath();
+                Script.PathData.ResetPath();
             }
         }
 
@@ -1079,18 +1078,18 @@ namespace ATP.AnimationPathTools {
             // each Animation Path node.
             if (exportSampling == 0) {
                 // Initialize points.
-                points = new List<Vector3>(script.PathData.NodesNo);
+                points = new List<Vector3>(Script.PathData.NodesNo);
 
                 // For each node in the path..
-                for (var i = 0; i < script.PathData.NodesNo; i++) {
+                for (var i = 0; i < Script.PathData.NodesNo; i++) {
                     // Get it 3d position.
-                    points[i] = script.PathData.GetNodePosition(i);
+                    points[i] = Script.PathData.GetNodePosition(i);
                 }
             }
             // exportSampling not zero..
             else {
                 // Initialize points array with nodes to export.
-                points = script.PathData.SampleAnimationPathForPoints(
+                points = Script.PathData.SampleAnimationPathForPoints(
                     exportSampling);
             }
 
@@ -1111,7 +1110,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = script.PathData.GetPathTimestamps();
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
 
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
                 if (pathTimestamps[i] < animTimeRatio.floatValue) {
@@ -1124,7 +1123,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = script.PathData.GetPathTimestamps();
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
 
             foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
@@ -1137,22 +1136,22 @@ namespace ATP.AnimationPathTools {
 
         private void JumpToNextNodeCallbackHandler() {
             // Jump to next node.
-            script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
+            Script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
         }
 
         private void JumpToPreviousNodeCallbackHandler() {
             // Jump to next node.
-            script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
+            Script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
         }
 
         private void ModJumpBackwardCallbackHandler() {
             // Update animation time.
-            script.AnimationTimeRatio -= JumpValue;
+            Script.AnimationTimeRatio -= JumpValue;
         }
 
         private void ModJumpForwardCallbackHandler() {
             // Update animation time.
-            script.AnimationTimeRatio += JumpValue;
+            Script.AnimationTimeRatio += JumpValue;
         }
 
         #endregion PRIVATE METHODS

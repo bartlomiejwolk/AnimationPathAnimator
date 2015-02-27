@@ -309,9 +309,9 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodeAdded(
             object sender,
             EventArgs eventArgs) {
-            PathData.UpdateCurveWithAddedKeys(PathData.EaseCurve);
-            PathData.UpdateCurveWithAddedKeys(PathData.TiltingCurve);
-            PathData.UpdateRotationCurvesWithAddedKeys();
+            //PathData.UpdateCurveWithAddedKeys(PathData.EaseCurve);
+            //PathData.UpdateCurveWithAddedKeys(PathData.TiltingCurve);
+            //PathData.UpdateRotationCurvesWithAddedKeys();
         }
 
         private void animationPathBuilder_NodePositionChanged(
@@ -324,18 +324,18 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_NodeRemoved(
             object sender,
             EventArgs e) {
-            PathData.UpdateCurveWithRemovedKeys(PathData.EaseCurve);
-            PathData.UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
-            pathData.UpdateRotationPathWithRemovedKeys();
+            //PathData.UpdateCurveWithRemovedKeys(PathData.EaseCurve);
+            //PathData.UpdateCurveWithRemovedKeys(PathData.TiltingCurve);
+            //pathData.UpdateRotationPathWithRemovedKeys();
         }
 
         private void animationPathBuilder_NodeTimeChanged(
             object sender,
             EventArgs e) {
 
-            PathData.UpdateCurveTimestamps(PathData.EaseCurve);
-            PathData.UpdateCurveTimestamps(PathData.TiltingCurve);
-            PathData.UpdateRotationCurvesTimestamps();
+            //PathData.UpdateCurveTimestamps(PathData.EaseCurve);
+            //PathData.UpdateCurveTimestamps(PathData.TiltingCurve);
+            //PathData.UpdateRotationCurvesTimestamps();
         }
 
         private void animationPathBuilder_PathReset(
@@ -469,7 +469,7 @@ namespace ATP.AnimationPathTools {
                 // If animation is not paused..
                 if (!Pause) {
                     // Ease time.
-                    var timeStep = PathData.EaseCurve.Evaluate(animTimeRatio);
+                    var timeStep = PathData.GetEaseValueAtTime(animTimeRatio);
                     animTimeRatio += timeStep * Time.deltaTime;
                 }
 

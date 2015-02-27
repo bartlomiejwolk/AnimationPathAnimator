@@ -496,10 +496,11 @@ namespace ATP.AnimationPathTools {
                 script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get ease values.
-            var easeCurveValues = new float[script.PathData.EaseCurve.length];
-            for (var i = 0; i < script.PathData.EaseCurve.length; i++) {
-                easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
-            }
+            //var easeCurveValues = new float[script.PathData.EaseCurveKeysNo];
+            var easeCurveValues = script.PathData.GetEaseValues();
+            //for (var i = 0; i < script.PathData.EaseCurveKeysNo; i++) {
+            //    easeCurveValues[i] = script.PathData.EaseCurve.keys[i].value;
+            //}
 
             var arcValueMultiplier = 360/maxAnimationSpeed.floatValue;
 
@@ -609,7 +610,7 @@ namespace ATP.AnimationPathTools {
                 script.AnimationPathBuilder.GetNodeGlobalPositions();
 
             // Get tilting curve values.
-            var tiltingCurveValues = new float[script.PathData.EaseCurve.length];
+            var tiltingCurveValues = new float[script.PathData.EaseCurveKeysNo];
             for (var i = 0; i < script.PathData.TiltingCurve.length; i++) {
                 tiltingCurveValues[i] =
                     script.PathData.TiltingCurve.keys[i].value;
@@ -641,8 +642,10 @@ namespace ATP.AnimationPathTools {
             Undo.RecordObject(script.PathData, "Ease curve changed.");
 
             if (script.UpdateAllMode) {
-                var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
-                var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
+                //var keyTime = script.PathData.EaseCurve.keys[keyIndex].time;
+                //var keyTime = script.PathData.GetEaseValueAtIndex(keyIndex);
+                //var oldValue = script.PathData.EaseCurve.Evaluate(keyTime);
+                var oldValue = script.PathData.GetEaseValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
                 script.PathData.UpdateEaseValues(delta);
             }

@@ -45,9 +45,13 @@ namespace ATP.AnimationPathTools {
             get { return animatedObjectPath.KeysNo; }
         }
 
-        public AnimationCurve EaseCurve {
+        private AnimationCurve EaseCurve {
             get { return easeCurve; }
             set { easeCurve = value; }
+        }
+
+        public int EaseCurveKeysNo {
+            get { return EaseCurve.length; }
         }
 
         public int NodesNo {
@@ -85,6 +89,29 @@ namespace ATP.AnimationPathTools {
 
             InstantiateReferenceTypes();
             AssignDefaultValues();
+
+            NodeAdded += PathData_NodeAdded;
+            NodeRemoved += PathData_NodeRemoved;
+            NodeTiltChanged += PathData_NodeTiltChanged;
+        }
+
+        void PathData_NodeRemoved(object sender, EventArgs e) {
+            UpdateCurveWithRemovedKeys(EaseCurve);
+            UpdateCurveWithRemovedKeys(TiltingCurve);
+            UpdateRotationPathWithRemovedKeys();
+        }
+
+        void PathData_NodeTiltChanged(object sender, EventArgs e) {
+            UpdateCurveTimestamps(EaseCurve);
+            UpdateCurveTimestamps(TiltingCurve);
+            // TODO Rename to UpdateRotationPathTimestamps().
+            UpdateRotationCurvesTimestamps();
+        }
+
+        void PathData_NodeAdded(object sender, EventArgs e) {
+            UpdateCurveWithAddedKeys(EaseCurve);
+            UpdateCurveWithAddedKeys(TiltingCurve);
+            UpdateRotationCurvesWithAddedKeys();
         }
 
         #endregion UNITY MESSAGES
@@ -641,6 +668,31 @@ namespace ATP.AnimationPathTools {
                 // NOTE After each removal, next node gets index 0.
                 RemoveNode(0);
             }
+        }
+
+        public float GetEaseValueAtIndex(int index) {
+            var timestamp = GetEaseTimestampAtIndex(index);
+            var value = GetEaseValueAtTime(timestamp);
+
+            return value;
+        }
+
+        public float GetEaseValueAtTime(float animTimeRatio) {
+            return EaseCurve.Evaluate(animTimeRatio);
+        }
+
+        public float GetEaseTimestampAtIndex(int keyIndex) {
+            return EaseCurve.keys[keyIndex].time;
+        }
+
+        public float[] GetEaseValues() {
+            var values = new float[EaseCurveKeysNo];
+
+            for (int i = 0; i < values.Length; i++) {
+                values[i] = EaseCurve.keys[i].value;
+            }
+
+            return values;
         }
 
     }

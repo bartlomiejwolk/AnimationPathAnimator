@@ -63,12 +63,15 @@ namespace ATP.AnimationPathTools {
             callback();
         }
 
-        public static void HandleModifiedShortcuts(
+        public static void HandleModifiedJumpShortcuts(
             Action jumpForwardCallback = null,
             Action jumpBackwardCallback = null,
             Action jumpToNextNodeCallback = null,
             Action jumpToPreviousNodeCallback = null,
             Action anyModJumpKeyPressedCallback = null) {
+
+            if (Event.current.type != EventType.keyDown
+                || !ModKeyPressed) return;
 
             // Check what key is pressed..
             switch (Event.current.keyCode) {
@@ -167,14 +170,15 @@ namespace ATP.AnimationPathTools {
             callback();
         }
 
-        public static void HandleUnmodifiedShortcuts(
+        public static void HandleUnmodifiedJumpShortcuts(
             Action jumpBackwardCallback = null,
             Action jumpForwardCallback = null,
             Action jumpToStartCallback = null,
             Action jumpToEndCallback = null,
             Action anyJumpKeyPressedCallback = null) {
 
-            // Helper variable.
+            if (Event.current.type != EventType.keyDown
+                || ModKeyPressed) return;
 
             switch (Event.current.keyCode) {
                 // Jump backward.
@@ -182,6 +186,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     if (jumpBackwardCallback != null) jumpBackwardCallback();
+
                     if (anyJumpKeyPressedCallback != null) {
                         anyJumpKeyPressedCallback();
                     }
@@ -192,6 +197,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     if (jumpForwardCallback != null) jumpForwardCallback();
+
                     if (anyJumpKeyPressedCallback != null) {
                         anyJumpKeyPressedCallback();
                     }
@@ -202,6 +208,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     if (jumpToStartCallback != null) jumpToStartCallback();
+
                     if (anyJumpKeyPressedCallback != null) {
                         anyJumpKeyPressedCallback();
                     }
@@ -212,6 +219,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     if (jumpToEndCallback != null) jumpToEndCallback();
+
                     if (anyJumpKeyPressedCallback != null) {
                         anyJumpKeyPressedCallback();
                     }
@@ -228,12 +236,14 @@ namespace ATP.AnimationPathTools {
             // Check if modifier key is currently pressed.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode == ModKey) {
+
                 // Remember key state.
                 modKeyPressed = true;
             }
             // If modifier key was released..
             if (Event.current.type == EventType.keyUp
                 && Event.current.keyCode == ModKey) {
+
                 modKeyPressed = false;
             }
         }
@@ -254,6 +264,28 @@ namespace ATP.AnimationPathTools {
                 || Event.current.keyCode != ShortcutHandler.UpdateAllShortcut) return;
 
             callback();
+        }
+
+        /// <summary>
+        ///     Change current animation time with arrow keys.
+        /// </summary>
+        public static void ChangeTimeWithArrowKeys(
+            Action keyPressedCallback,
+            Action modKeyPressedCallback) {
+
+            // If a key is pressed..
+            if (Event.current.type == EventType.keyDown
+                // and modifier key is pressed also..
+                && ModKeyPressed) {
+
+                modKeyPressedCallback();
+
+                
+            }
+            // Modifier key not pressed.
+            else if (Event.current.type == EventType.keyDown) {
+                    keyPressedCallback();
+            }
         }
 
     }

@@ -133,6 +133,7 @@ namespace ATP.AnimationPathTools {
 
         public float AnimationTimeRatio {
             get { return animTimeRatio; }
+            set { animTimeRatio = value; }
         }
 
         public bool AutoPlay {
@@ -223,9 +224,10 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
-            // Subscribe to events.
-            pathData.RotationPointPositionChanged +=
-                pathData_RotationPointPositionChanged;
+            if (pathData != null) {
+                pathData.RotationPointPositionChanged +=
+                    pathData_RotationPointPositionChanged;
+            }
 
             if (gizmoDrawer == null) {
                 gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();

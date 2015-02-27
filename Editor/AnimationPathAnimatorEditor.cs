@@ -284,7 +284,6 @@ namespace ATP.AnimationPathTools {
             SceneTool.RememberCurrentTool();
 
             gizmoDrawer = new SerializedObject(script.GizmoDrawer);
-            //shortcutHandler = new ShortcutHandler(script);
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
@@ -354,7 +353,19 @@ namespace ATP.AnimationPathTools {
                     AnimationPathBuilderHandleMode.MoveSingle);
 
             // Change current animation time with arrow keys.
-            ChangeTimeWithArrowKeys();
+            ShortcutHandler.HandleModifiedJumpShortcuts(
+                ModJumpForwardCallbackHandler,
+                ModJumpBackwardCallbackHandler,
+                JumpToNextNodeCallbackHandler,
+                JumpToPreviousNodeCallbackHandler,
+                AnyModJumpKeyPressedCallbackHandler);
+
+            ShortcutHandler.HandleUnmodifiedJumpShortcuts(
+                JumpBackwardCallbackHandler,
+                JumpForwardCallbackHandler,
+                JumpToStartCallbackHandler,
+                JumpToEndCallbackHandler,
+                AnyJumpKeyPressedCallbackHandler);
 
             HandleWrapModeDropdown();
 
@@ -952,36 +963,30 @@ namespace ATP.AnimationPathTools {
 
         private void JumpBackwardCallbackHandler() {
             // Update animTimeRatio.
-            var newAnimationTimeRatio = animTimeRatio.floatValue
-                                        - script.ShortJumpValue;
-            serializedObject.Update();
-            animTimeRatio.floatValue =
+            var newAnimationTimeRatio =
+                script.AnimationTimeRatio - script.ShortJumpValue;
+
+            script.AnimationTimeRatio =
                 (float) (Math.Round(newAnimationTimeRatio, 3));
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void JumpForwardCallbackHandler() {
             // Update animTimeRatio.
-            var newAnimationTimeRatio = animTimeRatio.floatValue
-                                        + script.ShortJumpValue;
-            serializedObject.Update();
-            animTimeRatio.floatValue =
+            var newAnimationTimeRatio =
+                script.AnimationTimeRatio + script.ShortJumpValue;
+
+            script.AnimationTimeRatio =
                 (float) (Math.Round(newAnimationTimeRatio, 3));
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void JumpToEndCallbackHandler() {
             // Update animTimeRatio.
-            serializedObject.Update();
-            animTimeRatio.floatValue = 1;
-            serializedObject.ApplyModifiedProperties();
+            script.AnimationTimeRatio = 1;
         }
 
         private void JumpToStartCallbackHandler() {
             // Update animTimeRatio.
-            serializedObject.Update();
-            animTimeRatio.floatValue = 0;
-            serializedObject.ApplyModifiedProperties();
+            script.AnimationTimeRatio = 0;
         }
 
         #endregion CALLBACK HANDLERS
@@ -1012,33 +1017,6 @@ namespace ATP.AnimationPathTools {
         private void AnyModJumpKeyPressedCallbackHandler() {
             if (Application.isPlaying) script.UpdateAnimatedGO();
             if (!Application.isPlaying) script.Animate();
-        }
-
-        /// <summary>
-        ///     Change current animation time with arrow keys.
-        /// </summary>
-        private void ChangeTimeWithArrowKeys() {
-            // If a key is pressed..
-            if (Event.current.type == EventType.keyDown
-                // and modifier key is pressed also..
-                && ShortcutHandler.ModKeyPressed) {
-
-                ShortcutHandler.HandleModifiedShortcuts(
-                    ModJumpForwardCallbackHandler,
-                    ModJumpBackwardCallbackHandler,
-                    JumpToNextNodeCallbackHandler,
-                    JumpToPreviousNodeCallbackHandler,
-                    AnyModJumpKeyPressedCallbackHandler);
-            }
-            // Modifier key not pressed.
-            else if (Event.current.type == EventType.keyDown) {
-                ShortcutHandler.HandleUnmodifiedShortcuts(
-                    JumpBackwardCallbackHandler,
-                    JumpForwardCallbackHandler,
-                    JumpToStartCallbackHandler,
-                    JumpToEndCallbackHandler,
-                    AnyJumpKeyPressedCallbackHandler);
-            }
         }
 
         private float ConvertEaseToDegrees(int nodeIndex) {
@@ -1159,26 +1137,22 @@ namespace ATP.AnimationPathTools {
 
         private void JumpToNextNodeCallbackHandler() {
             // Jump to next node.
-            animTimeRatio.floatValue = GetNearestForwardNodeTimestamp();
-            serializedObject.ApplyModifiedProperties();
+            script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
         }
 
         private void JumpToPreviousNodeCallbackHandler() {
             // Jump to next node.
-            animTimeRatio.floatValue = GetNearestBackwardNodeTimestamp();
-            serializedObject.ApplyModifiedProperties();
+            script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
         }
 
         private void ModJumpBackwardCallbackHandler() {
             // Update animation time.
-            animTimeRatio.floatValue -= JumpValue;
-            serializedObject.ApplyModifiedProperties();
+            script.AnimationTimeRatio -= JumpValue;
         }
 
         private void ModJumpForwardCallbackHandler() {
             // Update animation time.
-            animTimeRatio.floatValue += JumpValue;
-            serializedObject.ApplyModifiedProperties();
+            script.AnimationTimeRatio += JumpValue;
         }
 
         #endregion PRIVATE METHODS

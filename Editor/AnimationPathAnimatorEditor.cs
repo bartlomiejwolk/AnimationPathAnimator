@@ -72,7 +72,6 @@ namespace ATP.AnimationPathTools {
         #region FIELDS
         private readonly Color moveAllModeColor = Color.red;
 
-        public static Tool LastTool = Tool.None;
         private SerializedObject gizmoDrawer;
 
         /// <summary>
@@ -303,7 +302,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
-            Tools.current = LastTool;
+            SceneTool.RestoreTool();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -311,11 +310,7 @@ namespace ATP.AnimationPathTools {
             // Get target script reference.
             script = (AnimationPathAnimator) target;
 
-            // Remember active scene tool.
-            if (Tools.current != Tool.None) {
-                LastTool = Tools.current;
-                Tools.current = Tool.None;
-            }
+            SceneTool.RememberCurrentTool();
 
             gizmoDrawer = new SerializedObject(script.GizmoDrawer);
 

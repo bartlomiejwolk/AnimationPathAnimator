@@ -311,7 +311,7 @@ namespace ATP.AnimationPathTools {
             EventArgs eventArgs) {
             //PathData.UpdateCurveWithAddedKeys(PathData.EaseCurve);
             //PathData.UpdateCurveWithAddedKeys(PathData.TiltingCurve);
-            //PathData.UpdateRotationCurvesWithAddedKeys();
+            //PathData.UpdateRotationPathWithAddedKeys();
         }
 
         private void animationPathBuilder_NodePositionChanged(

@@ -154,7 +154,7 @@ namespace ATP.AnimationPathTools {
         private void PathData_NodeAdded(object sender, EventArgs e) {
             UpdateCurveWithAddedKeys(EaseCurve);
             UpdateCurveWithAddedKeys(TiltingCurve);
-            UpdateRotationCurvesWithAddedKeys();
+            UpdateRotationPathWithAddedKeys();
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
@@ -617,7 +617,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void UpdateRotationCurvesWithAddedKeys() {
+        public void UpdateRotationPathWithAddedKeys() {
             // Get animatedObjectPath timestamps.
             var pathTimestamps = GetPathTimestamps();
 

@@ -71,6 +71,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     Reference to target script.
         /// </summary>
+        // TODO Create property.
         private AnimationPathAnimator script;
 
         //private GUIStyle TiltValueLabelStyle {
@@ -183,6 +184,10 @@ namespace ATP.AnimationPathTools {
                     "Rotation Speed",
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
+
+            EditorGUILayout.Space();
+
+            DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();
 
@@ -829,6 +834,17 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void DrawResetPathInspectorButton() {
+            if (GUILayout.Button(new GUIContent(
+                "Reset Path",
+                "Reset path to default."))) {
+                // Allow undo this operation.
+                Undo.RecordObject(script.PathData, "Change path");
+
+                // Reset curves to its default state.
+                script.PathData.ResetPath();
+            }
+        }
         #endregion PRIVATE METHODS
 
         #region SHORTCUT HANDLERS

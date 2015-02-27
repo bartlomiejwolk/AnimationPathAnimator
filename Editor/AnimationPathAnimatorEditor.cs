@@ -83,6 +83,8 @@ namespace ATP.AnimationPathTools {
         // TODO Create property.
         private AnimationPathAnimator script;
 
+        public static Tool LastTool = Tool.None;
+
         //private GUIStyle TiltValueLabelStyle {
         //    get {
         //        return new GUIStyle {
@@ -339,6 +341,12 @@ namespace ATP.AnimationPathTools {
             // Get target script reference.
             script = (AnimationPathAnimator) target;
 
+            // Remember active scene tool.
+            if (Tools.current != Tool.None) {
+                LastTool = Tools.current;
+                Tools.current = Tool.None;
+            }
+
             gizmoDrawer = new SerializedObject(script.GizmoDrawer);
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
@@ -364,7 +372,18 @@ namespace ATP.AnimationPathTools {
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnDisable() {
+            Tools.current = LastTool;
+        }
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
+            if (script.Skin == null) {
+                script.MissingReferenceError(
+                        "Skin",
+                        "Skin field cannot be empty. You will find default " +
+                        "GUISkin in the Animation PathTools/GUISkin folder");
+            }
+
             // Handle undo event.
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {

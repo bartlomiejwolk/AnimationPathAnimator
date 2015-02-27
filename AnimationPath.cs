@@ -124,8 +124,6 @@ namespace ATP.AnimationPathTools {
         }
 
         public void CreateNewNode(float timestamp, Vector3 position) {
-            Logger.LogString("ADD NEW NODE : {0}", timestamp);
-
             curves[0].AddKey(timestamp, position.x);
             curves[1].AddKey(timestamp, position.y);
             curves[2].AddKey(timestamp, position.z);
@@ -189,7 +187,6 @@ namespace ATP.AnimationPathTools {
             curves[2].MoveKey(keyIndex, keyZCopy);
         }
         public void RemoveNode(int nodeIndex) {
-            Logger.LogString("REMOVE NODE: {0}", nodeIndex);
             // For each animation curve..
             for (var i = 0; i < 3; i++) {
                 // Remove node keys.

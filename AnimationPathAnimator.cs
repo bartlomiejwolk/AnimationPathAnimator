@@ -207,15 +207,15 @@ namespace ATP.AnimationPathTools {
             //RotationPointPositionChanged += this_RotationPointPositionChanged;
 
             // TODO First unsubscribe from events. Make separate method.
-            if (pathData != null) {
-                PathData.NodeTimeChanged +=
-                    animationPathBuilder_NodeTimeChanged;
-                PathData.NodeRemoved += animationPathBuilder_NodeRemoved;
-                PathData.NodePositionChanged +=
-                    animationPathBuilder_NodePositionChanged;
-                PathData.NodeAdded += animationPathBuilder_NodeAdded;
-                pathData.NodeTiltChanged += this_NodeTiltChanged;
-            }
+            //if (pathData != null) {
+            //    PathData.NodeTimeChanged +=
+            //        animationPathBuilder_NodeTimeChanged;
+            //    PathData.NodeRemoved += animationPathBuilder_NodeRemoved;
+            //    PathData.NodePositionChanged +=
+            //        animationPathBuilder_NodePositionChanged;
+            //    PathData.NodeAdded += animationPathBuilder_NodeAdded;
+            //    pathData.NodeTiltChanged += this_NodeTiltChanged;
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -342,7 +342,7 @@ namespace ATP.AnimationPathTools {
         private void animationPathBuilder_PathReset(
             object sender,
             EventArgs eventArgs) {
-            PathData.Reset();
+            //PathData.Reset();
 
             // Change handle mode to None.
             handleMode = AnimatorHandleMode.None;

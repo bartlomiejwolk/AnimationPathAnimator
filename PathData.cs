@@ -111,6 +111,14 @@ namespace ATP.AnimationPathTools {
             NodePositionChanged += PathData_NodePositionChanged;
         }
 
+        private void OnDisable() {
+            NodeAdded -= PathData_NodeAdded;
+            NodeRemoved -= PathData_NodeRemoved;
+            NodeTiltChanged -= PathData_NodeTiltChanged;
+            NodeTimeChanged -= PathData_NodeTimeChanged;
+            NodePositionChanged -= PathData_NodePositionChanged;
+        }
+
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
@@ -146,7 +154,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void PathData_NodeRemoved(object sender, EventArgs e) {
@@ -224,6 +232,7 @@ namespace ATP.AnimationPathTools {
 
         public void CreateNodeAtTime(float timestamp) {
             AnimatedObjectPath.AddNodeAtTime(timestamp);
+
             OnNodeAdded();
         }
 
@@ -259,9 +268,6 @@ namespace ATP.AnimationPathTools {
                 // NOTE When nodes on the scene overlap, it's possible that new
                 // timestamp is > 0, which is invalid.
                 if (newTimestamp > 1) break;
-
-                if (i == 1)
-                    Logger.LogString("OBJECT NEW TIMESTAMP: {0}", newTimestamp);
 
                 // Update node timestamp.
                 AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
@@ -423,7 +429,7 @@ namespace ATP.AnimationPathTools {
             OnNodeRemoved();
         }
 
-        public void Reset() {
+        public void ResetPath() {
             InstantiateReferenceTypes();
             AssignDefaultValues();
         }
@@ -610,11 +616,6 @@ namespace ATP.AnimationPathTools {
                 if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
                     > FloatPrecision) {
 
-                    if (i == 1)
-                        Logger.LogString(
-                            "Rotation NEW TIMESTAMP: {0}",
-                            nodeTimestamps[i]);
-
                     // Update rotation point timestamp.
                     RotationPath.ChangeNodeTimestamp(
                         i,
@@ -663,6 +664,7 @@ namespace ATP.AnimationPathTools {
                 }
             }
         }
+
 
         public void UpdateRotationPathWithRemovedKeys() {
             // AnimationPathBuilder node timestamps.

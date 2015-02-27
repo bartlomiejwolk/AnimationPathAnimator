@@ -6,7 +6,6 @@ using ATP.AnimationPathTools;
 public class AnimationPathDebug : MonoBehaviour {
 
     private AnimationPathAnimator animator;
-    private AnimationPathBuilder animationPathBuilder;
 
     [Header("Animation Path")]
     public AnimationCurve pathCurveX;

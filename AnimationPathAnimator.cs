@@ -14,7 +14,6 @@ namespace ATP.AnimationPathTools {
     ///     Animation Paths and also animate their rotation on x and y axis in
     ///     time.
     /// </summary>
-    [RequireComponent(typeof (AnimationPathBuilder))]
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
         #region FIELDS
@@ -28,12 +27,6 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         [SerializeField]
         private Transform animatedGO;
-
-        /// <summary>
-        ///     Path used to animate the <c>animatedGO</c> transform.
-        /// </summary>
-        [SerializeField]
-        private AnimationPathBuilder animationPathBuilder;
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
@@ -133,13 +126,6 @@ namespace ATP.AnimationPathTools {
 
         #region PROPERTIES
 
-        /// <summary>
-        ///     Path used to animate the <c>animatedGO</c> transform.
-        /// </summary>
-        public AnimationPathBuilder AnimationPathBuilder {
-            get { return animationPathBuilder; }
-        }
-
         public float AnimationTimeRatio {
             get { return animTimeRatio; }
         }
@@ -234,11 +220,12 @@ namespace ATP.AnimationPathTools {
         public virtual void OnEnable() {
             // Subscribe to events.
             //animationPathBuilder.PathReset += animationPathBuilder_PathReset;
-            pathData.RotationPointPositionChanged += pathData_RotationPointPositionChanged;
+            pathData.RotationPointPositionChanged +=
+                pathData_RotationPointPositionChanged;
 
-            //if (gizmoDrawer == null) {
-            //    gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
-            //}
+            if (gizmoDrawer == null) {
+                gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            }
 
             // TODO First unsubscribe from events. Make separate method.
             //if (pathData != null) {
@@ -263,8 +250,6 @@ namespace ATP.AnimationPathTools {
             }
 
             gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
-            // Initialize AnimationPathBuilder field.
-            animationPathBuilder = GetComponent<AnimationPathBuilder>();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -400,8 +385,7 @@ namespace ATP.AnimationPathTools {
             var forwardPointDelta = forwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
-            var localPosition =
-                animationPathBuilder.PathData.GetVectorAtTime(forwardPointTimestamp);
+            var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
 
             // Return global position.
             if (globalPosition) {
@@ -412,8 +396,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public Vector3 GetGlobalNodePosition(int nodeIndex) {
-            var localNodePosition =
-                animationPathBuilder.PathData.GetNodePosition(nodeIndex);
+            var localNodePosition = PathData.GetNodePosition(nodeIndex);
             var globalNodePosition = transform.TransformPoint(localNodePosition);
 
             return globalNodePosition;
@@ -452,13 +435,9 @@ namespace ATP.AnimationPathTools {
         }
 
         private void AnimateObject() {
-            if (animatedGO == null
-                || animationPathBuilder == null) {
-                return;
-            }
+            if (animatedGO == null) return;
 
-            var positionAtTimestamp =
-                animationPathBuilder.PathData.GetVectorAtTime(animTimeRatio);
+            var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);
 
             var globalPositionAtTimestamp =
                 transform.TransformPoint(positionAtTimestamp);
@@ -631,8 +610,7 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateAnimatedGOPosition() {
             // Get animatedGO position at current animation time.
-            var positionAtTimestamp =
-                animationPathBuilder.PathData.GetVectorAtTime(animTimeRatio);
+            var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);
             var globalPositionAtTimestamp =
                 transform.TransformPoint(positionAtTimestamp);
 

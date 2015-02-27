@@ -219,8 +219,6 @@ namespace ATP.AnimationPathTools {
                     ""),
                 script.MovementMode);
 
-            EditorGUILayout.Space();
-
             DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();
@@ -840,7 +838,7 @@ namespace ATP.AnimationPathTools {
             int offsetX,
             int offsetY,
             GUIStyle style) {
-            var nodesNo = script.AnimationPathBuilder.NodesNo;
+            var nodesNo = script.PathData.NodesNo;
 
             // For each path node..
             for (var i = 0; i < nodesNo; i++) {

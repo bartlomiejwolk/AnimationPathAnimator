@@ -885,6 +885,36 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING METHODS
 
         #region CALLBACK HANDLERS
+        private void AnyJumpKeyPressedCallbackHandler() {
+            if (Application.isPlaying) Script.UpdateAnimatedGO();
+            if (!Application.isPlaying) Script.Animate();
+        }
+
+        private void AnyModJumpKeyPressedCallbackHandler() {
+            if (Application.isPlaying) Script.UpdateAnimatedGO();
+            if (!Application.isPlaying) Script.Animate();
+        }
+
+        private void ModJumpForwardCallbackHandler() {
+            // Update animation time.
+            Script.AnimationTimeRatio += JumpValue;
+        }
+
+        private void JumpToPreviousNodeCallbackHandler() {
+            // Jump to next node.
+            Script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
+        }
+
+        private void ModJumpBackwardCallbackHandler() {
+            // Update animation time.
+            Script.AnimationTimeRatio -= JumpValue;
+        }
+
+        private void JumpToNextNodeCallbackHandler() {
+            // Jump to next node.
+            Script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
+        }
+
 
         protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
@@ -1007,17 +1037,6 @@ namespace ATP.AnimationPathTools {
             // Add node to the animation curves.
             Script.PathData.CreateNodeAtTime(newKeyTime);
         }
-
-        private void AnyJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) Script.UpdateAnimatedGO();
-            if (!Application.isPlaying) Script.Animate();
-        }
-
-        private void AnyModJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) Script.UpdateAnimatedGO();
-            if (!Application.isPlaying) Script.Animate();
-        }
-
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
@@ -1133,27 +1152,6 @@ namespace ATP.AnimationPathTools {
             // Return timestamp of the last node.
             return 1.0f;
         }
-
-        private void JumpToNextNodeCallbackHandler() {
-            // Jump to next node.
-            Script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
-        }
-
-        private void JumpToPreviousNodeCallbackHandler() {
-            // Jump to next node.
-            Script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
-        }
-
-        private void ModJumpBackwardCallbackHandler() {
-            // Update animation time.
-            Script.AnimationTimeRatio -= JumpValue;
-        }
-
-        private void ModJumpForwardCallbackHandler() {
-            // Update animation time.
-            Script.AnimationTimeRatio += JumpValue;
-        }
-
         #endregion PRIVATE METHODS
     }
 

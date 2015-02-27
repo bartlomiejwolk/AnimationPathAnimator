@@ -9,7 +9,7 @@ using UnityEngine;
 namespace ATP.AnimationPathTools {
 
     // TODO Use public API instead of using path and curve fields directly.
-    public class PathData : ScriptableObject {
+    public class PathData : ScriptableObject, ISerializationCallbackReceiver {
         #region EVENTS
         public event EventHandler RotationPointPositionChanged;
 
@@ -104,20 +104,8 @@ namespace ATP.AnimationPathTools {
             InstantiateReferenceTypes();
             AssignDefaultValues();
 
-            NodeAdded += PathData_NodeAdded;
-            NodeRemoved += PathData_NodeRemoved;
-            NodeTiltChanged += PathData_NodeTiltChanged;
-            NodeTimeChanged += PathData_NodeTimeChanged;
-            NodePositionChanged += PathData_NodePositionChanged;
-        }
-
-        private void OnDisable() {
-            NodeAdded -= PathData_NodeAdded;
-            NodeRemoved -= PathData_NodeRemoved;
-            NodeTiltChanged -= PathData_NodeTiltChanged;
-            NodeTimeChanged -= PathData_NodeTimeChanged;
-            NodePositionChanged -= PathData_NodePositionChanged;
-        }
+            SubscribeToEvents();
+       }
 
         #endregion UNITY MESSAGES
 
@@ -754,6 +742,22 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion METHODS
+
+        public void OnBeforeSerialize() {
+        }
+
+        public void OnAfterDeserialize() {
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents() {
+            NodeAdded += PathData_NodeAdded;
+            NodeRemoved += PathData_NodeRemoved;
+            NodeTiltChanged += PathData_NodeTiltChanged;
+            NodeTimeChanged += PathData_NodeTimeChanged;
+            NodePositionChanged += PathData_NodePositionChanged;
+        }
+
     }
 
 }

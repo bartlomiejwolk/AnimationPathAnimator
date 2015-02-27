@@ -54,20 +54,19 @@ namespace ATP.AnimationPathTools {
         ///     Transform that the <c>animatedGO</c> will be looking at.
         /// </summary>
         [SerializeField]
-#pragma warning disable 649
             private Transform targetGO;
 
-#pragma warning restore 649
         public const int GizmoCurveSamplingFrequency = 20;
+
+        [SerializeField]
+            private int exportSamplingFrequency = 5;
 
         #region OPTIONS
 
         [SerializeField]
-#pragma warning disable 169
             protected bool EnableControlsInPlayMode = true;
 
         [SerializeField]
-#pragma warning disable 169
             protected float MaxAnimationSpeed = 0.3f;
 
         /// <summary>
@@ -236,6 +235,10 @@ namespace ATP.AnimationPathTools {
             // Subscribe to events.
             //animationPathBuilder.PathReset += animationPathBuilder_PathReset;
             pathData.RotationPointPositionChanged += pathData_RotationPointPositionChanged;
+
+            //if (gizmoDrawer == null) {
+            //    gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            //}
 
             // TODO First unsubscribe from events. Make separate method.
             //if (pathData != null) {

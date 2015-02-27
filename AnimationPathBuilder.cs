@@ -44,11 +44,9 @@ namespace ATP.AnimationPathTools {
         ///     exporting nodes to transforms.
         /// </summary>
         /// <remarks>Exporting is implemented in <c>Editor</c> class.</remarks>
-        [SerializeField]
-#pragma warning disable 414
-            private int exportSamplingFrequency = 5;
+        //[SerializeField]
+        //    private int exportSamplingFrequency = 5;
 
-#pragma warning restore 414
 
         ///// <summary>
         /////     Color of the gizmo curve.

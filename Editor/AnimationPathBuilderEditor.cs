@@ -68,7 +68,7 @@ namespace ATP.AnimationPathTools {
 
         //private SerializedProperty GizmoCurveColor;
         private SerializedProperty advancedSettingsFoldout;
-        private SerializedProperty exportSamplingFrequency;
+        //private SerializedProperty exportSamplingFrequency;
         private SerializedProperty skin;
         private SerializedProperty pathData;
 
@@ -91,8 +91,8 @@ namespace ATP.AnimationPathTools {
             // Initialize serialized properties.
             //GizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
             skin = serializedObject.FindProperty("skin");
-            exportSamplingFrequency =
-                serializedObject.FindProperty("exportSamplingFrequency");
+            //exportSamplingFrequency =
+            //    serializedObject.FindProperty("exportSamplingFrequency");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             pathData = serializedObject.FindProperty("pathData");
@@ -634,23 +634,23 @@ namespace ATP.AnimationPathTools {
         //    }
         //}
 
-        private void DrawExportControls() {
-            EditorGUILayout.BeginHorizontal();
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                exportSamplingFrequency,
-                new GUIContent(
-                    "Export Sampling",
-                    "Number of points to export for 1 m of the curve. " +
-                    "If set to 0, it'll export only keys defined in " +
-                    "the curve."));
-            serializedObject.ApplyModifiedProperties();
+        //private void DrawExportControls() {
+        //    EditorGUILayout.BeginHorizontal();
+        //    serializedObject.Update();
+        //    EditorGUILayout.PropertyField(
+        //        exportSamplingFrequency,
+        //        new GUIContent(
+        //            "Export Sampling",
+        //            "Number of points to export for 1 m of the curve. " +
+        //            "If set to 0, it'll export only keys defined in " +
+        //            "the curve."));
+        //    serializedObject.ApplyModifiedProperties();
 
-            if (GUILayout.Button("Export")) {
-                ExportNodes(exportSamplingFrequency.intValue);
-            }
-            EditorGUILayout.EndHorizontal();
-        }
+        //    if (GUILayout.Button("Export")) {
+        //        ExportNodes(exportSamplingFrequency.intValue);
+        //    }
+        //    EditorGUILayout.EndHorizontal();
+        //}
 
         private void DrawLinearInspectorButton() {
             if (GUILayout.Button(new GUIContent(
@@ -730,7 +730,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
-            DrawExportControls();
+            //DrawExportControls();
 
             EditorGUILayout.Space();
 
@@ -752,50 +752,50 @@ namespace ATP.AnimationPathTools {
 
             if (GUI.changed) EditorUtility.SetDirty(Script);
         }
-        /// <summary>
-        /// Export Animation Path nodes as transforms.
-        /// </summary>
-        /// <param name="exportSampling">
-        /// Amount of result transforms for one meter of Animation Path.
-        /// </param>
-        private void ExportNodes(int exportSampling) {
-            // Points to be exported.
-            List<Vector3> points;
+        ///// <summary>
+        ///// Export Animation Path nodes as transforms.
+        ///// </summary>
+        ///// <param name="exportSampling">
+        ///// Amount of result transforms for one meter of Animation Path.
+        ///// </param>
+        //private void ExportNodes(int exportSampling) {
+        //    // Points to be exported.
+        //    List<Vector3> points;
 
-            // If exportSampling arg. is zero then export one transform for
-            // each Animation Path node.
-            if (exportSampling == 0) {
-                // Initialize points.
-                points = new List<Vector3>(Script.NodesNo);
+        //    // If exportSampling arg. is zero then export one transform for
+        //    // each Animation Path node.
+        //    if (exportSampling == 0) {
+        //        // Initialize points.
+        //        points = new List<Vector3>(Script.NodesNo);
 
-                // For each node in the path..
-                for (var i = 0; i < Script.NodesNo; i++) {
-                    // Get it 3d position.
-                    points[i] = Script.PathData.GetNodePosition(i);
-                }
-            }
-            // exportSampling not zero..
-            else {
-                // Initialize points array with nodes to export.
-                points = Script.PathData.SampleAnimationPathForPoints(
-                    exportSampling);
-            }
+        //        // For each node in the path..
+        //        for (var i = 0; i < Script.NodesNo; i++) {
+        //            // Get it 3d position.
+        //            points[i] = Script.PathData.GetNodePosition(i);
+        //        }
+        //    }
+        //    // exportSampling not zero..
+        //    else {
+        //        // Initialize points array with nodes to export.
+        //        points = Script.PathData.SampleAnimationPathForPoints(
+        //            exportSampling);
+        //    }
 
-            // Create parent GO.
-            var exportedPath = new GameObject("exported_path");
+        //    // Create parent GO.
+        //    var exportedPath = new GameObject("exported_path");
 
-            // Create child GOs.
-            for (var i = 0; i < points.Count; i++) {
-                // Create child GO.
-                var node = new GameObject("Node " + i);
+        //    // Create child GOs.
+        //    for (var i = 0; i < points.Count; i++) {
+        //        // Create child GO.
+        //        var node = new GameObject("Node " + i);
 
-                // Move node under the path GO.
-                node.transform.parent = exportedPath.transform;
+        //        // Move node under the path GO.
+        //        node.transform.parent = exportedPath.transform;
 
-                // Assign node local position.
-                node.transform.localPosition = points[i];
-            }
-        }
+        //        // Assign node local position.
+        //        node.transform.localPosition = points[i];
+        //    }
+        //}
        
         /// <summary>
         /// Remove all keys in animation curves and create new, default ones.

@@ -44,8 +44,8 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         /// Movement mode will change only while key is pressed.
         /// </remarks>
-        public const KeyCode MoveAllKey = KeyCode.U;
-        public const KeyCode MoveSingleModeKey = KeyCode.Y;
+        //public const KeyCode MoveAllKey = KeyCode.U;
+        //public const KeyCode MoveSingleModeKey = KeyCode.Y;
         #endregion CONSTANS
 
         #region FIELDS
@@ -141,9 +141,9 @@ namespace ATP.AnimationPathTools {
             //HandleTangentModeOptionShortcut();
 
             // Update "Move All" inspector option with keyboard shortcut.
-            HandleMoveAllOptionShortcut();
+            //HandleMoveAllOptionShortcut();
 
-            HandleMoveSingleModeShortcut();
+            //HandleMoveSingleModeShortcut();
 
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
@@ -267,25 +267,25 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING HANDLERS
 
         #region OTHER HANDLERS
-        private void HandleMoveSingleModeShortcut() {
-            // Return if Tangent Mode shortcut wasn't released.
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveSingleModeKey) return;
+        //private void HandleMoveSingleModeShortcut() {
+        //    // Return if Tangent Mode shortcut wasn't released.
+        //    if (Event.current.type != EventType.keyUp
+        //        || Event.current.keyCode != MoveSingleModeKey) return;
 
-            Script.HandleMode = AnimationPathBuilderHandleMode.MoveSingle;
-            serializedObject.ApplyModifiedProperties();
-        }
+        //    Script.HandleMode = AnimationPathBuilderHandleMode.MoveSingle;
+        //    serializedObject.ApplyModifiedProperties();
+        //}
 
-        /// <summary>
-        /// Update <c>moveAllMode</c> option with keyboard shortcut.
-        /// </summary>
-        private void HandleMoveAllOptionShortcut() {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveAllKey) return;
+        ///// <summary>
+        ///// Update <c>moveAllMode</c> option with keyboard shortcut.
+        ///// </summary>
+        //private void HandleMoveAllOptionShortcut() {
+        //    if (Event.current.type != EventType.keyUp
+        //        || Event.current.keyCode != MoveAllKey) return;
 
-            Script.HandleMode = AnimationPathBuilderHandleMode.MoveAll;
-            serializedObject.ApplyModifiedProperties();
-        }
+        //    Script.HandleMode = AnimationPathBuilderHandleMode.MoveAll;
+        //    serializedObject.ApplyModifiedProperties();
+        //}
 
         //private void HandleTangentModeChange() {
         //    // Update path node tangents.
@@ -723,10 +723,10 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             // Tooltip for moveAllMode property.
-            var moveAllModeTooltip = String.Format(
-                "Move all nodes at once. " +
-                "Toggle it with {0} key.",
-                MoveAllKey);
+            //var moveAllModeTooltip = String.Format(
+            //    "Move all nodes at once. " +
+            //    "Toggle it with {0} key.",
+            //    MoveAllKey);
 
             EditorGUILayout.Space();
 

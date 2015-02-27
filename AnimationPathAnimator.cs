@@ -255,6 +255,7 @@ namespace ATP.AnimationPathTools {
         private void Awake() {
             //InitializeEaseCurve();
             //InitializeRotationCurve();
+            skin = Resources.Load("GUISkin/default") as GUISkin;
 
             // Initialize animatedGO field.
             if (animatedGO == null && Camera.main.transform != null) {

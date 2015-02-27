@@ -64,6 +64,8 @@ namespace ATP.AnimationPathTools {
         private const int AddButtonV = 10;
         private const int RemoveButtonH = 44;
         private const int RemoveButtonV = 10;
+        public const KeyCode MoveAllKey = KeyCode.U;
+        public const KeyCode MoveSingleModeKey = KeyCode.Y;
         #endregion CONSTANTS
 
         #region FIELDS
@@ -379,6 +381,8 @@ namespace ATP.AnimationPathTools {
             HandleNoneModeOptionShortcut();
             HandleUpdateAllOptionShortcut();
             HandlePlayPauseShortcut();
+            HandleMoveAllOptionShortcut();
+            HandleMoveSingleModeShortcut();
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
@@ -1255,6 +1259,25 @@ namespace ATP.AnimationPathTools {
         #endregion PRIVATE METHODS
 
         #region SHORTCUT HANDLERS
+        private void HandleMoveSingleModeShortcut() {
+            // Return if Tangent Mode shortcut wasn't released.
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != MoveSingleModeKey) return;
+
+            script.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        /// <summary>
+        /// Update <c>moveAllMode</c> option with keyboard shortcut.
+        /// </summary>
+        private void HandleMoveAllOptionShortcut() {
+            if (Event.current.type != EventType.keyUp
+                || Event.current.keyCode != MoveAllKey) return;
+
+            script.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
+            serializedObject.ApplyModifiedProperties();
+        }
 
         private void HandleEaseModeOptionShortcut() {
             if (Event.current.type != EventType.keyUp

@@ -113,7 +113,7 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
             // Load default skin.
-            skin = Resources.Load("GUISkin/default") as GUISkin;
+            //skin = Resources.Load("GUISkin/default") as GUISkin;
         }
 
         private void OnDestroy() {

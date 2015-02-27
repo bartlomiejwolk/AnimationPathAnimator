@@ -80,6 +80,7 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     if (jumpBackwardCallback != null) jumpBackwardCallback();
+
                     if (anyModJumpKeyPressedCallback != null) {
                         anyModJumpKeyPressedCallback();
                     }
@@ -90,23 +91,23 @@ namespace ATP.AnimationPathTools {
                     Event.current.Use();
 
                     if (jumpForwardCallback != null) jumpForwardCallback();
+
                     if (anyModJumpKeyPressedCallback != null) {
                         anyModJumpKeyPressedCallback();
                     }
 
                     break;
-
                 case JumpToNextNode:
                     Event.current.Use();
 
                     if (jumpToNextNodeCallback != null)
                         jumpToNextNodeCallback();
+
                     if (anyModJumpKeyPressedCallback != null) {
                         anyModJumpKeyPressedCallback();
                     }
 
                     break;
-
                 case JumpToPreviousNode:
                     Event.current.Use();
 

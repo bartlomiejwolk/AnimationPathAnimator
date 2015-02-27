@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
-    public class ShortcutHandler {
+    public static class ShortcutHandler {
 
         public const KeyCode MoveAllKey = KeyCode.U;
         public const KeyCode MoveSingleModeKey = KeyCode.Y;
@@ -47,29 +47,23 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     If modifier is currently pressed.
         /// </summary>
-        private bool modKeyPressed;
-
-        private AnimationPathAnimator animator;
-
-        public ShortcutHandler(AnimationPathAnimator animator) {
-            this.animator = animator;
-        }
+        private static bool modKeyPressed;
 
         /// <summary>
         ///     If modifier is currently pressed.
         /// </summary>
-        public bool ModKeyPressed {
+        public static bool ModKeyPressed {
             get { return modKeyPressed; }
         }
 
-        public void HandleEaseModeOptionShortcut() {
+        public static void HandleEaseModeOptionShortcut(Action callback) {
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != EaseModeShortcut) return;
 
-            animator.HandleMode = AnimatorHandleMode.Ease;
+            callback();
         }
 
-        public void HandleModifiedShortcuts(
+        public static void HandleModifiedShortcuts(
             Action jumpForwardCallback = null,
             Action jumpBackwardCallback = null,
             Action jumpToNextNodeCallback = null,
@@ -127,43 +121,53 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     Update <c>moveAllMode</c> option with keyboard shortcut.
         /// </summary>
-        public void HandleMoveAllOptionShortcut() {
+        public static void HandleMoveAllOptionShortcut(
+            Action callback) {
+
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != MoveAllKey) return;
 
-            animator.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
+            callback();
         }
 
-        public void HandleMoveSingleModeShortcut() {
+        public static void HandleMoveSingleModeShortcut(
+            Action callback) {
+
             // Return if Tangent Mode shortcut wasn't released.
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != MoveSingleModeKey) return;
 
-            animator.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
+            callback();
         }
 
-        public void HandlePlayPauseShortcut() {
+        public static void HandlePlayPauseShortcut(
+            Action callback) {
+
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != PlayPauseShortcut) return;
 
-            animator.HandlePlayPause();
+            callback();
         }
 
-        public void HandleRotationModeOptionShortcut() {
+        public static void HandleRotationModeOptionShortcut(
+            Action callback) {
+            
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != RotationModeShortcut) return;
 
-            animator.HandleMode = AnimatorHandleMode.Rotation;
+            callback();
         }
 
-        public void HandleTiltingModeOptionShortcut() {
+        public static void HandleTiltingModeOptionShortcut(
+            Action callback) {
+            
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != TiltingModeShortcut) return;
 
-            animator.HandleMode = AnimatorHandleMode.Tilting;
+            callback();
         }
 
-        public void HandleUnmodifiedShortcuts(
+        public static void HandleUnmodifiedShortcuts(
             Action jumpBackwardCallback = null,
             Action jumpForwardCallback = null,
             Action jumpToStartCallback = null,
@@ -220,7 +224,7 @@ namespace ATP.AnimationPathTools {
         ///     Checked if modifier key is pressed and remember it in a class
         ///     field.
         /// </summary>
-        public void UpdateModifierKey() {
+        public static void UpdateModifierKey() {
             // Check if modifier key is currently pressed.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode == ModKey) {
@@ -234,18 +238,22 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void HandleNoneModeOptionShortcut() {
+        public static void HandleNoneModeOptionShortcut(
+            Action callback) {
+
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != ShortcutHandler.NoneModeShortcut) return;
 
-            animator.HandleMode = AnimatorHandleMode.None;
+            callback();
         }
 
-        public void HandleUpdateAllOptionShortcut() {
+        public static void HandleUpdateAllOptionShortcut(
+            Action callback) {
+
             if (Event.current.type != EventType.keyUp
                 || Event.current.keyCode != ShortcutHandler.UpdateAllShortcut) return;
 
-            animator.UpdateAllMode = !animator.UpdateAllMode;
+            callback();
         }
 
     }

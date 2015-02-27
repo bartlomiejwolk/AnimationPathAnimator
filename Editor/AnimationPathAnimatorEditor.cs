@@ -62,7 +62,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
-        private ShortcutHandler shortcutHandler;
+        //private ShortcutHandler shortcutHandler;
 
         public AnimationPathAnimator Script {
             set { script = value; }
@@ -193,7 +193,7 @@ namespace ATP.AnimationPathTools {
                     playPauseBtnText,
                     ""))) {
 
-                script.HandlePlayPause();
+                HandlePlayPause();
             }
 
             // Draw Stop button.
@@ -284,7 +284,7 @@ namespace ATP.AnimationPathTools {
             SceneTool.RememberCurrentTool();
 
             gizmoDrawer = new SerializedObject(script.GizmoDrawer);
-            shortcutHandler = new ShortcutHandler(script);
+            //shortcutHandler = new ShortcutHandler(script);
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
@@ -326,15 +326,32 @@ namespace ATP.AnimationPathTools {
             if (script.PathData == null) return;
 
             // Update modifier key state.
-            shortcutHandler.UpdateModifierKey();
-            shortcutHandler.HandleEaseModeOptionShortcut();
-            shortcutHandler.HandleRotationModeOptionShortcut();
-            shortcutHandler.HandleTiltingModeOptionShortcut();
-            shortcutHandler.HandleNoneModeOptionShortcut();
-            shortcutHandler.HandleUpdateAllOptionShortcut();
-            shortcutHandler.HandlePlayPauseShortcut();
-            shortcutHandler.HandleMoveAllOptionShortcut();
-            shortcutHandler.HandleMoveSingleModeShortcut();
+            ShortcutHandler.UpdateModifierKey();
+
+            ShortcutHandler.HandleEaseModeOptionShortcut(
+                () => script.HandleMode = AnimatorHandleMode.Ease);
+
+            ShortcutHandler.HandleRotationModeOptionShortcut(
+                () => script.HandleMode = AnimatorHandleMode.Rotation);
+
+            ShortcutHandler.HandleTiltingModeOptionShortcut(
+                () => script.HandleMode = AnimatorHandleMode.Tilting);
+
+            ShortcutHandler.HandleNoneModeOptionShortcut(
+                () => script.HandleMode = AnimatorHandleMode.None);
+
+            ShortcutHandler.HandleUpdateAllOptionShortcut(
+                () => script.UpdateAllMode = !script.UpdateAllMode);
+
+            ShortcutHandler.HandlePlayPauseShortcut(HandlePlayPause);
+
+            ShortcutHandler.HandleMoveAllOptionShortcut(
+                () => script.MovementMode =
+                    AnimationPathBuilderHandleMode.MoveAll);
+
+            ShortcutHandler.HandleMoveSingleModeShortcut(
+                () => script.MovementMode =
+                    AnimationPathBuilderHandleMode.MoveSingle);
 
             // Change current animation time with arrow keys.
             ChangeTimeWithArrowKeys();
@@ -494,6 +511,25 @@ namespace ATP.AnimationPathTools {
 
         private void HandleWrapModeDropdown() {
             script.UpdateWrapMode();
+        }
+
+        public void HandlePlayPause() {
+            // Pause animation.
+            if (script.IsPlaying) {
+                script.Pause = true;
+                script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (script.Pause) {
+                script.Pause = false;
+                script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                script.IsPlaying = true;
+                // Start animation.
+                script.StartEaseTimeCoroutine();
+            }
         }
 
         #endregion
@@ -985,9 +1021,9 @@ namespace ATP.AnimationPathTools {
             // If a key is pressed..
             if (Event.current.type == EventType.keyDown
                 // and modifier key is pressed also..
-                && shortcutHandler.ModKeyPressed) {
+                && ShortcutHandler.ModKeyPressed) {
 
-                shortcutHandler.HandleModifiedShortcuts(
+                ShortcutHandler.HandleModifiedShortcuts(
                     ModJumpForwardCallbackHandler,
                     ModJumpBackwardCallbackHandler,
                     JumpToNextNodeCallbackHandler,
@@ -996,7 +1032,7 @@ namespace ATP.AnimationPathTools {
             }
             // Modifier key not pressed.
             else if (Event.current.type == EventType.keyDown) {
-                shortcutHandler.HandleUnmodifiedShortcuts(
+                ShortcutHandler.HandleUnmodifiedShortcuts(
                     JumpBackwardCallbackHandler,
                     JumpForwardCallbackHandler,
                     JumpToStartCallbackHandler,

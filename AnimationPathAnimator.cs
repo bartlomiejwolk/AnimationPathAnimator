@@ -303,25 +303,6 @@ namespace ATP.AnimationPathTools {
 
         #region METHODS
 
-        public void HandlePlayPause() {
-            // Pause animation.
-            if (IsPlaying) {
-                Pause = true;
-                IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (Pause) {
-                Pause = false;
-                IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                IsPlaying = true;
-                // Start animation.
-                StartEaseTimeCoroutine();
-            }
-        }
-
         public void Animate() {
             AnimateObject();
             HandleAnimatedGORotation();

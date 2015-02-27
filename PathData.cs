@@ -276,6 +276,8 @@ namespace ATP.AnimationPathTools {
                 // Update node timestamp.
                 AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
             }
+
+            OnNodeTimeChanged();
         }
 
         public float[] GetEaseCurveValues() {

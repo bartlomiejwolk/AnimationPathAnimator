@@ -6,6 +6,7 @@ using ATP.ReorderableList;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
+
 namespace ATP.AnimationPathTools {
 
     /// <summary>
@@ -15,7 +16,19 @@ namespace ATP.AnimationPathTools {
     /// </summary>
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
+        #region EVENT HANDLERS
+
+        private void pathData_RotationPointPositionChanged(
+            object sender,
+            EventArgs e) {
+            UpdateAnimatedGO();
+        }
+
+        #endregion EVENT HANDLERS
+
         #region FIELDS
+
+        public const int GizmoCurveSamplingFrequency = 20;
 
         [SerializeField]
 #pragma warning disable 169
@@ -32,6 +45,9 @@ namespace ATP.AnimationPathTools {
         private float animTimeRatio;
 
         [SerializeField]
+        private int exportSamplingFrequency = 5;
+
+        [SerializeField]
         private GizmoDrawer gizmoDrawer;
 
 #pragma warning restore 169
@@ -46,20 +62,15 @@ namespace ATP.AnimationPathTools {
         ///     Transform that the <c>animatedGO</c> will be looking at.
         /// </summary>
         [SerializeField]
-            private Transform targetGO;
-
-        public const int GizmoCurveSamplingFrequency = 20;
-
-        [SerializeField]
-            private int exportSamplingFrequency = 5;
+        private Transform targetGO;
 
         #region OPTIONS
 
         [SerializeField]
-            protected bool EnableControlsInPlayMode = true;
+        protected bool EnableControlsInPlayMode = true;
 
         [SerializeField]
-            protected float MaxAnimationSpeed = 0.3f;
+        protected float MaxAnimationSpeed = 0.3f;
 
         /// <summary>
         ///     Value of the jump when modifier key is pressed.
@@ -78,9 +89,19 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private float forwardPointOffset = 0.05f;
 
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
         [SerializeField]
         private AnimatorHandleMode handleMode =
             AnimatorHandleMode.None;
+
+        [SerializeField]
+        private AnimationPathBuilderHandleMode movementMode =
+            AnimationPathBuilderHandleMode.MoveAll;
 
         [SerializeField]
         private float positionLerpSpeed = 0.1f;
@@ -93,25 +114,16 @@ namespace ATP.AnimationPathTools {
         private float rotationSpeed = 3.0f;
 
         [SerializeField]
+        private AnimationPathBuilderTangentMode tangentMode =
+            AnimationPathBuilderTangentMode.Smooth;
+
+        [SerializeField]
         private bool updateAllMode;
 
         [SerializeField]
         private WrapMode wrapMode = WrapMode.Clamp;
-
-        [SerializeField]
-        private AnimationPathBuilderHandleMode movementMode =
-            AnimationPathBuilderHandleMode.MoveAll;
-
 #pragma warning disable 0414
-        [SerializeField] private AnimationPathBuilderTangentMode tangentMode =
-            AnimationPathBuilderTangentMode.Smooth;
 #pragma warning restore 0414
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
 
         #endregion OPTIONS
 
@@ -132,6 +144,14 @@ namespace ATP.AnimationPathTools {
             get { return 0.001f; }
         }
 
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
         public GizmoDrawer GizmoDrawer {
             get { return gizmoDrawer; }
         }
@@ -148,6 +168,11 @@ namespace ATP.AnimationPathTools {
         ///     Used in play mode. You can use it to stop animation.
         /// </remarks>
         public bool IsPlaying { get; set; }
+
+        public AnimationPathBuilderHandleMode MovementMode {
+            get { return movementMode; }
+            set { movementMode = value; }
+        }
 
         public PathData PathData {
             get { return pathData; }
@@ -173,6 +198,11 @@ namespace ATP.AnimationPathTools {
             set { skin = value; }
         }
 
+        public AnimationPathBuilderTangentMode TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
+
         public bool UpdateAllMode {
             get { return updateAllMode; }
             set { updateAllMode = value; }
@@ -185,24 +215,6 @@ namespace ATP.AnimationPathTools {
 
         protected virtual int RotationCurveSampling {
             get { return 20; }
-        }
-
-        public AnimationPathBuilderHandleMode MovementMode {
-            get { return movementMode; }
-            set { movementMode = value; }
-        }
-
-        public AnimationPathBuilderTangentMode TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
-        }
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
         }
 
         #endregion PROPERTIES
@@ -219,6 +231,7 @@ namespace ATP.AnimationPathTools {
                 gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
             }
         }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
             skin = Resources.Load("GUISkin/default") as GUISkin;
@@ -288,54 +301,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion UNITY MESSAGES
 
-        #region EVENT HANDLERS
-        void pathData_RotationPointPositionChanged(object sender, EventArgs e) {
-            UpdateAnimatedGO();
-        }
-
-        #endregion EVENT HANDLERS
-
         #region METHODS
-
-        // Move to GizmoDrawer class.
-        private void DrawGizmoCurve() {
-            // Return if path asset is not assigned.
-            if (pathData == null) return;
-
-            // Get transform component.
-            var transform = GetComponent<Transform>();
-
-            // Get path points.
-            var points = pathData.SampleAnimationPathForPoints(
-                GizmoCurveSamplingFrequency);
-
-            // Convert points to global coordinates.
-            var globalPoints = new Vector3[points.Count];
-            for (var i = 0; i < points.Count; i++) {
-                globalPoints[i] = transform.TransformPoint(points[i]);
-            }
-
-            // There must be at least 3 points to draw a line.
-            if (points.Count < 3) return;
-
-            Gizmos.color = gizmoCurveColor;
-
-            // Draw curve.
-            for (var i = 0; i < points.Count - 1; i++) {
-                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
-            }
-        }
-
-        public Vector3[] GetNodeGlobalPositions() {
-            var nodePositions = PathData.GetNodePositions();
-
-            for (var i = 0; i < nodePositions.Length; i++) {
-                // Convert each position to global coordinate.
-                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
-            }
-
-            return nodePositions;
-        }
 
         public void Animate() {
             AnimateObject();
@@ -364,6 +330,17 @@ namespace ATP.AnimationPathTools {
             var globalNodePosition = transform.TransformPoint(localNodePosition);
 
             return globalNodePosition;
+        }
+
+        public Vector3[] GetNodeGlobalPositions() {
+            var nodePositions = PathData.GetNodePositions();
+
+            for (var i = 0; i < nodePositions.Length; i++) {
+                // Convert each position to global coordinate.
+                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+            }
+
+            return nodePositions;
         }
 
         public void StartEaseTimeCoroutine() {
@@ -415,6 +392,35 @@ namespace ATP.AnimationPathTools {
             }
             else {
                 animatedGO.position = globalPositionAtTimestamp;
+            }
+        }
+
+        // Move to GizmoDrawer class.
+        private void DrawGizmoCurve() {
+            // Return if path asset is not assigned.
+            if (pathData == null) return;
+
+            // Get transform component.
+            var transform = GetComponent<Transform>();
+
+            // Get path points.
+            var points = pathData.SampleAnimationPathForPoints(
+                GizmoCurveSamplingFrequency);
+
+            // Convert points to global coordinates.
+            var globalPoints = new Vector3[points.Count];
+            for (var i = 0; i < points.Count; i++) {
+                globalPoints[i] = transform.TransformPoint(points[i]);
+            }
+
+            // There must be at least 3 points to draw a line.
+            if (points.Count < 3) return;
+
+            Gizmos.color = gizmoCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
             }
         }
 

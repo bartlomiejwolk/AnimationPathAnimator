@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using System.IO;
 using UnityEditor;
-using System.IO;
+using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace Assets.Extensions.animationpathtools.Include.Editor {
 
 	public static class ScriptableObjectUtility
 	{

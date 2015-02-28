@@ -94,17 +94,17 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.RightAlt; }
         }
 
-        public virtual KeyCode MoveAllKey {
-            get { return KeyCode.U; }
+        public virtual KeyCode MoveAllModeKey {
+            get { return KeyCode.P; }
         }
 
         public virtual Color MoveAllModeColor {
             get { return Color.red; }
         }
 
-        public virtual KeyCode MoveSingleModeKey {
-            get { return KeyCode.Y; }
-        }
+        //public virtual KeyCode MoveSingleModeKey {
+        //    get { return KeyCode.Y; }
+        //}
 
         public virtual KeyCode NoneModeKey {
             get { return KeyCode.Y; }
@@ -766,15 +766,8 @@ namespace ATP.AnimationPathTools {
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
-                () => Script.MovementMode =
-                    AnimationPathBuilderHandleMode.MoveAll,
-                MoveAllKey,
-                ModKeyPressed);
-
-            Utilities.HandleUnmodShortcut(
-                () => Script.MovementMode =
-                    AnimationPathBuilderHandleMode.MoveSingle,
-                KeyCode.Y,
+                ToggleMovementMode,
+                MoveAllModeKey,
                 ModKeyPressed);
 
             // Short jump forward.
@@ -845,7 +838,6 @@ namespace ATP.AnimationPathTools {
                 PlayPauseKey,
                 ModKeyPressed);
         }
-
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
@@ -947,6 +939,17 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
+        private void ToggleMovementMode() {
+            if (Script.MovementMode ==
+                AnimationPathBuilderHandleMode.MoveSingle) {
+
+                Script.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
+            }
+            else {
+                Script.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
+            }
+        }
+
 
         /// <summary>
         ///     Checked if modifier key is pressed and remember it in a class

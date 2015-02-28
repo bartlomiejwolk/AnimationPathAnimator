@@ -10,6 +10,17 @@ namespace ATP.AnimationPathTools {
     public class AnimatorEditor : Editor {
 
         #region FIELDS
+        /// <summary>
+        ///     Reference to target script.
+        /// </summary>
+        public AnimationPathAnimator Script {
+            get { return script; }
+        }
+
+        public AnimatorHandles AnimatorHandles { get; private set; }
+
+        public SerializedObject GizmoDrawer { get; private set; }
+
 
         /// <summary>
         ///     Reference to target script.
@@ -37,10 +48,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion FIELDS
 
-        #region PROPERTIES
-
-        public AnimatorHandles AnimatorHandles { get; private set; }
-
+        #region CONSTANT VALUES
         public virtual int EaseValueLabelOffsetX {
             get { return -20; }
         }
@@ -52,9 +60,6 @@ namespace ATP.AnimationPathTools {
         public virtual float FloatPrecision {
             get { return 0.001f; }
         }
-
-        public SerializedObject GizmoDrawer { get; private set; }
-
         public virtual float JumpValue {
             get { return 0.01f; }
         }
@@ -65,13 +70,6 @@ namespace ATP.AnimationPathTools {
 
         public virtual float RotationHandleSize {
             get { return 0.25f; }
-        }
-
-        /// <summary>
-        ///     Reference to target script.
-        /// </summary>
-        public AnimationPathAnimator Script {
-            get { return script; }
         }
         // TODO Move to AnimatorHandles class.
         public virtual int TiltValueLabelOffsetX {

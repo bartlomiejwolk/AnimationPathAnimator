@@ -119,6 +119,11 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
+        protected virtual void OnPathReset() {
+            EventHandler handler = PathReset;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         public virtual void OnNodePositionChanged() {
             var handler = NodePositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -182,10 +187,6 @@ namespace ATP.AnimationPathTools {
         #endregion EVENT HANDLERS
 
         #region METHODS
-
-        //public void CreateNewNode(int index, Vector3 value) {
-        //    animatedObjectPath.CreateNewNode(index, value);
-        //}
 
         public void AddKeyToCurve(
             AnimationCurve curve,
@@ -762,12 +763,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion METHODS
-
-        protected virtual void OnPathReset() {
-            EventHandler handler = PathReset;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
     }
 
 }

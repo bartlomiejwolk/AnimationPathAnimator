@@ -1044,6 +1044,21 @@ namespace ATP.AnimationPathTools {
             return 1.0f;
         }
 
+        /// <summary>
+        /// Remove all keys in animation curves and create new, default ones.
+        /// </summary>
+        //public void MovePathToCameraPosition() {
+        //    // Get scene view camera.
+        //    Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+
+        //    // Get world point to place the Animation Path.
+        //    Vector3 worldPoint = sceneCamera.transform.position;
+
+        //    var destinationPoint = new Vector3(worldPoint.x, 0, worldPoint.z);
+
+        //    PathData.MovePathToPosition(destinationPoint);
+        //}
+
         #endregion PRIVATE METHODS
     }
 

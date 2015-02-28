@@ -295,7 +295,6 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
-            // In play mode, update animation time with delta time.
             if (Application.isPlaying && IsPlaying && !Pause) {
                 Animate();
             }
@@ -306,7 +305,7 @@ namespace ATP.AnimationPathTools {
         #region METHODS
 
         public void Animate() {
-            AnimateObject();
+            AnimateObjectPosition();
             HandleAnimatedGORotation();
             TiltObject();
         }
@@ -377,7 +376,7 @@ namespace ATP.AnimationPathTools {
             PathData.SetWrapMode(wrapMode);
         }
 
-        private void AnimateObject() {
+        private void AnimateObjectPosition() {
             if (animatedGO == null) return;
 
             var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);

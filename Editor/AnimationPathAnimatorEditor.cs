@@ -288,7 +288,7 @@ namespace ATP.AnimationPathTools {
 
             SceneTool.RememberCurrentTool();
 
-            gizmoDrawer = new SerializedObject(Script.GizmoDrawer);
+            gizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
             animatorHandles = new AnimatorHandles();
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");

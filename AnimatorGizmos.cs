@@ -3,7 +3,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace ATP.AnimationPathTools {
 
-    public class GizmoDrawer : ScriptableObject {
+    public class AnimatorGizmos : ScriptableObject {
 
         #region FIELDS
 

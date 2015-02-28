@@ -9,6 +9,8 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
         #region FIELDS
+        public bool ModKeyPressed { get; private set; }
+
 
         /// <summary>
         ///     Reference to target script.
@@ -89,12 +91,39 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.J; }
         }
 
-        public virtual KeyCode UpdateAllShortcut {
+        public virtual KeyCode UpdateAllKey {
             get { return KeyCode.L; }
         }
 
-        public virtual KeyCode EaseModeShortcut {
+        public KeyCode LongJumpForwardKey {
+            get { return KeyCode.K; }
+        }
+
+        public virtual KeyCode JumpToStartKey {
+            get { return KeyCode.H; }
+        }
+
+        public virtual KeyCode EaseModeKey {
             get { return KeyCode.G; }
+        }
+
+        /// <summary>
+        ///     Key shortcut to jump backward.
+        /// </summary>
+//public const KeyCode JumpBackward = KeyCode.J;
+        /// <summary>
+        ///     Key shortcut to jump forward.
+        /// </summary>
+//public const KeyCode JumpForward = KeyCode.K;
+        /// <summary>
+        ///     Key shortcut to jump to the end of the animation.
+        /// </summary>
+        public virtual KeyCode JumpToEndKey {
+            get { return KeyCode.L; }
+        }
+
+        public KeyCode LongJumpBackwardKey {
+            get { return KeyCode.J; }
         }
 
         /// <summary>
@@ -112,20 +141,24 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         //public const KeyCode jumpToEnd = KeyCode.H;
 
-        //public const KeyCode JumpToNextNode = KeyCode.L;
+        //public const KeyCode JumpToNextNodeKey = KeyCode.L;
 
-        public virtual KeyCode JumpToNextNode {
+        public KeyCode ShortJumpBackwardKey {
+            get { return KeyCode.J; }
+        }
+
+        public virtual KeyCode JumpToNextNodeKey {
             get { return KeyCode.L; }
         }
-        public virtual KeyCode JumpToPreviousNode {
+        public virtual KeyCode JumpToPreviousNodeKey {
             get { return KeyCode.H; }
         }
-        //public const KeyCode JumpToPreviousNode = KeyCode.H;
+        //public const KeyCode JumpToPreviousNodeKey = KeyCode.H;
 
         /// <summary>
         ///     Key shortcut to jump to the beginning of the animation.
         /// </summary>
-        //public const KeyCode JumpToStart = KeyCode.H;
+        //public const KeyCode JumpToStartKey = KeyCode.H;
 
         /// <summary>
         ///     Keycode used as a modifier key.
@@ -134,6 +167,10 @@ namespace ATP.AnimationPathTools {
         //public const KeyCode ModKey = KeyCode.J;
         public virtual KeyCode ModKey {
             get { return KeyCode.RightAlt; }
+        }
+
+        public KeyCode ShortJumpForwardKey {
+            get { return KeyCode.K; }
         }
 
         #endregion
@@ -705,7 +742,7 @@ namespace ATP.AnimationPathTools {
         private void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
-                EaseModeShortcut,
+                EaseModeKey,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
@@ -725,7 +762,7 @@ namespace ATP.AnimationPathTools {
 
             Utilities.HandleUnmodShortcut(
                 () => Script.UpdateAllMode = !Script.UpdateAllMode,
-                UpdateAllShortcut,
+                UpdateAllKey,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
@@ -749,7 +786,7 @@ namespace ATP.AnimationPathTools {
                     Script.AnimationTimeRatio =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
                 },
-                ShortJumpForward,
+                ShortJumpForwardKey,
                 ModKeyPressed);
 
             // Short jump backward.
@@ -761,45 +798,45 @@ namespace ATP.AnimationPathTools {
                     Script.AnimationTimeRatio =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
                 },
-                ShortJumpBackward,
+                ShortJumpBackwardKey,
                 ModKeyPressed);
 
             // Long jump forward.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio += LongJumpValue,
-                LongJumpForward,
+                LongJumpForwardKey,
                 ModKeyPressed);
 
             // Long jump backward.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio -= LongJumpValue,
-                LongJumpBackward,
+                LongJumpBackwardKey,
                 ModKeyPressed);
 
             // Jump to next node.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestForwardNodeTimestamp(),
-                JumpToNextNode,
+                JumpToNextNodeKey,
                 ModKeyPressed);
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp(),
-                JumpToPreviousNode,
+                JumpToPreviousNodeKey,
                 ModKeyPressed);
 
             // Jump to start.
             Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio = 0,
-                JumpToStart,
+                JumpToStartKey,
                 ModKeyPressed);
 
             // Jump to end.
             Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio = 1,
-                JumpToEnd,
+                JumpToEndKey,
                 ModKeyPressed);
 
             // Play/pause animation.
@@ -808,42 +845,6 @@ namespace ATP.AnimationPathTools {
                 PlayPauseKey,
                 ModKeyPressed);
         }
-
-        public bool ModKeyPressed { get; private set; }
-
-        public KeyCode LongJumpForward {
-            get { return KeyCode.K; }
-        }
-        public KeyCode LongJumpBackward {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode ShortJumpBackward {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode ShortJumpForward {
-            get { return KeyCode.K; }
-        }
-
-        /// <summary>
-        ///     Key shortcut to jump backward.
-        /// </summary>
-//public const KeyCode JumpBackward = KeyCode.J;
-        /// <summary>
-        ///     Key shortcut to jump forward.
-        /// </summary>
-//public const KeyCode JumpForward = KeyCode.K;
-        /// <summary>
-        ///     Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public virtual KeyCode JumpToEnd {
-            get { return KeyCode.L; }
-        }
-        public virtual KeyCode JumpToStart {
-            get { return KeyCode.H; }
-        }
-
         public void HandlePlayPause() {
             // Pause animation.
             if (Script.IsPlaying) {
@@ -953,16 +954,6 @@ namespace ATP.AnimationPathTools {
             else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
-        }
-
-        private void AnyJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) Script.UpdateAnimatedGO();
-            if (!Application.isPlaying) Script.Animate();
-        }
-
-        private void AnyModJumpKeyPressedCallbackHandler() {
-            if (Application.isPlaying) Script.UpdateAnimatedGO();
-            if (!Application.isPlaying) Script.Animate();
         }
 
         private void DrawEaseHandlesCallbackHandler(

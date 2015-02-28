@@ -76,101 +76,103 @@ namespace ATP.AnimationPathTools {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                pathData,
-                new GUIContent(
-                    "Path Asset",
-                    ""));
-            serializedObject.ApplyModifiedProperties();
+            DrawPathDataAssetControl();
+            DrawAnimationTimeControl();
+            DrawWrapModeDropdown();
+            DrawHandleModeDropdown();
+            DrawUpdateAllToggle();
+            DrawPositionLerpSpeedControl();
+            DrawRotationModeControls();
 
-            animTimeRatio.floatValue = EditorGUILayout.FloatField(
+            EditorGUILayout.Space();
+
+            DrawTangentModeDropdown();
+            DrawMovementModeDropdown();
+            DrawResetPathInspectorButton();
+
+            EditorGUILayout.Space();
+
+            DrawAnimatedGOControl();
+            DrawTargetGOControl();
+
+            EditorGUILayout.Space();
+
+            DrawPlayerControls();
+            DrawAutoPlayControl();
+            DrawEnableControlsInPlayModeToggle();
+
+            EditorGUILayout.Space();
+
+            PathExporter.DrawExportControls(
+                serializedObject,
+                exportSamplingFrequency,
+                Script.PathData);
+
+            EditorGUILayout.Space();
+
+            DrawAdvancedSettingsFoldout();
+            DrawAdvanceSettingsControls();
+        }
+
+        protected virtual bool DrawUpdateAllToggle() {
+
+            return Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
-                    "Animation Time",
-                    "Current animation time."),
-                animTimeRatio.floatValue);
+                    "Update All",
+                    ""),
+                Script.UpdateAllMode);
+        }
+
+        protected virtual AnimatorHandleMode DrawHandleModeDropdown() {
+
+            return Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Handle Mode",
+                    ""),
+                Script.HandleMode);
+        }
+
+        protected virtual void DrawWrapModeDropdown() {
 
             Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),
                 Script.WrapMode);
+        }
 
-            Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Handle Mode",
-                    ""),
-                Script.HandleMode);
-
-            Script.UpdateAllMode = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Update All",
-                    ""),
-                Script.UpdateAllMode);
+        protected virtual void DrawAdvancedSettingsFoldout() {
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                positionLerpSpeed,
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Position Lerp Speed",
+                    "Advanced Settings",
                     ""));
             serializedObject.ApplyModifiedProperties();
+        }
 
-            DrawRotationModeDropdown();
+        protected virtual void DrawEnableControlsInPlayModeToggle() {
 
             serializedObject.Update();
-
-            if (Script.RotationMode == AnimatorRotationMode.Forward) {
-                EditorGUILayout.PropertyField(forwardPointOffset);
-            }
-
             EditorGUILayout.PropertyField(
-                rotationSpeed,
+                enableControlsInPlayMode,
                 new GUIContent(
-                    "Rotation Speed",
-                    "Controls how much time (in seconds) it'll take the " +
-                    "animated object to finish rotation towards followed target."));
-
-            EditorGUILayout.Space();
-
-            // Remember current tangent mode.
-            var prevTangentMode = Script.TangentMode;
-            // Draw tangent mode dropdown.
-            Script.TangentMode =
-                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Tangent Mode",
-                        ""),
-                    Script.TangentMode);
-            // Update gizmo curve is tangent mode changed.
-            if (Script.TangentMode != prevTangentMode)
-                HandleTangentModeChange();
-
-            Script.MovementMode =
-                (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Movement Mode",
-                        ""),
-                    Script.MovementMode);
-
-            DrawResetPathInspectorButton();
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.PropertyField(
-                animatedGO,
-                new GUIContent(
-                    "Animated Object",
-                    "Object to animate."));
-
-            EditorGUILayout.PropertyField(
-                targetGO,
-                new GUIContent(
-                    "Target Object",
-                    "Object that the animated object will be looking at."));
+                    "Play Mode Controls",
+                    "Enable keybord controls in play mode."));
             serializedObject.ApplyModifiedProperties();
+        }
 
-            EditorGUILayout.Space();
+        protected virtual void DrawAutoPlayControl() {
+
+            Script.AutoPlay = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Auto Play",
+                    ""),
+                Script.AutoPlay);
+        }
+
+        protected virtual void DrawPlayerControls() {
 
             EditorGUILayout.BeginHorizontal();
 
@@ -201,41 +203,88 @@ namespace ATP.AnimationPathTools {
             }
 
             EditorGUILayout.EndHorizontal();
+        }
 
-            Script.AutoPlay = EditorGUILayout.Toggle(
+        protected virtual void DrawTargetGOControl() {
+
+            EditorGUILayout.PropertyField(
+                targetGO,
                 new GUIContent(
-                    "Auto Play",
-                    ""),
-                Script.AutoPlay);
+                    "Target Object",
+                    "Object that the animated object will be looking at."));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawAnimatedGOControl() {
+            EditorGUILayout.PropertyField(
+                animatedGO,
+                new GUIContent(
+                    "Animated Object",
+                    "Object to animate."));
+        }
+
+        protected virtual AnimationPathBuilderHandleMode DrawMovementModeDropdown() {
+
+            return Script.MovementMode =
+                (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Movement Mode",
+                        ""),
+                    Script.MovementMode);
+        }
+
+        protected virtual void DrawTangentModeDropdown() {
+
+// Remember current tangent mode.
+            var prevTangentMode = Script.TangentMode;
+            // Draw tangent mode dropdown.
+            Script.TangentMode =
+                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Tangent Mode",
+                        ""),
+                    Script.TangentMode);
+            // Update gizmo curve is tangent mode changed.
+            if (Script.TangentMode != prevTangentMode)
+                HandleTangentModeChange();
+        }
+
+        protected virtual void DrawPositionLerpSpeedControl() {
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(
-                enableControlsInPlayMode,
+                positionLerpSpeed,
                 new GUIContent(
-                    "Play Mode Controls",
-                    "Enable keybord controls in play mode."));
+                    "Position Lerp Speed",
+                    ""));
             serializedObject.ApplyModifiedProperties();
+        }
 
-            EditorGUILayout.Space();
-
-            PathExporter.DrawExportControls(
-                serializedObject,
-                exportSamplingFrequency,
-                Script.PathData);
-
-            EditorGUILayout.Space();
+        protected virtual void DrawAnimationTimeControl() {
 
             serializedObject.Update();
-
-            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                advancedSettingsFoldout.boolValue,
+            animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
-                    "Advanced Settings",
-                    ""));
-
+                    "Animation Time",
+                    "Current animation time."),
+                animTimeRatio.floatValue);
             serializedObject.ApplyModifiedProperties();
+        }
 
-            // Display advanced foldout content.
+        protected virtual void DrawPathDataAssetControl() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        #region INSPECTOR
+        protected virtual void DrawAdvanceSettingsControls() {
+
             if (advancedSettingsFoldout.boolValue) {
                 serializedObject.Update();
                 EditorGUILayout.PropertyField(
@@ -253,8 +302,9 @@ namespace ATP.AnimationPathTools {
                 serializedObject.ApplyModifiedProperties();
             }
         }
+        #endregion
 
-        private void DrawRotationModeDropdown() {
+        private void DrawRotationModeControls() {
             // Remember current RotationMode.
             var prevRotationMode = Script.RotationMode;
             // Draw RotationMode dropdown.
@@ -264,10 +314,26 @@ namespace ATP.AnimationPathTools {
                         "Rotation Mode",
                         ""),
                     Script.RotationMode);
+
             // If value changed, update animated GO in the scene.
             if (Script.RotationMode != prevRotationMode) {
                 Script.UpdateAnimatedGO();
             }
+
+            serializedObject.Update();
+
+            if (Script.RotationMode == AnimatorRotationMode.Forward) {
+                EditorGUILayout.PropertyField(forwardPointOffset);
+            }
+
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

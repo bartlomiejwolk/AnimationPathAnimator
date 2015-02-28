@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
-    public class PathExporter {
+    public static class PathExporter {
 
-        public void DrawExportControls(
+        public static void DrawExportControls(
             SerializedObject serializedObject,
             SerializedProperty exportSamplingFrequency,
             PathData pathData) {
@@ -35,7 +35,7 @@ namespace ATP.AnimationPathTools {
         /// <param name="exportSampling">
         ///     Amount of result transforms for one meter of Animation Path.
         /// </param>
-        private void ExportNodes(
+        private static void ExportNodes(
             PathData pathData,
             int exportSampling) {
 

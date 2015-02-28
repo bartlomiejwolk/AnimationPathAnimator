@@ -57,7 +57,6 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty targetGO;
 
         private AnimatorHandles animatorHandles;
-        private PathExporter pathExporter;
 
         #endregion SERIALIZED PROPERTIES
         #endregion FIELDS
@@ -79,10 +78,6 @@ namespace ATP.AnimationPathTools {
 
         public AnimatorHandles AnimatorHandles {
             get { return animatorHandles; }
-        }
-
-        public PathExporter PathExporter {
-            get { return pathExporter; }
         }
 
         #endregion
@@ -298,7 +293,6 @@ namespace ATP.AnimationPathTools {
 
             gizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
             animatorHandles = new AnimatorHandles();
-            pathExporter = new PathExporter();
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");

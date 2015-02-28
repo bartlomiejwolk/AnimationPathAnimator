@@ -8,38 +8,6 @@ namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
-        #region CONSTANTS
-
-        public virtual float JumpValue {
-            get { return 0.01f; }
-        }
-
-        public virtual int EaseValueLabelOffsetX {
-            get { return -20; }
-        }
-
-        public virtual int EaseValueLabelOffsetY {
-            get { return -25; }
-        }
-
-        public virtual float FloatPrecision {
-            get { return  0.001f; }
-        }
-
-        public virtual float RotationHandleSize {
-            get { return 0.25f; }
-        }
-
-        // TODO Move to AnimatorHandles class.
-        public virtual int TiltValueLabelOffsetX {
-            get { return -20; }
-        }
-
-        public virtual int TiltValueLabelOffsetY {
-            get { return -25; }
-        }
-
-        #endregion CONSTANTS
 
         #region FIELDS
 
@@ -73,10 +41,30 @@ namespace ATP.AnimationPathTools {
 
         public AnimatorHandles AnimatorHandles { get; private set; }
 
+        public virtual int EaseValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public virtual int EaseValueLabelOffsetY {
+            get { return -25; }
+        }
+
+        public virtual float FloatPrecision {
+            get { return 0.001f; }
+        }
+
         public SerializedObject GizmoDrawer { get; private set; }
+
+        public virtual float JumpValue {
+            get { return 0.01f; }
+        }
 
         public virtual Color MoveAllModeColor {
             get { return Color.red; }
+        }
+
+        public virtual float RotationHandleSize {
+            get { return 0.25f; }
         }
 
         /// <summary>
@@ -84,6 +72,14 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public AnimationPathAnimator Script {
             get { return script; }
+        }
+        // TODO Move to AnimatorHandles class.
+        public virtual int TiltValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public virtual int TiltValueLabelOffsetY {
+            get { return -25; }
         }
 
         #endregion

@@ -238,11 +238,18 @@ namespace ATP.AnimationPathTools {
                     PathData_RotationPointPositionChanged;
 
                 PathData.NodePositionChanged += PathData_NodePositionChanged;
+
+                pathData.NodeTiltChanged += pathData_NodeTiltChanged;
             }
 
             if (animatorGizmos == null) {
                 animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
+        }
+
+        void pathData_NodeTiltChanged(object sender, EventArgs e) {
+            if (Application.isPlaying) UpdateAnimatedGO();
+            if (!Application.isPlaying) Animate();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

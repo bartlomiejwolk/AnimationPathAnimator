@@ -65,7 +65,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public static void HandleShortcut(
-            Func<> callback,
+            Action callback,
             KeyCode key,
             KeyCode modKey = KeyCode.None) {
             

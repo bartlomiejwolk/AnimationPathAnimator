@@ -45,14 +45,6 @@ namespace ATP.AnimationPathTools {
         /// <remarks>Modifier key changes how other keys works.</remarks>
         public const KeyCode ModKey = KeyCode.A;
 
-        public static void HandlePlayPauseShortcut(
-            Action callback) {
-
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != PlayPauseShortcut) return;
-
-            callback();
-        }
     }
 
 }

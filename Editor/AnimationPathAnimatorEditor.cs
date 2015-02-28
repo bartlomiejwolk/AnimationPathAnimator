@@ -226,8 +226,6 @@ namespace ATP.AnimationPathTools {
 
             HandleShortcuts();
 
-            ShortcutHandler.HandlePlayPauseShortcut(HandlePlayPause);
-
             // Change current animation time with arrow keys.
             //ShortcutHandler.HandleModifiedJumpShortcuts(
             //    ModJumpForwardCallbackHandler,
@@ -732,6 +730,10 @@ namespace ATP.AnimationPathTools {
                 KeyCode.L,
                 KeyCode.J);
 
+            // Play/pause animation.
+            Utilities.HandleShortcut(
+                HandlePlayPause,
+                KeyCode.Space);
         }
 
 

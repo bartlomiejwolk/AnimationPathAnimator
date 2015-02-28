@@ -93,7 +93,7 @@ namespace ATP.AnimationPathTools {
             get { return 0.001f; }
         }
 
-        public virtual float JumpValue {
+        public virtual float LongJumpValue {
             get { return 0.01f; }
         }
 
@@ -224,48 +224,24 @@ namespace ATP.AnimationPathTools {
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
 
-            // Update modifier key state.
-            ShortcutHandler.UpdateModifierKey();
-
-            ShortcutHandler.HandleEaseModeOptionShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.Ease);
-
-            ShortcutHandler.HandleRotationModeOptionShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.Rotation);
-
-            ShortcutHandler.HandleTiltingModeOptionShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.Tilting);
-
-            ShortcutHandler.HandleNoneModeOptionShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.None);
-
-            ShortcutHandler.HandleUpdateAllOptionShortcut(
-                () => Script.UpdateAllMode = !Script.UpdateAllMode);
+            HandleShortcuts();
 
             ShortcutHandler.HandlePlayPauseShortcut(HandlePlayPause);
 
-            ShortcutHandler.HandleMoveAllOptionShortcut(
-                () => Script.MovementMode =
-                    AnimationPathBuilderHandleMode.MoveAll);
-
-            ShortcutHandler.HandleMoveSingleModeShortcut(
-                () => Script.MovementMode =
-                    AnimationPathBuilderHandleMode.MoveSingle);
-
             // Change current animation time with arrow keys.
-            ShortcutHandler.HandleModifiedJumpShortcuts(
-                ModJumpForwardCallbackHandler,
-                ModJumpBackwardCallbackHandler,
-                JumpToNextNodeCallbackHandler,
-                JumpToPreviousNodeCallbackHandler,
-                AnyModJumpKeyPressedCallbackHandler);
+            //ShortcutHandler.HandleModifiedJumpShortcuts(
+            //    ModJumpForwardCallbackHandler,
+            //    ModJumpBackwardCallbackHandler,
+            //    JumpToNextNodeCallbackHandler,
+            //    JumpToPreviousNodeCallbackHandler,
+            //    AnyModJumpKeyPressedCallbackHandler);
 
-            ShortcutHandler.HandleUnmodifiedJumpShortcuts(
-                JumpBackwardCallbackHandler,
-                JumpForwardCallbackHandler,
-                JumpToStartCallbackHandler,
-                JumpToEndCallbackHandler,
-                AnyJumpKeyPressedCallbackHandler);
+            //ShortcutHandler.HandleUnmodifiedJumpShortcuts(
+            //    JumpBackwardCallbackHandler,
+            //    JumpForwardCallbackHandler,
+            //    JumpToStartCallbackHandler,
+            //    JumpToEndCallbackHandler,
+            //    AnyJumpKeyPressedCallbackHandler);
 
             HandleWrapModeDropdown();
             HandleDrawingEaseHandles();
@@ -277,7 +253,6 @@ namespace ATP.AnimationPathTools {
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
         }
-
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
@@ -668,6 +643,97 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING HANDLERS
 
         #region OTHER HANDLERS
+        private void HandleShortcuts() {
+            ShortcutHandler.HandleShortcut(
+                () => Script.HandleMode = AnimatorHandleMode.Ease,
+                KeyCode.C);
+
+            ShortcutHandler.HandleShortcut(
+                () => Script.HandleMode = AnimatorHandleMode.Rotation,
+                KeyCode.V);
+
+            ShortcutHandler.HandleShortcut(
+                () => Script.HandleMode = AnimatorHandleMode.Tilting,
+                KeyCode.B);
+
+            ShortcutHandler.HandleShortcut(
+                () => Script.HandleMode = AnimatorHandleMode.None,
+                KeyCode.N);
+
+            ShortcutHandler.HandleShortcut(
+                () => Script.UpdateAllMode = !Script.UpdateAllMode,
+                KeyCode.M);
+
+            ShortcutHandler.HandleShortcut(
+                () => Script.MovementMode =
+                    AnimationPathBuilderHandleMode.MoveAll,
+                KeyCode.U);
+
+            ShortcutHandler.HandleShortcut(
+                () => Script.MovementMode =
+                    AnimationPathBuilderHandleMode.MoveSingle,
+                KeyCode.Y);
+
+            // Short jump forward.
+            ShortcutHandler.HandleShortcut(
+                () => {
+                    var newAnimationTimeRatio =
+                        Script.AnimationTimeRatio + Script.ShortJumpValue;
+
+                    Script.AnimationTimeRatio =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                },
+                KeyCode.K);
+
+            // Short jump backward.
+            ShortcutHandler.HandleShortcut(
+                () => {
+                    var newAnimationTimeRatio =
+                        Script.AnimationTimeRatio - Script.ShortJumpValue;
+
+                    Script.AnimationTimeRatio =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                },
+                KeyCode.K);
+
+            // Long jump forward.
+            ShortcutHandler.HandleShortcut(
+                () => Script.AnimationTimeRatio += LongJumpValue,
+                KeyCode.K,
+                KeyCode.J);
+
+            // Long jump backward.
+            ShortcutHandler.HandleShortcut(
+                () => Script.AnimationTimeRatio -= LongJumpValue,
+                KeyCode.H,
+                KeyCode.J);
+
+            // Jump to next node.
+            ShortcutHandler.HandleShortcut(
+                () => Script.AnimationTimeRatio =
+                    GetNearestForwardNodeTimestamp(),
+                KeyCode.L);
+
+            // Jump to previous node.
+            ShortcutHandler.HandleShortcut(
+                () => Script.AnimationTimeRatio =
+                    GetNearestBackwardNodeTimestamp(),
+                KeyCode.G);
+
+            // Jump to start.
+            ShortcutHandler.HandleShortcut(
+                () => Script.AnimationTimeRatio = 0,
+                KeyCode.G,
+                KeyCode.J);
+
+            // Jump to end.
+            ShortcutHandler.HandleShortcut(
+                () => Script.AnimationTimeRatio = 1,
+                KeyCode.L,
+                KeyCode.J);
+
+        }
+
 
         public void HandlePlayPause() {
             // Pause animation.
@@ -821,53 +887,53 @@ namespace ATP.AnimationPathTools {
             Script.PathData.UpdateNodeTilting(keyIndex, newValue);
         }
 
-        private void JumpBackwardCallbackHandler() {
-            // Update animTimeRatio.
-            var newAnimationTimeRatio =
-                Script.AnimationTimeRatio - Script.ShortJumpValue;
+        //private void JumpBackwardCallbackHandler() {
+        //    // Update animTimeRatio.
+        //    var newAnimationTimeRatio =
+        //        Script.AnimationTimeRatio - Script.ShortJumpValue;
 
-            Script.AnimationTimeRatio =
-                (float) (Math.Round(newAnimationTimeRatio, 3));
-        }
+        //    Script.AnimationTimeRatio =
+        //        (float) (Math.Round(newAnimationTimeRatio, 3));
+        //}
 
-        private void JumpForwardCallbackHandler() {
-            // Update animTimeRatio.
-            var newAnimationTimeRatio =
-                Script.AnimationTimeRatio + Script.ShortJumpValue;
+        //private void JumpForwardCallbackHandler() {
+        //    // Update animTimeRatio.
+        //    var newAnimationTimeRatio =
+        //        Script.AnimationTimeRatio + Script.ShortJumpValue;
 
-            Script.AnimationTimeRatio =
-                (float) (Math.Round(newAnimationTimeRatio, 3));
-        }
+        //    Script.AnimationTimeRatio =
+        //        (float) (Math.Round(newAnimationTimeRatio, 3));
+        //}
 
-        private void JumpToEndCallbackHandler() {
-            // Update animTimeRatio.
-            Script.AnimationTimeRatio = 1;
-        }
+        //private void JumpToEndCallbackHandler() {
+        //    // Update animTimeRatio.
+        //    Script.AnimationTimeRatio = 1;
+        //}
 
-        private void JumpToNextNodeCallbackHandler() {
-            // Jump to next node.
-            Script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
-        }
+        //private void JumpToNextNodeCallbackHandler() {
+        //    // Jump to next node.
+        //    Script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
+        //}
 
-        private void JumpToPreviousNodeCallbackHandler() {
-            // Jump to next node.
-            Script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
-        }
+        //private void JumpToPreviousNodeCallbackHandler() {
+        //    // Jump to next node.
+        //    Script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
+        //}
 
-        private void JumpToStartCallbackHandler() {
-            // Update animTimeRatio.
-            Script.AnimationTimeRatio = 0;
-        }
+        //private void JumpToStartCallbackHandler() {
+        //    // Update animTimeRatio.
+        //    Script.AnimationTimeRatio = 0;
+        //}
 
-        private void ModJumpBackwardCallbackHandler() {
-            // Update animation time.
-            Script.AnimationTimeRatio -= JumpValue;
-        }
+        //private void ModJumpBackwardCallbackHandler() {
+        //    // Update animation time.
+        //    Script.AnimationTimeRatio -= LongJumpValue;
+        //}
 
-        private void ModJumpForwardCallbackHandler() {
-            // Update animation time.
-            Script.AnimationTimeRatio += JumpValue;
-        }
+        //private void ModJumpForwardCallbackHandler() {
+        //    // Update animation time.
+        //    Script.AnimationTimeRatio += LongJumpValue;
+        //}
 
         #endregion CALLBACK HANDLERS
 

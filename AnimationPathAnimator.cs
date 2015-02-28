@@ -135,7 +135,12 @@ namespace ATP.AnimationPathTools {
 
         public float AnimationTimeRatio {
             get { return animTimeRatio; }
-            set { animTimeRatio = value; }
+            set {
+                animTimeRatio = value;
+
+                if (Application.isPlaying) UpdateAnimatedGO();
+                if (!Application.isPlaying) Animate();
+            }
         }
 
         public bool AutoPlay {

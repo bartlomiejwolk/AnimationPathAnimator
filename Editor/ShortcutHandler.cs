@@ -45,106 +45,24 @@ namespace ATP.AnimationPathTools {
         /// <remarks>Modifier key changes how other keys works.</remarks>
         public const KeyCode ModKey = KeyCode.A;
 
-        /// <summary>
-        ///     If modifier is currently pressed.
-        /// </summary>
-        private static bool modKeyPressed;
 
-        /// <summary>
-        ///     If modifier is currently pressed.
-        /// </summary>
-        public static bool ModKeyPressed {
-            get { return modKeyPressed; }
-        }
+        public static void HandleShortcut(
+            Action callback,
+            KeyCode key,
+            KeyCode modKey = KeyCode.None) {
+            
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == key
+                && modKey == KeyCode.None) {
 
-        public static void HandleEaseModeOptionShortcut(Action callback) {
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != EaseModeShortcut) return;
+                callback();
+            }
+            else if (Event.current.type == EventType.keyDown
+                     && Event.current.keyCode == key) {
 
-            callback();
-        }
-
-        public static void HandleModifiedJumpShortcuts(
-            Action jumpForwardCallback = null,
-            Action jumpBackwardCallback = null,
-            Action jumpToNextNodeCallback = null,
-            Action jumpToPreviousNodeCallback = null,
-            Action anyModJumpKeyPressedCallback = null) {
-
-            if (Event.current.type != EventType.keyDown
-                || !ModKeyPressed) return;
-
-            // Check what key is pressed..
-            switch (Event.current.keyCode) {
-                // Jump backward.
-                case JumpBackward:
-                    Event.current.Use();
-
-                    if (jumpBackwardCallback != null) jumpBackwardCallback();
-
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump forward.
-                case JumpForward:
-                    Event.current.Use();
-
-                    if (jumpForwardCallback != null) jumpForwardCallback();
-
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-                case JumpToNextNode:
-                    Event.current.Use();
-
-                    if (jumpToNextNodeCallback != null)
-                        jumpToNextNodeCallback();
-
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
-                case JumpToPreviousNode:
-                    Event.current.Use();
-
-                    if (jumpToPreviousNodeCallback != null) {
-                        jumpToPreviousNodeCallback();
-                    }
-                    if (anyModJumpKeyPressedCallback != null) {
-                        anyModJumpKeyPressedCallback();
-                    }
-
-                    break;
+                callback();
             }
         }
-
-        /// <summary>
-        ///     Update <c>moveAllMode</c> option with keyboard shortcut.
-        /// </summary>
-        public static void HandleMoveAllOptionShortcut(
-            Action callback) {
-
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveAllKey) return;
-
-            callback();
-        }
-
-        public static void HandleMoveSingleModeShortcut(
-            Action callback) {
-
-            // Return if Tangent Mode shortcut wasn't released.
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != MoveSingleModeKey) return;
-
-            callback();
-        }
-
         public static void HandlePlayPauseShortcut(
             Action callback) {
 
@@ -153,143 +71,6 @@ namespace ATP.AnimationPathTools {
 
             callback();
         }
-
-        public static void HandleRotationModeOptionShortcut(
-            Action callback) {
-            
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != RotationModeShortcut) return;
-
-            callback();
-        }
-
-        public static void HandleTiltingModeOptionShortcut(
-            Action callback) {
-            
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != TiltingModeShortcut) return;
-
-            callback();
-        }
-
-        public static void HandleUnmodifiedJumpShortcuts(
-            Action jumpBackwardCallback = null,
-            Action jumpForwardCallback = null,
-            Action jumpToStartCallback = null,
-            Action jumpToEndCallback = null,
-            Action anyJumpKeyPressedCallback = null) {
-
-            if (Event.current.type != EventType.keyDown
-                || ModKeyPressed) return;
-
-            switch (Event.current.keyCode) {
-                // Jump backward.
-                case JumpBackward:
-                    Event.current.Use();
-
-                    if (jumpBackwardCallback != null) jumpBackwardCallback();
-
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump forward.
-                case JumpForward:
-                    Event.current.Use();
-
-                    if (jumpForwardCallback != null) jumpForwardCallback();
-
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump to start.
-                case JumpToStart:
-                    Event.current.Use();
-
-                    if (jumpToStartCallback != null) jumpToStartCallback();
-
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-                // Jump to end.
-                case JumpToEnd:
-                    Event.current.Use();
-
-                    if (jumpToEndCallback != null) jumpToEndCallback();
-
-                    if (anyJumpKeyPressedCallback != null) {
-                        anyJumpKeyPressedCallback();
-                    }
-
-                    break;
-            }
-        }
-
-        /// <summary>
-        ///     Checked if modifier key is pressed and remember it in a class
-        ///     field.
-        /// </summary>
-        public static void UpdateModifierKey() {
-            // Check if modifier key is currently pressed.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == ModKey) {
-
-                // Remember key state.
-                modKeyPressed = true;
-            }
-            // If modifier key was released..
-            if (Event.current.type == EventType.keyUp
-                && Event.current.keyCode == ModKey) {
-
-                modKeyPressed = false;
-            }
-        }
-
-        public static void HandleNoneModeOptionShortcut(
-            Action callback) {
-
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != ShortcutHandler.NoneModeShortcut) return;
-
-            callback();
-        }
-
-        public static void HandleUpdateAllOptionShortcut(
-            Action callback) {
-
-            if (Event.current.type != EventType.keyUp
-                || Event.current.keyCode != ShortcutHandler.UpdateAllShortcut) return;
-
-            callback();
-        }
-
-        /// <summary>
-        ///     Change current animation time with arrow keys.
-        /// </summary>
-        public static void ChangeTimeWithArrowKeys(
-            Action keyPressedCallback,
-            Action modKeyPressedCallback) {
-
-            // If a key is pressed..
-            if (Event.current.type == EventType.keyDown
-                // and modifier key is pressed also..
-                && ModKeyPressed) {
-
-                modKeyPressedCallback();
-
-                
-            }
-            // Modifier key not pressed.
-            else if (Event.current.type == EventType.keyDown) {
-                    keyPressedCallback();
-            }
-        }
-
     }
 
 }

@@ -113,19 +113,19 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.Y; }
         }
 
-        public virtual KeyCode NoneModeShortcut {
+        public virtual KeyCode NoneModeKey {
             get { return KeyCode.K; }
         }
 
-        public virtual KeyCode PlayPauseShortcut {
+        public virtual KeyCode PlayPauseKey {
             get { return KeyCode.Space; }
         }
 
-        public virtual KeyCode RotationModeShortcut {
+        public virtual KeyCode RotationModeKey {
             get { return KeyCode.H; }
         }
 
-        public virtual KeyCode TiltingModeShortcut {
+        public virtual KeyCode TiltingModeKey {
             get { return KeyCode.J; }
         }
 
@@ -719,17 +719,17 @@ namespace ATP.AnimationPathTools {
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Rotation,
-                RotationModeShortcut,
+                RotationModeKey,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Tilting,
-                TiltingModeShortcut,
+                TiltingModeKey,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.None,
-                NoneModeShortcut,
+                NoneModeKey,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
@@ -814,7 +814,7 @@ namespace ATP.AnimationPathTools {
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
                 HandlePlayPause,
-                PlayPauseShortcut,
+                PlayPauseKey,
                 ModKeyPressed);
         }
 

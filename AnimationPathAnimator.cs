@@ -157,9 +157,7 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
-        /// <remarks>
-        ///     Used in play mode. You can use it to stop animation.
-        /// </remarks>
+        /// <remarks>When it's true, it means that the EaseTime coroutine is running.</remarks>
         public bool IsPlaying { get; set; }
 
         public AnimationPathBuilderHandleMode MovementMode {
@@ -465,10 +463,12 @@ namespace ATP.AnimationPathTools {
         public void StartEaseTimeCoroutine() {
             // Check for play mode.
             StartCoroutine("EaseTime");
+            Debug.Log("start coroutine");
         }
 
         public void StopEaseTimeCoroutine() {
             StopCoroutine("EaseTime");
+            Debug.Log("stop");
 
             // Reset animation.
             IsPlaying = false;
@@ -534,18 +534,25 @@ namespace ATP.AnimationPathTools {
 
         private IEnumerator EaseTime() {
             while (true) {
-                // If animation is not paused..
+                // If animation is enabled and not paused..
                 if (!Pause) {
                     // Ease time.
                     var timeStep = PathData.GetEaseValueAtTime(animTimeRatio);
                     animTimeRatio += timeStep * Time.deltaTime;
+
+                    if (AnimationTimeRatio > 1
+                        && WrapMode == WrapMode.Once) {
+
+                        AnimationTimeRatio = 1;
+                        Pause = true;
+                        //IsPlaying = false;
+                    }
                 }
 
                 yield return null;
             }
-            // ReSharper disable once FunctionNeverReturns
         }
-
+ 
         private Vector3[] GetGlobalRotationPointPositions() {
             var localPositions = PathData.GetRotationPointPositions();
             var globalPositions = new Vector3[localPositions.Length];

@@ -135,7 +135,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public virtual KeyCode UpdateAllKey {
-            get { return KeyCode.L; }
+            get { return KeyCode.G; }
         }
 
         #endregion
@@ -696,14 +696,14 @@ namespace ATP.AnimationPathTools {
 
         public void HandlePlayPause() {
             // Pause animation.
-            if (Script.IsPlaying) {
+            if (Script.IsPlaying && !Script.Pause) {
                 Script.Pause = true;
-                Script.IsPlaying = false;
+                //Script.IsPlaying = false;
             }
             // Unpause animation.
-            else if (Script.Pause) {
+            else if (Script.IsPlaying && Script.Pause) {
                 Script.Pause = false;
-                Script.IsPlaying = true;
+                //Script.IsPlaying = true;
             }
             // Start animation.
             else {

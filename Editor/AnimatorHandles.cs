@@ -15,6 +15,8 @@ namespace ATP.AnimationPathTools {
         private const float ScaleHandleSize = 1.5f;
         private const int DefaultLabelHeight = 10;
         private const int DefaultLabelWidth = 30;
+        private const float MoveAllModeSize = 0.15f;
+        private const float MovementHandleSize = 0.12f;
 
         public void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -252,6 +254,32 @@ namespace ATP.AnimationPathTools {
                     offsetY,
                     style);
             }
+        }
+
+        public Vector3 DrawPositionHandle(
+            Vector3 nodePosition,
+            Color handleColor,
+            Handles.DrawCapFunction capFunction) {
+
+            // Set handle color.
+            Handles.color = handleColor;
+
+            // Get handle size.
+            var handleSize = HandleUtility.GetHandleSize(nodePosition);
+            var sphereSize = handleSize * MovementHandleSize;
+
+            // Draw handle.
+            var newPos = Handles.FreeMoveHandle(
+                nodePosition,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                capFunction);
+            return newPos;
+        }
+
+        public virtual Color PositionHandleColor {
+            get { return Color.yellow; }
         }
 
     }

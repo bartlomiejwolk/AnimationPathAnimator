@@ -20,8 +20,8 @@ namespace ATP.AnimationPathTools {
         //private const int DefaultLabelWidth = 30;
         private const int EaseValueLabelOffsetX = -20;
         private const int EaseValueLabelOffsetY = -25;
-        private const float MoveAllModeSize = 0.15f;
-        private const float MovementHandleSize = 0.12f;
+        //private const float MoveAllModeSize = 0.15f;
+        //private const float MovementHandleSize = 0.12f;
         //private const int RemoveButtonH = 44;
         //private const int RemoveButtonV = 10;
         private const float RotationHandleSize = 0.25f;
@@ -451,7 +451,8 @@ namespace ATP.AnimationPathTools {
                 DrawPositionHandlesCallbackHandler;
 
             // Draw handles.
-            DrawPositionHandles(handlerCallback);
+            HandleDrawingMoveSinglePositionsHandles(handlerCallback);
+            HandleDrawingMoveAllPositionHandles(handlerCallback);
         }
 
         private void HandleDrawingRemoveButtons() {
@@ -740,35 +741,38 @@ namespace ATP.AnimationPathTools {
         //    }
         //}
 
-        private Vector3 DrawPositionHandle(
-            Vector3 nodePosition,
-            Handles.DrawCapFunction capFunction) {
+        //private Vector3 DrawPositionHandle(
+        //    Vector3 nodePosition,
+        //    Handles.DrawCapFunction capFunction) {
 
-            // Set handle color.
-            Handles.color = Script.GizmoCurveColor;
+        //    // Set handle color.
+        //    Handles.color = Script.GizmoCurveColor;
 
-            // Get handle size.
-            var handleSize = HandleUtility.GetHandleSize(nodePosition);
-            var sphereSize = handleSize * MovementHandleSize;
+        //    // Get handle size.
+        //    var handleSize = HandleUtility.GetHandleSize(nodePosition);
+        //    var sphereSize = handleSize * MovementHandleSize;
 
-            // In Move All mode..
-            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
-                Handles.color = MoveAllModeColor;
-                sphereSize = handleSize * MoveAllModeSize;
-            }
+        //    // In Move All mode..
+        //    if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+        //        Handles.color = MoveAllModeColor;
+        //        sphereSize = handleSize * MoveAllModeSize;
+        //    }
 
-            // Draw handle.
-            var newPos = Handles.FreeMoveHandle(
-                nodePosition,
-                Quaternion.identity,
-                sphereSize,
-                Vector3.zero,
-                capFunction);
-            return newPos;
-        }
+        //    // Draw handle.
+        //    var newPos = Handles.FreeMoveHandle(
+        //        nodePosition,
+        //        Quaternion.identity,
+        //        sphereSize,
+        //        Vector3.zero,
+        //        capFunction);
+        //    return newPos;
+        //}
 
-        private void DrawPositionHandles(
+        private void HandleDrawingMoveSinglePositionsHandles(
             Action<int, Vector3, Vector3> callback) {
+
+            if (script.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveSingle) return;
 
             // Node global positions.
             var nodes = Script.GetGlobalNodePositions();
@@ -778,8 +782,55 @@ namespace ATP.AnimationPathTools {
 
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = script.GizmoCurveColor;
+
                 // Draw position handle.
-                var newPos = DrawPositionHandle(nodes[i], capFunction);
+                var newPos = AnimatorHandles.DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
+
+                // TODO Make it into callback.
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition =
+                        Script.transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition =
+                        Script.transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
+            }
+        }
+
+        private void HandleDrawingMoveAllPositionHandles(
+            Action<int, Vector3, Vector3> callback) {
+
+            if (script.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveAll) return;
+
+            // Node global positions.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = MoveAllModeColor;
+
+                // Draw position handle.
+                var newPos = AnimatorHandles.DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
 
                 // If node was moved..
                 if (newPos != nodes[i]) {

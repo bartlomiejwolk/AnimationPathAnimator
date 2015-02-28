@@ -285,7 +285,7 @@ namespace ATP.AnimationPathTools {
                 DrawRotationPointGizmos();
             }
 
-            DrawGizmoCurve();
+            HandleDrawingGizmoCurve();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -306,11 +306,100 @@ namespace ATP.AnimationPathTools {
 
         #endregion UNITY MESSAGES
 
+        #region HANDLERS
+        private void HandleDrawingCurrentRotationPointGizmo() {
+            // Get current animation time.
+            var currentAnimationTime = AnimationTimeRatio;
+
+            // Node path node timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            if (nodeTimestamps.Any(
+                nodeTimestamp =>
+                    Math.Abs(nodeTimestamp - currentAnimationTime)
+                    < FloatPrecision)) {
+                return;
+            }
+
+            // Get rotation point position.
+            var localRotationPointPosition =
+                PathData.GetRotationAtTime(currentAnimationTime);
+            var globalRotationPointPosition =
+                Transform.TransformPoint(localRotationPointPosition);
+            AnimatorGizmos.DrawCurrentRotationPointGizmo(
+                globalRotationPointPosition);
+        }
+
+        // Move to AnimatorGizmos class.
+        private void HandleDrawingGizmoCurve() {
+            // Return if path asset is not assigned.
+            if (pathData == null) return;
+
+            // Get transform component.
+            //var transform = GetComponent<Transform>();
+
+            // Get path points.
+            var points = pathData.SampleAnimationPathForPoints(
+                GizmoCurveSamplingFrequency);
+
+            // Convert points to global coordinates.
+            var globalPoints = new Vector3[points.Count];
+            for (var i = 0; i < points.Count; i++) {
+                globalPoints[i] = Transform.TransformPoint(points[i]);
+            }
+
+            // There must be at least 3 points to draw a line.
+            if (points.Count < 3) return;
+
+            Gizmos.color = gizmoCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+            }
+        }
+
+        private void HandleUpdateAnimatedGORotation() {
+            if (animatedGO == null) return;
+
+            // Look at target.
+            if (targetGO != null
+                && rotationMode == AnimatorRotationMode.Target) {
+                // In play mode use Quaternion.Slerp();
+                if (Application.isPlaying) {
+                    RotateObjectWithSlerp(targetGO.position);
+                }
+                // In editor mode use Transform.LookAt().
+                else {
+                    RotateObjectWithLookAt(targetGO.position);
+                }
+            }
+            // Use rotation path.
+            if (rotationMode == AnimatorRotationMode.Custom) {
+                RotateObjectWithAnimationCurves();
+            }
+            // Look forward.
+            else if (rotationMode == AnimatorRotationMode.Forward) {
+                var globalForwardPoint = GetForwardPoint(true);
+
+                // In play mode..
+                if (Application.isPlaying) {
+                    RotateObjectWithSlerp(globalForwardPoint);
+                }
+                else {
+                    RotateObjectWithLookAt(globalForwardPoint);
+                }
+            }
+        }
+
+        #endregion
+
         #region METHODS
 
         public void Animate() {
             AnimateObjectPosition();
-            HandleAnimatedGORotation();
+            HandleUpdateAnimatedGORotation();
             TiltObject();
         }
 
@@ -399,36 +488,6 @@ namespace ATP.AnimationPathTools {
                 animatedGO.position = globalPositionAtTimestamp;
             }
         }
-
-        // Move to AnimatorGizmos class.
-        private void DrawGizmoCurve() {
-            // Return if path asset is not assigned.
-            if (pathData == null) return;
-
-            // Get transform component.
-            //var transform = GetComponent<Transform>();
-
-            // Get path points.
-            var points = pathData.SampleAnimationPathForPoints(
-                GizmoCurveSamplingFrequency);
-
-            // Convert points to global coordinates.
-            var globalPoints = new Vector3[points.Count];
-            for (var i = 0; i < points.Count; i++) {
-                globalPoints[i] = Transform.TransformPoint(points[i]);
-            }
-
-            // There must be at least 3 points to draw a line.
-            if (points.Count < 3) return;
-
-            Gizmos.color = gizmoCurveColor;
-
-            // Draw curve.
-            for (var i = 0; i < points.Count - 1; i++) {
-                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
-            }
-        }
-
         private void DrawRotationPointGizmos() {
             var rotationPointPositions = GetGlobalRotationPointPositions();
 
@@ -471,64 +530,6 @@ namespace ATP.AnimationPathTools {
 
             return globalPositions;
         }
-
-        private void HandleAnimatedGORotation() {
-            if (animatedGO == null) return;
-
-            // Look at target.
-            if (targetGO != null
-                && rotationMode == AnimatorRotationMode.Target) {
-                // In play mode use Quaternion.Slerp();
-                if (Application.isPlaying) {
-                    RotateObjectWithSlerp(targetGO.position);
-                }
-                // In editor mode use Transform.LookAt().
-                else {
-                    RotateObjectWithLookAt(targetGO.position);
-                }
-            }
-            // Use rotation path.
-            if (rotationMode == AnimatorRotationMode.Custom) {
-                RotateObjectWithAnimationCurves();
-            }
-            // Look forward.
-            else if (rotationMode == AnimatorRotationMode.Forward) {
-                var globalForwardPoint = GetForwardPoint(true);
-
-                // In play mode..
-                if (Application.isPlaying) {
-                    RotateObjectWithSlerp(globalForwardPoint);
-                }
-                else {
-                    RotateObjectWithLookAt(globalForwardPoint);
-                }
-            }
-        }
-
-        private void HandleDrawingCurrentRotationPointGizmo() {
-            // Get current animation time.
-            var currentAnimationTime = AnimationTimeRatio;
-
-            // Node path node timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            // Return if current animation time is the same as any node time.
-            if (nodeTimestamps.Any(
-                nodeTimestamp =>
-                    Math.Abs(nodeTimestamp - currentAnimationTime)
-                    < FloatPrecision)) {
-                return;
-            }
-
-            // Get rotation point position.
-            var localRotationPointPosition =
-                PathData.GetRotationAtTime(currentAnimationTime);
-            var globalRotationPointPosition =
-                Transform.TransformPoint(localRotationPointPosition);
-            AnimatorGizmos.DrawCurrentRotationPointGizmo(
-                globalRotationPointPosition);
-        }
-
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget =
                 PathData.GetRotationAtTime(animTimeRatio);

@@ -64,14 +64,6 @@ namespace ATP.AnimationPathTools {
         public virtual float RotationHandleSize {
             get { return 0.25f; }
         }
-        // TODO Move to AnimatorHandles class.
-        public virtual int TiltValueLabelOffsetX {
-            get { return -20; }
-        }
-
-        public virtual int TiltValueLabelOffsetY {
-            get { return -25; }
-        }
 
         #endregion
 

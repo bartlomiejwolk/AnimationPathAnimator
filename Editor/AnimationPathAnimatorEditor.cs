@@ -108,14 +108,6 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        ///     Key shortcut to jump backward.
-        /// </summary>
-//public const KeyCode JumpBackward = KeyCode.J;
-        /// <summary>
-        ///     Key shortcut to jump forward.
-        /// </summary>
-//public const KeyCode JumpForward = KeyCode.K;
-        /// <summary>
         ///     Key shortcut to jump to the end of the animation.
         /// </summary>
         public virtual KeyCode JumpToEndKey {
@@ -125,23 +117,6 @@ namespace ATP.AnimationPathTools {
         public KeyCode LongJumpBackwardKey {
             get { return KeyCode.J; }
         }
-
-        /// <summary>
-        ///     Key shortcut to jump backward.
-        /// </summary>
-        //public const KeyCode JumpBackward = KeyCode.J;
-
-        /// <summary>
-        ///     Key shortcut to jump forward.
-        /// </summary>
-        //public const KeyCode JumpForward = KeyCode.K;
-
-        /// <summary>
-        ///     Key shortcut to jump to the end of the animation.
-        /// </summary>
-        //public const KeyCode jumpToEnd = KeyCode.H;
-
-        //public const KeyCode JumpToNextNodeKey = KeyCode.L;
 
         public KeyCode ShortJumpBackwardKey {
             get { return KeyCode.J; }
@@ -153,18 +128,6 @@ namespace ATP.AnimationPathTools {
         public virtual KeyCode JumpToPreviousNodeKey {
             get { return KeyCode.H; }
         }
-        //public const KeyCode JumpToPreviousNodeKey = KeyCode.H;
-
-        /// <summary>
-        ///     Key shortcut to jump to the beginning of the animation.
-        /// </summary>
-        //public const KeyCode JumpToStartKey = KeyCode.H;
-
-        /// <summary>
-        ///     Keycode used as a modifier key.
-        /// </summary>
-        /// <remarks>Modifier key changes how other keys works.</remarks>
-        //public const KeyCode ModKey = KeyCode.J;
         public virtual KeyCode ModKey {
             get { return KeyCode.RightAlt; }
         }
@@ -294,21 +257,6 @@ namespace ATP.AnimationPathTools {
 
             UpdateModifierKey();
             HandleShortcuts();
-
-            // Change current animation time with arrow keys.
-            //ShortcutHandler.HandleModifiedJumpShortcuts(
-            //    ModJumpForwardCallbackHandler,
-            //    ModJumpBackwardCallbackHandler,
-            //    JumpToNextNodeCallbackHandler,
-            //    JumpToPreviousNodeCallbackHandler,
-            //    AnyModJumpKeyPressedCallbackHandler);
-
-            //ShortcutHandler.HandleUnmodifiedJumpShortcuts(
-            //    JumpBackwardCallbackHandler,
-            //    JumpForwardCallbackHandler,
-            //    JumpToStartCallbackHandler,
-            //    JumpToEndCallbackHandler,
-            //    AnyJumpKeyPressedCallbackHandler);
 
             HandleWrapModeDropdown();
             HandleDrawingEaseHandles();
@@ -986,54 +934,6 @@ namespace ATP.AnimationPathTools {
 
             Script.PathData.UpdateNodeTilting(keyIndex, newValue);
         }
-
-        //private void JumpBackwardCallbackHandler() {
-        //    // Update animTimeRatio.
-        //    var newAnimationTimeRatio =
-        //        Script.AnimationTimeRatio - Script.ShortJumpValue;
-
-        //    Script.AnimationTimeRatio =
-        //        (float) (Math.Round(newAnimationTimeRatio, 3));
-        //}
-
-        //private void JumpForwardCallbackHandler() {
-        //    // Update animTimeRatio.
-        //    var newAnimationTimeRatio =
-        //        Script.AnimationTimeRatio + Script.ShortJumpValue;
-
-        //    Script.AnimationTimeRatio =
-        //        (float) (Math.Round(newAnimationTimeRatio, 3));
-        //}
-
-        //private void JumpToEndCallbackHandler() {
-        //    // Update animTimeRatio.
-        //    Script.AnimationTimeRatio = 1;
-        //}
-
-        //private void JumpToNextNodeCallbackHandler() {
-        //    // Jump to next node.
-        //    Script.AnimationTimeRatio = GetNearestForwardNodeTimestamp();
-        //}
-
-        //private void JumpToPreviousNodeCallbackHandler() {
-        //    // Jump to next node.
-        //    Script.AnimationTimeRatio = GetNearestBackwardNodeTimestamp();
-        //}
-
-        //private void JumpToStartCallbackHandler() {
-        //    // Update animTimeRatio.
-        //    Script.AnimationTimeRatio = 0;
-        //}
-
-        //private void ModJumpBackwardCallbackHandler() {
-        //    // Update animation time.
-        //    Script.AnimationTimeRatio -= LongJumpValue;
-        //}
-
-        //private void ModJumpForwardCallbackHandler() {
-        //    // Update animation time.
-        //    Script.AnimationTimeRatio += LongJumpValue;
-        //}
 
         #endregion CALLBACK HANDLERS
 

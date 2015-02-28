@@ -16,23 +16,10 @@ namespace ATP.AnimationPathTools {
     /// </summary>
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
-        #region EVENT HANDLERS
-
-        private void PathData_RotationPointPositionChanged(
-            object sender,
-            EventArgs e) {
-            UpdateAnimatedGO();
-        }
-
-        #endregion EVENT HANDLERS
-
         #region FIELDS
 
-        public const int GizmoCurveSamplingFrequency = 20;
-
         [SerializeField]
-#pragma warning disable 169
-            private bool advancedSettingsFoldout;
+        private bool advancedSettingsFoldout;
 
         /// <summary>
         ///     Transform to be animated.
@@ -40,17 +27,15 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Transform animatedGO;
 
+        [SerializeField]
+        private AnimatorGizmos animatorGizmos;
+
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animTimeRatio;
 
         [SerializeField]
         private int exportSamplingFrequency = 5;
-
-        [SerializeField]
-        private AnimatorGizmos animatorGizmos;
-
-#pragma warning restore 169
 
         [SerializeField]
         private PathData pathData;
@@ -64,7 +49,7 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Transform targetGO;
 
-        private Transform Transform { get; set; }
+        #endregion FIELDS
 
         #region OPTIONS
 
@@ -124,12 +109,8 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
         private WrapMode wrapMode = WrapMode.Clamp;
-#pragma warning disable 0414
-#pragma warning restore 0414
 
         #endregion OPTIONS
-
-        #endregion FIELDS
 
         #region PROPERTIES
 
@@ -141,6 +122,10 @@ namespace ATP.AnimationPathTools {
                 if (Application.isPlaying) UpdateAnimatedGO();
                 if (!Application.isPlaying) Animate();
             }
+        }
+
+        public AnimatorGizmos AnimatorGizmos {
+            get { return animatorGizmos; }
         }
 
         public bool AutoPlay {
@@ -160,8 +145,8 @@ namespace ATP.AnimationPathTools {
             set { gizmoCurveColor = value; }
         }
 
-        public AnimatorGizmos AnimatorGizmos {
-            get { return animatorGizmos; }
+        public virtual int GizmoCurveSamplingFrequency {
+            get { return 20; }
         }
 
         public AnimatorHandleMode HandleMode {
@@ -225,6 +210,8 @@ namespace ATP.AnimationPathTools {
             get { return 20; }
         }
 
+        private Transform Transform { get; set; }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -245,13 +232,9 @@ namespace ATP.AnimationPathTools {
             }
 
             if (animatorGizmos == null) {
-                animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+                animatorGizmos =
+                    ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
-        }
-
-        void PathData_PathReset(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimatedGO();
-            if (!Application.isPlaying) Animate();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -265,6 +248,7 @@ namespace ATP.AnimationPathTools {
 
             animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
         }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         // TODO Refactor.
         private void OnDrawGizmosSelected() {
@@ -318,22 +302,36 @@ namespace ATP.AnimationPathTools {
                 Animate();
             }
         }
+
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
-        void PathData_NodePositionChanged(object sender, EventArgs e) {
+
+        private void PathData_NodePositionChanged(object sender, EventArgs e) {
             if (Application.isPlaying) UpdateAnimatedGO();
             if (!Application.isPlaying) Animate();
         }
 
-        void pathData_NodeTiltChanged(object sender, EventArgs e) {
+        private void pathData_NodeTiltChanged(object sender, EventArgs e) {
             if (Application.isPlaying) UpdateAnimatedGO();
             if (!Application.isPlaying) Animate();
+        }
+
+        private void PathData_PathReset(object sender, EventArgs e) {
+            if (Application.isPlaying) UpdateAnimatedGO();
+            if (!Application.isPlaying) Animate();
+        }
+
+        private void PathData_RotationPointPositionChanged(
+            object sender,
+            EventArgs e) {
+            UpdateAnimatedGO();
         }
 
         #endregion
 
         #region HANDLERS
+
         private void HandleDrawingCurrentRotationPointGizmo() {
             // Get current animation time.
             var currentAnimationTime = AnimationTimeRatio;
@@ -515,6 +513,7 @@ namespace ATP.AnimationPathTools {
                 animatedGO.position = globalPositionAtTimestamp;
             }
         }
+
         private void DrawRotationPointGizmos() {
             var rotationPointPositions = GetGlobalRotationPointPositions();
 
@@ -557,6 +556,7 @@ namespace ATP.AnimationPathTools {
 
             return globalPositions;
         }
+
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget =
                 PathData.GetRotationAtTime(animTimeRatio);

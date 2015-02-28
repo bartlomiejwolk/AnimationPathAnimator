@@ -611,13 +611,11 @@ namespace ATP.AnimationPathTools {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
-            // Callback to call when a node is moved on the scene.
-            Action<int, Vector3, Vector3> handlerCallback =
-                DrawPositionHandlesCallbackHandler;
+            HandleDrawingMoveSinglePositionsHandles(
+                DrawPositionHandlesCallbackHandler);
 
-            // Draw handles.
-            HandleDrawingMoveSinglePositionsHandles(handlerCallback);
-            HandleDrawingMoveAllPositionHandles(handlerCallback);
+            HandleDrawingMoveAllPositionHandles(
+                DrawPositionHandlesCallbackHandler);
         }
 
         private void HandleDrawingRemoveButtons() {

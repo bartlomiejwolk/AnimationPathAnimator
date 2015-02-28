@@ -18,7 +18,7 @@ namespace ATP.AnimationPathTools {
     public class AnimationPathAnimator : GameComponent {
         #region EVENT HANDLERS
 
-        private void pathData_RotationPointPositionChanged(
+        private void PathData_RotationPointPositionChanged(
             object sender,
             EventArgs e) {
             UpdateAnimatedGO();
@@ -235,7 +235,9 @@ namespace ATP.AnimationPathTools {
 
             if (pathData != null) {
                 pathData.RotationPointPositionChanged +=
-                    pathData_RotationPointPositionChanged;
+                    PathData_RotationPointPositionChanged;
+
+                PathData.NodePositionChanged += PathData_NodePositionChanged;
             }
 
             if (animatorGizmos == null) {
@@ -253,6 +255,11 @@ namespace ATP.AnimationPathTools {
             }
 
             animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+        }
+
+        void PathData_NodePositionChanged(object sender, EventArgs e) {
+            if (Application.isPlaying) UpdateAnimatedGO();
+            if (!Application.isPlaying) Animate();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

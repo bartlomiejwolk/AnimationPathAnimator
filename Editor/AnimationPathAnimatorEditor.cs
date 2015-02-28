@@ -15,7 +15,7 @@ namespace ATP.AnimationPathTools {
         public const float JumpValue = 0.01f;
         //private const int AddButtonH = 25;
         //private const int AddButtonV = 10;
-        private const float ArcHandleRadius = 0.6f;
+        //private const float ArcHandleRadius = 0.6f;
         private const int DefaultLabelHeight = 10;
         private const int DefaultLabelWidth = 30;
         private const int EaseValueLabelOffsetX = -20;
@@ -28,7 +28,7 @@ namespace ATP.AnimationPathTools {
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
         private const float FloatPrecision = 0.001f;
-        private const float ScaleHandleSize = 1.5f;
+        //private const float ScaleHandleSize = 1.5f;
 
         #endregion CONSTANTS
 
@@ -411,7 +411,21 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingEaseHandles() {
             if (Script.HandleMode != AnimatorHandleMode.Ease) return;
 
-            DrawEaseHandles(DrawEaseHandlesCallbackHandler);
+            // Get path node positions.
+            var nodePositions =
+                Script.GetNodeGlobalPositions();
+
+            // Get ease values.
+            var easeCurveValues = Script.PathData.GetEaseCurveValues();
+
+            // TODO Use property.
+            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+
+            animatorHandles.DrawEaseHandles(
+                nodePositions,
+                easeCurveValues,
+                arcValueMultiplier,
+                DrawEaseHandlesCallbackHandler);
         }
 
         private void HandleDrawingEaseLabel() {
@@ -468,7 +482,17 @@ namespace ATP.AnimationPathTools {
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
 
-            DrawTiltingHandles(callbackHandler);
+            // Get path node positions.
+            var nodePositions =
+                Script.GetNodeGlobalPositions();
+
+            // Get tilting curve values.
+            var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
+
+            AnimatorHandles.DrawTiltingHandles(
+                nodePositions,
+                tiltingCurveValues,
+                callbackHandler);
         }
 
         private void HandleDrawingTiltLabel() {
@@ -553,64 +577,64 @@ namespace ATP.AnimationPathTools {
 
         #region DRAWING METHODS
 
-        /// <summary>
-        ///     Draw arc handle.
-        /// </summary>
-        /// <param name="value">Arc value.</param>
-        /// <param name="position">Arc position.</param>
-        /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
-        /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
-        /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
-        /// <param name="handleColor">Handle color.</param>
-        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        private void DrawArcHandle(
-            float value,
-            Vector3 position,
-            float arcValueMultiplier,
-            int minDegrees,
-            int maxDegrees,
-            Color handleColor,
-            Action<float> callback) {
+        ///// <summary>
+        /////     Draw arc handle.
+        ///// </summary>
+        ///// <param name="value">Arc value.</param>
+        ///// <param name="position">Arc position.</param>
+        ///// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
+        ///// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
+        ///// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
+        ///// <param name="handleColor">Handle color.</param>
+        ///// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
+        //private void DrawArcHandle(
+        //    float value,
+        //    Vector3 position,
+        //    float arcValueMultiplier,
+        //    int minDegrees,
+        //    int maxDegrees,
+        //    Color handleColor,
+        //    Action<float> callback) {
 
-            var arcValue = value * arcValueMultiplier;
-            var handleSize = HandleUtility.GetHandleSize(position);
-            var arcRadius = handleSize * ArcHandleRadius;
+        //    var arcValue = value * arcValueMultiplier;
+        //    var handleSize = HandleUtility.GetHandleSize(position);
+        //    var arcRadius = handleSize * ArcHandleRadius;
 
-            Handles.color = handleColor;
+        //    Handles.color = handleColor;
 
-            Handles.DrawWireArc(
-                position,
-                Vector3.up,
-                Quaternion.AngleAxis(
-                    0,
-                    Vector3.up) * Vector3.forward,
-                arcValue,
-                arcRadius);
+        //    Handles.DrawWireArc(
+        //        position,
+        //        Vector3.up,
+        //        Quaternion.AngleAxis(
+        //            0,
+        //            Vector3.up) * Vector3.forward,
+        //        arcValue,
+        //        arcRadius);
 
-            Handles.color = handleColor;
+        //    Handles.color = handleColor;
 
-            // Set initial arc value to other than zero. If initial value
-            // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < FloatPrecision ? 10f : arcValue;
+        //    // Set initial arc value to other than zero. If initial value
+        //    // is zero, handle will always return zero.
+        //    arcValue = Math.Abs(arcValue) < FloatPrecision ? 10f : arcValue;
 
-            var scaleHandleSize = handleSize * ScaleHandleSize;
-            var newArcValue = Handles.ScaleValueHandle(
-                arcValue,
-                position + Vector3.forward * arcRadius
-                * 1.3f,
-                Quaternion.identity,
-                scaleHandleSize,
-                Handles.ConeCap,
-                1);
+        //    var scaleHandleSize = handleSize * ScaleHandleSize;
+        //    var newArcValue = Handles.ScaleValueHandle(
+        //        arcValue,
+        //        position + Vector3.forward * arcRadius
+        //        * 1.3f,
+        //        Quaternion.identity,
+        //        scaleHandleSize,
+        //        Handles.ConeCap,
+        //        1);
 
-            // Limit handle value.
-            if (newArcValue > maxDegrees) newArcValue = maxDegrees;
-            if (newArcValue < minDegrees) newArcValue = minDegrees;
+        //    // Limit handle value.
+        //    if (newArcValue > maxDegrees) newArcValue = maxDegrees;
+        //    if (newArcValue < minDegrees) newArcValue = minDegrees;
 
-            if (Math.Abs(newArcValue - arcValue) > FloatPrecision) {
-                callback(newArcValue / arcValueMultiplier);
-            }
-        }
+        //    if (Math.Abs(newArcValue - arcValue) > FloatPrecision) {
+        //        callback(newArcValue / arcValueMultiplier);
+        //    }
+        //}
 
         //private bool DrawButton(
         //    Vector2 position,
@@ -634,28 +658,28 @@ namespace ATP.AnimationPathTools {
         //    return addButtonPressed;
         //}
 
-        private void DrawEaseHandles(Action<int, float> callback) {
-            // Get path node positions.
-            var nodePositions =
-                Script.GetNodeGlobalPositions();
+        //private void DrawEaseHandles(Action<int, float> callback) {
+        //    // Get path node positions.
+        //    var nodePositions =
+        //        Script.GetNodeGlobalPositions();
 
-            // Get ease values.
-            var easeCurveValues = Script.PathData.GetEaseCurveValues();
+        //    // Get ease values.
+        //    var easeCurveValues = Script.PathData.GetEaseCurveValues();
 
-            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+        //    var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
 
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                DrawArcHandle(
-                    easeCurveValues[i],
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    0,
-                    360,
-                    Color.red,
-                    value => callback(i, value));
-            }
-        }
+        //    // For each path node..
+        //    for (var i = 0; i < nodePositions.Length; i++) {
+        //        DrawArcHandle(
+        //            easeCurveValues[i],
+        //            nodePositions[i],
+        //            arcValueMultiplier,
+        //            0,
+        //            360,
+        //            Color.red,
+        //            value => callback(i, value));
+        //    }
+        //}
 
         private void DrawNodeLabel(
             int nodeIndex,
@@ -833,29 +857,29 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawTiltingHandles(Action<int, float> callback) {
-            // Get path node positions.
-            var nodePositions =
-                Script.GetNodeGlobalPositions();
+        //private void DrawTiltingHandles(Action<int, float> callback) {
+        //    // Get path node positions.
+        //    var nodePositions =
+        //        Script.GetNodeGlobalPositions();
 
-            // Get tilting curve values.
-            var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
+        //    // Get tilting curve values.
+        //    var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
 
-            // Set arc value multiplier.
-            const int arcValueMultiplier = 1;
+        //    // Set arc value multiplier.
+        //    const int arcValueMultiplier = 1;
 
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                DrawArcHandle(
-                    tiltingCurveValues[i],
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    -90,
-                    90,
-                    Color.green,
-                    value => callback(i, value));
-            }
-        }
+        //    // For each path node..
+        //    for (var i = 0; i < nodePositions.Length; i++) {
+        //        DrawArcHandle(
+        //            tiltingCurveValues[i],
+        //            nodePositions[i],
+        //            arcValueMultiplier,
+        //            -90,
+        //            90,
+        //            Color.green,
+        //            value => callback(i, value));
+        //    }
+        //}
 
         #endregion DRAWING METHODS
 

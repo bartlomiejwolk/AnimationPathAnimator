@@ -64,19 +64,25 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public static void HandleShortcut(
+        public static void HandleUnmodShortcut(
             Action callback,
-            KeyCode key,
-            KeyCode modKey = KeyCode.None) {
+            KeyCode key) {
             
             if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == key
-                && modKey == KeyCode.None) {
+                && Event.current.keyCode == key) {
 
                 callback();
             }
-            else if (Event.current.type == EventType.keyDown
-                     && Event.current.keyCode == key) {
+        }
+
+        public static void HandleModShortcut(
+            Action callback,
+            KeyCode key,
+            bool modKeyPressed) {
+
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == key
+                && modKeyPressed) {
 
                 callback();
             }

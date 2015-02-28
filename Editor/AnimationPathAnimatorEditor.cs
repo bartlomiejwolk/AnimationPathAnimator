@@ -112,37 +112,36 @@ namespace ATP.AnimationPathTools {
         public const KeyCode RotationModeShortcut = KeyCode.H;
         public const KeyCode TiltingModeShortcut = KeyCode.J;
         public const KeyCode UpdateAllShortcut = KeyCode.L;
-
         public const KeyCode EaseModeShortcut = KeyCode.G;
 
         /// <summary>
         ///     Key shortcut to jump backward.
         /// </summary>
-        public const KeyCode JumpBackward = KeyCode.LeftArrow;
+        public const KeyCode JumpBackward = KeyCode.H;
 
         /// <summary>
         ///     Key shortcut to jump forward.
         /// </summary>
-        public const KeyCode JumpForward = KeyCode.RightArrow;
+        public const KeyCode JumpForward = KeyCode.K;
 
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
         /// </summary>
-        public const KeyCode JumpToEnd = KeyCode.UpArrow;
+        public const KeyCode JumpToEnd = KeyCode.L;
 
-        public const KeyCode JumpToNextNode = KeyCode.UpArrow;
-        public const KeyCode JumpToPreviousNode = KeyCode.DownArrow;
+        public const KeyCode JumpToNextNode = KeyCode.L;
+        public const KeyCode JumpToPreviousNode = KeyCode.G;
 
         /// <summary>
         ///     Key shortcut to jump to the beginning of the animation.
         /// </summary>
-        public const KeyCode JumpToStart = KeyCode.DownArrow;
+        public const KeyCode JumpToStart = KeyCode.G;
 
         /// <summary>
         ///     Keycode used as a modifier key.
         /// </summary>
         /// <remarks>Modifier key changes how other keys works.</remarks>
-        public const KeyCode ModKey = KeyCode.A;
+        public const KeyCode ModKey = KeyCode.J;
 
         #endregion
 
@@ -263,6 +262,7 @@ namespace ATP.AnimationPathTools {
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
 
+            UpdateModifierKey();
             HandleShortcuts();
 
             // Change current animation time with arrow keys.
@@ -681,38 +681,38 @@ namespace ATP.AnimationPathTools {
 
         #region OTHER HANDLERS
         private void HandleShortcuts() {
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
                 KeyCode.C);
 
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Rotation,
                 KeyCode.V);
 
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Tilting,
                 KeyCode.B);
 
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.None,
                 KeyCode.N);
 
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.UpdateAllMode = !Script.UpdateAllMode,
                 KeyCode.M);
 
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveAll,
                 KeyCode.U);
 
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveSingle,
                 KeyCode.Y);
 
             // Short jump forward.
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => {
                     var newAnimationTimeRatio =
                         Script.AnimationTimeRatio + Script.ShortJumpValue;
@@ -720,10 +720,10 @@ namespace ATP.AnimationPathTools {
                     Script.AnimationTimeRatio =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
                 },
-                KeyCode.K);
+                ShortJumpForward);
 
             // Short jump backward.
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => {
                     var newAnimationTimeRatio =
                         Script.AnimationTimeRatio - Script.ShortJumpValue;
@@ -731,50 +731,66 @@ namespace ATP.AnimationPathTools {
                     Script.AnimationTimeRatio =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
                 },
-                KeyCode.K);
+                ShortJumpBackward);
 
             // Long jump forward.
-            Utilities.HandleShortcut(
+            Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio += LongJumpValue,
-                KeyCode.K,
-                KeyCode.J);
+                LongJumpForward,
+                ModKeyPressed);
 
             // Long jump backward.
-            Utilities.HandleShortcut(
+            Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio -= LongJumpValue,
-                KeyCode.H,
-                KeyCode.J);
+                LongJumpBackward,
+                ModKeyPressed);
 
             // Jump to next node.
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestForwardNodeTimestamp(),
-                KeyCode.L);
+                JumpToNextNode);
 
             // Jump to previous node.
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp(),
-                KeyCode.G);
+                JumpToPreviousNode);
 
             // Jump to start.
-            Utilities.HandleShortcut(
+            Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio = 0,
-                KeyCode.G,
-                KeyCode.J);
+                JumpToStart,
+                ModKeyPressed);
 
             // Jump to end.
-            Utilities.HandleShortcut(
+            Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio = 1,
-                KeyCode.L,
-                KeyCode.J);
+                JumpToEnd,
+                ModKeyPressed);
 
             // Play/pause animation.
-            Utilities.HandleShortcut(
+            Utilities.HandleUnmodShortcut(
                 HandlePlayPause,
-                KeyCode.Space);
+                PlayPauseShortcut);
         }
 
+        public bool ModKeyPressed { get; private set; }
+
+        public KeyCode LongJumpForward {
+            get { return KeyCode.K; }
+        }
+        public KeyCode LongJumpBackward {
+            get { return KeyCode.H; }
+        }
+
+        public KeyCode ShortJumpBackward {
+            get { return KeyCode.H; }
+        }
+
+        public KeyCode ShortJumpForward {
+            get { return KeyCode.K; }
+        }
 
         public void HandlePlayPause() {
             // Pause animation.
@@ -1057,6 +1073,26 @@ namespace ATP.AnimationPathTools {
 
             // Return timestamp of the last node.
             return 1.0f;
+        }
+
+        /// <summary>
+        ///     Checked if modifier key is pressed and remember it in a class
+        ///     field.
+        /// </summary>
+        public void UpdateModifierKey() {
+            // Check if modifier key is currently pressed.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == ModKey) {
+
+                // Remember key state.
+                ModKeyPressed = true;
+            }
+            // If modifier key was released..
+            if (Event.current.type == EventType.keyUp
+                && Event.current.keyCode == ModKey) {
+
+                ModKeyPressed = false;
+            }
         }
 
         #endregion PRIVATE METHODS

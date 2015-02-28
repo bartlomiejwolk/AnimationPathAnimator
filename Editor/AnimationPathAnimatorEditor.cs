@@ -13,8 +13,8 @@ namespace ATP.AnimationPathTools {
 
         // TODO Replace with properties.
         public const float JumpValue = 0.01f;
-        private const int AddButtonH = 25;
-        private const int AddButtonV = 10;
+        //private const int AddButtonH = 25;
+        //private const int AddButtonV = 10;
         private const float ArcHandleRadius = 0.6f;
         private const int DefaultLabelHeight = 10;
         private const int DefaultLabelWidth = 30;
@@ -22,8 +22,8 @@ namespace ATP.AnimationPathTools {
         private const int EaseValueLabelOffsetY = -25;
         private const float MoveAllModeSize = 0.15f;
         private const float MovementHandleSize = 0.12f;
-        private const int RemoveButtonH = 44;
-        private const int RemoveButtonV = 10;
+        //private const int RemoveButtonH = 44;
+        //private const int RemoveButtonV = 10;
         private const float RotationHandleSize = 0.25f;
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
@@ -56,6 +56,8 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty skin;
         private SerializedProperty targetGO;
 
+        private AnimatorHandles animatorHandles;
+
         #endregion SERIALIZED PROPERTIES
         #endregion FIELDS
         #region PROPERTIES
@@ -72,6 +74,10 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         public AnimationPathAnimator Script {
             get { return script; }
+        }
+
+        public AnimatorHandles AnimatorHandles {
+            get { return animatorHandles; }
         }
 
         #endregion
@@ -283,6 +289,7 @@ namespace ATP.AnimationPathTools {
             SceneTool.RememberCurrentTool();
 
             gizmoDrawer = new SerializedObject(Script.GizmoDrawer);
+            animatorHandles = new AnimatorHandles();
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
@@ -395,7 +402,7 @@ namespace ATP.AnimationPathTools {
             Action<int> callbackHandler = DrawAddNodeButtonsCallbackHandler;
 
             // Draw add node buttons.
-            DrawAddNodeButtons(
+            AnimatorHandles.DrawAddNodeButtons(
                 nodePositions,
                 callbackHandler,
                 addButtonStyle);
@@ -442,7 +449,7 @@ namespace ATP.AnimationPathTools {
                 DrawRemoveNodeButtonsCallbackHandles;
 
             // Draw add node buttons.
-            DrawRemoveNodeButtons(
+            AnimatorHandles.DrawRemoveNodeButtons(
                 nodes,
                 removeNodeCallback,
                 removeButtonStyle);
@@ -546,38 +553,6 @@ namespace ATP.AnimationPathTools {
 
         #region DRAWING METHODS
 
-        private void DrawAddNodeButtons(
-            Vector3[] nodePositions,
-            Action<int> callback,
-            GUIStyle buttonStyle) {
-
-            Handles.BeginGUI();
-
-            // Draw add buttons for each node (except the last one). Execute
-            // callback on button press.
-            for (var i = 0; i < nodePositions.Length - 1; i++) {
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(
-                    nodePositions[i]);
-
-                // Draw button.
-                var buttonPressed = DrawButton(
-                    guiPoint,
-                    AddButtonH,
-                    AddButtonV,
-                    15,
-                    15,
-                    buttonStyle);
-
-                // Execute callback.
-                if (buttonPressed) {
-                    callback(i);
-                }
-            }
-
-            Handles.EndGUI();
-        }
-
         /// <summary>
         ///     Draw arc handle.
         /// </summary>
@@ -637,27 +612,27 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private bool DrawButton(
-            Vector2 position,
-            int relativeXPos,
-            int relativeYPos,
-            int width,
-            int height,
-            GUIStyle style,
-            string buttonText = "") {
+        //private bool DrawButton(
+        //    Vector2 position,
+        //    int relativeXPos,
+        //    int relativeYPos,
+        //    int width,
+        //    int height,
+        //    GUIStyle style,
+        //    string buttonText = "") {
 
-            // Create rectangle for the "+" button.
-            var rectAdd = new Rect(
-                position.x + relativeXPos,
-                position.y + relativeYPos,
-                width,
-                height);
+        //    // Create rectangle for the "+" button.
+        //    var rectAdd = new Rect(
+        //        position.x + relativeXPos,
+        //        position.y + relativeYPos,
+        //        width,
+        //        height);
 
-            // Draw the "+" button.
-            var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
+        //    // Draw the "+" button.
+        //    var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
 
-            return addButtonPressed;
-        }
+        //    return addButtonPressed;
+        //}
 
         private void DrawEaseHandles(Action<int, float> callback) {
             // Get path node positions.
@@ -790,37 +765,37 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawRemoveNodeButtons(
-            Vector3[] nodePositions,
-            Action<int> callback,
-            GUIStyle buttonStyle) {
+        //private void DrawRemoveNodeButtons(
+        //    Vector3[] nodePositions,
+        //    Action<int> callback,
+        //    GUIStyle buttonStyle) {
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            // Draw remove buttons for each node except for the first and the
-            // last one. Execute callback on button press.
-            for (var i = 1; i < nodePositions.Length - 1; i++) {
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(
-                    nodePositions[i]);
+        //    // Draw remove buttons for each node except for the first and the
+        //    // last one. Execute callback on button press.
+        //    for (var i = 1; i < nodePositions.Length - 1; i++) {
+        //        // Translate node's 3d position into screen coordinates.
+        //        var guiPoint = HandleUtility.WorldToGUIPoint(
+        //            nodePositions[i]);
 
-                // Draw button.
-                var buttonPressed = DrawButton(
-                    guiPoint,
-                    RemoveButtonH,
-                    RemoveButtonV,
-                    15,
-                    15,
-                    buttonStyle);
+        //        // Draw button.
+        //        var buttonPressed = DrawButton(
+        //            guiPoint,
+        //            RemoveButtonH,
+        //            RemoveButtonV,
+        //            15,
+        //            15,
+        //            buttonStyle);
 
-                // Execute callback.
-                if (buttonPressed) {
-                    callback(i);
-                }
-            }
+        //        // Execute callback.
+        //        if (buttonPressed) {
+        //            callback(i);
+        //        }
+        //    }
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
         private void DrawRotationHandle(Action<float, Vector3> callback) {
             var currentAnimationTime = Script.AnimationTimeRatio;

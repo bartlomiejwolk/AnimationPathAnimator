@@ -226,7 +226,7 @@ namespace ATP.AnimationPathTools {
 
                 PathData.NodePositionChanged += PathData_NodePositionChanged;
 
-                PathData.NodeTiltChanged += pathData_NodeTiltChanged;
+                PathData.NodeTiltChanged += PathData_NodeTiltChanged;
 
                 PathData.PathReset += PathData_PathReset;
             }
@@ -312,7 +312,7 @@ namespace ATP.AnimationPathTools {
             if (!Application.isPlaying) Animate();
         }
 
-        private void pathData_NodeTiltChanged(object sender, EventArgs e) {
+        private void PathData_NodeTiltChanged(object sender, EventArgs e) {
             if (Application.isPlaying) UpdateAnimatedGO();
             if (!Application.isPlaying) Animate();
         }

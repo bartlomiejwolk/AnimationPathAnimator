@@ -9,8 +9,6 @@ namespace ATP.AnimationPathTools {
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
         #region FIELDS
-        public bool ModKeyPressed { get; private set; }
-
 
         /// <summary>
         ///     Reference to target script.
@@ -20,6 +18,8 @@ namespace ATP.AnimationPathTools {
         public AnimatorHandles AnimatorHandles { get; private set; }
 
         public SerializedObject GizmoDrawer { get; private set; }
+
+        public bool ModKeyPressed { get; private set; }
 
         /// <summary>
         ///     Reference to target script.
@@ -51,24 +51,55 @@ namespace ATP.AnimationPathTools {
 
         #region CONSTANT VALUES
 
+        public virtual KeyCode EaseModeKey {
+            get { return KeyCode.G; }
+        }
+
         public virtual float FloatPrecision {
             get { return 0.001f; }
+        }
+
+        /// <summary>
+        ///     Key shortcut to jump to the end of the animation.
+        /// </summary>
+        public virtual KeyCode JumpToEndKey {
+            get { return KeyCode.L; }
+        }
+
+        public virtual KeyCode JumpToNextNodeKey {
+            get { return KeyCode.L; }
+        }
+
+        public virtual KeyCode JumpToPreviousNodeKey {
+            get { return KeyCode.H; }
+        }
+
+        public virtual KeyCode JumpToStartKey {
+            get { return KeyCode.H; }
+        }
+
+        public KeyCode LongJumpBackwardKey {
+            get { return KeyCode.J; }
+        }
+
+        public KeyCode LongJumpForwardKey {
+            get { return KeyCode.K; }
         }
 
         public virtual float LongJumpValue {
             get { return 0.01f; }
         }
 
-        public virtual Color MoveAllModeColor {
-            get { return Color.red; }
-        }
-
-        public virtual float RotationHandleSize {
-            get { return 0.25f; }
+        public virtual KeyCode ModKey {
+            get { return KeyCode.RightAlt; }
         }
 
         public virtual KeyCode MoveAllKey {
-            get { return KeyCode.U;}
+            get { return KeyCode.U; }
+        }
+
+        public virtual Color MoveAllModeColor {
+            get { return Color.red; }
         }
 
         public virtual KeyCode MoveSingleModeKey {
@@ -83,8 +114,20 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.Space; }
         }
 
+        public virtual float RotationHandleSize {
+            get { return 0.25f; }
+        }
+
         public virtual KeyCode RotationModeKey {
             get { return KeyCode.H; }
+        }
+
+        public KeyCode ShortJumpBackwardKey {
+            get { return KeyCode.J; }
+        }
+
+        public KeyCode ShortJumpForwardKey {
+            get { return KeyCode.K; }
         }
 
         public virtual KeyCode TiltingModeKey {
@@ -93,47 +136,6 @@ namespace ATP.AnimationPathTools {
 
         public virtual KeyCode UpdateAllKey {
             get { return KeyCode.L; }
-        }
-
-        public KeyCode LongJumpForwardKey {
-            get { return KeyCode.K; }
-        }
-
-        public virtual KeyCode JumpToStartKey {
-            get { return KeyCode.H; }
-        }
-
-        public virtual KeyCode EaseModeKey {
-            get { return KeyCode.G; }
-        }
-
-        /// <summary>
-        ///     Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public virtual KeyCode JumpToEndKey {
-            get { return KeyCode.L; }
-        }
-
-        public KeyCode LongJumpBackwardKey {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode ShortJumpBackwardKey {
-            get { return KeyCode.J; }
-        }
-
-        public virtual KeyCode JumpToNextNodeKey {
-            get { return KeyCode.L; }
-        }
-        public virtual KeyCode JumpToPreviousNodeKey {
-            get { return KeyCode.H; }
-        }
-        public virtual KeyCode ModKey {
-            get { return KeyCode.RightAlt; }
-        }
-
-        public KeyCode ShortJumpForwardKey {
-            get { return KeyCode.K; }
         }
 
         #endregion
@@ -268,6 +270,7 @@ namespace ATP.AnimationPathTools {
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
         }
+
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
@@ -649,7 +652,8 @@ namespace ATP.AnimationPathTools {
                 var newPointLocalPosition =
                     Script.transform.InverseTransformPoint(newGlobalPosition);
                 DrawRotationHandlesCallbackHandler(
-                    currentAnimationTime, newPointLocalPosition);
+                    currentAnimationTime,
+                    newPointLocalPosition);
             }
         }
 
@@ -687,6 +691,51 @@ namespace ATP.AnimationPathTools {
         #endregion DRAWING HANDLERS
 
         #region OTHER HANDLERS
+
+        public void HandlePlayPause() {
+            // Pause animation.
+            if (Script.IsPlaying) {
+                Script.Pause = true;
+                Script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (Script.Pause) {
+                Script.Pause = false;
+                Script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                Script.IsPlaying = true;
+                // Start animation.
+                Script.StartEaseTimeCoroutine();
+            }
+        }
+
+        private void HandleLinearTangentMode() {
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
+            }
+        }
+
+        private void HandleMoveAllMovementMode(Vector3 moveDelta) {
+            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+                Script.PathData.OffsetNodePositions(moveDelta);
+            }
+        }
+
+        private void HandleMoveSingleHandleMove(
+            int movedNodeIndex,
+            Vector3 position) {
+            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
+
+                Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
+                Script.PathData.DistributeTimestamps();
+
+                HandleSmoothTangentMode();
+                HandleLinearTangentMode();
+            }
+        }
+
         private void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
@@ -732,7 +781,7 @@ namespace ATP.AnimationPathTools {
                         Script.AnimationTimeRatio + Script.ShortJumpValue;
 
                     Script.AnimationTimeRatio =
-                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                        (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 ShortJumpForwardKey,
                 ModKeyPressed);
@@ -744,7 +793,7 @@ namespace ATP.AnimationPathTools {
                         Script.AnimationTimeRatio - Script.ShortJumpValue;
 
                     Script.AnimationTimeRatio =
-                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                        (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 ShortJumpBackwardKey,
                 ModKeyPressed);
@@ -792,49 +841,6 @@ namespace ATP.AnimationPathTools {
                 HandlePlayPause,
                 PlayPauseKey,
                 ModKeyPressed);
-        }
-        public void HandlePlayPause() {
-            // Pause animation.
-            if (Script.IsPlaying) {
-                Script.Pause = true;
-                Script.IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (Script.Pause) {
-                Script.Pause = false;
-                Script.IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                Script.IsPlaying = true;
-                // Start animation.
-                Script.StartEaseTimeCoroutine();
-            }
-        }
-
-        private void HandleLinearTangentMode() {
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
-            }
-        }
-
-        private void HandleMoveAllMovementMode(Vector3 moveDelta) {
-            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
-                Script.PathData.OffsetNodePositions(moveDelta);
-            }
-        }
-
-        private void HandleMoveSingleHandleMove(
-            int movedNodeIndex,
-            Vector3 position) {
-            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
-
-                Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
-                Script.PathData.DistributeTimestamps();
-
-                HandleSmoothTangentMode();
-                HandleLinearTangentMode();
-            }
         }
 
         private void HandleSmoothTangentMode() {
@@ -939,13 +945,23 @@ namespace ATP.AnimationPathTools {
 
         #region METHODS
 
-        private void CheckForSkinAsset() {
+        /// <summary>
+        ///     Checked if modifier key is pressed and remember it in a class
+        ///     field.
+        /// </summary>
+        public void UpdateModifierKey() {
+            // Check if modifier key is currently pressed.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == ModKey) {
 
-            if (Script.Skin == null) {
-                Script.MissingReferenceError(
-                    "Skin",
-                    "Skin field cannot be empty. You will find default " +
-                    "GUISkin in the \"animationpathtools/GUISkin\" folder");
+                // Remember key state.
+                ModKeyPressed = true;
+            }
+            // If modifier key was released..
+            if (Event.current.type == EventType.keyUp
+                && Event.current.keyCode == ModKey) {
+
+                ModKeyPressed = false;
             }
         }
 
@@ -963,6 +979,16 @@ namespace ATP.AnimationPathTools {
 
             // Add node to the animation curves.
             Script.PathData.CreateNodeAtTime(newKeyTime);
+        }
+
+        private void CheckForSkinAsset() {
+
+            if (Script.Skin == null) {
+                Script.MissingReferenceError(
+                    "Skin",
+                    "Skin field cannot be empty. You will find default " +
+                    "GUISkin in the \"animationpathtools/GUISkin\" folder");
+            }
         }
 
         private float ConvertEaseToDegrees(int nodeIndex) {
@@ -1016,26 +1042,6 @@ namespace ATP.AnimationPathTools {
 
             // Return timestamp of the last node.
             return 1.0f;
-        }
-
-        /// <summary>
-        ///     Checked if modifier key is pressed and remember it in a class
-        ///     field.
-        /// </summary>
-        public void UpdateModifierKey() {
-            // Check if modifier key is currently pressed.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == ModKey) {
-
-                // Remember key state.
-                ModKeyPressed = true;
-            }
-            // If modifier key was released..
-            if (Event.current.type == EventType.keyUp
-                && Event.current.keyCode == ModKey) {
-
-                ModKeyPressed = false;
-            }
         }
 
         #endregion PRIVATE METHODS

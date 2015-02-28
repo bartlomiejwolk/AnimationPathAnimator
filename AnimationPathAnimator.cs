@@ -246,12 +246,6 @@ namespace ATP.AnimationPathTools {
                 animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
         }
-
-        void pathData_NodeTiltChanged(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimatedGO();
-            if (!Application.isPlaying) Animate();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
             skin = Resources.Load("GUISkin/default") as GUISkin;
@@ -263,12 +257,6 @@ namespace ATP.AnimationPathTools {
 
             animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
         }
-
-        void PathData_NodePositionChanged(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimatedGO();
-            if (!Application.isPlaying) Animate();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         // TODO Refactor.
         private void OnDrawGizmosSelected() {
@@ -322,8 +310,20 @@ namespace ATP.AnimationPathTools {
                 Animate();
             }
         }
-
         #endregion UNITY MESSAGES
+
+        #region EVENT HANDLERS
+        void PathData_NodePositionChanged(object sender, EventArgs e) {
+            if (Application.isPlaying) UpdateAnimatedGO();
+            if (!Application.isPlaying) Animate();
+        }
+
+        void pathData_NodeTiltChanged(object sender, EventArgs e) {
+            if (Application.isPlaying) UpdateAnimatedGO();
+            if (!Application.isPlaying) Animate();
+        }
+
+        #endregion
 
         #region HANDLERS
         private void HandleDrawingCurrentRotationPointGizmo() {

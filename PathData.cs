@@ -654,9 +654,6 @@ namespace ATP.AnimationPathTools {
                     var defaultRotation =
                         RotationPath.GetVectorAtTime(addedKeyTimestamp);
 
-                    Logger.LogString("Create new rotation point at {0}",
-                        pathTimestamps[i]);
-
                     // Create new rotation point.
                     RotationPath.CreateNewNode(pathTimestamps[i],
                         defaultRotation);

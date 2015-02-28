@@ -25,6 +25,7 @@ namespace ATP.AnimationPathTools {
         //private const int RemoveButtonH = 44;
         //private const int RemoveButtonV = 10;
         private const float RotationHandleSize = 0.25f;
+        // TODO Move to AnimatorHandles class.
         private const int TiltValueLabelOffsetX = -20;
         private const int TiltValueLabelOffsetY = -25;
         private const float FloatPrecision = 0.001f;

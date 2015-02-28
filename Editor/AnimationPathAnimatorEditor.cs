@@ -105,14 +105,37 @@ namespace ATP.AnimationPathTools {
             get { return 0.25f; }
         }
 
-        public const KeyCode MoveAllKey = KeyCode.U;
-        public const KeyCode MoveSingleModeKey = KeyCode.Y;
-        public const KeyCode NoneModeShortcut = KeyCode.K;
-        public const KeyCode PlayPauseShortcut = KeyCode.Space;
-        public const KeyCode RotationModeShortcut = KeyCode.H;
-        public const KeyCode TiltingModeShortcut = KeyCode.J;
-        public const KeyCode UpdateAllShortcut = KeyCode.L;
-        public const KeyCode EaseModeShortcut = KeyCode.G;
+        public virtual KeyCode MoveAllKey {
+            get { return KeyCode.U;}
+        }
+
+        public virtual KeyCode MoveSingleModeKey {
+            get { return KeyCode.Y; }
+        }
+
+        public virtual KeyCode NoneModeShortcut {
+            get { return KeyCode.K; }
+        }
+
+        public virtual KeyCode PlayPauseShortcut {
+            get { return KeyCode.Space; }
+        }
+
+        public virtual KeyCode RotationModeShortcut {
+            get { return KeyCode.H; }
+        }
+
+        public virtual KeyCode TiltingModeShortcut {
+            get { return KeyCode.J; }
+        }
+
+        public virtual KeyCode UpdateAllShortcut {
+            get { return KeyCode.L; }
+        }
+
+        public virtual KeyCode EaseModeShortcut {
+            get { return KeyCode.G; }
+        }
 
         /// <summary>
         ///     Key shortcut to jump backward.
@@ -691,33 +714,33 @@ namespace ATP.AnimationPathTools {
         private void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
-                KeyCode.C,
+                EaseModeShortcut,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Rotation,
-                KeyCode.V,
+                RotationModeShortcut,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Tilting,
-                KeyCode.B,
+                TiltingModeShortcut,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.None,
-                KeyCode.N,
+                NoneModeShortcut,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.UpdateAllMode = !Script.UpdateAllMode,
-                KeyCode.M,
+                UpdateAllShortcut,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveAll,
-                KeyCode.U,
+                MoveAllKey,
                 ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(

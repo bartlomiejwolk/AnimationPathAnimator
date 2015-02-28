@@ -64,6 +64,8 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Transform targetGO;
 
+        private Transform Transform { get; set; }
+
         #region OPTIONS
 
         [SerializeField]
@@ -224,6 +226,8 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
+            Transform = GetComponent<Transform>();
+
             if (pathData != null) {
                 pathData.RotationPointPositionChanged +=
                     pathData_RotationPointPositionChanged;
@@ -272,7 +276,7 @@ namespace ATP.AnimationPathTools {
 
                 for (var i = 0; i < localPointPositions.Count; i++) {
                     globalPointPositions[i] =
-                        transform.TransformPoint(localPointPositions[i]);
+                        Transform.TransformPoint(localPointPositions[i]);
                 }
                 AnimatorGizmos.DrawRotationGizmoCurve(globalPointPositions);
 
@@ -320,7 +324,7 @@ namespace ATP.AnimationPathTools {
 
             // Return global position.
             if (globalPosition) {
-                return transform.TransformPoint(localPosition);
+                return Transform.TransformPoint(localPosition);
             }
 
             return localPosition;
@@ -328,7 +332,7 @@ namespace ATP.AnimationPathTools {
 
         public Vector3 GetGlobalNodePosition(int nodeIndex) {
             var localNodePosition = PathData.GetNodePosition(nodeIndex);
-            var globalNodePosition = transform.TransformPoint(localNodePosition);
+            var globalNodePosition = Transform.TransformPoint(localNodePosition);
 
             return globalNodePosition;
         }
@@ -338,7 +342,7 @@ namespace ATP.AnimationPathTools {
 
             for (var i = 0; i < nodePositions.Length; i++) {
                 // Convert each position to global coordinate.
-                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+                nodePositions[i] = Transform.TransformPoint(nodePositions[i]);
             }
 
             return nodePositions;
@@ -382,7 +386,7 @@ namespace ATP.AnimationPathTools {
             var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);
 
             var globalPositionAtTimestamp =
-                transform.TransformPoint(positionAtTimestamp);
+                Transform.TransformPoint(positionAtTimestamp);
 
             if (Application.isPlaying) {
                 // Update position.
@@ -402,7 +406,7 @@ namespace ATP.AnimationPathTools {
             if (pathData == null) return;
 
             // Get transform component.
-            var transform = GetComponent<Transform>();
+            //var transform = GetComponent<Transform>();
 
             // Get path points.
             var points = pathData.SampleAnimationPathForPoints(
@@ -411,7 +415,7 @@ namespace ATP.AnimationPathTools {
             // Convert points to global coordinates.
             var globalPoints = new Vector3[points.Count];
             for (var i = 0; i < points.Count; i++) {
-                globalPoints[i] = transform.TransformPoint(points[i]);
+                globalPoints[i] = Transform.TransformPoint(points[i]);
             }
 
             // There must be at least 3 points to draw a line.
@@ -462,7 +466,7 @@ namespace ATP.AnimationPathTools {
             var globalPositions = new Vector3[localPositions.Length];
 
             for (var i = 0; i < localPositions.Length; i++) {
-                globalPositions[i] = transform.TransformPoint(localPositions[i]);
+                globalPositions[i] = Transform.TransformPoint(localPositions[i]);
             }
 
             return globalPositions;
@@ -520,7 +524,7 @@ namespace ATP.AnimationPathTools {
             var localRotationPointPosition =
                 PathData.GetRotationAtTime(currentAnimationTime);
             var globalRotationPointPosition =
-                transform.TransformPoint(localRotationPointPosition);
+                Transform.TransformPoint(localRotationPointPosition);
             AnimatorGizmos.DrawCurrentRotationPointGizmo(
                 globalRotationPointPosition);
         }
@@ -529,7 +533,7 @@ namespace ATP.AnimationPathTools {
             var lookAtTarget =
                 PathData.GetRotationAtTime(animTimeRatio);
             // Convert target position to global coordinates.
-            var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
+            var lookAtTargetGlobal = Transform.TransformPoint(lookAtTarget);
 
             // In play mode use Quaternion.Slerp();
             if (Application.isPlaying) {
@@ -581,7 +585,7 @@ namespace ATP.AnimationPathTools {
             // Get animatedGO position at current animation time.
             var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);
             var globalPositionAtTimestamp =
-                transform.TransformPoint(positionAtTimestamp);
+                Transform.TransformPoint(positionAtTimestamp);
 
             // Update animatedGO position.
             animatedGO.position = globalPositionAtTimestamp;
@@ -605,7 +609,7 @@ namespace ATP.AnimationPathTools {
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =
-                        transform.TransformPoint(rotationPointPos);
+                        Transform.TransformPoint(rotationPointPos);
 
                     // Update animatedGO rotation.
                     RotateObjectWithLookAt(rotationPointGlobalPos);

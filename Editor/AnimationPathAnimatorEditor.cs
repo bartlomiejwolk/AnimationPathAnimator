@@ -57,6 +57,7 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty targetGO;
 
         private AnimatorHandles animatorHandles;
+        private PathExporter pathExporter;
 
         #endregion SERIALIZED PROPERTIES
         #endregion FIELDS
@@ -78,6 +79,10 @@ namespace ATP.AnimationPathTools {
 
         public AnimatorHandles AnimatorHandles {
             get { return animatorHandles; }
+        }
+
+        public PathExporter PathExporter {
+            get { return pathExporter; }
         }
 
         #endregion
@@ -227,7 +232,10 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
-            DrawExportControls();
+            PathExporter.DrawExportControls(
+                serializedObject,
+                exportSamplingFrequency,
+                Script.PathData);
 
             EditorGUILayout.Space();
 
@@ -290,6 +298,7 @@ namespace ATP.AnimationPathTools {
 
             gizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
             animatorHandles = new AnimatorHandles();
+            pathExporter = new PathExporter();
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animTimeRatio = serializedObject.FindProperty("animTimeRatio");
@@ -1111,24 +1120,6 @@ namespace ATP.AnimationPathTools {
             return rotationValue;
         }
 
-        private void DrawExportControls() {
-            EditorGUILayout.BeginHorizontal();
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                exportSamplingFrequency,
-                new GUIContent(
-                    "Export Sampling",
-                    "Number of points to export for 1 m of the curve. " +
-                    "If set to 0, it'll export only keys defined in " +
-                    "the curve."));
-            serializedObject.ApplyModifiedProperties();
-
-            if (GUILayout.Button("Export")) {
-                ExportNodes(exportSamplingFrequency.intValue);
-            }
-            EditorGUILayout.EndHorizontal();
-        }
-
         private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(
                 new GUIContent(
@@ -1142,50 +1133,50 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        /// <summary>
-        ///     Export Animation Path nodes as transforms.
-        /// </summary>
-        /// <param name="exportSampling">
-        ///     Amount of result transforms for one meter of Animation Path.
-        /// </param>
-        private void ExportNodes(int exportSampling) {
-            // Points to be exported.
-            List<Vector3> points;
+        ///// <summary>
+        /////     Export Animation Path nodes as transforms.
+        ///// </summary>
+        ///// <param name="exportSampling">
+        /////     Amount of result transforms for one meter of Animation Path.
+        ///// </param>
+        //private void ExportNodes(int exportSampling) {
+        //    // Points to be exported.
+        //    List<Vector3> points;
 
-            // If exportSampling arg. is zero then export one transform for
-            // each Animation Path node.
-            if (exportSampling == 0) {
-                // Initialize points.
-                points = new List<Vector3>(Script.PathData.NodesNo);
+        //    // If exportSampling arg. is zero then export one transform for
+        //    // each Animation Path node.
+        //    if (exportSampling == 0) {
+        //        // Initialize points.
+        //        points = new List<Vector3>(Script.PathData.NodesNo);
 
-                // For each node in the path..
-                for (var i = 0; i < Script.PathData.NodesNo; i++) {
-                    // Get it 3d position.
-                    points[i] = Script.PathData.GetNodePosition(i);
-                }
-            }
-            // exportSampling not zero..
-            else {
-                // Initialize points array with nodes to export.
-                points = Script.PathData.SampleAnimationPathForPoints(
-                    exportSampling);
-            }
+        //        // For each node in the path..
+        //        for (var i = 0; i < Script.PathData.NodesNo; i++) {
+        //            // Get it 3d position.
+        //            points[i] = Script.PathData.GetNodePosition(i);
+        //        }
+        //    }
+        //    // exportSampling not zero..
+        //    else {
+        //        // Initialize points array with nodes to export.
+        //        points = Script.PathData.SampleAnimationPathForPoints(
+        //            exportSampling);
+        //    }
 
-            // Create parent GO.
-            var exportedPath = new GameObject("exported_path");
+        //    // Create parent GO.
+        //    var exportedPath = new GameObject("exported_path");
 
-            // Create child GOs.
-            for (var i = 0; i < points.Count; i++) {
-                // Create child GO.
-                var node = new GameObject("Node " + i);
+        //    // Create child GOs.
+        //    for (var i = 0; i < points.Count; i++) {
+        //        // Create child GO.
+        //        var node = new GameObject("Node " + i);
 
-                // Move node under the path GO.
-                node.transform.parent = exportedPath.transform;
+        //        // Move node under the path GO.
+        //        node.transform.parent = exportedPath.transform;
 
-                // Assign node local position.
-                node.transform.localPosition = points[i];
-            }
-        }
+        //        // Assign node local position.
+        //        node.transform.localPosition = points[i];
+        //    }
+        //}
 
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = Script.PathData.GetPathTimestamps();

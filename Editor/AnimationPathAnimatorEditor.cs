@@ -691,36 +691,43 @@ namespace ATP.AnimationPathTools {
         private void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
-                KeyCode.C);
+                KeyCode.C,
+                ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Rotation,
-                KeyCode.V);
+                KeyCode.V,
+                ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Tilting,
-                KeyCode.B);
+                KeyCode.B,
+                ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.None,
-                KeyCode.N);
+                KeyCode.N,
+                ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.UpdateAllMode = !Script.UpdateAllMode,
-                KeyCode.M);
+                KeyCode.M,
+                ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveAll,
-                KeyCode.U);
+                KeyCode.U,
+                ModKeyPressed);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveSingle,
-                KeyCode.Y);
+                KeyCode.Y,
+                ModKeyPressed);
 
             // Short jump forward.
-            Utilities.HandleUnmodShortcut(
+            Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
                         Script.AnimationTimeRatio + Script.ShortJumpValue;
@@ -728,10 +735,11 @@ namespace ATP.AnimationPathTools {
                     Script.AnimationTimeRatio =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
                 },
-                ShortJumpForward);
+                ShortJumpForward,
+                ModKeyPressed);
 
             // Short jump backward.
-            Utilities.HandleUnmodShortcut(
+            Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
                         Script.AnimationTimeRatio - Script.ShortJumpValue;
@@ -739,16 +747,17 @@ namespace ATP.AnimationPathTools {
                     Script.AnimationTimeRatio =
                         (float)(Math.Round(newAnimationTimeRatio, 3));
                 },
-                ShortJumpBackward);
+                ShortJumpBackward,
+                ModKeyPressed);
 
             // Long jump forward.
-            Utilities.HandleModShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio += LongJumpValue,
                 LongJumpForward,
                 ModKeyPressed);
 
             // Long jump backward.
-            Utilities.HandleModShortcut(
+            Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio -= LongJumpValue,
                 LongJumpBackward,
                 ModKeyPressed);
@@ -757,13 +766,15 @@ namespace ATP.AnimationPathTools {
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestForwardNodeTimestamp(),
-                JumpToNextNode);
+                JumpToNextNode,
+                ModKeyPressed);
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp(),
-                JumpToPreviousNode);
+                JumpToPreviousNode,
+                ModKeyPressed);
 
             // Jump to start.
             Utilities.HandleModShortcut(
@@ -780,7 +791,8 @@ namespace ATP.AnimationPathTools {
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
                 HandlePlayPause,
-                PlayPauseShortcut);
+                PlayPauseShortcut,
+                ModKeyPressed);
         }
 
         public bool ModKeyPressed { get; private set; }

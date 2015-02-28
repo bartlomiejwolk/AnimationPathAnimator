@@ -234,18 +234,26 @@ namespace ATP.AnimationPathTools {
             Transform = GetComponent<Transform>();
 
             if (pathData != null) {
-                pathData.RotationPointPositionChanged +=
+                PathData.RotationPointPositionChanged +=
                     PathData_RotationPointPositionChanged;
 
                 PathData.NodePositionChanged += PathData_NodePositionChanged;
 
-                pathData.NodeTiltChanged += pathData_NodeTiltChanged;
+                PathData.NodeTiltChanged += pathData_NodeTiltChanged;
+
+                PathData.PathReset += PathData_PathReset;
             }
 
             if (animatorGizmos == null) {
                 animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
         }
+
+        void PathData_PathReset(object sender, EventArgs e) {
+            if (Application.isPlaying) UpdateAnimatedGO();
+            if (!Application.isPlaying) Animate();
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
             skin = Resources.Load("GUISkin/default") as GUISkin;

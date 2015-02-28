@@ -24,6 +24,8 @@ namespace ATP.AnimationPathTools {
 
         public event EventHandler NodeTimeChanged;
 
+        public event EventHandler PathReset;
+
         #endregion EVENTS
 
         #region FIELDS
@@ -429,6 +431,8 @@ namespace ATP.AnimationPathTools {
         public void ResetPath() {
             InstantiateReferenceTypes();
             AssignDefaultValues();
+
+            OnPathReset();
         }
 
         public List<Vector3> SampleAnimationPathForPoints(
@@ -758,6 +762,12 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion METHODS
+
+        protected virtual void OnPathReset() {
+            EventHandler handler = PathReset;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
     }
 
 }

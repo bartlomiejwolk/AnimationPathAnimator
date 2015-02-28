@@ -117,31 +117,41 @@ namespace ATP.AnimationPathTools {
         /// <summary>
         ///     Key shortcut to jump backward.
         /// </summary>
-        public const KeyCode JumpBackward = KeyCode.H;
+        //public const KeyCode JumpBackward = KeyCode.J;
 
         /// <summary>
         ///     Key shortcut to jump forward.
         /// </summary>
-        public const KeyCode JumpForward = KeyCode.K;
+        //public const KeyCode JumpForward = KeyCode.K;
 
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
         /// </summary>
-        public const KeyCode JumpToEnd = KeyCode.L;
+        //public const KeyCode jumpToEnd = KeyCode.H;
 
-        public const KeyCode JumpToNextNode = KeyCode.L;
-        public const KeyCode JumpToPreviousNode = KeyCode.G;
+        //public const KeyCode JumpToNextNode = KeyCode.L;
+
+        public virtual KeyCode JumpToNextNode {
+            get { return KeyCode.L; }
+        }
+        public virtual KeyCode JumpToPreviousNode {
+            get { return KeyCode.H; }
+        }
+        //public const KeyCode JumpToPreviousNode = KeyCode.H;
 
         /// <summary>
         ///     Key shortcut to jump to the beginning of the animation.
         /// </summary>
-        public const KeyCode JumpToStart = KeyCode.G;
+        //public const KeyCode JumpToStart = KeyCode.H;
 
         /// <summary>
         ///     Keycode used as a modifier key.
         /// </summary>
         /// <remarks>Modifier key changes how other keys works.</remarks>
-        public const KeyCode ModKey = KeyCode.J;
+        //public const KeyCode ModKey = KeyCode.J;
+        public virtual KeyCode ModKey {
+            get { return KeyCode.RightAlt; }
+        }
 
         #endregion
 
@@ -779,15 +789,33 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.K; }
         }
         public KeyCode LongJumpBackward {
-            get { return KeyCode.H; }
+            get { return KeyCode.J; }
         }
 
         public KeyCode ShortJumpBackward {
-            get { return KeyCode.H; }
+            get { return KeyCode.J; }
         }
 
         public KeyCode ShortJumpForward {
             get { return KeyCode.K; }
+        }
+
+        /// <summary>
+        ///     Key shortcut to jump backward.
+        /// </summary>
+//public const KeyCode JumpBackward = KeyCode.J;
+        /// <summary>
+        ///     Key shortcut to jump forward.
+        /// </summary>
+//public const KeyCode JumpForward = KeyCode.K;
+        /// <summary>
+        ///     Key shortcut to jump to the end of the animation.
+        /// </summary>
+        public virtual KeyCode JumpToEnd {
+            get { return KeyCode.L; }
+        }
+        public virtual KeyCode JumpToStart {
+            get { return KeyCode.H; }
         }
 
         public void HandlePlayPause() {

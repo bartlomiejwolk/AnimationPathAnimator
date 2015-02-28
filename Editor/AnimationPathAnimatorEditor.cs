@@ -183,7 +183,7 @@ namespace ATP.AnimationPathTools {
                 Script.MissingReferenceError(
                     "Skin",
                     "Skin field cannot be empty. You will find default " +
-                    "GUISkin in the Animation PathTools/GUISkin folder");
+                    "GUISkin in the \"animationpathtools/GUISkin\" folder");
             }
 
             // Handle undo event.

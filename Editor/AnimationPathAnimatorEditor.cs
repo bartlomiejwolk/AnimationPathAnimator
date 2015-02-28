@@ -389,6 +389,98 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region DRAWING HANDLERS
+        //    // Draw handle.
+        //    var newPos = Handles.FreeMoveHandle(
+        //        nodePosition,
+        //        Quaternion.identity,
+        //        sphereSize,
+        //        Vector3.zero,
+        //        capFunction);
+        //    return newPos;
+        //}
+        private void HandleDrawingMoveAllPositionHandles(
+            Action<int, Vector3, Vector3> callback) {
+
+            if (script.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveAll) return;
+
+            // Node global positions.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = MoveAllModeColor;
+
+                // Draw position handle.
+                var newPos = AnimatorHandles.DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
+
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition =
+                        Script.transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition =
+                        Script.transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
+            }
+        }
+
+        private void HandleDrawingMoveSinglePositionsHandles(
+                    Action<int, Vector3, Vector3> callback) {
+
+            if (script.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveSingle) return;
+
+            // Node global positions.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = script.GizmoCurveColor;
+
+                // Draw position handle.
+                var newPos = AnimatorHandles.DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
+
+                // TODO Make it into callback.
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition =
+                        Script.transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition =
+                        Script.transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
+            }
+        }
+
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
@@ -757,100 +849,6 @@ namespace ATP.AnimationPathTools {
         //        Handles.color = MoveAllModeColor;
         //        sphereSize = handleSize * MoveAllModeSize;
         //    }
-
-        //    // Draw handle.
-        //    var newPos = Handles.FreeMoveHandle(
-        //        nodePosition,
-        //        Quaternion.identity,
-        //        sphereSize,
-        //        Vector3.zero,
-        //        capFunction);
-        //    return newPos;
-        //}
-
-        private void HandleDrawingMoveSinglePositionsHandles(
-            Action<int, Vector3, Vector3> callback) {
-
-            if (script.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveSingle) return;
-
-            // Node global positions.
-            var nodes = Script.GetGlobalNodePositions();
-
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = script.GizmoCurveColor;
-
-                // Draw position handle.
-                var newPos = AnimatorHandles.DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // TODO Make it into callback.
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
-                }
-            }
-        }
-
-        private void HandleDrawingMoveAllPositionHandles(
-            Action<int, Vector3, Vector3> callback) {
-
-            if (script.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveAll) return;
-
-            // Node global positions.
-            var nodes = Script.GetGlobalNodePositions();
-
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = MoveAllModeColor;
-
-                // Draw position handle.
-                var newPos = AnimatorHandles.DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
-                }
-            }
-        }
-
         //private void DrawRemoveNodeButtons(
         //    Vector3[] nodePositions,
         //    Action<int> callback,

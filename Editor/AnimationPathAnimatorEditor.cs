@@ -16,8 +16,8 @@ namespace ATP.AnimationPathTools {
         //private const int AddButtonH = 25;
         //private const int AddButtonV = 10;
         //private const float ArcHandleRadius = 0.6f;
-        private const int DefaultLabelHeight = 10;
-        private const int DefaultLabelWidth = 30;
+        //private const int DefaultLabelHeight = 10;
+        //private const int DefaultLabelWidth = 30;
         private const int EaseValueLabelOffsetX = -20;
         private const int EaseValueLabelOffsetY = -25;
         private const float MoveAllModeSize = 0.15f;
@@ -681,35 +681,35 @@ namespace ATP.AnimationPathTools {
         //    }
         //}
 
-        private void DrawNodeLabel(
-            int nodeIndex,
-            string value,
-            int offsetX,
-            int offsetY,
-            GUIStyle style) {
-            // Get node position.
-            var nodePosition = Script.GetGlobalNodePosition(nodeIndex);
+        //private void DrawNodeLabel(
+        //    int nodeIndex,
+        //    string value,
+        //    int offsetX,
+        //    int offsetY,
+        //    GUIStyle style) {
+        //    // Get node position.
+        //    var nodePosition = Script.GetGlobalNodePosition(nodeIndex);
 
-            // Translate node's 3d position into screen coordinates.
-            var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
+        //    // Translate node's 3d position into screen coordinates.
+        //    var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
 
-            // Create rectangle for the label.
-            var labelPosition = new Rect(
-                guiPoint.x + offsetX,
-                guiPoint.y + offsetY,
-                DefaultLabelWidth,
-                DefaultLabelHeight);
+        //    // Create rectangle for the label.
+        //    var labelPosition = new Rect(
+        //        guiPoint.x + offsetX,
+        //        guiPoint.y + offsetY,
+        //        DefaultLabelWidth,
+        //        DefaultLabelHeight);
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            // Draw label.
-            GUI.Label(
-                labelPosition,
-                value,
-                style);
+        //    // Draw label.
+        //    GUI.Label(
+        //        labelPosition,
+        //        value,
+        //        style);
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
         private void DrawNodeLabels(
             Func<int, float> calculateValueCallback,
@@ -725,7 +725,10 @@ namespace ATP.AnimationPathTools {
                     "{0:0}",
                     calculateValueCallback(i));
 
-                DrawNodeLabel(i, arcValue, offsetX, offsetY, style);
+                // Get node position.
+                var nodeGlobalPosition = Script.GetGlobalNodePosition(i);
+
+                AnimatorHandles.DrawNodeLabel(i, nodeGlobalPosition, arcValue, offsetX, offsetY, style);
             }
         }
 

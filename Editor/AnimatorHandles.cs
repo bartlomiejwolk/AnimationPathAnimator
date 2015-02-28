@@ -13,6 +13,8 @@ namespace ATP.AnimationPathTools {
         private const int RemoveButtonV = 10;
         private const float ArcHandleRadius = 0.6f;
         private const float ScaleHandleSize = 1.5f;
+        private const int DefaultLabelHeight = 10;
+        private const int DefaultLabelWidth = 30;
 
         public void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -195,6 +197,35 @@ namespace ATP.AnimationPathTools {
                     Color.green,
                     value => callback(i, value));
             }
+        }
+
+        public void DrawNodeLabel(
+            int nodeIndex,
+            Vector3 nodeGlobalPosition,
+            string value,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
+
+            // Translate node's 3d position into screen coordinates.
+            var guiPoint = HandleUtility.WorldToGUIPoint(nodeGlobalPosition);
+
+            // Create rectangle for the label.
+            var labelPosition = new Rect(
+                guiPoint.x + offsetX,
+                guiPoint.y + offsetY,
+                DefaultLabelWidth,
+                DefaultLabelHeight);
+
+            Handles.BeginGUI();
+
+            // Draw label.
+            GUI.Label(
+                labelPosition,
+                value,
+                style);
+
+            Handles.EndGUI();
         }
 
     }

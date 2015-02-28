@@ -5,6 +5,7 @@ namespace ATP.AnimationPathTools {
 
     public static class ShortcutHandler {
 
+        // TODO Replace all with properties.
         public const KeyCode MoveAllKey = KeyCode.U;
         public const KeyCode MoveSingleModeKey = KeyCode.Y;
         public const KeyCode NoneModeShortcut = KeyCode.K;

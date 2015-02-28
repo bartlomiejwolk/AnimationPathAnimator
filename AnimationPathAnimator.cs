@@ -48,7 +48,7 @@ namespace ATP.AnimationPathTools {
         private int exportSamplingFrequency = 5;
 
         [SerializeField]
-        private GizmoDrawer gizmoDrawer;
+        private AnimatorGizmos animatorGizmos;
 
 #pragma warning restore 169
 
@@ -153,8 +153,8 @@ namespace ATP.AnimationPathTools {
             set { gizmoCurveColor = value; }
         }
 
-        public GizmoDrawer GizmoDrawer {
-            get { return gizmoDrawer; }
+        public AnimatorGizmos AnimatorGizmos {
+            get { return animatorGizmos; }
         }
 
         public AnimatorHandleMode HandleMode {
@@ -229,8 +229,8 @@ namespace ATP.AnimationPathTools {
                     pathData_RotationPointPositionChanged;
             }
 
-            if (gizmoDrawer == null) {
-                gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            if (animatorGizmos == null) {
+                animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
         }
 
@@ -243,7 +243,7 @@ namespace ATP.AnimationPathTools {
                 animatedGO = Camera.main.transform;
             }
 
-            gizmoDrawer = ScriptableObject.CreateInstance<GizmoDrawer>();
+            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -254,12 +254,12 @@ namespace ATP.AnimationPathTools {
 
             if (rotationMode == AnimatorRotationMode.Target
                 && targetGO != null) {
-                GizmoDrawer.DrawTargetIcon(targetGO.position);
+                AnimatorGizmos.DrawTargetIcon(targetGO.position);
             }
 
             if (rotationMode == AnimatorRotationMode.Forward) {
                 var globalForwardPointPosition = GetForwardPoint(true);
-                GizmoDrawer.DrawForwardPointIcon(globalForwardPointPosition);
+                AnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
             }
 
             if (handleMode == AnimatorHandleMode.Rotation) {
@@ -274,7 +274,7 @@ namespace ATP.AnimationPathTools {
                     globalPointPositions[i] =
                         transform.TransformPoint(localPointPositions[i]);
                 }
-                GizmoDrawer.DrawRotationGizmoCurve(globalPointPositions);
+                AnimatorGizmos.DrawRotationGizmoCurve(globalPointPositions);
 
                 HandleDrawingCurrentRotationPointGizmo();
 
@@ -334,7 +334,7 @@ namespace ATP.AnimationPathTools {
             return globalNodePosition;
         }
 
-        public Vector3[] GetNodeGlobalPositions() {
+        public Vector3[] GetGlobalNodePositions() {
             var nodePositions = PathData.GetNodePositions();
 
             for (var i = 0; i < nodePositions.Length; i++) {
@@ -397,7 +397,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        // Move to GizmoDrawer class.
+        // Move to AnimatorGizmos class.
         private void DrawGizmoCurve() {
             // Return if path asset is not assigned.
             if (pathData == null) return;
@@ -440,7 +440,7 @@ namespace ATP.AnimationPathTools {
                     continue;
                 }
 
-                GizmoDrawer.DrawRotationPointGizmo(rotationPointPositions[i]);
+                AnimatorGizmos.DrawRotationPointGizmo(rotationPointPositions[i]);
             }
         }
 
@@ -522,7 +522,7 @@ namespace ATP.AnimationPathTools {
                 PathData.GetRotationAtTime(currentAnimationTime);
             var globalRotationPointPosition =
                 transform.TransformPoint(localRotationPointPosition);
-            GizmoDrawer.DrawCurrentRotationPointGizmo(
+            AnimatorGizmos.DrawCurrentRotationPointGizmo(
                 globalRotationPointPosition);
         }
 

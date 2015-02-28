@@ -113,197 +113,6 @@ namespace ATP.AnimationPathTools {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
-
-        protected virtual bool DrawUpdateAllToggle() {
-
-            return Script.UpdateAllMode = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Update All",
-                    ""),
-                Script.UpdateAllMode);
-        }
-
-        protected virtual AnimatorHandleMode DrawHandleModeDropdown() {
-
-            return Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Handle Mode",
-                    ""),
-                Script.HandleMode);
-        }
-
-        protected virtual void DrawWrapModeDropdown() {
-
-            Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Wrap Mode",
-                    ""),
-                Script.WrapMode);
-        }
-
-        protected virtual void DrawAdvancedSettingsFoldout() {
-
-            serializedObject.Update();
-            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                advancedSettingsFoldout.boolValue,
-                new GUIContent(
-                    "Advanced Settings",
-                    ""));
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawEnableControlsInPlayModeToggle() {
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                enableControlsInPlayMode,
-                new GUIContent(
-                    "Play Mode Controls",
-                    "Enable keybord controls in play mode."));
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawAutoPlayControl() {
-
-            Script.AutoPlay = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Auto Play",
-                    ""),
-                Script.AutoPlay);
-        }
-
-        protected virtual void DrawPlayerControls() {
-
-            EditorGUILayout.BeginHorizontal();
-
-            // Play/Pause button text.
-            string playPauseBtnText;
-            if (!Script.IsPlaying || (Script.IsPlaying && Script.Pause)) {
-                playPauseBtnText = "Play";
-            }
-            else {
-                playPauseBtnText = "Pause";
-            }
-
-            // Draw Play/Pause button.
-            if (GUILayout.Button(
-                new GUIContent(
-                    playPauseBtnText,
-                    ""))) {
-
-                HandlePlayPause();
-            }
-
-            // Draw Stop button.
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Stop",
-                    ""))) {
-                Script.StopEaseTimeCoroutine();
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        protected virtual void DrawTargetGOControl() {
-
-            EditorGUILayout.PropertyField(
-                targetGO,
-                new GUIContent(
-                    "Target Object",
-                    "Object that the animated object will be looking at."));
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawAnimatedGOControl() {
-            EditorGUILayout.PropertyField(
-                animatedGO,
-                new GUIContent(
-                    "Animated Object",
-                    "Object to animate."));
-        }
-
-        protected virtual AnimationPathBuilderHandleMode DrawMovementModeDropdown() {
-
-            return Script.MovementMode =
-                (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Movement Mode",
-                        ""),
-                    Script.MovementMode);
-        }
-
-        protected virtual void DrawTangentModeDropdown() {
-
-// Remember current tangent mode.
-            var prevTangentMode = Script.TangentMode;
-            // Draw tangent mode dropdown.
-            Script.TangentMode =
-                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Tangent Mode",
-                        ""),
-                    Script.TangentMode);
-            // Update gizmo curve is tangent mode changed.
-            if (Script.TangentMode != prevTangentMode)
-                HandleTangentModeChange();
-        }
-
-        protected virtual void DrawPositionLerpSpeedControl() {
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                positionLerpSpeed,
-                new GUIContent(
-                    "Position Lerp Speed",
-                    ""));
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawAnimationTimeControl() {
-
-            serializedObject.Update();
-            animTimeRatio.floatValue = EditorGUILayout.FloatField(
-                new GUIContent(
-                    "Animation Time",
-                    "Current animation time."),
-                animTimeRatio.floatValue);
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawPathDataAssetControl() {
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(
-                pathData,
-                new GUIContent(
-                    "Path Asset",
-                    ""));
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        #region INSPECTOR
-        protected virtual void DrawAdvanceSettingsControls() {
-
-            if (advancedSettingsFoldout.boolValue) {
-                serializedObject.Update();
-                EditorGUILayout.PropertyField(
-                    gizmoCurveColor,
-                    new GUIContent("Curve Color", ""));
-                serializedObject.ApplyModifiedProperties();
-
-                GizmoDrawer.Update();
-                EditorGUILayout.PropertyField(rotationCurveColor);
-                GizmoDrawer.ApplyModifiedProperties();
-
-                serializedObject.Update();
-                EditorGUILayout.PropertyField(maxAnimationSpeed);
-                EditorGUILayout.PropertyField(skin);
-                serializedObject.ApplyModifiedProperties();
-            }
-        }
-        #endregion
-
         private void DrawRotationModeControls() {
             // Remember current RotationMode.
             var prevRotationMode = Script.RotationMode;
@@ -447,6 +256,197 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion UNITY MESSAGES
+
+        #region INSPECTOR
+        protected virtual void DrawAdvanceSettingsControls() {
+
+            if (advancedSettingsFoldout.boolValue) {
+                serializedObject.Update();
+                EditorGUILayout.PropertyField(
+                    gizmoCurveColor,
+                    new GUIContent("Curve Color", ""));
+                serializedObject.ApplyModifiedProperties();
+
+                GizmoDrawer.Update();
+                EditorGUILayout.PropertyField(rotationCurveColor);
+                GizmoDrawer.ApplyModifiedProperties();
+
+                serializedObject.Update();
+                EditorGUILayout.PropertyField(maxAnimationSpeed);
+                EditorGUILayout.PropertyField(skin);
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+
+        protected virtual bool DrawUpdateAllToggle() {
+
+            return Script.UpdateAllMode = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Update All",
+                    ""),
+                Script.UpdateAllMode);
+        }
+
+        protected virtual AnimatorHandleMode DrawHandleModeDropdown() {
+
+            return Script.HandleMode = (AnimatorHandleMode)EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Handle Mode",
+                    ""),
+                Script.HandleMode);
+        }
+
+        protected virtual void DrawWrapModeDropdown() {
+
+            Script.WrapMode = (WrapMode)EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Wrap Mode",
+                    ""),
+                Script.WrapMode);
+        }
+
+        protected virtual void DrawAdvancedSettingsFoldout() {
+
+            serializedObject.Update();
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                advancedSettingsFoldout.boolValue,
+                new GUIContent(
+                    "Advanced Settings",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawEnableControlsInPlayModeToggle() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                enableControlsInPlayMode,
+                new GUIContent(
+                    "Play Mode Controls",
+                    "Enable keybord controls in play mode."));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawAutoPlayControl() {
+
+            Script.AutoPlay = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Auto Play",
+                    ""),
+                Script.AutoPlay);
+        }
+
+        protected virtual void DrawPlayerControls() {
+
+            EditorGUILayout.BeginHorizontal();
+
+            // Play/Pause button text.
+            string playPauseBtnText;
+            if (!Script.IsPlaying || (Script.IsPlaying && Script.Pause)) {
+                playPauseBtnText = "Play";
+            }
+            else {
+                playPauseBtnText = "Pause";
+            }
+
+            // Draw Play/Pause button.
+            if (GUILayout.Button(
+                new GUIContent(
+                    playPauseBtnText,
+                    ""))) {
+
+                HandlePlayPause();
+            }
+
+            // Draw Stop button.
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Stop",
+                    ""))) {
+                Script.StopEaseTimeCoroutine();
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        protected virtual void DrawTargetGOControl() {
+
+            EditorGUILayout.PropertyField(
+                targetGO,
+                new GUIContent(
+                    "Target Object",
+                    "Object that the animated object will be looking at."));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawAnimatedGOControl() {
+            EditorGUILayout.PropertyField(
+                animatedGO,
+                new GUIContent(
+                    "Animated Object",
+                    "Object to animate."));
+        }
+
+        protected virtual AnimationPathBuilderHandleMode DrawMovementModeDropdown() {
+
+            return Script.MovementMode =
+                (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Movement Mode",
+                        ""),
+                    Script.MovementMode);
+        }
+
+        protected virtual void DrawTangentModeDropdown() {
+
+            // Remember current tangent mode.
+            var prevTangentMode = Script.TangentMode;
+            // Draw tangent mode dropdown.
+            Script.TangentMode =
+                (AnimationPathBuilderTangentMode)EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Tangent Mode",
+                        ""),
+                    Script.TangentMode);
+            // Update gizmo curve is tangent mode changed.
+            if (Script.TangentMode != prevTangentMode)
+                HandleTangentModeChange();
+        }
+
+        protected virtual void DrawPositionLerpSpeedControl() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                positionLerpSpeed,
+                new GUIContent(
+                    "Position Lerp Speed",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawAnimationTimeControl() {
+
+            serializedObject.Update();
+            animTimeRatio.floatValue = EditorGUILayout.FloatField(
+                new GUIContent(
+                    "Animation Time",
+                    "Current animation time."),
+                animTimeRatio.floatValue);
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawPathDataAssetControl() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(
+                pathData,
+                new GUIContent(
+                    "Path Asset",
+                    ""));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        #endregion
 
         #region DRAWING HANDLERS
     

@@ -334,7 +334,7 @@ namespace ATP.AnimationPathTools {
             return globalNodePosition;
         }
 
-        public Vector3[] GetNodeGlobalPositions() {
+        public Vector3[] GetGlobalNodePositions() {
             var nodePositions = PathData.GetNodePositions();
 
             for (var i = 0; i < nodePositions.Length; i++) {

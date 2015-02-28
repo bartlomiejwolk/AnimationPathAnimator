@@ -392,7 +392,7 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            var nodePositions = Script.GetNodeGlobalPositions();
+            var nodePositions = Script.GetGlobalNodePositions();
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -413,7 +413,7 @@ namespace ATP.AnimationPathTools {
 
             // Get path node positions.
             var nodePositions =
-                Script.GetNodeGlobalPositions();
+                Script.GetGlobalNodePositions();
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -431,7 +431,11 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingEaseLabel() {
             if (Script.HandleMode != AnimatorHandleMode.Ease) return;
 
-            DrawNodeLabels(
+            // Get node global positions.
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+
+            AnimatorHandles.DrawNodeLabels(
+                nodeGlobalPositions,
                 ConvertEaseToDegrees,
                 EaseValueLabelOffsetX,
                 EaseValueLabelOffsetY,
@@ -452,7 +456,7 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = Script.GetNodeGlobalPositions();
+            var nodes = Script.GetGlobalNodePositions();
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -484,7 +488,7 @@ namespace ATP.AnimationPathTools {
 
             // Get path node positions.
             var nodePositions =
-                Script.GetNodeGlobalPositions();
+                Script.GetGlobalNodePositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -498,7 +502,11 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingTiltLabel() {
             if (Script.HandleMode != AnimatorHandleMode.Tilting) return;
 
-            DrawNodeLabels(
+            // Get node global positions.
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+
+            AnimatorHandles.DrawNodeLabels(
+                nodeGlobalPositions,
                 ConvertTiltToDegrees,
                 TiltValueLabelOffsetX,
                 TiltValueLabelOffsetY,
@@ -661,7 +669,7 @@ namespace ATP.AnimationPathTools {
         //private void DrawEaseHandles(Action<int, float> callback) {
         //    // Get path node positions.
         //    var nodePositions =
-        //        Script.GetNodeGlobalPositions();
+        //        Script.GetGlobalNodePositions();
 
         //    // Get ease values.
         //    var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -711,26 +719,26 @@ namespace ATP.AnimationPathTools {
         //    Handles.EndGUI();
         //}
 
-        private void DrawNodeLabels(
-            Func<int, float> calculateValueCallback,
-            int offsetX,
-            int offsetY,
-            GUIStyle style) {
-            var nodesNo = Script.PathData.NodesNo;
+        //private void DrawNodeLabels(
+        //    Func<int, float> calculateValueCallback,
+        //    int offsetX,
+        //    int offsetY,
+        //    GUIStyle style) {
+        //    var nodesNo = Script.PathData.NodesNo;
 
-            // For each path node..
-            for (var i = 0; i < nodesNo; i++) {
-                // Get value to display.
-                var arcValue = String.Format(
-                    "{0:0}",
-                    calculateValueCallback(i));
+        //    // For each path node..
+        //    for (var i = 0; i < nodesNo; i++) {
+        //        // Get value to display.
+        //        var arcValue = String.Format(
+        //            "{0:0}",
+        //            calculateValueCallback(i));
 
-                // Get node position.
-                var nodeGlobalPosition = Script.GetGlobalNodePosition(i);
+        //        // Get node position.
+        //        var nodeGlobalPosition = Script.GetGlobalNodePosition(i);
 
-                AnimatorHandles.DrawNodeLabel(i, nodeGlobalPosition, arcValue, offsetX, offsetY, style);
-            }
-        }
+        //        AnimatorHandles.DrawNodeLabel(i, nodeGlobalPosition, arcValue, offsetX, offsetY, style);
+        //    }
+        //}
 
         private Vector3 DrawPositionHandle(
             Vector3 nodePosition,
@@ -763,7 +771,7 @@ namespace ATP.AnimationPathTools {
             Action<int, Vector3, Vector3> callback) {
 
             // Node global positions.
-            var nodes = Script.GetNodeGlobalPositions();
+            var nodes = Script.GetGlobalNodePositions();
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -863,7 +871,7 @@ namespace ATP.AnimationPathTools {
         //private void DrawTiltingHandles(Action<int, float> callback) {
         //    // Get path node positions.
         //    var nodePositions =
-        //        Script.GetNodeGlobalPositions();
+        //        Script.GetGlobalNodePositions();
 
         //    // Get tilting curve values.
         //    var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();

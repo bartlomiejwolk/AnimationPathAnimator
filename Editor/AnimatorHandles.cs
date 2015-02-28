@@ -228,6 +228,32 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
+        public void DrawNodeLabels(
+            Vector3[] nodeGlobalPositions,
+            Func<int, float> calculateValueCallback,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
+
+            var nodesNo = nodeGlobalPositions.Length;
+
+            // For each path node..
+            for (var i = 0; i < nodesNo; i++) {
+                // Get value to display.
+                var arcValue = String.Format(
+                    "{0:0}",
+                    calculateValueCallback(i));
+
+                DrawNodeLabel(
+                    i,
+                    nodeGlobalPositions[i],
+                    arcValue,
+                    offsetX,
+                    offsetY,
+                    style);
+            }
+        }
+
     }
 
 }

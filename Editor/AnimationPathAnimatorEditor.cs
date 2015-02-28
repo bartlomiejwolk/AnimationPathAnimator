@@ -8,24 +8,23 @@ namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
-
         #region FIELDS
+
+        /// <summary>
+        ///     Reference to target script.
+        /// </summary>
+        private AnimationPathAnimator script;
+
+        public AnimatorHandles AnimatorHandles { get; private set; }
+
+        public SerializedObject GizmoDrawer { get; private set; }
+
         /// <summary>
         ///     Reference to target script.
         /// </summary>
         public AnimationPathAnimator Script {
             get { return script; }
         }
-
-        public AnimatorHandles AnimatorHandles { get; private set; }
-
-        public SerializedObject GizmoDrawer { get; private set; }
-
-
-        /// <summary>
-        ///     Reference to target script.
-        /// </summary>
-        private AnimationPathAnimator script;
 
         #region SERIALIZED PROPERTIES
 
@@ -49,10 +48,11 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region CONSTANT VALUES
-      
+
         public virtual float FloatPrecision {
             get { return 0.001f; }
         }
+
         public virtual float JumpValue {
             get { return 0.01f; }
         }

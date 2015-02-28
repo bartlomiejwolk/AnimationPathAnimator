@@ -17,6 +17,13 @@ namespace ATP.AnimationPathTools {
         private const int DefaultLabelWidth = 30;
         private const float MoveAllModeSize = 0.15f;
         private const float MovementHandleSize = 0.12f;
+        public virtual int EaseValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public virtual int EaseValueLabelOffsetY {
+            get { return -25; }
+        }
 
         public void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -233,8 +240,6 @@ namespace ATP.AnimationPathTools {
         public void DrawNodeLabels(
             Vector3[] nodeGlobalPositions,
             Func<int, float> calculateValueCallback,
-            int offsetX,
-            int offsetY,
             GUIStyle style) {
 
             var nodesNo = nodeGlobalPositions.Length;
@@ -250,8 +255,8 @@ namespace ATP.AnimationPathTools {
                     i,
                     nodeGlobalPositions[i],
                     arcValue,
-                    offsetX,
-                    offsetY,
+                    EaseValueLabelOffsetX,
+                    EaseValueLabelOffsetY,
                     style);
             }
         }

@@ -49,14 +49,7 @@ namespace ATP.AnimationPathTools {
         #endregion FIELDS
 
         #region CONSTANT VALUES
-        public virtual int EaseValueLabelOffsetX {
-            get { return -20; }
-        }
-
-        public virtual int EaseValueLabelOffsetY {
-            get { return -25; }
-        }
-
+      
         public virtual float FloatPrecision {
             get { return 0.001f; }
         }
@@ -551,8 +544,6 @@ namespace ATP.AnimationPathTools {
             AnimatorHandles.DrawNodeLabels(
                 nodeGlobalPositions,
                 ConvertEaseToDegrees,
-                EaseValueLabelOffsetX,
-                EaseValueLabelOffsetY,
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
 
@@ -706,8 +697,6 @@ namespace ATP.AnimationPathTools {
             AnimatorHandles.DrawNodeLabels(
                 nodeGlobalPositions,
                 ConvertTiltToDegrees,
-                TiltValueLabelOffsetX,
-                TiltValueLabelOffsetY,
                 Script.Skin.GetStyle("TiltValueLabel"));
         }
 

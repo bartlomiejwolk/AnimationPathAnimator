@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
@@ -62,5 +63,24 @@ namespace ATP.AnimationPathTools {
                 curve.RemoveKey(0);
             }
         }
+
+        public static void HandleShortcut(
+            Func<> callback,
+            KeyCode key,
+            KeyCode modKey = KeyCode.None) {
+            
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == key
+                && modKey == KeyCode.None) {
+
+                callback();
+            }
+            else if (Event.current.type == EventType.keyDown
+                     && Event.current.keyCode == key) {
+
+                callback();
+            }
+        }
+
     }
 }

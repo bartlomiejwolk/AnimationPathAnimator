@@ -644,38 +644,38 @@ namespace ATP.AnimationPathTools {
 
         #region OTHER HANDLERS
         private void HandleShortcuts() {
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
                 KeyCode.C);
 
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Rotation,
                 KeyCode.V);
 
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Tilting,
                 KeyCode.B);
 
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.None,
                 KeyCode.N);
 
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.UpdateAllMode = !Script.UpdateAllMode,
                 KeyCode.M);
 
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveAll,
                 KeyCode.U);
 
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.MovementMode =
                     AnimationPathBuilderHandleMode.MoveSingle,
                 KeyCode.Y);
 
             // Short jump forward.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => {
                     var newAnimationTimeRatio =
                         Script.AnimationTimeRatio + Script.ShortJumpValue;
@@ -686,7 +686,7 @@ namespace ATP.AnimationPathTools {
                 KeyCode.K);
 
             // Short jump backward.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => {
                     var newAnimationTimeRatio =
                         Script.AnimationTimeRatio - Script.ShortJumpValue;
@@ -697,37 +697,37 @@ namespace ATP.AnimationPathTools {
                 KeyCode.K);
 
             // Long jump forward.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.AnimationTimeRatio += LongJumpValue,
                 KeyCode.K,
                 KeyCode.J);
 
             // Long jump backward.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.AnimationTimeRatio -= LongJumpValue,
                 KeyCode.H,
                 KeyCode.J);
 
             // Jump to next node.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestForwardNodeTimestamp(),
                 KeyCode.L);
 
             // Jump to previous node.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp(),
                 KeyCode.G);
 
             // Jump to start.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.AnimationTimeRatio = 0,
                 KeyCode.G,
                 KeyCode.J);
 
             // Jump to end.
-            ShortcutHandler.HandleShortcut(
+            Utilities.HandleShortcut(
                 () => Script.AnimationTimeRatio = 1,
                 KeyCode.L,
                 KeyCode.J);

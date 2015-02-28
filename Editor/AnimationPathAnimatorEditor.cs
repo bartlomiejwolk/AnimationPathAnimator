@@ -8,57 +8,36 @@ namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
-        #region DRAWING METHODS
-
-        private void DrawRotationHandle(Action<float, Vector3> callback) {
-            var currentAnimationTime = Script.AnimationTimeRatio;
-            var rotationPointPosition =
-                Script.PathData.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = Script.PathData.GetPathTimestamps();
-
-            // Return if current animation time is not equal to any node
-            // timestamp.
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
-            if (index < 0) return;
-
-            Handles.color = Color.magenta;
-            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
-            var sphereSize = handleSize * RotationHandleSize;
-
-            var rotationPointGlobalPos =
-                Script.transform.TransformPoint(rotationPointPosition);
-
-            // Draw node's handle.
-            var newGlobalPosition = Handles.FreeMoveHandle(
-                rotationPointGlobalPos,
-                Quaternion.identity,
-                sphereSize,
-                Vector3.zero,
-                Handles.SphereCap);
-
-            if (newGlobalPosition != rotationPointGlobalPos) {
-                var newPointLocalPosition =
-                    Script.transform.InverseTransformPoint(newGlobalPosition);
-                // Execute callback.
-                callback(currentAnimationTime, newPointLocalPosition);
-            }
-        }
-
-        #endregion DRAWING METHODS
-
         #region CONSTANTS
 
-        // TODO Replace with properties.
-        public const float JumpValue = 0.01f;
-        private const int EaseValueLabelOffsetX = -20;
-        private const int EaseValueLabelOffsetY = -25;
-        private const float FloatPrecision = 0.001f;
-        private const float RotationHandleSize = 0.25f;
+        public virtual float JumpValue {
+            get { return 0.01f; }
+        }
+
+        public virtual int EaseValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public virtual int EaseValueLabelOffsetY {
+            get { return -25; }
+        }
+
+        public virtual float FloatPrecision {
+            get { return  0.001f; }
+        }
+
+        public virtual float RotationHandleSize {
+            get { return 0.25f; }
+        }
+
         // TODO Move to AnimatorHandles class.
-        private const int TiltValueLabelOffsetX = -20;
-        private const int TiltValueLabelOffsetY = -25;
+        public virtual int TiltValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public virtual int TiltValueLabelOffsetY {
+            get { return -25; }
+        }
 
         #endregion CONSTANTS
 
@@ -488,6 +467,46 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion
+
+        #region DRAWING METHODS
+
+        private void DrawRotationHandle(Action<float, Vector3> callback) {
+            var currentAnimationTime = Script.AnimationTimeRatio;
+            var rotationPointPosition =
+                Script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = Script.PathData.GetPathTimestamps();
+
+            // Return if current animation time is not equal to any node
+            // timestamp.
+            var index = Array.FindIndex(
+                nodeTimestamps,
+                x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
+            if (index < 0) return;
+
+            Handles.color = Color.magenta;
+            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
+            var sphereSize = handleSize * RotationHandleSize;
+
+            var rotationPointGlobalPos =
+                Script.transform.TransformPoint(rotationPointPosition);
+
+            // Draw node's handle.
+            var newGlobalPosition = Handles.FreeMoveHandle(
+                rotationPointGlobalPos,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                Handles.SphereCap);
+
+            if (newGlobalPosition != rotationPointGlobalPos) {
+                var newPointLocalPosition =
+                    Script.transform.InverseTransformPoint(newGlobalPosition);
+                // Execute callback.
+                callback(currentAnimationTime, newPointLocalPosition);
+            }
+        }
+
+        #endregion DRAWING METHODS
 
         #region DRAWING HANDLERS
 

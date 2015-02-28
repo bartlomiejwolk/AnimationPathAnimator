@@ -52,7 +52,7 @@ namespace ATP.AnimationPathTools {
         #region CONSTANT VALUES
 
         public virtual KeyCode EaseModeKey {
-            get { return KeyCode.G; }
+            get { return KeyCode.U; }
         }
 
         public virtual float FloatPrecision {
@@ -107,7 +107,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public virtual KeyCode NoneModeKey {
-            get { return KeyCode.K; }
+            get { return KeyCode.Y; }
         }
 
         public virtual KeyCode PlayPauseKey {
@@ -119,7 +119,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public virtual KeyCode RotationModeKey {
-            get { return KeyCode.H; }
+            get { return KeyCode.I; }
         }
 
         public KeyCode ShortJumpBackwardKey {
@@ -131,7 +131,7 @@ namespace ATP.AnimationPathTools {
         }
 
         public virtual KeyCode TiltingModeKey {
-            get { return KeyCode.J; }
+            get { return KeyCode.O; }
         }
 
         public virtual KeyCode UpdateAllKey {
@@ -505,6 +505,8 @@ namespace ATP.AnimationPathTools {
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
 
+        // TODO Use this method also for HandleDrawingMoveSinglePositionHandes().
+        // .. Use parameters for differences.
         private void HandleDrawingMoveAllPositionHandles(
             Action<int, Vector3, Vector3> callback) {
 
@@ -720,6 +722,7 @@ namespace ATP.AnimationPathTools {
         private void HandleMoveAllMovementMode(Vector3 moveDelta) {
             if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
                 Script.PathData.OffsetNodePositions(moveDelta);
+                Script.PathData.OffsetRotationPathPosition(moveDelta);
             }
         }
 
@@ -1043,21 +1046,6 @@ namespace ATP.AnimationPathTools {
             // Return timestamp of the last node.
             return 1.0f;
         }
-
-        /// <summary>
-        /// Remove all keys in animation curves and create new, default ones.
-        /// </summary>
-        //public void MovePathToCameraPosition() {
-        //    // Get scene view camera.
-        //    Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-
-        //    // Get world point to place the Animation Path.
-        //    Vector3 worldPoint = sceneCamera.transform.position;
-
-        //    var destinationPoint = new Vector3(worldPoint.x, 0, worldPoint.z);
-
-        //    PathData.MovePathToPosition(destinationPoint);
-        //}
 
         #endregion PRIVATE METHODS
     }

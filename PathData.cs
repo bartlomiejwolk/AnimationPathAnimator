@@ -763,6 +763,19 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion METHODS
+
+        public void OffsetRotationPathPosition(Vector3 moveDelta) {
+            // For each node..
+            for (var i = 0; i < NodesNo; i++) {
+                // Old node position.
+                var oldPosition = GetRotationPointPosition(i);
+                // New node position.
+                var newPosition = oldPosition + moveDelta;
+                // Update node positions.
+                RotationPath.MovePointToPosition(i, newPosition);
+            }        
+        }
+
     }
 
 }

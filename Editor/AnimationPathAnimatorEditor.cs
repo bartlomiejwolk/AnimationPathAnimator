@@ -8,6 +8,46 @@ namespace ATP.AnimationPathTools {
 
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {
+        #region DRAWING METHODS
+
+        private void DrawRotationHandle(Action<float, Vector3> callback) {
+            var currentAnimationTime = Script.AnimationTimeRatio;
+            var rotationPointPosition =
+                Script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = Script.PathData.GetPathTimestamps();
+
+            // Return if current animation time is not equal to any node
+            // timestamp.
+            var index = Array.FindIndex(
+                nodeTimestamps,
+                x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
+            if (index < 0) return;
+
+            Handles.color = Color.magenta;
+            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
+            var sphereSize = handleSize * RotationHandleSize;
+
+            var rotationPointGlobalPos =
+                Script.transform.TransformPoint(rotationPointPosition);
+
+            // Draw node's handle.
+            var newGlobalPosition = Handles.FreeMoveHandle(
+                rotationPointGlobalPos,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                Handles.SphereCap);
+
+            if (newGlobalPosition != rotationPointGlobalPos) {
+                var newPointLocalPosition =
+                    Script.transform.InverseTransformPoint(newGlobalPosition);
+                // Execute callback.
+                callback(currentAnimationTime, newPointLocalPosition);
+            }
+        }
+
+        #endregion DRAWING METHODS
+
         #region FIELDS
 
         /// <summary>
@@ -179,17 +219,7 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
-            if (Script.Skin == null) {
-                Script.MissingReferenceError(
-                    "Skin",
-                    "Skin field cannot be empty. You will find default " +
-                    "GUISkin in the \"animationpathtools/GUISkin\" folder");
-            }
-
-            // Handle undo event.
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-            }
+            CheckForSkinAsset();
 
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
@@ -238,13 +268,11 @@ namespace ATP.AnimationPathTools {
                 AnyJumpKeyPressedCallbackHandler);
 
             HandleWrapModeDropdown();
-
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
-
             HandleDrawingPositionHandles();
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
@@ -255,7 +283,6 @@ namespace ATP.AnimationPathTools {
         #region INSPECTOR
 
         protected virtual void DrawAdvancedSettingsFoldout() {
-
             serializedObject.Update();
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
@@ -266,7 +293,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawAdvanceSettingsControls() {
-
             if (advancedSettingsFoldout.boolValue) {
                 serializedObject.Update();
                 EditorGUILayout.PropertyField(
@@ -294,7 +320,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawAnimationTimeControl() {
-
             serializedObject.Update();
             animTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
@@ -305,7 +330,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawAutoPlayControl() {
-
             Script.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
@@ -314,7 +338,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawEnableControlsInPlayModeToggle() {
-
             serializedObject.Update();
             EditorGUILayout.PropertyField(
                 enableControlsInPlayMode,
@@ -324,21 +347,16 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual AnimatorHandleMode DrawHandleModeDropdown() {
-
-            return
-                Script.HandleMode =
-                    (AnimatorHandleMode) EditorGUILayout.EnumPopup(
-                        new GUIContent(
-                            "Handle Mode",
-                            ""),
-                        Script.HandleMode);
+        protected virtual void DrawHandleModeDropdown() {
+            Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+                new GUIContent(
+                    "Handle Mode",
+                    ""),
+                Script.HandleMode);
         }
 
-        protected virtual AnimationPathBuilderHandleMode
-            DrawMovementModeDropdown() {
-
-            return Script.MovementMode =
+        protected virtual void DrawMovementModeDropdown() {
+            Script.MovementMode =
                 (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
@@ -347,18 +365,18 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawPathDataAssetControl() {
-
             serializedObject.Update();
+
             EditorGUILayout.PropertyField(
                 pathData,
                 new GUIContent(
                     "Path Asset",
                     ""));
+
             serializedObject.ApplyModifiedProperties();
         }
 
         protected virtual void DrawPlayerControls() {
-
             EditorGUILayout.BeginHorizontal();
 
             // Play/Pause button text.
@@ -391,7 +409,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawPositionLerpSpeedControl() {
-
             serializedObject.Update();
             EditorGUILayout.PropertyField(
                 positionLerpSpeed,
@@ -402,7 +419,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawTangentModeDropdown() {
-
             // Remember current tangent mode.
             var prevTangentMode = Script.TangentMode;
             // Draw tangent mode dropdown.
@@ -418,7 +434,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawTargetGOControl() {
-
             EditorGUILayout.PropertyField(
                 targetGO,
                 new GUIContent(
@@ -427,9 +442,8 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual bool DrawUpdateAllToggle() {
-
-            return Script.UpdateAllMode = EditorGUILayout.Toggle(
+        protected virtual void DrawUpdateAllToggle() {
+            Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All",
                     ""),
@@ -437,7 +451,6 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawWrapModeDropdown() {
-
             Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
@@ -446,46 +459,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion
-
-        #region DRAWING METHODS
-
-        private void DrawRotationHandle(Action<float, Vector3> callback) {
-            var currentAnimationTime = Script.AnimationTimeRatio;
-            var rotationPointPosition =
-                Script.PathData.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = Script.PathData.GetPathTimestamps();
-
-            // Return if current animation time is not equal to any node
-            // timestamp.
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
-            if (index < 0) return;
-
-            Handles.color = Color.magenta;
-            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
-            var sphereSize = handleSize * RotationHandleSize;
-
-            var rotationPointGlobalPos =
-                Script.transform.TransformPoint(rotationPointPosition);
-
-            // Draw node's handle.
-            var newGlobalPosition = Handles.FreeMoveHandle(
-                rotationPointGlobalPos,
-                Quaternion.identity,
-                sphereSize,
-                Vector3.zero,
-                Handles.SphereCap);
-
-            if (newGlobalPosition != rotationPointGlobalPos) {
-                var newPointLocalPosition =
-                    Script.transform.InverseTransformPoint(newGlobalPosition);
-                // Execute callback.
-                callback(currentAnimationTime, newPointLocalPosition);
-            }
-        }
-
-        #endregion DRAWING METHODS
 
         #region DRAWING HANDLERS
 
@@ -899,6 +872,16 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
+
+        private void CheckForSkinAsset() {
+
+            if (Script.Skin == null) {
+                Script.MissingReferenceError(
+                    "Skin",
+                    "Skin field cannot be empty. You will find default " +
+                    "GUISkin in the \"animationpathtools/GUISkin\" folder");
+            }
+        }
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.

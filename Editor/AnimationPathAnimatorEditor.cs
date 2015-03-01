@@ -204,7 +204,7 @@ namespace ATP.AnimationPathTools {
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnEnable() {
+        protected virtual void OnEnable() {
             // Get target script reference.
             script = (AnimationPathAnimator) target;
             GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);

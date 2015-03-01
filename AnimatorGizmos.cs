@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -47,10 +49,28 @@ namespace ATP.AnimationPathTools {
 
         #region METHODS
 
-        public void DrawCurrentRotationPointGizmo(Vector3 rotationPointPosition) {
+        public void DrawCurrentRotationPointGizmo(PathData pathData,
+            Transform transform, float animationTimeRatio) {
+
+            // Node path node timestamps.
+            var nodeTimestamps = pathData.GetPathTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            if (nodeTimestamps.Any(
+                nodeTimestamp =>
+                    Math.Abs(nodeTimestamp - animationTimeRatio)
+                    < FloatPrecision)) {
+                return;
+            }
+
+            // Get rotation point position.
+            var localRotationPointPosition =
+                pathData.GetRotationAtTime(animationTimeRatio);
+            var globalRotationPointPosition =
+                transform.TransformPoint(localRotationPointPosition);
+
             //Draw rotation point gizmo.
-            Gizmos.DrawIcon(
-                rotationPointPosition,
+            Gizmos.DrawIcon(globalRotationPointPosition,
                 CurrentRotationPointGizmoIcon,
                 false);
         }

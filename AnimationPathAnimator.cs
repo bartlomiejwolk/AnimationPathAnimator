@@ -268,7 +268,8 @@ namespace ATP.AnimationPathTools {
             if (handleMode == AnimatorHandleMode.Rotation) {
                 AnimatorGizmos.DrawRotationPathCurve(PathData, transform);
 
-                HandleDrawingCurrentRotationPointGizmo();
+                AnimatorGizmos.DrawCurrentRotationPointGizmo(PathData,
+                    transform, animationTimeRatio);
 
                 DrawRotationPointGizmos();
             }
@@ -321,29 +322,6 @@ namespace ATP.AnimationPathTools {
 
         #region HANDLERS
 
-        private void HandleDrawingCurrentRotationPointGizmo() {
-            // Get current animation time.
-            var currentAnimationTime = AnimationTimeRatio;
-
-            // Node path node timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            // Return if current animation time is the same as any node time.
-            if (nodeTimestamps.Any(
-                nodeTimestamp =>
-                    Math.Abs(nodeTimestamp - currentAnimationTime)
-                    < FloatPrecision)) {
-                return;
-            }
-
-            // Get rotation point position.
-            var localRotationPointPosition =
-                PathData.GetRotationAtTime(currentAnimationTime);
-            var globalRotationPointPosition =
-                Transform.TransformPoint(localRotationPointPosition);
-            AnimatorGizmos.DrawCurrentRotationPointGizmo(
-                globalRotationPointPosition);
-        }
 
         // Move to AnimatorGizmos class.
         private void HandleDrawingGizmoCurve() {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Assets.Extensions.animationpathtools.Include.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -148,7 +149,18 @@ namespace ATP.AnimationPathTools {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
+            EditorGUILayout.BeginHorizontal();
+
             DrawPathDataAssetControl();
+            DrawCreatePathAssetButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            DrawAnimatedGOControl();
+            DrawTargetGOControl();
+
+            EditorGUILayout.Space();
+
             DrawAnimationTimeControl();
             DrawWrapModeDropdown();
             DrawHandleModeDropdown();
@@ -163,9 +175,6 @@ namespace ATP.AnimationPathTools {
             DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();
-
-            DrawAnimatedGOControl();
-            DrawTargetGOControl();
 
             EditorGUILayout.Space();
 
@@ -184,6 +193,16 @@ namespace ATP.AnimationPathTools {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
+        }
+
+        private void DrawCreatePathAssetButton() {
+                if (GUILayout.Button(
+                new GUIContent(
+                    "New Asset",
+                    ""))) {
+
+                ScriptableObjectUtility.CreateAsset<PathData>();
+            }
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

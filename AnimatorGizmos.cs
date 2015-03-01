@@ -1,14 +1,15 @@
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
+
 namespace ATP.AnimationPathTools {
 
     public class AnimatorGizmos : ScriptableObject {
-
         #region FIELDS
 
         [SerializeField]
         private Color rotationCurveColor = Color.gray;
+
         #endregion
 
         #region PROPERIES
@@ -37,6 +38,11 @@ namespace ATP.AnimationPathTools {
             get { return rotationCurveColor; }
             set { rotationCurveColor = value; }
         }
+
+        protected virtual int RotationCurveSampling {
+            get { return 20; }
+        }
+
         #endregion
 
         #region METHODS
@@ -57,14 +63,27 @@ namespace ATP.AnimationPathTools {
                 false);
         }
 
-        public void DrawRotationGizmoCurve(Vector3[] globalPointPositions) {
+        public void DrawRotationPathCurve(PathData pathData,
+            Transform transform) {
+
+            var localPointPositions = pathData.SampleRotationPathForPoints(
+                RotationCurveSampling);
+
+            var globalPointPositions =
+                new Vector3[localPointPositions.Count];
+
+            for (var i = 0; i < localPointPositions.Count; i++) {
+                globalPointPositions[i] =
+                    transform.TransformPoint(localPointPositions[i]);
+            }
             if (globalPointPositions.Length < 2) return;
 
             Gizmos.color = RotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < globalPointPositions.Length - 1; i++) {
-                Gizmos.DrawLine(globalPointPositions[i], globalPointPositions[i + 1]);
+                Gizmos.DrawLine(
+                    globalPointPositions[i], globalPointPositions[i + 1]);
             }
         }
 
@@ -84,6 +103,8 @@ namespace ATP.AnimationPathTools {
                 TargetGizmoIcon,
                 false);
         }
+
         #endregion
     }
+
 }

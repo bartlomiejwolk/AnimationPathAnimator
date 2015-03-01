@@ -210,10 +210,6 @@ namespace ATP.AnimationPathTools {
             set { wrapMode = value; }
         }
 
-        protected virtual int RotationCurveSampling {
-            get { return 20; }
-        }
-
         private Transform Transform { get; set; }
 
         #endregion PROPERTIES
@@ -270,18 +266,7 @@ namespace ATP.AnimationPathTools {
             }
 
             if (handleMode == AnimatorHandleMode.Rotation) {
-                var localPointPositions =
-                    PathData.SampleRotationPathForPoints(
-                        RotationCurveSampling);
-
-                var globalPointPositions =
-                    new Vector3[localPointPositions.Count];
-
-                for (var i = 0; i < localPointPositions.Count; i++) {
-                    globalPointPositions[i] =
-                        Transform.TransformPoint(localPointPositions[i]);
-                }
-                AnimatorGizmos.DrawRotationGizmoCurve(globalPointPositions);
+                AnimatorGizmos.DrawRotationPathCurve(PathData, transform);
 
                 HandleDrawingCurrentRotationPointGizmo();
 

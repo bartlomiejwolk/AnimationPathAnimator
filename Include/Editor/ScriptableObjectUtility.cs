@@ -9,7 +9,7 @@ namespace Assets.Extensions.animationpathtools.Include.Editor {
 		/// <summary>
 		//	This makes it easy to create, name and place unique new ScriptableObject asset files.
 		/// </summary>
-		public static void CreateAsset<T> () where T : ScriptableObject
+		public static T CreateAsset<T> () where T : ScriptableObject
 		{
 			T asset = ScriptableObject.CreateInstance<T> ();
 			
@@ -31,6 +31,8 @@ namespace Assets.Extensions.animationpathtools.Include.Editor {
 			AssetDatabase.Refresh();
 			EditorUtility.FocusProjectWindow ();
 			Selection.activeObject = asset;
+
+		    return asset;
 		}
 	}
 }

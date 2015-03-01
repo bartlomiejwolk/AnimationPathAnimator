@@ -199,12 +199,15 @@ namespace ATP.AnimationPathTools {
         }
 
         private void DrawCreatePathAssetButton() {
-                if (GUILayout.Button(
+            if (GUILayout.Button(
                 new GUIContent(
                     "New Asset",
                     ""))) {
 
-                ScriptableObjectUtility.CreateAsset<PathData>();
+                var asset = ScriptableObjectUtility.CreateAsset<PathData>();
+
+                // Assign asset as the current path.
+                Script.PathData = asset;
             }
         }
 
@@ -456,7 +459,7 @@ namespace ATP.AnimationPathTools {
         private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(
                 new GUIContent(
-                    "Reset Path",
+                    "Reset Asset",
                     "Reset path to default."))) {
                 // Allow undo this operation.
                 Undo.RecordObject(Script.PathData, "Change path");

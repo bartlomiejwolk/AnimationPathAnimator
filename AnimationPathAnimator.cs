@@ -32,7 +32,7 @@ namespace ATP.AnimationPathTools {
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
-        private float animTimeRatio;
+        private float animationTimeRatio;
 
         [SerializeField]
         private int exportSamplingFrequency = 5;
@@ -115,10 +115,16 @@ namespace ATP.AnimationPathTools {
         #region PROPERTIES
 
         public float AnimationTimeRatio {
-            get { return animTimeRatio; }
+            get { return animationTimeRatio; }
             set {
-                animTimeRatio = value;
+                animationTimeRatio = value;
 
+                // Limit value in edit mode.
+                if (!Application.isPlaying && animationTimeRatio > 1) {
+                    animationTimeRatio = 1;
+                }
+
+                // Update animation.
                 if (Application.isPlaying) UpdateAnimatedGO();
                 if (!Application.isPlaying) Animate();
             }
@@ -431,7 +437,7 @@ namespace ATP.AnimationPathTools {
             // Timestamp offset of the forward point.
             var forwardPointDelta = forwardPointOffset;
             // Forward point timestamp.
-            var forwardPointTimestamp = animTimeRatio + forwardPointDelta;
+            var forwardPointTimestamp = animationTimeRatio + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
 
             // Return global position.
@@ -473,12 +479,12 @@ namespace ATP.AnimationPathTools {
             // Reset animation.
             IsPlaying = false;
             Pause = false;
-            animTimeRatio = 0;
+            animationTimeRatio = 0;
         }
 
         /// <summary>
         ///     Update animatedGO position, rotation and tilting based on current
-        ///     animTimeRatio.
+        ///     animationTimeRatio.
         /// </summary>
         /// <remarks>
         ///     Used to update animatedGO with keys, in play mode.
@@ -497,7 +503,7 @@ namespace ATP.AnimationPathTools {
         private void AnimateObjectPosition() {
             if (animatedGO == null) return;
 
-            var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);
+            var positionAtTimestamp = PathData.GetVectorAtTime(animationTimeRatio);
 
             var globalPositionAtTimestamp =
                 Transform.TransformPoint(positionAtTimestamp);
@@ -537,8 +543,8 @@ namespace ATP.AnimationPathTools {
                 // If animation is enabled and not paused..
                 if (!Pause) {
                     // Ease time.
-                    var timeStep = PathData.GetEaseValueAtTime(animTimeRatio);
-                    animTimeRatio += timeStep * Time.deltaTime;
+                    var timeStep = PathData.GetEaseValueAtTime(animationTimeRatio);
+                    animationTimeRatio += timeStep * Time.deltaTime;
 
                     if (AnimationTimeRatio > 1
                         && WrapMode == WrapMode.Once) {
@@ -566,7 +572,7 @@ namespace ATP.AnimationPathTools {
 
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget =
-                PathData.GetRotationAtTime(animTimeRatio);
+                PathData.GetRotationAtTime(animationTimeRatio);
             // Convert target position to global coordinates.
             var lookAtTargetGlobal = Transform.TransformPoint(lookAtTarget);
 
@@ -609,7 +615,7 @@ namespace ATP.AnimationPathTools {
             // Get current animatedGO rotation.
             var eulerAngles = animatedGO.rotation.eulerAngles;
             // Get rotation from tiltingCurve.
-            var zRotation = PathData.GetTiltingValueAtTime(animTimeRatio);
+            var zRotation = PathData.GetTiltingValueAtTime(animationTimeRatio);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
             // Update animatedGO rotation.
@@ -618,7 +624,7 @@ namespace ATP.AnimationPathTools {
 
         private void UpdateAnimatedGOPosition() {
             // Get animatedGO position at current animation time.
-            var positionAtTimestamp = PathData.GetVectorAtTime(animTimeRatio);
+            var positionAtTimestamp = PathData.GetVectorAtTime(animationTimeRatio);
             var globalPositionAtTimestamp =
                 Transform.TransformPoint(positionAtTimestamp);
 
@@ -640,7 +646,7 @@ namespace ATP.AnimationPathTools {
                 case AnimatorRotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
-                        PathData.GetRotationValueAtTime(animTimeRatio);
+                        PathData.GetRotationValueAtTime(animationTimeRatio);
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =

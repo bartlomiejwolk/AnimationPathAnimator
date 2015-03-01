@@ -27,12 +27,13 @@ namespace ATP.AnimationPathTools {
         public AnimationPathAnimator Script {
             get { return script; }
         }
+        #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
 
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty animatedGO;
-        private SerializedProperty animTimeRatio;
+        private SerializedProperty animationTimeRatio;
         private SerializedProperty enableControlsInPlayMode;
         private SerializedProperty exportSamplingFrequency;
         private SerializedProperty forwardPointOffset;
@@ -46,8 +47,6 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty targetGO;
 
         #endregion SERIALIZED PROPERTIES
-
-        #endregion FIELDS
 
         #region CONSTANT VALUES
 
@@ -229,7 +228,7 @@ namespace ATP.AnimationPathTools {
             AnimatorHandles = new AnimatorHandles();
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
-            animTimeRatio = serializedObject.FindProperty("animTimeRatio");
+            animationTimeRatio = serializedObject.FindProperty("animationTimeRatio");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             forwardPointOffset =
@@ -317,11 +316,11 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawAnimationTimeControl() {
             serializedObject.Update();
-            animTimeRatio.floatValue = EditorGUILayout.FloatField(
+            animationTimeRatio.floatValue = EditorGUILayout.FloatField(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
-                animTimeRatio.floatValue);
+                animationTimeRatio.floatValue);
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -1034,7 +1033,7 @@ namespace ATP.AnimationPathTools {
             var pathTimestamps = Script.PathData.GetPathTimestamps();
 
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < animTimeRatio.floatValue) {
+                if (pathTimestamps[i] < animationTimeRatio.floatValue) {
                     return pathTimestamps[i];
                 }
             }
@@ -1047,7 +1046,7 @@ namespace ATP.AnimationPathTools {
             var pathTimestamps = Script.PathData.GetPathTimestamps();
 
             foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > animTimeRatio.floatValue)) {
+                .Where(timestamp => timestamp > animationTimeRatio.floatValue)) {
                 return timestamp;
             }
 

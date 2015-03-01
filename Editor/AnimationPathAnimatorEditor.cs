@@ -373,7 +373,9 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Stop",
                     ""))) {
+
                 Script.StopEaseTimeCoroutine();
+                Script.UpdateAnimatedGO();
             }
 
             EditorGUILayout.EndHorizontal();

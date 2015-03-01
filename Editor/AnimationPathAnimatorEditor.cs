@@ -260,7 +260,7 @@ namespace ATP.AnimationPathTools {
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                 FocusType.Passive));
 
-            UpdateModifierKey();
+            //UpdateModifierKey();
             HandleShortcuts();
 
             HandleWrapModeDropdown();
@@ -960,21 +960,21 @@ namespace ATP.AnimationPathTools {
         ///     Checked if modifier key is pressed and remember it in a class
         ///     field.
         /// </summary>
-        public void UpdateModifierKey() {
-            // Check if modifier key is currently pressed.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == ModKey) {
+        //public void UpdateModifierKey() {
+        //    // Check if modifier key is currently pressed.
+        //    if (Event.current.type == EventType.keyDown
+        //        && Event.current.keyCode == ModKey) {
 
-                // Remember key state.
-                ModKeyPressed = true;
-            }
-            // If modifier key was released..
-            if (Event.current.type == EventType.keyUp
-                && Event.current.keyCode == ModKey) {
+        //        // Remember key state.
+        //        ModKeyPressed = true;
+        //    }
+        //    // If modifier key was released..
+        //    if (Event.current.type == EventType.keyUp
+        //        && Event.current.keyCode == ModKey) {
 
-                ModKeyPressed = false;
-            }
-        }
+        //        ModKeyPressed = false;
+        //    }
+        //}
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.

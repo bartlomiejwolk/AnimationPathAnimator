@@ -257,6 +257,9 @@ namespace ATP.AnimationPathTools {
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
 
+            // Disable interaction with background scene elements.
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+
             UpdateModifierKey();
             HandleShortcuts();
 

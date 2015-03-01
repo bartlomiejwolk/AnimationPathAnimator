@@ -166,24 +166,21 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             DrawAnimationTimeControl();
-            DrawWrapModeDropdown();
-            DrawHandleModeDropdown();
-            DrawUpdateAllToggle();
-            DrawPositionLerpSpeedControl();
             DrawRotationModeControls();
-
-            EditorGUILayout.Space();
-
-            DrawTangentModeDropdown();
+            DrawHandleModeDropdown();
             DrawMovementModeDropdown();
+            DrawTangentModeDropdown();
+            DrawWrapModeDropdown();
 
             EditorGUILayout.Space();
+
+            DrawAutoPlayControl();
+            DrawEnableControlsInPlayModeToggle();
+            DrawUpdateAllToggle();
 
             EditorGUILayout.Space();
 
             DrawPlayerControls();
-            DrawAutoPlayControl();
-            DrawEnableControlsInPlayModeToggle();
 
             EditorGUILayout.Space();
 
@@ -196,6 +193,21 @@ namespace ATP.AnimationPathTools {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
+        }
+
+        protected virtual void DrawForwardPointOffsetField() {
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(forwardPointOffset);
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawRotationSpeedField() {
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -269,21 +281,51 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawAdvanceSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-                GizmoDrawer.Update();
-                EditorGUILayout.PropertyField(
-                    gizmoCurveColor,
-                    new GUIContent("Curve Color", ""));
-                GizmoDrawer.ApplyModifiedProperties();
+                DrawGizmoCurveColorPicker();
+                DrawRotationCurveColorPicker();
 
-                GizmoDrawer.Update();
-                EditorGUILayout.PropertyField(rotationCurveColor);
-                GizmoDrawer.ApplyModifiedProperties();
+                EditorGUILayout.Space();
 
-                serializedObject.Update();
-                EditorGUILayout.PropertyField(maxAnimationSpeed);
-                EditorGUILayout.PropertyField(skin);
-                serializedObject.ApplyModifiedProperties();
+                // TODO Limit these values in OnValidate().
+                DrawPositionLerpSpeedControl();
+                DrawRotationSpeedField();
+                DrawForwardPointOffsetField();
+                DrawMaxAnimationSpeedField();
+
+                EditorGUILayout.Space();
+
+                DrawSkinSelectionControl();
             }
+        }
+
+        protected virtual void DrawSkinSelectionControl() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(skin);
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawMaxAnimationSpeedField() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(maxAnimationSpeed);
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawRotationCurveColorPicker() {
+
+            GizmoDrawer.Update();
+            EditorGUILayout.PropertyField(rotationCurveColor);
+            GizmoDrawer.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawGizmoCurveColorPicker() {
+
+            GizmoDrawer.Update();
+            EditorGUILayout.PropertyField(
+                gizmoCurveColor,
+                new GUIContent("Curve Color", ""));
+            GizmoDrawer.ApplyModifiedProperties();
         }
 
         protected virtual void DrawAnimatedGOControl() {
@@ -431,7 +473,7 @@ namespace ATP.AnimationPathTools {
         protected virtual void DrawUpdateAllToggle() {
             Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
-                    "Update All",
+                    "Update All Values",
                     ""),
                 Script.UpdateAllMode);
         }
@@ -468,25 +510,11 @@ namespace ATP.AnimationPathTools {
                         ""),
                     Script.RotationMode);
 
+            // TODO Execute it as a callback.
             // If value changed, update animated GO in the scene.
             if (Script.RotationMode != prevRotationMode) {
                 Script.UpdateAnimatedGO();
             }
-
-            serializedObject.Update();
-
-            if (Script.RotationMode == AnimatorRotationMode.Forward) {
-                EditorGUILayout.PropertyField(forwardPointOffset);
-            }
-
-            EditorGUILayout.PropertyField(
-                rotationSpeed,
-                new GUIContent(
-                    "Rotation Speed",
-                    "Controls how much time (in seconds) it'll take the " +
-                    "animated object to finish rotation towards followed target."));
-
-            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion

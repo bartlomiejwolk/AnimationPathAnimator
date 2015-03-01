@@ -746,32 +746,32 @@ namespace ATP.AnimationPathTools {
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Ease,
                 EaseModeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Rotation,
                 RotationModeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.Tilting,
                 TiltingModeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.HandleMode = AnimatorHandleMode.None,
                 NoneModeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             Utilities.HandleUnmodShortcut(
                 () => Script.UpdateAllMode = !Script.UpdateAllMode,
                 UpdateAllKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             Utilities.HandleUnmodShortcut(
                 ToggleMovementMode,
                 MoveAllModeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Short jump forward.
             Utilities.HandleModShortcut(
@@ -783,7 +783,7 @@ namespace ATP.AnimationPathTools {
                         (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 ShortJumpForwardKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Short jump backward.
             Utilities.HandleModShortcut(
@@ -795,51 +795,64 @@ namespace ATP.AnimationPathTools {
                         (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 ShortJumpBackwardKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Long jump forward.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio += LongJumpValue,
                 LongJumpForwardKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Long jump backward.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio -= LongJumpValue,
                 LongJumpBackwardKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Jump to next node.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestForwardNodeTimestamp(),
                 JumpToNextNodeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
                 () => Script.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp(),
                 JumpToPreviousNodeKey,
-                ModKeyPressed);
+                Event.current.alt);
 
             // Jump to start.
             Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio = 0,
                 JumpToStartKey,
-                ModKeyPressed);
+                //ModKeyPressed);
+                Event.current.alt);
 
             // Jump to end.
             Utilities.HandleModShortcut(
                 () => Script.AnimationTimeRatio = 1,
                 JumpToEndKey,
-                ModKeyPressed);
+                //ModKeyPressed);
+                Event.current.alt);
 
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
                 HandlePlayPause,
                 PlayPauseKey,
-                ModKeyPressed);
+                Event.current.alt);
+
+            //if (Event.current.type == EventType.keyDown
+            //    //&& Event.current.keyCode == KeyCode.C) {
+            //    && Event.current.keyCode == KeyCode.C
+            //    //&& Event.current.modifiers == EventModifiers.Alt) {
+            //    && Event.current.alt) {
+
+            //    //Event.current.Use();
+            //    //Debug.Log(Event.current.modifiers);
+            //    Debug.Log("Alt + C");
+            //}
         }
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {

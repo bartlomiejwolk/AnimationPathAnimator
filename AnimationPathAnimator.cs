@@ -192,7 +192,7 @@ namespace ATP.AnimationPathTools {
             set { wrapMode = value; }
         }
 
-        private Transform Transform { get; set; }
+        public Transform Transform { get; set; }
 
         #endregion PROPERTIES
 
@@ -368,24 +368,6 @@ namespace ATP.AnimationPathTools {
             }
 
             return localPosition;
-        }
-
-        public Vector3 GetGlobalNodePosition(int nodeIndex) {
-            var localNodePosition = PathData.GetNodePosition(nodeIndex);
-            var globalNodePosition = Transform.TransformPoint(localNodePosition);
-
-            return globalNodePosition;
-        }
-
-        public Vector3[] GetGlobalNodePositions() {
-            var nodePositions = PathData.GetNodePositions();
-
-            for (var i = 0; i < nodePositions.Length; i++) {
-                // Convert each position to global coordinate.
-                nodePositions[i] = Transform.TransformPoint(nodePositions[i]);
-            }
-
-            return nodePositions;
         }
 
         public void StartEaseTimeCoroutine() {

@@ -776,6 +776,26 @@ namespace ATP.AnimationPathTools {
             }        
         }
 
+        public Vector3 GetGlobalNodePosition(int nodeIndex,
+            Transform transform) {
+
+            var localNodePosition = GetNodePosition(nodeIndex);
+            var globalNodePosition = transform.TransformPoint(localNodePosition);
+
+            return globalNodePosition;
+        }
+
+        public Vector3[] GetGlobalNodePositions(Transform transform) {
+            var nodePositions = GetNodePositions();
+
+            for (var i = 0; i < nodePositions.Length; i++) {
+                // Convert each position to global coordinate.
+                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
+            }
+
+            return nodePositions;
+        }
+
     }
 
 }

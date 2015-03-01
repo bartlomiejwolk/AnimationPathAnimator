@@ -460,7 +460,8 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            var nodePositions = Script.GetGlobalNodePositions();
+            var nodePositions = Script.PathData.GetGlobalNodePositions(
+                Script.Transform);
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -481,7 +482,7 @@ namespace ATP.AnimationPathTools {
 
             // Get path node positions.
             var nodePositions =
-                Script.GetGlobalNodePositions();
+                Script.PathData.GetGlobalNodePositions(Script.Transform);
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -500,7 +501,8 @@ namespace ATP.AnimationPathTools {
             if (Script.HandleMode != AnimatorHandleMode.Ease) return;
 
             // Get node global positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
+                Script.Transform);
 
             AnimatorHandles.DrawNodeLabels(
                 nodeGlobalPositions,
@@ -517,7 +519,8 @@ namespace ATP.AnimationPathTools {
                 AnimationPathBuilderHandleMode.MoveAll) return;
 
             // Node global positions.
-            var nodes = Script.GetGlobalNodePositions();
+            var nodes = Script.PathData.GetGlobalNodePositions(
+                Script.Transform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -559,7 +562,8 @@ namespace ATP.AnimationPathTools {
                 AnimationPathBuilderHandleMode.MoveSingle) return;
 
             // Node global positions.
-            var nodes = Script.GetGlobalNodePositions();
+            var nodes = Script.PathData.GetGlobalNodePositions(
+                Script.Transform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -607,7 +611,7 @@ namespace ATP.AnimationPathTools {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = Script.GetGlobalNodePositions();
+            var nodes = Script.PathData.GetGlobalNodePositions(Script.Transform);
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -671,7 +675,7 @@ namespace ATP.AnimationPathTools {
 
             // Get path node positions.
             var nodePositions =
-                Script.GetGlobalNodePositions();
+                Script.PathData.GetGlobalNodePositions(Script.Transform);
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -686,7 +690,8 @@ namespace ATP.AnimationPathTools {
             if (Script.HandleMode != AnimatorHandleMode.Tilting) return;
 
             // Get node global positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
+                Script.Transform);
 
             AnimatorHandles.DrawNodeLabels(
                 nodeGlobalPositions,

@@ -76,12 +76,6 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private float forwardPointOffset = 0.05f;
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
         [SerializeField]
         private AnimatorHandleMode handleMode =
             AnimatorHandleMode.None;
@@ -141,18 +135,6 @@ namespace ATP.AnimationPathTools {
 
         public virtual float FloatPrecision {
             get { return 0.001f; }
-        }
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
-        }
-
-        public virtual int GizmoCurveSamplingFrequency {
-            get { return 20; }
         }
 
         public AnimatorHandleMode HandleMode {
@@ -275,7 +257,7 @@ namespace ATP.AnimationPathTools {
                     PathData, transform, AnimationTimeRatio);
             }
 
-            HandleDrawingGizmoCurve();
+            AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -326,31 +308,7 @@ namespace ATP.AnimationPathTools {
 
         // Move to AnimatorGizmos class.
         private void HandleDrawingGizmoCurve() {
-            // Return if path asset is not assigned.
-            if (pathData == null) return;
-
-            // Get transform component.
-            //var transform = GetComponent<Transform>();
-
-            // Get path points.
-            var points = pathData.SampleAnimationPathForPoints(
-                GizmoCurveSamplingFrequency);
-
-            // Convert points to global coordinates.
-            var globalPoints = new Vector3[points.Count];
-            for (var i = 0; i < points.Count; i++) {
-                globalPoints[i] = Transform.TransformPoint(points[i]);
-            }
-
-            // There must be at least 3 points to draw a line.
-            if (points.Count < 3) return;
-
-            Gizmos.color = gizmoCurveColor;
-
-            // Draw curve.
-            for (var i = 0; i < points.Count - 1; i++) {
-                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
-            }
+            
         }
 
         private void HandleUpdateAnimatedGORotation() {

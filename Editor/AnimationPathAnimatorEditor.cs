@@ -244,7 +244,7 @@ namespace ATP.AnimationPathTools {
                 serializedObject.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
-            gizmoCurveColor = serializedObject.FindProperty("gizmoCurveColor");
+            gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
         }
@@ -290,11 +290,11 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawAdvanceSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-                serializedObject.Update();
+                GizmoDrawer.Update();
                 EditorGUILayout.PropertyField(
                     gizmoCurveColor,
                     new GUIContent("Curve Color", ""));
-                serializedObject.ApplyModifiedProperties();
+                GizmoDrawer.ApplyModifiedProperties();
 
                 GizmoDrawer.Update();
                 EditorGUILayout.PropertyField(rotationCurveColor);
@@ -551,6 +551,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Move to AnimatorHandles class.
         private void HandleDrawingMoveSinglePositionsHandles(
             Action<int, Vector3, Vector3> callback) {
 
@@ -565,7 +566,7 @@ namespace ATP.AnimationPathTools {
 
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = script.GizmoCurveColor;
+                var handleColor = Script.AnimatorGizmos.GizmoCurveColor;
 
                 // Draw position handle.
                 var newPos = AnimatorHandles.DrawPositionHandle(

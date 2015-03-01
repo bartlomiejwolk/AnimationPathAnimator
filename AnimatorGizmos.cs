@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
-
 namespace ATP.AnimationPathTools {
 
     public class AnimatorGizmos : ScriptableObject {
@@ -11,6 +9,12 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
         private Color rotationCurveColor = Color.gray;
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
 
         #endregion
 
@@ -45,9 +49,48 @@ namespace ATP.AnimationPathTools {
             get { return 20; }
         }
 
+        public virtual int GizmoCurveSamplingFrequency {
+            get { return 20; }
+        }
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
         #endregion
 
         #region METHODS
+        public void DrawAnimationCurve(PathData pathData,
+                    Transform transform) {
+
+            // Return if path asset is not assigned.
+            if (pathData == null) return;
+
+            // Get path points.
+            var points = pathData.SampleAnimationPathForPoints(
+                GizmoCurveSamplingFrequency);
+
+            // Convert points to global coordinates.
+            var globalPoints = new Vector3[points.Count];
+            for (var i = 0; i < points.Count; i++) {
+                globalPoints[i] = transform.TransformPoint(points[i]);
+            }
+
+            // There must be at least 3 points to draw a line.
+            if (points.Count < 3) return;
+
+            Gizmos.color = gizmoCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+            }
+        }
+
 
         public void DrawCurrentRotationPointGizmo(PathData pathData,
             Transform transform, float animationTimeRatio) {

@@ -184,39 +184,6 @@ namespace ATP.AnimationPathTools {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
-
-        private void DrawRotationModeControls() {
-            // Remember current RotationMode.
-            var prevRotationMode = Script.RotationMode;
-            // Draw RotationMode dropdown.
-            Script.RotationMode =
-                (AnimatorRotationMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Rotation Mode",
-                        ""),
-                    Script.RotationMode);
-
-            // If value changed, update animated GO in the scene.
-            if (Script.RotationMode != prevRotationMode) {
-                Script.UpdateAnimatedGO();
-            }
-
-            serializedObject.Update();
-
-            if (Script.RotationMode == AnimatorRotationMode.Forward) {
-                EditorGUILayout.PropertyField(forwardPointOffset);
-            }
-
-            EditorGUILayout.PropertyField(
-                rotationSpeed,
-                new GUIContent(
-                    "Rotation Speed",
-                    "Controls how much time (in seconds) it'll take the " +
-                    "animated object to finish rotation towards followed target."));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
@@ -265,10 +232,9 @@ namespace ATP.AnimationPathTools {
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                 FocusType.Passive));
 
-            //UpdateModifierKey();
             HandleShortcuts();
+            Script.UpdateWrapMode();
 
-            HandleWrapModeDropdown();
             HandleDrawingEaseHandles();
             HandleDrawingRotationHandle();
             HandleDrawingTiltingHandles();
@@ -282,6 +248,51 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+        private void DrawRotationModeControls() {
+            // Remember current RotationMode.
+            var prevRotationMode = Script.RotationMode;
+            // Draw RotationMode dropdown.
+            Script.RotationMode =
+                (AnimatorRotationMode)EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Rotation Mode",
+                        ""),
+                    Script.RotationMode);
+
+            // If value changed, update animated GO in the scene.
+            if (Script.RotationMode != prevRotationMode) {
+                Script.UpdateAnimatedGO();
+            }
+
+            serializedObject.Update();
+
+            if (Script.RotationMode == AnimatorRotationMode.Forward) {
+                EditorGUILayout.PropertyField(forwardPointOffset);
+            }
+
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawResetPathInspectorButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Path",
+                    "Reset path to default."))) {
+                // Allow undo this operation.
+                Undo.RecordObject(Script.PathData, "Change path");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetPath();
+            }
+        }
+
 
         protected virtual void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();
@@ -787,10 +798,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void HandleWrapModeDropdown() {
-            Script.UpdateWrapMode();
-        }
-
         #endregion
 
         #region CALLBACK HANDLERS
@@ -944,20 +951,6 @@ namespace ATP.AnimationPathTools {
 
             return rotationValue;
         }
-
-        private void DrawResetPathInspectorButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Path",
-                    "Reset path to default."))) {
-                // Allow undo this operation.
-                Undo.RecordObject(Script.PathData, "Change path");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetPath();
-            }
-        }
-
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = Script.PathData.GetPathTimestamps();
 

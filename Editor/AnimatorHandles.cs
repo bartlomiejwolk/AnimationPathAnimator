@@ -328,6 +328,53 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public void DrawMoveAllPositionHandles(
+            AnimationPathAnimator animator,
+            Action<int, Vector3, Vector3> callback) {
+
+            if (animator.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveAll) return;
+
+            // Node global positions.
+            var nodes = animator.PathData.GetGlobalNodePositions(
+                animator.Transform);
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = MoveAllModeColor;
+
+                // Draw position handle.
+                var newPos = DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
+
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition =
+                        animator.Transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition =
+                        animator.Transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
+            }
+        }
+
+        public virtual Color MoveAllModeColor {
+            get { return Color.red; }
+        }
+
     }
 
 }

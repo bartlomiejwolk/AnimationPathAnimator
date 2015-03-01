@@ -137,6 +137,11 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.G; }
         }
 
+        public AnimationPathAnimator Script1 {
+            set { script = value; }
+            get { return script; }
+        }
+
         #endregion
 
         #region UNITY MESSAGES
@@ -512,48 +517,6 @@ namespace ATP.AnimationPathTools {
 
         // TODO Use this method also for HandleDrawingMoveSinglePositionHandes().
         // .. Use parameters for differences.
-        private void HandleDrawingMoveAllPositionHandles(
-            Action<int, Vector3, Vector3> callback) {
-
-            if (script.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveAll) return;
-
-            // Node global positions.
-            var nodes = Script.PathData.GetGlobalNodePositions(
-                Script.Transform);
-
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = MoveAllModeColor;
-
-                // Draw position handle.
-                var newPos = AnimatorHandles.DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
-                }
-            }
-        }
-
 
         /// <summary>
         ///     Handle drawing movement handles.
@@ -563,8 +526,8 @@ namespace ATP.AnimationPathTools {
                 Script,
                 DrawPositionHandlesCallbackHandler);
 
-            // TODO Move to AnimatorHandles class.
-            HandleDrawingMoveAllPositionHandles(
+            AnimatorHandles.DrawMoveAllPositionHandles(
+                Script,
                 DrawPositionHandlesCallbackHandler);
         }
 

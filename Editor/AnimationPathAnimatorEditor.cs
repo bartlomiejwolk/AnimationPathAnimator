@@ -198,19 +198,6 @@ namespace ATP.AnimationPathTools {
             DrawAdvanceSettingsControls();
         }
 
-        private void DrawCreatePathAssetButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "New Asset",
-                    ""))) {
-
-                var asset = ScriptableObjectUtility.CreateAsset<PathData>();
-
-                // Assign asset as the current path.
-                Script.PathData = asset;
-            }
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
@@ -220,11 +207,16 @@ namespace ATP.AnimationPathTools {
         private void OnEnable() {
             // Get target script reference.
             script = (AnimationPathAnimator) target;
+            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
+
+            AnimatorHandles = new AnimatorHandles();
 
             SceneTool.RememberCurrentTool();
 
-            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
-            AnimatorHandles = new AnimatorHandles();
+            InitializeSerializedProperties();
+        }
+
+        private void InitializeSerializedProperties() {
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animationTimeRatio =
@@ -277,6 +269,20 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+
+        private void DrawCreatePathAssetButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "New Asset",
+                    ""))) {
+
+                // Create new path asset.
+                var asset = ScriptableObjectUtility.CreateAsset<PathData>();
+
+                // Assign asset as the current path.
+                Script.PathData = asset;
+            }
+        }
 
         protected virtual void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();

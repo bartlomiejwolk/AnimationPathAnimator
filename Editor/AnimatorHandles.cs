@@ -6,6 +6,7 @@ namespace ATP.AnimationPathTools {
 
     public class AnimatorHandles {
 
+        // TODO Convert to properties.
         private const float FloatPrecision = 0.001f;
         private const int AddButtonH = 25;
         private const int AddButtonV = 10;

@@ -27,6 +27,7 @@ namespace ATP.AnimationPathTools {
         public AnimationPathAnimator Script {
             get { return script; }
         }
+
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
@@ -93,12 +94,12 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.RightAlt; }
         }
 
-        public virtual KeyCode MoveAllModeKey {
-            get { return KeyCode.P; }
-        }
-
         public virtual Color MoveAllModeColor {
             get { return Color.red; }
+        }
+
+        public virtual KeyCode MoveAllModeKey {
+            get { return KeyCode.P; }
         }
 
         //public virtual KeyCode MoveSingleModeKey {
@@ -121,6 +122,11 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.I; }
         }
 
+        public AnimationPathAnimator Script1 {
+            set { script = value; }
+            get { return script; }
+        }
+
         public KeyCode ShortJumpBackwardKey {
             get { return KeyCode.J; }
         }
@@ -135,11 +141,6 @@ namespace ATP.AnimationPathTools {
 
         public virtual KeyCode UpdateAllKey {
             get { return KeyCode.G; }
-        }
-
-        public AnimationPathAnimator Script1 {
-            set { script = value; }
-            get { return script; }
         }
 
         #endregion
@@ -184,6 +185,7 @@ namespace ATP.AnimationPathTools {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
@@ -200,7 +202,8 @@ namespace ATP.AnimationPathTools {
             AnimatorHandles = new AnimatorHandles();
 
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
-            animationTimeRatio = serializedObject.FindProperty("animationTimeRatio");
+            animationTimeRatio =
+                serializedObject.FindProperty("animationTimeRatio");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             forwardPointOffset =
@@ -229,8 +232,9 @@ namespace ATP.AnimationPathTools {
             if (Script.PathData == null) return;
 
             // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
-                FocusType.Passive));
+            HandleUtility.AddDefaultControl(
+                GUIUtility.GetControlID(
+                    FocusType.Passive));
 
             HandleShortcuts();
             Script.UpdateWrapMode();
@@ -248,51 +252,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
-        private void DrawRotationModeControls() {
-            // Remember current RotationMode.
-            var prevRotationMode = Script.RotationMode;
-            // Draw RotationMode dropdown.
-            Script.RotationMode =
-                (AnimatorRotationMode)EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Rotation Mode",
-                        ""),
-                    Script.RotationMode);
-
-            // If value changed, update animated GO in the scene.
-            if (Script.RotationMode != prevRotationMode) {
-                Script.UpdateAnimatedGO();
-            }
-
-            serializedObject.Update();
-
-            if (Script.RotationMode == AnimatorRotationMode.Forward) {
-                EditorGUILayout.PropertyField(forwardPointOffset);
-            }
-
-            EditorGUILayout.PropertyField(
-                rotationSpeed,
-                new GUIContent(
-                    "Rotation Speed",
-                    "Controls how much time (in seconds) it'll take the " +
-                    "animated object to finish rotation towards followed target."));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawResetPathInspectorButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Path",
-                    "Reset path to default."))) {
-                // Allow undo this operation.
-                Undo.RecordObject(Script.PathData, "Change path");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetPath();
-            }
-        }
-
 
         protected virtual void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();
@@ -468,6 +427,51 @@ namespace ATP.AnimationPathTools {
                     "Wrap Mode",
                     ""),
                 Script.WrapMode);
+        }
+
+        private void DrawResetPathInspectorButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Path",
+                    "Reset path to default."))) {
+                // Allow undo this operation.
+                Undo.RecordObject(Script.PathData, "Change path");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetPath();
+            }
+        }
+
+        private void DrawRotationModeControls() {
+            // Remember current RotationMode.
+            var prevRotationMode = Script.RotationMode;
+            // Draw RotationMode dropdown.
+            Script.RotationMode =
+                (AnimatorRotationMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Rotation Mode",
+                        ""),
+                    Script.RotationMode);
+
+            // If value changed, update animated GO in the scene.
+            if (Script.RotationMode != prevRotationMode) {
+                Script.UpdateAnimatedGO();
+            }
+
+            serializedObject.Update();
+
+            if (Script.RotationMode == AnimatorRotationMode.Forward) {
+                EditorGUILayout.PropertyField(forwardPointOffset);
+            }
+
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion
@@ -782,6 +786,7 @@ namespace ATP.AnimationPathTools {
             //    Debug.Log("Alt + C");
             //}
         }
+
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
@@ -879,37 +884,6 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
-        private void ToggleMovementMode() {
-            if (Script.MovementMode ==
-                AnimationPathBuilderHandleMode.MoveSingle) {
-
-                Script.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
-            }
-            else {
-                Script.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
-            }
-        }
-
-
-        /// <summary>
-        ///     Checked if modifier key is pressed and remember it in a class
-        ///     field.
-        /// </summary>
-        //public void UpdateModifierKey() {
-        //    // Check if modifier key is currently pressed.
-        //    if (Event.current.type == EventType.keyDown
-        //        && Event.current.keyCode == ModKey) {
-
-        //        // Remember key state.
-        //        ModKeyPressed = true;
-        //    }
-        //    // If modifier key was released..
-        //    if (Event.current.type == EventType.keyUp
-        //        && Event.current.keyCode == ModKey) {
-
-        //        ModKeyPressed = false;
-        //    }
-        //}
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
@@ -927,6 +901,9 @@ namespace ATP.AnimationPathTools {
             Script.PathData.CreateNodeAtTime(newKeyTime);
         }
 
+        //        ModKeyPressed = false;
+        //    }
+        //}
         private void CheckForSkinAsset() {
 
             if (Script.Skin == null) {
@@ -937,6 +914,12 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        //        // Remember key state.
+        //        ModKeyPressed = true;
+        //    }
+        //    // If modifier key was released..
+        //    if (Event.current.type == EventType.keyUp
+        //        && Event.current.keyCode == ModKey) {
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
@@ -946,11 +929,20 @@ namespace ATP.AnimationPathTools {
             return easeValueInDegrees;
         }
 
+        /// <summary>
+        ///     Checked if modifier key is pressed and remember it in a class
+        ///     field.
+        /// </summary>
+        //public void UpdateModifierKey() {
+        //    // Check if modifier key is currently pressed.
+        //    if (Event.current.type == EventType.keyDown
+        //        && Event.current.keyCode == ModKey) {
         private float ConvertTiltToDegrees(int nodeIndex) {
             var rotationValue = Script.PathData.GetNodeTiltValue(nodeIndex);
 
             return rotationValue;
         }
+
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = Script.PathData.GetPathTimestamps();
 
@@ -974,6 +966,17 @@ namespace ATP.AnimationPathTools {
 
             // Return timestamp of the last node.
             return 1.0f;
+        }
+
+        private void ToggleMovementMode() {
+            if (Script.MovementMode ==
+                AnimationPathBuilderHandleMode.MoveSingle) {
+
+                Script.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
+            }
+            else {
+                Script.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
+            }
         }
 
         #endregion PRIVATE METHODS

@@ -215,32 +215,6 @@ namespace ATP.AnimationPathTools {
 
             InitializeSerializedProperties();
         }
-
-        private void InitializeSerializedProperties() {
-
-            rotationSpeed = serializedObject.FindProperty("rotationSpeed");
-            animationTimeRatio =
-                serializedObject.FindProperty("animationTimeRatio");
-            animatedGO = serializedObject.FindProperty("animatedGO");
-            targetGO = serializedObject.FindProperty("targetGO");
-            forwardPointOffset =
-                serializedObject.FindProperty("forwardPointOffset");
-            advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
-            maxAnimationSpeed =
-                serializedObject.FindProperty("MaxAnimationSpeed");
-            positionLerpSpeed =
-                serializedObject.FindProperty("positionLerpSpeed");
-            pathData = serializedObject.FindProperty("pathData");
-            enableControlsInPlayMode =
-                serializedObject.FindProperty("EnableControlsInPlayMode");
-            skin = serializedObject.FindProperty("skin");
-            rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
-            gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
-            exportSamplingFrequency =
-                serializedObject.FindProperty("exportSamplingFrequency");
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
             CheckForSkinAsset();
@@ -269,7 +243,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
-
         private void DrawCreatePathAssetButton() {
             if (GUILayout.Button(
                 new GUIContent(
@@ -917,6 +890,31 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
+        private void InitializeSerializedProperties() {
+
+            rotationSpeed = serializedObject.FindProperty("rotationSpeed");
+            animationTimeRatio =
+                serializedObject.FindProperty("animationTimeRatio");
+            animatedGO = serializedObject.FindProperty("animatedGO");
+            targetGO = serializedObject.FindProperty("targetGO");
+            forwardPointOffset =
+                serializedObject.FindProperty("forwardPointOffset");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+            maxAnimationSpeed =
+                serializedObject.FindProperty("MaxAnimationSpeed");
+            positionLerpSpeed =
+                serializedObject.FindProperty("positionLerpSpeed");
+            pathData = serializedObject.FindProperty("pathData");
+            enableControlsInPlayMode =
+                serializedObject.FindProperty("EnableControlsInPlayMode");
+            skin = serializedObject.FindProperty("skin");
+            rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
+            gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
+            exportSamplingFrequency =
+                serializedObject.FindProperty("exportSamplingFrequency");
+        }
+
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.

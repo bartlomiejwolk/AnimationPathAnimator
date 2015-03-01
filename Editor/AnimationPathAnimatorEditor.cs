@@ -295,13 +295,15 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawAnimationTimeControl() {
-            serializedObject.Update();
-            animationTimeRatio.floatValue = EditorGUILayout.FloatField(
+            Undo.RecordObject(target, "Update AnimationTimeRatio");
+
+            Script.AnimationTimeRatio = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
-                animationTimeRatio.floatValue);
-            serializedObject.ApplyModifiedProperties();
+                Script.AnimationTimeRatio,
+                0,
+                1);
         }
 
         protected virtual void DrawAutoPlayControl() {

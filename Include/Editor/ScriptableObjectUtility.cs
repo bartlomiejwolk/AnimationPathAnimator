@@ -29,7 +29,7 @@ namespace Assets.Extensions.animationpathtools.Include.Editor {
 			
 			AssetDatabase.SaveAssets ();
 			AssetDatabase.Refresh();
-			EditorUtility.FocusProjectWindow ();
+            //EditorUtility.FocusProjectWindow ();
 			Selection.activeObject = asset;
 
 		    return asset;

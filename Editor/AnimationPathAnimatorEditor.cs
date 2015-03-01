@@ -297,13 +297,20 @@ namespace ATP.AnimationPathTools {
         protected virtual void DrawAnimationTimeControl() {
             Undo.RecordObject(target, "Update AnimationTimeRatio");
 
-            Script.AnimationTimeRatio = EditorGUILayout.Slider(
+            var newTimeRatio = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
                 Script.AnimationTimeRatio,
                 0,
                 1);
+
+            // Update AnimationTimeRatio only when value was changed.
+            if (Math.Abs(newTimeRatio - Script.AnimationTimeRatio)
+                > FloatPrecision) {
+
+                Script.AnimationTimeRatio = newTimeRatio;
+            }
         }
 
         protected virtual void DrawAutoPlayControl() {

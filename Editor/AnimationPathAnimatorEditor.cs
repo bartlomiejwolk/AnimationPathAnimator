@@ -554,57 +554,16 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        // TODO Move to AnimatorHandles class.
-        private void HandleDrawingMoveSinglePositionsHandles(
-            Action<int, Vector3, Vector3> callback) {
-
-            if (script.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveSingle) return;
-
-            // Node global positions.
-            var nodes = Script.PathData.GetGlobalNodePositions(
-                Script.Transform);
-
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = Script.AnimatorGizmos.GizmoCurveColor;
-
-                // Draw position handle.
-                var newPos = AnimatorHandles.DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // TODO Make it into callback.
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition =
-                        Script.transform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
-                }
-            }
-        }
 
         /// <summary>
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
-            HandleDrawingMoveSinglePositionsHandles(
+            AnimatorHandles.DrawMoveSinglePositionsHandles(
+                Script,
                 DrawPositionHandlesCallbackHandler);
 
+            // TODO Move to AnimatorHandles class.
             HandleDrawingMoveAllPositionHandles(
                 DrawPositionHandlesCallbackHandler);
         }

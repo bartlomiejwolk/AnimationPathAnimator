@@ -744,34 +744,28 @@ namespace ATP.AnimationPathTools {
 
         private void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.Ease,
                 EaseModeKey,
-                Event.current.alt);
+                () => Script.HandleMode = AnimatorHandleMode.Ease);
 
             Utilities.HandleUnmodShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.Rotation,
                 RotationModeKey,
-                Event.current.alt);
+                () => Script.HandleMode = AnimatorHandleMode.Rotation);
 
             Utilities.HandleUnmodShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.Tilting,
                 TiltingModeKey,
-                Event.current.alt);
+                () => Script.HandleMode = AnimatorHandleMode.Tilting);
 
             Utilities.HandleUnmodShortcut(
-                () => Script.HandleMode = AnimatorHandleMode.None,
                 NoneModeKey,
-                Event.current.alt);
+                () => Script.HandleMode = AnimatorHandleMode.None);
 
             Utilities.HandleUnmodShortcut(
-                () => Script.UpdateAllMode = !Script.UpdateAllMode,
                 UpdateAllKey,
-                Event.current.alt);
+                () => Script.UpdateAllMode = !Script.UpdateAllMode);
 
             Utilities.HandleUnmodShortcut(
-                ToggleMovementMode,
                 MoveAllModeKey,
-                Event.current.alt);
+                ToggleMovementMode);
 
             // Short jump forward.
             Utilities.HandleModShortcut(
@@ -799,29 +793,25 @@ namespace ATP.AnimationPathTools {
 
             // Long jump forward.
             Utilities.HandleUnmodShortcut(
-                () => Script.AnimationTimeRatio += LongJumpValue,
                 LongJumpForwardKey,
-                Event.current.alt);
+                () => Script.AnimationTimeRatio += LongJumpValue);
 
             // Long jump backward.
             Utilities.HandleUnmodShortcut(
-                () => Script.AnimationTimeRatio -= LongJumpValue,
                 LongJumpBackwardKey,
-                Event.current.alt);
+                () => Script.AnimationTimeRatio -= LongJumpValue);
 
             // Jump to next node.
             Utilities.HandleUnmodShortcut(
-                () => Script.AnimationTimeRatio =
-                    GetNearestForwardNodeTimestamp(),
                 JumpToNextNodeKey,
-                Event.current.alt);
+                () => Script.AnimationTimeRatio =
+                    GetNearestForwardNodeTimestamp());
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
-                () => Script.AnimationTimeRatio =
-                    GetNearestBackwardNodeTimestamp(),
                 JumpToPreviousNodeKey,
-                Event.current.alt);
+                () => Script.AnimationTimeRatio =
+                    GetNearestBackwardNodeTimestamp());
 
             // Jump to start.
             Utilities.HandleModShortcut(
@@ -839,9 +829,8 @@ namespace ATP.AnimationPathTools {
 
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
-                HandlePlayPause,
                 PlayPauseKey,
-                Event.current.alt);
+                HandlePlayPause);
 
             //if (Event.current.type == EventType.keyDown
             //    //&& Event.current.keyCode == KeyCode.C) {

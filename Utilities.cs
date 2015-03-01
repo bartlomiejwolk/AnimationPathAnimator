@@ -65,13 +65,15 @@ namespace ATP.AnimationPathTools {
         }
 
         public static void HandleUnmodShortcut(
-            Action callback,
+            //KeyCode key,
             KeyCode key,
-            bool modKeyPressed) {
+            Action callback) {
+            //bool modKeyPressed) {
             
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode == key
-                && !modKeyPressed) {
+                //&& !modKeyPressed) {
+                && Event.current.modifiers == EventModifiers.None) {
 
                 callback();
             }

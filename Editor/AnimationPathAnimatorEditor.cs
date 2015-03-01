@@ -149,12 +149,16 @@ namespace ATP.AnimationPathTools {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
+            DrawPathDataAssetControl();
+
             EditorGUILayout.BeginHorizontal();
 
-            DrawPathDataAssetControl();
             DrawCreatePathAssetButton();
+            DrawResetPathInspectorButton();
 
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
 
             DrawAnimatedGOControl();
             DrawTargetGOControl();
@@ -172,7 +176,6 @@ namespace ATP.AnimationPathTools {
 
             DrawTangentModeDropdown();
             DrawMovementModeDropdown();
-            DrawResetPathInspectorButton();
 
             EditorGUILayout.Space();
 

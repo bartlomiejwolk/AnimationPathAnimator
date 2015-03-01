@@ -107,12 +107,37 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        public void DrawRotationPointGizmo(Vector3 rotationPointPosition) {
-            //Draw rotation point gizmo.
-            Gizmos.DrawIcon(
-                rotationPointPosition,
+        public void DrawRotationPointGizmos(PathData pathData,
+            Transform transform, float animationTimeRatio) {
+
+            var localRotPointPositions =
+                pathData.GetRotationPointPositions();
+
+            var globalRotPointPositions =
+                new Vector3[localRotPointPositions.Length];
+
+            for (int i = 0; i < localRotPointPositions.Length; i++) {
+                globalRotPointPositions[i] =
+                    transform.TransformPoint(localRotPointPositions[i]);
+            }
+
+            // Path node timestamps.
+            var nodeTimestamps = pathData.GetPathTimestamps();
+
+            for (var i = 0; i < globalRotPointPositions.Length; i++) {
+                // Return if current animation time is the same as any node
+                // time.
+                if (Math.Abs(nodeTimestamps[i] - animationTimeRatio) <
+                    FloatPrecision) {
+                    continue;
+                }
+
+                //Draw rotation point gizmo.
+                Gizmos.DrawIcon(
+                globalRotPointPositions[i],
                 RotationPointGizmoIcon,
                 false);
+            }
         }
 
         public void DrawTargetIcon(Vector3 targetPosition) {

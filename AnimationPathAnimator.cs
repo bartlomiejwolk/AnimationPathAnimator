@@ -271,7 +271,8 @@ namespace ATP.AnimationPathTools {
                 AnimatorGizmos.DrawCurrentRotationPointGizmo(PathData,
                     transform, animationTimeRatio);
 
-                DrawRotationPointGizmos();
+                AnimatorGizmos.DrawRotationPointGizmos(
+                    PathData, transform, AnimationTimeRatio);
             }
 
             HandleDrawingGizmoCurve();
@@ -480,24 +481,6 @@ namespace ATP.AnimationPathTools {
             }
             else {
                 animatedGO.position = globalPositionAtTimestamp;
-            }
-        }
-
-        private void DrawRotationPointGizmos() {
-            var rotationPointPositions = GetGlobalRotationPointPositions();
-
-            // Path node timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            for (var i = 0; i < rotationPointPositions.Length; i++) {
-                // Return if current animation time is the same as any node
-                // time.
-                if (Math.Abs(nodeTimestamps[i] - AnimationTimeRatio) <
-                    FloatPrecision) {
-                    continue;
-                }
-
-                AnimatorGizmos.DrawRotationPointGizmo(rotationPointPositions[i]);
             }
         }
 

@@ -318,6 +318,7 @@ namespace ATP.AnimationPathTools {
         }
 
         private void PathData_PathReset(object sender, EventArgs e) {
+            AnimationTimeRatio = 0;
             UpdateAnimation();
         }
 

@@ -900,7 +900,14 @@ namespace ATP.AnimationPathTools {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            Script.PathData.UpdateNodeTilting(keyIndex, newValue);
+            if (Script.UpdateAllMode) {
+                var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
+                var delta = newValue - oldValue;
+                Script.PathData.UpdateTiltingValues(delta);
+            }
+            else {
+                Script.PathData.UpdateNodeTilting(keyIndex, newValue);
+            }
         }
 
         #endregion CALLBACK HANDLERS

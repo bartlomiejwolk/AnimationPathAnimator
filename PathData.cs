@@ -567,6 +567,7 @@ namespace ATP.AnimationPathTools {
             SmoothCurve(EaseCurve);
         }
 
+        // TODO Merge this and UpdateTiltingValues.
         public void UpdateEaseValues(float delta) {
             for (var i = 0; i < EaseCurve.length; i++) {
                 // Copy key.
@@ -585,6 +586,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Rename to UpdateTiltingValue.
         public void UpdateNodeTilting(int keyIndex, float newValue) {
             // Copy keyframe.
             var keyframeCopy = TiltingCurve.keys[keyIndex];
@@ -809,6 +811,32 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion METHODS
+
+        public void UpdateTiltingValues(float delta) {
+            for (var i = 0; i < TiltingCurve.length; i++) {
+                // Copy key.
+                var keyCopy = TiltingCurve[i];
+                // Update key value.
+                keyCopy.value += delta;
+
+                // Remove old key.
+                TiltingCurve.RemoveKey(i);
+
+                // Add key.
+                TiltingCurve.AddKey(keyCopy);
+
+                // Smooth all tangents.
+                SmoothCurve(TiltingCurve);
+            }
+        }
+
+        public float GetTiltingValueAtIndex(int keyIndex) {
+            var timestamp = GetEaseTimestampAtIndex(keyIndex);
+            var value = GetTiltingValueAtTime(timestamp);
+
+            return value;
+        }
+
     }
 
 }

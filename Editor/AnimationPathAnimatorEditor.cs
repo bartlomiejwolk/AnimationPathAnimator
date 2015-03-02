@@ -194,23 +194,38 @@ namespace ATP.AnimationPathTools {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
-            script = (AnimationPathAnimator)target;
-            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
+            script = (AnimationPathAnimator) target;
 
-            AnimatorHandles = new AnimatorHandles();
+            InstantiateCompositeClasses();
+            InitializeSerializedProperties();
 
             SceneTool.RememberCurrentTool();
 
-            InitializeSerializedProperties();
+            FocusOnSceneView();
+        }
+
+        private static void FocusOnSceneView() {
+
+            if (SceneView.sceneViews.Count > 0) {
+                var sceneView = (SceneView) SceneView.sceneViews[0];
+                sceneView.Focus();
+            }
+        }
+
+        private void InstantiateCompositeClasses() {
+            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
+            AnimatorHandles = new AnimatorHandles();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
             CheckForSkinAsset();
@@ -239,6 +254,7 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+
         protected virtual void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
@@ -329,7 +345,7 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawHandleModeDropdown() {
-            Script.HandleMode = (AnimatorHandleMode)EditorGUILayout.EnumPopup(
+            Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
@@ -345,7 +361,7 @@ namespace ATP.AnimationPathTools {
 
         protected virtual void DrawMovementModeDropdown() {
             Script.MovementMode =
-                (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(
+                (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
                         ""),
@@ -423,6 +439,7 @@ namespace ATP.AnimationPathTools {
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
         }
+
         protected virtual void DrawSkinSelectionControl() {
 
             serializedObject.Update();
@@ -435,7 +452,7 @@ namespace ATP.AnimationPathTools {
             var prevTangentMode = Script.TangentMode;
             // Draw tangent mode dropdown.
             Script.TangentMode =
-                (AnimationPathBuilderTangentMode)EditorGUILayout.EnumPopup(
+                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         ""),
@@ -463,7 +480,7 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawWrapModeDropdown() {
-            Script.WrapMode = (WrapMode)EditorGUILayout.EnumPopup(
+            Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),
@@ -483,6 +500,7 @@ namespace ATP.AnimationPathTools {
                 Script.PathData = asset;
             }
         }
+
         private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(
                 new GUIContent(
@@ -924,6 +942,7 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
+
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
@@ -1008,7 +1027,6 @@ namespace ATP.AnimationPathTools {
         }
 
         private void InitializeSerializedProperties() {
-
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animationTimeRatio =
                 serializedObject.FindProperty("animationTimeRatio");
@@ -1031,6 +1049,7 @@ namespace ATP.AnimationPathTools {
             exportSamplingFrequency =
                 serializedObject.FindProperty("exportSamplingFrequency");
         }
+
         private void ToggleMovementMode() {
             if (Script.MovementMode ==
                 AnimationPathBuilderHandleMode.MoveSingle) {

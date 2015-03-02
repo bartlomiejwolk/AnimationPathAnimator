@@ -292,9 +292,8 @@ namespace ATP.AnimationPathTools {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
             if (Application.isPlaying && autoPlay) {
-                IsPlaying = true;
-
                 StartEaseTimeCoroutine();
+                IsPlaying = true;
             }
         }
 

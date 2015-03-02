@@ -4,6 +4,12 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
+    /// <summary>
+    /// Class responsible for drawing all on scene handles.
+    /// </summary>
+    /// <remarks>It has same access to the AnimationPathAnimator class as
+    /// the AnimationPathAnimatorEditor does.</remarks>
+    // TODO Pass ref. to AnimationPathAnimator in the constructor.
     public class AnimatorHandles {
 
         // TODO Convert to properties.
@@ -22,6 +28,13 @@ namespace ATP.AnimationPathTools {
         }
 
         public virtual int EaseValueLabelOffsetY {
+            get { return -25; }
+        }
+        public virtual int UpdateAllLabelOffsetX {
+            get { return 0; }
+        }
+
+        public virtual int UpdateAllLabelOffsetY {
             get { return -25; }
         }
         public virtual float RotationHandleSize {
@@ -246,8 +259,7 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
-        // TODO Rename to DrawArcHandleLabels().
-        public void DrawNodeLabels(
+        public void DrawArcHandleLabels(
             Vector3[] nodeGlobalPositions,
             Func<int, float> calculateValueCallback,
             GUIStyle style) {
@@ -264,8 +276,29 @@ namespace ATP.AnimationPathTools {
                 DrawNodeLabel(
                     nodeGlobalPositions[i],
                     arcValue,
+                    // TODO These should be taken from method args.
                     EaseValueLabelOffsetX,
                     EaseValueLabelOffsetY,
+                    style);
+            }
+        }
+
+        public void DrawNodeLabels(
+            AnimationPathAnimator animator,
+            string text,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
+
+            var nodeGlobalPositions = animator.PathData.GetGlobalNodePositions(
+                animator.Transform);
+
+            foreach (var nodePos in nodeGlobalPositions) {
+                DrawNodeLabel(
+                    nodePos,
+                    text,
+                    offsetX,
+                    offsetY,
                     style);
             }
         }
@@ -423,6 +456,22 @@ namespace ATP.AnimationPathTools {
 
                 callback(currentAnimationTime, newPointLocalPosition);
             }
+        }
+
+        public void DrawUpdateAllLabels(
+            AnimationPathAnimator animator,
+            GUIStyle style) {
+
+            DrawNodeLabels(
+                animator,
+                UpdateAllLabelText,
+                UpdateAllLabelOffsetX,
+                UpdateAllLabelOffsetY,
+                style);
+        }
+
+        protected virtual string UpdateAllLabelText {
+            get { return "A"; }
         }
 
     }

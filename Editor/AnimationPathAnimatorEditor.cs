@@ -154,7 +154,17 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleDrawingUpdateAllModeLabel() {
-            
+            if (!Script.UpdateAllMode) return;
+
+            //AnimatorHandles.DrawNodeLabels(
+            //    Script,
+            //    "A",
+            //    upall
+            //    Script.Skin.GetStyle("UpdateAllLabel"));
+
+            AnimatorHandles.DrawUpdateAllLabels(
+                Script,
+                Script.Skin.GetStyle("UpdateAllLabel"));
         }
 
         #endregion UNITY MESSAGES
@@ -548,7 +558,7 @@ namespace ATP.AnimationPathTools {
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
                 Script.Transform);
 
-            AnimatorHandles.DrawNodeLabels(
+            AnimatorHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
                 ConvertEaseToDegrees,
                 Script.Skin.GetStyle("EaseValueLabel"));
@@ -623,7 +633,7 @@ namespace ATP.AnimationPathTools {
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
                 Script.Transform);
 
-            AnimatorHandles.DrawNodeLabels(
+            AnimatorHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
                 ConvertTiltToDegrees,
                 Script.Skin.GetStyle("TiltValueLabel"));

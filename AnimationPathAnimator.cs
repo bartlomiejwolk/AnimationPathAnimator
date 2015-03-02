@@ -247,7 +247,7 @@ namespace ATP.AnimationPathTools {
             }
 
             if (rotationMode == AnimatorRotationMode.Forward) {
-                var globalForwardPointPosition = GetForwardPoint(true);
+                var globalForwardPointPosition = GetGlobalForwardPoint();
                 AnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
             }
 
@@ -374,7 +374,7 @@ namespace ATP.AnimationPathTools {
             }
             // Look forward.
             else if (rotationMode == AnimatorRotationMode.Forward) {
-                var globalForwardPoint = GetForwardPoint(true);
+                var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
             }
@@ -467,7 +467,7 @@ namespace ATP.AnimationPathTools {
 
             switch (rotationMode) {
                 case AnimatorRotationMode.Forward:
-                    var globalForwardPoint = GetForwardPoint(true);
+                    var globalForwardPoint = GetGlobalForwardPoint();
 
                     RotateObjectWithLookAt(globalForwardPoint);
 
@@ -504,19 +504,21 @@ namespace ATP.AnimationPathTools {
         }
 
         // TODO Remove the globalPosition arg. and create separate method.
-        private Vector3 GetForwardPoint(bool globalPosition) {
+        private Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = forwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = AnimationTimeRatio + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
 
-            // Return global position.
-            if (globalPosition) {
-                return Transform.TransformPoint(localPosition);
-            }
-
             return localPosition;
+        }
+
+        private Vector3 GetGlobalForwardPoint() {
+            var localForwardPoint = GetForwardPoint();
+            var globalForwardPoint = Transform.TransformPoint(localForwardPoint);
+
+            return globalForwardPoint;
         }
 
         private Vector3[] GetGlobalRotationPointPositions() {

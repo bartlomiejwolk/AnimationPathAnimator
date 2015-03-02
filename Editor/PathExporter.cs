@@ -20,6 +20,7 @@ namespace ATP.AnimationPathTools {
             if (GUILayout.Button("Export")) {
                 ExportNodes(
                     script.PathData,
+                    script.Transform,
                     script.ExportSamplingFrequency);
             }
 
@@ -34,28 +35,22 @@ namespace ATP.AnimationPathTools {
         /// </param>
         private static void ExportNodes(
             PathData pathData,
+            Transform transform,
             int exportSampling) {
+
+            // exportSampling cannot be less than 0.
+            if (exportSampling < 0) return;
 
             // Points to be exported.
             List<Vector3> points;
 
-            // If exportSampling arg. is zero then export one transform for
-            // each Animation Path node.
-            if (exportSampling == 0) {
-                // Initialize points.
-                points = new List<Vector3>(pathData.NodesNo);
+            // Initialize points array with nodes to export.
+            points = pathData.SampleAnimationPathForPoints(
+                exportSampling);
 
-                // For each node in the path..
-                for (var i = 0; i < pathData.NodesNo; i++) {
-                    // Get it 3d position.
-                    points[i] = pathData.GetNodePosition(i);
-                }
-            }
-            // exportSampling not zero..
-            else {
-                // Initialize points array with nodes to export.
-                points = pathData.SampleAnimationPathForPoints(
-                    exportSampling);
+            // Convert points to global coordinates.
+            for (int i = 0; i < points.Count; i++) {
+                points[i] = transform.TransformPoint(points[i]);
             }
 
             // Create parent GO.
@@ -64,13 +59,13 @@ namespace ATP.AnimationPathTools {
             // Create child GOs.
             for (var i = 0; i < points.Count; i++) {
                 // Create child GO.
-                var node = new GameObject("Node " + i);
+                var nodeGo = new GameObject("Node " + i);
 
                 // Move node under the path GO.
-                node.transform.parent = exportedPath.transform;
+                nodeGo.transform.parent = exportedPath.transform;
 
                 // Assign node local position.
-                node.transform.localPosition = points[i];
+                nodeGo.transform.localPosition = points[i];
             }
         }
 

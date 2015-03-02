@@ -114,11 +114,6 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.I; }
         }
 
-        public AnimationPathAnimator Script1 {
-            set { script = value; }
-            get { return script; }
-        }
-
         public KeyCode ShortJumpBackwardKey {
             get { return KeyCode.J; }
         }

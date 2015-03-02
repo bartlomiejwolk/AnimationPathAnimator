@@ -252,7 +252,7 @@ namespace ATP.AnimationPathTools {
             skin = Resources.Load("GUISkin/default") as GUISkin;
 
             // Initialize animatedGO field.
-            if (animatedGO == null && Camera.main.transform != null) {
+            if (animatedGO == null && Camera.main != null) {
                 animatedGO = Camera.main.transform;
             }
 

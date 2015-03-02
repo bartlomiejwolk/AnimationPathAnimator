@@ -211,12 +211,6 @@ namespace ATP.AnimationPathTools {
                 sceneView.Focus();
             }
         }
-
-        private void InstantiateCompositeClasses() {
-            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
-            AnimatorHandles = new AnimatorHandles();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
@@ -938,6 +932,11 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
+        private void InstantiateCompositeClasses() {
+            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
+            AnimatorHandles = new AnimatorHandles();
+        }
+
 
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.

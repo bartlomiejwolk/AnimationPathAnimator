@@ -787,11 +787,7 @@ namespace ATP.AnimationPathTools {
 
         public Vector3[] GetGlobalNodePositions(Transform transform) {
             var nodePositions = GetNodePositions();
-
-            for (var i = 0; i < nodePositions.Length; i++) {
-                // Convert each position to global coordinate.
-                nodePositions[i] = transform.TransformPoint(nodePositions[i]);
-            }
+            Utilities.ConvertToGlobalCoordinates(ref nodePositions, transform);
 
             return nodePositions;
         }

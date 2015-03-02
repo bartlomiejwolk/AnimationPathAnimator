@@ -536,14 +536,15 @@ namespace ATP.AnimationPathTools {
         }
 
         private Vector3[] GetGlobalRotationPointPositions() {
-            var localPositions = PathData.GetRotationPointPositions();
-            var globalPositions = new Vector3[localPositions.Length];
+            // Get rotation point positions.
+            var rotPointPositions = PathData.GetRotationPointPositions();
 
-            for (var i = 0; i < localPositions.Length; i++) {
-                globalPositions[i] = Transform.TransformPoint(localPositions[i]);
-            }
+            // Convert positions to global coordinates.
+            Utilities.ConvertToGlobalCoordinates(
+                ref rotPointPositions,
+                Transform);
 
-            return globalPositions;
+            return rotPointPositions;
         }
 
         #endregion METHODS

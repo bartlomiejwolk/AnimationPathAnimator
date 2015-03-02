@@ -194,31 +194,10 @@ namespace ATP.AnimationPathTools {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
-
-        protected virtual void DrawForwardPointOffsetField() {
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(forwardPointOffset);
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawRotationSpeedField() {
-            EditorGUILayout.PropertyField(
-                rotationSpeed,
-                new GUIContent(
-                    "Rotation Speed",
-                    "Controls how much time (in seconds) it'll take the " +
-                    "animated object to finish rotation towards followed target."));
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void OnDisable() {
-            SceneTool.RestoreTool();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
-            script = (AnimationPathAnimator) target;
+            script = (AnimationPathAnimator)target;
             GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
 
             AnimatorHandles = new AnimatorHandles();
@@ -226,6 +205,11 @@ namespace ATP.AnimationPathTools {
             SceneTool.RememberCurrentTool();
 
             InitializeSerializedProperties();
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        private void OnDisable() {
+            SceneTool.RestoreTool();
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
@@ -255,20 +239,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
-        private void DrawCreatePathAssetButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "New Asset",
-                    ""))) {
-
-                // Create new path asset.
-                var asset = ScriptableObjectUtility.CreateAsset<PathData>();
-
-                // Assign asset as the current path.
-                Script.PathData = asset;
-            }
-        }
-
         protected virtual void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
@@ -296,36 +266,6 @@ namespace ATP.AnimationPathTools {
 
                 DrawSkinSelectionControl();
             }
-        }
-
-        protected virtual void DrawSkinSelectionControl() {
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(skin);
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawMaxAnimationSpeedField() {
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(maxAnimationSpeed);
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawRotationCurveColorPicker() {
-
-            GizmoDrawer.Update();
-            EditorGUILayout.PropertyField(rotationCurveColor);
-            GizmoDrawer.ApplyModifiedProperties();
-        }
-
-        protected virtual void DrawGizmoCurveColorPicker() {
-
-            GizmoDrawer.Update();
-            EditorGUILayout.PropertyField(
-                gizmoCurveColor,
-                new GUIContent("Curve Color", ""));
-            GizmoDrawer.ApplyModifiedProperties();
         }
 
         protected virtual void DrawAnimatedGOControl() {
@@ -373,17 +313,39 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
+        protected virtual void DrawForwardPointOffsetField() {
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(forwardPointOffset);
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawGizmoCurveColorPicker() {
+
+            GizmoDrawer.Update();
+            EditorGUILayout.PropertyField(
+                gizmoCurveColor,
+                new GUIContent("Curve Color", ""));
+            GizmoDrawer.ApplyModifiedProperties();
+        }
+
         protected virtual void DrawHandleModeDropdown() {
-            Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+            Script.HandleMode = (AnimatorHandleMode)EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
                 Script.HandleMode);
         }
 
+        protected virtual void DrawMaxAnimationSpeedField() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(maxAnimationSpeed);
+            serializedObject.ApplyModifiedProperties();
+        }
+
         protected virtual void DrawMovementModeDropdown() {
             Script.MovementMode =
-                (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
+                (AnimationPathBuilderHandleMode)EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
                         ""),
@@ -446,12 +408,34 @@ namespace ATP.AnimationPathTools {
             serializedObject.ApplyModifiedProperties();
         }
 
+        protected virtual void DrawRotationCurveColorPicker() {
+
+            GizmoDrawer.Update();
+            EditorGUILayout.PropertyField(rotationCurveColor);
+            GizmoDrawer.ApplyModifiedProperties();
+        }
+
+        protected virtual void DrawRotationSpeedField() {
+            EditorGUILayout.PropertyField(
+                rotationSpeed,
+                new GUIContent(
+                    "Rotation Speed",
+                    "Controls how much time (in seconds) it'll take the " +
+                    "animated object to finish rotation towards followed target."));
+        }
+        protected virtual void DrawSkinSelectionControl() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(skin);
+            serializedObject.ApplyModifiedProperties();
+        }
+
         protected virtual void DrawTangentModeDropdown() {
             // Remember current tangent mode.
             var prevTangentMode = Script.TangentMode;
             // Draw tangent mode dropdown.
             Script.TangentMode =
-                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
+                (AnimationPathBuilderTangentMode)EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         ""),
@@ -479,13 +463,26 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual void DrawWrapModeDropdown() {
-            Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+            Script.WrapMode = (WrapMode)EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),
                 Script.WrapMode);
         }
 
+        private void DrawCreatePathAssetButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "New Asset",
+                    ""))) {
+
+                // Create new path asset.
+                var asset = ScriptableObjectUtility.CreateAsset<PathData>();
+
+                // Assign asset as the current path.
+                Script.PathData = asset;
+            }
+        }
         private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(
                 new GUIContent(
@@ -927,32 +924,6 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
-        private void InitializeSerializedProperties() {
-
-            rotationSpeed = serializedObject.FindProperty("rotationSpeed");
-            animationTimeRatio =
-                serializedObject.FindProperty("animationTimeRatio");
-            animatedGO = serializedObject.FindProperty("animatedGO");
-            targetGO = serializedObject.FindProperty("targetGO");
-            forwardPointOffset =
-                serializedObject.FindProperty("forwardPointOffset");
-            advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
-            maxAnimationSpeed =
-                serializedObject.FindProperty("MaxAnimationSpeed");
-            positionLerpSpeed =
-                serializedObject.FindProperty("positionLerpSpeed");
-            pathData = serializedObject.FindProperty("pathData");
-            enableControlsInPlayMode =
-                serializedObject.FindProperty("EnableControlsInPlayMode");
-            skin = serializedObject.FindProperty("skin");
-            rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
-            gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
-            exportSamplingFrequency =
-                serializedObject.FindProperty("exportSamplingFrequency");
-        }
-
-
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
@@ -1036,6 +1007,30 @@ namespace ATP.AnimationPathTools {
             return 1.0f;
         }
 
+        private void InitializeSerializedProperties() {
+
+            rotationSpeed = serializedObject.FindProperty("rotationSpeed");
+            animationTimeRatio =
+                serializedObject.FindProperty("animationTimeRatio");
+            animatedGO = serializedObject.FindProperty("animatedGO");
+            targetGO = serializedObject.FindProperty("targetGO");
+            forwardPointOffset =
+                serializedObject.FindProperty("forwardPointOffset");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+            maxAnimationSpeed =
+                serializedObject.FindProperty("MaxAnimationSpeed");
+            positionLerpSpeed =
+                serializedObject.FindProperty("positionLerpSpeed");
+            pathData = serializedObject.FindProperty("pathData");
+            enableControlsInPlayMode =
+                serializedObject.FindProperty("EnableControlsInPlayMode");
+            skin = serializedObject.FindProperty("skin");
+            rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
+            gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
+            exportSamplingFrequency =
+                serializedObject.FindProperty("exportSamplingFrequency");
+        }
         private void ToggleMovementMode() {
             if (Script.MovementMode ==
                 AnimationPathBuilderHandleMode.MoveSingle) {

@@ -689,6 +689,91 @@ namespace ATP.AnimationPathTools {
 
         #endregion DRAWING HANDLERS
 
+        #region CALLBACK HANDLERS
+
+        protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Change path");
+
+            // Add a new node.
+            AddNodeBetween(nodeIndex);
+
+            Script.PathData.DistributeTimestamps();
+
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.PathData.SmoothAllNodeTangents();
+            }
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
+            }
+        }
+
+        protected virtual void DrawPositionHandlesCallbackHandler(
+            int movedNodeIndex,
+            Vector3 position,
+            Vector3 moveDelta) {
+
+            Undo.RecordObject(Script.PathData, "Change path");
+
+            HandleMoveAllMovementMode(moveDelta);
+            HandleMoveSingleHandleMove(movedNodeIndex, position);
+        }
+
+        protected virtual void DrawRemoveNodeButtonsCallbackHandles(
+            int nodeIndex) {
+            Undo.RecordObject(Script.PathData, "Change path");
+
+            Script.PathData.RemoveNode(nodeIndex);
+            Script.PathData.DistributeTimestamps();
+
+            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+                Script.PathData.SmoothAllNodeTangents();
+            }
+            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+                Script.PathData.SetNodesLinear();
+            }
+        }
+
+        private void DrawEaseHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+            Undo.RecordObject(Script.PathData, "Ease curve changed.");
+
+            if (Script.UpdateAllMode) {
+                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
+                var delta = newValue - oldValue;
+                Script.PathData.UpdateEaseValues(delta);
+            }
+            else {
+                Script.PathData.UpdateEaseValue(keyIndex, newValue);
+            }
+        }
+
+        private void DrawRotationHandlesCallbackHandler(
+            float timestamp,
+            Vector3 newPosition) {
+            Undo.RecordObject(Script.PathData, "Rotation path changed.");
+
+            Script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
+        }
+
+        private void DrawTiltingHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+            Undo.RecordObject(Script.PathData, "Tilting curve changed.");
+
+            if (Script.UpdateAllMode) {
+                var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
+                var delta = newValue - oldValue;
+                Script.PathData.UpdateTiltingValues(delta);
+            }
+            else {
+                Script.PathData.UpdateNodeTilting(keyIndex, newValue);
+            }
+        }
+
+        #endregion CALLBACK HANDLERS
+
         #region OTHER HANDLERS
 
         public void HandlePlayPause() {
@@ -855,92 +940,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion
-
-        #region CALLBACK HANDLERS
-
-        protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
-            // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Change path");
-
-            // Add a new node.
-            AddNodeBetween(nodeIndex);
-
-            Script.PathData.DistributeTimestamps();
-
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
-            }
-            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
-            }
-        }
-
-        protected virtual void DrawPositionHandlesCallbackHandler(
-            int movedNodeIndex,
-            Vector3 position,
-            Vector3 moveDelta) {
-
-            Undo.RecordObject(Script.PathData, "Change path");
-
-            HandleMoveAllMovementMode(moveDelta);
-            HandleMoveSingleHandleMove(movedNodeIndex, position);
-        }
-
-        protected virtual void DrawRemoveNodeButtonsCallbackHandles(
-            int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Change path");
-
-            Script.PathData.RemoveNode(nodeIndex);
-            Script.PathData.DistributeTimestamps();
-
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
-            }
-            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
-            }
-        }
-
-        private void DrawEaseHandlesCallbackHandler(
-            int keyIndex,
-            float newValue) {
-            Undo.RecordObject(Script.PathData, "Ease curve changed.");
-
-            if (Script.UpdateAllMode) {
-                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
-                var delta = newValue - oldValue;
-                Script.PathData.UpdateEaseValues(delta);
-            }
-            else {
-                Script.PathData.UpdateEaseValue(keyIndex, newValue);
-            }
-        }
-
-        private void DrawRotationHandlesCallbackHandler(
-            float timestamp,
-            Vector3 newPosition) {
-            Undo.RecordObject(Script.PathData, "Rotation path changed.");
-
-            Script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
-        }
-
-        private void DrawTiltingHandlesCallbackHandler(
-            int keyIndex,
-            float newValue) {
-            Undo.RecordObject(Script.PathData, "Tilting curve changed.");
-
-            if (Script.UpdateAllMode) {
-                var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
-                var delta = newValue - oldValue;
-                Script.PathData.UpdateTiltingValues(delta);
-            }
-            else {
-                Script.PathData.UpdateNodeTilting(keyIndex, newValue);
-            }
-        }
-
-        #endregion CALLBACK HANDLERS
-
         #region METHODS
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.

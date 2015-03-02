@@ -7,7 +7,6 @@ namespace ATP.AnimationPathTools {
     public class AnimatorHandles {
 
         // TODO Convert to properties.
-        private const float FloatPrecision = 0.001f;
         private const int AddButtonH = 25;
         private const int AddButtonV = 10;
         private const int RemoveButtonH = 44;
@@ -151,7 +150,8 @@ namespace ATP.AnimationPathTools {
 
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < FloatPrecision ? 10f : arcValue;
+            arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
+                ? 10f : arcValue;
 
             var scaleHandleSize = handleSize * ScaleHandleSize;
             var newArcValue = Handles.ScaleValueHandle(
@@ -167,7 +167,9 @@ namespace ATP.AnimationPathTools {
             if (newArcValue > maxDegrees) newArcValue = maxDegrees;
             if (newArcValue < minDegrees) newArcValue = minDegrees;
 
-            if (Math.Abs(newArcValue - arcValue) > FloatPrecision) {
+            if (Math.Abs(newArcValue - arcValue)
+                > GlobalConstants.FloatPrecision) {
+
                 callback(newArcValue / arcValueMultiplier);
             }
         }

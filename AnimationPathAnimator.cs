@@ -113,13 +113,14 @@ namespace ATP.AnimationPathTools {
             set {
                 animationTimeRatio = value;
 
-                // Limit value in edit mode.
+                // Limit animationTimeRatio in edit mode.
                 if (!Application.isPlaying && animationTimeRatio > 1) {
                     animationTimeRatio = 1;
                 }
 
-                // Update animation.
+                // Update animation with keys in play mode.
                 if (Application.isPlaying) UpdateAnimatedGO();
+
                 if (!Application.isPlaying) Animate();
             }
         }

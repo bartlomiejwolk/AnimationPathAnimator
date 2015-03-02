@@ -305,28 +305,12 @@ namespace ATP.AnimationPathTools {
 
         #endregion
 
-        #region METHODS
+        #region ANIMATION
 
         public void Animate() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
             AnimateAnimatedGOTilting();
-        }
-
-        // TODO Remove the globalPosition arg. and create separate method.
-        public Vector3 GetForwardPoint(bool globalPosition) {
-            // Timestamp offset of the forward point.
-            var forwardPointDelta = forwardPointOffset;
-            // Forward point timestamp.
-            var forwardPointTimestamp = AnimationTimeRatio + forwardPointDelta;
-            var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
-
-            // Return global position.
-            if (globalPosition) {
-                return Transform.TransformPoint(localPosition);
-            }
-
-            return localPosition;
         }
 
         public void StartEaseTimeCoroutine() {
@@ -356,10 +340,6 @@ namespace ATP.AnimationPathTools {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
             AnimateAnimatedGOTilting();
-        }
-
-        public void UpdateWrapMode() {
-            PathData.SetWrapMode(wrapMode);
         }
 
         private void AnimateAnimatedGOPosition() {
@@ -432,17 +412,6 @@ namespace ATP.AnimationPathTools {
 
                 yield return null;
             }
-        }
-
-        private Vector3[] GetGlobalRotationPointPositions() {
-            var localPositions = PathData.GetRotationPointPositions();
-            var globalPositions = new Vector3[localPositions.Length];
-
-            for (var i = 0; i < localPositions.Length; i++) {
-                globalPositions[i] = Transform.TransformPoint(localPositions[i]);
-            }
-
-            return globalPositions;
         }
 
         private void RotateObjectWithAnimationCurves() {
@@ -524,6 +493,41 @@ namespace ATP.AnimationPathTools {
                     RotateObjectWithLookAt(targetGO.position);
                     break;
             }
+        }
+
+        #endregion
+
+        #region HELPER METHODS
+
+        public void UpdateWrapMode() {
+            PathData.SetWrapMode(wrapMode);
+        }
+
+        // TODO Remove the globalPosition arg. and create separate method.
+        private Vector3 GetForwardPoint(bool globalPosition) {
+            // Timestamp offset of the forward point.
+            var forwardPointDelta = forwardPointOffset;
+            // Forward point timestamp.
+            var forwardPointTimestamp = AnimationTimeRatio + forwardPointDelta;
+            var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
+
+            // Return global position.
+            if (globalPosition) {
+                return Transform.TransformPoint(localPosition);
+            }
+
+            return localPosition;
+        }
+
+        private Vector3[] GetGlobalRotationPointPositions() {
+            var localPositions = PathData.GetRotationPointPositions();
+            var globalPositions = new Vector3[localPositions.Length];
+
+            for (var i = 0; i < localPositions.Length; i++) {
+                globalPositions[i] = Transform.TransformPoint(localPositions[i]);
+            }
+
+            return globalPositions;
         }
 
         #endregion METHODS

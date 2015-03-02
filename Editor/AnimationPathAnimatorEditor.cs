@@ -199,6 +199,8 @@ namespace ATP.AnimationPathTools {
 
                 // Reset curves to its default state.
                 Script.PathData.ResetRotationPath();
+
+                SceneView.RepaintAll();
             }
         }
 

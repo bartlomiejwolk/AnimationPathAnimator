@@ -347,7 +347,6 @@ namespace ATP.AnimationPathTools {
 
         public void StopEaseTimeCoroutine() {
             StopCoroutine("EaseTime");
-            Debug.Log("stop");
 
             // Reset animation.
             IsPlaying = false;
@@ -363,6 +362,8 @@ namespace ATP.AnimationPathTools {
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
         public void UpdateAnimation() {
+            if (PathData == null) return;
+
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
             AnimateAnimatedGOTilting();
@@ -522,6 +523,8 @@ namespace ATP.AnimationPathTools {
         }
 
         public void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
             // Pause animation.
             if (IsPlaying && !Pause) {
                 Pause = true;

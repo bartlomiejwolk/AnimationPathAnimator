@@ -172,6 +172,8 @@ namespace ATP.AnimationPathTools {
                                 "Reset Rotation",
                                 ""))) {
 
+                if (Script.PathData == null) return;
+
                 Undo.RecordObject(Script.PathData, "Reset rotatio path.");
 
                 // Reset curves to its default state.
@@ -366,6 +368,7 @@ namespace ATP.AnimationPathTools {
         protected virtual void DrawTangentModeDropdown() {
             // Remember current tangent mode.
             var prevTangentMode = Script.TangentMode;
+
             // Draw tangent mode dropdown.
             Script.TangentMode =
                 (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
@@ -373,9 +376,11 @@ namespace ATP.AnimationPathTools {
                         "Tangent Mode",
                         ""),
                     Script.TangentMode);
+
             // Update gizmo curve is tangent mode changed.
-            if (Script.TangentMode != prevTangentMode)
+            if (Script.TangentMode != prevTangentMode) {
                 HandleTangentModeChange();
+            }
         }
 
         protected virtual void DrawTargetGOControl() {
@@ -422,6 +427,9 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Reset Asset",
                     "Reset path to default."))) {
+
+                if (Script.PathData == null) return;
+
                 // Allow undo this operation.
                 Undo.RecordObject(Script.PathData, "Change path");
 
@@ -458,6 +466,8 @@ namespace ATP.AnimationPathTools {
                     "Reset Ease",
                     ""))) {
 
+                if (Script.PathData == null) return;
+
                 Undo.RecordObject(Script.PathData, "Reset ease curve.");
 
                 // Reset curves to its default state.
@@ -472,6 +482,8 @@ namespace ATP.AnimationPathTools {
                 new GUIContent(
                     "Reset Tilting",
                     ""))) {
+
+                if (Script.PathData == null) return;
 
                 Undo.RecordObject(Script.PathData, "Reset tilting curve.");
 
@@ -735,6 +747,8 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleTangentModeChange() {
+            if (Script.PathData == null) return;
+
             // Update path node tangents.
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();

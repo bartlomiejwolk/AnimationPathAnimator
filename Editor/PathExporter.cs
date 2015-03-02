@@ -6,26 +6,23 @@ namespace ATP.AnimationPathTools {
 
     public static class PathExporter {
 
-        public static void DrawExportControls(
-            SerializedObject serializedObject,
-            SerializedProperty exportSamplingFrequency,
-            PathData pathData) {
-
+        public static void DrawExportControls(AnimationPathAnimator script) {
             EditorGUILayout.BeginHorizontal();
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(exportSamplingFrequency,
+
+            script.ExportSamplingFrequency = EditorGUILayout.IntField(
                 new GUIContent(
                     "Export Sampling",
                     "Number of points to export for 1 m of the curve. " +
                     "If set to 0, it'll export only keys defined in " +
-                    "the curve."));
-            serializedObject.ApplyModifiedProperties();
+                    "the curve."),
+                script.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {
                 ExportNodes(
-                    pathData,
-                    exportSamplingFrequency.intValue);
+                    script.PathData,
+                    script.ExportSamplingFrequency);
             }
+
             EditorGUILayout.EndHorizontal();
         }
 

@@ -19,6 +19,15 @@ namespace ATP.AnimationPathTools {
 
         [SerializeField]
         private bool advancedSettingsFoldout;
+        [SerializeField]
+        private AnimatorGizmos animatorGizmos;
+        [SerializeField]
+        private PathData pathData;
+        /// <summary>
+        ///     Transform that the <c>animatedGO</c> will be looking at.
+        /// </summary>
+        [SerializeField]
+        private Transform targetGO;
 
         /// <summary>
         ///     Transform to be animated.
@@ -26,31 +35,16 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Transform animatedGO;
 
+        [SerializeField]
+        private GUISkin skin;
+
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animationTimeRatio;
 
         [SerializeField]
-        private AnimatorGizmos animatorGizmos;
-
-        [SerializeField]
         private int exportSamplingFrequency = 5;
 
-        [SerializeField]
-        private PathData pathData;
-
-        [SerializeField]
-        private GUISkin skin;
-
-        /// <summary>
-        ///     Transform that the <c>animatedGO</c> will be looking at.
-        /// </summary>
-        [SerializeField]
-        private Transform targetGO;
-
-        #endregion FIELDS
-
-        #region OPTIONS
 
         [SerializeField]
         protected bool EnableControlsInPlayMode = true;
@@ -198,6 +192,22 @@ namespace ATP.AnimationPathTools {
             set { wrapMode = value; }
         }
 
+        public int ExportSamplingFrequency {
+            get { return exportSamplingFrequency; }
+            set {
+                // Limit value.
+                if (value < 1) {
+                    exportSamplingFrequency = 1;
+                }
+                else if (value > 100) {
+                    exportSamplingFrequency = 100;
+                }
+                else {
+                    exportSamplingFrequency = value;
+                }
+            }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -276,6 +286,10 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
+        }
+
+        private void OnValidate() {
+            
         }
 
         #endregion UNITY MESSAGES

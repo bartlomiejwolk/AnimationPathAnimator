@@ -37,7 +37,6 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty animatedGO;
         private SerializedProperty animationTimeRatio;
         private SerializedProperty enableControlsInPlayMode;
-        private SerializedProperty exportSamplingFrequency;
         private SerializedProperty forwardPointOffset;
         private SerializedProperty gizmoCurveColor;
         private SerializedProperty maxAnimationSpeed;
@@ -184,10 +183,7 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.Space();
 
-            PathExporter.DrawExportControls(
-                serializedObject,
-                exportSamplingFrequency,
-                Script.PathData);
+            PathExporter.DrawExportControls(Script);
 
             EditorGUILayout.Space();
 
@@ -1046,8 +1042,6 @@ namespace ATP.AnimationPathTools {
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
             gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
-            exportSamplingFrequency =
-                serializedObject.FindProperty("exportSamplingFrequency");
         }
 
         private void ToggleMovementMode() {

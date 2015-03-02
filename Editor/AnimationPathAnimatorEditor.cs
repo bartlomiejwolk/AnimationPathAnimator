@@ -146,10 +146,15 @@ namespace ATP.AnimationPathTools {
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
+            HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
             HandleDrawingRotationHandle();
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
+        }
+
+        private void HandleDrawingUpdateAllModeLabel() {
+            
         }
 
         #endregion UNITY MESSAGES

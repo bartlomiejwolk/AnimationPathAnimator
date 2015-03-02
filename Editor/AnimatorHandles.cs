@@ -219,7 +219,6 @@ namespace ATP.AnimationPathTools {
         }
 
         public void DrawNodeLabel(
-            int nodeIndex,
             Vector3 nodeGlobalPosition,
             string value,
             int offsetX,
@@ -247,6 +246,7 @@ namespace ATP.AnimationPathTools {
             Handles.EndGUI();
         }
 
+        // TODO Rename to DrawArcHandleLabels().
         public void DrawNodeLabels(
             Vector3[] nodeGlobalPositions,
             Func<int, float> calculateValueCallback,
@@ -262,7 +262,6 @@ namespace ATP.AnimationPathTools {
                     calculateValueCallback(i));
 
                 DrawNodeLabel(
-                    i,
                     nodeGlobalPositions[i],
                     arcValue,
                     EaseValueLabelOffsetX,

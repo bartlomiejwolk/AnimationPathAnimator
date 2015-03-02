@@ -29,6 +29,12 @@ namespace ATP.AnimationPathTools {
             get { return script; }
         }
 
+        public AnimatorShortcuts AnimatorShortcuts {
+            get { return animatorShortcuts; }
+            set { animatorShortcuts = value; }
+        }
+
+        private AnimatorShortcuts animatorShortcuts;
         #endregion FIELDS
 
         #region SERIALIZED PROPERTIES
@@ -47,88 +53,10 @@ namespace ATP.AnimationPathTools {
         private SerializedProperty skin;
         private SerializedProperty targetGO;
 
+
         #endregion SERIALIZED PROPERTIES
 
         #region CONSTANT VALUES
-
-        public virtual KeyCode EaseModeKey {
-            get { return KeyCode.U; }
-        }
-
-        /// <summary>
-        ///     Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public virtual KeyCode JumpToEndKey {
-            get { return KeyCode.L; }
-        }
-
-        public virtual KeyCode JumpToNextNodeKey {
-            get { return KeyCode.L; }
-        }
-
-        public virtual KeyCode JumpToPreviousNodeKey {
-            get { return KeyCode.H; }
-        }
-
-        public virtual KeyCode JumpToStartKey {
-            get { return KeyCode.H; }
-        }
-
-        public KeyCode LongJumpBackwardKey {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode LongJumpForwardKey {
-            get { return KeyCode.K; }
-        }
-
-        public virtual float LongJumpValue {
-            get { return 0.01f; }
-        }
-
-        public virtual KeyCode ModKey {
-            get { return KeyCode.RightAlt; }
-        }
-
-        public virtual Color MoveAllModeColor {
-            get { return Color.red; }
-        }
-
-        public virtual KeyCode MoveAllModeKey {
-            get { return KeyCode.P; }
-        }
-
-        //public virtual KeyCode MoveSingleModeKey {
-        //    get { return KeyCode.Y; }
-        //}
-
-        public virtual KeyCode NoneModeKey {
-            get { return KeyCode.Y; }
-        }
-
-        public virtual KeyCode PlayPauseKey {
-            get { return KeyCode.Space; }
-        }
-
-        public virtual KeyCode RotationModeKey {
-            get { return KeyCode.I; }
-        }
-
-        public KeyCode ShortJumpBackwardKey {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode ShortJumpForwardKey {
-            get { return KeyCode.K; }
-        }
-
-        public virtual KeyCode TiltingModeKey {
-            get { return KeyCode.O; }
-        }
-
-        public virtual KeyCode UpdateAllKey {
-            get { return KeyCode.G; }
-        }
 
         #endregion
 
@@ -260,7 +188,8 @@ namespace ATP.AnimationPathTools {
                 GUIUtility.GetControlID(
                     FocusType.Passive));
 
-            HandleShortcuts();
+            AnimatorShortcuts.HandleShortcuts();
+
             Script.UpdateWrapMode();
 
             HandleDrawingEaseHandles();
@@ -420,7 +349,7 @@ namespace ATP.AnimationPathTools {
                     playPauseBtnText,
                     ""))) {
 
-                HandlePlayPause();
+                Script.HandlePlayPause();
             }
 
             // Draw Stop button.
@@ -778,25 +707,6 @@ namespace ATP.AnimationPathTools {
 
         #region OTHER HANDLERS
 
-        public void HandlePlayPause() {
-            // Pause animation.
-            if (Script.IsPlaying && !Script.Pause) {
-                Script.Pause = true;
-                //Script.IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (Script.IsPlaying && Script.Pause) {
-                Script.Pause = false;
-                //Script.IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                Script.IsPlaying = true;
-                // Start animation.
-                Script.StartEaseTimeCoroutine();
-            }
-        }
-
         private void HandleLinearTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
@@ -821,108 +731,6 @@ namespace ATP.AnimationPathTools {
                 HandleSmoothTangentMode();
                 HandleLinearTangentMode();
             }
-        }
-
-        private void HandleShortcuts() {
-            Utilities.HandleUnmodShortcut(
-                EaseModeKey,
-                () => Script.HandleMode = AnimatorHandleMode.Ease);
-
-            Utilities.HandleUnmodShortcut(
-                RotationModeKey,
-                () => Script.HandleMode = AnimatorHandleMode.Rotation);
-
-            Utilities.HandleUnmodShortcut(
-                TiltingModeKey,
-                () => Script.HandleMode = AnimatorHandleMode.Tilting);
-
-            Utilities.HandleUnmodShortcut(
-                NoneModeKey,
-                () => Script.HandleMode = AnimatorHandleMode.None);
-
-            Utilities.HandleUnmodShortcut(
-                UpdateAllKey,
-                () => Script.UpdateAllMode = !Script.UpdateAllMode);
-
-            Utilities.HandleUnmodShortcut(
-                MoveAllModeKey,
-                ToggleMovementMode);
-
-            // Short jump forward.
-            Utilities.HandleModShortcut(
-                () => {
-                    var newAnimationTimeRatio =
-                        Script.AnimationTimeRatio + Script.ShortJumpValue;
-
-                    Script.AnimationTimeRatio =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-                },
-                ShortJumpForwardKey,
-                Event.current.alt);
-
-            // Short jump backward.
-            Utilities.HandleModShortcut(
-                () => {
-                    var newAnimationTimeRatio =
-                        Script.AnimationTimeRatio - Script.ShortJumpValue;
-
-                    Script.AnimationTimeRatio =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-                },
-                ShortJumpBackwardKey,
-                Event.current.alt);
-
-            // Long jump forward.
-            Utilities.HandleUnmodShortcut(
-                LongJumpForwardKey,
-                () => Script.AnimationTimeRatio += LongJumpValue);
-
-            // Long jump backward.
-            Utilities.HandleUnmodShortcut(
-                LongJumpBackwardKey,
-                () => Script.AnimationTimeRatio -= LongJumpValue);
-
-            // Jump to next node.
-            Utilities.HandleUnmodShortcut(
-                JumpToNextNodeKey,
-                () => Script.AnimationTimeRatio =
-                    GetNearestForwardNodeTimestamp());
-
-            // Jump to previous node.
-            Utilities.HandleUnmodShortcut(
-                JumpToPreviousNodeKey,
-                () => Script.AnimationTimeRatio =
-                    GetNearestBackwardNodeTimestamp());
-
-            // Jump to start.
-            Utilities.HandleModShortcut(
-                () => Script.AnimationTimeRatio = 0,
-                JumpToStartKey,
-                //ModKeyPressed);
-                Event.current.alt);
-
-            // Jump to end.
-            Utilities.HandleModShortcut(
-                () => Script.AnimationTimeRatio = 1,
-                JumpToEndKey,
-                //ModKeyPressed);
-                Event.current.alt);
-
-            // Play/pause animation.
-            Utilities.HandleUnmodShortcut(
-                PlayPauseKey,
-                HandlePlayPause);
-
-            //if (Event.current.type == EventType.keyDown
-            //    //&& Event.current.keyCode == KeyCode.C) {
-            //    && Event.current.keyCode == KeyCode.C
-            //    //&& Event.current.modifiers == EventModifiers.Alt) {
-            //    && Event.current.alt) {
-
-            //    //Event.current.Use();
-            //    //Debug.Log(Event.current.modifiers);
-            //    Debug.Log("Alt + C");
-            //}
         }
 
         private void HandleSmoothTangentMode() {
@@ -1008,31 +816,6 @@ namespace ATP.AnimationPathTools {
             return rotationValue;
         }
 
-        private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < animationTimeRatio.floatValue) {
-                    return pathTimestamps[i];
-                }
-            }
-
-            // Return timestamp of the last node.
-            return 0;
-        }
-
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > animationTimeRatio.floatValue)) {
-                return timestamp;
-            }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
         private void InitializeSerializedProperties() {
             rotationSpeed = serializedObject.FindProperty("rotationSpeed");
             animationTimeRatio =
@@ -1058,17 +841,9 @@ namespace ATP.AnimationPathTools {
         private void InstantiateCompositeClasses() {
             GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
             AnimatorHandles = new AnimatorHandles();
+            AnimatorShortcuts = new AnimatorShortcuts(Script);
         }
-        private void ToggleMovementMode() {
-            if (Script.MovementMode ==
-                AnimationPathBuilderHandleMode.MoveSingle) {
-
-                Script.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
-            }
-            else {
-                Script.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
-            }
-        }
+  
 
         #endregion PRIVATE METHODS
     }

@@ -520,6 +520,25 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public void HandlePlayPause() {
+            // Pause animation.
+            if (IsPlaying && !Pause) {
+                Pause = true;
+                //Script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (IsPlaying && Pause) {
+                Pause = false;
+                //Script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                IsPlaying = true;
+                // Start animation.
+                StartEaseTimeCoroutine();
+            }
+        }
+
         #endregion
 
         #region HELPER METHODS

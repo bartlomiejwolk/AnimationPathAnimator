@@ -11,9 +11,6 @@ namespace ATP.AnimationPathTools {
     // TODO Use public API instead of using path and curve fields directly.
     public class PathData : ScriptableObject, ISerializationCallbackReceiver {
         #region EVENTS
-        public event EventHandler RotationPointPositionChanged;
-
-
         public event EventHandler NodeAdded;
 
         public event EventHandler NodePositionChanged;
@@ -26,6 +23,7 @@ namespace ATP.AnimationPathTools {
 
         public event EventHandler PathReset;
 
+        public event EventHandler RotationPointPositionChanged;
         #endregion EVENTS
 
         #region FIELDS
@@ -93,14 +91,12 @@ namespace ATP.AnimationPathTools {
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
-        public void OnBeforeSerialize() {
-        }
-
         public void OnAfterDeserialize() {
             SubscribeToEvents();
         }
 
-
+        public void OnBeforeSerialize() {
+        }
         // ReSharper disable once UnusedMember.Local
         private void OnEnable() {
             // Return if fields are initialized.
@@ -115,11 +111,6 @@ namespace ATP.AnimationPathTools {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
-        protected virtual void OnPathReset() {
-            EventHandler handler = PathReset;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         public virtual void OnNodePositionChanged() {
             var handler = NodePositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -129,7 +120,6 @@ namespace ATP.AnimationPathTools {
             var handler = NodeRemoved;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-
 
         protected virtual void OnNodeAdded() {
             var handler = NodeAdded;
@@ -146,6 +136,10 @@ namespace ATP.AnimationPathTools {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        protected virtual void OnPathReset() {
+            EventHandler handler = PathReset;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
         protected virtual void OnRotationPointPositionChanged() {
             var handler = RotationPointPositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -182,19 +176,134 @@ namespace ATP.AnimationPathTools {
 
         #endregion EVENT HANDLERS
 
-        #region METHODS
+        #region INIT METHODS
+    
+        private void AssignDefaultValues() {
+            InitializeAnimatedObjectPath();
+            InitializeRotationPath();
+            InitializeEaseCurve();
+            InitializeTiltingCurve();
+        }
 
-        public void AddKeyToCurve(
-            AnimationCurve curve,
-            float timestamp) {
-            var value = curve.Evaluate(timestamp);
+        private void InitializeAnimatedObjectPath() {
+            var firstNodePos = new Vector3(0, 0, 0);
+            AnimatedObjectPath.CreateNewNode(0, firstNodePos);
 
-            curve.AddKey(timestamp, value);
+            var lastNodePos = new Vector3(1, 0, 1);
+            AnimatedObjectPath.CreateNewNode(1, lastNodePos);
+        }
+
+        private void InitializeEaseCurve() {
+            EaseCurve.AddKey(0, DefaultEaseCurveValue);
+            EaseCurve.AddKey(1, DefaultEaseCurveValue);
+        }
+
+        private void InitializeRotationPath() {
+            var firstNodePos = new Vector3(0, 0, 0);
+            RotationPath.CreateNewNode(0, firstNodePos);
+
+            var lastNodePos = new Vector3(1, 0, 1);
+            RotationPath.CreateNewNode(1, lastNodePos);
+        }
+
+        private void InitializeTiltingCurve() {
+            TiltingCurve.AddKey(0, 0);
+            TiltingCurve.AddKey(1, 0);
+        }
+
+        // TODO This method should be inside AnimationPath.
+        private void InstantiateAnimationPathCurves(AnimationPath animationPath) {
+            for (var i = 0; i < 3; i++) {
+                animationPath[i] = new AnimationCurve();
+            }
+        }
+
+        private void InstantiateReferenceTypes() {
+            AnimatedObjectPath = new AnimationPath();
+            InstantiateAnimationPathCurves(animatedObjectPath);
+
+            RotationPath = new AnimationPath();
+            InstantiateAnimationPathCurves(rotationPath);
+
+            EaseCurve = new AnimationCurve();
+            TiltingCurve = new AnimationCurve();
+        }
+      
+        private void SubscribeToEvents() {
+            NodeAdded += PathData_NodeAdded;
+            NodeRemoved += PathData_NodeRemoved;
+            NodeTiltChanged += PathData_NodeTiltChanged;
+            NodeTimeChanged += PathData_NodeTimeChanged;
+            NodePositionChanged += PathData_NodePositionChanged;
+        }
+        #endregion METHODS
+
+        #region EDIT METHODS
+        /// <summary>
+        /// Set RotationPath node positions to the same as in AnimatedObjectPath.
+        /// </summary>
+        private void ResetRotationPathValues() {
+            var animPathNodePositions = GetNodePositions();
+
+            for (int i = 0; i < animPathNodePositions.Length; i++) {
+                RotationPath.MovePointToPosition(i, animPathNodePositions[i]);
+            }
+        }
+
+        private void EaseCurveExtremeNodes(AnimationCurve curve) {
+            // Ease first node.
+            var firstKeyCopy = curve.keys[0];
+            firstKeyCopy.outTangent = 0;
+            curve.RemoveKey(0);
+            curve.AddKey(firstKeyCopy);
+
+            // Ease last node.
+            var lastKeyIndex = curve.length - 1;
+            var lastKeyCopy = curve.keys[lastKeyIndex];
+            lastKeyCopy.inTangent = 0;
+            curve.RemoveKey(lastKeyIndex);
+            curve.AddKey(lastKeyCopy);
+        }
+
+        public void SetNodesLinear() {
+            for (var i = 0; i < 3; i++) {
+                Utilities.SetCurveLinear(AnimatedObjectPath[i]);
+            }
+        }
+
+        public void SetNodeTangents(int index, Vector3 inOutTangent) {
+            AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
+        }
+
+        public void SetWrapMode(WrapMode wrapMode) {
+            AnimatedObjectPath.SetWrapMode(wrapMode);
+        }
+
+        /// <summary>
+        ///     Smooth tangents in all nodes in all animation curves.
+        /// </summary>
+        /// <param name="weight">Weight to be applied to the tangents.</param>
+        public void SmoothAllNodeTangents(float weight = 0) {
+            // For each key..
+            for (var j = 0; j < NodesNo; j++) {
+                // Smooth in and out tangents.
+                AnimatedObjectPath.SmoothPointTangents(j);
+            }
+        }
+
+        public void SmoothCurve(AnimationCurve curve) {
+            for (var i = 0; i < curve.length; i++) {
+                curve.SmoothTangents(i, 0);
+            }
+        }
+
+        public void SmoothSingleNodeTangents(int nodeIndex) {
+            AnimatedObjectPath.SmoothPointTangents(nodeIndex);
         }
 
         public void ChangeRotationAtTimestamp(
-            float timestamp,
-            Vector3 newPosition) {
+        float timestamp,
+        Vector3 newPosition) {
             // Get node timestamps.
             var timestamps = RotationPath.GetTimestamps();
             // If matching timestamp in the path was found.
@@ -279,116 +388,6 @@ namespace ATP.AnimationPathTools {
             OnNodeTimeChanged();
         }
 
-        public float[] GetEaseCurveValues() {
-            var values = new float[EaseCurveKeysNo];
-
-            for (var i = 0; i < values.Length; i++) {
-                values[i] = EaseCurve.keys[i].value;
-            }
-
-            return values;
-        }
-
-        public float GetEaseTimestampAtIndex(int keyIndex) {
-            return EaseCurve.keys[keyIndex].time;
-        }
-
-        public float GetEaseValueAtIndex(int index) {
-            var timestamp = GetEaseTimestampAtIndex(index);
-            var value = GetEaseValueAtTime(timestamp);
-
-            return value;
-        }
-
-        public float GetEaseValueAtTime(float timestamp) {
-            return EaseCurve.Evaluate(timestamp);
-        }
-
-        public float GetNodeEaseValue(int i) {
-            return EaseCurve.keys[i].value;
-        }
-
-        public Vector3 GetNodePosition(int nodeIndex) {
-            return AnimatedObjectPath.GetVectorAtKey(nodeIndex);
-        }
-
-        public Vector3[] GetNodePositions() {
-            var result = new Vector3[NodesNo];
-
-            for (var i = 0; i < NodesNo; i++) {
-                // Get node 3d position.
-                result[i] = AnimatedObjectPath.GetVectorAtKey(i);
-            }
-
-            return result;
-        }
-
-        public float GetNodeTiltValue(int nodeIndex) {
-            return TiltingCurve.keys[nodeIndex].value;
-        }
-
-        public float GetNodeTimestamp(int nodeIndex) {
-            return AnimatedObjectPath.GetTimeAtKey(nodeIndex);
-        }
-
-        public float[] GetPathTimestamps() {
-            // Output array.
-            var result = new float[NodesNo];
-
-            // For each key..
-            for (var i = 0; i < NodesNo; i++) {
-                // Get key time.
-                result[i] = AnimatedObjectPath.GetTimeAtKey(i);
-            }
-
-            return result;
-        }
-
-        public Vector3 GetRotationAtTime(float timestamp) {
-            return RotationPath.GetVectorAtTime(timestamp);
-        }
-
-        public Vector3 GetRotationPointPosition(int nodeIndex) {
-            return RotationPath.GetVectorAtKey(nodeIndex);
-        }
-
-        public Vector3[] GetRotationPointPositions() {
-            // Get number of existing rotation points.
-            var rotationPointsNo = RotationPath.KeysNo;
-            // Result array.
-            var rotationPointPositions = new Vector3[rotationPointsNo];
-
-            // For each rotation point..
-            for (var i = 0; i < rotationPointsNo; i++) {
-                // Get rotation point local position.
-                rotationPointPositions[i] = GetRotationPointPosition(i);
-            }
-
-            return rotationPointPositions;
-        }
-
-        public Vector3 GetRotationValueAtTime(float timestamp) {
-            return RotationPath.GetVectorAtTime(timestamp);
-        }
-
-        public float[] GetTiltingCurveValues() {
-            var values = new float[TiltingCurveKeysNo];
-
-            for (var i = 0; i < values.Length; i++) {
-                values[i] = TiltingCurve.keys[i].value;
-            }
-
-            return values;
-        }
-
-        public float GetTiltingValueAtTime(float timestamp) {
-            return TiltingCurve.Evaluate(timestamp);
-        }
-
-        public Vector3 GetVectorAtTime(float timestamp) {
-            return AnimatedObjectPath.GetVectorAtTime(timestamp);
-        }
-
         public void MoveNodeToPosition(
             int nodeIndex,
             Vector3 position) {
@@ -411,74 +410,26 @@ namespace ATP.AnimationPathTools {
                 OnNodePositionChanged();
             }
         }
-        public void RemoveAllNodes() {
-            var nodesNo = NodesNo;
-            for (var i = 0; i < nodesNo; i++) {
-                // NOTE After each removal, next node gets index 0.
-                RemoveNode(0);
+        public void OffsetRotationPathPosition(Vector3 moveDelta) {
+            // For each node..
+            for (var i = 0; i < NodesNo; i++) {
+                // Old node position.
+                var oldPosition = GetRotationPointPosition(i);
+                // New node position.
+                var newPosition = oldPosition + moveDelta;
+                // Update node positions.
+                RotationPath.MovePointToPosition(i, newPosition);
             }
         }
 
-        public void RemoveNode(int nodeIndex) {
-            AnimatedObjectPath.RemoveNode(nodeIndex);
+        public void AddKeyToCurve(
+                    AnimationCurve curve,
+                    float timestamp) {
+            var value = curve.Evaluate(timestamp);
 
-            OnNodeRemoved();
+            curve.AddKey(timestamp, value);
         }
 
-        public void ResetPath() {
-            InstantiateReferenceTypes();
-            AssignDefaultValues();
-
-            OnPathReset();
-        }
-
-        public List<Vector3> SampleAnimationPathForPoints(
-            int samplingFrequency) {
-
-            return animatedObjectPath.SamplePathForPoints(samplingFrequency);
-        }
-
-        public List<Vector3> SampleRotationPathForPoints(
-            int samplingFrequency) {
-
-            return RotationPath.SamplePathForPoints(samplingFrequency);
-        }
-
-        public void SetNodesLinear() {
-            for (var i = 0; i < 3; i++) {
-                Utilities.SetCurveLinear(AnimatedObjectPath[i]);
-            }
-        }
-
-        public void SetNodeTangents(int index, Vector3 inOutTangent) {
-            AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
-        }
-
-        public void SetWrapMode(WrapMode wrapMode) {
-            AnimatedObjectPath.SetWrapMode(wrapMode);
-        }
-
-        /// <summary>
-        ///     Smooth tangents in all nodes in all animation curves.
-        /// </summary>
-        /// <param name="weight">Weight to be applied to the tangents.</param>
-        public void SmoothAllNodeTangents(float weight = 0) {
-            // For each key..
-            for (var j = 0; j < NodesNo; j++) {
-                // Smooth in and out tangents.
-                AnimatedObjectPath.SmoothPointTangents(j);
-            }
-        }
-
-        public void SmoothCurve(AnimationCurve curve) {
-            for (var i = 0; i < curve.length; i++) {
-                curve.SmoothTangents(i, 0);
-            }
-        }
-
-        public void SmoothSingleNodeTangents(int nodeIndex) {
-            AnimatedObjectPath.SmoothPointTangents(nodeIndex);
-        }
 
         public void UpdateCurveTimestamps(AnimationCurve curve) {
             // Get node timestamps.
@@ -688,129 +639,6 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void AssignDefaultValues() {
-            InitializeAnimatedObjectPath();
-            InitializeRotationPath();
-            InitializeEaseCurve();
-            InitializeTiltingCurve();
-        }
-
-        private void EaseCurveExtremeNodes(AnimationCurve curve) {
-            // Ease first node.
-            var firstKeyCopy = curve.keys[0];
-            firstKeyCopy.outTangent = 0;
-            curve.RemoveKey(0);
-            curve.AddKey(firstKeyCopy);
-
-            // Ease last node.
-            var lastKeyIndex = curve.length - 1;
-            var lastKeyCopy = curve.keys[lastKeyIndex];
-            lastKeyCopy.inTangent = 0;
-            curve.RemoveKey(lastKeyIndex);
-            curve.AddKey(lastKeyCopy);
-        }
-
-        private void InitializeAnimatedObjectPath() {
-            var firstNodePos = new Vector3(0, 0, 0);
-            AnimatedObjectPath.CreateNewNode(0, firstNodePos);
-
-            var lastNodePos = new Vector3(1, 0, 1);
-            AnimatedObjectPath.CreateNewNode(1, lastNodePos);
-        }
-
-        private void InitializeEaseCurve() {
-            EaseCurve.AddKey(0, DefaultEaseCurveValue);
-            EaseCurve.AddKey(1, DefaultEaseCurveValue);
-        }
-
-        private void InitializeRotationPath() {
-            var firstNodePos = new Vector3(0, 0, 0);
-            RotationPath.CreateNewNode(0, firstNodePos);
-
-            var lastNodePos = new Vector3(1, 0, 1);
-            RotationPath.CreateNewNode(1, lastNodePos);
-        }
-
-        private void InitializeTiltingCurve() {
-            TiltingCurve.AddKey(0, 0);
-            TiltingCurve.AddKey(1, 0);
-        }
-
-        // TODO This method should be inside AnimationPath.
-        private void InstantiateAnimationPathCurves(AnimationPath animationPath) {
-            for (var i = 0; i < 3; i++) {
-                animationPath[i] = new AnimationCurve();
-            }
-        }
-
-        private void InstantiateReferenceTypes() {
-            AnimatedObjectPath = new AnimationPath();
-            InstantiateAnimationPathCurves(animatedObjectPath);
-
-            RotationPath = new AnimationPath();
-            InstantiateAnimationPathCurves(rotationPath);
-
-            EaseCurve = new AnimationCurve();
-            TiltingCurve = new AnimationCurve();
-        }
-
-        public void OffsetRotationPathPosition(Vector3 moveDelta) {
-            // For each node..
-            for (var i = 0; i < NodesNo; i++) {
-                // Old node position.
-                var oldPosition = GetRotationPointPosition(i);
-                // New node position.
-                var newPosition = oldPosition + moveDelta;
-                // Update node positions.
-                RotationPath.MovePointToPosition(i, newPosition);
-            }
-        }
-
-        private void SubscribeToEvents() {
-            NodeAdded += PathData_NodeAdded;
-            NodeRemoved += PathData_NodeRemoved;
-            NodeTiltChanged += PathData_NodeTiltChanged;
-            NodeTimeChanged += PathData_NodeTimeChanged;
-            NodePositionChanged += PathData_NodePositionChanged;
-        }
-
-        public Vector3 GetGlobalNodePosition(int nodeIndex,
-            Transform transform) {
-
-            var localNodePosition = GetNodePosition(nodeIndex);
-            var globalNodePosition = transform.TransformPoint(localNodePosition);
-
-            return globalNodePosition;
-        }
-
-        public Vector3[] GetGlobalNodePositions(Transform transform) {
-            var nodePositions = GetNodePositions();
-            Utilities.ConvertToGlobalCoordinates(ref nodePositions, transform);
-
-            return nodePositions;
-        }
-
-        public void ResetRotationPath() {
-            RotationPath = new AnimationPath();
-            InstantiateAnimationPathCurves(rotationPath);
-
-            UpdateRotationPathWithAddedKeys();
-            ResetRotationPathValues();
-        }
-
-        /// <summary>
-        /// Set RotationPath node positions to the same as in AnimatedObjectPath.
-        /// </summary>
-        private void ResetRotationPathValues() {
-            var animPathNodePositions = GetNodePositions();
-
-            for (int i = 0; i < animPathNodePositions.Length; i++) {
-                RotationPath.MovePointToPosition(i, animPathNodePositions[i]);
-            }
-        }
-
-        #endregion METHODS
-
         public void UpdateTiltingValues(float delta) {
             for (var i = 0; i < TiltingCurve.length; i++) {
                 // Copy key.
@@ -832,11 +660,18 @@ namespace ATP.AnimationPathTools {
             OnNodeTiltChanged();
         }
 
-        public float GetTiltingValueAtIndex(int keyIndex) {
-            var timestamp = GetEaseTimestampAtIndex(keyIndex);
-            var value = GetTiltingValueAtTime(timestamp);
+        public void RemoveAllNodes() {
+            var nodesNo = NodesNo;
+            for (var i = 0; i < nodesNo; i++) {
+                // NOTE After each removal, next node gets index 0.
+                RemoveNode(0);
+            }
+        }
 
-            return value;
+        public void RemoveNode(int nodeIndex) {
+            AnimatedObjectPath.RemoveNode(nodeIndex);
+
+            OnNodeRemoved();
         }
 
         public void ResetEaseCurve() {
@@ -844,11 +679,176 @@ namespace ATP.AnimationPathTools {
             UpdateCurveWithAddedKeys(EaseCurve);
         }
 
+        public void ResetPath() {
+            InstantiateReferenceTypes();
+            AssignDefaultValues();
+
+            OnPathReset();
+        }
+
+        public void ResetRotationPath() {
+            RotationPath = new AnimationPath();
+            InstantiateAnimationPathCurves(rotationPath);
+
+            UpdateRotationPathWithAddedKeys();
+            ResetRotationPathValues();
+        }
+
         public void ResetTiltingCurve() {
             TiltingCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(TiltingCurve);
         }
 
+        #endregion
+
+        #region GET METHODS
+
+        public List<Vector3> SampleAnimationPathForPoints(
+            int samplingFrequency) {
+
+            return animatedObjectPath.SamplePathForPoints(samplingFrequency);
+        }
+
+        public List<Vector3> SampleRotationPathForPoints(
+            int samplingFrequency) {
+
+            return RotationPath.SamplePathForPoints(samplingFrequency);
+        }
+
+        public float[] GetEaseCurveValues() {
+            var values = new float[EaseCurveKeysNo];
+
+            for (var i = 0; i < values.Length; i++) {
+                values[i] = EaseCurve.keys[i].value;
+            }
+
+            return values;
+        }
+
+        public float GetEaseTimestampAtIndex(int keyIndex) {
+            return EaseCurve.keys[keyIndex].time;
+        }
+
+        public float GetEaseValueAtIndex(int index) {
+            var timestamp = GetEaseTimestampAtIndex(index);
+            var value = GetEaseValueAtTime(timestamp);
+
+            return value;
+        }
+
+        public float GetEaseValueAtTime(float timestamp) {
+            return EaseCurve.Evaluate(timestamp);
+        }
+
+        public Vector3 GetGlobalNodePosition(int nodeIndex,
+            Transform transform) {
+
+            var localNodePosition = GetNodePosition(nodeIndex);
+            var globalNodePosition = transform.TransformPoint(localNodePosition);
+
+            return globalNodePosition;
+        }
+
+        public Vector3[] GetGlobalNodePositions(Transform transform) {
+            var nodePositions = GetNodePositions();
+            Utilities.ConvertToGlobalCoordinates(ref nodePositions, transform);
+
+            return nodePositions;
+        }
+
+        public float GetNodeEaseValue(int i) {
+            return EaseCurve.keys[i].value;
+        }
+
+        public Vector3 GetNodePosition(int nodeIndex) {
+            return AnimatedObjectPath.GetVectorAtKey(nodeIndex);
+        }
+
+        public Vector3[] GetNodePositions() {
+            var result = new Vector3[NodesNo];
+
+            for (var i = 0; i < NodesNo; i++) {
+                // Get node 3d position.
+                result[i] = AnimatedObjectPath.GetVectorAtKey(i);
+            }
+
+            return result;
+        }
+
+        public float GetNodeTiltValue(int nodeIndex) {
+            return TiltingCurve.keys[nodeIndex].value;
+        }
+
+        public float GetNodeTimestamp(int nodeIndex) {
+            return AnimatedObjectPath.GetTimeAtKey(nodeIndex);
+        }
+
+        public float[] GetPathTimestamps() {
+            // Output array.
+            var result = new float[NodesNo];
+
+            // For each key..
+            for (var i = 0; i < NodesNo; i++) {
+                // Get key time.
+                result[i] = AnimatedObjectPath.GetTimeAtKey(i);
+            }
+
+            return result;
+        }
+
+        public Vector3 GetRotationAtTime(float timestamp) {
+            return RotationPath.GetVectorAtTime(timestamp);
+        }
+
+        public Vector3 GetRotationPointPosition(int nodeIndex) {
+            return RotationPath.GetVectorAtKey(nodeIndex);
+        }
+
+        public Vector3[] GetRotationPointPositions() {
+            // Get number of existing rotation points.
+            var rotationPointsNo = RotationPath.KeysNo;
+            // Result array.
+            var rotationPointPositions = new Vector3[rotationPointsNo];
+
+            // For each rotation point..
+            for (var i = 0; i < rotationPointsNo; i++) {
+                // Get rotation point local position.
+                rotationPointPositions[i] = GetRotationPointPosition(i);
+            }
+
+            return rotationPointPositions;
+        }
+
+        public Vector3 GetRotationValueAtTime(float timestamp) {
+            return RotationPath.GetVectorAtTime(timestamp);
+        }
+
+        public float[] GetTiltingCurveValues() {
+            var values = new float[TiltingCurveKeysNo];
+
+            for (var i = 0; i < values.Length; i++) {
+                values[i] = TiltingCurve.keys[i].value;
+            }
+
+            return values;
+        }
+
+        public float GetTiltingValueAtIndex(int keyIndex) {
+            var timestamp = GetEaseTimestampAtIndex(keyIndex);
+            var value = GetTiltingValueAtTime(timestamp);
+
+            return value;
+        }
+
+        public float GetTiltingValueAtTime(float timestamp) {
+            return TiltingCurve.Evaluate(timestamp);
+        }
+
+        public Vector3 GetVectorAtTime(float timestamp) {
+            return AnimatedObjectPath.GetVectorAtTime(timestamp);
+        }
+
+        #endregion
     }
 
 }

@@ -109,52 +109,6 @@ namespace ATP.AnimationPathTools {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
-
-        private void DrawResetTiltingButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Tilting",
-                    ""))) {
-
-                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetTiltingCurve();
-
-                SceneView.RepaintAll();
-            }
-        }
-
-        private void DrawResetEaseButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Ease",
-                    ""))) {
-
-                Undo.RecordObject(Script.PathData, "Reset ease curve.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetEaseCurve();
-
-                SceneView.RepaintAll();
-            }
-        }
-
-        private void DrawResetRotationPathButton() {
-            if (GUILayout.Button(
-                            new GUIContent(
-                                "Reset Rotation",
-                                ""))) {
-
-                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetRotationPath();
-
-                SceneView.RepaintAll();
-            }
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
@@ -210,6 +164,21 @@ namespace ATP.AnimationPathTools {
                     "Advanced Settings",
                     ""));
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawResetRotationPathButton() {
+            if (GUILayout.Button(
+                            new GUIContent(
+                                "Reset Rotation",
+                                ""))) {
+
+                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetRotationPath();
+
+                SceneView.RepaintAll();
+            }
         }
 
         protected virtual void DrawAdvanceSettingsControls() {
@@ -482,6 +451,36 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion
+
+        private void DrawResetEaseButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Ease",
+                    ""))) {
+
+                Undo.RecordObject(Script.PathData, "Reset ease curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetEaseCurve();
+
+                SceneView.RepaintAll();
+            }
+        }
+
+        private void DrawResetTiltingButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Tilting",
+                    ""))) {
+
+                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetTiltingCurve();
+
+                SceneView.RepaintAll();
+            }
+        }
 
         #region DRAWING HANDLERS
 

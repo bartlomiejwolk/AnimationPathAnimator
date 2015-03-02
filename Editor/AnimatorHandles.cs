@@ -25,6 +25,9 @@ namespace ATP.AnimationPathTools {
         public virtual int EaseValueLabelOffsetY {
             get { return -25; }
         }
+        public virtual float RotationHandleSize {
+            get { return 0.25f; }
+        }
 
         public void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -374,6 +377,47 @@ namespace ATP.AnimationPathTools {
 
         public virtual Color MoveAllModeColor {
             get { return Color.red; }
+        }
+
+        public void DrawRotationHandle(
+            AnimationPathAnimator script,
+            Action<float, Vector3> callback) {
+
+            var currentAnimationTime = script.AnimationTimeRatio;
+            var rotationPointPosition =
+                script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = script.PathData.GetPathTimestamps();
+
+            // Return if current animation time is not equal to any node
+            // timestamp.
+            var index = Array.FindIndex(
+                nodeTimestamps,
+                x => Math.Abs(x - currentAnimationTime)
+                    < GlobalConstants.FloatPrecision);
+
+            if (index < 0) return;
+
+            Handles.color = Color.magenta;
+            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
+            var sphereSize = handleSize * RotationHandleSize;
+
+            var rotationPointGlobalPos =
+                script.transform.TransformPoint(rotationPointPosition);
+
+            // Draw node's handle.
+            var newGlobalPosition = Handles.FreeMoveHandle(
+                rotationPointGlobalPos,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                Handles.SphereCap);
+
+            if (newGlobalPosition != rotationPointGlobalPos) {
+                var newPointLocalPosition =
+                    script.transform.InverseTransformPoint(newGlobalPosition);
+
+                callback(currentAnimationTime, newPointLocalPosition);
+            }
         }
 
     }

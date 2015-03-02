@@ -110,10 +110,6 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.Space; }
         }
 
-        public virtual float RotationHandleSize {
-            get { return 0.25f; }
-        }
-
         public virtual KeyCode RotationModeKey {
             get { return KeyCode.I; }
         }
@@ -623,42 +619,9 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingRotationHandle() {
             if (Script.HandleMode != AnimatorHandleMode.Rotation) return;
 
-            var currentAnimationTime = Script.AnimationTimeRatio;
-            var rotationPointPosition =
-                Script.PathData.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = Script.PathData.GetPathTimestamps();
-
-            // Return if current animation time is not equal to any node
-            // timestamp.
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Math.Abs(x - currentAnimationTime)
-                    < GlobalConstants.FloatPrecision);
-
-            if (index < 0) return;
-
-            Handles.color = Color.magenta;
-            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
-            var sphereSize = handleSize * RotationHandleSize;
-
-            var rotationPointGlobalPos =
-                Script.transform.TransformPoint(rotationPointPosition);
-
-            // Draw node's handle.
-            var newGlobalPosition = Handles.FreeMoveHandle(
-                rotationPointGlobalPos,
-                Quaternion.identity,
-                sphereSize,
-                Vector3.zero,
-                Handles.SphereCap);
-
-            if (newGlobalPosition != rotationPointGlobalPos) {
-                var newPointLocalPosition =
-                    Script.transform.InverseTransformPoint(newGlobalPosition);
-                DrawRotationHandlesCallbackHandler(
-                    currentAnimationTime,
-                    newPointLocalPosition);
-            }
+            AnimatorHandles.DrawRotationHandle(
+                Script,
+                DrawRotationHandlesCallbackHandler);
         }
 
         private void HandleDrawingTiltingHandles() {

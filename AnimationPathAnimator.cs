@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ATP.ReorderableList;
 using UnityEngine;
@@ -160,7 +161,24 @@ namespace ATP.AnimationPathTools {
 
         public AnimatorRotationMode RotationMode {
             get { return rotationMode; }
-            set { rotationMode = value; }
+            set {
+                // RotationMode changed.
+                if (value != rotationMode) {
+                    // Update value.
+                    rotationMode = value;
+
+                    UpdateAnimation();
+
+                    // RotationMode changed to Forward.
+                    if (value == AnimatorRotationMode.Forward) {
+                        // Update HandleMode. 
+                        HandleMode = AnimatorHandleMode.None;
+                    }
+                }
+                else {
+                    rotationMode = value;
+                }
+            }
         }
 
         /// <summary>

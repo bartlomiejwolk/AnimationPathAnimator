@@ -56,10 +56,6 @@ namespace ATP.AnimationPathTools {
 
         #endregion SERIALIZED PROPERTIES
 
-        #region CONSTANT VALUES
-
-        #endregion
-
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {

@@ -152,6 +152,7 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.BeginHorizontal();
 
             DrawResetRotationPathButton();
+            DrawResetEaseButton();
 
             EditorGUILayout.EndHorizontal();
 
@@ -187,6 +188,21 @@ namespace ATP.AnimationPathTools {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
+        }
+
+        private void DrawResetEaseButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Ease",
+                    ""))) {
+
+                Undo.RecordObject(Script.PathData, "Reset ease curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetEaseCurve();
+
+                SceneView.RepaintAll();
+            }
         }
 
         private void DrawResetRotationPathButton() {

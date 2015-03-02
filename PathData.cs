@@ -524,8 +524,6 @@ namespace ATP.AnimationPathTools {
 
                 AddKeyToCurve(curve, nodeTimestamp);
                 SmoothCurve(curve);
-
-                break;
             }
         }
 
@@ -624,6 +622,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        // TODO Refactor.
         public void UpdateRotationPathWithAddedKeys() {
             // Get animatedObjectPath timestamps.
             var pathTimestamps = GetPathTimestamps();
@@ -835,6 +834,13 @@ namespace ATP.AnimationPathTools {
             var value = GetTiltingValueAtTime(timestamp);
 
             return value;
+        }
+
+        public void ResetEaseCurve() {
+            EaseCurve = new AnimationCurve();
+            //InitializeEaseCurve();
+
+            UpdateCurveWithAddedKeys(EaseCurve);
         }
 
     }

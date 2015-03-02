@@ -580,6 +580,8 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingEaseHandles() {
             if (Script.HandleMode != AnimatorHandleMode.Ease) return;
 
+            // TODO Move this code to AnimatorHandles.DrawEaseHandles().
+
             // Get path node positions.
             var nodePositions =
                 Script.PathData.GetGlobalNodePositions(Script.Transform);

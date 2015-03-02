@@ -151,7 +151,7 @@ namespace ATP.AnimationPathTools {
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
             arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
-                ? 10f : arcValue;
+                ? InitialArcValue : arcValue;
 
             var scaleHandleSize = handleSize * ScaleHandleSize;
             var newArcValue = Handles.ScaleValueHandle(
@@ -172,6 +172,10 @@ namespace ATP.AnimationPathTools {
 
                 callback(newArcValue / arcValueMultiplier);
             }
+        }
+
+        public virtual float InitialArcValue {
+            get { return 15f; }
         }
 
         public void DrawEaseHandles(

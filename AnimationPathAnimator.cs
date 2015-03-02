@@ -307,7 +307,7 @@ namespace ATP.AnimationPathTools {
 
         #region HANDLERS
 
-        private void HandleUpdateAnimatedGORotation() {
+        private void AnimateAnimatedGORotation() {
             if (animatedGO == null) return;
 
             // Look at target.
@@ -333,9 +333,9 @@ namespace ATP.AnimationPathTools {
         #region METHODS
 
         public void Animate() {
-            AnimateObjectPosition();
-            HandleUpdateAnimatedGORotation();
-            UpdateAnimatedGOTilting();
+            AnimateAnimatedGOPosition();
+            AnimateAnimatedGORotation();
+            AnimateAnimatedGOTilting();
         }
 
         // TODO Remove the globalPosition arg. and create separate method.
@@ -380,14 +380,14 @@ namespace ATP.AnimationPathTools {
         public void UpdateAnimation() {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
-            UpdateAnimatedGOTilting();
+            AnimateAnimatedGOTilting();
         }
 
         public void UpdateWrapMode() {
             PathData.SetWrapMode(wrapMode);
         }
 
-        private void AnimateObjectPosition() {
+        private void AnimateAnimatedGOPosition() {
             if (animatedGO == null) return;
 
             var positionAtTimestamp = PathData.GetVectorAtTime(AnimationTimeRatio);
@@ -471,7 +471,7 @@ namespace ATP.AnimationPathTools {
                 speed);
         }
 
-        private void UpdateAnimatedGOTilting() {
+        private void AnimateAnimatedGOTilting() {
             if (animatedGO == null) return;
 
             // Get current animatedGO rotation.

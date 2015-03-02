@@ -408,6 +408,40 @@ namespace ATP.AnimationPathTools {
                 Script.WrapMode);
         }
 
+        private void DrawResetTiltingButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Tilting",
+                    ""))) {
+
+                if (Script.PathData == null) return;
+
+                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetTiltingCurve();
+
+                SceneView.RepaintAll();
+            }
+        }
+
+        private void DrawResetEaseButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Ease",
+                    ""))) {
+
+                if (Script.PathData == null) return;
+
+                Undo.RecordObject(Script.PathData, "Reset ease curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetEaseCurve();
+
+                SceneView.RepaintAll();
+            }
+        }
+
         private void DrawCreatePathAssetButton() {
             if (GUILayout.Button(
                 new GUIContent(
@@ -459,41 +493,6 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion
-
-        private void DrawResetEaseButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Ease",
-                    ""))) {
-
-                if (Script.PathData == null) return;
-
-                Undo.RecordObject(Script.PathData, "Reset ease curve.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetEaseCurve();
-
-                SceneView.RepaintAll();
-            }
-        }
-
-        private void DrawResetTiltingButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Tilting",
-                    ""))) {
-
-                if (Script.PathData == null) return;
-
-                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetTiltingCurve();
-
-                SceneView.RepaintAll();
-            }
-        }
-
         #region DRAWING HANDLERS
 
         private void HandleDrawingAddButtons() {

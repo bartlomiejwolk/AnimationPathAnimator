@@ -838,9 +838,12 @@ namespace ATP.AnimationPathTools {
 
         public void ResetEaseCurve() {
             EaseCurve = new AnimationCurve();
-            //InitializeEaseCurve();
-
             UpdateCurveWithAddedKeys(EaseCurve);
+        }
+
+        public void ResetTiltingCurve() {
+            TiltingCurve = new AnimationCurve();
+            UpdateCurveWithAddedKeys(TiltingCurve);
         }
 
     }

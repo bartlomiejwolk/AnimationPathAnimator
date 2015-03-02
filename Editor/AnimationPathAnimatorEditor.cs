@@ -153,6 +153,7 @@ namespace ATP.AnimationPathTools {
 
             DrawResetRotationPathButton();
             DrawResetEaseButton();
+            DrawResetTiltingButton();
 
             EditorGUILayout.EndHorizontal();
 
@@ -188,6 +189,21 @@ namespace ATP.AnimationPathTools {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
+        }
+
+        private void DrawResetTiltingButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Tilting",
+                    ""))) {
+
+                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetTiltingCurve();
+
+                SceneView.RepaintAll();
+            }
         }
 
         private void DrawResetEaseButton() {

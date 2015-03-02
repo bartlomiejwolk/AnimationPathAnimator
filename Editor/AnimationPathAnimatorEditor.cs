@@ -199,14 +199,6 @@ namespace ATP.AnimationPathTools {
 
             FocusOnSceneView();
         }
-
-        private static void FocusOnSceneView() {
-
-            if (SceneView.sceneViews.Count > 0) {
-                var sceneView = (SceneView) SceneView.sceneViews[0];
-                sceneView.Focus();
-            }
-        }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
@@ -930,12 +922,6 @@ namespace ATP.AnimationPathTools {
         #endregion CALLBACK HANDLERS
 
         #region METHODS
-        private void InstantiateCompositeClasses() {
-            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
-            AnimatorHandles = new AnimatorHandles();
-        }
-
-
         protected void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
@@ -950,6 +936,13 @@ namespace ATP.AnimationPathTools {
 
             // Add node to the animation curves.
             Script.PathData.CreateNodeAtTime(newKeyTime);
+        }
+
+        private static void FocusOnSceneView() {
+            if (SceneView.sceneViews.Count > 0) {
+                var sceneView = (SceneView)SceneView.sceneViews[0];
+                sceneView.Focus();
+            }
         }
 
         //        ModKeyPressed = false;
@@ -1041,6 +1034,10 @@ namespace ATP.AnimationPathTools {
             gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
         }
 
+        private void InstantiateCompositeClasses() {
+            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
+            AnimatorHandles = new AnimatorHandles();
+        }
         private void ToggleMovementMode() {
             if (Script.MovementMode ==
                 AnimationPathBuilderHandleMode.MoveSingle) {

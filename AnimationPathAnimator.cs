@@ -118,16 +118,14 @@ namespace ATP.AnimationPathTools {
                     animationTimeRatio = 1;
                 }
 
-                // Update animation with keys in play mode.
-                //if (Application.isPlaying) UpdateAnimation();
+                // Animate while animation is running.
                 if (Application.isPlaying && IsPlaying && !Pause) {
                     Animate();
                 }
+                // Update animation with keys while animation is stopped or paused.
                 else {
                     UpdateAnimation();
                 }
-
-                //if (!Application.isPlaying) Animate();
             }
         }
 
@@ -278,9 +276,6 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
-            //if (Application.isPlaying && IsPlaying && !Pause) {
-            //    Animate();
-            //}
         }
 
         #endregion UNITY MESSAGES
@@ -385,7 +380,6 @@ namespace ATP.AnimationPathTools {
         public void UpdateAnimation() {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
-            // Update animatedGO tilting.
             TiltObject();
         }
 
@@ -422,7 +416,6 @@ namespace ATP.AnimationPathTools {
 
                         AnimationTimeRatio = 1;
                         Pause = true;
-                        //IsPlaying = false;
                     }
                 }
 
@@ -447,11 +440,9 @@ namespace ATP.AnimationPathTools {
             // Convert target position to global coordinates.
             var lookAtTargetGlobal = Transform.TransformPoint(lookAtTarget);
 
-            // In play mode use Quaternion.Slerp();
             if (Application.isPlaying) {
                 RotateObjectWithSlerp(lookAtTargetGlobal);
             }
-            // In editor mode use Transform.LookAt().
             else {
                 RotateObjectWithLookAt(lookAtTargetGlobal);
             }

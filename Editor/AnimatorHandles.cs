@@ -25,7 +25,7 @@ namespace ATP.AnimationPathTools {
             get { return -25; }
         }
         public virtual float RotationHandleSize {
-            get { return 0.25f; }
+            get { return 0.26f; }
         }
 
         public void DrawAddNodeButtons(

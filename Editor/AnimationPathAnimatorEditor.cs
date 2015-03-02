@@ -235,11 +235,11 @@ namespace ATP.AnimationPathTools {
             Script.UpdateWrapMode();
 
             HandleDrawingEaseHandles();
-            HandleDrawingRotationHandle();
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
             HandleDrawingTiltLabel();
             HandleDrawingPositionHandles();
+            HandleDrawingRotationHandle();
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
         }

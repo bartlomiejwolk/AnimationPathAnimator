@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using ATP.ReorderableList;
 using UnityEngine;
 
@@ -27,12 +26,12 @@ namespace ATP.AnimationPathTools {
         [SerializeField]
         private Transform animatedGO;
 
-        [SerializeField]
-        private AnimatorGizmos animatorGizmos;
-
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animationTimeRatio;
+
+        [SerializeField]
+        private AnimatorGizmos animatorGizmos;
 
         [SerializeField]
         private int exportSamplingFrequency = 5;
@@ -187,6 +186,8 @@ namespace ATP.AnimationPathTools {
             set { tangentMode = value; }
         }
 
+        public Transform Transform { get; set; }
+
         public bool UpdateAllMode {
             get { return updateAllMode; }
             set { updateAllMode = value; }
@@ -196,8 +197,6 @@ namespace ATP.AnimationPathTools {
             get { return wrapMode; }
             set { wrapMode = value; }
         }
-
-        public Transform Transform { get; set; }
 
         #endregion PROPERTIES
 
@@ -255,7 +254,8 @@ namespace ATP.AnimationPathTools {
             if (handleMode == AnimatorHandleMode.Rotation) {
                 AnimatorGizmos.DrawRotationPathCurve(PathData, transform);
 
-                AnimatorGizmos.DrawCurrentRotationPointGizmo(PathData,
+                AnimatorGizmos.DrawCurrentRotationPointGizmo(
+                    PathData,
                     transform, AnimationTimeRatio);
 
                 AnimatorGizmos.DrawRotationPointGizmos(
@@ -301,31 +301,6 @@ namespace ATP.AnimationPathTools {
             object sender,
             EventArgs e) {
             UpdateAnimation();
-        }
-
-        #endregion
-
-        #region HANDLERS
-
-        private void AnimateAnimatedGORotation() {
-            if (animatedGO == null) return;
-
-            // Look at target.
-            if (targetGO != null
-                && rotationMode == AnimatorRotationMode.Target) {
-
-                RotateObjectWithSlerp(targetGO.position);
-            }
-            // Use rotation path.
-            if (rotationMode == AnimatorRotationMode.Custom) {
-                RotateObjectWithAnimationCurves();
-            }
-            // Look forward.
-            else if (rotationMode == AnimatorRotationMode.Forward) {
-                var globalForwardPoint = GetForwardPoint(true);
-
-                RotateObjectWithSlerp(globalForwardPoint);
-            }
         }
 
         #endregion
@@ -390,7 +365,8 @@ namespace ATP.AnimationPathTools {
         private void AnimateAnimatedGOPosition() {
             if (animatedGO == null) return;
 
-            var positionAtTimestamp = PathData.GetVectorAtTime(AnimationTimeRatio);
+            var positionAtTimestamp =
+                PathData.GetVectorAtTime(AnimationTimeRatio);
 
             var globalPositionAtTimestamp =
                 Transform.TransformPoint(positionAtTimestamp);
@@ -400,7 +376,41 @@ namespace ATP.AnimationPathTools {
                 animatedGO.position,
                 globalPositionAtTimestamp,
                 positionLerpSpeed);
-           
+
+        }
+
+        private void AnimateAnimatedGORotation() {
+            if (animatedGO == null) return;
+
+            // Look at target.
+            if (targetGO != null
+                && rotationMode == AnimatorRotationMode.Target) {
+
+                RotateObjectWithSlerp(targetGO.position);
+            }
+            // Use rotation path.
+            if (rotationMode == AnimatorRotationMode.Custom) {
+                RotateObjectWithAnimationCurves();
+            }
+            // Look forward.
+            else if (rotationMode == AnimatorRotationMode.Forward) {
+                var globalForwardPoint = GetForwardPoint(true);
+
+                RotateObjectWithSlerp(globalForwardPoint);
+            }
+        }
+
+        private void AnimateAnimatedGOTilting() {
+            if (animatedGO == null) return;
+
+            // Get current animatedGO rotation.
+            var eulerAngles = animatedGO.rotation.eulerAngles;
+            // Get rotation from tiltingCurve.
+            var zRotation = PathData.GetTiltingValueAtTime(AnimationTimeRatio);
+            // Update value on Z axis.
+            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            // Update animatedGO rotation.
+            animatedGO.rotation = Quaternion.Euler(eulerAngles);
         }
 
         private IEnumerator EaseTime() {
@@ -408,7 +418,8 @@ namespace ATP.AnimationPathTools {
                 // If animation is enabled and not paused..
                 if (!Pause) {
                     // Ease time.
-                    var timeStep = PathData.GetEaseValueAtTime(AnimationTimeRatio);
+                    var timeStep =
+                        PathData.GetEaseValueAtTime(AnimationTimeRatio);
                     AnimationTimeRatio += timeStep * Time.deltaTime;
 
                     if (AnimationTimeRatio > 1
@@ -422,7 +433,7 @@ namespace ATP.AnimationPathTools {
                 yield return null;
             }
         }
- 
+
         private Vector3[] GetGlobalRotationPointPositions() {
             var localPositions = PathData.GetRotationPointPositions();
             var globalPositions = new Vector3[localPositions.Length];
@@ -471,22 +482,10 @@ namespace ATP.AnimationPathTools {
                 speed);
         }
 
-        private void AnimateAnimatedGOTilting() {
-            if (animatedGO == null) return;
-
-            // Get current animatedGO rotation.
-            var eulerAngles = animatedGO.rotation.eulerAngles;
-            // Get rotation from tiltingCurve.
-            var zRotation = PathData.GetTiltingValueAtTime(AnimationTimeRatio);
-            // Update value on Z axis.
-            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-            // Update animatedGO rotation.
-            animatedGO.rotation = Quaternion.Euler(eulerAngles);
-        }
-
         private void UpdateAnimatedGOPosition() {
             // Get animatedGO position at current animation time.
-            var positionAtTimestamp = PathData.GetVectorAtTime(AnimationTimeRatio);
+            var positionAtTimestamp =
+                PathData.GetVectorAtTime(AnimationTimeRatio);
             var globalPositionAtTimestamp =
                 Transform.TransformPoint(positionAtTimestamp);
 

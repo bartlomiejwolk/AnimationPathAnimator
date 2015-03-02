@@ -66,10 +66,6 @@ namespace ATP.AnimationPathTools {
             get { return 0.05f; }
         }
 
-        protected virtual float FloatPrecision {
-            get { return 0.001f; }
-        }
-
         protected virtual int PathLengthSamplingFrequency {
             get { return 20; }
         }
@@ -206,7 +202,7 @@ namespace ATP.AnimationPathTools {
             // For each timestamp..
             for (var i = 0; i < RotationPath.KeysNo; i++) {
                 // Check if it is the timestamp to remove..
-                if (Math.Abs(timestamps[i] - timestamp) < FloatPrecision) {
+                if (Math.Abs(timestamps[i] - timestamp) < GlobalConstants.FloatPrecision) {
                     // Remove node.
                     RotationPath.RemoveNode(i);
 
@@ -492,7 +488,7 @@ namespace ATP.AnimationPathTools {
                 // If resp. node timestamp is different from easeCurve
                 // timestamp..
                 if (Math.Abs(pathNodeTimestamps[i] - curve.keys[i].value)
-                    > FloatPrecision) {
+                    > GlobalConstants.FloatPrecision) {
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp
@@ -521,7 +517,7 @@ namespace ATP.AnimationPathTools {
             foreach (var nodeTimestamp in nodeTimestamps) {
                 var valueExists = curveTimestamps.Any(
                     t =>
-                        Math.Abs(nodeTimestamp - t) < FloatPrecision);
+                        Math.Abs(nodeTimestamp - t) < GlobalConstants.FloatPrecision);
 
                 // Add missing key.
                 if (valueExists) continue;
@@ -547,7 +543,7 @@ namespace ATP.AnimationPathTools {
                 // Check if key at this timestamp exists..
                 var keyExists = nodeTimestamps.Any(
                     t =>
-                        Math.Abs(curveTimestamps[i] - t) < FloatPrecision);
+                        Math.Abs(curveTimestamps[i] - t) < GlobalConstants.FloatPrecision);
 
                 if (keyExists) continue;
 
@@ -616,7 +612,7 @@ namespace ATP.AnimationPathTools {
                 // If resp. path node timestamp is different from rotation
                 // point timestamp..
                 if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
-                    > FloatPrecision) {
+                    > GlobalConstants.FloatPrecision) {
 
                     // Update rotation point timestamp.
                     RotationPath.ChangeNodeTimestamp(
@@ -643,7 +639,7 @@ namespace ATP.AnimationPathTools {
                 for (var j = 0; j < rotationPathNodeNo; j++) {
                     // If both timestamps are the same..
                     if (Math.Abs(rotationPathTimestamps[j] - pathTimestamps[i])
-                        < FloatPrecision) {
+                        < GlobalConstants.FloatPrecision) {
 
                         keyExists = true;
 
@@ -679,7 +675,7 @@ namespace ATP.AnimationPathTools {
                 var keyExists = pathTimestamps.Any(
                     nodeTimestamp =>
                         Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
-                        < FloatPrecision);
+                        < GlobalConstants.FloatPrecision);
 
                 // If key exists check next timestamp.
                 if (keyExists) continue;

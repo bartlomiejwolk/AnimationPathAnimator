@@ -132,10 +132,6 @@ namespace ATP.AnimationPathTools {
             set { autoPlay = value; }
         }
 
-        public virtual float FloatPrecision {
-            get { return 0.001f; }
-        }
-
         public AnimatorHandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }

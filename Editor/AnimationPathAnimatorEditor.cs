@@ -55,10 +55,6 @@ namespace ATP.AnimationPathTools {
             get { return KeyCode.U; }
         }
 
-        public virtual float FloatPrecision {
-            get { return 0.001f; }
-        }
-
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
         /// </summary>
@@ -295,7 +291,7 @@ namespace ATP.AnimationPathTools {
 
             // Update AnimationTimeRatio only when value was changed.
             if (Math.Abs(newTimeRatio - Script.AnimationTimeRatio)
-                > FloatPrecision) {
+                > GlobalConstants.FloatPrecision) {
 
                 Script.AnimationTimeRatio = newTimeRatio;
             }
@@ -625,7 +621,9 @@ namespace ATP.AnimationPathTools {
             // timestamp.
             var index = Array.FindIndex(
                 nodeTimestamps,
-                x => Math.Abs(x - currentAnimationTime) < FloatPrecision);
+                x => Math.Abs(x - currentAnimationTime)
+                    < GlobalConstants.FloatPrecision);
+
             if (index < 0) return;
 
             Handles.color = Color.magenta;

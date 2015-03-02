@@ -735,6 +735,7 @@ namespace ATP.AnimationPathTools {
             TiltingCurve.AddKey(1, 0);
         }
 
+        // TODO This method should be inside AnimationPath.
         private void InstantiateAnimationPathCurves(AnimationPath animationPath) {
             for (var i = 0; i < 3; i++) {
                 animationPath[i] = new AnimationCurve();
@@ -744,21 +745,13 @@ namespace ATP.AnimationPathTools {
         private void InstantiateReferenceTypes() {
             AnimatedObjectPath = new AnimationPath();
             InstantiateAnimationPathCurves(animatedObjectPath);
+
             RotationPath = new AnimationPath();
             InstantiateAnimationPathCurves(rotationPath);
+
             EaseCurve = new AnimationCurve();
             TiltingCurve = new AnimationCurve();
         }
-
-        private void SubscribeToEvents() {
-            NodeAdded += PathData_NodeAdded;
-            NodeRemoved += PathData_NodeRemoved;
-            NodeTiltChanged += PathData_NodeTiltChanged;
-            NodeTimeChanged += PathData_NodeTimeChanged;
-            NodePositionChanged += PathData_NodePositionChanged;
-        }
-
-        #endregion METHODS
 
         public void OffsetRotationPathPosition(Vector3 moveDelta) {
             // For each node..
@@ -769,7 +762,15 @@ namespace ATP.AnimationPathTools {
                 var newPosition = oldPosition + moveDelta;
                 // Update node positions.
                 RotationPath.MovePointToPosition(i, newPosition);
-            }        
+            }
+        }
+
+        private void SubscribeToEvents() {
+            NodeAdded += PathData_NodeAdded;
+            NodeRemoved += PathData_NodeRemoved;
+            NodeTiltChanged += PathData_NodeTiltChanged;
+            NodeTimeChanged += PathData_NodeTimeChanged;
+            NodePositionChanged += PathData_NodePositionChanged;
         }
 
         public Vector3 GetGlobalNodePosition(int nodeIndex,
@@ -788,6 +789,26 @@ namespace ATP.AnimationPathTools {
             return nodePositions;
         }
 
+        public void ResetRotationPath() {
+            RotationPath = new AnimationPath();
+            InstantiateAnimationPathCurves(rotationPath);
+
+            UpdateRotationPathWithAddedKeys();
+            ResetRotationPathValues();
+        }
+
+        /// <summary>
+        /// Set RotationPath node positions to the same as in AnimatedObjectPath.
+        /// </summary>
+        private void ResetRotationPathValues() {
+            var animPathNodePositions = GetNodePositions();
+
+            for (int i = 0; i < animPathNodePositions.Length; i++) {
+                RotationPath.MovePointToPosition(i, animPathNodePositions[i]);
+            }
+        }
+
+        #endregion METHODS
     }
 
 }

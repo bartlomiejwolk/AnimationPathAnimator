@@ -153,6 +153,12 @@ namespace ATP.AnimationPathTools {
 
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal();
+
+            DrawResetRotationPathButton();
+
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.Space();
 
             DrawAnimatedGOControl();
@@ -185,6 +191,19 @@ namespace ATP.AnimationPathTools {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
+        }
+
+        private void DrawResetRotationPathButton() {
+            if (GUILayout.Button(
+                            new GUIContent(
+                                "Reset Rotation",
+                                ""))) {
+
+                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetRotationPath();
+            }
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

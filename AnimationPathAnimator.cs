@@ -119,12 +119,12 @@ namespace ATP.AnimationPathTools {
                 }
 
                 // Update animation with keys in play mode.
-                //if (Application.isPlaying) UpdateAnimatedGO();
+                //if (Application.isPlaying) UpdateAnimation();
                 if (Application.isPlaying && IsPlaying && !Pause) {
                     Animate();
                 }
                 else {
-                    UpdateAnimatedGO();
+                    UpdateAnimation();
                 }
 
                 //if (!Application.isPlaying) Animate();
@@ -288,24 +288,24 @@ namespace ATP.AnimationPathTools {
         #region EVENT HANDLERS
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimatedGO();
+            if (Application.isPlaying) UpdateAnimation();
             if (!Application.isPlaying) Animate();
         }
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimatedGO();
+            if (Application.isPlaying) UpdateAnimation();
             if (!Application.isPlaying) Animate();
         }
 
         private void PathData_PathReset(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimatedGO();
+            if (Application.isPlaying) UpdateAnimation();
             if (!Application.isPlaying) Animate();
         }
 
         private void PathData_RotationPointPositionChanged(
             object sender,
             EventArgs e) {
-            UpdateAnimatedGO();
+            UpdateAnimation();
         }
 
         #endregion
@@ -382,7 +382,7 @@ namespace ATP.AnimationPathTools {
         /// <remarks>
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
-        public void UpdateAnimatedGO() {
+        public void UpdateAnimation() {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
             // Update animatedGO tilting.

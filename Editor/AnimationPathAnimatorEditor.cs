@@ -430,7 +430,7 @@ namespace ATP.AnimationPathTools {
                     ""))) {
 
                 Script.StopEaseTimeCoroutine();
-                Script.UpdateAnimatedGO();
+                Script.UpdateAnimation();
             }
 
             EditorGUILayout.EndHorizontal();
@@ -513,7 +513,7 @@ namespace ATP.AnimationPathTools {
             // TODO Execute it as a callback.
             // If value changed, update animated GO in the scene.
             if (Script.RotationMode != prevRotationMode) {
-                Script.UpdateAnimatedGO();
+                Script.UpdateAnimation();
             }
         }
 

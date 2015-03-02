@@ -165,7 +165,7 @@ namespace ATP.AnimationPathTools {
             EditorGUILayout.Space();
 
             DrawAnimationTimeControl();
-            DrawRotationModeControls();
+            DrawRotationModeDropdown();
             DrawHandleModeDropdown();
             DrawMovementModeDropdown();
             DrawTangentModeDropdown();
@@ -504,7 +504,7 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        private void DrawRotationModeControls() {
+        private void DrawRotationModeDropdown() {
             // Remember current RotationMode.
             var prevRotationMode = Script.RotationMode;
             // Draw RotationMode dropdown.

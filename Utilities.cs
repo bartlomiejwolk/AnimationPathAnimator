@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -92,5 +93,23 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        public static void ConvertToGlobalCoordinates(
+            ref Vector3[] points,
+            Transform transform) {
+
+            // Convert to global.
+            for (int i = 0; i < points.Length; i++) {
+                points[i] = transform.TransformPoint(points[i]);
+            }
+        }
+
+        public static void ConvertToGlobalCoordinates(
+            ref List<Vector3> points,
+            Transform transform) {
+
+            for (int i = 0; i < points.Count; i++) {
+                points[i] = transform.TransformPoint(points[i]);
+            }
+        } 
     }
 }

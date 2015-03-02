@@ -827,6 +827,9 @@ namespace ATP.AnimationPathTools {
                 // Smooth all tangents.
                 SmoothCurve(TiltingCurve);
             }
+
+            // TODO Rename to OnNodeTiltingChange().
+            OnNodeTiltChanged();
         }
 
         public float GetTiltingValueAtIndex(int keyIndex) {

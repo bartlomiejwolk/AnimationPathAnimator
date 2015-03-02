@@ -310,23 +310,21 @@ namespace ATP.AnimationPathTools {
         #region EVENT HANDLERS
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimation();
-            if (!Application.isPlaying) Animate();
+            UpdateAnimation();
         }
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimation();
-            if (!Application.isPlaying) Animate();
+            UpdateAnimation();
         }
 
         private void PathData_PathReset(object sender, EventArgs e) {
-            if (Application.isPlaying) UpdateAnimation();
-            if (!Application.isPlaying) Animate();
+            UpdateAnimation();
         }
 
         private void PathData_RotationPointPositionChanged(
             object sender,
             EventArgs e) {
+
             UpdateAnimation();
         }
 

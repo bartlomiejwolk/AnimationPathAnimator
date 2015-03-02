@@ -119,9 +119,15 @@ namespace ATP.AnimationPathTools {
                 }
 
                 // Update animation with keys in play mode.
-                if (Application.isPlaying) UpdateAnimatedGO();
+                //if (Application.isPlaying) UpdateAnimatedGO();
+                if (Application.isPlaying && IsPlaying && !Pause) {
+                    Animate();
+                }
+                else {
+                    UpdateAnimatedGO();
+                }
 
-                if (!Application.isPlaying) Animate();
+                //if (!Application.isPlaying) Animate();
             }
         }
 
@@ -272,9 +278,9 @@ namespace ATP.AnimationPathTools {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
-            if (Application.isPlaying && IsPlaying && !Pause) {
-                Animate();
-            }
+            //if (Application.isPlaying && IsPlaying && !Pause) {
+            //    Animate();
+            //}
         }
 
         #endregion UNITY MESSAGES
@@ -306,26 +312,14 @@ namespace ATP.AnimationPathTools {
 
         #region HANDLERS
 
-
-        // Move to AnimatorGizmos class.
-        private void HandleDrawingGizmoCurve() {
-            
-        }
-
         private void HandleUpdateAnimatedGORotation() {
             if (animatedGO == null) return;
 
             // Look at target.
             if (targetGO != null
                 && rotationMode == AnimatorRotationMode.Target) {
-                // In play mode use Quaternion.Slerp();
-                if (Application.isPlaying) {
-                    RotateObjectWithSlerp(targetGO.position);
-                }
-                // In editor mode use Transform.LookAt().
-                else {
-                    RotateObjectWithLookAt(targetGO.position);
-                }
+
+                RotateObjectWithSlerp(targetGO.position);
             }
             // Use rotation path.
             if (rotationMode == AnimatorRotationMode.Custom) {
@@ -335,13 +329,7 @@ namespace ATP.AnimationPathTools {
             else if (rotationMode == AnimatorRotationMode.Forward) {
                 var globalForwardPoint = GetForwardPoint(true);
 
-                // In play mode..
-                if (Application.isPlaying) {
-                    RotateObjectWithSlerp(globalForwardPoint);
-                }
-                else {
-                    RotateObjectWithLookAt(globalForwardPoint);
-                }
+                RotateObjectWithSlerp(globalForwardPoint);
             }
         }
 
@@ -413,16 +401,12 @@ namespace ATP.AnimationPathTools {
             var globalPositionAtTimestamp =
                 Transform.TransformPoint(positionAtTimestamp);
 
-            if (Application.isPlaying) {
-                // Update position.
-                animatedGO.position = Vector3.Lerp(
-                    animatedGO.position,
-                    globalPositionAtTimestamp,
-                    positionLerpSpeed);
-            }
-            else {
-                animatedGO.position = globalPositionAtTimestamp;
-            }
+            // Update position.
+            animatedGO.position = Vector3.Lerp(
+                animatedGO.position,
+                globalPositionAtTimestamp,
+                positionLerpSpeed);
+           
         }
 
         private IEnumerator EaseTime() {

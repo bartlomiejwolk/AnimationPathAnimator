@@ -335,7 +335,7 @@ namespace ATP.AnimationPathTools {
         public void Animate() {
             AnimateObjectPosition();
             HandleUpdateAnimatedGORotation();
-            TiltObject();
+            UpdateAnimatedGOTilting();
         }
 
         // TODO Remove the globalPosition arg. and create separate method.
@@ -380,7 +380,7 @@ namespace ATP.AnimationPathTools {
         public void UpdateAnimation() {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
-            TiltObject();
+            UpdateAnimatedGOTilting();
         }
 
         public void UpdateWrapMode() {
@@ -471,7 +471,7 @@ namespace ATP.AnimationPathTools {
                 speed);
         }
 
-        private void TiltObject() {
+        private void UpdateAnimatedGOTilting() {
             if (animatedGO == null) return;
 
             // Get current animatedGO rotation.

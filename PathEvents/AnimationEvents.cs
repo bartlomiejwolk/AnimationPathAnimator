@@ -28,10 +28,16 @@ namespace ATP.SimplePathAnimator.PathEvents {
     public class AnimationEvents : MonoBehaviour {
 
         [SerializeField]
+        private GUISkin skin;
+
+        [SerializeField]
         private AnimationPathAnimator animator;
 
         [SerializeField]
         private List<NodeEvent> nodeEvents;
+
+        [SerializeField]
+        private bool drawMethodNames = true;
 
         public AnimationPathAnimator Animator {
             get { return animator; }
@@ -39,6 +45,10 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         public List<NodeEvent> NodeEvents {
             get { return nodeEvents; }
+        }
+
+        public GUISkin Skin {
+            get { return skin; }
         }
 
         private void OnEnable() {
@@ -73,6 +83,24 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         private void Update() {
 
+        }
+
+        public Vector3[] GetNodePositions() {
+            // TODO Move GetGlobalNodePositions() to AnimationPathAnimator class.
+            var nodePositions =
+                Animator.PathData.GetGlobalNodePositions(Animator.Transform);
+
+            return nodePositions;
+        }
+
+        public List<string> GetMethodNames() {
+            var methodNames = new List<string>();
+
+            foreach (var nodeEvent in NodeEvents) {
+                methodNames.Add(nodeEvent.MethodName);
+            }
+
+            return methodNames;
         }
 
     }

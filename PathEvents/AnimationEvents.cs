@@ -5,26 +5,6 @@ using ATP.SimplePathAnimator.Animator;
 
 namespace ATP.SimplePathAnimator.PathEvents {
 
-// TODO Move to separate file.
-    [System.Serializable]
-    public class NodeEvent {
-
-        [SerializeField]
-        private string methodName;
-
-        [SerializeField]
-        private string methodArg;
-
-        public string MethodName {
-            get { return methodName; }
-        }
-
-        public string MethodArg {
-            get { return methodArg; }
-        }
-
-    }
-
     public class AnimationEvents : MonoBehaviour {
 
         #region FIELDS

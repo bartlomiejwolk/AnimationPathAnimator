@@ -5,7 +5,7 @@ using Assets.Extensions.animationpathtools.Include.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace ATP.SimplePathAnimator {
 
     [CustomEditor(typeof (AnimationPathAnimator))]
     public class AnimatorEditor : Editor {

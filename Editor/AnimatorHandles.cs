@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace ATP.SimplePathAnimator {
 
     /// <summary>
     /// Class responsible for drawing all on scene handles.

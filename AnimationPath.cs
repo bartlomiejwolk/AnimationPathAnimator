@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using ATP.LoggingTools;
 
-namespace ATP.AnimationPathTools {
+namespace ATP.SimplePathAnimator {
 
     /// <summary>
     /// </summary>

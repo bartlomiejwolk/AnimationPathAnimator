@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ATP.ReorderableList;
+using ATP.SimplePathAnimator;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
-namespace ATP.AnimationPathTools {
+namespace ATP.SimplePathAnimator {
 
     // TODO Move to separate file.
     public class NodeReachedEventArgs : EventArgs {

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace ATP.SimplePathAnimator {
 
     public class AnimatorGizmos : ScriptableObject {
         #region FIELDS

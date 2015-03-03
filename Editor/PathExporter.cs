@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace ATP.SimplePathAnimator {
 
     public static class PathExporter {
 

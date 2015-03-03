@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using ATP.AnimationPathTools;
+using ATP.SimplePathAnimator;
 
 [ExecuteInEditMode]
 public class AnimationPathDebug : MonoBehaviour {

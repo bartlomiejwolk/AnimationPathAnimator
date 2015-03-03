@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ATP.ReorderableList {
+namespace ATP.SimplePathAnimator {
     public class GameComponent : MonoBehaviour {
 
         public enum InfoType { Warning, Error }

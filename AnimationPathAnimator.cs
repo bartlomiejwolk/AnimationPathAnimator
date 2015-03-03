@@ -143,6 +143,24 @@ namespace ATP.AnimationPathTools {
         }
 
         private void HandleFireNodeReachedEvent() {
+            // Get path timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            // Compare current AnimationTimeRatio to node timestamps.
+            var index = Array.FindIndex(
+                nodeTimestamps,
+                x => Math.Abs(x - AnimationTimeRatio)
+                    < GlobalConstants.FloatPrecision);
+
+            // Return if current AnimationTimeRatio is not equal to any node
+            // timestamp.
+            if (index < 0) return;
+
+            // Create event args.
+            var args = new NodeReachedEventArgs(index, AnimationTimeRatio);
+
+            // Fire event.
+            OnNodeReached(args);
         }
 
         public AnimatorGizmos AnimatorGizmos {

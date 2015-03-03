@@ -5,7 +5,7 @@ using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
-namespace ATP.SimplePathAnimator {
+namespace ATP.SimplePathAnimator.Animator {
 
     // TODO Use public API instead of using path and curve fields directly.
     public class PathData : ScriptableObject, ISerializationCallbackReceiver {

@@ -614,8 +614,23 @@ namespace ATP.AnimationPathTools {
         private void HandleDrawingRotationHandle() {
             if (Script.HandleMode != AnimatorHandleMode.Rotation) return;
 
+            var currentAnimationTime = script.AnimationTimeRatio;
+            var rotationPointPosition =
+                script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = script.PathData.GetPathTimestamps();
+
+            // Return if current animation time is not equal to any node
+            // timestamp.
+            var index = Array.FindIndex(
+                nodeTimestamps,
+                x => Math.Abs(x - currentAnimationTime)
+                    < GlobalConstants.FloatPrecision);
+
+            if (index < 0) return;
+
             AnimatorHandles.DrawRotationHandle(
                 Script,
+                rotationPointPosition,
                 DrawRotationHandlesCallbackHandler);
         }
 

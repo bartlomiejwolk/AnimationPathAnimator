@@ -419,23 +419,9 @@ namespace ATP.AnimationPathTools {
 
         public void DrawRotationHandle(
             AnimationPathAnimator script,
+            Vector3 rotationPointPosition,
             Action<float, Vector3> callback) {
 
-            var currentAnimationTime = script.AnimationTimeRatio;
-            var rotationPointPosition =
-                script.PathData.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = script.PathData.GetPathTimestamps();
-
-            // Return if current animation time is not equal to any node
-            // timestamp.
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Math.Abs(x - currentAnimationTime)
-                    < GlobalConstants.FloatPrecision);
-
-            if (index < 0) return;
-
-            Handles.color = Color.magenta;
             var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
             var sphereSize = handleSize * RotationHandleSize;
 
@@ -454,7 +440,7 @@ namespace ATP.AnimationPathTools {
                 var newPointLocalPosition =
                     script.transform.InverseTransformPoint(newGlobalPosition);
 
-                callback(currentAnimationTime, newPointLocalPosition);
+                callback(script.AnimationTimeRatio, newPointLocalPosition);
             }
         }
 

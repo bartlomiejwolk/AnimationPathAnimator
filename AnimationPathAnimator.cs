@@ -133,12 +133,16 @@ namespace ATP.AnimationPathTools {
                 // Animate while animation is running.
                 if (Application.isPlaying && IsPlaying && !Pause) {
                     Animate();
+                    HandleFireNodeReachedEvent();
                 }
                 // Update animation with keys while animation is stopped or paused.
                 else {
                     UpdateAnimation();
                 }
             }
+        }
+
+        private void HandleFireNodeReachedEvent() {
         }
 
         public AnimatorGizmos AnimatorGizmos {

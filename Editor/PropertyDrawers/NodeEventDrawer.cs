@@ -13,6 +13,7 @@ namespace ATP.SimplePathAnimator {
         const int propHeight = 16;
         /// Margin between properties.
         const int propMargin = 4;
+        const int RowsSpace = 8;
 
         /// Overall hight of the serialized property.
         public override float GetPropertyHeight(
@@ -21,7 +22,7 @@ namespace ATP.SimplePathAnimator {
 
             return base.GetPropertyHeight(property, label)
                 * _rows // Each row is 16 px high.
-                + (_rows - 1) * 4; // Add 4 px for each spece between rows.
+                + (_rows - 1) * RowsSpace; // Add 4 px for each spece between rows.
         }
 
         public override void OnGUI(

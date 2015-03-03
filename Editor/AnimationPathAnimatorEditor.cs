@@ -464,8 +464,19 @@ namespace ATP.AnimationPathTools {
                     "New Asset",
                     ""))) {
 
+                // Display save panel.
+                var savePath = EditorUtility.SaveFilePanelInProject(
+                    "Save Path Asset File",
+                    // TODO Make it a property.
+                    "Path1",
+                    "asset",
+                    "");
+
                 // Create new path asset.
-                var asset = ScriptableObjectUtility.CreateAsset<PathData>();
+                var asset = ScriptableObjectUtility.CreateAsset<PathData>(
+                    savePath);
+
+                if (asset == null) return;
 
                 // Assign asset as the current path.
                 Script.PathData = asset;

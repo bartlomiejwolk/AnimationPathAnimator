@@ -9,6 +9,20 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
+    // TODO Move to separate file.
+    public class NodeReachedEventArgs : EventArgs {
+
+        public int NodeIndex { get; set; }
+
+        public float Timestamp { get; set; }
+
+        public NodeReachedEventArgs(int nodeIndex, float timestamp) {
+            NodeIndex = nodeIndex;
+            Timestamp = timestamp;
+        }
+
+    }
+
     /// <summary>
     ///     Component that allows animating transforms position along predefined
     ///     Animation Paths and also animate their rotation on x and y axis in
@@ -16,6 +30,10 @@ namespace ATP.AnimationPathTools {
     /// </summary>
     [ExecuteInEditMode]
     public class AnimationPathAnimator : GameComponent {
+        #region EVENTS
+
+        public event EventHandler<NodeReachedEventArgs> NodeReached;
+        #endregion
         #region FIELDS
 
         [SerializeField]
@@ -582,6 +600,12 @@ namespace ATP.AnimationPathTools {
         }
 
         #endregion METHODS
+
+        protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
+            var handler = NodeReached;
+            if (handler != null) handler(this, eventArgs);
+        }
+
     }
 
 }

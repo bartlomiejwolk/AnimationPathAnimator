@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using ATP.SimplePathAnimator;
 
-namespace ATP.SimplePathAnimator.Events {
+namespace ATP.SimplePathAnimator.PathEvents {
 
 // TODO Move to separate file.
     [System.Serializable]

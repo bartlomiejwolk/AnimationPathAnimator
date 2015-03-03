@@ -388,7 +388,6 @@ namespace ATP.SimplePathAnimator {
 
             // Check for play mode.
             StartCoroutine("EaseTime");
-            Debug.Log("start coroutine");
         }
 
         public void StopEaseTimeCoroutine() {

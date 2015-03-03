@@ -380,6 +380,12 @@ namespace ATP.SimplePathAnimator {
         }
 
         public void StartEaseTimeCoroutine() {
+            // Starting node was reached.
+            if (AnimationTimeRatio == 0) {
+                var args = new NodeReachedEventArgs(0, 0);
+                OnNodeReached(args);
+            }
+
             // Check for play mode.
             StartCoroutine("EaseTime");
             Debug.Log("start coroutine");

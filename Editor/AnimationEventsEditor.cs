@@ -8,13 +8,13 @@ namespace ATP.SimplePathAnimator {
 
         private AnimationEvents Script { get; set; }
 
-        private SerializedProperty events;
+        private SerializedProperty nodeEvents;
         private SerializedProperty animator;
 
         private void OnEnable() {
             Script = (AnimationEvents) target;
 
-            events = serializedObject.FindProperty("events");
+            nodeEvents = serializedObject.FindProperty("nodeEvents");
             animator = serializedObject.FindProperty("animator");
         }
 
@@ -24,7 +24,7 @@ namespace ATP.SimplePathAnimator {
             EditorGUILayout.PropertyField(animator);
 
             ReorderableListGUI.Title("Events");
-            ReorderableListGUI.ListField(events);
+            ReorderableListGUI.ListField(nodeEvents);
 
             serializedObject.ApplyModifiedProperties();
         }

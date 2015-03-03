@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using ATP.SimplePathAnimator.ReorderableList;
+using UnityEditor;
 using UnityEngine;
 
 namespace ATP.SimplePathAnimator.PathEvents {
 
     [CustomEditor(typeof (AnimationEvents))]
     public class AnimationEventsEditor : Editor {
-
         #region FIELDS
+
         private SerializedProperty animator;
 
         private SerializedProperty drawMethodNames;
@@ -16,9 +16,11 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private SerializedProperty nodeEvents;
 
         private SerializedProperty skin;
+
         #endregion
 
         #region PROPERTIES
+
         public float DefaultNodeLabelHeight {
             get { return 30; }
         }
@@ -36,9 +38,11 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private AnimationEvents Script { get; set; }
-#endregion
+
+        #endregion
 
         #region UNITY MESSAGES
+
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
@@ -52,7 +56,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void OnEnable() {
-            Script = (AnimationEvents)target;
+            Script = (AnimationEvents) target;
 
             nodeEvents = serializedObject.FindProperty("nodeEvents");
             animator = serializedObject.FindProperty("animator");
@@ -64,14 +68,17 @@ namespace ATP.SimplePathAnimator.PathEvents {
             // TODO Guard against null Skin.
             HandleDrawingMethodNames();
         }
+
         #endregion
+
         #region METHODS
+
         private void DrawNodeLabel(
-                    Vector3 nodePosition,
-                    string value,
-                    int offsetX,
-                    int offsetY,
-                    GUIStyle style) {
+            Vector3 nodePosition,
+            string value,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
 
             // Translate node's 3d position into screen coordinates.
             var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
@@ -95,13 +102,13 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void DrawNodeLabels(
-                    Vector3[] nodePositions,
-                    List<string> textValues,
-                    int offsetX,
-                    int offsetY,
-                    GUIStyle style) {
+            Vector3[] nodePositions,
+            List<string> textValues,
+            int offsetX,
+            int offsetY,
+            GUIStyle style) {
 
-            for (int i = 0; i < textValues.Count; i++) {
+            for (var i = 0; i < textValues.Count; i++) {
                 DrawNodeLabel(
                     nodePositions[i],
                     textValues[i],
@@ -110,6 +117,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
                     style);
             }
         }
+
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;
 

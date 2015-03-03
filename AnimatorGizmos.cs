@@ -46,11 +46,11 @@ namespace ATP.AnimationPathTools {
         }
 
         protected virtual int RotationCurveSampling {
-            get { return 20; }
+            get { return 40; }
         }
 
         public virtual int GizmoCurveSamplingFrequency {
-            get { return 20; }
+            get { return 40; }
         }
 
         /// <summary>

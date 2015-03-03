@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEditor;
 
-namespace ATP.SimplePathAnimator {
+namespace ATP.SimplePathAnimator.Events {
 
     [CustomPropertyDrawer(typeof(NodeEvent))]
     public class NodeEventDrawer : PropertyDrawer {
@@ -36,7 +36,7 @@ namespace ATP.SimplePathAnimator {
             SerializedProperty methodArg =
                 prop.FindPropertyRelative("methodArg");
 
-            EditorGUIUtility.labelWidth = 70;
+            EditorGUIUtility.labelWidth = 55;
 
             EditorGUI.PropertyField(
                     new Rect(pos.x, pos.y, pos.width, propHeight),
@@ -50,7 +50,7 @@ namespace ATP.SimplePathAnimator {
                         pos.width,
                         propHeight),
                     methodArg,
-                    new GUIContent("Argument", ""));
+                    new GUIContent("Arg.", ""));
         }
     }
 }

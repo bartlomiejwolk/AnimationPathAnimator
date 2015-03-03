@@ -154,7 +154,9 @@ namespace ATP.AnimationPathTools {
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
         }
+        #endregion UNITY MESSAGES
 
+        #region INSPECTOR
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Script.UpdateAllMode) return;
 
@@ -169,9 +171,6 @@ namespace ATP.AnimationPathTools {
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
 
-        #endregion UNITY MESSAGES
-
-        #region INSPECTOR
 
         protected virtual void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();

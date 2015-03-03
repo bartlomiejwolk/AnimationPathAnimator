@@ -372,16 +372,16 @@ namespace ATP.AnimationPathTools {
         private void AnimateAnimatedGOPosition() {
             if (animatedGO == null) return;
 
-            var positionAtTimestamp =
+            var localPosAtTime =
                 PathData.GetVectorAtTime(AnimationTimeRatio);
 
-            var globalPositionAtTimestamp =
-                Transform.TransformPoint(positionAtTimestamp);
+            var globalPosAtTime =
+                Transform.TransformPoint(localPosAtTime);
 
             // Update position.
             animatedGO.position = Vector3.Lerp(
                 animatedGO.position,
-                globalPositionAtTimestamp,
+                globalPosAtTime,
                 positionLerpSpeed);
 
         }

@@ -6,7 +6,11 @@ using System.Collections.Generic;
 [System.Serializable]
 public class NodeEvent {
 
-    
+    [SerializeField]
+    private string methodName;
+
+    [SerializeField]
+    private string methodArg;
 
 }
 

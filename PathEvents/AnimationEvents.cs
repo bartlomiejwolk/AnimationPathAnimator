@@ -27,6 +27,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
     public class AnimationEvents : MonoBehaviour {
 
+        #region FIELDS
         [SerializeField]
         private GUISkin skin;
 
@@ -38,7 +39,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         [SerializeField]
         private bool drawMethodNames = true;
+        #endregion
 
+        #region PROPERTIES
         public AnimationPathAnimator Animator {
             get { return animator; }
         }
@@ -50,16 +53,31 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public GUISkin Skin {
             get { return skin; }
         }
+        #endregion
+
+        #region UNITY MESSAGES
+        private void Update() {
+
+        }
+
+        private void Start() {
+
+        }
+
+        private void OnDisable() {
+            Animator.NodeReached -= Animator_NodeReached;
+        }
 
         private void OnEnable() {
             if (Animator == null) return;
 
             Animator.NodeReached += Animator_NodeReached;
         }
-
+        #endregion
+        #region EVENT HANDLERS
         private void Animator_NodeReached(
-            object sender,
-            NodeReachedEventArgs arg) {
+                    object sender,
+                    NodeReachedEventArgs arg) {
             // Return if no event was specified for current and later nodes.
             if (arg.NodeIndex > NodeEvents.Count - 1) return;
 
@@ -73,26 +91,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
                 SendMessageOptions.DontRequireReceiver);
         }
 
-        private void OnDisable() {
-            Animator.NodeReached -= Animator_NodeReached;
-        }
-
-        private void Start() {
-
-        }
-
-        private void Update() {
-
-        }
-
-        public Vector3[] GetNodePositions() {
-            // TODO Move GetGlobalNodePositions() to AnimationPathAnimator class.
-            var nodePositions =
-                Animator.PathData.GetGlobalNodePositions(Animator.Transform);
-
-            return nodePositions;
-        }
-
+        #endregion
+        #region METHODS
         public List<string> GetMethodNames() {
             var methodNames = new List<string>();
 
@@ -103,6 +103,15 @@ namespace ATP.SimplePathAnimator.PathEvents {
             return methodNames;
         }
 
+        public Vector3[] GetNodePositions() {
+            // TODO Move GetGlobalNodePositions() to AnimationPathAnimator class.
+            var nodePositions =
+                Animator.PathData.GetGlobalNodePositions(Animator.Transform);
+
+            return nodePositions;
+        }
+
+        #endregion
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using ATP.SimplePathAnimator;
 
 // TODO Move to separate file.
 [System.Serializable]
@@ -17,7 +18,19 @@ public class NodeEvent {
 public class AnimationEvents : MonoBehaviour {
 
     [SerializeField]
-    private List<NodeEvent> events; 
+    private AnimationPathAnimator animator;
+
+    [SerializeField]
+    private List<NodeEvent> events;
+
+    private void OnEnable() {
+        if (animator == null) return;
+
+    }
+
+    private void OnDisable() {
+        
+    }
 
     private void Start() {
 

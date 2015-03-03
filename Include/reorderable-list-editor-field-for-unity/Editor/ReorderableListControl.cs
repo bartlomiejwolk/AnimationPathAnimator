@@ -1,14 +1,14 @@
 // Copyright (c) Rotorz Limited. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root.
 
-using Rotorz.ReorderableList.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using ATP.SimplePathAnimator.ReorderableList.Internal;
 using UnityEditor;
 using UnityEngine;
 
-namespace Rotorz.ReorderableList {
+namespace ATP.SimplePathAnimator.ReorderableList {
 	
 	/// <summary>
 	/// Arguments which are passed to <see cref="ItemInsertedEventHandler"/>.

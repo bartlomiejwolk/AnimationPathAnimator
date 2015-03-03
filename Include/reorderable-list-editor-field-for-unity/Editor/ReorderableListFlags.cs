@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Rotorz.ReorderableList {
+namespace ATP.SimplePathAnimator.ReorderableList {
 
 	/// <summary>
 	/// Additional flags which can be passed into reorderable list field.

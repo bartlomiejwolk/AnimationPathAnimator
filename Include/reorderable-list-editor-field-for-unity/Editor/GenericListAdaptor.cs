@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Rotorz.ReorderableList {
+namespace ATP.SimplePathAnimator.ReorderableList {
 
 	/// <summary>
 	/// Reorderable list adaptor for generic list.

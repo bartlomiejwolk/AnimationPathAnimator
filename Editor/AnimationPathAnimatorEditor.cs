@@ -16,6 +16,10 @@ namespace ATP.AnimationPathTools {
         /// </summary>
         private AnimationPathAnimator script;
 
+        private AnimatorShortcuts animatorShortcuts;
+        #endregion FIELDS
+        #region PROPERTIES
+
         public AnimatorHandles AnimatorHandles { get; private set; }
 
         public SerializedObject GizmoDrawer { get; private set; }
@@ -33,9 +37,7 @@ namespace ATP.AnimationPathTools {
             get { return animatorShortcuts; }
             set { animatorShortcuts = value; }
         }
-
-        private AnimatorShortcuts animatorShortcuts;
-        #endregion FIELDS
+        #endregion 
 
         #region SERIALIZED PROPERTIES
 
@@ -726,7 +728,7 @@ namespace ATP.AnimationPathTools {
 
         #endregion CALLBACK HANDLERS
 
-        #region OTHER HANDLERS
+        #region MODE HANDLERS
 
         private void HandleLinearTangentMode() {
             if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
@@ -816,6 +818,7 @@ namespace ATP.AnimationPathTools {
         //    // If modifier key was released..
         //    if (Event.current.type == EventType.keyUp
         //        && Event.current.keyCode == ModKey) {
+        // TODO Move to PathData.
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
@@ -833,6 +836,7 @@ namespace ATP.AnimationPathTools {
         //    // Check if modifier key is currently pressed.
         //    if (Event.current.type == EventType.keyDown
         //        && Event.current.keyCode == ModKey) {
+        // TODO Move to PathData.
         private float ConvertTiltToDegrees(int nodeIndex) {
             var rotationValue = Script.PathData.GetNodeTiltValue(nodeIndex);
 

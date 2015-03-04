@@ -305,27 +305,9 @@ namespace ATP.SimplePathAnimator.Animator {
             set { movementMode = value; }
         }
 
-        // TODO Move logic to AnimationPathAnimator.OnValidate().
         public AnimatorRotationMode RotationMode {
             get { return rotationMode; }
-            set {
-                // RotationMode changed.
-                if (value != rotationMode) {
-                    // Update value.
-                    rotationMode = value;
-
-                    //UpdateAnimation();
-
-                    // RotationMode changed to Forward.
-                    if (value == AnimatorRotationMode.Forward) {
-                        // Update HandleMode. 
-                        HandleMode = AnimatorHandleMode.None;
-                    }
-                }
-                else {
-                    rotationMode = value;
-                }
-            }
+            set { rotationMode = value; }
         }
 
         public AnimationPathBuilderTangentMode TangentMode {

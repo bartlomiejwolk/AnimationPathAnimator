@@ -80,8 +80,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.Space();
 
-            DrawAnimatedGOControl();
-            DrawTargetGOControl();
+            DrawAnimatedGOField();
+            DrawTargetGOField();
 
             EditorGUILayout.Space();
 
@@ -265,7 +265,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawAnimatedGOControl() {
+        protected virtual void DrawAnimatedGOField() {
             EditorGUILayout.PropertyField(
                 animatedGO,
                 new GUIContent(
@@ -450,7 +450,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawTargetGOControl() {
+        protected virtual void DrawTargetGOField() {
             EditorGUILayout.PropertyField(
                 targetGO,
                 new GUIContent(

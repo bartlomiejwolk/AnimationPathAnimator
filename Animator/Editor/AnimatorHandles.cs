@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,33 +13,22 @@ namespace ATP.SimplePathAnimator.Animator {
     // TODO Pass ref. to AnimationPathAnimator in the constructor.
     public class AnimatorHandles {
 
-        // TODO Convert to properties.
-        private const int AddButtonH = 25;
-        private const int AddButtonV = 10;
-        private const int RemoveButtonH = 44;
-        private const int RemoveButtonV = 10;
-        private const float ArcHandleRadius = 0.6f;
-        private const float ScaleHandleSize = 1.5f;
-        private const int DefaultLabelHeight = 10;
-        private const int DefaultLabelWidth = 30;
-        private const float MoveAllModeSize = 0.15f;
-        private const float MovementHandleSize = 0.12f;
-        public virtual int EaseValueLabelOffsetX {
-            get { return -20; }
+        private readonly AnimationPathAnimator animator;
+
+        public AnimatorHandles(AnimationPathAnimator animator) {
+            this.animator = animator;
         }
 
-        public virtual int EaseValueLabelOffsetY {
-            get { return -25; }
-        }
-        public virtual int UpdateAllLabelOffsetX {
-            get { return 0; }
+        private AnimationPathAnimator Animator {
+            get { return animator; }
         }
 
-        public virtual int UpdateAllLabelOffsetY {
-            get { return -25; }
+        private AnimatorSettings AnimatorSettings {
+            get { return Animator.Settings; }
         }
-        public virtual float RotationHandleSize {
-            get { return 0.26f; }
+
+        private AnimatorSettings Settings{
+            get { return Animator.Settings; }
         }
 
         public void DrawAddNodeButtons(
@@ -57,61 +47,9 @@ namespace ATP.SimplePathAnimator.Animator {
 
                 // Draw button.
                 var buttonPressed = DrawButton(
-                    guiPoint, AddButtonH, AddButtonV,
-                    15,
-                    15,
-                    buttonStyle);
-
-                // Execute callback.
-                if (buttonPressed) {
-                    callback(i);
-                }
-            }
-
-            Handles.EndGUI();
-        }
-
-        private bool DrawButton(
-            Vector2 position,
-            int relativeXPos,
-            int relativeYPos,
-            int width,
-            int height,
-            GUIStyle style,
-            string buttonText = "") {
-
-            // Create rectangle for the "+" button.
-            var rectAdd = new Rect(
-                position.x + relativeXPos,
-                position.y + relativeYPos,
-                width,
-                height);
-
-            // Draw the "+" button.
-            var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
-
-            return addButtonPressed;
-        }
-
-        public void DrawRemoveNodeButtons(
-            Vector3[] nodePositions,
-            Action<int> callback,
-            GUIStyle buttonStyle) {
-
-            Handles.BeginGUI();
-
-            // Draw remove buttons for each node except for the first and the
-            // last one. Execute callback on button press.
-            for (var i = 1; i < nodePositions.Length - 1; i++) {
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(
-                    nodePositions[i]);
-
-                // Draw button.
-                var buttonPressed = DrawButton(
                     guiPoint,
-                    RemoveButtonH,
-                    RemoveButtonV,
+                    Settings.AddButtonH,
+                    Settings.AddButtonV,
                     15,
                     15,
                     buttonStyle);
@@ -146,7 +84,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             var arcValue = value * arcValueMultiplier;
             var handleSize = HandleUtility.GetHandleSize(position);
-            var arcRadius = handleSize * ArcHandleRadius;
+            var arcRadius = handleSize * Settings.ArcHandleRadius;
 
             Handles.color = handleColor;
 
@@ -164,9 +102,9 @@ namespace ATP.SimplePathAnimator.Animator {
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
             arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
-                ? InitialArcValue : arcValue;
+                ? Settings.InitialArcValue : arcValue;
 
-            var scaleHandleSize = handleSize * ScaleHandleSize;
+            var scaleHandleSize = handleSize * Settings.ScaleHandleSize;
             var newArcValue = Handles.ScaleValueHandle(
                 arcValue,
                 position + Vector3.forward * arcRadius
@@ -187,8 +125,28 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public virtual float InitialArcValue {
-            get { return 15f; }
+        public void DrawArcHandleLabels(
+            Vector3[] nodeGlobalPositions,
+            Func<int, float> calculateValueCallback,
+            GUIStyle style) {
+
+            var nodesNo = nodeGlobalPositions.Length;
+
+            // For each path node..
+            for (var i = 0; i < nodesNo; i++) {
+                // Get value to display.
+                var arcValue = String.Format(
+                    "{0:0}",
+                    calculateValueCallback(i));
+
+                DrawNodeLabel(
+                    nodeGlobalPositions[i],
+                    arcValue,
+                    // TODO These should be taken from method args.
+                    Settings.EaseValueLabelOffsetX,
+                    Settings.EaseValueLabelOffsetY,
+                    style);
+            }
         }
 
         public void DrawEaseHandles(
@@ -210,24 +168,88 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void DrawTiltingHandles(
-            Vector3[] nodePositions,
-            float[] tiltingCurveValues,
-            Action<int, float> callback) {
+        // TODO Remove animator param. from all methods.
+        public void DrawMoveAllPositionHandles(
+            AnimationPathAnimator animator,
+            Action<int, Vector3, Vector3> callback) {
 
-            // Set arc value multiplier.
-            const int arcValueMultiplier = 1;
+            if (AnimatorSettings.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveAll) return;
 
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                DrawArcHandle(
-                    tiltingCurveValues[i],
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    -90,
-                    90,
-                    Color.green,
-                    value => callback(i, value));
+            // Node global positions.
+            var nodes = animator.PathData.GetGlobalNodePositions(
+                animator.Transform);
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = Settings.MoveAllModeColor;
+
+                // Draw position handle.
+                var newPos = DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
+
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition =
+                        animator.Transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition =
+                        animator.Transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
+            }
+        }
+
+        public void DrawMoveSinglePositionsHandles(AnimationPathAnimator animator,
+            Action<int, Vector3, Vector3> callback) {
+
+            if (AnimatorSettings.MovementMode !=
+                AnimationPathBuilderHandleMode.MoveSingle) return;
+
+            // Node global positions.
+            var nodes = animator.PathData.GetGlobalNodePositions(
+                animator.Transform);
+
+            // Cap function used to draw handle.
+            Handles.DrawCapFunction capFunction = Handles.CircleCap;
+
+            // For each node..
+            for (var i = 0; i < nodes.Length; i++) {
+                var handleColor = animator.Settings.GizmoCurveColor;
+
+                // Draw position handle.
+                var newPos = DrawPositionHandle(
+                    nodes[i],
+                    handleColor,
+                    capFunction);
+
+                // TODO Make it into callback.
+                // If node was moved..
+                if (newPos != nodes[i]) {
+                    // Calculate node old local position.
+                    var oldNodeLocalPosition = animator.Transform.InverseTransformPoint(nodes[i]);
+
+                    // Calculate node new local position.
+                    var newNodeLocalPosition = animator.Transform.InverseTransformPoint(newPos);
+
+                    // Calculate movement delta.
+                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+                    // Execute callback.
+                    callback(i, newNodeLocalPosition, moveDelta);
+                }
             }
         }
 
@@ -245,8 +267,8 @@ namespace ATP.SimplePathAnimator.Animator {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                DefaultLabelWidth,
-                DefaultLabelHeight);
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight);
 
             Handles.BeginGUI();
 
@@ -257,30 +279,6 @@ namespace ATP.SimplePathAnimator.Animator {
                 style);
 
             Handles.EndGUI();
-        }
-
-        public void DrawArcHandleLabels(
-            Vector3[] nodeGlobalPositions,
-            Func<int, float> calculateValueCallback,
-            GUIStyle style) {
-
-            var nodesNo = nodeGlobalPositions.Length;
-
-            // For each path node..
-            for (var i = 0; i < nodesNo; i++) {
-                // Get value to display.
-                var arcValue = String.Format(
-                    "{0:0}",
-                    calculateValueCallback(i));
-
-                DrawNodeLabel(
-                    nodeGlobalPositions[i],
-                    arcValue,
-                    // TODO These should be taken from method args.
-                    EaseValueLabelOffsetX,
-                    EaseValueLabelOffsetY,
-                    style);
-            }
         }
 
         public void DrawNodeLabels(
@@ -313,7 +311,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Get handle size.
             var handleSize = HandleUtility.GetHandleSize(nodePosition);
-            var sphereSize = handleSize * MovementHandleSize;
+            var sphereSize = handleSize * Settings.MovementHandleSize;
 
             // Draw handle.
             var newPos = Handles.FreeMoveHandle(
@@ -325,96 +323,36 @@ namespace ATP.SimplePathAnimator.Animator {
             return newPos;
         }
 
-        public virtual Color PositionHandleColor {
-            get { return Color.yellow; }
-        }
+        public void DrawRemoveNodeButtons(
+            Vector3[] nodePositions,
+            Action<int> callback,
+            GUIStyle buttonStyle) {
 
-        public void DrawMoveSinglePositionsHandles(AnimationPathAnimator animator,
-            Action<int, Vector3, Vector3> callback) {
+            Handles.BeginGUI();
 
-            if (animator.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveSingle) return;
+            // Draw remove buttons for each node except for the first and the
+            // last one. Execute callback on button press.
+            for (var i = 1; i < nodePositions.Length - 1; i++) {
+                // Translate node's 3d position into screen coordinates.
+                var guiPoint = HandleUtility.WorldToGUIPoint(
+                    nodePositions[i]);
 
-            // Node global positions.
-            var nodes = animator.PathData.GetGlobalNodePositions(
-                animator.Transform);
+                // Draw button.
+                var buttonPressed = DrawButton(
+                    guiPoint,
+                    Settings.RemoveButtonH,
+                    Settings.RemoveButtonV,
+                    15,
+                    15,
+                    buttonStyle);
 
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = animator.AnimatorGizmos.GizmoCurveColor;
-
-                // Draw position handle.
-                var newPos = DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // TODO Make it into callback.
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition = animator.Transform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition = animator.Transform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
+                // Execute callback.
+                if (buttonPressed) {
+                    callback(i);
                 }
             }
-        }
 
-        public void DrawMoveAllPositionHandles(
-            AnimationPathAnimator animator,
-            Action<int, Vector3, Vector3> callback) {
-
-            if (animator.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveAll) return;
-
-            // Node global positions.
-            var nodes = animator.PathData.GetGlobalNodePositions(
-                animator.Transform);
-
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = MoveAllModeColor;
-
-                // Draw position handle.
-                var newPos = DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition =
-                        animator.Transform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition =
-                        animator.Transform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
-                }
-            }
-        }
-
-        public virtual Color MoveAllModeColor {
-            get { return Color.red; }
+            Handles.EndGUI();
         }
 
         public void DrawRotationHandle(
@@ -423,7 +361,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Action<float, Vector3> callback) {
 
             var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
-            var sphereSize = handleSize * RotationHandleSize;
+            var sphereSize = handleSize * Settings.RotationHandleSize;
 
             var rotationPointGlobalPos =
                 script.transform.TransformPoint(rotationPointPosition);
@@ -444,22 +382,60 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        public void DrawTiltingHandles(
+            Vector3[] nodePositions,
+            float[] tiltingCurveValues,
+            Action<int, float> callback) {
+
+            // Set arc value multiplier.
+            const int arcValueMultiplier = 1;
+
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                DrawArcHandle(
+                    tiltingCurveValues[i],
+                    nodePositions[i],
+                    arcValueMultiplier,
+                    -90,
+                    90,
+                    Color.green,
+                    value => callback(i, value));
+            }
+        }
+
         public void DrawUpdateAllLabels(
             AnimationPathAnimator animator,
             GUIStyle style) {
 
             DrawNodeLabels(
                 animator,
-                UpdateAllLabelText,
-                UpdateAllLabelOffsetX,
-                UpdateAllLabelOffsetY,
+                Settings.UpdateAllLabelText,
+                Settings.UpdateAllLabelOffsetX,
+                Settings.UpdateAllLabelOffsetY,
                 style);
         }
 
-        protected virtual string UpdateAllLabelText {
-            get { return "A"; }
-        }
+        private bool DrawButton(
+            Vector2 position,
+            int relativeXPos,
+            int relativeYPos,
+            int width,
+            int height,
+            GUIStyle style,
+            string buttonText = "") {
 
+            // Create rectangle for the "+" button.
+            var rectAdd = new Rect(
+                position.x + relativeXPos,
+                position.y + relativeYPos,
+                width,
+                height);
+
+            // Draw the "+" button.
+            var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
+
+            return addButtonPressed;
+        }
     }
 
 }

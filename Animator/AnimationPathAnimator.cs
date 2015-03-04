@@ -1,27 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ATP.SimplePathAnimator.Animator;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
 namespace ATP.SimplePathAnimator.Animator {
-
-    // TODO Move to separate file.
-    public class NodeReachedEventArgs : EventArgs {
-
-        public int NodeIndex { get; set; }
-
-        public float Timestamp { get; set; }
-
-        public NodeReachedEventArgs(int nodeIndex, float timestamp) {
-            NodeIndex = nodeIndex;
-            Timestamp = timestamp;
-        }
-
-    }
 
     /// <summary>
     ///     Component that allows animating transforms position along predefined
@@ -33,20 +17,18 @@ namespace ATP.SimplePathAnimator.Animator {
         #region EVENTS
 
         public event EventHandler<NodeReachedEventArgs> NodeReached;
+
         #endregion
+
+        protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
+            var handler = NodeReached;
+            if (handler != null) handler(this, eventArgs);
+        }
+
         #region FIELDS
 
         [SerializeField]
         private bool advancedSettingsFoldout;
-        [SerializeField]
-        private AnimatorGizmos animatorGizmos;
-        [SerializeField]
-        private PathData pathData;
-        /// <summary>
-        ///     Transform that the <c>animatedGO</c> will be looking at.
-        /// </summary>
-        [SerializeField]
-        private Transform targetGO;
 
         /// <summary>
         ///     Transform to be animated.
@@ -54,67 +36,27 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private Transform animatedGO;
 
-        [SerializeField]
-        private GUISkin skin;
-
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animationTimeRatio;
 
         [SerializeField]
-        private int exportSamplingFrequency = 5;
-
-
-        [SerializeField]
-        protected bool EnableControlsInPlayMode = true;
+        private AnimatorGizmos animatorGizmos;
 
         [SerializeField]
-        protected float MaxAnimationSpeed = 0.3f;
+        private PathData pathData;
+
+        [SerializeField]
+        private AnimatorSettings settings;
+
+        [SerializeField]
+        private GUISkin skin;
 
         /// <summary>
-        ///     Value of the jump when modifier key is pressed.
+        ///     Transform that the <c>animatedGO</c> will be looking at.
         /// </summary>
         [SerializeField]
-        private readonly float shortJumpValue = 0.002f;
-
-        [SerializeField]
-        private bool autoPlay = true;
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        [SerializeField]
-        private float forwardPointOffset = 0.05f;
-
-        [SerializeField]
-        private AnimatorHandleMode handleMode =
-            AnimatorHandleMode.None;
-
-        [SerializeField]
-        private AnimationPathBuilderHandleMode movementMode =
-            AnimationPathBuilderHandleMode.MoveAll;
-
-        [SerializeField]
-        private float positionLerpSpeed = 0.1f;
-
-        [SerializeField]
-        private AnimatorRotationMode rotationMode =
-            AnimatorRotationMode.Forward;
-
-        [SerializeField]
-        private float rotationSpeed = 3.0f;
-
-        [SerializeField]
-        private AnimationPathBuilderTangentMode tangentMode =
-            AnimationPathBuilderTangentMode.Smooth;
-
-        [SerializeField]
-        private bool updateAllMode;
-
-        [SerializeField]
-        private WrapMode wrapMode = WrapMode.Clamp;
+        private Transform targetGO;
 
         #endregion OPTIONS
 
@@ -142,6 +84,35 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        public AnimatorGizmos AnimatorGizmos {
+            get { return animatorGizmos; }
+        }
+
+        /// <summary>
+        ///     If animation is currently enabled.
+        /// </summary>
+        /// <remarks>When it's true, it means that the EaseTime coroutine is running.</remarks>
+        public bool IsPlaying { get; set; }
+
+        public PathData PathData {
+            get { return pathData; }
+            set { pathData = value; }
+        }
+
+        public bool Pause { get; set; }
+
+        public AnimatorSettings Settings {
+            get { return settings; }
+            set { settings = value; }
+        }
+
+        public GUISkin Skin {
+            get { return skin; }
+            set { skin = value; }
+        }
+
+        public Transform Transform { get; set; }
+
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
@@ -150,7 +121,7 @@ namespace ATP.SimplePathAnimator.Animator {
             var index = Array.FindIndex(
                 nodeTimestamps,
                 x => Math.Abs(x - AnimationTimeRatio)
-                    < GlobalConstants.FloatPrecision);
+                     < GlobalConstants.FloatPrecision);
 
             // Return if current AnimationTimeRatio is not equal to any node
             // timestamp.
@@ -163,105 +134,6 @@ namespace ATP.SimplePathAnimator.Animator {
             OnNodeReached(args);
         }
 
-        public AnimatorGizmos AnimatorGizmos {
-            get { return animatorGizmos; }
-        }
-
-        public bool AutoPlay {
-            get { return autoPlay; }
-            set { autoPlay = value; }
-        }
-
-        public AnimatorHandleMode HandleMode {
-            get { return handleMode; }
-            set { handleMode = value; }
-        }
-
-        /// <summary>
-        ///     If animation is currently enabled.
-        /// </summary>
-        /// <remarks>When it's true, it means that the EaseTime coroutine is running.</remarks>
-        public bool IsPlaying { get; set; }
-
-        public AnimationPathBuilderHandleMode MovementMode {
-            get { return movementMode; }
-            set { movementMode = value; }
-        }
-
-        public PathData PathData {
-            get { return pathData; }
-            set { pathData = value; }
-        }
-
-        public bool Pause { get; set; }
-
-        public AnimatorRotationMode RotationMode {
-            get { return rotationMode; }
-            set {
-                // RotationMode changed.
-                if (value != rotationMode) {
-                    // Update value.
-                    rotationMode = value;
-
-                    UpdateAnimation();
-
-                    // RotationMode changed to Forward.
-                    if (value == AnimatorRotationMode.Forward) {
-                        // Update HandleMode. 
-                        HandleMode = AnimatorHandleMode.None;
-                    }
-                }
-                else {
-                    rotationMode = value;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public virtual float ShortJumpValue {
-            get { return shortJumpValue; }
-        }
-
-        public GUISkin Skin {
-            get { return skin; }
-            set { skin = value; }
-        }
-
-        public AnimationPathBuilderTangentMode TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
-        }
-
-        public Transform Transform { get; set; }
-
-        public bool UpdateAllMode {
-            get { return updateAllMode; }
-            set { updateAllMode = value; }
-        }
-
-        public WrapMode WrapMode {
-            get { return wrapMode; }
-            set { wrapMode = value; }
-        }
-
-        public int ExportSamplingFrequency {
-            get { return exportSamplingFrequency; }
-            set {
-                // Limit value.
-                if (value < 1) {
-                    exportSamplingFrequency = 1;
-                }
-                else if (value > 100) {
-                    exportSamplingFrequency = 100;
-                }
-                else {
-                    exportSamplingFrequency = value;
-                }
-            }
-        }
-
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -269,6 +141,16 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             Transform = GetComponent<Transform>();
+            Settings = Resources.Load("Settings/Animator") as AnimatorSettings;
+            skin = Resources.Load("GUISkin/Animator") as GUISkin;
+
+            // Initialize animatedGO field.
+            if (animatedGO == null && Camera.main != null) {
+                animatedGO = Camera.main.transform;
+            }
+
+            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+            animatorGizmos.Init(Settings);
 
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=
@@ -289,14 +171,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
-            skin = Resources.Load("GUISkin/default") as GUISkin;
 
-            // Initialize animatedGO field.
-            if (animatedGO == null && Camera.main != null) {
-                animatedGO = Camera.main.transform;
-            }
-
-            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -305,33 +180,40 @@ namespace ATP.SimplePathAnimator.Animator {
             // Return if path asset file is not assigned.
             if (PathData == null) return;
 
-            if (rotationMode == AnimatorRotationMode.Target
+            if (Settings.RotationMode == AnimatorRotationMode.Target
                 && targetGO != null) {
                 AnimatorGizmos.DrawTargetIcon(targetGO.position);
             }
 
-            if (rotationMode == AnimatorRotationMode.Forward) {
+            if (Settings.RotationMode == AnimatorRotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
                 AnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
             }
 
-            if (handleMode == AnimatorHandleMode.Rotation) {
+            if (Settings.HandleMode == AnimatorHandleMode.Rotation) {
                 AnimatorGizmos.DrawRotationPathCurve(PathData, transform);
 
                 AnimatorGizmos.DrawCurrentRotationPointGizmo(
                     PathData,
-                    transform, AnimationTimeRatio);
+                    transform,
+                    AnimationTimeRatio);
 
                 AnimatorGizmos.DrawRotationPointGizmos(
-                    PathData, transform, AnimationTimeRatio);
+                    PathData,
+                    transform,
+                    AnimationTimeRatio);
             }
 
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 
+        private void OnValidate() {
+
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
-            if (Application.isPlaying && autoPlay) {
+            if (Application.isPlaying && Settings.AutoPlay) {
                 StartEaseTimeCoroutine();
                 IsPlaying = true;
             }
@@ -339,10 +221,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
-        }
-
-        private void OnValidate() {
-            
         }
 
         #endregion UNITY MESSAGES
@@ -377,6 +255,27 @@ namespace ATP.SimplePathAnimator.Animator {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
             AnimateAnimatedGOTilting();
+        }
+
+        public void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            // Pause animation.
+            if (IsPlaying && !Pause) {
+                Pause = true;
+                //Script.IsPlaying = false;
+            }
+            // Unpause animation.
+            else if (IsPlaying && Pause) {
+                Pause = false;
+                //Script.IsPlaying = true;
+            }
+            // Start animation.
+            else {
+                IsPlaying = true;
+                // Start animation.
+                StartEaseTimeCoroutine();
+            }
         }
 
         public void StartEaseTimeCoroutine() {
@@ -427,7 +326,7 @@ namespace ATP.SimplePathAnimator.Animator {
             animatedGO.position = Vector3.Lerp(
                 animatedGO.position,
                 globalPosAtTime,
-                positionLerpSpeed);
+                Settings.PositionLerpSpeed);
 
         }
 
@@ -436,16 +335,16 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Look at target.
             if (targetGO != null
-                && rotationMode == AnimatorRotationMode.Target) {
+                && Settings.RotationMode == AnimatorRotationMode.Target) {
 
                 RotateObjectWithSlerp(targetGO.position);
             }
             // Use rotation path.
-            if (rotationMode == AnimatorRotationMode.Custom) {
+            if (Settings.RotationMode == AnimatorRotationMode.Custom) {
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            else if (rotationMode == AnimatorRotationMode.Forward) {
+            else if (Settings.RotationMode == AnimatorRotationMode.Forward) {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
@@ -475,7 +374,7 @@ namespace ATP.SimplePathAnimator.Animator {
                     AnimationTimeRatio += timeStep * Time.deltaTime;
 
                     if (AnimationTimeRatio > 1
-                        && WrapMode == WrapMode.Once) {
+                        && Settings.WrapMode == WrapMode.Once) {
 
                         AnimationTimeRatio = 1;
                         Pause = true;
@@ -514,7 +413,7 @@ namespace ATP.SimplePathAnimator.Animator {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime * rotationSpeed;
+            var speed = Time.deltaTime * Settings.RotationSpeed;
 
             // Lerp rotation.
             animatedGO.rotation = Quaternion.Slerp(
@@ -537,7 +436,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void UpdateAnimatedGORotation() {
             if (animatedGO == null) return;
 
-            switch (rotationMode) {
+            switch (Settings.RotationMode) {
                 case AnimatorRotationMode.Forward:
                     var globalForwardPoint = GetGlobalForwardPoint();
 
@@ -567,39 +466,18 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void HandlePlayPause() {
-            if (!Application.isPlaying) return;
-
-            // Pause animation.
-            if (IsPlaying && !Pause) {
-                Pause = true;
-                //Script.IsPlaying = false;
-            }
-            // Unpause animation.
-            else if (IsPlaying && Pause) {
-                Pause = false;
-                //Script.IsPlaying = true;
-            }
-            // Start animation.
-            else {
-                IsPlaying = true;
-                // Start animation.
-                StartEaseTimeCoroutine();
-            }
-        }
-
         #endregion
 
         #region HELPER METHODS
 
         public void UpdateWrapMode() {
-            PathData.SetWrapMode(wrapMode);
+            PathData.SetWrapMode(Settings.WrapMode);
         }
 
         // TODO Remove the globalPosition arg. and create separate method.
         private Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
-            var forwardPointDelta = forwardPointOffset;
+            var forwardPointDelta = Settings.ForwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = AnimationTimeRatio + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
@@ -627,11 +505,18 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         #endregion METHODS
+    }
 
-        protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
-            var handler = NodeReached;
-            if (handler != null) handler(this, eventArgs);
+    // TODO Move to separate file.
+    public class NodeReachedEventArgs : EventArgs {
+
+        public NodeReachedEventArgs(int nodeIndex, float timestamp) {
+            NodeIndex = nodeIndex;
+            Timestamp = timestamp;
         }
+
+        public int NodeIndex { get; set; }
+        public float Timestamp { get; set; }
 
     }
 

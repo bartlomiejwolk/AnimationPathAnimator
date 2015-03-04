@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Assets.Extensions.animationpathtools.Include.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,14 +16,17 @@ namespace ATP.SimplePathAnimator.Animator {
         private AnimationPathAnimator script;
 
         private AnimatorShortcuts animatorShortcuts;
+
         #endregion FIELDS
         #region PROPERTIES
 
         public AnimatorHandles AnimatorHandles { get; private set; }
 
+        // TODO Rename to GizmoDrawerSerObj.
+        // TODO Make private.
         public SerializedObject GizmoDrawer { get; private set; }
-
-        public bool ModKeyPressed { get; private set; }
+        private SerializedObject SettingsSerObj { get; set; }
+        //public SerializedObject PathExporterSerObj { get; private set; }
 
         /// <summary>
         ///     Reference to target script.
@@ -37,6 +39,10 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return animatorShortcuts; }
             set { animatorShortcuts = value; }
         }
+
+        public AnimatorSettings AnimatorSettings { get; private set; }
+        private PathExporter PathExporter { get; set; }
+
         #endregion 
 
         #region SERIALIZED PROPERTIES
@@ -54,6 +60,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
+        private SerializedProperty settings;
 
 
         #endregion SERIALIZED PROPERTIES
@@ -61,20 +68,13 @@ namespace ATP.SimplePathAnimator.Animator {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            DrawPathDataAssetControl();
+            // TODO Rename to DrawPathDataAssetField().
+            DrawPathDataAssetField();
 
             EditorGUILayout.BeginHorizontal();
 
             DrawCreatePathAssetButton();
             DrawResetPathInspectorButton();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-
-            DrawResetRotationPathButton();
-            DrawResetEaseButton();
-            DrawResetTiltingButton();
 
             EditorGUILayout.EndHorizontal();
 
@@ -94,6 +94,25 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.Space();
 
+            EditorGUIUtility.labelWidth = 180;
+
+            DrawPositionLerpSpeedControl();
+            DrawRotationLerpSpeedField();
+            DrawForwardPointOffsetField();
+            //DrawMaxAnimationSpeedField();
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawResetRotationPathButton();
+            DrawResetEaseButton();
+            DrawResetTiltingButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
             DrawAutoPlayControl();
             DrawEnableControlsInPlayModeToggle();
             DrawUpdateAllToggle();
@@ -104,17 +123,44 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.Space();
 
-            PathExporter.DrawExportControls(Script);
+            EditorGUIUtility.labelWidth = 0;
+
+            PathExporter.DrawExportControls();
 
             EditorGUILayout.Space();
 
-            DrawAdvancedSettingsFoldout();
-            DrawAdvanceSettingsControls();
+            // TODO Create control section for Lerp settings.
+
+            //EditorGUILayout.Space();
+
+            //DrawAdvancedSettingsFoldout();
+            //DrawAdvanceSettingsControls();
+
+            DrawSettingsAssetField();
+            DrawSkinSelectionControl();
         }
+
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "Settings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
             script = (AnimationPathAnimator) target;
+
+            // Initialize AnimatorSettings property.
+            AnimatorSettings = Script.Settings;
+
+            PathExporter = new PathExporter(Script);
 
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
@@ -158,7 +204,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region INSPECTOR
         private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.UpdateAllMode) return;
+            if (!AnimatorSettings.UpdateAllMode) return;
 
             //AnimatorHandles.DrawNodeLabels(
             //    Script,
@@ -208,7 +254,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
                 // TODO Limit these values in OnValidate().
                 DrawPositionLerpSpeedControl();
-                DrawRotationSpeedField();
+                DrawRotationLerpSpeedField();
                 DrawForwardPointOffsetField();
                 DrawMaxAnimationSpeedField();
 
@@ -246,11 +292,11 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawAutoPlayControl() {
-            Script.AutoPlay = EditorGUILayout.Toggle(
+            AnimatorSettings.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
                     ""),
-                Script.AutoPlay);
+                AnimatorSettings.AutoPlay);
         }
 
         protected virtual void DrawEnableControlsInPlayModeToggle() {
@@ -279,11 +325,11 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawHandleModeDropdown() {
-            Script.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+            AnimatorSettings.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
-                Script.HandleMode);
+                AnimatorSettings.HandleMode);
         }
 
         protected virtual void DrawMaxAnimationSpeedField() {
@@ -294,15 +340,15 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawMovementModeDropdown() {
-            Script.MovementMode =
+            AnimatorSettings.MovementMode =
                 (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
                         ""),
-                    Script.MovementMode);
+                    AnimatorSettings.MovementMode);
         }
 
-        protected virtual void DrawPathDataAssetControl() {
+        protected virtual void DrawPathDataAssetField() {
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(
@@ -365,11 +411,11 @@ namespace ATP.SimplePathAnimator.Animator {
             GizmoDrawer.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawRotationSpeedField() {
+        protected virtual void DrawRotationLerpSpeedField() {
             EditorGUILayout.PropertyField(
                 rotationSpeed,
                 new GUIContent(
-                    "Rotation Speed",
+                    "Rotation Lerp Speed",
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
         }
@@ -377,24 +423,28 @@ namespace ATP.SimplePathAnimator.Animator {
         protected virtual void DrawSkinSelectionControl() {
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(skin);
+            EditorGUILayout.PropertyField(
+                skin,
+                new GUIContent(
+                    "Skin Asset",
+                    ""));
             serializedObject.ApplyModifiedProperties();
         }
 
         protected virtual void DrawTangentModeDropdown() {
             // Remember current tangent mode.
-            var prevTangentMode = Script.TangentMode;
+            var prevTangentMode = AnimatorSettings.TangentMode;
 
             // Draw tangent mode dropdown.
-            Script.TangentMode =
+            AnimatorSettings.TangentMode =
                 (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         ""),
-                    Script.TangentMode);
+                    AnimatorSettings.TangentMode);
 
             // Update gizmo curve is tangent mode changed.
-            if (Script.TangentMode != prevTangentMode) {
+            if (AnimatorSettings.TangentMode != prevTangentMode) {
                 HandleTangentModeChange();
             }
         }
@@ -409,19 +459,19 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawUpdateAllToggle() {
-            Script.UpdateAllMode = EditorGUILayout.Toggle(
+            AnimatorSettings.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
                     ""),
-                Script.UpdateAllMode);
+                AnimatorSettings.UpdateAllMode);
         }
 
         protected virtual void DrawWrapModeDropdown() {
-            Script.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+            AnimatorSettings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),
-                Script.WrapMode);
+                AnimatorSettings.WrapMode);
         }
 
         private void DrawResetTiltingButton() {
@@ -461,7 +511,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void DrawCreatePathAssetButton() {
             if (GUILayout.Button(
                 new GUIContent(
-                    "New Asset",
+                    "New Path",
                     ""))) {
 
                 // Display save panel.
@@ -472,11 +522,12 @@ namespace ATP.SimplePathAnimator.Animator {
                     "asset",
                     "");
 
+                // Path cannot be empty.
+                if (savePath == "") return;
+
                 // Create new path asset.
                 var asset = ScriptableObjectUtility.CreateAsset<PathData>(
                     savePath);
-
-                if (asset == null) return;
 
                 // Assign asset as the current path.
                 Script.PathData = asset;
@@ -486,7 +537,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(
                 new GUIContent(
-                    "Reset Asset",
+                    "Reset Path",
                     "Reset path to default."))) {
 
                 if (Script.PathData == null) return;
@@ -503,18 +554,18 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void DrawRotationModeDropdown() {
             // Remember current RotationMode.
-            var prevRotationMode = Script.RotationMode;
+            var prevRotationMode = AnimatorSettings.RotationMode;
             // Draw RotationMode dropdown.
-            Script.RotationMode =
+            AnimatorSettings.RotationMode =
                 (AnimatorRotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         ""),
-                    Script.RotationMode);
+                    AnimatorSettings.RotationMode);
 
             // TODO Execute it as a callback.
             // If value changed, update animated GO in the scene.
-            if (Script.RotationMode != prevRotationMode) {
+            if (AnimatorSettings.RotationMode != prevRotationMode) {
                 Script.UpdateAnimation();
             }
         }
@@ -542,7 +593,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingEaseHandles() {
-            if (Script.HandleMode != AnimatorHandleMode.Ease) return;
+            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Ease) return;
 
             // TODO Move this code to AnimatorHandles.DrawEaseHandles().
 
@@ -564,7 +615,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingEaseLabel() {
-            if (Script.HandleMode != AnimatorHandleMode.Ease) return;
+            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Ease) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
@@ -612,7 +663,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingRotationHandle() {
-            if (Script.HandleMode != AnimatorHandleMode.Rotation) return;
+            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Rotation) return;
 
             var currentAnimationTime = script.AnimationTimeRatio;
             var rotationPointPosition =
@@ -635,7 +686,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingTiltingHandles() {
-            if (Script.HandleMode != AnimatorHandleMode.Tilting) return;
+            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
@@ -654,7 +705,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingTiltLabel() {
-            if (Script.HandleMode != AnimatorHandleMode.Tilting) return;
+            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Tilting) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
@@ -679,10 +730,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
             Script.PathData.DistributeTimestamps();
 
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            else if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -705,10 +756,10 @@ namespace ATP.SimplePathAnimator.Animator {
             Script.PathData.RemoveNode(nodeIndex);
             Script.PathData.DistributeTimestamps();
 
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            else if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -718,7 +769,7 @@ namespace ATP.SimplePathAnimator.Animator {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
-            if (Script.UpdateAllMode) {
+            if (AnimatorSettings.UpdateAllMode) {
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
                 Script.PathData.UpdateEaseValues(delta);
@@ -741,7 +792,7 @@ namespace ATP.SimplePathAnimator.Animator {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            if (Script.UpdateAllMode) {
+            if (AnimatorSettings.UpdateAllMode) {
                 var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
                 Script.PathData.UpdateTiltingValues(delta);
@@ -756,13 +807,13 @@ namespace ATP.SimplePathAnimator.Animator {
         #region MODE HANDLERS
 
         private void HandleLinearTangentMode() {
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
 
         private void HandleMoveAllMovementMode(Vector3 moveDelta) {
-            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+            if (AnimatorSettings.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
                 Script.PathData.OffsetNodePositions(moveDelta);
                 Script.PathData.OffsetRotationPathPosition(moveDelta);
             }
@@ -771,7 +822,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleMoveSingleHandleMove(
             int movedNodeIndex,
             Vector3 position) {
-            if (Script.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
+            if (AnimatorSettings.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
 
                 Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
                 Script.PathData.DistributeTimestamps();
@@ -782,7 +833,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleSmoothTangentMode() {
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
         }
@@ -791,10 +842,10 @@ namespace ATP.SimplePathAnimator.Animator {
             if (Script.PathData == null) return;
 
             // Update path node tangents.
-            if (Script.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (Script.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            else if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -869,30 +920,33 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void InitializeSerializedProperties() {
-            rotationSpeed = serializedObject.FindProperty("rotationSpeed");
+            rotationSpeed = SettingsSerObj.FindProperty("rotationSpeed");
             animationTimeRatio =
                 serializedObject.FindProperty("animationTimeRatio");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             forwardPointOffset =
-                serializedObject.FindProperty("forwardPointOffset");
+                SettingsSerObj.FindProperty("forwardPointOffset");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
-                serializedObject.FindProperty("MaxAnimationSpeed");
+                SettingsSerObj.FindProperty("MaxAnimationSpeed");
             positionLerpSpeed =
-                serializedObject.FindProperty("positionLerpSpeed");
+                SettingsSerObj.FindProperty("positionLerpSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
-                serializedObject.FindProperty("EnableControlsInPlayMode");
+                SettingsSerObj.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
             gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
+            settings = serializedObject.FindProperty("settings");
         }
 
         private void InstantiateCompositeClasses() {
             GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
-            AnimatorHandles = new AnimatorHandles();
+            SettingsSerObj = new SerializedObject(Script.Settings);
+            //PathExporterSerObj = new SerializedObject(PathExporter);
+            AnimatorHandles = new AnimatorHandles(Script);
             AnimatorShortcuts = new AnimatorShortcuts(Script);
         }
   

@@ -289,7 +289,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
-            skin = Resources.Load("GUISkin/default") as GUISkin;
+            skin = Resources.Load("GUISkin/Animator") as GUISkin;
 
             // Initialize animatedGO field.
             if (animatedGO == null && Camera.main != null) {

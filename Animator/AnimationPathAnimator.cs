@@ -118,6 +118,22 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return thisTransform; }
         }
 
+        /// <summary>
+        ///     Transform that the <c>animatedGO</c> will be looking at.
+        /// </summary>
+        public Transform TargetGO {
+            get { return targetGO; }
+            set { targetGO = value; }
+        }
+
+        /// <summary>
+        ///     Transform to be animated.
+        /// </summary>
+        public Transform AnimatedGO {
+            get { return animatedGO; }
+            set { animatedGO = value; }
+        }
+
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
@@ -150,8 +166,8 @@ namespace ATP.SimplePathAnimator.Animator {
             skin = Resources.Load("GUISkin/Animator") as GUISkin;
 
             // Initialize animatedGO field.
-            if (animatedGO == null && Camera.main != null) {
-                animatedGO = Camera.main.transform;
+            if (AnimatedGO == null && Camera.main != null) {
+                AnimatedGO = Camera.main.transform;
             }
 
             animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
@@ -196,8 +212,8 @@ namespace ATP.SimplePathAnimator.Animator {
             if (PathData == null) return;
 
             if (Settings.RotationMode == AnimatorRotationMode.Target
-                && targetGO != null) {
-                AnimatorGizmos.DrawTargetIcon(targetGO.position);
+                && TargetGO != null) {
+                AnimatorGizmos.DrawTargetIcon(TargetGO.position);
             }
 
             if (Settings.RotationMode == AnimatorRotationMode.Forward) {
@@ -334,7 +350,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void AnimateAnimatedGOPosition() {
-            if (animatedGO == null) return;
+            if (AnimatedGO == null) return;
 
             var localPosAtTime =
                 PathData.GetVectorAtTime(AnimationTimeRatio);
@@ -343,21 +359,21 @@ namespace ATP.SimplePathAnimator.Animator {
                 ThisTransform.TransformPoint(localPosAtTime);
 
             // Update position.
-            animatedGO.position = Vector3.Lerp(
-                animatedGO.position,
+            AnimatedGO.position = Vector3.Lerp(
+                AnimatedGO.position,
                 globalPosAtTime,
                 Settings.PositionLerpSpeed);
 
         }
 
         private void AnimateAnimatedGORotation() {
-            if (animatedGO == null) return;
+            if (AnimatedGO == null) return;
 
             // Look at target.
-            if (targetGO != null
+            if (TargetGO != null
                 && Settings.RotationMode == AnimatorRotationMode.Target) {
 
-                RotateObjectWithSlerp(targetGO.position);
+                RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
             if (Settings.RotationMode == AnimatorRotationMode.Custom) {
@@ -372,16 +388,16 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void AnimateAnimatedGOTilting() {
-            if (animatedGO == null) return;
+            if (AnimatedGO == null) return;
 
             // Get current animatedGO rotation.
-            var eulerAngles = animatedGO.rotation.eulerAngles;
+            var eulerAngles = AnimatedGO.rotation.eulerAngles;
             // Get rotation from tiltingCurve.
             var zRotation = PathData.GetTiltingValueAtTime(AnimationTimeRatio);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
             // Update animatedGO rotation.
-            animatedGO.rotation = Quaternion.Euler(eulerAngles);
+            AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         }
 
         private IEnumerator EaseTime() {
@@ -420,24 +436,24 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void RotateObjectWithLookAt(Vector3 targetPos) {
-            animatedGO.LookAt(targetPos);
+            AnimatedGO.LookAt(targetPos);
         }
 
         private void RotateObjectWithSlerp(Vector3 targetPosition) {
             // Return when point to look at is at the same position as the
             // animated object.
-            if (targetPosition == animatedGO.position) return;
+            if (targetPosition == AnimatedGO.position) return;
 
             // Calculate direction to target.
-            var targetDirection = targetPosition - animatedGO.position;
+            var targetDirection = targetPosition - AnimatedGO.position;
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
             var speed = Time.deltaTime * Settings.RotationSpeed;
 
             // Lerp rotation.
-            animatedGO.rotation = Quaternion.Slerp(
-                animatedGO.rotation,
+            AnimatedGO.rotation = Quaternion.Slerp(
+                AnimatedGO.rotation,
                 rotation,
                 speed);
         }
@@ -450,11 +466,11 @@ namespace ATP.SimplePathAnimator.Animator {
                 ThisTransform.TransformPoint(positionAtTimestamp);
 
             // Update animatedGO position.
-            animatedGO.position = globalPositionAtTimestamp;
+            AnimatedGO.position = globalPositionAtTimestamp;
         }
 
         private void UpdateAnimatedGORotation() {
-            if (animatedGO == null) return;
+            if (AnimatedGO == null) return;
 
             switch (Settings.RotationMode) {
                 case AnimatorRotationMode.Forward:
@@ -479,9 +495,9 @@ namespace ATP.SimplePathAnimator.Animator {
                     break;
 
                 case AnimatorRotationMode.Target:
-                    if (targetGO == null) return;
+                    if (TargetGO == null) return;
 
-                    RotateObjectWithLookAt(targetGO.position);
+                    RotateObjectWithLookAt(TargetGO.position);
                     break;
             }
         }

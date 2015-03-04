@@ -451,12 +451,26 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawTargetGOField() {
+            var prevTargetGO = Script.TargetGO;
+            serializedObject.Update();
             EditorGUILayout.PropertyField(
                 targetGO,
                 new GUIContent(
                     "Target Object",
                     "Object that the animated object will be looking at."));
             serializedObject.ApplyModifiedProperties();
+
+            if (Script.TargetGO != prevTargetGO
+                && prevTargetGO == null) {
+
+                Script.Settings.RotationMode = AnimatorRotationMode.Target;
+            }
+            else if (Script.TargetGO != prevTargetGO
+                && prevTargetGO != null
+                     && Script.TargetGO == null) {
+                
+                Script.Settings.RotationMode = AnimatorRotationMode.Forward;
+            }
         }
 
         protected virtual void DrawUpdateAllToggle() {

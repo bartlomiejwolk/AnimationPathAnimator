@@ -4,7 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets.Extensions.animationpathtools.Include.Editor {
+namespace ATP.SimplePathAnimator.Animator {
 
 	public static class ScriptableObjectUtility
 	{
@@ -14,9 +14,7 @@ namespace Assets.Extensions.animationpathtools.Include.Editor {
 		public static T CreateAsset<T> (string path) where T : ScriptableObject
 		{
             // Path cannot be empty.
-		    if (path == "") {
-		        return null;
-		    }
+		    if (path == "") return null;
 
 			T asset = ScriptableObject.CreateInstance<T> ();
 			

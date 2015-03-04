@@ -470,11 +470,12 @@ namespace ATP.SimplePathAnimator.Animator {
                     "asset",
                     "");
 
+                // Path cannot be empty.
+                if (savePath == "") return;
+
                 // Create new path asset.
                 var asset = ScriptableObjectUtility.CreateAsset<PathData>(
                     savePath);
-
-                if (asset == null) return;
 
                 // Assign asset as the current path.
                 Script.PathData = asset;

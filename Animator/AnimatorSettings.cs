@@ -227,8 +227,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
 
         [SerializeField]
-        private AnimatorHandleMode handleMode =
-            AnimatorHandleMode.None;
+        private HandleMode handleMode =
+            SimplePathAnimator.Animator.HandleMode.None;
 
         [SerializeField]
         private MovementMode movementMode =
@@ -238,8 +238,8 @@ namespace ATP.SimplePathAnimator.Animator {
         private float positionLerpSpeed = 0.1f;
 
         [SerializeField]
-        private AnimatorRotationMode rotationMode =
-            AnimatorRotationMode.Forward;
+        private RotationMode rotationMode =
+            SimplePathAnimator.Animator.RotationMode.Forward;
 
         [SerializeField]
         private float rotationSpeed = 3.0f;
@@ -283,7 +283,7 @@ namespace ATP.SimplePathAnimator.Animator {
             set { exportSamplingFrequency = value; }
        }
 
-        public AnimatorHandleMode HandleMode {
+        public HandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
         }
@@ -293,7 +293,7 @@ namespace ATP.SimplePathAnimator.Animator {
             set { movementMode = value; }
         }
 
-        public AnimatorRotationMode RotationMode {
+        public RotationMode RotationMode {
             get { return rotationMode; }
             set { rotationMode = value; }
         }

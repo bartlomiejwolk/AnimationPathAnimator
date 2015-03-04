@@ -1,6 +1,6 @@
  // ReSharper disable once CheckNamespace
 namespace ATP.SimplePathAnimator.Animator {
-    public enum AnimatorRotationMode {
+    public enum RotationMode {
         Forward,
         Custom,
         Target

@@ -326,7 +326,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawHandleModeDropdown() {
-            AnimatorSettings.HandleMode = (AnimatorHandleMode) EditorGUILayout.EnumPopup(
+            AnimatorSettings.HandleMode = (HandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
@@ -463,13 +463,13 @@ namespace ATP.SimplePathAnimator.Animator {
             if (Script.TargetGO != prevTargetGO
                 && prevTargetGO == null) {
 
-                Script.Settings.RotationMode = AnimatorRotationMode.Target;
+                Script.Settings.RotationMode = RotationMode.Target;
             }
             else if (Script.TargetGO != prevTargetGO
                 && prevTargetGO != null
                      && Script.TargetGO == null) {
                 
-                Script.Settings.RotationMode = AnimatorRotationMode.Forward;
+                Script.Settings.RotationMode = RotationMode.Forward;
             }
         }
 
@@ -572,7 +572,7 @@ namespace ATP.SimplePathAnimator.Animator {
             var prevRotationMode = AnimatorSettings.RotationMode;
             // Draw RotationMode dropdown.
             AnimatorSettings.RotationMode =
-                (AnimatorRotationMode) EditorGUILayout.EnumPopup(
+                (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         ""),
@@ -608,7 +608,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingEaseHandles() {
-            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Ease) return;
+            if (AnimatorSettings.HandleMode != HandleMode.Ease) return;
 
             // TODO Move this code to AnimatorHandles.DrawEaseHandles().
 
@@ -630,7 +630,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingEaseLabel() {
-            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Ease) return;
+            if (AnimatorSettings.HandleMode != HandleMode.Ease) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
@@ -678,7 +678,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingRotationHandle() {
-            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Rotation) return;
+            if (AnimatorSettings.HandleMode != HandleMode.Rotation) return;
 
             var currentAnimationTime = script.AnimationTimeRatio;
             var rotationPointPosition =
@@ -701,7 +701,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingTiltingHandles() {
-            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Tilting) return;
+            if (AnimatorSettings.HandleMode != HandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
@@ -720,7 +720,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingTiltLabel() {
-            if (AnimatorSettings.HandleMode != AnimatorHandleMode.Tilting) return;
+            if (AnimatorSettings.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(

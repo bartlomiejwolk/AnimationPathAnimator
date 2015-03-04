@@ -27,19 +27,19 @@ namespace ATP.SimplePathAnimator.Animator {
         public void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.EaseModeKey,
-                () => Settings.HandleMode = AnimatorHandleMode.Ease);
+                () => Settings.HandleMode = HandleMode.Ease);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.RotationModeKey,
-                () => Settings.HandleMode = AnimatorHandleMode.Rotation);
+                () => Settings.HandleMode = HandleMode.Rotation);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.TiltingModeKey,
-                () => Settings.HandleMode = AnimatorHandleMode.Tilting);
+                () => Settings.HandleMode = HandleMode.Tilting);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.NoneModeKey,
-                () => Settings.HandleMode = AnimatorHandleMode.None);
+                () => Settings.HandleMode = HandleMode.None);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.UpdateAllKey,

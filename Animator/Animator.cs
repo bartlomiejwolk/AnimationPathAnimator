@@ -199,7 +199,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         void PathData_RotationPathReset(object sender, EventArgs e) {
-            Settings.RotationMode = AnimatorRotationMode.Custom;
+            Settings.RotationMode = RotationMode.Custom;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -213,17 +213,17 @@ namespace ATP.SimplePathAnimator.Animator {
             // Return if path asset file is not assigned.
             if (PathData == null) return;
 
-            if (Settings.RotationMode == AnimatorRotationMode.Target
+            if (Settings.RotationMode == RotationMode.Target
                 && TargetGO != null) {
                 AnimatorGizmos.DrawTargetIcon(TargetGO.position);
             }
 
-            if (Settings.RotationMode == AnimatorRotationMode.Forward) {
+            if (Settings.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
                 AnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
             }
 
-            if (Settings.HandleMode == AnimatorHandleMode.Rotation) {
+            if (Settings.HandleMode == HandleMode.Rotation) {
                 AnimatorGizmos.DrawRotationPathCurve(PathData, transform);
 
                 AnimatorGizmos.DrawCurrentRotationPointGizmo(
@@ -383,16 +383,16 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Look at target.
             if (TargetGO != null
-                && Settings.RotationMode == AnimatorRotationMode.Target) {
+                && Settings.RotationMode == RotationMode.Target) {
 
                 RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
-            if (Settings.RotationMode == AnimatorRotationMode.Custom) {
+            if (Settings.RotationMode == RotationMode.Custom) {
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            else if (Settings.RotationMode == AnimatorRotationMode.Forward) {
+            else if (Settings.RotationMode == RotationMode.Forward) {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
@@ -485,14 +485,14 @@ namespace ATP.SimplePathAnimator.Animator {
             if (AnimatedGO == null) return;
 
             switch (Settings.RotationMode) {
-                case AnimatorRotationMode.Forward:
+                case RotationMode.Forward:
                     var globalForwardPoint = GetGlobalForwardPoint();
 
                     RotateObjectWithLookAt(globalForwardPoint);
 
                     break;
 
-                case AnimatorRotationMode.Custom:
+                case RotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
                         PathData.GetRotationValueAtTime(AnimationTimeRatio);
@@ -506,7 +506,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
                     break;
 
-                case AnimatorRotationMode.Target:
+                case RotationMode.Target:
                     if (TargetGO == null) return;
 
                     RotateObjectWithLookAt(TargetGO.position);

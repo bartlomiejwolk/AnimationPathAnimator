@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -39,6 +40,16 @@ namespace ATP.SimplePathAnimator.Animator {
         }
         public virtual float RotationHandleSize {
             get { return 0.26f; }
+        }
+
+        private readonly AnimationPathAnimator animator;
+
+        public AnimatorHandles(AnimationPathAnimator animator) {
+            this.animator = animator;
+        }
+
+        private AnimatorSettings AnimatorSettings {
+            get { return Animator.Settings; }
         }
 
         public void DrawAddNodeButtons(
@@ -332,7 +343,7 @@ namespace ATP.SimplePathAnimator.Animator {
         public void DrawMoveSinglePositionsHandles(AnimationPathAnimator animator,
             Action<int, Vector3, Vector3> callback) {
 
-            if (animator.MovementMode !=
+            if (AnimatorSettings.MovementMode !=
                 AnimationPathBuilderHandleMode.MoveSingle) return;
 
             // Node global positions.
@@ -370,11 +381,12 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        // TODO Remove animator param. from all methods.
         public void DrawMoveAllPositionHandles(
             AnimationPathAnimator animator,
             Action<int, Vector3, Vector3> callback) {
 
-            if (animator.MovementMode !=
+            if (AnimatorSettings.MovementMode !=
                 AnimationPathBuilderHandleMode.MoveAll) return;
 
             // Node global positions.
@@ -458,6 +470,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
         protected virtual string UpdateAllLabelText {
             get { return "A"; }
+        }
+
+        public AnimationPathAnimator Animator {
+            get { return animator; }
         }
 
     }

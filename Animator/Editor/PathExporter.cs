@@ -4,24 +4,40 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public static class PathExporter {
+    public class PathExporter {
 
-        public static void DrawExportControls(AnimationPathAnimator script) {
+        private readonly AnimationPathAnimator animator;
+        private readonly AnimatorSettings settings;
+
+        public PathExporter(AnimationPathAnimator animator) {
+            this.animator = animator;
+            this.settings = animator.Settings;
+        }
+
+        public AnimatorSettings Settings {
+            get { return settings; }
+        }
+
+        public AnimationPathAnimator Animator {
+            get { return animator; }
+        }
+
+        public void DrawExportControls() {
             EditorGUILayout.BeginHorizontal();
 
-            script.ExportSamplingFrequency = EditorGUILayout.IntField(
+            Settings.ExportSamplingFrequency = EditorGUILayout.IntField(
                 new GUIContent(
                     "Export Sampling",
                     "Number of points to export for 1 m of the curve. " +
                     "If set to 0, it'll export only keys defined in " +
                     "the curve."),
-                script.ExportSamplingFrequency);
+                Settings.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {
                 ExportNodes(
-                    script.PathData,
-                    script.Transform,
-                    script.ExportSamplingFrequency);
+                    Animator.PathData,
+                    Animator.Transform,
+                    Settings.ExportSamplingFrequency);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -33,7 +49,7 @@ namespace ATP.SimplePathAnimator.Animator {
         /// <param name="exportSampling">
         ///     Amount of result transforms for one meter of Animation Path.
         /// </param>
-        private static void ExportNodes(
+        private void ExportNodes(
             PathData pathData,
             Transform transform,
             int exportSampling) {

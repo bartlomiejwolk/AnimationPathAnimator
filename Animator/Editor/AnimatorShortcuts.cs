@@ -8,34 +8,41 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private readonly AnimationPathAnimator animator;
 
+        private readonly AnimatorSettings settings;
+
         public AnimatorShortcuts(AnimationPathAnimator animator) {
             this.animator = animator;
+            settings = animator.Settings;
         }
 
         public AnimationPathAnimator Animator {
             get { return animator; }
         }
 
+        public AnimatorSettings Settings {
+            get { return settings; }
+        }
+
         public void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.EaseModeKey,
-                () => Animator.HandleMode = AnimatorHandleMode.Ease);
+                () => Settings.HandleMode = AnimatorHandleMode.Ease);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.RotationModeKey,
-                () => Animator.HandleMode = AnimatorHandleMode.Rotation);
+                () => Settings.HandleMode = AnimatorHandleMode.Rotation);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.TiltingModeKey,
-                () => Animator.HandleMode = AnimatorHandleMode.Tilting);
+                () => Settings.HandleMode = AnimatorHandleMode.Tilting);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.NoneModeKey,
-                () => Animator.HandleMode = AnimatorHandleMode.None);
+                () => Settings.HandleMode = AnimatorHandleMode.None);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.UpdateAllKey,
-                () => Animator.UpdateAllMode = !Animator.UpdateAllMode);
+                () => Settings.UpdateAllMode = !Settings.UpdateAllMode);
 
             Utilities.HandleUnmodShortcut(
                 Animator.Settings.MoveAllModeKey,
@@ -44,7 +51,8 @@ namespace ATP.SimplePathAnimator.Animator {
             // Short jump forward.
             Utilities.HandleModShortcut(
                 () => {
-                    var newAnimationTimeRatio = Animator.AnimationTimeRatio + Animator.ShortJumpValue;
+                    var newAnimationTimeRatio =
+                        Animator.AnimationTimeRatio + Settings.ShortJumpValue;
 
                     Animator.AnimationTimeRatio =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
@@ -55,7 +63,8 @@ namespace ATP.SimplePathAnimator.Animator {
             // Short jump backward.
             Utilities.HandleModShortcut(
                 () => {
-                    var newAnimationTimeRatio = Animator.AnimationTimeRatio - Animator.ShortJumpValue;
+                    var newAnimationTimeRatio =
+                        Animator.AnimationTimeRatio - Settings.ShortJumpValue;
 
                     Animator.AnimationTimeRatio =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
@@ -83,6 +92,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
+                // TODO Replace Animator.Settings with Settings.
                 Animator.Settings.JumpToPreviousNodeKey,
                 () => Animator.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp());
@@ -118,13 +128,13 @@ namespace ATP.SimplePathAnimator.Animator {
             //}
         }
         private void ToggleMovementMode() {
-            if (Animator.MovementMode ==
+            if (Settings.MovementMode ==
                 AnimationPathBuilderHandleMode.MoveSingle) {
 
-                Animator.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
+                Settings.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
             }
             else {
-                Animator.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
+                Settings.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
             }
         }
 

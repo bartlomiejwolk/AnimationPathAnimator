@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using ATP.LoggingTools;
 
 namespace ATP.SimplePathAnimator.Animator {
 

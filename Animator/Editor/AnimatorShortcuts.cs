@@ -12,113 +12,33 @@ namespace ATP.SimplePathAnimator.Animator {
             this.animator = animator;
         }
 
-        // TODO Make protected instead of public.
-        public virtual KeyCode EaseModeKey {
-            get { return KeyCode.U; }
-        }
-
-        /// <summary>
-        ///     Key shortcut to jump to the end of the animation.
-        /// </summary>
-        public virtual KeyCode JumpToEndKey {
-            get { return KeyCode.L; }
-        }
-
-        public virtual KeyCode JumpToNextNodeKey {
-            get { return KeyCode.L; }
-        }
-
-        public virtual KeyCode JumpToPreviousNodeKey {
-            get { return KeyCode.H; }
-        }
-
-        public virtual KeyCode JumpToStartKey {
-            get { return KeyCode.H; }
-        }
-
-        public KeyCode LongJumpBackwardKey {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode LongJumpForwardKey {
-            get { return KeyCode.K; }
-        }
-
-        public virtual float LongJumpValue {
-            get { return 0.01f; }
-        }
-
-        public virtual KeyCode ModKey {
-            get { return KeyCode.RightAlt; }
-        }
-
-        public virtual Color MoveAllModeColor {
-            get { return Color.red; }
-        }
-
-        public virtual KeyCode MoveAllModeKey {
-            get { return KeyCode.P; }
-        }
-
-        //public virtual KeyCode MoveSingleModeKey {
-        //    get { return KeyCode.Y; }
-        //}
-
-        public virtual KeyCode NoneModeKey {
-            get { return KeyCode.Y; }
-        }
-
-        //public virtual KeyCode PlayPauseKey {
-        //    get { return KeyCode.Space; }
-        //}
-
-        public virtual KeyCode RotationModeKey {
-            get { return KeyCode.I; }
-        }
-
-        public KeyCode ShortJumpBackwardKey {
-            get { return KeyCode.J; }
-        }
-
-        public KeyCode ShortJumpForwardKey {
-            get { return KeyCode.K; }
-        }
-
-        public virtual KeyCode TiltingModeKey {
-            get { return KeyCode.O; }
-        }
-
-        public virtual KeyCode UpdateAllKey {
-            get { return KeyCode.G; }
-        }
-
         public AnimationPathAnimator Animator {
             get { return animator; }
         }
 
         public void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
-                EaseModeKey,
+                Animator.Settings.EaseModeKey,
                 () => Animator.HandleMode = AnimatorHandleMode.Ease);
 
             Utilities.HandleUnmodShortcut(
-                RotationModeKey,
+                Animator.Settings.RotationModeKey,
                 () => Animator.HandleMode = AnimatorHandleMode.Rotation);
 
             Utilities.HandleUnmodShortcut(
-                TiltingModeKey,
+                Animator.Settings.TiltingModeKey,
                 () => Animator.HandleMode = AnimatorHandleMode.Tilting);
 
             Utilities.HandleUnmodShortcut(
-                NoneModeKey,
+                Animator.Settings.NoneModeKey,
                 () => Animator.HandleMode = AnimatorHandleMode.None);
 
             Utilities.HandleUnmodShortcut(
-                UpdateAllKey,
+                Animator.Settings.UpdateAllKey,
                 () => Animator.UpdateAllMode = !Animator.UpdateAllMode);
 
             Utilities.HandleUnmodShortcut(
-                MoveAllModeKey,
+                Animator.Settings.MoveAllModeKey,
                 ToggleMovementMode);
 
             // Short jump forward.
@@ -128,7 +48,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
                     Animator.AnimationTimeRatio =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
-                }, ShortJumpForwardKey,
+                },
+                Animator.Settings.ShortJumpForwardKey,
                 Event.current.alt);
 
             // Short jump backward.
@@ -138,40 +59,45 @@ namespace ATP.SimplePathAnimator.Animator {
 
                     Animator.AnimationTimeRatio =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
-                }, ShortJumpBackwardKey,
+                },
+                Animator.Settings.ShortJumpBackwardKey,
                 Event.current.alt);
 
             // Long jump forward.
-            Utilities.HandleUnmodShortcut(LongJumpForwardKey,
-                () => Animator.AnimationTimeRatio += LongJumpValue);
+            Utilities.HandleUnmodShortcut(
+                Animator.Settings.LongJumpForwardKey,
+                () => Animator.AnimationTimeRatio +=
+                    Animator.Settings.LongJumpValue);
 
             // Long jump backward.
-            Utilities.HandleUnmodShortcut(LongJumpBackwardKey,
-                () => Animator.AnimationTimeRatio -= LongJumpValue);
+            Utilities.HandleUnmodShortcut(
+                Animator.Settings.LongJumpBackwardKey,
+                () => Animator.AnimationTimeRatio -=
+                    Animator.Settings.LongJumpValue);
 
             // Jump to next node.
             Utilities.HandleUnmodShortcut(
-                JumpToNextNodeKey,
+                Animator.Settings.JumpToNextNodeKey,
                 () => Animator.AnimationTimeRatio =
                     GetNearestForwardNodeTimestamp());
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
-                JumpToPreviousNodeKey,
+                Animator.Settings.JumpToPreviousNodeKey,
                 () => Animator.AnimationTimeRatio =
                     GetNearestBackwardNodeTimestamp());
 
             // Jump to start.
             Utilities.HandleModShortcut(
                 () => Animator.AnimationTimeRatio = 0,
-                JumpToStartKey,
+                Animator.Settings.JumpToStartKey,
                 //ModKeyPressed);
                 Event.current.alt);
 
             // Jump to end.
             Utilities.HandleModShortcut(
                 () => Animator.AnimationTimeRatio = 1,
-                JumpToEndKey,
+                Animator.Settings.JumpToEndKey,
                 //ModKeyPressed);
                 Event.current.alt);
 

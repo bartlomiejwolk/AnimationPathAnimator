@@ -88,9 +88,9 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUIUtility.labelWidth = 180;
 
             DrawPositionLerpSpeedControl();
-            DrawRotationSpeedField();
+            DrawRotationLerpSpeedField();
             DrawForwardPointOffsetField();
-            DrawMaxAnimationSpeedField();
+            //DrawMaxAnimationSpeedField();
 
             EditorGUILayout.Space();
 
@@ -240,7 +240,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
                 // TODO Limit these values in OnValidate().
                 DrawPositionLerpSpeedControl();
-                DrawRotationSpeedField();
+                DrawRotationLerpSpeedField();
                 DrawForwardPointOffsetField();
                 DrawMaxAnimationSpeedField();
 
@@ -397,11 +397,11 @@ namespace ATP.SimplePathAnimator.Animator {
             GizmoDrawer.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawRotationSpeedField() {
+        protected virtual void DrawRotationLerpSpeedField() {
             EditorGUILayout.PropertyField(
                 rotationSpeed,
                 new GUIContent(
-                    "Rotation Speed",
+                    "Rotation Lerp Speed",
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
         }

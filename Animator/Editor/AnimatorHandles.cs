@@ -8,18 +8,18 @@ namespace ATP.SimplePathAnimator.Animator {
     /// <summary>
     /// Class responsible for drawing all on scene handles.
     /// </summary>
-    /// <remarks>It has same access to the AnimationPathAnimator class as
+    /// <remarks>It has same access to the Animator class as
     /// the AnimationPathAnimatorEditor does.</remarks>
-    // TODO Pass ref. to AnimationPathAnimator in the constructor.
+    // TODO Pass ref. to Animator in the constructor.
     public class AnimatorHandles {
 
-        private readonly AnimationPathAnimator animator;
+        private readonly Animator animator;
 
-        public AnimatorHandles(AnimationPathAnimator animator) {
+        public AnimatorHandles(Animator animator) {
             this.animator = animator;
         }
 
-        private AnimationPathAnimator Animator {
+        private Animator Animator {
             get { return animator; }
         }
 
@@ -170,7 +170,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         // TODO Remove animator param. from all methods.
         public void DrawMoveAllPositionHandles(
-            AnimationPathAnimator animator,
+            Animator animator,
             Action<int, Vector3, Vector3> callback) {
 
             if (AnimatorSettings.MovementMode !=
@@ -212,7 +212,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void DrawMoveSinglePositionsHandles(AnimationPathAnimator animator,
+        public void DrawMoveSinglePositionsHandles(Animator animator,
             Action<int, Vector3, Vector3> callback) {
 
             if (AnimatorSettings.MovementMode !=
@@ -282,7 +282,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void DrawNodeLabels(
-            AnimationPathAnimator animator,
+            Animator animator,
             string text,
             int offsetX,
             int offsetY,
@@ -356,7 +356,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void DrawRotationHandle(
-            AnimationPathAnimator script,
+            Animator script,
             Vector3 rotationPointPosition,
             Action<float, Vector3> callback) {
 
@@ -404,7 +404,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void DrawUpdateAllLabels(
-            AnimationPathAnimator animator,
+            Animator animator,
             GUIStyle style) {
 
             DrawNodeLabels(

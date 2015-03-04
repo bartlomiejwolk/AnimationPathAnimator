@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    [CustomEditor(typeof (AnimationPathAnimator))]
+    [CustomEditor(typeof (Animator))]
     public class AnimatorEditor : Editor {
         #region FIELDS
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private AnimationPathAnimator script;
+        private Animator script;
 
         private AnimatorShortcuts animatorShortcuts;
 
@@ -31,7 +31,7 @@ namespace ATP.SimplePathAnimator.Animator {
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        public AnimationPathAnimator Script {
+        public Animator Script {
             get { return script; }
         }
 
@@ -155,7 +155,7 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
-            script = (AnimationPathAnimator) target;
+            script = (Animator) target;
 
             // Initialize AnimatorSettings property.
             AnimatorSettings = Script.Settings;

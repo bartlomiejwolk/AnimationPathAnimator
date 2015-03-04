@@ -6,16 +6,16 @@ namespace ATP.SimplePathAnimator.Animator {
 
     public class AnimatorShortcuts {
 
-        private readonly AnimationPathAnimator animator;
+        private readonly Animator animator;
 
         private readonly AnimatorSettings settings;
 
-        public AnimatorShortcuts(AnimationPathAnimator animator) {
+        public AnimatorShortcuts(Animator animator) {
             this.animator = animator;
             settings = animator.Settings;
         }
 
-        public AnimationPathAnimator Animator {
+        public Animator Animator {
             get { return animator; }
         }
 

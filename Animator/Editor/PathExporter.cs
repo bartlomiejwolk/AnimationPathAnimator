@@ -6,10 +6,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
     public class PathExporter {
 
-        private readonly AnimationPathAnimator animator;
+        private readonly Animator animator;
         private readonly AnimatorSettings settings;
 
-        public PathExporter(AnimationPathAnimator animator) {
+        public PathExporter(Animator animator) {
             this.animator = animator;
             this.settings = animator.Settings;
         }
@@ -18,7 +18,7 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return settings; }
         }
 
-        public AnimationPathAnimator Animator {
+        public Animator Animator {
             get { return animator; }
         }
 

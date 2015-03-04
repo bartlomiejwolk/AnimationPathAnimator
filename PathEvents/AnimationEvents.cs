@@ -12,7 +12,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private GUISkin skin;
 
         [SerializeField]
-        private AnimationPathAnimator animator;
+        private Animator.Animator animator;
 
         [SerializeField]
         private List<NodeEvent> nodeEvents;
@@ -22,7 +22,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         #endregion
 
         #region PROPERTIES
-        public AnimationPathAnimator Animator {
+        public Animator.Animator Animator {
             get { return animator; }
         }
 
@@ -84,7 +84,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         public Vector3[] GetNodePositions() {
-            // TODO Move GetGlobalNodePositions() to AnimationPathAnimator class.
+            // TODO Move GetGlobalNodePositions() to Animator class.
             var nodePositions =
                 Animator.PathData.GetGlobalNodePositions(Animator.ThisTransform);
 

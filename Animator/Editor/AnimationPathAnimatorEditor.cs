@@ -105,8 +105,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.BeginHorizontal();
 
-            DrawResetRotationPathButton();
             DrawResetEaseButton();
+            DrawResetRotationPathButton();
             DrawResetTiltingButton();
 
             EditorGUILayout.EndHorizontal();
@@ -239,6 +239,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 Undo.RecordObject(Script.PathData, "Reset rotatio path.");
 
                 // Reset curves to its default state.
+                // todo Create direct property for PathData.
                 Script.PathData.ResetRotationPath();
 
                 SceneView.RepaintAll();

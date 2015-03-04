@@ -162,16 +162,26 @@ namespace ATP.SimplePathAnimator.Animator {
                     PathData_RotationPointPositionChanged;
 
                 PathData.NodePositionChanged += PathData_NodePositionChanged;
-
                 PathData.NodeTiltChanged += PathData_NodeTiltChanged;
-
                 PathData.PathReset += PathData_PathReset;
+                PathData.RotationPathReset += PathData_RotationPathReset;
             }
 
             if (animatorGizmos == null) {
                 animatorGizmos =
                     ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
+        }
+
+        private void OnDisable() {
+            PathData.NodePositionChanged -= PathData_NodePositionChanged;
+            PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
+            PathData.PathReset -= PathData_PathReset;
+            PathData.RotationPathReset -= PathData_RotationPathReset;
+        }
+
+        void PathData_RotationPathReset(object sender, EventArgs e) {
+            Settings.RotationMode = AnimatorRotationMode.Custom;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

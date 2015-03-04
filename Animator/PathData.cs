@@ -25,6 +25,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public event EventHandler RotationPointPositionChanged;
 
+        public event EventHandler RotationPathReset;
+
         #endregion EVENTS
 
         #region FIELDS
@@ -410,6 +412,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
             UpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();
+
+            OnRotationPathReset();
         }
 
         public void ResetTiltingCurve() {
@@ -861,6 +865,12 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         #endregion
+
+        protected virtual void OnRotationPathReset() {
+            var handler = RotationPathReset;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
     }
 
 }

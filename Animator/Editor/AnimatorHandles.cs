@@ -174,7 +174,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Action<int, Vector3, Vector3> callback) {
 
             if (AnimatorSettings.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveAll) return;
+                MovementMode.MoveAll) return;
 
             // Node global positions.
             var nodes = animator.PathData.GetGlobalNodePositions(
@@ -216,7 +216,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Action<int, Vector3, Vector3> callback) {
 
             if (AnimatorSettings.MovementMode !=
-                AnimationPathBuilderHandleMode.MoveSingle) return;
+                MovementMode.MoveSingle) return;
 
             // Node global positions.
             var nodes = animator.PathData.GetGlobalNodePositions(

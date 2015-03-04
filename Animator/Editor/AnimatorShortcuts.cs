@@ -130,12 +130,12 @@ namespace ATP.SimplePathAnimator.Animator {
         }
         private void ToggleMovementMode() {
             if (Settings.MovementMode ==
-                AnimationPathBuilderHandleMode.MoveSingle) {
+                MovementMode.MoveSingle) {
 
-                Settings.MovementMode = AnimationPathBuilderHandleMode.MoveAll;
+                Settings.MovementMode = MovementMode.MoveAll;
             }
             else {
-                Settings.MovementMode = AnimationPathBuilderHandleMode.MoveSingle;
+                Settings.MovementMode = MovementMode.MoveSingle;
             }
         }
 

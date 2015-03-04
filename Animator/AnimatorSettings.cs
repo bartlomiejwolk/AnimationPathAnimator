@@ -231,8 +231,8 @@ namespace ATP.SimplePathAnimator.Animator {
             AnimatorHandleMode.None;
 
         [SerializeField]
-        private AnimationPathBuilderHandleMode movementMode =
-            AnimationPathBuilderHandleMode.MoveSingle;
+        private MovementMode movementMode =
+            SimplePathAnimator.Animator.MovementMode.MoveSingle;
 
         [SerializeField]
         private float positionLerpSpeed = 0.1f;
@@ -262,12 +262,12 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private float forwardPointOffset = 0.05f;
 
-        private AnimationPathBuilderHandleMode movementModeAfterReset =
-            AnimationPathBuilderHandleMode.MoveSingle;
+        private MovementMode movementModeAfterReset =
+            SimplePathAnimator.Animator.MovementMode.MoveSingle;
 
         #endregion
         #region ANIMATOR PROPERTIES
-        public AnimationPathBuilderHandleMode MovementModeAfterReset {
+        public MovementMode MovementModeAfterReset {
             get { return movementModeAfterReset; }
             set { movementModeAfterReset = value; }
         }
@@ -288,7 +288,7 @@ namespace ATP.SimplePathAnimator.Animator {
             set { handleMode = value; }
         }
 
-        public AnimationPathBuilderHandleMode MovementMode {
+        public MovementMode MovementMode {
             get { return movementMode; }
             set { movementMode = value; }
         }

@@ -342,7 +342,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         protected virtual void DrawMovementModeDropdown() {
             AnimatorSettings.MovementMode =
-                (AnimationPathBuilderHandleMode) EditorGUILayout.EnumPopup(
+                (MovementMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
                         ""),
@@ -828,7 +828,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleMoveAllMovementMode(Vector3 moveDelta) {
-            if (AnimatorSettings.MovementMode == AnimationPathBuilderHandleMode.MoveAll) {
+            if (AnimatorSettings.MovementMode == MovementMode.MoveAll) {
                 Script.PathData.OffsetNodePositions(moveDelta);
                 Script.PathData.OffsetRotationPathPosition(moveDelta);
             }
@@ -837,7 +837,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleMoveSingleHandleMove(
             int movedNodeIndex,
             Vector3 position) {
-            if (AnimatorSettings.MovementMode == AnimationPathBuilderHandleMode.MoveSingle) {
+            if (AnimatorSettings.MovementMode == MovementMode.MoveSingle) {
 
                 Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
                 Script.PathData.DistributeTimestamps();

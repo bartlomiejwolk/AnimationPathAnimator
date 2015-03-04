@@ -61,12 +61,6 @@ namespace ATP.SimplePathAnimator.Animator {
         public override void OnInspectorGUI() {
             // TODO Rename to DrawPathDataAssetField().
             DrawPathDataAssetControl();
-            DrawSettingsAssetField();
-            DrawSkinSelectionControl();
-            DrawAnimatedGOControl();
-            DrawTargetGOControl();
-
-            EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -75,15 +69,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
-
-            DrawResetRotationPathButton();
-            DrawResetEaseButton();
-            DrawResetTiltingButton();
-
-            EditorGUILayout.EndHorizontal();
-
             EditorGUILayout.Space();
+
+            DrawAnimatedGOControl();
+            DrawTargetGOControl();
 
             EditorGUILayout.Space();
 
@@ -93,6 +82,16 @@ namespace ATP.SimplePathAnimator.Animator {
             DrawMovementModeDropdown();
             DrawTangentModeDropdown();
             DrawWrapModeDropdown();
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawResetRotationPathButton();
+            DrawResetEaseButton();
+            DrawResetTiltingButton();
+
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
@@ -108,12 +107,17 @@ namespace ATP.SimplePathAnimator.Animator {
 
             PathExporter.DrawExportControls(Script);
 
+            EditorGUILayout.Space();
+
             // TODO Create control section for Lerp settings.
 
             //EditorGUILayout.Space();
 
             //DrawAdvancedSettingsFoldout();
             //DrawAdvanceSettingsControls();
+
+            DrawSettingsAssetField();
+            DrawSkinSelectionControl();
         }
 
         private void DrawSettingsAssetField() {
@@ -122,7 +126,7 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "Settings",
+                    "Settings Asset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -394,7 +398,11 @@ namespace ATP.SimplePathAnimator.Animator {
         protected virtual void DrawSkinSelectionControl() {
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(skin);
+            EditorGUILayout.PropertyField(
+                skin,
+                new GUIContent(
+                    "Skin Asset",
+                    ""));
             serializedObject.ApplyModifiedProperties();
         }
 

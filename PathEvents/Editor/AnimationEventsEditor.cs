@@ -102,8 +102,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void DrawNodeLabels(
-            Vector3[] nodePositions,
-            List<string> textValues,
+            IList<Vector3> nodePositions,
+            IList<string> textValues,
             int offsetX,
             int offsetY,
             GUIStyle style) {

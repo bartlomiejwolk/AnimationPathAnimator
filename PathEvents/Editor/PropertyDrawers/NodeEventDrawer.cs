@@ -7,22 +7,33 @@ namespace ATP.SimplePathAnimator.PathEvents {
     [CustomPropertyDrawer(typeof(NodeEvent))]
     public class NodeEventDrawer : PropertyDrawer {
 
-        /// How many rows (properties) will be displayed.
-        const int _rows = 2;
-        /// Hight of a single property.
-        const int propHeight = 16;
-        /// Margin between properties.
-        const int propMargin = 4;
-        const int RowsSpace = 8;
+        // How many rows (properties) will be displayed.
+        public static int Rows {
+            get { return 2; }
+        }
 
-        /// Overall hight of the serialized property.
+        // Hight of a single property.
+        public static int PropHeight {
+            get { return 16; }
+        }
+
+        // Margin between properties.
+        public static int PropMargin {
+            get { return 4; }
+        }
+
+        public static int RowsSpace {
+            get { return 8; }
+        }
+
+        // Overall hight of the serialized property.
         public override float GetPropertyHeight(
                 SerializedProperty property,
                 GUIContent label) {
 
             return base.GetPropertyHeight(property, label)
-                * _rows // Each row is 16 px high.
-                + (_rows - 1) * RowsSpace; // Add 4 px for each spece between rows.
+                * Rows // Each row is 16 px high.
+                + (Rows - 1) * RowsSpace; // Add 4 px for each spece between rows.
         }
 
         public override void OnGUI(
@@ -39,16 +50,16 @@ namespace ATP.SimplePathAnimator.PathEvents {
             EditorGUIUtility.labelWidth = 55;
 
             EditorGUI.PropertyField(
-                    new Rect(pos.x, pos.y, pos.width, propHeight),
+                    new Rect(pos.x, pos.y, pos.width, PropHeight),
                     methodName,
                     new GUIContent("Method", ""));
 
             EditorGUI.PropertyField(
                     new Rect(
                         pos.x,
-                        pos.y + 1 * (propHeight + propMargin),
+                        pos.y + 1 * (PropHeight + PropMargin),
                         pos.width,
-                        propHeight),
+                        PropHeight),
                     methodArg,
                     new GUIContent("Arg.", ""));
         }

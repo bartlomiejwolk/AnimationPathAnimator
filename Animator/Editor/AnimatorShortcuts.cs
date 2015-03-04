@@ -68,9 +68,9 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return KeyCode.Y; }
         }
 
-        public virtual KeyCode PlayPauseKey {
-            get { return KeyCode.Space; }
-        }
+        //public virtual KeyCode PlayPauseKey {
+        //    get { return KeyCode.Space; }
+        //}
 
         public virtual KeyCode RotationModeKey {
             get { return KeyCode.I; }
@@ -177,7 +177,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
-                PlayPauseKey,
+                Animator.Settings.PlayPauseKey,
                 Animator.HandlePlayPause);
 
             //if (Event.current.type == EventType.keyDown

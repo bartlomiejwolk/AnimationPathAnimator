@@ -265,6 +265,11 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        public AnimatorSettings Settings {
+            get { return settings; }
+            set { settings = value; }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -272,7 +277,7 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             Transform = GetComponent<Transform>();
-            settings = Resources.Load("Settings/Animator") as AnimatorSettings;
+            Settings = Resources.Load("Settings/Animator") as AnimatorSettings;
 
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=

@@ -60,7 +60,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public override void OnInspectorGUI() {
             // TODO Rename to DrawPathDataAssetField().
-            DrawPathDataAssetControl();
+            DrawPathDataAssetField();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -334,7 +334,7 @@ namespace ATP.SimplePathAnimator.Animator {
                     Script.MovementMode);
         }
 
-        protected virtual void DrawPathDataAssetControl() {
+        protected virtual void DrawPathDataAssetField() {
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(

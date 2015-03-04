@@ -190,10 +190,12 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void OnDisable() {
-            PathData.NodePositionChanged -= PathData_NodePositionChanged;
-            PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
-            PathData.PathReset -= PathData_PathReset;
-            PathData.RotationPathReset -= PathData_RotationPathReset;
+            if (PathData != null) {
+                PathData.NodePositionChanged -= PathData_NodePositionChanged;
+                PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
+                PathData.PathReset -= PathData_PathReset;
+                PathData.RotationPathReset -= PathData_RotationPathReset;
+            }
         }
 
         void PathData_RotationPathReset(object sender, EventArgs e) {
@@ -238,8 +240,18 @@ namespace ATP.SimplePathAnimator.Animator {
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 
+        // todo OnValidate() is not called on script load
+        // change in the inspector.
         private void OnValidate() {
+            if (Settings == null) return;
 
+             // Limit value.
+            if (Settings.ExportSamplingFrequency < 1) {
+                Settings.ExportSamplingFrequency = 1;
+            }
+            else if (Settings.ExportSamplingFrequency > 100) {
+                Settings.ExportSamplingFrequency = 100;
+            }
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

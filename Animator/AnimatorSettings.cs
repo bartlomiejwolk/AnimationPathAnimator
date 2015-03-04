@@ -278,22 +278,10 @@ namespace ATP.SimplePathAnimator.Animator {
             set { autoPlay = value; }
         }
 
-        // TODO Move logic to AnimationPathAnimator.OnValidate().
         public int ExportSamplingFrequency {
             get { return exportSamplingFrequency; }
-            set {
-                // Limit value.
-                if (value < 1) {
-                    exportSamplingFrequency = 1;
-                }
-                else if (value > 100) {
-                    exportSamplingFrequency = 100;
-                }
-                else {
-                    exportSamplingFrequency = value;
-                }
-            }
-        }
+            set { exportSamplingFrequency = value; }
+       }
 
         public AnimatorHandleMode HandleMode {
             get { return handleMode; }

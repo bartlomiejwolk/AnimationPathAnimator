@@ -115,17 +115,10 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return modKey; }
         }
 
-        public virtual Color MoveAllModeColor {
-            get { return moveAllModeColor; }
-        }
-
         public virtual KeyCode MoveAllModeKey {
             get { return moveAllModeKey; }
         }
 
-        //public virtual KeyCode MoveSingleModeKey {
-        //    get { return KeyCode.Y; }
-        //}
         public virtual KeyCode NoneModeKey {
             get { return noneModeKey; }
         }
@@ -134,9 +127,6 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return playPauseKey; }
             set { playPauseKey = value; }
         }
-        //public virtual KeyCode PlayPauseKey {
-        //    get { return KeyCode.Space; }
-        //}
         public virtual KeyCode RotationModeKey {
             get { return rotationModeKey; }
         }
@@ -228,10 +218,10 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private int exportSamplingFrequency = 5;
         [SerializeField]
-        protected float MaxAnimationSpeed = 0.3f;
+        private float MaxAnimationSpeed = 0.3f;
 
         [SerializeField]
-        protected bool EnableControlsInPlayMode = true;
+        private bool EnableControlsInPlayMode = true;
         [SerializeField]
         private bool autoPlay = true;
 
@@ -363,6 +353,111 @@ namespace ATP.SimplePathAnimator.Animator {
         public float ForwardPointOffset {
             get { return forwardPointOffset; }
             set { forwardPointOffset = value; }
+        }
+
+        #endregion
+        #region HANDLES FIELDS
+
+        [SerializeField]
+        private int addButtonH = 25;
+        [SerializeField]
+        private int addButtonV = 10;
+        [SerializeField]
+        private int removeButtonH = 44;
+        [SerializeField]
+        private int removeButtonV = 10;
+        [SerializeField]
+        private float arcHandleRadius = 0.6f;
+        [SerializeField]
+        private float scaleHandleSize = 1.5f;
+        [SerializeField]
+        private int defaultLabelHeight = 10;
+        [SerializeField]
+        private int defaultLabelWidth = 30;
+        [SerializeField]
+        private float moveAllModeSize = 0.15f;
+        [SerializeField]
+        private float movementHandleSize = 0.12f;
+      
+        #endregion
+        #region HANDLES PROPERTIES
+        public int EaseValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public int EaseValueLabelOffsetY {
+            get { return -25; }
+        }
+        public int UpdateAllLabelOffsetX {
+            get { return 0; }
+        }
+
+        public int UpdateAllLabelOffsetY {
+            get { return -25; }
+        }
+        public float RotationHandleSize {
+            get { return 0.26f; }
+        }
+
+        public float InitialArcValue {
+            get { return 15f; }
+        }
+
+        public Color MoveAllModeColor {
+            get { return Color.red; }
+        }
+
+        public Color PositionHandleColor {
+            get { return Color.yellow; }
+        }
+
+        public string UpdateAllLabelText {
+            get { return "A"; }
+        }
+
+        public int AddButtonH {
+            get { return addButtonH; }
+            set { addButtonH = value; }
+        }
+
+        public int AddButtonV {
+            get { return addButtonV; }
+            set { addButtonV = value; }
+        }
+
+        public float ArcHandleRadius {
+            get { return arcHandleRadius; }
+            set { arcHandleRadius = value; }
+        }
+
+        public float ScaleHandleSize {
+            get { return scaleHandleSize; }
+            set { scaleHandleSize = value; }
+        }
+
+        public int DefaultLabelWidth {
+            get { return defaultLabelWidth; }
+            set { defaultLabelWidth = value; }
+        }
+
+        public int DefaultLabelHeight {
+            get { return defaultLabelHeight; }
+            set { defaultLabelHeight = value; }
+        }
+
+        public float MovementHandleSize {
+            get { return movementHandleSize; }
+            set { movementHandleSize = value; }
+        }
+
+        public int RemoveButtonH {
+            get { return removeButtonH; }
+            set { removeButtonH = value; }
+        }
+
+        public int RemoveButtonV {
+            get { return removeButtonV; }
+            set { removeButtonV = value; }
         }
 
         #endregion

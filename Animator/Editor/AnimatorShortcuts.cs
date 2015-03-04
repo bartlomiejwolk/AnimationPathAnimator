@@ -20,6 +20,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public AnimatorSettings Settings {
+            // TODO Replace with Animator.Settings.
             get { return settings; }
         }
 

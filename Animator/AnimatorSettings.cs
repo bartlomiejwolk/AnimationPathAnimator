@@ -140,6 +140,77 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return updateAllKey; }
         }
         #endregion
+        #region GIZMO FIELDS
+
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
+        #endregion
+        #region GIZMO PROPERTIES
+
+        [SerializeField]
+        private float floatPrecision = 0.001f;
+
+        public float FloatPrecision {
+            get { return floatPrecision; }
+        }
+
+        [SerializeField]
+        private string rotationPointGizmoIcon = "rec_16x16";
+        public string RotationPointGizmoIcon {
+            get { return rotationPointGizmoIcon; }
+        }
+
+        [SerializeField]
+        private string targetGizmoIcon = "target_22x22-blue";
+        public string TargetGizmoIcon {
+            get { return targetGizmoIcon; }
+        }
+
+        [SerializeField]
+        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
+        public string CurrentRotationPointGizmoIcon {
+            get { return currentRotationPointGizmoIcon; }
+        }
+
+        [SerializeField]
+        private string forwardPointIcon = "target_22x22-pink";
+        public string ForwardPointIcon {
+            get { return forwardPointIcon; }
+        }
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
+        }
+
+        [SerializeField]
+        private int rotationCurveSampling = 40;
+        public int RotationCurveSampling {
+            get { return rotationCurveSampling; }
+        }
+
+        [SerializeField]
+        private int gizmoCurveSamplingFrequency = 40;
+        public int GizmoCurveSamplingFrequency {
+            get { return gizmoCurveSamplingFrequency; }
+        }
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
+        #endregion
     }
 
 }

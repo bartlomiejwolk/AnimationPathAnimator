@@ -62,6 +62,11 @@ namespace ATP.SimplePathAnimator.Animator {
             // TODO Rename to DrawPathDataAssetField().
             DrawPathDataAssetControl();
             DrawSettingsAssetField();
+            DrawSkinSelectionControl();
+            DrawAnimatedGOControl();
+            DrawTargetGOControl();
+
+            EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -79,9 +84,6 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
-
-            DrawAnimatedGOControl();
-            DrawTargetGOControl();
 
             EditorGUILayout.Space();
 
@@ -106,10 +108,12 @@ namespace ATP.SimplePathAnimator.Animator {
 
             PathExporter.DrawExportControls(Script);
 
-            EditorGUILayout.Space();
+            // TODO Create control section for Lerp settings.
 
-            DrawAdvancedSettingsFoldout();
-            DrawAdvanceSettingsControls();
+            //EditorGUILayout.Space();
+
+            //DrawAdvancedSettingsFoldout();
+            //DrawAdvanceSettingsControls();
         }
 
         private void DrawSettingsAssetField() {

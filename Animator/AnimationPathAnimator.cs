@@ -278,6 +278,15 @@ namespace ATP.SimplePathAnimator.Animator {
         public virtual void OnEnable() {
             Transform = GetComponent<Transform>();
             Settings = Resources.Load("Settings/Animator") as AnimatorSettings;
+            skin = Resources.Load("GUISkin/Animator") as GUISkin;
+
+            // Initialize animatedGO field.
+            if (animatedGO == null && Camera.main != null) {
+                animatedGO = Camera.main.transform;
+            }
+
+            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+            animatorGizmos.Init(Settings);
 
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=
@@ -298,14 +307,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
-            skin = Resources.Load("GUISkin/Animator") as GUISkin;
-
-            // Initialize animatedGO field.
-            if (animatedGO == null && Camera.main != null) {
-                animatedGO = Camera.main.transform;
-            }
-
-            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+            
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

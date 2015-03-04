@@ -344,7 +344,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = animator.AnimatorGizmos.GizmoCurveColor;
+                var handleColor = animator.Settings.GizmoCurveColor;
 
                 // Draw position handle.
                 var newPos = DrawPositionHandle(

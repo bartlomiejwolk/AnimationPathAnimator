@@ -5,63 +5,14 @@ using UnityEngine;
 namespace ATP.SimplePathAnimator.Animator {
 
     public class AnimatorGizmos : ScriptableObject {
-        #region FIELDS
 
         [SerializeField]
-        private Color rotationCurveColor = Color.gray;
+        private AnimatorSettings settings;
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
-        #endregion
-
-        #region PROPERIES
-
-        public virtual float FloatPrecision {
-            get { return 0.001f; }
+        public AnimatorSettings Settings {
+            get { return settings; }
+            set { settings = value; }
         }
-
-        protected virtual string RotationPointGizmoIcon {
-            get { return "rec_16x16"; }
-        }
-
-        protected virtual string TargetGizmoIcon {
-            get { return "target_22x22-blue"; }
-        }
-
-        protected virtual string CurrentRotationPointGizmoIcon {
-            get { return "rec_16x16-yellow"; }
-        }
-
-        protected virtual string ForwardPointIcon {
-            get { return "target_22x22-pink"; }
-        }
-
-        public Color RotationCurveColor {
-            get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
-        }
-
-        protected virtual int RotationCurveSampling {
-            get { return 40; }
-        }
-
-        public virtual int GizmoCurveSamplingFrequency {
-            get { return 40; }
-        }
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
-        }
-
-        #endregion
 
         #region METHODS
         public void DrawAnimationCurve(PathData pathData,
@@ -72,7 +23,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Get path points.
             var points = pathData.SampleAnimationPathForPoints(
-                GizmoCurveSamplingFrequency);
+                Settings.GizmoCurveSamplingFrequency);
 
             // Convert points to global coordinates.
             var globalPoints = new Vector3[points.Count];
@@ -83,7 +34,7 @@ namespace ATP.SimplePathAnimator.Animator {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            Gizmos.color = gizmoCurveColor;
+            Gizmos.color = Settings.GizmoCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
@@ -102,7 +53,7 @@ namespace ATP.SimplePathAnimator.Animator {
             if (nodeTimestamps.Any(
                 nodeTimestamp =>
                     Math.Abs(nodeTimestamp - animationTimeRatio)
-                    < FloatPrecision)) {
+                    < Settings.FloatPrecision)) {
                 return;
             }
 
@@ -114,7 +65,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(globalRotationPointPosition,
-                CurrentRotationPointGizmoIcon,
+                Settings.CurrentRotationPointGizmoIcon,
                 false);
         }
 
@@ -122,7 +73,7 @@ namespace ATP.SimplePathAnimator.Animator {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 forwardPointPosition,
-                ForwardPointIcon,
+                Settings.ForwardPointIcon,
                 false);
         }
 
@@ -130,7 +81,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Transform transform) {
 
             var localPointPositions = pathData.SampleRotationPathForPoints(
-                RotationCurveSampling);
+                Settings.RotationCurveSampling);
 
             var globalPointPositions =
                 new Vector3[localPointPositions.Count];
@@ -141,7 +92,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
             if (globalPointPositions.Length < 2) return;
 
-            Gizmos.color = RotationCurveColor;
+            Gizmos.color = Settings.RotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < globalPointPositions.Length - 1; i++) {
@@ -171,14 +122,14 @@ namespace ATP.SimplePathAnimator.Animator {
                 // Return if current animation time is the same as any node
                 // time.
                 if (Math.Abs(nodeTimestamps[i] - animationTimeRatio) <
-                    FloatPrecision) {
+                    Settings.FloatPrecision) {
                     continue;
                 }
 
                 //Draw rotation point gizmo.
                 Gizmos.DrawIcon(
                 globalRotPointPositions[i],
-                RotationPointGizmoIcon,
+                Settings.RotationPointGizmoIcon,
                 false);
             }
         }
@@ -188,8 +139,12 @@ namespace ATP.SimplePathAnimator.Animator {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetPosition,
-                TargetGizmoIcon,
+                Settings.TargetGizmoIcon,
                 false);
+        }
+
+        public void Init(AnimatorSettings settings) {
+            Settings = settings;
         }
 
         #endregion

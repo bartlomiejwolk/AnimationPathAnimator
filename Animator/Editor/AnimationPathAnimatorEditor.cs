@@ -85,6 +85,15 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.Space();
 
+            EditorGUIUtility.labelWidth = 180;
+
+            DrawPositionLerpSpeedControl();
+            DrawRotationSpeedField();
+            DrawForwardPointOffsetField();
+            DrawMaxAnimationSpeedField();
+
+            EditorGUILayout.Space();
+
             EditorGUILayout.BeginHorizontal();
 
             DrawResetRotationPathButton();
@@ -104,6 +113,8 @@ namespace ATP.SimplePathAnimator.Animator {
             DrawPlayerControls();
 
             EditorGUILayout.Space();
+
+            EditorGUIUtility.labelWidth = 0;
 
             PathExporter.DrawExportControls(Script);
 

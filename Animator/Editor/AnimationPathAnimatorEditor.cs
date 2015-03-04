@@ -24,8 +24,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public SerializedObject GizmoDrawer { get; private set; }
 
-        public bool ModKeyPressed { get; private set; }
-
         /// <summary>
         ///     Reference to target script.
         /// </summary>

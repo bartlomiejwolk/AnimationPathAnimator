@@ -497,7 +497,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void DrawCreatePathAssetButton() {
             if (GUILayout.Button(
                 new GUIContent(
-                    "New Asset",
+                    "New Path",
                     ""))) {
 
                 // Display save panel.
@@ -523,7 +523,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void DrawResetPathInspectorButton() {
             if (GUILayout.Button(
                 new GUIContent(
-                    "Reset Asset",
+                    "Reset Path",
                     "Reset path to default."))) {
 
                 if (Script.PathData == null) return;

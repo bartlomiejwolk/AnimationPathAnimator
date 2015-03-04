@@ -20,7 +20,7 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion FIELDS
         #region PROPERTIES
 
-        public AnimatorHandles AnimatorHandles { get; private set; }
+        public SceneHandles SceneHandles { get; private set; }
 
         // TODO Rename to GizmoDrawerSerObj.
         // TODO Make private.
@@ -206,13 +206,13 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleDrawingUpdateAllModeLabel() {
             if (!AnimatorSettings.UpdateAllMode) return;
 
-            //AnimatorHandles.DrawNodeLabels(
+            //SceneHandles.DrawNodeLabels(
             //    Script,
             //    "A",
             //    upall
             //    Script.Skin.GetStyle("UpdateAllLabel"));
 
-            AnimatorHandles.DrawUpdateAllLabels(
+            SceneHandles.DrawUpdateAllLabels(
                 Script,
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
@@ -601,7 +601,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Action<int> callbackHandler = DrawAddNodeButtonsCallbackHandler;
 
             // Draw add node buttons.
-            AnimatorHandles.DrawAddNodeButtons(
+            SceneHandles.DrawAddNodeButtons(
                 nodePositions,
                 callbackHandler,
                 addButtonStyle);
@@ -610,7 +610,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleDrawingEaseHandles() {
             if (AnimatorSettings.HandleMode != HandleMode.Ease) return;
 
-            // TODO Move this code to AnimatorHandles.DrawEaseHandles().
+            // TODO Move this code to SceneHandles.DrawEaseHandles().
 
             // Get path node positions.
             var nodePositions =
@@ -622,7 +622,7 @@ namespace ATP.SimplePathAnimator.Animator {
             // TODO Use property.
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
 
-            AnimatorHandles.DrawEaseHandles(
+            SceneHandles.DrawEaseHandles(
                 nodePositions,
                 easeCurveValues,
                 arcValueMultiplier,
@@ -636,7 +636,7 @@ namespace ATP.SimplePathAnimator.Animator {
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
                 Script.ThisTransform);
 
-            AnimatorHandles.DrawArcHandleLabels(
+            SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
                 ConvertEaseToDegrees,
                 Script.Skin.GetStyle("EaseValueLabel"));
@@ -649,11 +649,11 @@ namespace ATP.SimplePathAnimator.Animator {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
-            AnimatorHandles.DrawMoveSinglePositionsHandles(
+            SceneHandles.DrawMoveSinglePositionsHandles(
                 Script,
                 DrawPositionHandlesCallbackHandler);
 
-            AnimatorHandles.DrawMoveAllPositionHandles(
+            SceneHandles.DrawMoveAllPositionHandles(
                 Script,
                 DrawPositionHandlesCallbackHandler);
         }
@@ -671,7 +671,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 DrawRemoveNodeButtonsCallbackHandles;
 
             // Draw add node buttons.
-            AnimatorHandles.DrawRemoveNodeButtons(
+            SceneHandles.DrawRemoveNodeButtons(
                 nodes,
                 removeNodeCallback,
                 removeButtonStyle);
@@ -694,7 +694,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             if (index < 0) return;
 
-            AnimatorHandles.DrawRotationHandle(
+            SceneHandles.DrawRotationHandle(
                 Script,
                 rotationPointPosition,
                 DrawRotationHandlesCallbackHandler);
@@ -713,7 +713,7 @@ namespace ATP.SimplePathAnimator.Animator {
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
 
-            AnimatorHandles.DrawTiltingHandles(
+            SceneHandles.DrawTiltingHandles(
                 nodePositions,
                 tiltingCurveValues,
                 callbackHandler);
@@ -726,7 +726,7 @@ namespace ATP.SimplePathAnimator.Animator {
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
                 Script.ThisTransform);
 
-            AnimatorHandles.DrawArcHandleLabels(
+            SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
                 ConvertTiltToDegrees,
                 Script.Skin.GetStyle("TiltValueLabel"));
@@ -961,7 +961,7 @@ namespace ATP.SimplePathAnimator.Animator {
             GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
             SettingsSerObj = new SerializedObject(Script.Settings);
             //PathExporterSerObj = new SerializedObject(PathExporter);
-            AnimatorHandles = new AnimatorHandles(Script);
+            SceneHandles = new SceneHandles(Script);
             AnimatorShortcuts = new AnimatorShortcuts(Script);
         }
   

@@ -19,7 +19,7 @@ namespace ATP.SimplePathAnimator.Animator {
             this.animator = animator;
         }
 
-        public AnimationPathAnimator Animator {
+        private AnimationPathAnimator Animator {
             get { return animator; }
         }
 

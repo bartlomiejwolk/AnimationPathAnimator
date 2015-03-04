@@ -117,7 +117,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private WrapMode wrapMode = WrapMode.Clamp;
 
         [SerializeField]
-        private Settings settings;
+        private AnimatorSettings settings;
 
         #endregion OPTIONS
 
@@ -272,6 +272,7 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             Transform = GetComponent<Transform>();
+            settings = Resources.Load("Settings/Animator") as AnimatorSettings;
 
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=

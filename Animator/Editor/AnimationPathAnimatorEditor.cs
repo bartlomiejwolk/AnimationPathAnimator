@@ -51,6 +51,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
+        private SerializedProperty settings;
 
 
         #endregion SERIALIZED PROPERTIES
@@ -58,7 +59,9 @@ namespace ATP.SimplePathAnimator.Animator {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
+            // TODO Rename to DrawPathDataAssetField().
             DrawPathDataAssetControl();
+            DrawSettingsAssetField();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -108,6 +111,19 @@ namespace ATP.SimplePathAnimator.Animator {
             DrawAdvancedSettingsFoldout();
             DrawAdvanceSettingsControls();
         }
+
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "Settings",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
@@ -886,6 +902,7 @@ namespace ATP.SimplePathAnimator.Animator {
             skin = serializedObject.FindProperty("skin");
             rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
             gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
+            settings = serializedObject.FindProperty("settings");
         }
 
         private void InstantiateCompositeClasses() {

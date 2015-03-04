@@ -116,6 +116,9 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private WrapMode wrapMode = WrapMode.Clamp;
 
+        [SerializeField]
+        private Settings settings;
+
         #endregion OPTIONS
 
         #region PROPERTIES

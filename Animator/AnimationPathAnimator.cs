@@ -285,6 +285,10 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void StartEaseTimeCoroutine() {
+            if (PathData == null) {
+                Debug.LogWarning("Assign Path Asset in the inspector.");
+                return;
+            }
             // Starting node was reached.
             if (AnimationTimeRatio == 0) {
                 var args = new NodeReachedEventArgs(0, 0);

@@ -232,7 +232,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SerializeField]
         private AnimationPathBuilderHandleMode movementMode =
-            AnimationPathBuilderHandleMode.MoveAll;
+            AnimationPathBuilderHandleMode.MoveSingle;
 
         [SerializeField]
         private float positionLerpSpeed = 0.1f;
@@ -262,8 +262,16 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private float forwardPointOffset = 0.05f;
 
+        private AnimationPathBuilderHandleMode movementModeAfterReset =
+            AnimationPathBuilderHandleMode.MoveSingle;
+
         #endregion
         #region ANIMATOR PROPERTIES
+        public AnimationPathBuilderHandleMode MovementModeAfterReset {
+            get { return movementModeAfterReset; }
+            set { movementModeAfterReset = value; }
+        }
+
 
         public bool AutoPlay {
             get { return autoPlay; }
@@ -459,7 +467,6 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return removeButtonV; }
             set { removeButtonV = value; }
         }
-
         #endregion
     }
 

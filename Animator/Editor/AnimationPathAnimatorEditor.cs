@@ -576,7 +576,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
             var nodePositions = Script.PathData.GetGlobalNodePositions(
-                Script.Transform);
+                Script.ThisTransform);
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -599,7 +599,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Get path node positions.
             var nodePositions =
-                Script.PathData.GetGlobalNodePositions(Script.Transform);
+                Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -619,7 +619,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
-                Script.Transform);
+                Script.ThisTransform);
 
             AnimatorHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
@@ -645,7 +645,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = Script.PathData.GetGlobalNodePositions(Script.Transform);
+            var nodes = Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -693,7 +693,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Get path node positions.
             var nodePositions =
-                Script.PathData.GetGlobalNodePositions(Script.Transform);
+                Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -709,7 +709,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
-                Script.Transform);
+                Script.ThisTransform);
 
             AnimatorHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,

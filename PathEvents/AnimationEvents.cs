@@ -86,7 +86,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public Vector3[] GetNodePositions() {
             // TODO Move GetGlobalNodePositions() to AnimationPathAnimator class.
             var nodePositions =
-                Animator.PathData.GetGlobalNodePositions(Animator.Transform);
+                Animator.PathData.GetGlobalNodePositions(Animator.ThisTransform);
 
             return nodePositions;
         }

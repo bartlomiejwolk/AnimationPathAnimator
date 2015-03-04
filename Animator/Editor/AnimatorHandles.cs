@@ -178,7 +178,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Node global positions.
             var nodes = animator.PathData.GetGlobalNodePositions(
-                animator.Transform);
+                animator.ThisTransform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -197,11 +197,11 @@ namespace ATP.SimplePathAnimator.Animator {
                 if (newPos != nodes[i]) {
                     // Calculate node old local position.
                     var oldNodeLocalPosition =
-                        animator.Transform.InverseTransformPoint(nodes[i]);
+                        animator.ThisTransform.InverseTransformPoint(nodes[i]);
 
                     // Calculate node new local position.
                     var newNodeLocalPosition =
-                        animator.Transform.InverseTransformPoint(newPos);
+                        animator.ThisTransform.InverseTransformPoint(newPos);
 
                     // Calculate movement delta.
                     var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
@@ -220,7 +220,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Node global positions.
             var nodes = animator.PathData.GetGlobalNodePositions(
-                animator.Transform);
+                animator.ThisTransform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -239,10 +239,10 @@ namespace ATP.SimplePathAnimator.Animator {
                 // If node was moved..
                 if (newPos != nodes[i]) {
                     // Calculate node old local position.
-                    var oldNodeLocalPosition = animator.Transform.InverseTransformPoint(nodes[i]);
+                    var oldNodeLocalPosition = animator.ThisTransform.InverseTransformPoint(nodes[i]);
 
                     // Calculate node new local position.
-                    var newNodeLocalPosition = animator.Transform.InverseTransformPoint(newPos);
+                    var newNodeLocalPosition = animator.ThisTransform.InverseTransformPoint(newPos);
 
                     // Calculate movement delta.
                     var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
@@ -289,7 +289,7 @@ namespace ATP.SimplePathAnimator.Animator {
             GUIStyle style) {
 
             var nodeGlobalPositions = animator.PathData.GetGlobalNodePositions(
-                animator.Transform);
+                animator.ThisTransform);
 
             foreach (var nodePos in nodeGlobalPositions) {
                 DrawNodeLabel(

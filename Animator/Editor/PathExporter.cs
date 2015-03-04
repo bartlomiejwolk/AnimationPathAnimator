@@ -36,7 +36,7 @@ namespace ATP.SimplePathAnimator.Animator {
             if (GUILayout.Button("Export")) {
                 ExportNodes(
                     Animator.PathData,
-                    Animator.Transform,
+                    Animator.ThisTransform,
                     Settings.ExportSamplingFrequency);
             }
 

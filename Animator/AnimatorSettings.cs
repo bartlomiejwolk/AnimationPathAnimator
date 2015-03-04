@@ -245,8 +245,8 @@ namespace ATP.SimplePathAnimator.Animator {
         private float rotationSpeed = 3.0f;
 
         [SerializeField]
-        private AnimationPathBuilderTangentMode tangentMode =
-            AnimationPathBuilderTangentMode.Smooth;
+        private TangentMode tangentMode =
+            SimplePathAnimator.Animator.TangentMode.Smooth;
 
         [SerializeField]
         private bool updateAllMode;
@@ -298,7 +298,7 @@ namespace ATP.SimplePathAnimator.Animator {
             set { rotationMode = value; }
         }
 
-        public AnimationPathBuilderTangentMode TangentMode {
+        public TangentMode TangentMode {
             get { return tangentMode; }
             set { tangentMode = value; }
         }

@@ -438,7 +438,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Draw tangent mode dropdown.
             AnimatorSettings.TangentMode =
-                (AnimationPathBuilderTangentMode) EditorGUILayout.EnumPopup(
+                (TangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         ""),
@@ -745,10 +745,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
             Script.PathData.DistributeTimestamps();
 
-            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -771,10 +771,10 @@ namespace ATP.SimplePathAnimator.Animator {
             Script.PathData.RemoveNode(nodeIndex);
             Script.PathData.DistributeTimestamps();
 
-            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -822,7 +822,7 @@ namespace ATP.SimplePathAnimator.Animator {
         #region MODE HANDLERS
 
         private void HandleLinearTangentMode() {
-            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            if (AnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -848,7 +848,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleSmoothTangentMode() {
-            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
         }
@@ -857,10 +857,10 @@ namespace ATP.SimplePathAnimator.Animator {
             if (Script.PathData == null) return;
 
             // Update path node tangents.
-            if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Smooth) {
+            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (AnimatorSettings.TangentMode == AnimationPathBuilderTangentMode.Linear) {
+            else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }

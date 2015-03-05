@@ -19,12 +19,6 @@ namespace ATP.SimplePathAnimator.Animator {
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         #endregion
-
-        protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
-            var handler = NodeReached;
-            if (handler != null) handler(this, eventArgs);
-        }
-
         #region FIELDS
 
         [SerializeField]
@@ -269,6 +263,11 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
+        protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
+            var handler = NodeReached;
+            if (handler != null) handler(this, eventArgs);
+        }
+
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             UpdateAnimation();

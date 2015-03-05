@@ -892,6 +892,8 @@ namespace ATP.SimplePathAnimator.Animator {
             else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
+
+            SceneView.RepaintAll();
         }
 
         #endregion

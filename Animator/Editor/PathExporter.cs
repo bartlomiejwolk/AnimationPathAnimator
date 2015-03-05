@@ -6,20 +6,20 @@ namespace ATP.SimplePathAnimator.Animator {
 
     public class PathExporter {
 
-        private readonly Animator animator;
+        private readonly PathAnimator pathAnimator;
         private readonly AnimatorSettings settings;
 
-        public PathExporter(Animator animator) {
-            this.animator = animator;
-            this.settings = animator.Settings;
+        public PathExporter(PathAnimator pathAnimator) {
+            this.pathAnimator = pathAnimator;
+            this.settings = pathAnimator.Settings;
         }
 
         public AnimatorSettings Settings {
             get { return settings; }
         }
 
-        public Animator Animator {
-            get { return animator; }
+        public PathAnimator PathAnimator {
+            get { return pathAnimator; }
         }
 
         public void DrawExportControls() {
@@ -35,8 +35,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
             if (GUILayout.Button("Export")) {
                 ExportNodes(
-                    Animator.PathData,
-                    Animator.ThisTransform,
+                    PathAnimator.PathData,
+                    PathAnimator.ThisTransform,
                     Settings.ExportSamplingFrequency);
             }
 

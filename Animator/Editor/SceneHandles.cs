@@ -13,22 +13,22 @@ namespace ATP.SimplePathAnimator.Animator {
     // TODO Pass ref. to Animator in the constructor.
     public class SceneHandles {
 
-        private readonly Animator animator;
+        private readonly PathAnimator pathAnimator;
 
-        public SceneHandles(Animator animator) {
-            this.animator = animator;
+        public SceneHandles(PathAnimator pathAnimator) {
+            this.pathAnimator = pathAnimator;
         }
 
-        private Animator Animator {
-            get { return animator; }
+        private PathAnimator PathAnimator {
+            get { return pathAnimator; }
         }
 
         private AnimatorSettings AnimatorSettings {
-            get { return Animator.Settings; }
+            get { return PathAnimator.Settings; }
         }
 
         private AnimatorSettings Settings{
-            get { return Animator.Settings; }
+            get { return PathAnimator.Settings; }
         }
 
         public void DrawAddNodeButtons(
@@ -170,15 +170,15 @@ namespace ATP.SimplePathAnimator.Animator {
 
         // TODO Remove animator param. from all methods.
         public void DrawMoveAllPositionHandles(
-            Animator animator,
+            PathAnimator pathAnimator,
             Action<int, Vector3, Vector3> callback) {
 
             if (AnimatorSettings.MovementMode !=
                 MovementMode.MoveAll) return;
 
             // Node global positions.
-            var nodes = animator.PathData.GetGlobalNodePositions(
-                animator.ThisTransform);
+            var nodes = pathAnimator.PathData.GetGlobalNodePositions(
+                pathAnimator.ThisTransform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -197,11 +197,11 @@ namespace ATP.SimplePathAnimator.Animator {
                 if (newPos != nodes[i]) {
                     // Calculate node old local position.
                     var oldNodeLocalPosition =
-                        animator.ThisTransform.InverseTransformPoint(nodes[i]);
+                        pathAnimator.ThisTransform.InverseTransformPoint(nodes[i]);
 
                     // Calculate node new local position.
                     var newNodeLocalPosition =
-                        animator.ThisTransform.InverseTransformPoint(newPos);
+                        pathAnimator.ThisTransform.InverseTransformPoint(newPos);
 
                     // Calculate movement delta.
                     var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
@@ -212,22 +212,22 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void DrawMoveSinglePositionsHandles(Animator animator,
+        public void DrawMoveSinglePositionsHandles(PathAnimator pathAnimator,
             Action<int, Vector3, Vector3> callback) {
 
             if (AnimatorSettings.MovementMode !=
                 MovementMode.MoveSingle) return;
 
             // Node global positions.
-            var nodes = animator.PathData.GetGlobalNodePositions(
-                animator.ThisTransform);
+            var nodes = pathAnimator.PathData.GetGlobalNodePositions(
+                pathAnimator.ThisTransform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = animator.Settings.GizmoCurveColor;
+                var handleColor = pathAnimator.Settings.GizmoCurveColor;
 
                 // Draw position handle.
                 var newPos = DrawPositionHandle(
@@ -239,10 +239,10 @@ namespace ATP.SimplePathAnimator.Animator {
                 // If node was moved..
                 if (newPos != nodes[i]) {
                     // Calculate node old local position.
-                    var oldNodeLocalPosition = animator.ThisTransform.InverseTransformPoint(nodes[i]);
+                    var oldNodeLocalPosition = pathAnimator.ThisTransform.InverseTransformPoint(nodes[i]);
 
                     // Calculate node new local position.
-                    var newNodeLocalPosition = animator.ThisTransform.InverseTransformPoint(newPos);
+                    var newNodeLocalPosition = pathAnimator.ThisTransform.InverseTransformPoint(newPos);
 
                     // Calculate movement delta.
                     var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
@@ -282,14 +282,14 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void DrawNodeLabels(
-            Animator animator,
+            PathAnimator pathAnimator,
             string text,
             int offsetX,
             int offsetY,
             GUIStyle style) {
 
-            var nodeGlobalPositions = animator.PathData.GetGlobalNodePositions(
-                animator.ThisTransform);
+            var nodeGlobalPositions = pathAnimator.PathData.GetGlobalNodePositions(
+                pathAnimator.ThisTransform);
 
             foreach (var nodePos in nodeGlobalPositions) {
                 DrawNodeLabel(
@@ -356,7 +356,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void DrawRotationHandle(
-            Animator script,
+            PathAnimator script,
             Vector3 rotationPointPosition,
             Action<float, Vector3> callback) {
 
@@ -404,11 +404,11 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void DrawUpdateAllLabels(
-            Animator animator,
+            PathAnimator pathAnimator,
             GUIStyle style) {
 
             DrawNodeLabels(
-                animator,
+                pathAnimator,
                 Settings.UpdateAllLabelText,
                 Settings.UpdateAllLabelOffsetX,
                 Settings.UpdateAllLabelOffsetY,

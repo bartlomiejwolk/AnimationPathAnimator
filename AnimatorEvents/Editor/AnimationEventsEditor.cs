@@ -79,6 +79,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void OnSceneGUI() {
+            if (Script.EventsData == null) return;
+
             // TODO Guard against null Skin.
             HandleDrawingMethodNames();
         }

@@ -36,6 +36,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         public GUISkin Skin {
             get { return skin; }
+            set { skin = value; }
         }
 
         public AnimatorEventsData EventsData {
@@ -59,9 +60,13 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void OnEnable() {
-            if (Animator == null) return;
+            if (Animator == null) return; 
 
             Animator.NodeReached += Animator_NodeReached;
+        }
+
+        private void Reset() {
+            Skin = Resources.Load("AnimatorEventsDefaultSkin") as GUISkin;
         }
         #endregion
         #region EVENT HANDLERS

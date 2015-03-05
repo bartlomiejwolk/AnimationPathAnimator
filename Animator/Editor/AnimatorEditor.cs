@@ -281,11 +281,15 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawAnimatedGOField() {
+            serializedObject.Update();
+            
             EditorGUILayout.PropertyField(
                 animatedGO,
                 new GUIContent(
                     "Animated Object",
                     "Object to animate."));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected virtual void DrawAnimationTimeControl() {

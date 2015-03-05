@@ -156,8 +156,9 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             thisTransform = GetComponent<Transform>();
-            Settings = Resources.Load("PathAnimatorSettings") as AnimatorSettings;
-            skin = Resources.Load("PathAnimatorSkin") as GUISkin;
+            Settings = Resources.Load("DefaultPathAnimatorSettings")
+                as AnimatorSettings;
+            skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
             // Initialize animatedGO field.
             if (AnimatedGO == null && Camera.main != null) {

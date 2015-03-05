@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: PathAnimatorSettings
+  m_Name: DefaultPathAnimatorSettings
   m_EditorClassIdentifier: 
   shortJumpValue: .00200000009
   easeModeKey: 117

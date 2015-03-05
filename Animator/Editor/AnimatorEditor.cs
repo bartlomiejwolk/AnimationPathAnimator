@@ -99,7 +99,6 @@ namespace ATP.SimplePathAnimator.Animator {
             DrawPositionLerpSpeedControl();
             DrawRotationLerpSpeedField();
             DrawForwardPointOffsetField();
-            //DrawMaxAnimationSpeedField();
 
             EditorGUILayout.Space();
 
@@ -310,9 +309,11 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawForwardPointOffsetField() {
-            serializedObject.Update();
+            SettingsSerObj.Update();
+
             EditorGUILayout.PropertyField(forwardPointOffset);
-            serializedObject.ApplyModifiedProperties();
+
+            SettingsSerObj.ApplyModifiedProperties();
         }
 
         protected virtual void DrawGizmoCurveColorPicker() {
@@ -395,13 +396,13 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawPositionLerpSpeedControl() {
-            serializedObject.Update();
+            SettingsSerObj.Update();
             EditorGUILayout.PropertyField(
                 positionLerpSpeed,
                 new GUIContent(
                     "Position Lerp Speed",
                     ""));
-            serializedObject.ApplyModifiedProperties();
+            SettingsSerObj.ApplyModifiedProperties();
         }
 
         protected virtual void DrawRotationCurveColorPicker() {
@@ -412,12 +413,16 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawRotationLerpSpeedField() {
+            SettingsSerObj.Update();
+
             EditorGUILayout.PropertyField(
                 rotationSpeed,
                 new GUIContent(
                     "Rotation Lerp Speed",
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
+
+            SettingsSerObj.ApplyModifiedProperties();
         }
 
         protected virtual void DrawSkinSelectionControl() {

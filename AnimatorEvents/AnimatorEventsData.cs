@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ATP.SimplePathAnimator.PathEvents {
+namespace ATP.SimplePathAnimator.Events {
 
     public class AnimatorEventsData : ScriptableObject {
 

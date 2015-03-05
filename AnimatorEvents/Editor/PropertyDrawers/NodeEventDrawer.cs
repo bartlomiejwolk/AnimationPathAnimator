@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEditor;
 
-namespace ATP.SimplePathAnimator.PathEvents {
+namespace ATP.SimplePathAnimator.Events {
 
     [CustomPropertyDrawer(typeof(NodeEvent))]
     public class NodeEventDrawer : PropertyDrawer {

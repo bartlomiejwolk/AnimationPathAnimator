@@ -3,7 +3,7 @@ using ATP.SimplePathAnimator.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathEvents {
+namespace ATP.SimplePathAnimator.Events {
 
     [CustomEditor(typeof (AnimatorEvents))]
     public class AnimationEventsEditor : Editor {

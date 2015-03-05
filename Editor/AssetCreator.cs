@@ -1,5 +1,5 @@
 ﻿using ATP.SimplePathAnimator.Animator;
-using ATP.SimplePathAnimator.PathEvents;
+using ATP.SimplePathAnimator.Events;
 using UnityEditor;
 
 namespace ATP.SimplePathAnimator {

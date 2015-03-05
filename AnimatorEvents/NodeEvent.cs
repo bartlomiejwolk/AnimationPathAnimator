@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathEvents {
+namespace ATP.SimplePathAnimator.Events {
 
     [System.Serializable]
     public class NodeEvent {

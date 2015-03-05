@@ -148,13 +148,11 @@ namespace ATP.SimplePathAnimator.Animator {
 
                 // Repaint inspector.
                 Repaint();
-                //SceneView.RepaintAll();
-                UpdateSceneOnUndo();
+                // Update path with new tangent setting.
+                HandleTangentModeChange();
+                // Update animated object.
+                Script.UpdateAnimation();
             }
-        }
-
-        private void UpdateSceneOnUndo() {
-            HandleTangentModeChange();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

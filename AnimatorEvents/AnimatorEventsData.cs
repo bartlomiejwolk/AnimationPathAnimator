@@ -19,7 +19,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void OnEnable() {
-            NodeEvents = new List<NodeEvent>();
+            if (nodeEvents == null) {
+                nodeEvents = new List<NodeEvent>();
+            }
         }
 
     }

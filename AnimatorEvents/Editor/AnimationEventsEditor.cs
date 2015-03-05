@@ -57,10 +57,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             EditorGUILayout.Space();
 
-            DrawEventList();
-
             serializedObject.ApplyModifiedProperties();
 
+            DrawEventList();
 
         }
 
@@ -78,8 +77,12 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private void DrawEventList() {
             if (nodeEvents == null) return;
 
+            EventsDataSerObj.Update();
+
             ReorderableListGUI.Title("Events");
             ReorderableListGUI.ListField(nodeEvents);
+
+            EventsDataSerObj.ApplyModifiedProperties();
         }
 
         private void OnEnable() {

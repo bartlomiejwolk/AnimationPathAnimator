@@ -139,19 +139,6 @@ namespace ATP.SimplePathAnimator.Animator {
             DrawSettingsAssetField();
             DrawSkinSelectionControl();
         }
-
-        private void DrawSettingsAssetField() {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                settings,
-                new GUIContent(
-                    "Settings Asset",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
@@ -203,6 +190,18 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "Settings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
         private void HandleDrawingUpdateAllModeLabel() {
             if (!AnimatorSettings.UpdateAllMode) return;
 

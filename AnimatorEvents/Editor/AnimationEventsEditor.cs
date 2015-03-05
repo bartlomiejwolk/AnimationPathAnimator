@@ -14,25 +14,11 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         #region PROPERTIES
 
-        public float DefaultNodeLabelHeight {
-            get { return 30; }
-        }
-
-        public float DefaultNodeLabelWidth {
-            get { return 100; }
-        }
-
-        public int MethodNameLabelOffsetX {
-            get { return 30; }
-        }
-
-        public int MethodNameLabelOffsetY {
-            get { return -20; }
-        }
-
         private SerializedObject EventsDataSerObj { get; set; }
 
         private AnimatorEvents Script { get; set; }
+
+        private PathEventsSettings PathEventsSettings;
 
         #endregion
 
@@ -98,6 +84,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         private void OnEnable() {
             Script = (AnimatorEvents) target;
+            PathEventsSettings = Script.Settings;
 
             if (EventsDataSerObj != null) {
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
@@ -147,8 +134,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                DefaultNodeLabelWidth,
-                DefaultNodeLabelHeight);
+                PathEventsSettings.DefaultNodeLabelWidth,
+                PathEventsSettings.DefaultNodeLabelHeight);
 
             Handles.BeginGUI();
 
@@ -188,8 +175,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
             DrawNodeLabels(
                 nodePositions,
                 methodNames,
-                MethodNameLabelOffsetX,
-                MethodNameLabelOffsetY,
+                PathEventsSettings.MethodNameLabelOffsetX,
+                PathEventsSettings.MethodNameLabelOffsetY,
                 style);
         }
 

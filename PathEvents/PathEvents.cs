@@ -20,7 +20,7 @@ namespace ATP.SimplePathAnimator.Events {
         //private List<NodeEvent> nodeEvents;
 
         [SerializeField]
-        private AnimatorEventsData eventsData;
+        private PathEventsData eventsData;
 
         [SerializeField]
         private bool drawMethodNames = true;
@@ -44,7 +44,7 @@ namespace ATP.SimplePathAnimator.Events {
             set { skin = value; }
         }
 
-        public AnimatorEventsData EventsData {
+        public PathEventsData EventsData {
             get { return eventsData; }
             set { eventsData = value; }
         }

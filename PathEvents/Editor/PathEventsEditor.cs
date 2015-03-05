@@ -92,6 +92,7 @@ namespace ATP.SimplePathAnimator.Events {
             if (EventsDataSerObj != null) {
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
             }
+
             pathAnimator = serializedObject.FindProperty("pathAnimator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
@@ -194,12 +195,12 @@ namespace ATP.SimplePathAnimator.Events {
 
             //serializedObject.ApplyModifiedProperties();
 
-            Script.EventsData = (AnimatorEventsData) EditorGUILayout.ObjectField(
+            Script.EventsData = (PathEventsData) EditorGUILayout.ObjectField(
                 new GUIContent(
                     "Events Asset",
                     ""),
                 Script.EventsData,
-                typeof(AnimatorEventsData),
+                typeof(PathEventsData),
                 false);
         }
 
@@ -222,7 +223,7 @@ namespace ATP.SimplePathAnimator.Events {
 
                 // Create new path asset.
                 var asset =
-                    ScriptableObjectUtility.CreateAsset<AnimatorEventsData>(
+                    ScriptableObjectUtility.CreateAsset<PathEventsData>(
                     savePath);
 
                 // Assign asset as the current path.

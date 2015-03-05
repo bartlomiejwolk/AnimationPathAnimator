@@ -76,6 +76,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private void Animator_NodeReached(
                     object sender,
                     NodeReachedEventArgs arg) {
+
+            if (EventsData == null) return;
+
             // Return if no event was specified for current and later nodes.
             if (arg.NodeIndex > EventsData.NodeEvents.Count - 1) return;
 

@@ -18,6 +18,10 @@ namespace ATP.SimplePathAnimator.PathEvents {
             NodeEvents.Clear();
         }
 
+        private void OnEnable() {
+            NodeEvents = new List<NodeEvent>();
+        }
+
     }
 
 }

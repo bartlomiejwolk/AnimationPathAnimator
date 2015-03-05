@@ -71,15 +71,18 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             serializedObject.ApplyModifiedProperties();
 
-            // Initialize EventsDataSerObj.
-            if (Script.EventsData != null && EventsDataSerObj == null) {
-                EventsDataSerObj = new SerializedObject(Script.EventsData);
-                nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
+            if (Event.current.type == EventType.Repaint) {
+                if (Script.EventsData != null && EventsDataSerObj == null) {
+                    // Initialize SerializedObject EventsDataSerObj.
+                    EventsDataSerObj = new SerializedObject(Script.EventsData);
+                    // Iniatilize SerializedProperty nodeEvents.
+                    nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
+                }
             }
+
         }
 
         private void DrawEventList() {
-            if (Script.EventsData == null) return;
             if (nodeEvents == null) return;
 
             ReorderableListGUI.Title("Events");
@@ -89,7 +92,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private void OnEnable() {
             Script = (AnimatorEvents) target;
 
-            nodeEvents = serializedObject.FindProperty("nodeEvents");
+            if (EventsDataSerObj != null) {
+                nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
+            }
             pathAnimator = serializedObject.FindProperty("pathAnimator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");

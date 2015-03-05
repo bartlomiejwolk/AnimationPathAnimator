@@ -68,6 +68,12 @@ namespace ATP.SimplePathAnimator.Animator {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                Repaint();
+            }
+
             // TODO Rename to DrawPathDataAssetField().
             DrawPathDataAssetField();
 
@@ -86,6 +92,7 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUILayout.Space();
 
             DrawAnimationTimeControl();
+
             DrawRotationModeDropdown();
             DrawHandleModeDropdown();
             DrawMovementModeDropdown();
@@ -326,6 +333,8 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawHandleModeDropdown() {
+            Undo.RecordObject(AnimatorSettings, "Change handle mode.");
+
             AnimatorSettings.HandleMode = (HandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
@@ -341,6 +350,8 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawMovementModeDropdown() {
+            Undo.RecordObject(AnimatorSettings, "Change movement mode.");
+
             AnimatorSettings.MovementMode =
                 (MovementMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
@@ -572,6 +583,8 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void DrawRotationModeDropdown() {
+            Undo.RecordObject(AnimatorSettings, "Change rotation mode.");
+
             // Remember current RotationMode.
             var prevRotationMode = AnimatorSettings.RotationMode;
             // Draw RotationMode dropdown.

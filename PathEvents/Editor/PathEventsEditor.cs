@@ -100,6 +100,8 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void OnSceneGUI() {
+            // Return if path data is not assigned to the PathAnimator component.
+            if (Script.PathAnimator.PathData == null) return;
             if (Script.EventsData == null) return;
 
             // TODO Guard against null Skin.

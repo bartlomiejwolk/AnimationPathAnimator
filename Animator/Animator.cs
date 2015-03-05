@@ -353,6 +353,7 @@ namespace ATP.SimplePathAnimator.Animator {
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
         public void UpdateAnimation() {
+            if (AnimatedGO == null) return;
             if (PathData == null) return;
 
             UpdateAnimatedGOPosition();

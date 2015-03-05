@@ -39,12 +39,12 @@ MonoBehaviour:
   forwardPointIcon: target_22x22-pink
   rotationCurveSampling: 40
   gizmoCurveSamplingFrequency: 40
-  exportSamplingFrequency: 5
+  exportSamplingFrequency: 25
   MaxAnimationSpeed: .300000012
   EnableControlsInPlayMode: 1
   autoPlay: 1
-  handleMode: 0
-  movementMode: 1
+  handleMode: 1
+  movementMode: 0
   positionLerpSpeed: .100000001
   rotationMode: 0
   rotationSpeed: 3

@@ -59,8 +59,12 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.Space();
+
             EditorGUILayout.PropertyField(pathAnimator);
             EditorGUILayout.PropertyField(skin);
+
+            EditorGUILayout.Space();
 
             ReorderableListGUI.Title("Events");
             ReorderableListGUI.ListField(nodeEvents);

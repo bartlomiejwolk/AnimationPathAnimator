@@ -34,8 +34,6 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         #endregion
 
-        #region UNITY MESSAGES
-
         #region SERIALIZED PROPERTIES
 
         private SerializedProperty animator;
@@ -48,10 +46,18 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private SerializedProperty eventsData;
         #endregion
 
+        #region UNITY MESSAGES
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
             DrawEventsDataAssetField();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawCreateEventsDataAssetButton();
+            DrawResetEventsDataInspectorButton();
+
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.PropertyField(animator);
             EditorGUILayout.PropertyField(skin);
@@ -151,6 +157,49 @@ namespace ATP.SimplePathAnimator.PathEvents {
                     ""));
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawCreateEventsDataAssetButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "New Events List",
+                    ""))) {
+
+                // Display save panel.
+                var savePath = EditorUtility.SaveFilePanelInProject(
+                    "Save Events List Asset File",
+                    // TODO Make it a property.
+                    "EventsList",
+                    "asset",
+                    "");
+
+                // Path cannot be empty.
+                if (savePath == "") return;
+
+                // Create new path asset.
+                var asset =
+                    ScriptableObjectUtility.CreateAsset<AnimatorEventsData>(
+                    savePath);
+
+                // Assign asset as the current path.
+                Script.EventsData = asset;
+            }
+        }
+
+        private void DrawResetEventsDataInspectorButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Events",
+                    "Reset path to default."))) {
+
+                if (Script.EventsData == null) return;
+
+                // Allow undo this operation.
+                Undo.RecordObject(Script.EventsData, "Change events data.");
+
+                // Reset curves to its default state.
+                Script.EventsData.ResetEvents();
+            }
         }
 
         #endregion

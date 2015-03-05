@@ -573,7 +573,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 var savePath = EditorUtility.SaveFilePanelInProject(
                     "Save Path Asset File",
                     // TODO Make it a property.
-                    "Path1",
+                    "Path",
                     "asset",
                     "");
 

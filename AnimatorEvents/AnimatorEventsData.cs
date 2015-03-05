@@ -9,6 +9,15 @@ namespace ATP.SimplePathAnimator.PathEvents {
         [SerializeField]
         private List<NodeEvent> nodeEvents;
 
+        public List<NodeEvent> NodeEvents {
+            get { return nodeEvents; }
+            set { nodeEvents = value; }
+        }
+
+        public void ResetEvents() {
+            NodeEvents.Clear();
+        }
+
     }
 
 }

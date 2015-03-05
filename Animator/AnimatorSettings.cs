@@ -228,25 +228,25 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SerializeField]
         private HandleMode handleMode =
-            SimplePathAnimator.Animator.HandleMode.None;
+            HandleMode.None;
 
         [SerializeField]
         private MovementMode movementMode =
-            SimplePathAnimator.Animator.MovementMode.MoveSingle;
+            MovementMode.MoveSingle;
 
         [SerializeField]
         private float positionLerpSpeed = 0.1f;
 
         [SerializeField]
         private RotationMode rotationMode =
-            SimplePathAnimator.Animator.RotationMode.Forward;
+            RotationMode.Forward;
 
         [SerializeField]
         private float rotationSpeed = 3.0f;
 
         [SerializeField]
         private TangentMode tangentMode =
-            SimplePathAnimator.Animator.TangentMode.Smooth;
+            TangentMode.Smooth;
 
         [SerializeField]
         private bool updateAllMode;
@@ -263,7 +263,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private float forwardPointOffset = 0.05f;
 
         private MovementMode movementModeAfterReset =
-            SimplePathAnimator.Animator.MovementMode.MoveSingle;
+            MovementMode.MoveSingle;
 
         #endregion
         #region ANIMATOR PROPERTIES

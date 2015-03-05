@@ -5,6 +5,7 @@ using ATP.SimplePathAnimator.Animator;
 
 namespace ATP.SimplePathAnimator.PathEvents {
 
+    [RequireComponent(typeof(PathAnimator))]
     public class AnimatorEvents : MonoBehaviour {
 
         #region FIELDS
@@ -12,27 +13,39 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private GUISkin skin;
 
         [SerializeField]
-        private Animator.Animator animator;
+        private Animator.PathAnimator pathAnimator;
+
+        // todo Remove.
+        //[SerializeField]
+        //private List<NodeEvent> nodeEvents;
 
         [SerializeField]
-        private List<NodeEvent> nodeEvents;
+        private AnimatorEventsData eventsData;
 
         [SerializeField]
         private bool drawMethodNames = true;
         #endregion
 
         #region PROPERTIES
-        public Animator.Animator Animator {
-            get { return animator; }
+        public PathAnimator PathAnimator {
+            get { return pathAnimator; }
+            set { pathAnimator = value; }
         }
 
-        public List<NodeEvent> NodeEvents {
-            get { return nodeEvents; }
-        }
+        //public List<NodeEvent> NodeEvents {
+        //    get { return nodeEvents; }
+        //}
 
         public GUISkin Skin {
             get { return skin; }
+            set { skin = value; }
         }
+
+        public AnimatorEventsData EventsData {
+            get { return eventsData; }
+            set { eventsData = value; }
+        }
+
         #endregion
 
         #region UNITY MESSAGES
@@ -45,24 +58,32 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void OnDisable() {
-            Animator.NodeReached -= Animator_NodeReached;
+            PathAnimator.NodeReached -= Animator_NodeReached;
         }
 
         private void OnEnable() {
-            if (Animator == null) return;
+            if (PathAnimator == null) return; 
 
-            Animator.NodeReached += Animator_NodeReached;
+            PathAnimator.NodeReached += Animator_NodeReached;
+        }
+
+        private void Reset() {
+            PathAnimator = GetComponent<PathAnimator>();
+            Skin = Resources.Load("AnimatorEventsDefaultSkin") as GUISkin;
         }
         #endregion
         #region EVENT HANDLERS
         private void Animator_NodeReached(
                     object sender,
                     NodeReachedEventArgs arg) {
+
+            if (EventsData == null) return;
+
             // Return if no event was specified for current and later nodes.
-            if (arg.NodeIndex > NodeEvents.Count - 1) return;
+            if (arg.NodeIndex > EventsData.NodeEvents.Count - 1) return;
 
             // Get NodeEvent for current path node.
-            var nodeEvent = NodeEvents[arg.NodeIndex];
+            var nodeEvent = EventsData.NodeEvents[arg.NodeIndex];
 
             // Call method that will handle this event.
             gameObject.SendMessage(
@@ -76,7 +97,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public List<string> GetMethodNames() {
             var methodNames = new List<string>();
 
-            foreach (var nodeEvent in NodeEvents) {
+            foreach (var nodeEvent in EventsData.NodeEvents) {
                 methodNames.Add(nodeEvent.MethodName);
             }
 
@@ -86,7 +107,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public Vector3[] GetNodePositions() {
             // TODO Move GetGlobalNodePositions() to Animator class.
             var nodePositions =
-                Animator.PathData.GetGlobalNodePositions(Animator.ThisTransform);
+                PathAnimator.PathData.GetGlobalNodePositions(PathAnimator.ThisTransform);
 
             return nodePositions;
         }

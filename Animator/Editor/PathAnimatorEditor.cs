@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    [CustomEditor(typeof (Animator))]
-    public class AnimatorEditor : Editor {
+    [CustomEditor(typeof (PathAnimator))]
+    public class PathAnimatorEditor : Editor {
         #region FIELDS
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private Animator script;
+        private PathAnimator script;
 
         private AnimatorShortcuts animatorShortcuts;
 
@@ -31,7 +31,7 @@ namespace ATP.SimplePathAnimator.Animator {
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        public Animator Script {
+        public PathAnimator Script {
             get { return script; }
         }
 
@@ -158,7 +158,7 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
-            script = (Animator) target;
+            script = (PathAnimator) target;
 
             // Initialize AnimatorSettings property.
             AnimatorSettings = Script.Settings;
@@ -573,7 +573,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 var savePath = EditorUtility.SaveFilePanelInProject(
                     "Save Path Asset File",
                     // TODO Make it a property.
-                    "Path1",
+                    "Path",
                     "asset",
                     "");
 

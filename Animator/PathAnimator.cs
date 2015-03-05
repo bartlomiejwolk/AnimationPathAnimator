@@ -5,6 +5,7 @@ using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
+// TODO Rename to .PathAnimator.
 namespace ATP.SimplePathAnimator.Animator {
 
     /// <summary>
@@ -13,7 +14,7 @@ namespace ATP.SimplePathAnimator.Animator {
     ///     time.
     /// </summary>
     [ExecuteInEditMode]
-    public class Animator : GameComponent {
+    public class PathAnimator : GameComponent {
         #region EVENTS
 
         public event EventHandler<NodeReachedEventArgs> NodeReached;

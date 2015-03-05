@@ -489,16 +489,25 @@ namespace ATP.SimplePathAnimator.Animator {
                     "Object that the animated object will be looking at."));
             serializedObject.ApplyModifiedProperties();
 
+            HandleTargetGOFieldChange(prevTargetGO);
+        }
+
+        private void HandleTargetGOFieldChange(Transform prevTargetGO) {
+
+// Handle adding reference.
             if (Script.TargetGO != prevTargetGO
                 && prevTargetGO == null) {
 
                 Script.Settings.RotationMode = RotationMode.Target;
+                Script.UpdateAnimation();
             }
+            // Handle removing reference.
             else if (Script.TargetGO != prevTargetGO
-                && prevTargetGO != null
+                     && prevTargetGO != null
                      && Script.TargetGO == null) {
-                
+
                 Script.Settings.RotationMode = RotationMode.Forward;
+                Script.UpdateAnimation();
             }
         }
 

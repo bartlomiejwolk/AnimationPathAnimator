@@ -45,6 +45,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private SerializedProperty nodeEvents;
 
         private SerializedProperty skin;
+        private SerializedProperty settings;
         #endregion
 
         #region UNITY MESSAGES
@@ -65,6 +66,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(pathAnimator);
+            DrawSettingsAssetField();
             EditorGUILayout.PropertyField(skin);
 
             EditorGUILayout.Space();
@@ -103,6 +105,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
             pathAnimator = serializedObject.FindProperty("pathAnimator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
+            settings = serializedObject.FindProperty("settings");
         }
 
         private void OnSceneGUI() {
@@ -110,6 +113,20 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             // TODO Guard against null Skin.
             HandleDrawingMethodNames();
+        }
+
+        #endregion
+        #region INSPECTOR
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "Settings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion

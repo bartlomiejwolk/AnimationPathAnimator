@@ -14,6 +14,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         [SerializeField]
         private Animator.Animator animator;
 
+        // todo Remove.
         [SerializeField]
         private List<NodeEvent> nodeEvents;
 

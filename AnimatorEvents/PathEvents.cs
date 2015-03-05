@@ -6,7 +6,7 @@ using ATP.SimplePathAnimator.Animator;
 namespace ATP.SimplePathAnimator.Events {
 
     [RequireComponent(typeof(PathAnimator))]
-    public class AnimatorEvents : MonoBehaviour {
+    public class PathEvents : MonoBehaviour {
 
         #region FIELDS
         [SerializeField]

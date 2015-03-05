@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Events {
 
-    [CustomEditor(typeof (AnimatorEvents))]
-    public class AnimationEventsEditor : Editor {
+    [CustomEditor(typeof (PathEvents))]
+    public class PathEventsEditor : Editor {
         #region FIELDS
 
 
@@ -16,7 +16,7 @@ namespace ATP.SimplePathAnimator.Events {
 
         private SerializedObject EventsDataSerObj { get; set; }
 
-        private AnimatorEvents Script { get; set; }
+        private PathEvents Script { get; set; }
 
         private PathEventsSettings PathEventsSettings;
 
@@ -86,7 +86,7 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void OnEnable() {
-            Script = (AnimatorEvents) target;
+            Script = (PathEvents) target;
             PathEventsSettings = Script.Settings;
 
             if (EventsDataSerObj != null) {

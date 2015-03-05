@@ -68,11 +68,7 @@ namespace ATP.SimplePathAnimator.Animator {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                Repaint();
-            }
+            HandleUndo();
 
             // TODO Rename to DrawPathDataAssetField().
             DrawPathDataAssetField();
@@ -145,6 +141,16 @@ namespace ATP.SimplePathAnimator.Animator {
             DrawSettingsAssetField();
             DrawSkinSelectionControl();
         }
+
+        private void HandleUndo() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                Repaint();
+                //SceneView.RepaintAll();
+            }
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.

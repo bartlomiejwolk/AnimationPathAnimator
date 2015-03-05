@@ -146,9 +146,15 @@ namespace ATP.SimplePathAnimator.Animator {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
 
+                // Repaint inspector.
                 Repaint();
                 //SceneView.RepaintAll();
+                UpdateSceneOnUndo();
             }
+        }
+
+        private void UpdateSceneOnUndo() {
+            HandleTangentModeChange();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

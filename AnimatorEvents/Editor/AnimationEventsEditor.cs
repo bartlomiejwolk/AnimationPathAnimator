@@ -14,25 +14,11 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         #region PROPERTIES
 
-        public float DefaultNodeLabelHeight {
-            get { return 30; }
-        }
-
-        public float DefaultNodeLabelWidth {
-            get { return 100; }
-        }
-
-        public int MethodNameLabelOffsetX {
-            get { return 30; }
-        }
-
-        public int MethodNameLabelOffsetY {
-            get { return -20; }
-        }
-
         private SerializedObject EventsDataSerObj { get; set; }
 
         private AnimatorEvents Script { get; set; }
+
+        private PathEventsSettings PathEventsSettings;
 
         #endregion
 
@@ -45,6 +31,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private SerializedProperty nodeEvents;
 
         private SerializedProperty skin;
+        private SerializedProperty settings;
         #endregion
 
         #region UNITY MESSAGES
@@ -65,14 +52,14 @@ namespace ATP.SimplePathAnimator.PathEvents {
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(pathAnimator);
+            DrawSettingsAssetField();
             EditorGUILayout.PropertyField(skin);
 
             EditorGUILayout.Space();
 
-            DrawEventList();
-
             serializedObject.ApplyModifiedProperties();
 
+            DrawEventList();
 
         }
 
@@ -90,12 +77,17 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private void DrawEventList() {
             if (nodeEvents == null) return;
 
+            EventsDataSerObj.Update();
+
             ReorderableListGUI.Title("Events");
             ReorderableListGUI.ListField(nodeEvents);
+
+            EventsDataSerObj.ApplyModifiedProperties();
         }
 
         private void OnEnable() {
             Script = (AnimatorEvents) target;
+            PathEventsSettings = Script.Settings;
 
             if (EventsDataSerObj != null) {
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
@@ -103,6 +95,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
             pathAnimator = serializedObject.FindProperty("pathAnimator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
+            settings = serializedObject.FindProperty("settings");
         }
 
         private void OnSceneGUI() {
@@ -110,6 +103,20 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             // TODO Guard against null Skin.
             HandleDrawingMethodNames();
+        }
+
+        #endregion
+        #region INSPECTOR
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "Settings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion
@@ -130,8 +137,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                DefaultNodeLabelWidth,
-                DefaultNodeLabelHeight);
+                PathEventsSettings.DefaultNodeLabelWidth,
+                PathEventsSettings.DefaultNodeLabelHeight);
 
             Handles.BeginGUI();
 
@@ -171,8 +178,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
             DrawNodeLabels(
                 nodePositions,
                 methodNames,
-                MethodNameLabelOffsetX,
-                MethodNameLabelOffsetY,
+                PathEventsSettings.MethodNameLabelOffsetX,
+                PathEventsSettings.MethodNameLabelOffsetY,
                 style);
         }
 

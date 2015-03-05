@@ -24,6 +24,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         [SerializeField]
         private bool drawMethodNames = true;
+
+        [SerializeField]
+        private PathEventsSettings settings;
         #endregion
 
         #region PROPERTIES
@@ -44,6 +47,10 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public AnimatorEventsData EventsData {
             get { return eventsData; }
             set { eventsData = value; }
+        }
+
+        public PathEventsSettings Settings {
+            get { return settings; }
         }
 
         #endregion
@@ -69,6 +76,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         private void Reset() {
             PathAnimator = GetComponent<PathAnimator>();
+            settings = Resources.Load<PathEventsSettings>("PathEventsSettings");
             Skin = Resources.Load("AnimatorEventsDefaultSkin") as GUISkin;
         }
         #endregion

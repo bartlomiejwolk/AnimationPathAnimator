@@ -5,7 +5,6 @@ using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
-// TODO Rename to .PathAnimator.
 namespace ATP.SimplePathAnimator.Animator {
 
     /// <summary>
@@ -157,8 +156,8 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             thisTransform = GetComponent<Transform>();
-            Settings = Resources.Load("Settings/Animator") as AnimatorSettings;
-            skin = Resources.Load("GUISkin/Animator") as GUISkin;
+            Settings = Resources.Load("PathAnimatorSettings") as AnimatorSettings;
+            skin = Resources.Load("PathAnimatorSkin") as GUISkin;
 
             // Initialize animatedGO field.
             if (AnimatedGO == null && Camera.main != null) {

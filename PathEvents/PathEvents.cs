@@ -77,7 +77,7 @@ namespace ATP.SimplePathAnimator.Events {
         private void Reset() {
             PathAnimator = GetComponent<PathAnimator>();
             settings = Resources.Load<PathEventsSettings>("PathEventsSettings");
-            Skin = Resources.Load("AnimatorEventsDefaultSkin") as GUISkin;
+            Skin = Resources.Load("PathEventsDefaultSkin") as GUISkin;
         }
         #endregion
         #region EVENT HANDLERS

@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PathEventsSettings : ScriptableObject {
+namespace ATP.SimplePathAnimator.PathEvents {
 
-    #region FIELDS
-    #endregion
-    #region PROPERTIES
+    public class PathEventsSettings : ScriptableObject {
 
-    #endregion
+        #region FIELDS
+
+        #endregion
+
+        #region PROPERTIES
+
+        #endregion
+    }
+
 }

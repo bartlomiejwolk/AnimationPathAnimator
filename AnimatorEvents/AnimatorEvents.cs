@@ -19,6 +19,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private List<NodeEvent> nodeEvents;
 
         [SerializeField]
+        private AnimatorEventsData eventsData;
+
+        [SerializeField]
         private bool drawMethodNames = true;
         #endregion
 
@@ -34,6 +37,12 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public GUISkin Skin {
             get { return skin; }
         }
+
+        public AnimatorEventsData EventsData {
+            get { return eventsData; }
+            set { eventsData = value; }
+        }
+
         #endregion
 
         #region UNITY MESSAGES

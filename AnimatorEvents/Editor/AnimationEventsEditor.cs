@@ -9,13 +9,6 @@ namespace ATP.SimplePathAnimator.PathEvents {
     public class AnimationEventsEditor : Editor {
         #region FIELDS
 
-        private SerializedProperty animator;
-
-        private SerializedProperty drawMethodNames;
-
-        private SerializedProperty nodeEvents;
-
-        private SerializedProperty skin;
 
         #endregion
 
@@ -43,8 +36,22 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         #region UNITY MESSAGES
 
+        #region SERIALIZED PROPERTIES
+
+        private SerializedProperty animator;
+
+        private SerializedProperty drawMethodNames;
+
+        private SerializedProperty nodeEvents;
+
+        private SerializedProperty skin;
+        private SerializedProperty eventsData;
+        #endregion
+
         public override void OnInspectorGUI() {
             serializedObject.Update();
+
+            DrawEventsDataAssetField();
 
             EditorGUILayout.PropertyField(animator);
             EditorGUILayout.PropertyField(skin);
@@ -62,6 +69,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
             animator = serializedObject.FindProperty("animator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
+            eventsData = serializedObject.FindProperty("eventsData");
         }
 
         private void OnSceneGUI() {
@@ -131,6 +139,18 @@ namespace ATP.SimplePathAnimator.PathEvents {
                 MethodNameLabelOffsetX,
                 MethodNameLabelOffsetY,
                 style);
+        }
+
+        protected virtual void DrawEventsDataAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                eventsData,
+                new GUIContent(
+                    "Events Data",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion

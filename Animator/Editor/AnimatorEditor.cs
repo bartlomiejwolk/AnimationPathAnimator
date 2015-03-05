@@ -370,6 +370,8 @@ namespace ATP.SimplePathAnimator.Animator {
                         "Movement Mode",
                         ""),
                     AnimatorSettings.MovementMode);
+
+            SceneView.RepaintAll();
         }
 
         protected virtual void DrawPathDataAssetField() {

@@ -5,6 +5,7 @@ using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
+// TODO Rename to .PathAnimator.
 namespace ATP.SimplePathAnimator.Animator {
 
     /// <summary>

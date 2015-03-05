@@ -36,7 +36,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
         #region SERIALIZED PROPERTIES
 
-        private SerializedProperty animator;
+        private SerializedProperty pathAnimator;
 
         private SerializedProperty drawMethodNames;
 
@@ -59,7 +59,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.PropertyField(animator);
+            EditorGUILayout.PropertyField(pathAnimator);
             EditorGUILayout.PropertyField(skin);
 
             ReorderableListGUI.Title("Events");
@@ -72,7 +72,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
             Script = (AnimatorEvents) target;
 
             nodeEvents = serializedObject.FindProperty("nodeEvents");
-            animator = serializedObject.FindProperty("animator");
+            pathAnimator = serializedObject.FindProperty("pathAnimator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
             eventsData = serializedObject.FindProperty("eventsData");

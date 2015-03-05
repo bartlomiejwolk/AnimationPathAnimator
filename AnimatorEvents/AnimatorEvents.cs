@@ -5,6 +5,7 @@ using ATP.SimplePathAnimator.Animator;
 
 namespace ATP.SimplePathAnimator.PathEvents {
 
+    [RequireComponent(typeof(PathAnimator))]
     public class AnimatorEvents : MonoBehaviour {
 
         #region FIELDS
@@ -26,8 +27,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
         #endregion
 
         #region PROPERTIES
-        public Animator.PathAnimator PathAnimator {
+        public PathAnimator PathAnimator {
             get { return pathAnimator; }
+            set { pathAnimator = value; }
         }
 
         public List<NodeEvent> NodeEvents {
@@ -66,6 +68,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         private void Reset() {
+            PathAnimator = GetComponent<PathAnimator>();
             Skin = Resources.Load("AnimatorEventsDefaultSkin") as GUISkin;
         }
         #endregion

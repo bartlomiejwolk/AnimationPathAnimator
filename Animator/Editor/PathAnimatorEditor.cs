@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ATP.SimplePathAnimator.Animator {
 
     [CustomEditor(typeof (PathAnimator))]
-    public class AnimatorEditor : Editor {
+    public class PathAnimatorEditor : Editor {
         #region FIELDS
 
         /// <summary>

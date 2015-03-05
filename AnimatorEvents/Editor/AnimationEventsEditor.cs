@@ -30,6 +30,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
             get { return -20; }
         }
 
+        private SerializedObject EventsDataSerObj { get; set; }
+
         private AnimatorEvents Script { get; set; }
 
         #endregion
@@ -43,7 +45,6 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private SerializedProperty nodeEvents;
 
         private SerializedProperty skin;
-        private SerializedProperty eventsData;
         #endregion
 
         #region UNITY MESSAGES
@@ -66,10 +67,23 @@ namespace ATP.SimplePathAnimator.PathEvents {
 
             EditorGUILayout.Space();
 
-            ReorderableListGUI.Title("Events");
-            ReorderableListGUI.ListField(nodeEvents);
+            DrawEventList();
 
             serializedObject.ApplyModifiedProperties();
+
+            // Initialize EventsDataSerObj.
+            if (Script.EventsData != null && EventsDataSerObj == null) {
+                EventsDataSerObj = new SerializedObject(Script.EventsData);
+                nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
+            }
+        }
+
+        private void DrawEventList() {
+            if (Script.EventsData == null) return;
+            if (nodeEvents == null) return;
+
+            ReorderableListGUI.Title("Events");
+            ReorderableListGUI.ListField(nodeEvents);
         }
 
         private void OnEnable() {
@@ -79,7 +93,6 @@ namespace ATP.SimplePathAnimator.PathEvents {
             pathAnimator = serializedObject.FindProperty("pathAnimator");
             drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
-            eventsData = serializedObject.FindProperty("eventsData");
         }
 
         private void OnSceneGUI() {
@@ -154,15 +167,23 @@ namespace ATP.SimplePathAnimator.PathEvents {
         }
 
         protected virtual void DrawEventsDataAssetField() {
-            serializedObject.Update();
+            //serializedObject.Update();
 
-            EditorGUILayout.PropertyField(
-                eventsData,
+            //EditorGUILayout.PropertyField(
+            //    eventsData,
+            //    new GUIContent(
+            //        "Events Data",
+            //        ""));
+
+            //serializedObject.ApplyModifiedProperties();
+
+            Script.EventsData = (AnimatorEventsData) EditorGUILayout.ObjectField(
                 new GUIContent(
-                    "Events Data",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
+                    "Events Asset",
+                    ""),
+                Script.EventsData,
+                typeof(AnimatorEventsData),
+                false);
         }
 
         private void DrawCreateEventsDataAssetButton() {

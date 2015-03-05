@@ -16,8 +16,8 @@ namespace ATP.SimplePathAnimator.PathEvents {
         private Animator.PathAnimator pathAnimator;
 
         // todo Remove.
-        [SerializeField]
-        private List<NodeEvent> nodeEvents;
+        //[SerializeField]
+        //private List<NodeEvent> nodeEvents;
 
         [SerializeField]
         private AnimatorEventsData eventsData;
@@ -32,9 +32,9 @@ namespace ATP.SimplePathAnimator.PathEvents {
             set { pathAnimator = value; }
         }
 
-        public List<NodeEvent> NodeEvents {
-            get { return nodeEvents; }
-        }
+        //public List<NodeEvent> NodeEvents {
+        //    get { return nodeEvents; }
+        //}
 
         public GUISkin Skin {
             get { return skin; }
@@ -77,10 +77,10 @@ namespace ATP.SimplePathAnimator.PathEvents {
                     object sender,
                     NodeReachedEventArgs arg) {
             // Return if no event was specified for current and later nodes.
-            if (arg.NodeIndex > NodeEvents.Count - 1) return;
+            if (arg.NodeIndex > EventsData.NodeEvents.Count - 1) return;
 
             // Get NodeEvent for current path node.
-            var nodeEvent = NodeEvents[arg.NodeIndex];
+            var nodeEvent = EventsData.NodeEvents[arg.NodeIndex];
 
             // Call method that will handle this event.
             gameObject.SendMessage(
@@ -94,7 +94,7 @@ namespace ATP.SimplePathAnimator.PathEvents {
         public List<string> GetMethodNames() {
             var methodNames = new List<string>();
 
-            foreach (var nodeEvent in NodeEvents) {
+            foreach (var nodeEvent in EventsData.NodeEvents) {
                 methodNames.Add(nodeEvent.MethodName);
             }
 

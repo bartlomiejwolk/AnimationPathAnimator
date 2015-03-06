@@ -13,10 +13,12 @@ namespace ATP.SimplePathAnimator.Events {
 
         public string MethodName {
             get { return methodName; }
+            set { methodName = value; }
         }
 
         public string MethodArg {
             get { return methodArg; }
+            set { methodArg = value; }
         }
 
     }

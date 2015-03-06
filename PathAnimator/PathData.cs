@@ -109,12 +109,12 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region EVENT INVOCATORS
 
-        public virtual void OnNodePositionChanged() {
+        private void OnNodePositionChanged() {
             var handler = NodePositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        public virtual void OnNodeRemoved() {
+        private void OnNodeRemoved() {
             var handler = NodeRemoved;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -241,11 +241,11 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region EDIT METHODS
 
-        public void AddKeyToCurve(
+        private void AddKeyToCurve(
             AnimationCurve curve,
             float timestamp) {
-            var value = curve.Evaluate(timestamp);
 
+            var value = curve.Evaluate(timestamp);
             curve.AddKey(timestamp, value);
         }
 
@@ -439,17 +439,17 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void SmoothCurve(AnimationCurve curve) {
+        private void SmoothCurve(AnimationCurve curve) {
             for (var i = 0; i < curve.length; i++) {
                 curve.SmoothTangents(i, 0);
             }
         }
 
-        public void SmoothSingleNodeTangents(int nodeIndex) {
+        private void SmoothSingleNodeTangents(int nodeIndex) {
             AnimatedObjectPath.SmoothPointTangents(nodeIndex);
         }
 
-        public void UpdateCurveTimestamps(AnimationCurve curve) {
+        private void UpdateCurveTimestamps(AnimationCurve curve) {
             // Get node timestamps.
             var pathNodeTimestamps = GetPathTimestamps();
             // For each key in easeCurve..
@@ -474,7 +474,7 @@ namespace ATP.SimplePathAnimator.Animator {
         ///     Update AnimationCurve with keys added to the path.
         /// </summary>
         /// <param name="curve"></param>
-        public void UpdateCurveWithAddedKeys(AnimationCurve curve) {
+        private void UpdateCurveWithAddedKeys(AnimationCurve curve) {
             var nodeTimestamps = GetPathTimestamps();
             // Get curve value.
             var curveTimestamps = new float[curve.length];
@@ -497,7 +497,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
+        private void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
             // AnimationPathBuilder node timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get values from curve.
@@ -571,7 +571,7 @@ namespace ATP.SimplePathAnimator.Animator {
             OnNodeTiltChanged();
         }
 
-        public void UpdateRotationCurvesTimestamps() {
+        private void UpdateRotationCurvesTimestamps() {
             // Get node timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get rotation point timestamps.
@@ -594,7 +594,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         // TODO Refactor.
-        public void UpdateRotationPathWithAddedKeys() {
+        private void UpdateRotationPathWithAddedKeys() {
             // Get animatedObjectPath timestamps.
             var pathTimestamps = GetPathTimestamps();
 
@@ -635,7 +635,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void UpdateRotationPathWithRemovedKeys() {
+        private void UpdateRotationPathWithRemovedKeys() {
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get values from rotationPath.

@@ -201,7 +201,7 @@ namespace ATP.SimplePathAnimator.Events {
                 style);
         }
 
-        protected virtual void DrawEventsDataAssetField() {
+        private void DrawEventsDataAssetField() {
             //serializedObject.Update();
 
             //EditorGUILayout.PropertyField(

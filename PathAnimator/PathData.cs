@@ -47,10 +47,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region PROPERTIES
 
-        public int AnimationPathKeysNo {
-            get { return animatedObjectPath.KeysNo; }
-        }
-
         public int EaseCurveKeysNo {
             get { return EaseCurve.length; }
         }
@@ -63,11 +59,11 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return TiltingCurve.length; }
         }
 
-        protected virtual float DefaultEaseCurveValue {
+        private float DefaultEaseCurveValue {
             get { return 0.05f; }
         }
 
-        protected virtual int PathLengthSamplingFrequency {
+        private int PathLengthSamplingFrequency {
             get { return 20; }
         }
 
@@ -127,27 +123,27 @@ namespace ATP.SimplePathAnimator.Animator {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnNodeAdded() {
+        private void OnNodeAdded() {
             var handler = NodeAdded;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnNodeTiltChanged() {
+        private void OnNodeTiltChanged() {
             var handler = NodeTiltChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnNodeTimeChanged() {
+        private void OnNodeTimeChanged() {
             var handler = NodeTimeChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnPathReset() {
+        private void OnPathReset() {
             var handler = PathReset;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnRotationPointPositionChanged() {
+        private void OnRotationPointPositionChanged() {
             var handler = RotationPointPositionChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -866,7 +862,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #endregion
 
-        protected virtual void OnRotationPathReset() {
+        private void OnRotationPathReset() {
             var handler = RotationPathReset;
             if (handler != null) handler(this, EventArgs.Empty);
         }

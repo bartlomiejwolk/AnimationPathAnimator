@@ -120,7 +120,7 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUILayout.Space();
 
             DrawAdvancedSettingsFoldout();
-            DrawAdvanceSettingsControls();
+            DrawAdvancedSettingsControls();
 
             // Validate inspector settings.
             // Not all inspector controls can be validated with OnValidate().
@@ -245,7 +245,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        private void DrawAdvanceSettingsControls() {
+        private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();

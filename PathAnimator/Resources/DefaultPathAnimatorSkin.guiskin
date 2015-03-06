@@ -1309,10 +1309,10 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
-  - m_Name: SmoothButton
+  - m_Name: PlayPauseInspectorButton
     m_Normal:
-      m_Background: {fileID: 2800000, guid: 92d5be698378c0940972f7af6d8931ef, type: 3}
-      m_TextColor: {r: 1, g: 1, b: 1, a: 1}
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Hover:
       m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}

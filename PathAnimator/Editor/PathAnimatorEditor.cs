@@ -393,8 +393,6 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawPlayerControls() {
-            EditorGUILayout.BeginHorizontal();
-
             // Play/Pause button text.
             string playPauseBtnText;
             if (!Script.IsPlaying || (Script.IsPlaying && Script.Pause)) {
@@ -403,6 +401,8 @@ namespace ATP.SimplePathAnimator.Animator {
             else {
                 playPauseBtnText = "Pause";
             }
+
+            EditorGUILayout.BeginHorizontal();
 
             // Draw Play/Pause button.
             if (GUILayout.Button(

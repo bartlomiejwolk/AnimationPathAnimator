@@ -229,7 +229,10 @@ namespace ATP.SimplePathAnimator.Animator {
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 
-        public void OnValidate() {
+        private void OnValidate() {
+        }
+
+        public void ValidateInspectorSettings() {
             if (Settings == null) return;
 
             // Limit ForwardPointOffset value.

@@ -13,17 +13,10 @@ namespace ATP.SimplePathAnimator.Events {
         private GUISkin skin;
 
         [SerializeField]
-        private Animator.PathAnimator pathAnimator;
-
-        // todo Remove.
-        //[SerializeField]
-        //private List<NodeEvent> nodeEvents;
+        private PathAnimator pathAnimator;
 
         [SerializeField]
         private PathEventsData eventsData;
-
-        [SerializeField]
-        private bool drawMethodNames = true;
 
         [SerializeField]
         private PathEventsSettings settings;

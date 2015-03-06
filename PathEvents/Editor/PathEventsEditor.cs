@@ -8,6 +8,8 @@ namespace ATP.SimplePathAnimator.Events {
     [CustomEditor(typeof (PathEvents))]
     public class PathEventsEditor : Editor {
         #region FIELDS
+        private SerializedObject PathEventsSettingsSerObj;
+        private PathEventsSettings PathEventsSettings;
 
 
         #endregion
@@ -18,8 +20,7 @@ namespace ATP.SimplePathAnimator.Events {
 
         private PathEvents Script { get; set; }
 
-        private PathEventsSettings PathEventsSettings;
-
+        public PathEventsData EventsData { get; set; }
         #endregion
 
         #region SERIALIZED PROPERTIES
@@ -61,15 +62,27 @@ namespace ATP.SimplePathAnimator.Events {
 
         }
 
-        private void InitializeNodeEvents() {
+        /// <summary>
+        /// Initialize object fields that may be changed from the inspector.
+        /// </summary>
+        private void InitializeObjectFields() {
+            // Initialize EventsDataSerObj.
             if (Script.EventsData != null && EventsDataSerObj == null) {
+                EventsData = Script.EventsData;
                 // Initialize SerializedObject EventsDataSerObj.
-                EventsDataSerObj = new SerializedObject(Script.EventsData);
+                EventsDataSerObj = new SerializedObject(EventsData);
                 // Iniatilize SerializedProperty nodeEvents.
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
             }
-        }
 
+            // Initialize PathEventsSettingsSerObje.
+            if (Script.Settings != null) {
+                PathEventsSettings = Script.Settings;
+
+                PathEventsSettingsSerObj = new SerializedObject(Script.Settings);
+                drawMethodNames = PathEventsSettingsSerObj.FindProperty("drawMethodNames");
+            }
+        }
         private void DrawEventList() {
             if (nodeEvents == null) return;
 
@@ -83,14 +96,13 @@ namespace ATP.SimplePathAnimator.Events {
 
         private void OnEnable() {
             Script = (PathEvents) target;
-            PathEventsSettings = Script.Settings;
+
 
             if (EventsDataSerObj != null) {
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
             }
 
             pathAnimator = serializedObject.FindProperty("pathAnimator");
-            drawMethodNames = serializedObject.FindProperty("drawMethodNames");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settings");
         }
@@ -170,6 +182,7 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void HandleDrawingMethodNames() {
+            if (drawMethodNames == null) return;
             if (!drawMethodNames.boolValue) return;
 
             var nodePositions = Script.GetNodePositions();

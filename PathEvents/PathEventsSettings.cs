@@ -18,6 +18,9 @@ namespace ATP.SimplePathAnimator.Events {
 
         [SerializeField]
         private int methodNameLabelOffsetY = -20;
+        
+        [SerializeField]
+        private bool drawMethodNames = true;
         #endregion
 
         #region PROPERTIES
@@ -39,6 +42,11 @@ namespace ATP.SimplePathAnimator.Events {
 
         public int MethodNameLabelOffsetY {
             get { return methodNameLabelOffsetY; }
+        }
+
+        public bool DrawMethodNames {
+            get { return drawMethodNames; }
+            set { drawMethodNames = value; }
         }
 
         #endregion

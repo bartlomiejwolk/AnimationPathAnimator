@@ -233,6 +233,12 @@ namespace ATP.SimplePathAnimator.Animator {
             if (Settings == null) return;
 
             // Limit ForwardPointOffset value.
+            if (Settings.ForwardPointOffset < 0.001f) {
+                Settings.ForwardPointOffset = 0.001f;
+            }
+            else if (Settings.ForwardPointOffset > 1) {
+                Settings.ForwardPointOffset = 1;
+            }
 
             // Limit ExmportSamplingFrequency value.
             if (Settings.ExportSamplingFrequency < 1) {

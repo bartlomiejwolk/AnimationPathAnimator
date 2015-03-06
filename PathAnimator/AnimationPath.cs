@@ -20,8 +20,15 @@ namespace ATP.SimplePathAnimator.Animator {
         /// Animation Curves based on which the Animation Path is constructed.
         /// </summary>
         [SerializeField]
-        private AnimationCurve[] curves = new AnimationCurve[3];
+        private AnimationCurve[] curves;
 
+        public AnimationPath() {
+            curves = new AnimationCurve[3];
+        }
+
+        #endregion FIELDS
+
+        #region PROPERTIES
         public int KeysNo {
             get { return curves[0].length; }
         }
@@ -35,20 +42,9 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return curves[i]; }
             set { curves[i] = value; }
         }
+        #endregion
 
-        #endregion FIELDS
-
-        //#region UNITY MESSAGES
-        //[SuppressMessage("ReSharper", "UnusedMember.Local")]
-        //private void OnEnable() {
-        //    // Initialize curves field.
-        //    if (curves[0] == null) {
-        //        InitializeCurves();
-        //    }
-        //}
-        //#endregion
-
-        #region PUBLIC METHODS
+        #region METHODS
         public float[] GetTimestamps() {
             var timestamps = new float[KeysNo];
 
@@ -385,8 +381,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
             return pathLength;
         }
-        #endregion
-        #region PRIVATE METHODS
 
         /// <summary>
         /// Initialize <c>curves</c> field with empty AnimationCurve objects.

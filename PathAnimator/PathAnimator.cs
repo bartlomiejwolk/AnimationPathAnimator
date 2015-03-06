@@ -229,12 +229,10 @@ namespace ATP.SimplePathAnimator.Animator {
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 
-        // todo OnValidate() is not called on script load
-        // change in the inspector.
-        private void OnValidate() {
+        public void OnValidate() {
             if (Settings == null) return;
 
-             // Limit value.
+            // Limit ExmportSamplingFrequency value.
             if (Settings.ExportSamplingFrequency < 1) {
                 Settings.ExportSamplingFrequency = 1;
             }

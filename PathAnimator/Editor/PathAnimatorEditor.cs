@@ -140,6 +140,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
             DrawSettingsAssetField();
             DrawSkinSelectionControl();
+
+            // Call OnValidate() manually since not all controls use
+            // serializedObject to update their values.
+            if (GUI.changed) Script.OnValidate();
         }
 
         private void HandleUndo() {

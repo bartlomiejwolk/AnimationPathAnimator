@@ -123,8 +123,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region UNITY MESSAGES
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        public virtual void OnEnable() {
+        private void OnEnable() {
             ThisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
@@ -162,12 +161,10 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathData.RotationPathReset -= PathData_RotationPathReset;
             }
         }
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
 
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         // TODO Refactor.
         private void OnDrawGizmosSelected() {
             // Return if path asset file is not assigned.
@@ -200,9 +197,7 @@ namespace ATP.SimplePathAnimator.Animator {
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 
-        private void OnValidate() {
-        }
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+     
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
                 StartEaseTimeCoroutine();
@@ -210,9 +205,6 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private void Update() {
-        }
 
         private void Reset() {
             // Create separate method InitializeFields().
@@ -227,11 +219,11 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
-        void PathData_RotationPathReset(object sender, EventArgs e) {
+        private void PathData_RotationPathReset(object sender, EventArgs e) {
             Settings.RotationMode = RotationMode.Custom;
         }
 
-        protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
+        private void OnNodeReached(NodeReachedEventArgs eventArgs) {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
@@ -262,7 +254,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region ANIMATION
 
-        public void Animate() {
+        private void Animate() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
             AnimateAnimatedGOTilting();

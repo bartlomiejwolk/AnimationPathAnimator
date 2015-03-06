@@ -126,28 +126,6 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return animatedGO; }
             set { animatedGO = value; }
         }
-
-        private void HandleFireNodeReachedEvent() {
-            // Get path timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            // Compare current AnimationTimeRatio to node timestamps.
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Math.Abs(x - AnimationTimeRatio)
-                     < GlobalConstants.FloatPrecision);
-
-            // Return if current AnimationTimeRatio is not equal to any node
-            // timestamp.
-            if (index < 0) return;
-
-            // Create event args.
-            var args = new NodeReachedEventArgs(index, AnimationTimeRatio);
-
-            // Fire event.
-            OnNodeReached(args);
-        }
-
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -155,7 +133,7 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
             thisTransform = GetComponent<Transform>();
-            Settings = Resources.Load("DefaultPathAnimatorSettings")
+            settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
@@ -262,6 +240,12 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Update() {
+        }
+
+        private void Reset() {
+            settings = Resources.Load("DefaultPathAnimatorSettings")
+                as PathAnimatorSettings;
+            skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
         }
 
         #endregion UNITY MESSAGES
@@ -525,6 +509,28 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion
 
         #region HELPER METHODS
+        // TODO Rename to HandleFiringNodeReachedEvent.
+        private void HandleFireNodeReachedEvent() {
+            // Get path timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            // Compare current AnimationTimeRatio to node timestamps.
+            var index = Array.FindIndex(
+                nodeTimestamps,
+                x => Math.Abs(x - AnimationTimeRatio)
+                     < GlobalConstants.FloatPrecision);
+
+            // Return if current AnimationTimeRatio is not equal to any node
+            // timestamp.
+            if (index < 0) return;
+
+            // Create event args.
+            var args = new NodeReachedEventArgs(index, AnimationTimeRatio);
+
+            // Fire event.
+            OnNodeReached(args);
+        }
+
 
         public void UpdateWrapMode() {
             PathData.SetWrapMode(Settings.WrapMode);

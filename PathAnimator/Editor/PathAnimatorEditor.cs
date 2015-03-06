@@ -44,6 +44,8 @@ namespace ATP.SimplePathAnimator.Animator {
         private SerializedProperty skin;
         private SerializedProperty targetGO;
         private SerializedProperty settings;
+        private SerializedProperty shortJumpValue;
+        private SerializedProperty longJumpValue;
 
 
         #endregion SERIALIZED PROPERTIES
@@ -140,6 +142,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        // TODO Reorder.
         private void OnEnable() {
             // Get target script reference.
             Script = (PathAnimator) target;
@@ -249,19 +252,25 @@ namespace ATP.SimplePathAnimator.Animator {
             if (advancedSettingsFoldout.boolValue) {
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
-
-                //EditorGUILayout.Space();
-
-                //// TODO Limit these values in OnValidate().
-                //DrawPositionLerpSpeedControl();
-                //DrawRotationSlerpSpeedField();
-                //DrawForwardPointOffsetField();
-                //DrawMaxAnimationSpeedField();
-
-                //EditorGUILayout.Space();
-
-                //DrawSkinSelectionControl();
+                DrawShortJumpValueField();
+                DrawLongJumpValueField();
             }
+        }
+
+        private void DrawLongJumpValueField() {
+            SettingsSerObj.Update();
+
+            EditorGUILayout.PropertyField(longJumpValue);
+
+            SettingsSerObj.ApplyModifiedProperties();
+        }
+
+        private void DrawShortJumpValueField() {
+            SettingsSerObj.Update();
+
+            EditorGUILayout.PropertyField(shortJumpValue);
+
+            SettingsSerObj.ApplyModifiedProperties();
         }
 
         private void DrawAnimatedGOField() {
@@ -994,6 +1003,8 @@ namespace ATP.SimplePathAnimator.Animator {
             gizmoCurveColor = SettingsSerObj.FindProperty("gizmoCurveColor");
             rotationCurveColor =
                 SettingsSerObj.FindProperty("rotationCurveColor");
+            shortJumpValue = SettingsSerObj.FindProperty("shortJumpValue");
+            longJumpValue = SettingsSerObj.FindProperty("longJumpValue");
         }
 
         private void InstantiateCompositeClasses() {

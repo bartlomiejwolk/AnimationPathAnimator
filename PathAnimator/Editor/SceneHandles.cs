@@ -13,12 +13,11 @@ namespace ATP.SimplePathAnimator.Animator {
     // TODO Pass ref. to Animator in the constructor.
     public class SceneHandles {
 
+        #region FIELDS
         private readonly PathAnimator pathAnimator;
+        #endregion
 
-        public SceneHandles(PathAnimator pathAnimator) {
-            this.pathAnimator = pathAnimator;
-        }
-
+        #region PROPERTIES
         private PathAnimator PathAnimator {
             get { return pathAnimator; }
         }
@@ -30,6 +29,12 @@ namespace ATP.SimplePathAnimator.Animator {
         private PathAnimatorSettings Settings{
             get { return PathAnimator.Settings; }
         }
+        #endregion
+        #region METHDOS
+        public SceneHandles(PathAnimator pathAnimator) {
+            this.pathAnimator = pathAnimator;
+        }
+
 
         public void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -73,7 +78,7 @@ namespace ATP.SimplePathAnimator.Animator {
         /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        public void DrawArcHandle(
+        private void DrawArcHandle(
             float value,
             Vector3 position,
             float arcValueMultiplier,
@@ -253,7 +258,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public void DrawNodeLabel(
+        private void DrawNodeLabel(
             Vector3 nodeGlobalPosition,
             string value,
             int offsetX,
@@ -281,7 +286,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Handles.EndGUI();
         }
 
-        public void DrawNodeLabels(
+        private void DrawNodeLabels(
             PathAnimator pathAnimator,
             string text,
             int offsetX,
@@ -301,7 +306,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public Vector3 DrawPositionHandle(
+        private Vector3 DrawPositionHandle(
             Vector3 nodePosition,
             Color handleColor,
             Handles.DrawCapFunction capFunction) {
@@ -436,6 +441,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             return addButtonPressed;
         }
+        #endregion
     }
 
 }

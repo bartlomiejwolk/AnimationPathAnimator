@@ -179,7 +179,10 @@ namespace ATP.SimplePathAnimator.Animator {
         private string targetGizmoIcon = "target_22x22-blue";
 
         [SerializeField]
-        private string[] iconsSourceDirs;
+        private string[] iconsSourceDirs = {
+            "/AirTimeProductions/animationpathtools/PathAnimator/Resources/Icons/",
+            "/animationpathtools/PathAnimator/Resources/Icons/"
+        };
         #endregion
         #region GIZMO PROPERTIES
         public string[] IconsSourceDirs {

@@ -24,11 +24,11 @@ namespace ATP.SimplePathAnimator.Animator {
         public AnimatorGizmos(PathAnimatorSettings settings) {
             this.settings = settings;
 
+            // TODO Use directive to disable this code in standalone.
             CopyIconsToGizmosFolder();
         }
 
         private void CopyIconsToGizmosFolder() {
-            // TODO Use directive to disable this code in standalone.
 
             // Create Asset/Gizmos folder if not exists.
             if (!Directory.Exists(Application.dataPath + "/Gizmos")) {

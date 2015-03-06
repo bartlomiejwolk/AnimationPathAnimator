@@ -7,11 +7,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region SHORTCUT FIELDS
 
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        [SerializeField]
-        private float shortJumpValue = 0.002f;
         [SerializeField]
         private KeyCode easeModeKey = KeyCode.U;
 
@@ -63,6 +58,11 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private KeyCode shortJumpForwardKey = KeyCode.K;
 
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        [SerializeField]
+        private float shortJumpValue = 0.002f;
         [SerializeField]
         private KeyCode tiltingModeKey = KeyCode.O;
 
@@ -70,13 +70,6 @@ namespace ATP.SimplePathAnimator.Animator {
         private KeyCode updateAllKey = KeyCode.G;
 #endregion
         #region SHORTCUT PROPERTIES
-
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public float ShortJumpValue {
-            get { return shortJumpValue; }
-        }
 
         // TODO Add setters everywhere.
         public KeyCode EaseModeKey {
@@ -127,14 +120,24 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return playPauseKey; }
             set { playPauseKey = value; }
         }
+
         public KeyCode RotationModeKey {
             get { return rotationModeKey; }
         }
+
         public KeyCode ShortJumpBackwardKey {
             get { return shortJumpBackwardKey; }
         }
+
         public KeyCode ShortJumpForwardKey {
             get { return shortJumpForwardKey; }
+        }
+
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        public float ShortJumpValue {
+            get { return shortJumpValue; }
         }
         public KeyCode TiltingModeKey {
             get { return tiltingModeKey; }
@@ -145,64 +148,47 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion
         #region GIZMO FIELDS
 
-        [SerializeField]
-        private Color rotationCurveColor = Color.gray;
-
         /// <summary>
         ///     Color of the gizmo curve.
         /// </summary>
         [SerializeField]
         private Color gizmoCurveColor = Color.yellow;
 
-        #endregion
-        #region GIZMO PROPERTIES
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+
+        [SerializeField]
+        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
 
         [SerializeField]
         private float floatPrecision = 0.001f;
 
-        public float FloatPrecision {
-            get { return floatPrecision; }
-        }
+        [SerializeField]
+        private string forwardPointIcon = "target_22x22-pink";
+
+        [SerializeField]
+        private int gizmoCurveSamplingFrequency = 40;
+
+        [SerializeField]
+        private int rotationCurveSampling = 40;
 
         [SerializeField]
         private string rotationPointGizmoIcon = "rec_16x16";
-        public string RotationPointGizmoIcon {
-            get { return rotationPointGizmoIcon; }
-        }
 
         [SerializeField]
         private string targetGizmoIcon = "target_22x22-blue";
-        public string TargetGizmoIcon {
-            get { return targetGizmoIcon; }
-        }
+        #endregion
+        #region GIZMO PROPERTIES
 
-        [SerializeField]
-        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
         public string CurrentRotationPointGizmoIcon {
             get { return currentRotationPointGizmoIcon; }
         }
 
-        [SerializeField]
-        private string forwardPointIcon = "target_22x22-pink";
+        public float FloatPrecision {
+            get { return floatPrecision; }
+        }
         public string ForwardPointIcon {
             get { return forwardPointIcon; }
-        }
-
-        public Color RotationCurveColor {
-            get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
-        }
-
-        [SerializeField]
-        private int rotationCurveSampling = 40;
-        public int RotationCurveSampling {
-            get { return rotationCurveSampling; }
-        }
-
-        [SerializeField]
-        private int gizmoCurveSamplingFrequency = 40;
-        public int GizmoCurveSamplingFrequency {
-            get { return gizmoCurveSamplingFrequency; }
         }
 
         /// <summary>
@@ -213,25 +199,54 @@ namespace ATP.SimplePathAnimator.Animator {
             set { gizmoCurveColor = value; }
         }
 
+        public int GizmoCurveSamplingFrequency {
+            get { return gizmoCurveSamplingFrequency; }
+        }
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
+        }
+
+        public int RotationCurveSampling {
+            get { return rotationCurveSampling; }
+        }
+
+        public string RotationPointGizmoIcon {
+            get { return rotationPointGizmoIcon; }
+        }
+        public string TargetGizmoIcon {
+            get { return targetGizmoIcon; }
+        }
         #endregion
         #region ANIMATOR FIELDS
         [SerializeField]
-        private int exportSamplingFrequency = 5;
-        [SerializeField]
-        private float MaxAnimationSpeed = 0.3f;
+        private bool autoPlay = true;
 
         [SerializeField]
         private bool EnableControlsInPlayMode = true;
-        [SerializeField]
-        private bool autoPlay = true;
 
+        [SerializeField]
+        private int exportSamplingFrequency = 5;
+        /// <summary>
+        ///     How much look forward point should be positioned away from the
+        ///     animated object.
+        /// </summary>
+        /// <remarks>Value is a time in range from 0 to 1.</remarks>
+        [SerializeField]
+        private float forwardPointOffset = 0.05f;
 
         [SerializeField]
         private HandleMode handleMode =
             HandleMode.None;
 
         [SerializeField]
+        private float MaxAnimationSpeed = 0.3f;
+        [SerializeField]
         private MovementMode movementMode =
+            MovementMode.MoveSingle;
+
+        private MovementMode movementModeAfterReset =
             MovementMode.MoveSingle;
 
         [SerializeField]
@@ -254,26 +269,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SerializeField]
         private WrapMode wrapMode = WrapMode.ClampForever;
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        [SerializeField]
-        private float forwardPointOffset = 0.05f;
-
-        private MovementMode movementModeAfterReset =
-            MovementMode.MoveSingle;
-
         #endregion
         #region ANIMATOR PROPERTIES
-        public MovementMode MovementModeAfterReset {
-            get { return movementModeAfterReset; }
-            set { movementModeAfterReset = value; }
-        }
-
-
         public bool AutoPlay {
             get { return autoPlay; }
             set { autoPlay = value; }
@@ -282,7 +279,17 @@ namespace ATP.SimplePathAnimator.Animator {
         public int ExportSamplingFrequency {
             get { return exportSamplingFrequency; }
             set { exportSamplingFrequency = value; }
-       }
+        }
+
+        /// <summary>
+        ///     How much look forward point should be positioned away from the
+        ///     animated object.
+        /// </summary>
+        /// <remarks>Value is a time in range from 0 to 1.</remarks>
+        public float ForwardPointOffset {
+            get { return forwardPointOffset; }
+            set { forwardPointOffset = value; }
+        }
 
         public HandleMode HandleMode {
             get { return handleMode; }
@@ -294,9 +301,23 @@ namespace ATP.SimplePathAnimator.Animator {
             set { movementMode = value; }
         }
 
+        public MovementMode MovementModeAfterReset {
+            get { return movementModeAfterReset; }
+            set { movementModeAfterReset = value; }
+        }
+        public float PositionLerpSpeed {
+            get { return positionLerpSpeed; }
+            set { positionLerpSpeed = value; }
+        }
+
         public RotationMode RotationMode {
             get { return rotationMode; }
             set { rotationMode = value; }
+        }
+
+        public float RotationSpeed {
+            get { return rotationSpeed; }
+            set { rotationSpeed = value; }
         }
 
         public TangentMode TangentMode {
@@ -313,27 +334,6 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return wrapMode; }
             set { wrapMode = value; }
         }
-
-        public float PositionLerpSpeed {
-            get { return positionLerpSpeed; }
-            set { positionLerpSpeed = value; }
-        }
-
-        public float RotationSpeed {
-            get { return rotationSpeed; }
-            set { rotationSpeed = value; }
-        }
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        public float ForwardPointOffset {
-            get { return forwardPointOffset; }
-            set { forwardPointOffset = value; }
-        }
-
         #endregion
         #region HANDLES FIELDS
 
@@ -342,58 +342,28 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private int addButtonV = 10;
         [SerializeField]
+        private float arcHandleRadius = 0.6f;
+
+        [SerializeField]
+        private int defaultLabelHeight = 10;
+
+        [SerializeField]
+        private int defaultLabelWidth = 30;
+
+        [SerializeField]
+        private float moveAllModeSize = 0.15f;
+
+        [SerializeField]
+        private float movementHandleSize = 0.12f;
+
+        [SerializeField]
         private int removeButtonH = 44;
         [SerializeField]
         private int removeButtonV = 10;
         [SerializeField]
-        private float arcHandleRadius = 0.6f;
-        [SerializeField]
         private float scaleHandleSize = 1.5f;
-        [SerializeField]
-        private int defaultLabelHeight = 10;
-        [SerializeField]
-        private int defaultLabelWidth = 30;
-        [SerializeField]
-        private float moveAllModeSize = 0.15f;
-        [SerializeField]
-        private float movementHandleSize = 0.12f;
-      
         #endregion
         #region HANDLES PROPERTIES
-        public int EaseValueLabelOffsetX {
-            get { return -20; }
-        }
-
-        public int EaseValueLabelOffsetY {
-            get { return -25; }
-        }
-        public int UpdateAllLabelOffsetX {
-            get { return 0; }
-        }
-
-        public int UpdateAllLabelOffsetY {
-            get { return -25; }
-        }
-        public float RotationHandleSize {
-            get { return 0.26f; }
-        }
-
-        public float InitialArcValue {
-            get { return 15f; }
-        }
-
-        public Color MoveAllModeColor {
-            get { return Color.red; }
-        }
-
-        public Color PositionHandleColor {
-            get { return Color.yellow; }
-        }
-
-        public string UpdateAllLabelText {
-            get { return "A"; }
-        }
-
         public int AddButtonH {
             get { return addButtonH; }
             set { addButtonH = value; }
@@ -409,9 +379,9 @@ namespace ATP.SimplePathAnimator.Animator {
             set { arcHandleRadius = value; }
         }
 
-        public float ScaleHandleSize {
-            get { return scaleHandleSize; }
-            set { scaleHandleSize = value; }
+        public int DefaultLabelHeight {
+            get { return defaultLabelHeight; }
+            set { defaultLabelHeight = value; }
         }
 
         public int DefaultLabelWidth {
@@ -419,14 +389,28 @@ namespace ATP.SimplePathAnimator.Animator {
             set { defaultLabelWidth = value; }
         }
 
-        public int DefaultLabelHeight {
-            get { return defaultLabelHeight; }
-            set { defaultLabelHeight = value; }
+        public int EaseValueLabelOffsetX {
+            get { return -20; }
+        }
+
+        public int EaseValueLabelOffsetY {
+            get { return -25; }
+        }
+        public float InitialArcValue {
+            get { return 15f; }
+        }
+
+        public Color MoveAllModeColor {
+            get { return Color.red; }
         }
 
         public float MovementHandleSize {
             get { return movementHandleSize; }
             set { movementHandleSize = value; }
+        }
+
+        public Color PositionHandleColor {
+            get { return Color.yellow; }
         }
 
         public int RemoveButtonH {
@@ -437,6 +421,26 @@ namespace ATP.SimplePathAnimator.Animator {
         public int RemoveButtonV {
             get { return removeButtonV; }
             set { removeButtonV = value; }
+        }
+
+        public float RotationHandleSize {
+            get { return 0.26f; }
+        }
+
+        public float ScaleHandleSize {
+            get { return scaleHandleSize; }
+            set { scaleHandleSize = value; }
+        }
+
+        public int UpdateAllLabelOffsetX {
+            get { return 0; }
+        }
+
+        public int UpdateAllLabelOffsetY {
+            get { return -25; }
+        }
+        public string UpdateAllLabelText {
+            get { return "A"; }
         }
         #endregion
     }

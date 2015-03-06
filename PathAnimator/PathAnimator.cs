@@ -37,8 +37,8 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private float animationTimeRatio;
 
-        [SerializeField]
-        private AnimatorGizmos animatorGizmos;
+        //[SerializeField]
+        //private AnimatorGizmos animatorGizmos;
 
         [SerializeField]
         private PathData pathData;
@@ -81,9 +81,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        public AnimatorGizmos AnimatorGizmos {
-            get { return animatorGizmos; }
-        }
+        AnimatorGizmos AnimatorGizmos { get; set; }
 
         /// <summary>
         ///     If animation is currently enabled.
@@ -137,8 +135,8 @@ namespace ATP.SimplePathAnimator.Animator {
                 animatedGO = Camera.main.transform;
             }
 
-            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
-            animatorGizmos.Init(Settings);
+            AnimatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+            AnimatorGizmos.Init(Settings);
 
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=
@@ -150,8 +148,8 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathData.RotationPathReset += PathData_RotationPathReset;
             }
 
-            if (animatorGizmos == null) {
-                animatorGizmos =
+            if (AnimatorGizmos == null) {
+                AnimatorGizmos =
                     ScriptableObject.CreateInstance<AnimatorGizmos>();
             }
         }
@@ -217,13 +215,14 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void Reset() {
+            // Create separate method InitializeFields().
             ThisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
-            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
-            animatorGizmos.Init(Settings);
+            AnimatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+            AnimatorGizmos.Init(Settings);
         }
 
         #endregion UNITY MESSAGES

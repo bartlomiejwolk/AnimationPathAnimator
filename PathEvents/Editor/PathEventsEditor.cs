@@ -36,8 +36,6 @@ namespace ATP.SimplePathAnimator.Events {
 
         #region UNITY MESSAGES
         public override void OnInspectorGUI() {
-            InitializeNodeEvents();
-
             serializedObject.Update();
 
             DrawEventsDataAssetField();
@@ -64,8 +62,6 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void InitializeNodeEvents() {
-            if (Event.current.type != EventType.Layout) return;
-
             if (Script.EventsData != null && EventsDataSerObj == null) {
                 // Initialize SerializedObject EventsDataSerObj.
                 EventsDataSerObj = new SerializedObject(Script.EventsData);
@@ -100,6 +96,8 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void OnSceneGUI() {
+            InitializeNodeEvents();
+
             // Return if path data is not assigned to the PathAnimator component.
             if (Script.PathAnimator.PathData == null) return;
             if (Script.EventsData == null) return;

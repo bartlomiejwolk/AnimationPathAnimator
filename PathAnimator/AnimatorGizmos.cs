@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
@@ -18,8 +20,26 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion
 
         #region METHODS
+
         public AnimatorGizmos(PathAnimatorSettings settings) {
             this.settings = settings;
+
+            if (!Directory.Exists(Application.dataPath + "/Gizmos")) {
+                Directory.CreateDirectory(Application.dataPath + "/Gizmos");
+            }
+
+            if (!File.Exists(Application.dataPath + "/Gizmos/"
+                + Settings.RotationPointGizmoIcon + ".png")) {
+
+                // TODO If source directory doesn't exist, show info about how
+                // to copy icons to the Gizmos folder.
+                FileUtil.CopyFileOrDirectory(
+                    Application.dataPath
+                        + "/AirTimeProductions/animationpathtools/PathAnimator/Resources/Icons/"
+                        + Settings.RotationPointGizmoIcon + ".png",
+                    Application.dataPath + "/Gizmos/"
+                        + Settings.RotationPointGizmoIcon + ".png");
+            }
         }
 
         public void DrawAnimationCurve(PathData pathData,

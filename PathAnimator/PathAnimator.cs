@@ -20,6 +20,9 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #endregion
         #region FIELDS
+        [SerializeField]
+        private Transform thisTransform;
+
 
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -104,10 +107,6 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return skin; }
             set { skin = value; }
         }
-
-        [SerializeField]
-        private Transform thisTransform;
-
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -192,11 +191,6 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathData.RotationPathReset -= PathData_RotationPathReset;
             }
         }
-
-        void PathData_RotationPathReset(object sender, EventArgs e) {
-            Settings.RotationMode = RotationMode.Custom;
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Awake() {
 
@@ -264,6 +258,10 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
+        void PathData_RotationPathReset(object sender, EventArgs e) {
+            Settings.RotationMode = RotationMode.Custom;
+        }
+
         protected virtual void OnNodeReached(NodeReachedEventArgs eventArgs) {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);

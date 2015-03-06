@@ -28,10 +28,6 @@ namespace ATP.SimplePathAnimator.Events {
             set { pathAnimator = value; }
         }
 
-        //public List<NodeEvent> NodeEvents {
-        //    get { return nodeEvents; }
-        //}
-
         public GUISkin Skin {
             get { return skin; }
             set { skin = value; }
@@ -44,18 +40,12 @@ namespace ATP.SimplePathAnimator.Events {
 
         public PathEventsSettings Settings {
             get { return settings; }
+            set { settings = value; }
         }
 
         #endregion
 
         #region UNITY MESSAGES
-        private void Update() {
-
-        }
-
-        private void Start() {
-
-        }
 
         private void OnDisable() {
             PathAnimator.NodeReached -= Animator_NodeReached;
@@ -68,10 +58,10 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void Reset() {
-            PathAnimator = GetComponent<PathAnimator>();
+            pathAnimator = GetComponent<PathAnimator>();
             settings =
                 Resources.Load<PathEventsSettings>("DefaultPathEventsSettings");
-            Skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
+            skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
         }
         #endregion
         #region EVENT HANDLERS

@@ -20,8 +20,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #endregion
         #region FIELDS
-        [SerializeField]
-        private Transform thisTransform;
+        //[SerializeField]
+        //private Transform thisTransform;
 
 
         [SerializeField]
@@ -106,9 +106,7 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return skin; }
         }
 
-        public Transform ThisTransform {
-            get { return thisTransform; }
-        }
+        public Transform ThisTransform { get; set; }
 
         /// <summary>
         ///     Transform that the <c>animatedGO</c> will be looking at.
@@ -129,7 +127,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public virtual void OnEnable() {
-            thisTransform = GetComponent<Transform>();
+            ThisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
@@ -219,7 +217,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void Reset() {
-            thisTransform = GetComponent<Transform>();
+            ThisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;

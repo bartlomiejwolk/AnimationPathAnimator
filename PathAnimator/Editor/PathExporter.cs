@@ -6,14 +6,12 @@ namespace ATP.SimplePathAnimator.Animator {
 
     public class PathExporter {
 
+        #region FIELDS
         private readonly PathAnimator pathAnimator;
         private readonly PathAnimatorSettings settings;
+        #endregion
 
-        public PathExporter(PathAnimator pathAnimator) {
-            this.pathAnimator = pathAnimator;
-            this.settings = pathAnimator.Settings;
-        }
-
+        #region PROPERTIES
         public PathAnimatorSettings Settings {
             get { return settings; }
         }
@@ -21,6 +19,13 @@ namespace ATP.SimplePathAnimator.Animator {
         public PathAnimator PathAnimator {
             get { return pathAnimator; }
         }
+        #endregion
+        #region METHODS
+        public PathExporter(PathAnimator pathAnimator) {
+            this.pathAnimator = pathAnimator;
+            this.settings = pathAnimator.Settings;
+        }
+
 
         public void DrawExportControls() {
             EditorGUILayout.BeginHorizontal();
@@ -85,6 +90,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        #endregion
     }
 
 }

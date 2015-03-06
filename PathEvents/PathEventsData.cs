@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ATP.SimplePathAnimator.Events {
 
-    public class PathEventsData : ScriptableObject {
+    public sealed class PathEventsData : ScriptableObject {
 
         [SerializeField]
         private List<NodeEvent> nodeEvents;

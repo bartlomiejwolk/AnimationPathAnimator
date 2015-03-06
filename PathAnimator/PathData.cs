@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ATP.SimplePathAnimator.Animator {
 
     // TODO Use public API instead of using path and curve fields directly.
-    public class PathData : ScriptableObject, ISerializationCallbackReceiver {
+    public sealed class PathData : ScriptableObject, ISerializationCallbackReceiver {
         #region EVENTS
 
         public event EventHandler NodeAdded;

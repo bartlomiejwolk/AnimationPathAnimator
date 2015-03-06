@@ -11,7 +11,7 @@ namespace ATP.SimplePathAnimator.Animator {
     /// <remarks>It has same access to the Animator class as
     /// the AnimationPathAnimatorEditor does.</remarks>
     // TODO Pass ref. to Animator in the constructor.
-    public class SceneHandles {
+    public sealed class SceneHandles {
 
         #region FIELDS
         private readonly PathAnimator pathAnimator;

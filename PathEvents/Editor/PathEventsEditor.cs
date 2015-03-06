@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ATP.SimplePathAnimator.Events {
 
     [CustomEditor(typeof (PathEvents))]
-    public class PathEventsEditor : Editor {
+    public sealed class PathEventsEditor : Editor {
         #region FIELDS
 
         private SerializedObject PathEventsSettingsSerObj;

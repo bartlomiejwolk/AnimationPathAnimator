@@ -2,7 +2,7 @@ using System;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class NodeReachedEventArgs : EventArgs {
+    public sealed class NodeReachedEventArgs : EventArgs {
 
         public NodeReachedEventArgs(int nodeIndex, float timestamp) {
             NodeIndex = nodeIndex;

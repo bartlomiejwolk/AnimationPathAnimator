@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class PathAnimatorSettings : ScriptableObject {
+    public sealed class PathAnimatorSettings : ScriptableObject {
 
         #region SHORTCUT FIELDS
 
@@ -111,15 +111,15 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return longJumpValue; }
         }
 
-        public virtual KeyCode ModKey {
+        public KeyCode ModKey {
             get { return modKey; }
         }
 
-        public virtual KeyCode MoveAllModeKey {
+        public KeyCode MoveAllModeKey {
             get { return moveAllModeKey; }
         }
 
-        public virtual KeyCode NoneModeKey {
+        public KeyCode NoneModeKey {
             get { return noneModeKey; }
         }
 
@@ -127,7 +127,7 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return playPauseKey; }
             set { playPauseKey = value; }
         }
-        public virtual KeyCode RotationModeKey {
+        public KeyCode RotationModeKey {
             get { return rotationModeKey; }
         }
         public KeyCode ShortJumpBackwardKey {
@@ -136,10 +136,10 @@ namespace ATP.SimplePathAnimator.Animator {
         public KeyCode ShortJumpForwardKey {
             get { return shortJumpForwardKey; }
         }
-        public virtual KeyCode TiltingModeKey {
+        public KeyCode TiltingModeKey {
             get { return tiltingModeKey; }
         }
-        public virtual KeyCode UpdateAllKey {
+        public KeyCode UpdateAllKey {
             get { return updateAllKey; }
         }
         #endregion

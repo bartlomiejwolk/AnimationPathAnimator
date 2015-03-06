@@ -5,7 +5,7 @@ using UnityEditor;
 namespace ATP.SimplePathAnimator.Events {
 
     [CustomPropertyDrawer(typeof(NodeEvent))]
-    public class NodeEventDrawer : PropertyDrawer {
+    public sealed class NodeEventDrawer : PropertyDrawer {
 
         // How many rows (properties) will be displayed.
         private static int Rows {

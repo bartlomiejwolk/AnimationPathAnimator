@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class Shortcuts {
+    public sealed class Shortcuts {
 
         #region FIELDS
         private readonly PathAnimator pathAnimator;

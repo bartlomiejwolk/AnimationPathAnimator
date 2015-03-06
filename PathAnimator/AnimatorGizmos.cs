@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class AnimatorGizmos {
+    public sealed class AnimatorGizmos {
 
         #region FIELDS
 

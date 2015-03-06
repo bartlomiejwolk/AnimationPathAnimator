@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class PathExporter {
+    public sealed class PathExporter {
 
         #region FIELDS
         private readonly PathAnimator pathAnimator;

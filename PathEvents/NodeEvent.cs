@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ATP.SimplePathAnimator.Events {
 
     [System.Serializable]
-    public class NodeEvent {
+    public sealed class NodeEvent {
 
         [SerializeField]
         private string methodName;

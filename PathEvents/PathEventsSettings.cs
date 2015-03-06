@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace ATP.SimplePathAnimator.Events {
 
-    public class PathEventsSettings : ScriptableObject {
+    public sealed class PathEventsSettings : ScriptableObject {
 
         #region FIELDS
 

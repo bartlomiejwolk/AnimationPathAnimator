@@ -40,7 +40,7 @@ namespace ATP.SimplePathAnimator.Animator {
             set { animatorShortcuts = value; }
         }
 
-        public AnimatorSettings AnimatorSettings { get; private set; }
+        public PathAnimatorSettings PathAnimatorSettings { get; private set; }
         private PathExporter PathExporter { get; set; }
 
         #endregion 
@@ -164,8 +164,8 @@ namespace ATP.SimplePathAnimator.Animator {
             // Get target script reference.
             script = (PathAnimator) target;
 
-            // Initialize AnimatorSettings property.
-            AnimatorSettings = Script.Settings;
+            // Initialize PathAnimatorSettings property.
+            PathAnimatorSettings = Script.Settings;
 
             PathExporter = new PathExporter(Script);
 
@@ -223,7 +223,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingUpdateAllModeLabel() {
-            if (!AnimatorSettings.UpdateAllMode) return;
+            if (!PathAnimatorSettings.UpdateAllMode) return;
 
             //SceneHandles.DrawNodeLabels(
             //    Script,
@@ -316,11 +316,11 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawAutoPlayControl() {
-            AnimatorSettings.AutoPlay = EditorGUILayout.Toggle(
+            PathAnimatorSettings.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
                     ""),
-                AnimatorSettings.AutoPlay);
+                PathAnimatorSettings.AutoPlay);
         }
 
         protected virtual void DrawEnableControlsInPlayModeToggle() {
@@ -351,13 +351,13 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawHandleModeDropdown() {
-            Undo.RecordObject(AnimatorSettings, "Change handle mode.");
+            Undo.RecordObject(PathAnimatorSettings, "Change handle mode.");
 
-            AnimatorSettings.HandleMode = (HandleMode) EditorGUILayout.EnumPopup(
+            PathAnimatorSettings.HandleMode = (HandleMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Handle Mode",
                     ""),
-                AnimatorSettings.HandleMode);
+                PathAnimatorSettings.HandleMode);
         }
 
         protected virtual void DrawMaxAnimationSpeedField() {
@@ -368,14 +368,14 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawMovementModeDropdown() {
-            Undo.RecordObject(AnimatorSettings, "Change movement mode.");
+            Undo.RecordObject(PathAnimatorSettings, "Change movement mode.");
 
-            AnimatorSettings.MovementMode =
+            PathAnimatorSettings.MovementMode =
                 (MovementMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Movement Mode",
                         ""),
-                    AnimatorSettings.MovementMode);
+                    PathAnimatorSettings.MovementMode);
 
             SceneView.RepaintAll();
         }
@@ -469,18 +469,18 @@ namespace ATP.SimplePathAnimator.Animator {
 
         protected virtual void DrawTangentModeDropdown() {
             // Remember current tangent mode.
-            var prevTangentMode = AnimatorSettings.TangentMode;
+            var prevTangentMode = PathAnimatorSettings.TangentMode;
 
             // Draw tangent mode dropdown.
-            AnimatorSettings.TangentMode =
+            PathAnimatorSettings.TangentMode =
                 (TangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         ""),
-                    AnimatorSettings.TangentMode);
+                    PathAnimatorSettings.TangentMode);
 
             // Update gizmo curve is tangent mode changed.
-            if (AnimatorSettings.TangentMode != prevTangentMode) {
+            if (PathAnimatorSettings.TangentMode != prevTangentMode) {
                 HandleTangentModeChange();
             }
         }
@@ -518,19 +518,19 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         protected virtual void DrawUpdateAllToggle() {
-            AnimatorSettings.UpdateAllMode = EditorGUILayout.Toggle(
+            PathAnimatorSettings.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
                     ""),
-                AnimatorSettings.UpdateAllMode);
+                PathAnimatorSettings.UpdateAllMode);
         }
 
         protected virtual void DrawWrapModeDropdown() {
-            AnimatorSettings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+            PathAnimatorSettings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),
-                AnimatorSettings.WrapMode);
+                PathAnimatorSettings.WrapMode);
         }
 
         private void DrawResetTiltingButton() {
@@ -612,21 +612,21 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void DrawRotationModeDropdown() {
-            Undo.RecordObject(AnimatorSettings, "Change rotation mode.");
+            Undo.RecordObject(PathAnimatorSettings, "Change rotation mode.");
 
             // Remember current RotationMode.
-            var prevRotationMode = AnimatorSettings.RotationMode;
+            var prevRotationMode = PathAnimatorSettings.RotationMode;
             // Draw RotationMode dropdown.
-            AnimatorSettings.RotationMode =
+            PathAnimatorSettings.RotationMode =
                 (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         ""),
-                    AnimatorSettings.RotationMode);
+                    PathAnimatorSettings.RotationMode);
 
             // TODO Execute it as a callback.
             // If value changed, update animated GO in the scene.
-            if (AnimatorSettings.RotationMode != prevRotationMode) {
+            if (PathAnimatorSettings.RotationMode != prevRotationMode) {
                 Script.UpdateAnimation();
             }
         }
@@ -654,7 +654,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingEaseHandles() {
-            if (AnimatorSettings.HandleMode != HandleMode.Ease) return;
+            if (PathAnimatorSettings.HandleMode != HandleMode.Ease) return;
 
             // TODO Move this code to SceneHandles.DrawEaseHandles().
 
@@ -676,7 +676,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingEaseLabel() {
-            if (AnimatorSettings.HandleMode != HandleMode.Ease) return;
+            if (PathAnimatorSettings.HandleMode != HandleMode.Ease) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
@@ -724,7 +724,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingRotationHandle() {
-            if (AnimatorSettings.HandleMode != HandleMode.Rotation) return;
+            if (PathAnimatorSettings.HandleMode != HandleMode.Rotation) return;
 
             var currentAnimationTime = script.AnimationTimeRatio;
             var rotationPointPosition =
@@ -747,7 +747,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingTiltingHandles() {
-            if (AnimatorSettings.HandleMode != HandleMode.Tilting) return;
+            if (PathAnimatorSettings.HandleMode != HandleMode.Tilting) return;
 
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
@@ -766,7 +766,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleDrawingTiltLabel() {
-            if (AnimatorSettings.HandleMode != HandleMode.Tilting) return;
+            if (PathAnimatorSettings.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
@@ -791,10 +791,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
             Script.PathData.DistributeTimestamps();
 
-            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
+            if (PathAnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
+            else if (PathAnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -817,10 +817,10 @@ namespace ATP.SimplePathAnimator.Animator {
             Script.PathData.RemoveNode(nodeIndex);
             Script.PathData.DistributeTimestamps();
 
-            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
+            if (PathAnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
+            else if (PathAnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
@@ -830,7 +830,7 @@ namespace ATP.SimplePathAnimator.Animator {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
-            if (AnimatorSettings.UpdateAllMode) {
+            if (PathAnimatorSettings.UpdateAllMode) {
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
                 Script.PathData.UpdateEaseValues(delta);
@@ -853,7 +853,7 @@ namespace ATP.SimplePathAnimator.Animator {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            if (AnimatorSettings.UpdateAllMode) {
+            if (PathAnimatorSettings.UpdateAllMode) {
                 var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
                 Script.PathData.UpdateTiltingValues(delta);
@@ -868,13 +868,13 @@ namespace ATP.SimplePathAnimator.Animator {
         #region MODE HANDLERS
 
         private void HandleLinearTangentMode() {
-            if (AnimatorSettings.TangentMode == TangentMode.Linear) {
+            if (PathAnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
         }
 
         private void HandleMoveAllMovementMode(Vector3 moveDelta) {
-            if (AnimatorSettings.MovementMode == MovementMode.MoveAll) {
+            if (PathAnimatorSettings.MovementMode == MovementMode.MoveAll) {
                 Script.PathData.OffsetNodePositions(moveDelta);
                 Script.PathData.OffsetRotationPathPosition(moveDelta);
             }
@@ -883,7 +883,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleMoveSingleHandleMove(
             int movedNodeIndex,
             Vector3 position) {
-            if (AnimatorSettings.MovementMode == MovementMode.MoveSingle) {
+            if (PathAnimatorSettings.MovementMode == MovementMode.MoveSingle) {
 
                 Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
                 Script.PathData.DistributeTimestamps();
@@ -894,7 +894,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void HandleSmoothTangentMode() {
-            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
+            if (PathAnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
         }
@@ -903,10 +903,10 @@ namespace ATP.SimplePathAnimator.Animator {
             if (Script.PathData == null) return;
 
             // Update path node tangents.
-            if (AnimatorSettings.TangentMode == TangentMode.Smooth) {
+            if (PathAnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
-            else if (AnimatorSettings.TangentMode == TangentMode.Linear) {
+            else if (PathAnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
 

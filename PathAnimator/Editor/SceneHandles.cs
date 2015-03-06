@@ -23,11 +23,11 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return pathAnimator; }
         }
 
-        private AnimatorSettings AnimatorSettings {
+        private PathAnimatorSettings PathAnimatorSettings {
             get { return PathAnimator.Settings; }
         }
 
-        private AnimatorSettings Settings{
+        private PathAnimatorSettings Settings{
             get { return PathAnimator.Settings; }
         }
 
@@ -173,7 +173,7 @@ namespace ATP.SimplePathAnimator.Animator {
             PathAnimator pathAnimator,
             Action<int, Vector3, Vector3> callback) {
 
-            if (AnimatorSettings.MovementMode !=
+            if (PathAnimatorSettings.MovementMode !=
                 MovementMode.MoveAll) return;
 
             // Node global positions.
@@ -215,7 +215,7 @@ namespace ATP.SimplePathAnimator.Animator {
         public void DrawMoveSinglePositionsHandles(PathAnimator pathAnimator,
             Action<int, Vector3, Vector3> callback) {
 
-            if (AnimatorSettings.MovementMode !=
+            if (PathAnimatorSettings.MovementMode !=
                 MovementMode.MoveSingle) return;
 
             // Node global positions.

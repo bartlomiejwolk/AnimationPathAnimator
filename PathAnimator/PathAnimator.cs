@@ -44,7 +44,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private PathData pathData;
 
         [SerializeField]
-        private AnimatorSettings settings;
+        private PathAnimatorSettings settings;
 
         [SerializeField]
         private GUISkin skin;
@@ -98,7 +98,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public bool Pause { get; set; }
 
-        public AnimatorSettings Settings {
+        public PathAnimatorSettings Settings {
             get { return settings; }
             set { settings = value; }
         }
@@ -156,7 +156,7 @@ namespace ATP.SimplePathAnimator.Animator {
         public virtual void OnEnable() {
             thisTransform = GetComponent<Transform>();
             Settings = Resources.Load("DefaultPathAnimatorSettings")
-                as AnimatorSettings;
+                as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
             // Initialize animatedGO field.
@@ -231,6 +231,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public void OnValidate() {
             if (Settings == null) return;
+
+            // Limit ForwardPointOffset value.
 
             // Limit ExmportSamplingFrequency value.
             if (Settings.ExportSamplingFrequency < 1) {

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class AnimatorSettings : ScriptableObject {
+    public class PathAnimatorSettings : ScriptableObject {
 
         #region SHORTCUT FIELDS
 

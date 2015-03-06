@@ -8,7 +8,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private readonly PathAnimator pathAnimator;
 
-        private readonly AnimatorSettings settings;
+        private readonly PathAnimatorSettings settings;
 
         public AnimatorShortcuts(PathAnimator pathAnimator) {
             this.pathAnimator = pathAnimator;
@@ -19,7 +19,7 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return pathAnimator; }
         }
 
-        public AnimatorSettings Settings {
+        public PathAnimatorSettings Settings {
             // TODO Replace with Animator.Settings.
             get { return settings; }
         }

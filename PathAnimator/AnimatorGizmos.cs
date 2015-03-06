@@ -7,9 +7,9 @@ namespace ATP.SimplePathAnimator.Animator {
     public class AnimatorGizmos : ScriptableObject {
 
         [SerializeField]
-        private AnimatorSettings settings;
+        private PathAnimatorSettings settings;
 
-        public AnimatorSettings Settings {
+        public PathAnimatorSettings Settings {
             // TODO Replace with Animator.Settings.
             get { return settings; }
             set { settings = value; }
@@ -144,7 +144,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 false);
         }
 
-        public void Init(AnimatorSettings settings) {
+        public void Init(PathAnimatorSettings settings) {
             Settings = settings;
         }
 

@@ -7,14 +7,14 @@ namespace ATP.SimplePathAnimator.Animator {
     public class PathExporter {
 
         private readonly PathAnimator pathAnimator;
-        private readonly AnimatorSettings settings;
+        private readonly PathAnimatorSettings settings;
 
         public PathExporter(PathAnimator pathAnimator) {
             this.pathAnimator = pathAnimator;
             this.settings = pathAnimator.Settings;
         }
 
-        public AnimatorSettings Settings {
+        public PathAnimatorSettings Settings {
             get { return settings; }
         }
 

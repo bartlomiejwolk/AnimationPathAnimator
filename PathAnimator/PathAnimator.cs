@@ -213,6 +213,14 @@ namespace ATP.SimplePathAnimator.Animator {
         public void ValidateInspectorSettings() {
             if (Settings == null) return;
 
+            // Limit PositionLerpSpeed value.
+            if (Settings.PositionLerpSpeed < 0) {
+                Settings.PositionLerpSpeed = 0;
+            }
+            else if (Settings.PositionLerpSpeed > 1) {
+                Settings.PositionLerpSpeed = 1;
+            }
+
             // Limit ForwardPointOffset value.
             if (Settings.ForwardPointOffset < 0.001f) {
                 Settings.ForwardPointOffset = 0.001f;

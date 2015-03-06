@@ -10,11 +10,6 @@ namespace ATP.SimplePathAnimator.Animator {
     public class PathAnimatorEditor : Editor {
         #region FIELDS
 
-        /// <summary>
-        ///     Reference to target script.
-        /// </summary>
-        private PathAnimator script;
-
         #endregion FIELDS
         #region PROPERTIES
 
@@ -26,9 +21,7 @@ namespace ATP.SimplePathAnimator.Animator {
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private PathAnimator Script {
-            get { return script; }
-        }
+        private PathAnimator Script { get; set; }
 
         private AnimatorShortcuts AnimatorShortcuts { get; set; }
 
@@ -155,7 +148,7 @@ namespace ATP.SimplePathAnimator.Animator {
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         protected virtual void OnEnable() {
             // Get target script reference.
-            script = (PathAnimator) target;
+            Script = (PathAnimator) target;
 
             // Initialize PathAnimatorSettings property.
             PathAnimatorSettings = Script.Settings;
@@ -719,10 +712,10 @@ namespace ATP.SimplePathAnimator.Animator {
         private void HandleDrawingRotationHandle() {
             if (PathAnimatorSettings.HandleMode != HandleMode.Rotation) return;
 
-            var currentAnimationTime = script.AnimationTimeRatio;
+            var currentAnimationTime = Script.AnimationTimeRatio;
             var rotationPointPosition =
-                script.PathData.GetRotationAtTime(currentAnimationTime);
-            var nodeTimestamps = script.PathData.GetPathTimestamps();
+                Script.PathData.GetRotationAtTime(currentAnimationTime);
+            var nodeTimestamps = Script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
             // timestamp.

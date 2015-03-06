@@ -142,7 +142,6 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnEnable() {
             // Get target script reference.
             Script = (PathAnimator) target;
@@ -159,12 +158,10 @@ namespace ATP.SimplePathAnimator.Animator {
 
             FocusOnSceneView();
         }
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void OnSceneGUI() {
             CheckForSkinAsset();
 

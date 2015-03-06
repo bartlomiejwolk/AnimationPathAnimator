@@ -8,9 +8,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
     [CustomEditor(typeof (PathAnimator))]
     public class PathAnimatorEditor : Editor {
-        #region FIELDS
-
-        #endregion FIELDS
+        
         #region PROPERTIES
 
         private SceneHandles SceneHandles { get; set; }
@@ -145,7 +143,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        protected virtual void OnEnable() {
+        private void OnEnable() {
             // Get target script reference.
             Script = (PathAnimator) target;
 
@@ -222,7 +220,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
 
-        protected virtual void DrawAdvancedSettingsFoldout() {
+        private void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
@@ -250,7 +248,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawAdvanceSettingsControls() {
+        private void DrawAdvanceSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
@@ -269,7 +267,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawAnimatedGOField() {
+        private void DrawAnimatedGOField() {
             serializedObject.Update();
             
             EditorGUILayout.PropertyField(
@@ -281,7 +279,7 @@ namespace ATP.SimplePathAnimator.Animator {
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawAnimationTimeControl() {
+        private void DrawAnimationTimeControl() {
             Undo.RecordObject(target, "Update AnimationTimeRatio");
 
             var newTimeRatio = EditorGUILayout.Slider(
@@ -300,7 +298,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawAutoPlayControl() {
+        private void DrawAutoPlayControl() {
             PathAnimatorSettings.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
@@ -308,7 +306,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathAnimatorSettings.AutoPlay);
         }
 
-        protected virtual void DrawEnableControlsInPlayModeToggle() {
+        private void DrawEnableControlsInPlayModeToggle() {
             SettingsSerObj.Update();
             EditorGUILayout.PropertyField(
                 enableControlsInPlayMode,
@@ -318,7 +316,7 @@ namespace ATP.SimplePathAnimator.Animator {
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawForwardPointOffsetField() {
+        private void DrawForwardPointOffsetField() {
             SettingsSerObj.Update();
 
             EditorGUILayout.PropertyField(forwardPointOffset);
@@ -326,7 +324,7 @@ namespace ATP.SimplePathAnimator.Animator {
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawGizmoCurveColorPicker() {
+        private void DrawGizmoCurveColorPicker() {
 
             SettingsSerObj.Update();
             EditorGUILayout.PropertyField(
@@ -335,7 +333,7 @@ namespace ATP.SimplePathAnimator.Animator {
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawHandleModeDropdown() {
+        private void DrawHandleModeDropdown() {
             Undo.RecordObject(PathAnimatorSettings, "Change handle mode.");
 
             PathAnimatorSettings.HandleMode = (HandleMode) EditorGUILayout.EnumPopup(
@@ -345,14 +343,14 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathAnimatorSettings.HandleMode);
         }
 
-        protected virtual void DrawMaxAnimationSpeedField() {
+        private void DrawMaxAnimationSpeedField() {
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(maxAnimationSpeed);
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawMovementModeDropdown() {
+        private void DrawMovementModeDropdown() {
             Undo.RecordObject(PathAnimatorSettings, "Change movement mode.");
 
             PathAnimatorSettings.MovementMode =
@@ -365,7 +363,7 @@ namespace ATP.SimplePathAnimator.Animator {
             SceneView.RepaintAll();
         }
 
-        protected virtual void DrawPathDataAssetField() {
+        private void DrawPathDataAssetField() {
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(
@@ -377,7 +375,7 @@ namespace ATP.SimplePathAnimator.Animator {
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawPlayerControls() {
+        private void DrawPlayerControls() {
             // Play/Pause button text.
             string playPauseBtnText;
             if (!Script.IsPlaying || (Script.IsPlaying && Script.Pause)) {
@@ -411,7 +409,7 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUILayout.EndHorizontal();
         }
 
-        protected virtual void DrawPositionLerpSpeedControl() {
+        private void DrawPositionLerpSpeedControl() {
             SettingsSerObj.Update();
             EditorGUILayout.PropertyField(
                 positionLerpSpeed,
@@ -421,14 +419,14 @@ namespace ATP.SimplePathAnimator.Animator {
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawRotationCurveColorPicker() {
+        private void DrawRotationCurveColorPicker() {
 
             SettingsSerObj.Update();
             EditorGUILayout.PropertyField(rotationCurveColor);
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawRotationSlerpSpeedField() {
+        private void DrawRotationSlerpSpeedField() {
             SettingsSerObj.Update();
 
             EditorGUILayout.PropertyField(
@@ -441,7 +439,7 @@ namespace ATP.SimplePathAnimator.Animator {
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawSkinSelectionControl() {
+        private void DrawSkinSelectionControl() {
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -452,7 +450,7 @@ namespace ATP.SimplePathAnimator.Animator {
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawTangentModeDropdown() {
+        private void DrawTangentModeDropdown() {
             // Remember current tangent mode.
             var prevTangentMode = PathAnimatorSettings.TangentMode;
 
@@ -470,7 +468,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawTargetGOField() {
+        private void DrawTargetGOField() {
             var prevTargetGO = Script.TargetGO;
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -502,7 +500,7 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
-        protected virtual void DrawUpdateAllToggle() {
+        private void DrawUpdateAllToggle() {
             PathAnimatorSettings.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
@@ -510,7 +508,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathAnimatorSettings.UpdateAllMode);
         }
 
-        protected virtual void DrawWrapModeDropdown() {
+        private void DrawWrapModeDropdown() {
             PathAnimatorSettings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
@@ -767,7 +765,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #region CALLBACK HANDLERS
 
-        protected virtual void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
+        private void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
             Undo.RecordObject(Script.PathData, "Change path");
 
@@ -789,7 +787,7 @@ namespace ATP.SimplePathAnimator.Animator {
             Script.UpdateAnimation();
         }
 
-        protected virtual void DrawPositionHandlesCallbackHandler(
+        private void DrawPositionHandlesCallbackHandler(
             int movedNodeIndex,
             Vector3 position,
             Vector3 moveDelta) {
@@ -800,7 +798,7 @@ namespace ATP.SimplePathAnimator.Animator {
             HandleMoveSingleHandleMove(movedNodeIndex, position);
         }
 
-        protected virtual void DrawRemoveNodeButtonsCallbackHandles(
+        private void DrawRemoveNodeButtonsCallbackHandles(
             int nodeIndex) {
             Undo.RecordObject(Script.PathData, "Change path");
 

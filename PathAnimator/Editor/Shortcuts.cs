@@ -6,15 +6,13 @@ namespace ATP.SimplePathAnimator.Animator {
 
     public class Shortcuts {
 
+        #region FIELDS
         private readonly PathAnimator pathAnimator;
 
         private readonly PathAnimatorSettings settings;
+        #endregion
 
-        public Shortcuts(PathAnimator pathAnimator) {
-            this.pathAnimator = pathAnimator;
-            settings = pathAnimator.Settings;
-        }
-
+        #region PROPERTIES
         public PathAnimator PathAnimator {
             get { return pathAnimator; }
         }
@@ -22,6 +20,13 @@ namespace ATP.SimplePathAnimator.Animator {
         public PathAnimatorSettings Settings {
             // TODO Replace with Animator.Settings.
             get { return settings; }
+        }
+        #endregion
+
+        #region METHODS
+        public Shortcuts(PathAnimator pathAnimator) {
+            this.pathAnimator = pathAnimator;
+            settings = pathAnimator.Settings;
         }
 
         public void HandleShortcuts() {
@@ -164,6 +169,7 @@ namespace ATP.SimplePathAnimator.Animator {
             return 1.0f;
         }
 
+        #endregion
     }
 
 }

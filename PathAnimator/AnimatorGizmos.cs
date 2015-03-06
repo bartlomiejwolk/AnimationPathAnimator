@@ -4,10 +4,14 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class AnimatorGizmos : ScriptableObject {
+    public class AnimatorGizmos {
 
         [SerializeField]
         private PathAnimatorSettings settings;
+
+        public AnimatorGizmos(PathAnimatorSettings settings) {
+            this.settings = settings;
+        }
 
         public PathAnimatorSettings Settings {
             // TODO Replace with Animator.Settings.
@@ -144,9 +148,9 @@ namespace ATP.SimplePathAnimator.Animator {
                 false);
         }
 
-        public void Init(PathAnimatorSettings settings) {
-            Settings = settings;
-        }
+        //public void Init(PathAnimatorSettings settings) {
+        //    Settings = settings;
+        //}
 
         #endregion
     }

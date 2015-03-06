@@ -135,8 +135,8 @@ namespace ATP.SimplePathAnimator.Animator {
                 animatedGO = Camera.main.transform;
             }
 
-            AnimatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
-            AnimatorGizmos.Init(Settings);
+            AnimatorGizmos = new AnimatorGizmos(Settings);
+            //AnimatorGizmos.Init(Settings);
 
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=
@@ -150,7 +150,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             if (AnimatorGizmos == null) {
                 AnimatorGizmos =
-                    ScriptableObject.CreateInstance<AnimatorGizmos>();
+                    AnimatorGizmos = new AnimatorGizmos(Settings);
             }
         }
 
@@ -221,8 +221,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
-            AnimatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
-            AnimatorGizmos.Init(Settings);
+            AnimatorGizmos = new AnimatorGizmos(Settings);
         }
 
         #endregion UNITY MESSAGES

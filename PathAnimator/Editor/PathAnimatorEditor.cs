@@ -791,12 +791,17 @@ namespace ATP.SimplePathAnimator.Animator {
 
             Script.PathData.DistributeTimestamps();
 
+            // In Smooth mode mooth node tangents.
             if (PathAnimatorSettings.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAllNodeTangents();
             }
+            // In Linear mode set node tangents to linear.
             else if (PathAnimatorSettings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
             }
+
+            // Update animated object.
+            Script.UpdateAnimation();
         }
 
         protected virtual void DrawPositionHandlesCallbackHandler(

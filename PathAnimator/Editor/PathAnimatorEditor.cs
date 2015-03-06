@@ -35,7 +35,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty animatedGO;
-        private SerializedProperty animationTimeRatio;
         private SerializedProperty enableControlsInPlayMode;
         private SerializedProperty forwardPointOffset;
         private SerializedProperty gizmoCurveColor;
@@ -980,8 +979,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void InitializeSerializedProperties() {
             rotationSpeed = SettingsSerObj.FindProperty("rotationSpeed");
-            animationTimeRatio =
-                serializedObject.FindProperty("animationTimeRatio");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             forwardPointOffset =

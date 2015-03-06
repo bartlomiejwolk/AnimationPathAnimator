@@ -20,9 +20,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private SceneHandles SceneHandles { get; set; }
 
-        // TODO Rename to GizmoDrawerSerObj.
-        private SerializedObject GizmoDrawer { get; set; }
-
         private SerializedObject SettingsSerObj { get; set; }
         //public SerializedObject PathExporterSerObj { get; private set; }
 
@@ -339,11 +336,11 @@ namespace ATP.SimplePathAnimator.Animator {
 
         protected virtual void DrawGizmoCurveColorPicker() {
 
-            GizmoDrawer.Update();
+            SettingsSerObj.Update();
             EditorGUILayout.PropertyField(
                 gizmoCurveColor,
                 new GUIContent("Curve Color", ""));
-            GizmoDrawer.ApplyModifiedProperties();
+            SettingsSerObj.ApplyModifiedProperties();
         }
 
         protected virtual void DrawHandleModeDropdown() {
@@ -434,9 +431,9 @@ namespace ATP.SimplePathAnimator.Animator {
 
         protected virtual void DrawRotationCurveColorPicker() {
 
-            GizmoDrawer.Update();
+            SettingsSerObj.Update();
             EditorGUILayout.PropertyField(rotationCurveColor);
-            GizmoDrawer.ApplyModifiedProperties();
+            SettingsSerObj.ApplyModifiedProperties();
         }
 
         protected virtual void DrawRotationSlerpSpeedField() {
@@ -1006,13 +1003,10 @@ namespace ATP.SimplePathAnimator.Animator {
             enableControlsInPlayMode =
                 SettingsSerObj.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
-            rotationCurveColor = GizmoDrawer.FindProperty("rotationCurveColor");
-            gizmoCurveColor = GizmoDrawer.FindProperty("gizmoCurveColor");
             settings = serializedObject.FindProperty("settings");
         }
 
         private void InstantiateCompositeClasses() {
-            GizmoDrawer = new SerializedObject(Script.AnimatorGizmos);
             SettingsSerObj = new SerializedObject(Script.Settings);
             //PathExporterSerObj = new SerializedObject(PathExporter);
             SceneHandles = new SceneHandles(Script);

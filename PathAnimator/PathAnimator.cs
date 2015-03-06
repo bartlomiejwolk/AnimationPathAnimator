@@ -100,7 +100,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public PathAnimatorSettings Settings {
             get { return settings; }
-            set { settings = value; }
         }
 
         public GUISkin Skin {

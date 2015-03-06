@@ -11,7 +11,6 @@ namespace ATP.SimplePathAnimator.Events {
 
         public List<NodeEvent> NodeEvents {
             get { return nodeEvents; }
-            set { nodeEvents = value; }
         }
 
         public void ResetEvents() {

@@ -235,14 +235,15 @@ namespace ATP.SimplePathAnimator.Animator {
             MovementMode.MoveSingle;
 
         [SerializeField]
-        private float positionLerpSpeed = 0.1f;
+        private float positionLerpSpeed = 1;
 
         [SerializeField]
         private RotationMode rotationMode =
             RotationMode.Forward;
 
         [SerializeField]
-        private float rotationSpeed = 3.0f;
+        // TODO Rename to rotationLerpSpeed.
+        private float rotationSpeed = 1f;
 
         [SerializeField]
         private TangentMode tangentMode =
@@ -252,7 +253,7 @@ namespace ATP.SimplePathAnimator.Animator {
         private bool updateAllMode;
 
         [SerializeField]
-        private WrapMode wrapMode = WrapMode.Clamp;
+        private WrapMode wrapMode = WrapMode.ClampForever;
 
         /// <summary>
         ///     How much look forward point should be positioned away from the

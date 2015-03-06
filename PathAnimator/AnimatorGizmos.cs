@@ -24,21 +24,50 @@ namespace ATP.SimplePathAnimator.Animator {
         public AnimatorGizmos(PathAnimatorSettings settings) {
             this.settings = settings;
 
+            CopyIconsToGizmosFolder();
+        }
+
+        private void CopyIconsToGizmosFolder() {
+            // TODO Use directive to disable this code in standalone.
+
+            // Create Asset/Gizmos folder if not exists.
             if (!Directory.Exists(Application.dataPath + "/Gizmos")) {
                 Directory.CreateDirectory(Application.dataPath + "/Gizmos");
             }
 
-            if (!File.Exists(Application.dataPath + "/Gizmos/"
-                + Settings.RotationPointGizmoIcon + ".png")) {
+            // Check if settings asset has any paths to be searched for icons.
+            if (Settings.IconsSourceDirs == null) return;
+
+            // For each path check if specified folder exists..
+            foreach (var iconDir in Settings.IconsSourceDirs) {
+                if (Directory.Exists(Application.dataPath + iconDir)) {
+                    // Copy icon to Asset/Gizmos folder.
+                    CopyIcon(iconDir, Settings.CurrentRotationPointGizmoIcon);
+                    CopyIcon(iconDir, Settings.ForwardPointIcon);
+                    CopyIcon(iconDir, Settings.RotationPointGizmoIcon);
+                    CopyIcon(iconDir, Settings.TargetGizmoIcon);
+
+                    break;
+                }
+            }
+        }
+
+        private void CopyIcon(string sourceDir, string iconName) {
+            // Check if icon file exists in Assets/Gizmos folder.
+            if (!File.Exists(
+                Application.dataPath + "/Gizmos/"
+                + iconName + ".png")) {
 
                 // TODO If source directory doesn't exist, show info about how
                 // to copy icons to the Gizmos folder.
+
+                // Copy icon.
                 FileUtil.CopyFileOrDirectory(
                     Application.dataPath
-                        + "/AirTimeProductions/animationpathtools/PathAnimator/Resources/Icons/"
-                        + Settings.RotationPointGizmoIcon + ".png",
+                        + sourceDir
+                        + iconName + ".png",
                     Application.dataPath + "/Gizmos/"
-                        + Settings.RotationPointGizmoIcon + ".png");
+                        + iconName + ".png");
             }
         }
 

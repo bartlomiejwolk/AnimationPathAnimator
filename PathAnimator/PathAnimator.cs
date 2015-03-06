@@ -206,6 +206,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
 
+        // TODO Check for null first.
         private void Reset() {
             // Create separate method InitializeFields().
             ThisTransform = GetComponent<Transform>();
@@ -213,7 +214,9 @@ namespace ATP.SimplePathAnimator.Animator {
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
-            AnimatorGizmos = new AnimatorGizmos(Settings);
+            if (AnimatorGizmos == null) {
+                AnimatorGizmos = new AnimatorGizmos(Settings);
+            }
         }
 
         #endregion UNITY MESSAGES

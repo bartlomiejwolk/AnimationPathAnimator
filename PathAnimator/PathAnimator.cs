@@ -556,17 +556,4 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion METHODS
     }
 
-    // TODO Move to separate file.
-    public class NodeReachedEventArgs : EventArgs {
-
-        public NodeReachedEventArgs(int nodeIndex, float timestamp) {
-            NodeIndex = nodeIndex;
-            Timestamp = timestamp;
-        }
-
-        public int NodeIndex { get; set; }
-        public float Timestamp { get; set; }
-
-    }
-
 }

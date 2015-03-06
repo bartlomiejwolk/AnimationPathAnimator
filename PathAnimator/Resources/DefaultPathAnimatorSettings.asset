@@ -46,12 +46,12 @@ MonoBehaviour:
   handleMode: 1
   movementMode: 0
   positionLerpSpeed: .100000001
-  rotationMode: 2
-  rotationSpeed: 3
+  rotationMode: 0
+  rotationSpeed: 2.26999998
   tangentMode: 0
   updateAllMode: 0
   wrapMode: 1
-  forwardPointOffset: .5
+  forwardPointOffset: .579999983
   addButtonH: 25
   addButtonV: 10
   removeButtonH: 44

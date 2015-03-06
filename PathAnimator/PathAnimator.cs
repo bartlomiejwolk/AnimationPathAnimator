@@ -246,6 +246,9 @@ namespace ATP.SimplePathAnimator.Animator {
             settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
+
+            animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();
+            animatorGizmos.Init(Settings);
         }
 
         #endregion UNITY MESSAGES

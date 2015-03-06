@@ -219,6 +219,10 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+        private void OnValidate() {
+            UpdateAnimation();
+        }
+
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS

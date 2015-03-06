@@ -45,12 +45,12 @@ MonoBehaviour:
   autoPlay: 0
   EnableControlsInPlayMode: 1
   exportSamplingFrequency: 40
-  forwardPointOffset: .00100000005
-  handleMode: 1
+  forwardPointOffset: .129999995
+  handleMode: 2
   MaxAnimationSpeed: .300000012
   movementMode: 0
   positionLerpSpeed: 1
-  rotationMode: 2
+  rotationMode: 0
   rotationSpeed: 1
   tangentMode: 0
   updateAllMode: 0

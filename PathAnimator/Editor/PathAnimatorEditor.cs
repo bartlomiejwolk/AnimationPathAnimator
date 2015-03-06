@@ -20,18 +20,18 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion FIELDS
         #region PROPERTIES
 
-        public SceneHandles SceneHandles { get; private set; }
+        private SceneHandles SceneHandles { get; set; }
 
         // TODO Rename to GizmoDrawerSerObj.
-        // TODO Make private.
-        public SerializedObject GizmoDrawer { get; private set; }
+        private SerializedObject GizmoDrawer { get; set; }
+
         private SerializedObject SettingsSerObj { get; set; }
         //public SerializedObject PathExporterSerObj { get; private set; }
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        public PathAnimator Script {
+        private PathAnimator Script {
             get { return script; }
         }
 

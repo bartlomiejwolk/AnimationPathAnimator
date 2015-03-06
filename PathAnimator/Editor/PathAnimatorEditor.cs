@@ -114,15 +114,13 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUILayout.Space();
 
-            // TODO Create control section for Lerp settings.
-
-            //EditorGUILayout.Space();
-
-            //DrawAdvancedSettingsFoldout();
-            //DrawAdvanceSettingsControls();
-
             DrawSettingsAssetField();
             DrawSkinSelectionControl();
+
+            EditorGUILayout.Space();
+
+            DrawAdvancedSettingsFoldout();
+            DrawAdvanceSettingsControls();
 
             // Validate inspector settings.
             // Not all inspector controls can be validated with OnValidate().
@@ -219,11 +217,13 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void DrawAdvancedSettingsFoldout() {
             serializedObject.Update();
+
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
                     "Advanced Settings",
                     ""));
+
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -250,17 +250,17 @@ namespace ATP.SimplePathAnimator.Animator {
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
 
-                EditorGUILayout.Space();
+                //EditorGUILayout.Space();
 
-                // TODO Limit these values in OnValidate().
-                DrawPositionLerpSpeedControl();
-                DrawRotationSlerpSpeedField();
-                DrawForwardPointOffsetField();
-                DrawMaxAnimationSpeedField();
+                //// TODO Limit these values in OnValidate().
+                //DrawPositionLerpSpeedControl();
+                //DrawRotationSlerpSpeedField();
+                //DrawForwardPointOffsetField();
+                //DrawMaxAnimationSpeedField();
 
-                EditorGUILayout.Space();
+                //EditorGUILayout.Space();
 
-                DrawSkinSelectionControl();
+                //DrawSkinSelectionControl();
             }
         }
 
@@ -322,11 +322,12 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void DrawGizmoCurveColorPicker() {
-
             SettingsSerObj.Update();
+
             EditorGUILayout.PropertyField(
                 gizmoCurveColor,
                 new GUIContent("Curve Color", ""));
+
             SettingsSerObj.ApplyModifiedProperties();
         }
 
@@ -417,9 +418,10 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void DrawRotationCurveColorPicker() {
-
             SettingsSerObj.Update();
+
             EditorGUILayout.PropertyField(rotationCurveColor);
+
             SettingsSerObj.ApplyModifiedProperties();
         }
 
@@ -989,6 +991,9 @@ namespace ATP.SimplePathAnimator.Animator {
                 SettingsSerObj.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settings");
+            gizmoCurveColor = SettingsSerObj.FindProperty("gizmoCurveColor");
+            rotationCurveColor =
+                SettingsSerObj.FindProperty("rotationCurveColor");
         }
 
         private void InstantiateCompositeClasses() {

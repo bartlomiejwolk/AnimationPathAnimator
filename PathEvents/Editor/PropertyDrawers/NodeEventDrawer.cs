@@ -8,21 +8,21 @@ namespace ATP.SimplePathAnimator.Events {
     public class NodeEventDrawer : PropertyDrawer {
 
         // How many rows (properties) will be displayed.
-        public static int Rows {
+        private static int Rows {
             get { return 2; }
         }
 
         // Hight of a single property.
-        public static int PropHeight {
+        private static int PropHeight {
             get { return 16; }
         }
 
         // Margin between properties.
-        public static int PropMargin {
+        private static int PropMargin {
             get { return 4; }
         }
 
-        public static int RowsSpace {
+        private static int RowsSpace {
             get { return 8; }
         }
 

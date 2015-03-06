@@ -220,6 +220,8 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void OnValidate() {
+            ThisTransform = GetComponent<Transform>();
+
             UpdateAnimation();
         }
 
@@ -442,6 +444,7 @@ namespace ATP.SimplePathAnimator.Animator {
             // Get animatedGO position at current animation time.
             var positionAtTimestamp =
                 PathData.GetVectorAtTime(AnimationTimeRatio);
+
             var globalPositionAtTimestamp =
                 ThisTransform.TransformPoint(positionAtTimestamp);
 

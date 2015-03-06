@@ -905,7 +905,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #endregion
         #region METHODS
-        protected void AddNodeBetween(int nodeIndex) {
+        private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.

@@ -209,40 +209,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void OnValidate() {
         }
-
-        public void ValidateInspectorSettings() {
-            if (Settings == null) return;
-
-            // Limit PositionLerpSpeed value.
-            if (Settings.PositionLerpSpeed < 0) {
-                Settings.PositionLerpSpeed = 0;
-            }
-            else if (Settings.PositionLerpSpeed > 1) {
-                Settings.PositionLerpSpeed = 1;
-            }
-
-            // Limit RotationSpeed value.
-            if (Settings.RotationSpeed < 0) {
-                Settings.RotationSpeed = 0;
-            }
-
-            // Limit ForwardPointOffset value.
-            if (Settings.ForwardPointOffset < 0.001f) {
-                Settings.ForwardPointOffset = 0.001f;
-            }
-            else if (Settings.ForwardPointOffset > 1) {
-                Settings.ForwardPointOffset = 1;
-            }
-
-            // Limit ExmportSamplingFrequency value.
-            if (Settings.ExportSamplingFrequency < 1) {
-                Settings.ExportSamplingFrequency = 1;
-            }
-            else if (Settings.ExportSamplingFrequency > 100) {
-                Settings.ExportSamplingFrequency = 100;
-            }
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
@@ -527,6 +493,39 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion
 
         #region HELPER METHODS
+        public void ValidateInspectorSettings() {
+            if (Settings == null) return;
+
+            // Limit PositionLerpSpeed value.
+            if (Settings.PositionLerpSpeed < 0) {
+                Settings.PositionLerpSpeed = 0;
+            }
+            else if (Settings.PositionLerpSpeed > 1) {
+                Settings.PositionLerpSpeed = 1;
+            }
+
+            // Limit RotationSpeed value.
+            if (Settings.RotationSpeed < 0) {
+                Settings.RotationSpeed = 0;
+            }
+
+            // Limit ForwardPointOffset value.
+            if (Settings.ForwardPointOffset < 0.001f) {
+                Settings.ForwardPointOffset = 0.001f;
+            }
+            else if (Settings.ForwardPointOffset > 1) {
+                Settings.ForwardPointOffset = 1;
+            }
+
+            // Limit ExmportSamplingFrequency value.
+            if (Settings.ExportSamplingFrequency < 1) {
+                Settings.ExportSamplingFrequency = 1;
+            }
+            else if (Settings.ExportSamplingFrequency > 100) {
+                Settings.ExportSamplingFrequency = 100;
+            }
+        }
+
         // TODO Rename to HandleFiringNodeReachedEvent.
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.

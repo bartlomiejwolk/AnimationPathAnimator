@@ -97,6 +97,10 @@ namespace ATP.SimplePathAnimator.Events {
         private void OnEnable() {
             Script = (PathEvents) target;
 
+            InitializeSerializedProperties();
+        }
+
+        private void InitializeSerializedProperties() {
 
             if (EventsDataSerObj != null) {
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
@@ -108,7 +112,7 @@ namespace ATP.SimplePathAnimator.Events {
         }
 
         private void OnSceneGUI() {
-            InitializeNodeEvents();
+            InitializeObjectFields();
 
             // Return if path data is not assigned to the PathAnimator component.
             if (Script.PathAnimator.PathData == null) return;

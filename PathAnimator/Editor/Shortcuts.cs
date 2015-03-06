@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace ATP.SimplePathAnimator.Animator {
 
-    public class AnimatorShortcuts {
+    public class Shortcuts {
 
         private readonly PathAnimator pathAnimator;
 
         private readonly PathAnimatorSettings settings;
 
-        public AnimatorShortcuts(PathAnimator pathAnimator) {
+        public Shortcuts(PathAnimator pathAnimator) {
             this.pathAnimator = pathAnimator;
             settings = pathAnimator.Settings;
         }

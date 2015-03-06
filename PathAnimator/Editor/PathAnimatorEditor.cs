@@ -23,7 +23,7 @@ namespace ATP.SimplePathAnimator.Animator {
         /// </summary>
         private PathAnimator Script { get; set; }
 
-        private AnimatorShortcuts AnimatorShortcuts { get; set; }
+        private Shortcuts Shortcuts { get; set; }
 
         private PathAnimatorSettings PathAnimatorSettings { get; set; }
 
@@ -178,7 +178,7 @@ namespace ATP.SimplePathAnimator.Animator {
                 GUIUtility.GetControlID(
                     FocusType.Passive));
 
-            AnimatorShortcuts.HandleShortcuts();
+            Shortcuts.HandleShortcuts();
 
             Script.UpdateWrapMode();
 
@@ -1000,7 +1000,7 @@ namespace ATP.SimplePathAnimator.Animator {
             SettingsSerObj = new SerializedObject(Script.Settings);
             //PathExporterSerObj = new SerializedObject(PathExporter);
             SceneHandles = new SceneHandles(Script);
-            AnimatorShortcuts = new AnimatorShortcuts(Script);
+            Shortcuts = new Shortcuts(Script);
         }
   
 

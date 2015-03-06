@@ -104,8 +104,8 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public GUISkin Skin {
             get { return skin; }
-            set { skin = value; }
         }
+
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -115,7 +115,6 @@ namespace ATP.SimplePathAnimator.Animator {
         /// </summary>
         public Transform TargetGO {
             get { return targetGO; }
-            set { targetGO = value; }
         }
 
         /// <summary>
@@ -123,7 +122,6 @@ namespace ATP.SimplePathAnimator.Animator {
         /// </summary>
         public Transform AnimatedGO {
             get { return animatedGO; }
-            set { animatedGO = value; }
         }
         #endregion PROPERTIES
 
@@ -138,7 +136,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             // Initialize animatedGO field.
             if (AnimatedGO == null && Camera.main != null) {
-                AnimatedGO = Camera.main.transform;
+                animatedGO = Camera.main.transform;
             }
 
             animatorGizmos = ScriptableObject.CreateInstance<AnimatorGizmos>();

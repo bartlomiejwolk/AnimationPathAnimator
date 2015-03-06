@@ -221,6 +221,14 @@ namespace ATP.SimplePathAnimator.Animator {
                 Settings.PositionLerpSpeed = 1;
             }
 
+            // Limit RotationSpeed value.
+            if (Settings.RotationSpeed < 0) {
+                Settings.RotationSpeed = 0;
+            }
+            else if (Settings.RotationSpeed > 1) {
+                Settings.RotationSpeed = 1;
+            }
+
             // Limit ForwardPointOffset value.
             if (Settings.ForwardPointOffset < 0.001f) {
                 Settings.ForwardPointOffset = 0.001f;

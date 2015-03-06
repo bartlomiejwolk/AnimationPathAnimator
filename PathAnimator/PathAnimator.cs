@@ -251,6 +251,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void Reset() {
+            thisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultPathAnimatorSettings")
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
@@ -422,6 +423,7 @@ namespace ATP.SimplePathAnimator.Animator {
                     // Ease time.
                     var timeStep =
                         PathData.GetEaseValueAtTime(AnimationTimeRatio);
+
                     AnimationTimeRatio += timeStep * Time.deltaTime;
 
                     if (AnimationTimeRatio > 1

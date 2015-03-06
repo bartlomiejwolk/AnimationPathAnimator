@@ -15,8 +15,6 @@ namespace ATP.SimplePathAnimator.Animator {
         /// </summary>
         private PathAnimator script;
 
-        private AnimatorShortcuts animatorShortcuts;
-
         #endregion FIELDS
         #region PROPERTIES
 
@@ -35,12 +33,10 @@ namespace ATP.SimplePathAnimator.Animator {
             get { return script; }
         }
 
-        public AnimatorShortcuts AnimatorShortcuts {
-            get { return animatorShortcuts; }
-            set { animatorShortcuts = value; }
-        }
+        private AnimatorShortcuts AnimatorShortcuts { get; set; }
 
-        public PathAnimatorSettings PathAnimatorSettings { get; private set; }
+        private PathAnimatorSettings PathAnimatorSettings { get; set; }
+
         private PathExporter PathExporter { get; set; }
 
         #endregion 

@@ -74,38 +74,47 @@ namespace ATP.SimplePathAnimator.Animator {
         // TODO Add setters everywhere.
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
+            set { easeModeKey = value; }
         }
 
         public KeyCode JumpToEndKey {
             get { return jumpToEndKey; }
+            set { jumpToEndKey = value; }
         }
 
         public KeyCode JumpToNextNodeKey {
             get { return jumpToNextNodeKey; }
+            set { jumpToNextNodeKey = value; }
         }
 
         public KeyCode JumpToPreviousNodeKey {
             get { return jumpToPreviousNodeKey; }
+            set { jumpToPreviousNodeKey = value; }
         }
 
         public KeyCode JumpToStartKey {
             get { return jumpToStartKey; }
+            set { jumpToStartKey = value; }
         }
 
         public KeyCode LongJumpBackwardKey {
             get { return longJumpBackwardKey; }
+            set { longJumpBackwardKey = value; }
         }
 
         public KeyCode LongJumpForwardKey {
             get { return longJumpForwardKey; }
+            set { longJumpForwardKey = value; }
         }
 
         public float LongJumpValue {
             get { return longJumpValue; }
+            set { longJumpValue = value; }
         }
 
         public KeyCode ModKey {
             get { return modKey; }
+            set { modKey = value; }
         }
 
         public KeyCode MoveAllModeKey {
@@ -114,6 +123,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public KeyCode NoneModeKey {
             get { return noneModeKey; }
+            set { noneModeKey = value; }
         }
 
         public KeyCode PlayPauseKey {
@@ -123,14 +133,17 @@ namespace ATP.SimplePathAnimator.Animator {
 
         public KeyCode RotationModeKey {
             get { return rotationModeKey; }
+            set { rotationModeKey = value; }
         }
 
         public KeyCode ShortJumpBackwardKey {
             get { return shortJumpBackwardKey; }
+            set { shortJumpBackwardKey = value; }
         }
 
         public KeyCode ShortJumpForwardKey {
             get { return shortJumpForwardKey; }
+            set { shortJumpForwardKey = value; }
         }
 
         /// <summary>
@@ -138,12 +151,15 @@ namespace ATP.SimplePathAnimator.Animator {
         /// </summary>
         public float ShortJumpValue {
             get { return shortJumpValue; }
+            set { shortJumpValue = value; }
         }
         public KeyCode TiltingModeKey {
             get { return tiltingModeKey; }
+            set { tiltingModeKey = value; }
         }
         public KeyCode UpdateAllKey {
             get { return updateAllKey; }
+            set { updateAllKey = value; }
         }
         #endregion
         #region GIZMO FIELDS

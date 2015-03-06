@@ -1044,6 +1044,22 @@ namespace ATP.SimplePathAnimator.Animator {
             else if (Settings.ExportSamplingFrequency > 100) {
                 Settings.ExportSamplingFrequency = 100;
             }
+
+            // Limit ShortJumpValue.
+            if (Settings.ShortJumpValue < 0) {
+                Settings.ShortJumpValue = 0;
+            }
+            else if (Settings.ShortJumpValue > 1) {
+                Settings.ShortJumpValue = 1;
+            }
+
+            // Limit LongJumpValue.
+            if (Settings.LongJumpValue < 0) {
+                Settings.LongJumpValue = 0;
+            }
+            else if (Settings.LongJumpValue > 1) {
+                Settings.LongJumpValue = 1;
+            }
         }
 
 

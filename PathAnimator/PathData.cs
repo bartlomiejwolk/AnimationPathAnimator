@@ -69,22 +69,18 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
-            set { animatedObjectPath = value; }
         }
 
         private AnimationCurve EaseCurve {
             get { return easeCurve; }
-            set { easeCurve = value; }
         }
 
         private AnimationPath RotationPath {
             get { return rotationPath; }
-            set { rotationPath = value; }
         }
 
         private AnimationCurve TiltingCurve {
             get { return tiltingCurve; }
-            set { tiltingCurve = value; }
         }
 
         #endregion PROPERTIES
@@ -223,14 +219,14 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         private void InstantiateReferenceTypes() {
-            AnimatedObjectPath = new AnimationPath();
+            animatedObjectPath = new AnimationPath();
             InstantiateAnimationPathCurves(animatedObjectPath);
 
-            RotationPath = new AnimationPath();
+            rotationPath = new AnimationPath();
             InstantiateAnimationPathCurves(rotationPath);
 
-            EaseCurve = new AnimationCurve();
-            TiltingCurve = new AnimationCurve();
+            easeCurve = new AnimationCurve();
+            tiltingCurve = new AnimationCurve();
         }
 
         private void SubscribeToEvents() {
@@ -391,7 +387,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void ResetEaseCurve() {
-            EaseCurve = new AnimationCurve();
+            easeCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(EaseCurve);
         }
 
@@ -403,7 +399,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void ResetRotationPath() {
-            RotationPath = new AnimationPath();
+            rotationPath = new AnimationPath();
             InstantiateAnimationPathCurves(rotationPath);
 
             UpdateRotationPathWithAddedKeys();
@@ -413,7 +409,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         public void ResetTiltingCurve() {
-            TiltingCurve = new AnimationCurve();
+            tiltingCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(TiltingCurve);
         }
 

@@ -8,9 +8,9 @@ namespace ATP.SimplePathAnimator.Events {
     [CustomEditor(typeof (PathEvents))]
     public class PathEventsEditor : Editor {
         #region FIELDS
-        private SerializedObject PathEventsSettingsSerObj;
-        private PathEventsSettings PathEventsSettings;
 
+        private SerializedObject PathEventsSettingsSerObj;
+        private PathEventsSettings PathEventsSettings { get; set; }
 
         #endregion
 

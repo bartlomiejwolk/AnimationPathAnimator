@@ -6,20 +6,22 @@ namespace ATP.SimplePathAnimator.Animator {
 
     public class AnimatorGizmos {
 
+        #region FIELDS
+
         [SerializeField]
         private PathAnimatorSettings settings;
-
-        public AnimatorGizmos(PathAnimatorSettings settings) {
-            this.settings = settings;
-        }
-
         public PathAnimatorSettings Settings {
             // TODO Replace with Animator.Settings.
             get { return settings; }
             set { settings = value; }
         }
+        #endregion
 
         #region METHODS
+        public AnimatorGizmos(PathAnimatorSettings settings) {
+            this.settings = settings;
+        }
+
         public void DrawAnimationCurve(PathData pathData,
                     Transform transform) {
 

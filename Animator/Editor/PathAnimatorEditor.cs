@@ -113,6 +113,9 @@ namespace ATP.SimplePathAnimator.Animator {
             EditorGUIUtility.labelWidth = 0;
 
             //DrawShortcutsHelpBox();
+            EditorGUILayout.Space();
+
+            PathExporter.DrawExportControls();
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
@@ -235,10 +238,6 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-                PathExporter.DrawExportControls();
-
-                EditorGUILayout.Space();
-
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
 

@@ -33,11 +33,14 @@ namespace ATP.SimplePathAnimator.Events {
 
         private SerializedProperty skin;
         private SerializedProperty settings;
+        private SerializedProperty advancedSettingsFoldout;
         #endregion
 
         #region UNITY MESSAGES
         public override void OnInspectorGUI() {
             serializedObject.Update();
+
+            EditorGUILayout.PropertyField(pathAnimator);
 
             DrawEventsDataAssetField();
 
@@ -50,15 +53,12 @@ namespace ATP.SimplePathAnimator.Events {
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.PropertyField(pathAnimator);
-            DrawSettingsAssetField();
-            EditorGUILayout.PropertyField(skin);
-
-            EditorGUILayout.Space();
-
             serializedObject.ApplyModifiedProperties();
 
             DrawEventList();
+
+            DrawAdvancedSettingsFoldout();
+            DrawAdvancedSettingsControls();
 
         }
         private void OnEnable() {
@@ -90,6 +90,13 @@ namespace ATP.SimplePathAnimator.Events {
             EventsDataSerObj.ApplyModifiedProperties();
         }
 
+        private void DrawAdvancedSettingsControls() {
+            if (advancedSettingsFoldout.boolValue) {
+                DrawSettingsAssetField();
+                EditorGUILayout.PropertyField(skin);
+            }
+        }
+
         private void DrawSettingsAssetField() {
             serializedObject.Update();
 
@@ -97,6 +104,18 @@ namespace ATP.SimplePathAnimator.Events {
                 settings,
                 new GUIContent(
                     "Settings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawAdvancedSettingsFoldout() {
+            serializedObject.Update();
+
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                advancedSettingsFoldout.boolValue,
+                new GUIContent(
+                    "Other",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -114,6 +133,8 @@ namespace ATP.SimplePathAnimator.Events {
             pathAnimator = serializedObject.FindProperty("pathAnimator");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settings");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
         }
 
         /// <summary>

@@ -20,6 +20,9 @@ namespace ATP.SimplePathAnimator.Events {
 
         [SerializeField]
         private PathEventsSettings settings;
+
+        [SerializeField]
+        private bool advancedSettingsFoldout;
         #endregion
 
         #region PROPERTIES

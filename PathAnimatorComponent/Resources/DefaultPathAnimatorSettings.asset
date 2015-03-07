@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: DefaultPathAnimatorSettings
+  m_Name: New ATP.SimplePathAnimator.PathAnimatorComponent.PathAnimatorSettings
   m_EditorClassIdentifier: 
   easeModeKey: 117
   jumpToEndKey: 108
@@ -40,8 +40,8 @@ MonoBehaviour:
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   iconsSourceDirs:
-  - /AirTimeProductions/animationpathtools/PathAnimator/Resources/Icons/
-  - /animationpathtools/PathAnimator/Resources/Icons/
+  - /AirTimeProductions/animationpathtools/PathAnimatorComponent/Resources/Icons/
+  - /simplepathanimator/PathAnimatorComponent/Resources/Icons/
   autoPlay: 1
   EnableControlsInPlayMode: 1
   exportSamplingFrequency: 5

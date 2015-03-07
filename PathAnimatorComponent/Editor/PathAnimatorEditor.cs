@@ -1020,8 +1020,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
+            if (Script.Settings == null) return;
+
             SettingsSerObj = new SerializedObject(Script.Settings);
-            //PathExporterSerObj = new SerializedObject(PathExporter);
             SceneHandles = new SceneHandles(Script);
             Shortcuts = new Shortcuts(Script);
         }

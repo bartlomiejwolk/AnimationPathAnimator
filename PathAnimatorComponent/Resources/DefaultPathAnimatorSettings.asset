@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: DefaultPathAnimatorSettings
+  m_Name: New ATP.SimplePathAnimator.PathAnimatorComponent.PathAnimatorSettings
   m_EditorClassIdentifier: 
   easeModeKey: 117
   jumpToEndKey: 108
@@ -42,11 +42,12 @@ MonoBehaviour:
   iconsSourceDirs:
   - /AirTimeProductions/animationpathtools/PathAnimatorComponent/Resources/Icons/
   - /simplepathanimator/PathAnimatorComponent/Resources/Icons/
+  icons: []
   autoPlay: 1
   EnableControlsInPlayMode: 1
   exportSamplingFrequency: 5
   forwardPointOffset: .0500000007
-  handleMode: 2
+  handleMode: 0
   MaxAnimationSpeed: .300000012
   movementMode: 0
   positionLerpSpeed: 1

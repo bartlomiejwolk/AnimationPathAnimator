@@ -236,11 +236,15 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
         #endregion
         #region ANIMATOR FIELDS
+        // TODO Remove.
         [SerializeField]
         private string[] iconsSourceDirs = {
             "/AirTimeProductions/animationpathtools/PathAnimatorComponent/Resources/Icons/",
             "/simplepathanimator/PathAnimatorComponent/Resources/Icons/"
         };
+
+        [SerializeField]
+        private Texture[] icons;
 
         [SerializeField]
         private bool autoPlay = true;
@@ -293,6 +297,11 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private WrapMode wrapMode = WrapMode.ClampForever;
         #endregion
         #region ANIMATOR PROPERTIES
+        public Texture[] Icons {
+            get { return icons; }
+            set { icons = value; }
+        }
+
         public string[] IconsSourceDirs {
             get { return iconsSourceDirs; }
             set { iconsSourceDirs = value; }

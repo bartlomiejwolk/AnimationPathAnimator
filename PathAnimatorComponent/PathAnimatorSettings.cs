@@ -237,13 +237,10 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         #endregion
         #region ANIMATOR FIELDS
         private string gizmosSubfolder = "ATP/";
-        // TODO Remove.
-        [SerializeField]
-        private string[] iconsSourceDirs = {
-            "/AirTimeProductions/animationpathtools/PathAnimatorComponent/Resources/Icons/",
-            "/simplepathanimator/PathAnimatorComponent/Resources/Icons/"
-        };
 
+        /// <summary>
+        /// Holds references to icons that will be copied to Assets/Gizmos folder.
+        /// </summary>
         [SerializeField]
         private Texture[] gizmoIcons;
 
@@ -306,11 +303,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         public Texture[] GizmoIcons {
             get { return gizmoIcons; }
             set { gizmoIcons = value; }
-        }
-
-        public string[] IconsSourceDirs {
-            get { return iconsSourceDirs; }
-            set { iconsSourceDirs = value; }
         }
 
         public bool AutoPlay {

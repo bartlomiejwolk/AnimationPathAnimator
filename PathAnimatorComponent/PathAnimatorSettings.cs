@@ -244,7 +244,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         };
 
         [SerializeField]
-        private Texture[] icons;
+        private Texture[] gizmoIcons;
 
         [SerializeField]
         private bool autoPlay = true;
@@ -297,9 +297,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private WrapMode wrapMode = WrapMode.ClampForever;
         #endregion
         #region ANIMATOR PROPERTIES
-        public Texture[] Icons {
-            get { return icons; }
-            set { icons = value; }
+        public Texture[] GizmoIcons {
+            get { return gizmoIcons; }
+            set { gizmoIcons = value; }
         }
 
         public string[] IconsSourceDirs {

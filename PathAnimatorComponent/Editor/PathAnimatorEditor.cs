@@ -40,7 +40,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private SerializedProperty gizmoCurveColor;
         private SerializedProperty maxAnimationSpeed;
         private SerializedProperty pathData;
-        private SerializedProperty positionLerpSpeed;
+        //private SerializedProperty positionLerpSpeed;
         private SerializedProperty rotationCurveColor;
         private SerializedProperty rotationSpeed;
         private SerializedProperty skin;
@@ -81,9 +81,10 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
+            DrawPositionLerpSpeedSlider();
+            
             EditorGUIUtility.labelWidth = 180;
 
-            DrawPositionLerpSpeedSlider();
             DrawRotationSlerpSpeedField();
             DrawForwardPointOffsetField();
 
@@ -401,13 +402,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void DrawPositionLerpSpeedSlider() {
-            SettingsSerObj.Update();
-            EditorGUILayout.PropertyField(
-                positionLerpSpeed,
+            Settings.PositionLerpSpeed = EditorGUILayout.Slider(
                 new GUIContent(
                     "Position Lerp Speed",
-                    ""));
-            SettingsSerObj.ApplyModifiedProperties();
+                    ""),
+                Settings.PositionLerpSpeed,
+                0,
+                1);
         }
 
         private void DrawRotationCurveColorPicker() {
@@ -969,8 +970,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 SettingsSerObj.FindProperty("MaxAnimationSpeed");
-            positionLerpSpeed =
-                SettingsSerObj.FindProperty("positionLerpSpeed");
+            //positionLerpSpeed =
+            //    SettingsSerObj.FindProperty("positionLerpSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
                 SettingsSerObj.FindProperty("EnableControlsInPlayMode");

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.Events {
+namespace ATP.SimplePathAnimator.PathEventsComponent {
 
     public class NodeEventHandlers : MonoBehaviour {
 

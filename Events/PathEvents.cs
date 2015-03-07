@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using ATP.SimplePathAnimator.PathAnimatorComponent;
 
-namespace ATP.SimplePathAnimator.Events {
+namespace ATP.SimplePathAnimator.PathEventsComponent {
 
     [RequireComponent(typeof(PathAnimator))]
     public sealed class PathEvents : MonoBehaviour {

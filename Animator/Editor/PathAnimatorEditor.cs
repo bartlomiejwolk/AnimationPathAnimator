@@ -121,26 +121,6 @@ namespace ATP.SimplePathAnimator.Animator {
             // Not all inspector controls can be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
         }
-
-        private void DrawShortcutsHelpBox() {
-            EditorGUILayout.HelpBox(
-                "Check Settings Asset for shortcuts.",
-                MessageType.Info);
-        }
-
-        private void HandleUndo() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                // Repaint inspector.
-                Repaint();
-                // Update path with new tangent setting.
-                HandleTangentModeChange();
-                // Update animated object.
-                Script.UpdateAnimation();
-            }
-        }
-
         // TODO Reorder.
         private void OnEnable() {
             // Get target script reference.
@@ -190,6 +170,12 @@ namespace ATP.SimplePathAnimator.Animator {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+        private void DrawShortcutsHelpBox() {
+            EditorGUILayout.HelpBox(
+                "Check Settings Asset for shortcuts.",
+                MessageType.Info);
+        }
+
         private void DrawSettingsAssetField() {
             serializedObject.Update();
 
@@ -927,6 +913,19 @@ namespace ATP.SimplePathAnimator.Animator {
 
         #endregion
         #region METHODS
+        private void HandleUndo() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                // Repaint inspector.
+                Repaint();
+                // Update path with new tangent setting.
+                HandleTangentModeChange();
+                // Update animated object.
+                Script.UpdateAnimation();
+            }
+        }
+
         private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);

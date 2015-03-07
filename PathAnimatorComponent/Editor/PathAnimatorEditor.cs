@@ -1074,6 +1074,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             }
         }
 
+        // TODO Move to separate class.
         private void CopyIconsToGizmosFolder() {
             var gizmosDir = Application.dataPath + "/Gizmos/";
 

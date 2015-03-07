@@ -13,80 +13,28 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         public void CopyIconsToGizmosFolder() {
-            var gizmosDir = Application.dataPath + "/Gizmos/";
+            // Path to Unity Gizmos folder.
+            var gizmosDir = Application.dataPath + "/Gizmos";
+
+            // Path to ATP folder inside Gizmos.
 
             // Create Asset/Gizmos folder if not exists.
-            if (!Directory.Exists(gizmosDir)) {
-                Directory.CreateDirectory(gizmosDir);
+            if (!Directory.Exists(gizmosDir + "ATP")) {
+                Directory.CreateDirectory(gizmosDir + "ATP");
             }
 
-            // Check if settings asset has any paths to be searched for icons.
-            if (Settings.IconsSourceDirs == null) return;
+            // Check if settings asset has icons specified.
+            if (Settings.GizmoIcons == null) return;
 
-            // For each path..
-            foreach (var iconDir in Settings.IconsSourceDirs) {
-                // If source directory exists..
-                if (Directory.Exists(Application.dataPath + iconDir)) {
-                    var destFilePath =
-                        gizmosDir + Settings.CurrentRotationPointGizmoIcon;
+            // For each icon..
+            foreach (var icon in Settings.GizmoIcons) {
+                // Get icon path.
+                var iconPath = AssetDatabase.GetAssetPath(icon);
 
-                    // If file doesn't exist..
-                    if (!File.Exists(destFilePath)) {
-                        // Copy icon to Asset/Gizmos folder.
-                        CopyIcon(iconDir, Settings.CurrentRotationPointGizmoIcon);
-                    }
-
-                    destFilePath =
-                        gizmosDir + Settings.ForwardPointIcon;
-
-                    // If file doesn't exist..
-                    if (!File.Exists(destFilePath)) {
-                        // Copy icon to Asset/Gizmos folder.
-                        CopyIcon(iconDir, Settings.ForwardPointIcon);
-                    }
-
-                    destFilePath =
-                        gizmosDir + Settings.RotationPointGizmoIcon;
-
-                    // If file doesn't exist..
-                    if (!File.Exists(destFilePath)) {
-                        // Copy icon to Asset/Gizmos folder.
-                        CopyIcon(iconDir, Settings.RotationPointGizmoIcon);
-                    }
-
-                    destFilePath =
-                        gizmosDir + Settings.TargetGizmoIcon;
-
-                    // If file doesn't exist..
-                    if (!File.Exists(destFilePath)) {
-                        // Copy icon to Asset/Gizmos folder.
-                        CopyIcon(iconDir, Settings.TargetGizmoIcon);
-                    }
-
-                    break;
-                }
+                // Copy icon to Gizmos folder.
+                AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
             }
         }
-
-        private void CopyIcon(string sourceDir, string iconName) {
-            // Check if icon file exists in Assets/Gizmos folder.
-            if (!File.Exists(
-                Application.dataPath + "/Gizmos/"
-                + iconName + ".png")) {
-
-                // TODO If source directory doesn't exist, show info about how
-                // to copy icons to the Gizmos folder.
-
-                // Copy icon.
-                FileUtil.CopyFileOrDirectory(
-                    Application.dataPath
-                    + sourceDir
-                    + iconName + ".png",
-                    Application.dataPath + "/Gizmos/"
-                    + iconName + ".png");
-            }
-        }
-
     }
 
 }

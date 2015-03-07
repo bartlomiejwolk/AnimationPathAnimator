@@ -52,6 +52,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
 
+        // TODO Add "Icon" to method name.
         public void DrawCurrentRotationPointGizmo(PathData pathData,
             Transform transform, float animationTimeRatio) {
 
@@ -74,7 +75,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(globalRotationPointPosition,
-                Settings.CurrentRotationPointGizmoIcon,
+                Settings.GizmosSubfolder + Settings.CurrentRotationPointGizmoIcon,
                 false);
         }
 
@@ -82,7 +83,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 forwardPointPosition,
-                Settings.ForwardPointIcon,
+                Settings.GizmosSubfolder + Settings.ForwardPointIcon,
                 false);
         }
 
@@ -110,6 +111,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             }
         }
 
+        // TODO Add "Icons" to method name end.
         public void DrawRotationPointGizmos(PathData pathData,
             Transform transform, float animationTimeRatio) {
 
@@ -138,7 +140,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 //Draw rotation point gizmo.
                 Gizmos.DrawIcon(
                 globalRotPointPositions[i],
-                Settings.RotationPointGizmoIcon,
+                Settings.GizmosSubfolder + Settings.RotationPointGizmoIcon,
                 false);
             }
         }
@@ -148,7 +150,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetPosition,
-                Settings.TargetGizmoIcon,
+                Settings.GizmosSubfolder + Settings.TargetGizmoIcon,
                 false);
         }
 

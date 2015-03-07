@@ -124,26 +124,21 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Not all inspector controls can be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
         }
-        // TODO Reorder.
+
         private void OnEnable() {
             // Get target script reference.
             Script = (PathAnimator) target;
 
-            if (Script.Settings == null) return;
-
-            // Initialize Settings property.
-            Settings = Script.Settings;
-            GizmoIcons = new GizmoIcons(Settings);
-
-            PathExporter = new PathExporter(Script);
+            if (Script.Settings != null) {
+                // Initialize Settings property.
+                Settings = Script.Settings;
+            }
 
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
 
             SceneTool.RememberCurrentTool();
-
             FocusOnSceneView();
-
             GizmoIcons.CopyIconsToGizmosFolder();
         }
         private void OnDisable() {
@@ -155,6 +150,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
+
+            if (Settings == null) return;
 
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(
@@ -1022,9 +1019,14 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
-            SettingsSerObj = new SerializedObject(Script.Settings);
             SceneHandles = new SceneHandles(Script);
             Shortcuts = new Shortcuts(Script);
+            PathExporter = new PathExporter(Script);
+
+            if (Settings == null) return;
+
+            GizmoIcons = new GizmoIcons(Settings);
+            SettingsSerObj = new SerializedObject(Settings);
         }
         private void ValidateInspectorSettings() {
             if (Settings == null) return;

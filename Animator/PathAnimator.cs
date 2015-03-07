@@ -81,7 +81,9 @@ namespace ATP.SimplePathAnimator.Animator {
             }
         }
 
+#if UNITY_EDITOR
         AnimatorGizmos AnimatorGizmos { get; set; }
+#endif
 
         /// <summary>
         ///     If animation is currently enabled.
@@ -134,9 +136,6 @@ namespace ATP.SimplePathAnimator.Animator {
                 animatedGO = Camera.main.transform;
             }
 
-            AnimatorGizmos = new AnimatorGizmos(Settings);
-            //AnimatorGizmos.Init(Settings);
-
             if (pathData != null) {
                 PathData.RotationPointPositionChanged +=
                     PathData_RotationPointPositionChanged;
@@ -147,10 +146,12 @@ namespace ATP.SimplePathAnimator.Animator {
                 PathData.RotationPathReset += PathData_RotationPathReset;
             }
 
+#if UNITY_EDITOR
             if (AnimatorGizmos == null) {
                 AnimatorGizmos =
                     AnimatorGizmos = new AnimatorGizmos(Settings);
             }
+#endif
         }
 
         private void OnDisable() {
@@ -166,6 +167,7 @@ namespace ATP.SimplePathAnimator.Animator {
         }
 
         // TODO Refactor.
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
             // Return if path asset file is not assigned.
             if (PathData == null) return;
@@ -196,7 +198,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
-
+#endif
      
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
@@ -214,9 +216,11 @@ namespace ATP.SimplePathAnimator.Animator {
                 as PathAnimatorSettings;
             skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
 
+#if UNITY_EDITOR
             if (AnimatorGizmos == null) {
                 AnimatorGizmos = new AnimatorGizmos(Settings);
             }
+#endif
         }
 
         private void OnValidate() {

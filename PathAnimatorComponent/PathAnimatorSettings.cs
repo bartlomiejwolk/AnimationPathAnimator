@@ -269,7 +269,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         [SerializeField]
         // TODO Rename to rotationLerpSpeed.
-        private float rotationSpeed = 1f;
+        private float rotationSlerpSpeed = 999.0f;
 
         [SerializeField]
         private TangentMode tangentMode =
@@ -326,9 +326,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             set { rotationMode = value; }
         }
 
-        public float RotationSpeed {
-            get { return rotationSpeed; }
-            set { rotationSpeed = value; }
+        public float RotationSlerpSpeed {
+            get { return rotationSlerpSpeed; }
+            set { rotationSlerpSpeed = value; }
         }
 
         public TangentMode TangentMode {

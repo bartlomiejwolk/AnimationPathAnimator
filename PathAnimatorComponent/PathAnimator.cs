@@ -434,7 +434,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime * Settings.RotationSpeed;
+            var speed = Time.deltaTime * Settings.RotationSlerpSpeed;
 
             // Lerp rotation.
             AnimatedGO.rotation = Quaternion.Slerp(

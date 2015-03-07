@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: DefaultPathAnimatorSettings
+  m_Name: New ATP.SimplePathAnimator.PathAnimatorComponent.PathAnimatorSettings
   m_EditorClassIdentifier: 
   easeModeKey: 117
   jumpToEndKey: 108
@@ -21,7 +21,6 @@ MonoBehaviour:
   longJumpValue: .00999999978
   modKey: 307
   moveAllModeColor: {r: 1, g: 0, b: 0, a: 1}
-  moveAllModeKey: 112
   noneModeKey: 121
   playPauseKey: 32
   rotationModeKey: 105
@@ -39,24 +38,16 @@ MonoBehaviour:
   rotationCurveSampling: 40
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
-  iconsSourceDirs:
-  - /AirTimeProductions/animationpathtools/PathAnimatorComponent/Resources/Icons/
-  - /simplepathanimator/PathAnimatorComponent/Resources/Icons/
-  gizmoIcons:
-  - {fileID: 2800000, guid: 7035c5b758f753f4c85443715f7b41a7, type: 3}
-  - {fileID: 2800000, guid: d09a8dd6e0e171b49ba73fd3d5c57205, type: 3}
-  - {fileID: 2800000, guid: 649104d15ab43284cb21177f43ec04a4, type: 3}
-  - {fileID: 2800000, guid: d777b5e2cb371524fade0782c726f2e6, type: 3}
+  gizmoIcons: []
   autoPlay: 1
   EnableControlsInPlayMode: 1
   exportSamplingFrequency: 5
   forwardPointOffset: .0500000007
   handleMode: 0
   MaxAnimationSpeed: .300000012
-  movementMode: 0
   positionLerpSpeed: 1
   rotationMode: 0
-  rotationSpeed: 1
+  rotationSlerpSpeed: 999
   tangentMode: 0
   updateAllMode: 0
   wrapMode: 8

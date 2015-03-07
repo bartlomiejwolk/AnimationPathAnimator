@@ -42,7 +42,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private SerializedProperty pathData;
         //private SerializedProperty positionLerpSpeed;
         private SerializedProperty rotationCurveColor;
-        private SerializedProperty rotationSpeed;
+        private SerializedProperty rotationSlerpSpeed;
         private SerializedProperty skin;
         private SerializedProperty targetGO;
         private SerializedProperty settings;
@@ -432,7 +432,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             SettingsSerObj.Update();
 
             EditorGUILayout.PropertyField(
-                rotationSpeed,
+                rotationSlerpSpeed,
                 new GUIContent(
                     "Rotation Slerp Speed",
                     "Controls how much time (in seconds) it'll take the " +
@@ -970,7 +970,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void InitializeSerializedProperties() {
-            rotationSpeed = SettingsSerObj.FindProperty("rotationSpeed");
+            rotationSlerpSpeed = SettingsSerObj.FindProperty("rotationSlerpSpeed");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             forwardPointOffset =
@@ -1015,8 +1015,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             //}
 
             // Limit RotationSpeed value.
-            if (Settings.RotationSpeed < 0) {
-                Settings.RotationSpeed = 0;
+            if (Settings.RotationSlerpSpeed < 0) {
+                Settings.RotationSlerpSpeed = 0;
             }
 
             // Limit ForwardPointOffset value.

@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
+    // TODO Rename to Settings.
     public sealed class PathAnimatorSettings : ScriptableObject {
 
         #region SHORTCUT FIELDS

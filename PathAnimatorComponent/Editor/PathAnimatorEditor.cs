@@ -83,10 +83,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             DrawPositionSpeedSlider();
             
-            EditorGUIUtility.labelWidth = 180;
+            EditorGUIUtility.labelWidth = 208;
 
             DrawRotationSpeedField();
-            DrawForwardPointOffsetField();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            DrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 
@@ -123,6 +126,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Validate inspector settings.
             // Not all inspector controls can be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
+
+            // Repaint scene after each inspector update.
+            SceneView.RepaintAll();
         }
 
         private void OnEnable() {
@@ -320,12 +326,15 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             SettingsSerObj.ApplyModifiedProperties();
         }
 
-        private void DrawForwardPointOffsetField() {
-            SettingsSerObj.Update();
-
-            EditorGUILayout.PropertyField(forwardPointOffset);
-
-            SettingsSerObj.ApplyModifiedProperties();
+        private void DrawForwardPointOffsetSlider() {
+            Settings.ForwardPointOffset = EditorGUILayout.Slider(
+                new GUIContent(
+                    "Forward Point Offset",
+                    ""), 
+                Settings.ForwardPointOffset,
+                // TODO Create field in settings asset.
+                0.001f,
+                1);
         }
 
         private void DrawGizmoCurveColorPicker() {
@@ -998,12 +1007,12 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             if (Settings == null) return;
 
             // Limit PositionLerpSpeed value.
-            if (Settings.PositionLerpSpeed < 0) {
-                Settings.PositionLerpSpeed = 0;
-            }
-            else if (Settings.PositionLerpSpeed > 1) {
-                Settings.PositionLerpSpeed = 1;
-            }
+            //if (Settings.PositionLerpSpeed < 0) {
+            //    Settings.PositionLerpSpeed = 0;
+            //}
+            //else if (Settings.PositionLerpSpeed > 1) {
+            //    Settings.PositionLerpSpeed = 1;
+            //}
 
             // Limit RotationSpeed value.
             if (Settings.RotationSpeed < 0) {
@@ -1011,36 +1020,36 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             }
 
             // Limit ForwardPointOffset value.
-            if (Settings.ForwardPointOffset < 0.001f) {
-                Settings.ForwardPointOffset = 0.001f;
-            }
-            else if (Settings.ForwardPointOffset > 1) {
-                Settings.ForwardPointOffset = 1;
-            }
+            //if (Settings.ForwardPointOffset < 0.001f) {
+            //    Settings.ForwardPointOffset = 0.001f;
+            //}
+            //else if (Settings.ForwardPointOffset > 1) {
+            //    Settings.ForwardPointOffset = 1;
+            //}
 
             // Limit ExmportSamplingFrequency value.
             if (Settings.ExportSamplingFrequency < 1) {
                 Settings.ExportSamplingFrequency = 1;
             }
-            else if (Settings.ExportSamplingFrequency > 100) {
-                Settings.ExportSamplingFrequency = 100;
-            }
+            //else if (Settings.ExportSamplingFrequency > 100) {
+            //    Settings.ExportSamplingFrequency = 100;
+            //}
 
             // Limit ShortJumpValue.
-            if (Settings.ShortJumpValue < 0) {
-                Settings.ShortJumpValue = 0;
-            }
-            else if (Settings.ShortJumpValue > 1) {
-                Settings.ShortJumpValue = 1;
-            }
+            //if (Settings.ShortJumpValue < 0) {
+            //    Settings.ShortJumpValue = 0;
+            //}
+            //else if (Settings.ShortJumpValue > 1) {
+            //    Settings.ShortJumpValue = 1;
+            //}
 
             // Limit LongJumpValue.
-            if (Settings.LongJumpValue < 0) {
-                Settings.LongJumpValue = 0;
-            }
-            else if (Settings.LongJumpValue > 1) {
-                Settings.LongJumpValue = 1;
-            }
+            //if (Settings.LongJumpValue < 0) {
+            //    Settings.LongJumpValue = 0;
+            //}
+            //else if (Settings.LongJumpValue > 1) {
+            //    Settings.LongJumpValue = 1;
+            //}
         }
 
         #endregion PRIVATE METHODS

@@ -237,8 +237,8 @@ namespace ATP.SimplePathAnimator.Animator {
         #region ANIMATOR FIELDS
         [SerializeField]
         private string[] iconsSourceDirs = {
-            "/AirTimeProductions/animationpathtools/PathAnimator/Resources/Icons/",
-            "/animationpathtools/PathAnimator/Resources/Icons/"
+            "/AirTimeProductions/animationpathtools/PathAnimatorComponent/Resources/Icons/",
+            "/simplepathanimator/PathAnimatorComponent/Resources/Icons/"
         };
 
         [SerializeField]

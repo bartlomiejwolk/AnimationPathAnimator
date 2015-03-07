@@ -42,9 +42,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private Color moveAllModeColor = Color.red;
 
         [SerializeField]
-        private KeyCode moveAllModeKey = KeyCode.P;
-
-        [SerializeField]
         private KeyCode noneModeKey = KeyCode.Y;
 
         [SerializeField]
@@ -116,10 +113,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         public KeyCode ModKey {
             get { return modKey; }
             set { modKey = value; }
-        }
-
-        public KeyCode MoveAllModeKey {
-            get { return moveAllModeKey; }
         }
 
         public KeyCode NoneModeKey {
@@ -266,12 +259,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         [SerializeField]
         private float MaxAnimationSpeed = 0.3f;
-        [SerializeField]
-        private MovementMode movementMode =
-            MovementMode.MoveSingle;
-
-        private MovementMode movementModeAfterReset =
-            MovementMode.MoveSingle;
 
         [SerializeField]
         private float positionLerpSpeed = 1;
@@ -328,16 +315,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         public HandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
-        }
-
-        public MovementMode MovementMode {
-            get { return movementMode; }
-            set { movementMode = value; }
-        }
-
-        public MovementMode MovementModeAfterReset {
-            get { return movementModeAfterReset; }
-            set { movementModeAfterReset = value; }
         }
         public float PositionLerpSpeed {
             get { return positionLerpSpeed; }

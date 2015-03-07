@@ -76,7 +76,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             DrawRotationModeDropdown();
             DrawHandleModeDropdown();
-            DrawMovementModeDropdown();
             DrawTangentModeDropdown();
             DrawWrapModeDropdown();
 
@@ -353,19 +352,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             serializedObject.Update();
             EditorGUILayout.PropertyField(maxAnimationSpeed);
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawMovementModeDropdown() {
-            Undo.RecordObject(Settings, "Change movement mode.");
-
-            Settings.MovementMode =
-                (MovementMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Movement Mode",
-                        ""),
-                    Settings.MovementMode);
-
-            SceneView.RepaintAll();
         }
 
         private void DrawPathDataAssetField() {
@@ -687,10 +673,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             SceneHandles.DrawMoveSinglePositionsHandles(
                 Script,
                 DrawPositionHandlesCallbackHandler);
-
-            SceneHandles.DrawMoveAllPositionHandles(
-                Script,
-                DrawPositionHandlesCallbackHandler);
         }
 
         private void HandleDrawingRemoveButtons() {
@@ -800,8 +782,11 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             Undo.RecordObject(Script.PathData, "Change path");
 
-            HandleMoveAllMovementMode(moveDelta);
-            HandleMoveSingleHandleMove(movedNodeIndex, position);
+            Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
+            Script.PathData.DistributeTimestamps();
+
+            HandleSmoothTangentMode();
+            HandleLinearTangentMode();
         }
 
         private void DrawRemoveNodeButtonsCallbackHandles(
@@ -869,26 +854,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private void HandleLinearTangentMode() {
             if (Settings.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetNodesLinear();
-            }
-        }
-
-        private void HandleMoveAllMovementMode(Vector3 moveDelta) {
-            if (Settings.MovementMode == MovementMode.MoveAll) {
-                Script.PathData.OffsetNodePositions(moveDelta);
-                Script.PathData.OffsetRotationPathPosition(moveDelta);
-            }
-        }
-
-        private void HandleMoveSingleHandleMove(
-            int movedNodeIndex,
-            Vector3 position) {
-            if (Settings.MovementMode == MovementMode.MoveSingle) {
-
-                Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
-                Script.PathData.DistributeTimestamps();
-
-                HandleSmoothTangentMode();
-                HandleLinearTangentMode();
             }
         }
 

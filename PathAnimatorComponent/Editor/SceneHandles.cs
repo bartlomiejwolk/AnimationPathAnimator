@@ -173,55 +173,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             }
         }
 
-        // TODO Remove animator param. from all methods.
-        public void DrawMoveAllPositionHandles(
-            PathAnimator pathAnimator,
-            Action<int, Vector3, Vector3> callback) {
-
-            if (PathAnimatorSettings.MovementMode !=
-                MovementMode.MoveAll) return;
-
-            // Node global positions.
-            var nodes = pathAnimator.PathData.GetGlobalNodePositions(
-                pathAnimator.ThisTransform);
-
-            // Cap function used to draw handle.
-            Handles.DrawCapFunction capFunction = Handles.CircleCap;
-
-            // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = Settings.MoveAllModeColor;
-
-                // Draw position handle.
-                var newPos = DrawPositionHandle(
-                    nodes[i],
-                    handleColor,
-                    capFunction);
-
-                // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition =
-                        pathAnimator.ThisTransform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition =
-                        pathAnimator.ThisTransform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-                    // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
-                }
-            }
-        }
-
+        // TODO Rename to DrawPositionHandles().
         public void DrawMoveSinglePositionsHandles(PathAnimator pathAnimator,
             Action<int, Vector3, Vector3> callback) {
-
-            if (PathAnimatorSettings.MovementMode !=
-                MovementMode.MoveSingle) return;
 
             // Node global positions.
             var nodes = pathAnimator.PathData.GetGlobalNodePositions(

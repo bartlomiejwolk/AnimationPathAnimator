@@ -252,7 +252,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         private void PathData_PathReset(object sender, EventArgs e) {
             AnimationTimeRatio = 0;
-            Settings.MovementMode = Settings.MovementModeAfterReset;
             UpdateAnimation();
         }
 

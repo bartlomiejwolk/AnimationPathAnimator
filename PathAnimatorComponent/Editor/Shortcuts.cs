@@ -50,10 +50,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 PathAnimator.Settings.UpdateAllKey,
                 () => Settings.UpdateAllMode = !Settings.UpdateAllMode);
 
-            Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.MoveAllModeKey,
-                ToggleMovementMode);
-
             // Short jump forward.
             Utilities.HandleModShortcut(
                 () => {
@@ -132,16 +128,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             //    //Debug.Log(Event.current.modifiers);
             //    Debug.Log("Alt + C");
             //}
-        }
-        private void ToggleMovementMode() {
-            if (Settings.MovementMode ==
-                MovementMode.MoveSingle) {
-
-                Settings.MovementMode = MovementMode.MoveAll;
-            }
-            else {
-                Settings.MovementMode = MovementMode.MoveSingle;
-            }
         }
 
         private float GetNearestBackwardNodeTimestamp() {

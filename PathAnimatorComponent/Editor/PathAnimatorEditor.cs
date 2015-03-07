@@ -83,7 +83,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUIUtility.labelWidth = 180;
 
-            DrawPositionLerpSpeedControl();
+            DrawPositionLerpSpeedSlider();
             DrawRotationSlerpSpeedField();
             DrawForwardPointOffsetField();
 
@@ -400,7 +400,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawPositionLerpSpeedControl() {
+        private void DrawPositionLerpSpeedSlider() {
             SettingsSerObj.Update();
             EditorGUILayout.PropertyField(
                 positionLerpSpeed,

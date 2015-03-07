@@ -236,6 +236,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
         #endregion
         #region ANIMATOR FIELDS
+        private string gizmosSubfolder = "ATP/";
         // TODO Remove.
         [SerializeField]
         private string[] iconsSourceDirs = {
@@ -297,6 +298,11 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private WrapMode wrapMode = WrapMode.ClampForever;
         #endregion
         #region ANIMATOR PROPERTIES
+        public string GizmosSubfolder {
+            get { return gizmosSubfolder; }
+            set { gizmosSubfolder = value; }
+        }
+
         public Texture[] GizmoIcons {
             get { return gizmoIcons; }
             set { gizmoIcons = value; }

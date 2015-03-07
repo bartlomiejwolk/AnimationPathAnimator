@@ -212,7 +212,7 @@ namespace ATP.SimplePathAnimator.Animator {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Other",
+                    "Advanced Settings",
                     ""));
 
             serializedObject.ApplyModifiedProperties();

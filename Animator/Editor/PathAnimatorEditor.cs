@@ -112,14 +112,7 @@ namespace ATP.SimplePathAnimator.Animator {
 
             EditorGUIUtility.labelWidth = 0;
 
-            PathExporter.DrawExportControls();
-
-            EditorGUILayout.Space();
-
-            DrawSettingsAssetField();
-            DrawSkinSelectionControl();
-
-            EditorGUILayout.Space();
+            //DrawShortcutsHelpBox();
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
@@ -127,6 +120,12 @@ namespace ATP.SimplePathAnimator.Animator {
             // Validate inspector settings.
             // Not all inspector controls can be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
+        }
+
+        private void DrawShortcutsHelpBox() {
+            EditorGUILayout.HelpBox(
+                "Check Settings Asset for shortcuts.",
+                MessageType.Info);
         }
 
         private void HandleUndo() {
@@ -224,7 +223,7 @@ namespace ATP.SimplePathAnimator.Animator {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced Settings",
+                    "Other",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -250,10 +249,22 @@ namespace ATP.SimplePathAnimator.Animator {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
+                PathExporter.DrawExportControls();
+
+                EditorGUILayout.Space();
+
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
+
+                EditorGUILayout.Space();
+
                 DrawShortJumpValueField();
                 DrawLongJumpValueField();
+
+                EditorGUILayout.Space();
+
+                DrawSettingsAssetField();
+                DrawSkinSelectionControl();
             }
         }
 

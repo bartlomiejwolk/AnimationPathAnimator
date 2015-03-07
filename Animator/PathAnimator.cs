@@ -5,7 +5,7 @@ using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
-namespace ATP.SimplePathAnimator.Animator {
+namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
     /// <summary>
     ///     Component that allows animating transforms position along predefined

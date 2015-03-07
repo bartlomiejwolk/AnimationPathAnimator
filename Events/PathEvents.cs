@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using ATP.SimplePathAnimator.Animator;
+using ATP.SimplePathAnimator.PathAnimatorComponent;
 
 namespace ATP.SimplePathAnimator.Events {
 

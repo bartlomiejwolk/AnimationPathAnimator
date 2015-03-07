@@ -1,3 +1,3 @@
-namespace ATP.SimplePathAnimator.Animator {
+namespace ATP.SimplePathAnimator.PathAnimatorComponent {
     public enum MovementMode { MoveSingle, MoveAll }
 }

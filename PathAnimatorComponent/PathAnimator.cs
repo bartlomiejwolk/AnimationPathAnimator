@@ -394,6 +394,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
                     AnimationTimeRatio += timeStep * Time.deltaTime;
 
+                    // Pause animation when finished in wrap mode set to Once.
                     if (AnimationTimeRatio > 1
                         && Settings.WrapMode == WrapMode.Once) {
 

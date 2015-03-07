@@ -61,6 +61,60 @@ namespace ATP.SimplePathAnimator.Events {
             DrawEventList();
 
         }
+        private void OnEnable() {
+            Script = (PathEvents) target;
+
+            InitializeSerializedProperties();
+        }
+        private void OnSceneGUI() {
+            InitializeObjectFields();
+
+            // Return if path data is not assigned to the PathAnimator component.
+            if (Script.PathAnimator.PathData == null) return;
+            if (Script.EventsData == null) return;
+
+            // TODO Guard against null Skin.
+            HandleDrawingMethodNames();
+        }
+
+        #endregion
+        #region INSPECTOR
+        private void DrawEventList() {
+            if (nodeEvents == null) return;
+
+            EventsDataSerObj.Update();
+
+            ReorderableListGUI.Title("Events");
+            ReorderableListGUI.ListField(nodeEvents);
+
+            EventsDataSerObj.ApplyModifiedProperties();
+        }
+
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "Settings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        #endregion
+
+        #region METHODS
+        private void InitializeSerializedProperties() {
+
+            if (EventsDataSerObj != null) {
+                nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
+            }
+
+            pathAnimator = serializedObject.FindProperty("pathAnimator");
+            skin = serializedObject.FindProperty("skin");
+            settings = serializedObject.FindProperty("settings");
+        }
 
         /// <summary>
         /// Initialize object fields that may be changed from the inspector.
@@ -83,62 +137,7 @@ namespace ATP.SimplePathAnimator.Events {
                 drawMethodNames = PathEventsSettingsSerObj.FindProperty("drawMethodNames");
             }
         }
-        private void DrawEventList() {
-            if (nodeEvents == null) return;
 
-            EventsDataSerObj.Update();
-
-            ReorderableListGUI.Title("Events");
-            ReorderableListGUI.ListField(nodeEvents);
-
-            EventsDataSerObj.ApplyModifiedProperties();
-        }
-
-        private void OnEnable() {
-            Script = (PathEvents) target;
-
-            InitializeSerializedProperties();
-        }
-
-        private void InitializeSerializedProperties() {
-
-            if (EventsDataSerObj != null) {
-                nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
-            }
-
-            pathAnimator = serializedObject.FindProperty("pathAnimator");
-            skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("settings");
-        }
-
-        private void OnSceneGUI() {
-            InitializeObjectFields();
-
-            // Return if path data is not assigned to the PathAnimator component.
-            if (Script.PathAnimator.PathData == null) return;
-            if (Script.EventsData == null) return;
-
-            // TODO Guard against null Skin.
-            HandleDrawingMethodNames();
-        }
-
-        #endregion
-        #region INSPECTOR
-        private void DrawSettingsAssetField() {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                settings,
-                new GUIContent(
-                    "Settings Asset",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        #endregion
-
-        #region METHODS
 
         private void DrawNodeLabel(
             Vector3 nodePosition,

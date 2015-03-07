@@ -13,7 +13,6 @@ namespace ATP.SimplePathAnimator.Animator {
         [SerializeField]
         private PathAnimatorSettings settings;
         public PathAnimatorSettings Settings {
-            // TODO Replace with Animator.Settings.
             get { return settings; }
             set { settings = value; }
         }

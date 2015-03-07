@@ -14,11 +14,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         public void CopyIconsToGizmosFolder() {
             // Path to Unity Gizmos folder.
-            var gizmosDir = Application.dataPath + "/Gizmos/";
+            var gizmosDir = Application.dataPath + "/Gizmos";
+
+            // Path to ATP folder inside Gizmos.
 
             // Create Asset/Gizmos folder if not exists.
-            if (!Directory.Exists(gizmosDir)) {
-                Directory.CreateDirectory(gizmosDir);
+            if (!Directory.Exists(gizmosDir + "ATP")) {
+                Directory.CreateDirectory(gizmosDir + "ATP");
             }
 
             // Check if settings asset has icons specified.
@@ -30,7 +32,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 var iconPath = AssetDatabase.GetAssetPath(icon);
 
                 // Copy icon to Gizmos folder.
-                AssetDatabase.CopyAsset(iconPath, gizmosDir);
+                AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
             }
         }
     }

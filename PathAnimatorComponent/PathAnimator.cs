@@ -76,18 +76,34 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         AnimatorGizmos AnimatorGizmos { get; set; }
 #endif
 
+        private bool isPlaying;
+
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
         /// <remarks>When it's true, it means that the EaseTime coroutine is running.</remarks>
-        public bool IsPlaying { get; set; }
+        public bool IsPlaying {
+            get { return isPlaying; }
+            set {
+                isPlaying = value;
+                Debug.Log("IsPlaying:" + isPlaying);
+            }
+        }
 
         public PathData PathData {
             get { return pathData; }
             set { pathData = value; }
         }
 
-        public bool Pause { get; set; }
+        private bool pause;
+
+        public bool Pause {
+            get { return pause; }
+            set {
+                pause = value;
+                Debug.Log("Pause: " + pause);
+            }
+        }
 
         public PathAnimatorSettings Settings {
             get { return settings; }
@@ -288,6 +304,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Start animation.
             else {
                 IsPlaying = true;
+                animationTimeRatio = 0;
                 // Start animation.
                 StartEaseTimeCoroutine();
             }
@@ -298,6 +315,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 Debug.LogWarning("Assign Path Asset in the inspector.");
                 return;
             }
+            
+            Debug.Log("StartCoroutine");
+
             // Starting node was reached.
             if (AnimationTimeRatio == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
@@ -310,6 +330,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         public void StopEaseTimeCoroutine() {
             StopCoroutine("EaseTime");
+
+            Debug.Log("StopCoroutine");
 
             // Reset animation.
             IsPlaying = false;
@@ -401,6 +423,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     && AnimationTimeRatio > 1) {
 
                     AnimationTimeRatio = 1;
+                    IsPlaying = false;
+                    // TODO
+                    Debug.Log("Break from coroutine.");
                     break;
                 }
 

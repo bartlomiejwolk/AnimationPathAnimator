@@ -427,6 +427,10 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             AnimatedObjectPath.SetWrapMode(wrapMode);
         }
 
+        public void SetEaseWrapMode (AnimatorWrapMode wrapMode) {
+            EaseCurve.postWrapMode = (WrapMode) wrapMode;
+        }
+
         /// <summary>
         ///     Smooth tangents in all nodes in all animation curves.
         /// </summary>

@@ -133,7 +133,17 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
 
+            // Get decimal part of the timestamp.
+            var baseTime = Mathf.Floor(PathAnimator.AnimationTimeRatio);
+
+            // Increase timestamp value by the decimal base.
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                pathTimestamps[i] += baseTime;
+            }
+
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                //pathTimestamps[i] += baseTime;
+
                 if (pathTimestamps[i] < PathAnimator.AnimationTimeRatio) {
                     return pathTimestamps[i];
                 }
@@ -146,13 +156,21 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private float GetNearestForwardNodeTimestamp() {
             var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
 
+            // Get decimal part of the timestamp.
+            var baseTime = Mathf.Floor(PathAnimator.AnimationTimeRatio);
+
+            // Increase timestamp value by the decimal base.
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                pathTimestamps[i] += baseTime;
+            }
+
             foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > PathAnimator.AnimationTimeRatio)) {
                 return timestamp;
             }
 
             // Return timestamp of the last node.
-            return 1.0f;
+            return baseTime + 1.0f;
         }
 
         #endregion

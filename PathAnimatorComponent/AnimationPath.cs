@@ -213,6 +213,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 		public void SetWrapMode (AnimatorWrapMode wrapMode) {
 		    WrapMode unityWrapMode = WrapMode.Clamp;
 
+            // TODO Use casting instead of switch.
+            // = (WrapMode) wrapMode;
 		    switch (wrapMode) {
 		        case AnimatorWrapMode.Clamp:
                     unityWrapMode = WrapMode.Clamp;

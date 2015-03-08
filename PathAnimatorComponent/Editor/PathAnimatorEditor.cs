@@ -651,13 +651,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private void HandleRotationModeChange() {
             Script.UpdateAnimation();
             Settings.HandleMode = HandleMode.None;
-
-            // Update HandleMode.
-            //if (Settings.RotationMode == RotationMode.Forward
-            //    || Settings.RotationMode == RotationMode.Target) {
-
-            //    Settings.HandleMode = HandleMode.None;
-            //}
         }
 
         #endregion

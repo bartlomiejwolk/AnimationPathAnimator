@@ -66,6 +66,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
                 if (Application.isPlaying && IsPlaying && !Pause) {
                 }
+                // Update animated GO in editor mode.
                 else {
                     UpdateAnimation();
                 }
@@ -238,8 +239,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void Update() {
-            // Animate while animation is not paused.
-            if (Application.isPlaying && !Pause) {
+            // Update animated GO in play mode.
+            if (Application.isPlaying) {
                 Animate();
                 HandleFireNodeReachedEvent();
             }
@@ -304,7 +305,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Start animation.
             else {
                 IsPlaying = true;
-                animationTimeRatio = 0;
+                //AnimationTimeRatio = 0;
                 // Start animation.
                 StartEaseTimeCoroutine();
             }
@@ -324,7 +325,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 OnNodeReached(args);
             }
 
-            // Check for play mode.
             StartCoroutine("EaseTime");
         }
 
@@ -336,7 +336,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Reset animation.
             IsPlaying = false;
             Pause = false;
-            AnimationTimeRatio = 0;
+            //AnimationTimeRatio = 0;
         }
 
         /// <summary>

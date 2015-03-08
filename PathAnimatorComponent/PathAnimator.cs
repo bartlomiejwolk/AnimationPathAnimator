@@ -521,6 +521,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         public void UpdateWrapMode() {
             PathData.SetPathWrapMode(Settings.WrapMode);
+            PathData.SetEaseWrapMode(Settings.WrapMode);
         }
 
         // TODO Remove the globalPosition arg. and create separate method.

@@ -423,7 +423,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
         }
 
-        public void SetWrapMode(AnimatorWrapMode wrapMode) {
+        public void SetPathWrapMode(AnimatorWrapMode wrapMode) {
             AnimatedObjectPath.SetWrapMode(wrapMode);
         }
 

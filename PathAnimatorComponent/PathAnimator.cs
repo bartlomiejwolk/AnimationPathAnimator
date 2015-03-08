@@ -64,7 +64,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             set {
                 animationTimeRatio = value;
 
-                //if (Application.isPlaying && (!IsPlaying || Pause)) {
                 if (Application.isPlaying && IsPlaying && !Pause) {
                 }
                 else {
@@ -521,7 +520,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
 
         public void UpdateWrapMode() {
-            PathData.SetWrapMode(Settings.WrapMode);
+            PathData.SetPathWrapMode(Settings.WrapMode);
         }
 
         // TODO Remove the globalPosition arg. and create separate method.

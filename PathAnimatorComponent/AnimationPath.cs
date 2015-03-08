@@ -252,7 +252,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             points.Clear();
 
             // Fill points array with 3d points.
-            for (var i = 0; i < samplingRate + 1; i++) {
+            for (var i = 0; i < samplingRate; i++) {
                 // Calculate single point.
                 var point = GetVectorAtTime(time);
 
@@ -292,7 +292,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             points.Clear();
 
             // Fill points array with 3d points.
-            for (var i = 0; i < samplingRate + 1; i++) {
+            for (var i = 0; i < samplingRate; i++) {
                 // Calculate single point.
                 var point = GetVectorAtTime(time);
 

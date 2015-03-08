@@ -396,13 +396,11 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     AnimationTimeRatio += timeStep * Time.deltaTime;
                 }
 
-                // Break from animation when finished.
-                if (AnimationTimeRatio > 1) {
+                // Break from animation in Clamp wrap mode.
+                if (Settings.WrapMode == AnimatorWrapMode.Clamp
+                    && AnimationTimeRatio > 1) {
+
                     AnimationTimeRatio = 1;
-
-                    //IsPlaying = false;
-                    //Pause = true;
-
                     break;
                 }
 

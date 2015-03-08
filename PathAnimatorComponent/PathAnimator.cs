@@ -64,12 +64,10 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             set {
                 animationTimeRatio = value;
 
-                // Limit animationTimeRatio in edit mode.
-                if (!Application.isPlaying && animationTimeRatio > 1) {
-                    animationTimeRatio = 1;
+                //if (Application.isPlaying && (!IsPlaying || Pause)) {
+                if (Application.isPlaying && IsPlaying && !Pause) {
                 }
-                if (Application.isPlaying && (!IsPlaying || Pause)) {
-                // Update animation with keys while animation is stopped or paused.
+                else {
                     UpdateAnimation();
                 }
             }
@@ -229,10 +227,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             if (Application.isPlaying && !Pause) {
                 Animate();
                 HandleFireNodeReachedEvent();
-
-                var distToNextPosition = Vector3.Distance(
-                    animatedGO.position,
-                    pathData.GetVectorAtTime(AnimationTimeRatio));
             }
         }
 
@@ -394,20 +388,23 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private IEnumerator EaseTime() {
             while (true) {
                 // If animation is enabled and not paused..
-                if (IsPlaying && !Pause) {
-                    // Ease time.
+                if (!Pause) {
+                    // Get ease value.
                     var timeStep =
                         PathData.GetEaseValueAtTime(AnimationTimeRatio);
 
+                    // Increase AnimationTimeRatio.
                     AnimationTimeRatio += timeStep * Time.deltaTime;
+                }
 
-                    // Pause animation when finished in wrap mode set to Once.
-                    if (AnimationTimeRatio > 1) {
+                // Break from animation when finished.
+                if (AnimationTimeRatio > 1) {
+                    AnimationTimeRatio = 1;
 
-                        AnimationTimeRatio = 1;
-                        IsPlaying = false;
-                        //Pause = true;
-                    }
+                    //IsPlaying = false;
+                    //Pause = true;
+
+                    break;
                 }
 
                 yield return null;

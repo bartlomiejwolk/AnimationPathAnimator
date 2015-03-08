@@ -72,7 +72,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
-            DrawAnimationTimeSlider();
+            DrawAnimationTimeValue();
 
             DrawRotationModeDropdown();
             DrawHandleModeDropdown();
@@ -289,7 +289,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawAnimationTimeSlider() {
+        private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTimeRatio");
 
             var newTimeRatio = EditorGUILayout.Slider(

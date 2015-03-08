@@ -68,14 +68,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 if (!Application.isPlaying && animationTimeRatio > 1) {
                     animationTimeRatio = 1;
                 }
-
-                // Animate while animation is running.
-                if (Application.isPlaying && IsPlaying && !Pause) {
-                    Animate();
-                    HandleFireNodeReachedEvent();
-                }
+                if (Application.isPlaying && (!IsPlaying || Pause)) {
                 // Update animation with keys while animation is stopped or paused.
-                else {
                     UpdateAnimation();
                 }
             }
@@ -228,6 +222,18 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             ThisTransform = GetComponent<Transform>();
 
             UpdateAnimation();
+        }
+
+        private void Update() {
+            // Animate while animation is running and not paused.
+            if (Application.isPlaying && !Pause) {
+                Animate();
+                HandleFireNodeReachedEvent();
+
+                var distToNextPosition = Vector3.Distance(
+                    animatedGO.position,
+                    pathData.GetVectorAtTime(AnimationTimeRatio));
+            }
         }
 
         #endregion UNITY MESSAGES
@@ -388,7 +394,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private IEnumerator EaseTime() {
             while (true) {
                 // If animation is enabled and not paused..
-                if (!Pause) {
+                if (IsPlaying && !Pause) {
                     // Ease time.
                     var timeStep =
                         PathData.GetEaseValueAtTime(AnimationTimeRatio);
@@ -396,11 +402,11 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     AnimationTimeRatio += timeStep * Time.deltaTime;
 
                     // Pause animation when finished in wrap mode set to Once.
-                    if (AnimationTimeRatio > 1
-                        && Settings.WrapMode == WrapMode.Once) {
+                    if (AnimationTimeRatio > 1) {
 
                         AnimationTimeRatio = 1;
-                        Pause = true;
+                        IsPlaying = false;
+                        //Pause = true;
                     }
                 }
 

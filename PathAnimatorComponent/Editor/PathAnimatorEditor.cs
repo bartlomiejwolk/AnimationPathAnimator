@@ -292,6 +292,45 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTimeRatio");
 
+            float newTimeRatio = 0;
+
+            switch (Settings.WrapMode) {
+                case WrapMode.Default:
+                    newTimeRatio = DrawAnimationTimeSlider();
+                    break;
+                case WrapMode.Clamp:
+                    newTimeRatio = DrawAnimationTimeSlider();
+                    break;
+                case WrapMode.Loop:
+                    newTimeRatio = DrawAnimationTimeFloatField();
+                    break;
+                case WrapMode.PingPong:
+                    newTimeRatio = DrawAnimationTimeFloatField();
+                    break;
+                case WrapMode.ClampForever:
+                    newTimeRatio = DrawAnimationTimeSlider();
+                    break;
+            }
+
+            // Update AnimationTimeRatio only when value was changed.
+            if (Math.Abs(newTimeRatio - Script.AnimationTimeRatio)
+                > GlobalConstants.FloatPrecision) {
+
+                Script.AnimationTimeRatio = newTimeRatio;
+            }
+        }
+
+        private float DrawAnimationTimeFloatField() {
+            var newTimeRatio = EditorGUILayout.FloatField(
+                new GUIContent(
+                    "Animation Time",
+                    ""),
+                Script.AnimationTimeRatio);
+
+            return newTimeRatio;
+        }
+
+        private float DrawAnimationTimeSlider() {
             var newTimeRatio = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
@@ -300,12 +339,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 0,
                 1);
 
-            // Update AnimationTimeRatio only when value was changed.
-            if (Math.Abs(newTimeRatio - Script.AnimationTimeRatio)
-                > GlobalConstants.FloatPrecision) {
-
-                Script.AnimationTimeRatio = newTimeRatio;
-            }
+            return newTimeRatio;
         }
 
         private void DrawAutoPlayControl() {

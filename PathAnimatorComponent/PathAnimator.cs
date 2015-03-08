@@ -238,7 +238,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void Update() {
-            // Animate while animation is running and not paused.
+            // Animate while animation is not paused.
             if (Application.isPlaying && !Pause) {
                 Animate();
                 HandleFireNodeReachedEvent();

@@ -629,6 +629,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             // Remember current RotationMode.
             var prevRotationMode = Settings.RotationMode;
+
             // Draw RotationMode dropdown.
             Settings.RotationMode =
                 (RotationMode) EditorGUILayout.EnumPopup(
@@ -640,8 +641,23 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // TODO Execute it as a callback.
             // If value changed, update animated GO in the scene.
             if (Settings.RotationMode != prevRotationMode) {
-                Script.UpdateAnimation();
+                HandleRotationModeChange();
             }
+        }
+
+        /// <summary>
+        /// Called on rotation mode change.
+        /// </summary>
+        private void HandleRotationModeChange() {
+            Script.UpdateAnimation();
+            Settings.HandleMode = HandleMode.None;
+
+            // Update HandleMode.
+            //if (Settings.RotationMode == RotationMode.Forward
+            //    || Settings.RotationMode == RotationMode.Target) {
+
+            //    Settings.HandleMode = HandleMode.None;
+            //}
         }
 
         #endregion

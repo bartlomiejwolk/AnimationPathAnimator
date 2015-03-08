@@ -133,7 +133,17 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
 
+            // Get decimal part of the timestamp.
+            var baseTime = Mathf.Floor(PathAnimator.AnimationTimeRatio);
+
+            // Increase timestamp value by the decimal base.
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                pathTimestamps[i] += baseTime;
+            }
+
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                //pathTimestamps[i] += baseTime;
+
                 if (pathTimestamps[i] < PathAnimator.AnimationTimeRatio) {
                     return pathTimestamps[i];
                 }

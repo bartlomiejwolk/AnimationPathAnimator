@@ -210,9 +210,23 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             }
         }
 
-		public void SetWrapMode (WrapMode wrapMode) {
+		public void SetWrapMode (AnimatorWrapMode wrapMode) {
+		    WrapMode unityWrapMode = WrapMode.Clamp;
+
+		    switch (wrapMode) {
+		        case AnimatorWrapMode.Clamp:
+                    unityWrapMode = WrapMode.Clamp;
+		            break;
+                case AnimatorWrapMode.Loop:
+                    unityWrapMode = WrapMode.Loop;
+		            break;
+                case AnimatorWrapMode.PingPong:
+		            unityWrapMode = WrapMode.PingPong;
+		            break;
+		    }
+
 			foreach (var curve in curves) {
-				curve.postWrapMode = wrapMode;
+				curve.postWrapMode = unityWrapMode;
 			}
 		}
 

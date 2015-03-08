@@ -279,7 +279,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private bool updateAllMode;
 
         [SerializeField]
-        private WrapMode wrapMode = WrapMode.ClampForever;
+        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
         #endregion
         #region ANIMATOR PROPERTIES
         public string GizmosSubfolder {
@@ -341,7 +341,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             set { updateAllMode = value; }
         }
 
-        public WrapMode WrapMode {
+        public AnimatorWrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
         }

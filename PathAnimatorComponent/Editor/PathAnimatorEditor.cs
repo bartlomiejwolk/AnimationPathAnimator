@@ -295,20 +295,14 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             float newTimeRatio = 0;
 
             switch (Settings.WrapMode) {
-                case WrapMode.Default:
+                case AnimatorWrapMode.Clamp:
                     newTimeRatio = DrawAnimationTimeSlider();
                     break;
-                case WrapMode.Clamp:
-                    newTimeRatio = DrawAnimationTimeSlider();
-                    break;
-                case WrapMode.Loop:
+                case AnimatorWrapMode.Loop:
                     newTimeRatio = DrawAnimationTimeFloatField();
                     break;
-                case WrapMode.PingPong:
+                case AnimatorWrapMode.PingPong:
                     newTimeRatio = DrawAnimationTimeFloatField();
-                    break;
-                case WrapMode.ClampForever:
-                    newTimeRatio = DrawAnimationTimeSlider();
                     break;
             }
 
@@ -545,7 +539,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void DrawWrapModeDropdown() {
-            Settings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+            Settings.WrapMode = (AnimatorWrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),

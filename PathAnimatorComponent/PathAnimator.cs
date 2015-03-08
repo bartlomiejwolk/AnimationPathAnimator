@@ -174,6 +174,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             if (Settings.RotationMode == RotationMode.Target
                 && TargetGO != null) {
+
                 AnimatorGizmos.DrawTargetIcon(TargetGO.position);
             }
 

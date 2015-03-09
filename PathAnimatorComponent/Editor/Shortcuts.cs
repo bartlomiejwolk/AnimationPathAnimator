@@ -54,9 +54,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
-                        PathAnimator.AnimationTimeRatio + Settings.ShortJumpValue;
+                        PathAnimator.AnimationTime + Settings.ShortJumpValue;
 
-                    PathAnimator.AnimationTimeRatio =
+                    PathAnimator.AnimationTime =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 PathAnimator.Settings.ShortJumpForwardKey,
@@ -66,9 +66,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
-                        PathAnimator.AnimationTimeRatio - Settings.ShortJumpValue;
+                        PathAnimator.AnimationTime - Settings.ShortJumpValue;
 
-                    PathAnimator.AnimationTimeRatio =
+                    PathAnimator.AnimationTime =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 PathAnimator.Settings.ShortJumpBackwardKey,
@@ -77,38 +77,38 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Long jump forward.
             Utilities.HandleUnmodShortcut(
                 PathAnimator.Settings.LongJumpForwardKey,
-                () => PathAnimator.AnimationTimeRatio +=
+                () => PathAnimator.AnimationTime +=
                     PathAnimator.Settings.LongJumpValue);
 
             // Long jump backward.
             Utilities.HandleUnmodShortcut(
                 PathAnimator.Settings.LongJumpBackwardKey,
-                () => PathAnimator.AnimationTimeRatio -=
+                () => PathAnimator.AnimationTime -=
                     PathAnimator.Settings.LongJumpValue);
 
             // Jump to next node.
             Utilities.HandleUnmodShortcut(
                 PathAnimator.Settings.JumpToNextNodeKey,
-                () => PathAnimator.AnimationTimeRatio =
+                () => PathAnimator.AnimationTime =
                     GetNearestForwardNodeTimestamp());
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
                 // TODO Replace Animator.Settings with Settings.
                 PathAnimator.Settings.JumpToPreviousNodeKey,
-                () => PathAnimator.AnimationTimeRatio =
+                () => PathAnimator.AnimationTime =
                     GetNearestBackwardNodeTimestamp());
 
             // Jump to start.
             Utilities.HandleModShortcut(
-                () => PathAnimator.AnimationTimeRatio = 0,
+                () => PathAnimator.AnimationTime = 0,
                 PathAnimator.Settings.JumpToStartKey,
                 //ModKeyPressed);
                 Event.current.alt);
 
             // Jump to end.
             Utilities.HandleModShortcut(
-                () => PathAnimator.AnimationTimeRatio = 1,
+                () => PathAnimator.AnimationTime = 1,
                 PathAnimator.Settings.JumpToEndKey,
                 //ModKeyPressed);
                 Event.current.alt);
@@ -134,7 +134,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
 
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < PathAnimator.AnimationTimeRatio) {
+                if (pathTimestamps[i] < PathAnimator.AnimationTime) {
                     return pathTimestamps[i];
                 }
             }
@@ -147,7 +147,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
 
             foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > PathAnimator.AnimationTimeRatio)) {
+                .Where(timestamp => timestamp > PathAnimator.AnimationTime)) {
                 return timestamp;
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -35,7 +36,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         /// Current play time represented as a number between 0 and 1.
         [SerializeField]
-        private float animationTimeRatio;
+        private float animationTime;
 
         //[SerializeField]
         //private AnimatorGizmos animatorGizmos;
@@ -59,10 +60,10 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         #region PROPERTIES
 
-        public float AnimationTimeRatio {
-            get { return animationTimeRatio; }
+        public float AnimationTime {
+            get { return animationTime; }
             set {
-                animationTimeRatio = value;
+                animationTime = value;
 
                 if (Application.isPlaying && IsPlaying && !Pause) {
                 }
@@ -82,7 +83,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
-        /// <remarks>When it's true, it means that the EaseTime coroutine is running.</remarks>
+        /// <remarks>When it's true, it means that the HandleEaseTime coroutine is running.</remarks>
         public bool IsPlaying {
             get { return isPlaying; }
             set {
@@ -197,12 +198,12 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 AnimatorGizmos.DrawCurrentRotationPointGizmo(
                     PathData,
                     transform,
-                    AnimationTimeRatio);
+                    AnimationTime);
 
                 AnimatorGizmos.DrawRotationPointGizmos(
                     PathData,
                     transform,
-                    AnimationTimeRatio);
+                    AnimationTime);
             }
 
             AnimatorGizmos.DrawAnimationCurve(PathData, transform);
@@ -268,7 +269,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void PathData_PathReset(object sender, EventArgs e) {
-            AnimationTimeRatio = 0;
+            AnimationTime = 0;
             UpdateAnimation();
         }
 
@@ -305,7 +306,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Start animation.
             else {
                 IsPlaying = true;
-                //AnimationTimeRatio = 0;
+                //AnimationTime = 0;
                 // Start animation.
                 StartEaseTimeCoroutine();
             }
@@ -320,28 +321,26 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             Debug.Log("StartCoroutine");
 
             // Starting node was reached.
-            if (AnimationTimeRatio == 0) {
+            if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
                 OnNodeReached(args);
             }
 
-            StartCoroutine("EaseTime");
+            StartCoroutine("HandleEaseTime");
         }
 
         public void StopEaseTimeCoroutine() {
-            StopCoroutine("EaseTime");
+            StopCoroutine("HandleEaseTime");
 
             Debug.Log("StopCoroutine");
 
             // Reset animation.
-            IsPlaying = false;
-            Pause = false;
-            //AnimationTimeRatio = 0;
+            //AnimationTime = 0;
         }
 
         /// <summary>
         ///     Update animatedGO position, rotation and tilting based on current
-        ///     AnimationTimeRatio.
+        ///     AnimationTime.
         /// </summary>
         /// <remarks>
         ///     Used to update animatedGO with keys, in play mode.
@@ -359,7 +358,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             if (AnimatedGO == null) return;
 
             var localPosAtTime =
-                PathData.GetVectorAtTime(AnimationTimeRatio);
+                PathData.GetVectorAtTime(AnimationTime);
 
             var globalPosAtTime =
                 ThisTransform.TransformPoint(localPosAtTime);
@@ -399,43 +398,91 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Get current animatedGO rotation.
             var eulerAngles = AnimatedGO.rotation.eulerAngles;
             // Get rotation from tiltingCurve.
-            var zRotation = PathData.GetTiltingValueAtTime(AnimationTimeRatio);
+            var zRotation = PathData.GetTiltingValueAtTime(AnimationTime);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
             // Update animatedGO rotation.
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         }
 
-        private IEnumerator EaseTime() {
+        private IEnumerator HandleEaseTime() {
+            IsPlaying = true;
+            Pause = false;
+
+            var reverse = false;
+
             while (true) {
-                // If animation is enabled and not paused..
+                // If animation is not paused..
                 if (!Pause) {
-                    // Get ease value.
-                    var timeStep =
-                        PathData.GetEaseValueAtTime(AnimationTimeRatio);
+                    UpdateAnimationTime(reverse);
 
-                    // Increase AnimationTimeRatio.
-                    AnimationTimeRatio += timeStep * Time.deltaTime;
+                    HandleClampWrapMode();
+                    HandleLoopWrapMode();
+                    HandlePingPongWrapMode(ref reverse);
                 }
 
-                // Break from animation in Clamp wrap mode.
-                if (Settings.WrapMode == AnimatorWrapMode.Clamp
-                    && AnimationTimeRatio > 1) {
-
-                    AnimationTimeRatio = 1;
-                    IsPlaying = false;
-                    // TODO
-                    Debug.Log("Break from coroutine.");
-                    break;
-                }
+                if (!IsPlaying) break;
 
                 yield return null;
             }
         }
 
+        private void UpdateAnimationTime(bool reverse) {
+            // Get ease value.
+            var timeStep =
+                PathData.GetEaseValueAtTime(AnimationTime);
+
+            if (reverse) {
+                // Increase animation time.
+                AnimationTime -= timeStep * Time.deltaTime;
+            }
+            else {
+                // Decrease animation time.
+                AnimationTime += timeStep * Time.deltaTime;
+            }
+        }
+
+        private void HandleClampWrapMode() {
+            // Break from animation in Clamp wrap mode.
+            if (AnimationTime > 1
+                && Settings.WrapMode == AnimatorWrapMode.Clamp) {
+
+                AnimationTime = 1;
+                IsPlaying = false;
+
+                // TODO
+                Debug.Log("Break from coroutine.");
+
+                //break;
+            }
+        }
+
+        private void HandleLoopWrapMode() {
+
+            if (AnimationTime > 1
+                && Settings.WrapMode == AnimatorWrapMode.Loop) {
+
+                AnimationTime = 0;
+            }
+        }
+
+        private void HandlePingPongWrapMode(ref bool reverse) {
+            if (AnimationTime > 1
+                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+
+                reverse = true;
+            }
+
+            if (AnimationTime < 0
+                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+
+                reverse = false;
+            }
+        }
+
         private void RotateObjectWithAnimationCurves() {
             var lookAtTarget =
-                PathData.GetRotationAtTime(AnimationTimeRatio);
+                PathData.GetRotationAtTime(AnimationTime);
             // Convert target position to global coordinates.
             var lookAtTargetGlobal = ThisTransform.TransformPoint(lookAtTarget);
 
@@ -473,7 +520,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private void UpdateAnimatedGOPosition() {
             // Get animatedGO position at current animation time.
             var positionAtTimestamp =
-                PathData.GetVectorAtTime(AnimationTimeRatio);
+                PathData.GetVectorAtTime(AnimationTime);
 
             var globalPositionAtTimestamp =
                 ThisTransform.TransformPoint(positionAtTimestamp);
@@ -496,7 +543,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 case RotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
-                        PathData.GetRotationValueAtTime(AnimationTimeRatio);
+                        PathData.GetRotationValueAtTime(AnimationTime);
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =
@@ -524,24 +571,25 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Get path timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
 
-            // Compare current AnimationTimeRatio to node timestamps.
+            // Compare current AnimationTime to node timestamps.
             var index = Array.FindIndex(
                 nodeTimestamps,
-                x => Math.Abs(x - AnimationTimeRatio)
+                x => Math.Abs(x - AnimationTime)
                      < GlobalConstants.FloatPrecision);
 
-            // Return if current AnimationTimeRatio is not equal to any node
+            // Return if current AnimationTime is not equal to any node
             // timestamp.
             if (index < 0) return;
 
             // Create event args.
-            var args = new NodeReachedEventArgs(index, AnimationTimeRatio);
+            var args = new NodeReachedEventArgs(index, AnimationTime);
 
             // Fire event.
             OnNodeReached(args);
         }
 
 
+        // TODO Remove.
         public void UpdateWrapMode() {
             PathData.SetPathWrapMode(Settings.WrapMode);
             PathData.SetEaseWrapMode(Settings.WrapMode);
@@ -552,7 +600,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Timestamp offset of the forward point.
             var forwardPointDelta = Settings.ForwardPointOffset;
             // Forward point timestamp.
-            var forwardPointTimestamp = AnimationTimeRatio + forwardPointDelta;
+            var forwardPointTimestamp = AnimationTime + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
 
             return localPosition;

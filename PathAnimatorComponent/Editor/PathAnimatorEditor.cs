@@ -166,7 +166,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             Shortcuts.HandleShortcuts();
 
-            Script.UpdateWrapMode();
+            //Script.UpdateWrapMode();
 
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
@@ -290,27 +290,17 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void DrawAnimationTimeValue() {
-            Undo.RecordObject(target, "Update AnimationTimeRatio");
+            Undo.RecordObject(target, "Update AnimationTime");
 
             float newTimeRatio = 0;
 
-            switch (Settings.WrapMode) {
-                case AnimatorWrapMode.Clamp:
-                    newTimeRatio = DrawAnimationTimeSlider();
-                    break;
-                case AnimatorWrapMode.Loop:
-                    newTimeRatio = DrawAnimationTimeFloatField();
-                    break;
-                case AnimatorWrapMode.PingPong:
-                    newTimeRatio = DrawAnimationTimeFloatField();
-                    break;
-            }
+            newTimeRatio = DrawAnimationTimeSlider();
 
-            // Update AnimationTimeRatio only when value was changed.
-            if (Math.Abs(newTimeRatio - Script.AnimationTimeRatio)
+            // Update AnimationTime only when value was changed.
+            if (Math.Abs(newTimeRatio - Script.AnimationTime)
                 > GlobalConstants.FloatPrecision) {
 
-                Script.AnimationTimeRatio = newTimeRatio;
+                Script.AnimationTime = newTimeRatio;
             }
         }
 
@@ -319,7 +309,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 new GUIContent(
                     "Animation Time",
                     ""),
-                Script.AnimationTimeRatio);
+                Script.AnimationTime);
 
             return newTimeRatio;
         }
@@ -329,7 +319,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 new GUIContent(
                     "Animation Time",
                     "Current animation time."),
-                Script.AnimationTimeRatio,
+                Script.AnimationTime,
                 0,
                 1);
 
@@ -744,7 +734,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private void HandleDrawingRotationHandle() {
             if (Settings.HandleMode != HandleMode.Rotation) return;
 
-            var currentAnimationTime = Script.AnimationTimeRatio;
+            var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
                 Script.PathData.GetRotationAtTime(currentAnimationTime);
             var nodeTimestamps = Script.PathData.GetPathTimestamps();

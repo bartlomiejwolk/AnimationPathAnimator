@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -407,6 +408,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private IEnumerator EaseTime() {
+            var reverse = false;
+
             while (true) {
                 // If animation is enabled and not paused..
                 if (!Pause) {
@@ -414,27 +417,45 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     var timeStep =
                         PathData.GetEaseValueAtTime(AnimationTimeRatio);
 
-                    // Increase AnimationTimeRatio.
-                    AnimationTimeRatio += timeStep * Time.deltaTime;
-                }
+                    if (reverse) {
+                        // Increase AnimationTimeRatio.
+                        AnimationTimeRatio -= timeStep * Time.deltaTime;
+                    }
+                    else {
+                        AnimationTimeRatio += timeStep * Time.deltaTime;
+                    }
 
-                // Break from animation in Clamp wrap mode.
-                if (AnimationTimeRatio > 1
-                    && Settings.WrapMode == AnimatorWrapMode.Clamp) {
+                    // Break from animation in Clamp wrap mode.
+                    if (AnimationTimeRatio > 1
+                        && Settings.WrapMode == AnimatorWrapMode.Clamp) {
 
-                    AnimationTimeRatio = 1;
-                    IsPlaying = false;
+                        AnimationTimeRatio = 1;
+                        IsPlaying = false;
 
-                    // TODO
-                    Debug.Log("Break from coroutine.");
+                        // TODO
+                        Debug.Log("Break from coroutine.");
 
-                    break;
-                }
+                        break;
+                    }
 
-                if (AnimationTimeRatio > 1
-                    && Settings.WrapMode == AnimatorWrapMode.Loop) {
+                    if (AnimationTimeRatio > 1
+                        && Settings.WrapMode == AnimatorWrapMode.Loop) {
 
-                    AnimationTimeRatio = 0;
+                        AnimationTimeRatio = 0;
+                    }
+
+                    if (AnimationTimeRatio > 1
+                        && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+
+                        reverse = true;
+                    }
+
+                    if (AnimationTimeRatio < 0
+                        && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+
+                        reverse = false;
+                    }
+
                 }
 
                 yield return null;

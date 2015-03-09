@@ -294,17 +294,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             float newTimeRatio = 0;
 
-            switch (Settings.WrapMode) {
-                case AnimatorWrapMode.Clamp:
-                    newTimeRatio = DrawAnimationTimeSlider();
-                    break;
-                case AnimatorWrapMode.Loop:
-                    newTimeRatio = DrawAnimationTimeFloatField();
-                    break;
-                case AnimatorWrapMode.PingPong:
-                    newTimeRatio = DrawAnimationTimeFloatField();
-                    break;
-            }
+            newTimeRatio = DrawAnimationTimeSlider();
 
             // Update AnimationTime only when value was changed.
             if (Math.Abs(newTimeRatio - Script.AnimationTime)

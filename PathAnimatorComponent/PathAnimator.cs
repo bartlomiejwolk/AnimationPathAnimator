@@ -330,7 +330,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Start animation.
             else {
                 IsPlaying = true;
-                //AnimationTime = 0;
+                AnimationTime = 0;
                 // Start animation.
                 StartEaseTimeCoroutine();
             }

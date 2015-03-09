@@ -99,6 +99,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         private bool pause;
 
+        private bool animatedObjectUpdateEnabled;
+
         public bool Pause {
             get { return pause; }
             set {
@@ -130,6 +132,12 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         public Transform AnimatedGO {
             get { return animatedGO; }
         }
+
+        public bool AnimatedObjectUpdateEnabled {
+            get { return animatedObjectUpdateEnabled; }
+            set { animatedObjectUpdateEnabled = value; }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -240,10 +248,25 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void Update() {
+            HandleUpdatingAnimGOInPlayMode();
+        }
+
+        private void HandleUpdatingAnimGOInPlayMode() {
             // Update animated GO in play mode.
-            if (Application.isPlaying) {
+            if (Application.isPlaying && AnimatedObjectUpdateEnabled) {
+                var prevPosition = animatedGO.position;
+
                 Animate();
                 HandleFireNodeReachedEvent();
+
+                if (Utilities.V3Equal(
+                    prevPosition,
+                    animatedGO.position,
+                    // TODO Add to global constants.
+                    0.00000001f)) {
+
+                    //AnimatedObjectUpdateEnabled = false;
+                }
             }
         }
 
@@ -408,6 +431,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private IEnumerator HandleEaseTime() {
             IsPlaying = true;
             Pause = false;
+            AnimatedObjectUpdateEnabled = true;
 
             var reverse = false;
 
@@ -440,6 +464,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 // Decrease animation time.
                 AnimationTime += timeStep * Time.deltaTime;
             }
+            Debug.Log("");
         }
 
         private void HandleClampWrapMode() {

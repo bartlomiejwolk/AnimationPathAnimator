@@ -110,6 +110,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             for (int i = 0; i < points.Count; i++) {
                 points[i] = transform.TransformPoint(points[i]);
             }
-        } 
+        }
+        public static bool V3Equal(Vector3 a, Vector3 b, float precision) {
+            return Vector3.SqrMagnitude(a - b) < precision;
+        }
     }
 }

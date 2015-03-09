@@ -356,11 +356,15 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         [SerializeField]
         private float arcHandleRadius = 0.6f;
 
+        private float initialArcValue = 15f;
+
         [SerializeField]
         private int defaultLabelHeight = 10;
 
         [SerializeField]
         private int defaultLabelWidth = 30;
+
+        private int easeValueLabelOffsetY = -25;
 
         // TODO Remove.
         [SerializeField]
@@ -371,8 +375,15 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         [SerializeField]
         private int removeButtonH = 44;
+        private int easeValueLabelOffsetX = -20;
+
         [SerializeField]
         private int removeButtonV = 10;
+
+        private string updateAllLabelText = "A";
+
+        private int updateAllLabelOffsetY = -25;
+        private int updateAllLabelOffsetX = 10;
         [SerializeField]
         private float scaleHandleSize = 1.5f;
 
@@ -404,20 +415,14 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             get { return defaultLabelWidth; }
             set { defaultLabelWidth = value; }
         }
-
-        private int easeValueLabelOffsetX = -20;
         public int EaseValueLabelOffsetX {
             get { return easeValueLabelOffsetX; }
             set { easeValueLabelOffsetX = value; }
         }
-
-        private int easeValueLabelOffsetY = -25;
         public int EaseValueLabelOffsetY {
             get { return easeValueLabelOffsetY; }
             set { easeValueLabelOffsetY = value; }
         }
-
-        private float initialArcValue = 15f;
         public float InitialArcValue {
             get { return initialArcValue; }
             set { initialArcValue = value; }
@@ -454,21 +459,14 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             get { return scaleHandleSize; }
             set { scaleHandleSize = value; }
         }
-
-        private int updateAllLabelOffsetX = 10;
-
         public int UpdateAllLabelOffsetX {
             get { return updateAllLabelOffsetX; }
             set { updateAllLabelOffsetX = value; }
         }
-
-        private int updateAllLabelOffsetY = -25;
         public int UpdateAllLabelOffsetY {
             get { return updateAllLabelOffsetY; }
             set { updateAllLabelOffsetY = value; }
         }
-
-        private string updateAllLabelText = "A";
         public string UpdateAllLabelText {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }

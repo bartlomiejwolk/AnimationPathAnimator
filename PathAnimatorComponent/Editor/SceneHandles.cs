@@ -340,7 +340,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 var newPointLocalPosition =
                     script.transform.InverseTransformPoint(newGlobalPosition);
 
-                callback(script.AnimationTimeRatio, newPointLocalPosition);
+                callback(script.AnimationTime, newPointLocalPosition);
             }
         }
 

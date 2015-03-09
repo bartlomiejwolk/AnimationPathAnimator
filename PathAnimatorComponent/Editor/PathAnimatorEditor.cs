@@ -75,7 +75,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             EditorGUILayout.Space();
 
 
-            GUILayout.Label("Tools", EditorStyles.boldLabel);
+            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             DrawHandleModeDropdown();
             DrawTangentModeDropdown();

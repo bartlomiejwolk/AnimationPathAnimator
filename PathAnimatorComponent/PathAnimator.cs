@@ -261,7 +261,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private void HandleUpdatingAnimGOInPlayMode() {
             // Update animated GO in play mode.
             if (Application.isPlaying && AnimatedObjectUpdateEnabled) {
-                var prevPosition = animatedGO.position;
+                var prevAnimGOPosition = animatedGO.position;
 
                 Debug.Log("animate go");
 
@@ -269,7 +269,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 HandleFireNodeReachedEvent();
 
                 if (Utilities.V3Equal(
-                    prevPosition,
+                    prevAnimGOPosition,
                     animatedGO.position,
                     // TODO Add to global constants.
                     //0.00000001f)) {

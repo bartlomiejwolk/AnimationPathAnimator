@@ -83,7 +83,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
-        /// <remarks>When it's true, it means that the EaseTime coroutine is running.</remarks>
+        /// <remarks>When it's true, it means that the HandleEaseTime coroutine is running.</remarks>
         public bool IsPlaying {
             get { return isPlaying; }
             set {
@@ -326,17 +326,15 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 OnNodeReached(args);
             }
 
-            StartCoroutine("EaseTime");
+            StartCoroutine("HandleEaseTime");
         }
 
         public void StopEaseTimeCoroutine() {
-            StopCoroutine("EaseTime");
+            StopCoroutine("HandleEaseTime");
 
             Debug.Log("StopCoroutine");
 
             // Reset animation.
-            IsPlaying = false;
-            Pause = false;
             //AnimationTimeRatio = 0;
         }
 
@@ -407,48 +405,66 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         }
 
-        private IEnumerator EaseTime() {
+        private IEnumerator HandleEaseTime() {
+            IsPlaying = true;
+            Pause = false;
+
             var reverse = false;
 
             while (true) {
                 // If animation is enabled and not paused..
                 if (!Pause) {
-                    // Get ease value.
-                    var timeStep =
-                        PathData.GetEaseValueAtTime(AnimationTimeRatio);
+                    UpdateAnimationTime(reverse);
 
-                    if (reverse) {
-                        // Increase AnimationTimeRatio.
-                        AnimationTimeRatio -= timeStep * Time.deltaTime;
-                    }
-                    else {
-                        AnimationTimeRatio += timeStep * Time.deltaTime;
-                    }
-
-                    // Break from animation in Clamp wrap mode.
-                    if (AnimationTimeRatio > 1
-                        && Settings.WrapMode == AnimatorWrapMode.Clamp) {
-
-                        AnimationTimeRatio = 1;
-                        IsPlaying = false;
-
-                        // TODO
-                        Debug.Log("Break from coroutine.");
-
-                        break;
-                    }
-
-                    if (AnimationTimeRatio > 1
-                        && Settings.WrapMode == AnimatorWrapMode.Loop) {
-
-                        AnimationTimeRatio = 0;
-                    }
-
+                    HandleClampWrapMode();
+                    HandleLoopWrapMode();
                     HandlePingPongWrapMode(ref reverse);
 
                 }
 
+                if (!IsPlaying) break;
+
                 yield return null;
+            }
+        }
+
+        private void UpdateAnimationTime(bool reverse) {
+
+// Get ease value.
+            var timeStep =
+                PathData.GetEaseValueAtTime(AnimationTimeRatio);
+
+            if (reverse) {
+                // Increase AnimationTimeRatio.
+                AnimationTimeRatio -= timeStep * Time.deltaTime;
+            }
+            else {
+                AnimationTimeRatio += timeStep * Time.deltaTime;
+            }
+        }
+
+        private void HandleClampWrapMode() {
+
+// Break from animation in Clamp wrap mode.
+            if (AnimationTimeRatio > 1
+                && Settings.WrapMode == AnimatorWrapMode.Clamp) {
+
+                AnimationTimeRatio = 1;
+                IsPlaying = false;
+
+                // TODO
+                Debug.Log("Break from coroutine.");
+
+                //break;
+            }
+        }
+
+        private void HandleLoopWrapMode() {
+
+            if (AnimationTimeRatio > 1
+                && Settings.WrapMode == AnimatorWrapMode.Loop) {
+
+                AnimationTimeRatio = 0;
             }
         }
 

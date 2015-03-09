@@ -373,6 +373,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private int removeButtonV = 10;
         [SerializeField]
         private float scaleHandleSize = 1.5f;
+
+        [SerializeField]
+        private Color rotationHandleColor = Color.magenta;
         #endregion
         #region HANDLES PROPERTIES
         public int AddButtonH {
@@ -453,6 +456,12 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         public string UpdateAllLabelText {
             get { return "A"; }
         }
+
+        public Color RotationHandleColor {
+            get { return rotationHandleColor; }
+            set { rotationHandleColor = value; }
+        }
+
         #endregion
     }
 

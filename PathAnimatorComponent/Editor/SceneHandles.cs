@@ -325,6 +325,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             var rotationPointGlobalPos =
                 script.transform.TransformPoint(rotationPointPosition);
 
+            // Set handle color.
+            Handles.color = Settings.RotationHandleColor;
+
             // Draw node's handle.
             var newGlobalPosition = Handles.FreeMoveHandle(
                 rotationPointGlobalPos,

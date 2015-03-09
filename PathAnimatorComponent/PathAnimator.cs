@@ -265,6 +265,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     // TODO Add to global constants.
                     0.00000001f)) {
 
+                    // TODO Implement.
                     //AnimatedObjectUpdateEnabled = false;
                 }
             }

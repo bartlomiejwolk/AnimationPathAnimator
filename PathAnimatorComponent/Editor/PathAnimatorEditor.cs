@@ -81,6 +81,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
+            DrawForwardPointOffsetSlider();
+
             DrawPositionSpeedSlider();
             
             EditorGUIUtility.labelWidth = 208;
@@ -88,8 +90,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             DrawRotationSpeedField();
 
             EditorGUIUtility.labelWidth = 0;
-
-            DrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 

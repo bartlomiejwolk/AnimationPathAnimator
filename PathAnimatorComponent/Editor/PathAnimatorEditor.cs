@@ -157,6 +157,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
 
+            // Return is settings asset is not assigned in the inspector.
             if (Settings == null) return;
 
             // Disable interaction with background scene elements.
@@ -177,6 +178,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             HandleDrawingRotationHandle();
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
+
+            // Repaint inspector if any key was pressed.
+            // Inspector needs to be redrawn after option is changed
+            // with keyboard shortcut.
+            if (Event.current.type == EventType.keyUp) {
+                Repaint();
+            }
         }
         #endregion UNITY MESSAGES
 

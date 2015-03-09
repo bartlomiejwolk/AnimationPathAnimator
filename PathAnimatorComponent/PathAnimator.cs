@@ -135,7 +135,10 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
         public bool AnimatedObjectUpdateEnabled {
             get { return animatedObjectUpdateEnabled; }
-            set { animatedObjectUpdateEnabled = value; }
+            set {
+                animatedObjectUpdateEnabled = value;
+                Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+            }
         }
 
         #endregion PROPERTIES
@@ -220,7 +223,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
      
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
-                StartEaseTimeCoroutine();
+                //StartEaseTimeCoroutine();
                 IsPlaying = true;
             }
         }
@@ -247,14 +250,20 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             UpdateAnimation();
         }
 
+        private int frame;
         private void Update() {
+            frame++;
             HandleUpdatingAnimGOInPlayMode();
+
+            if (frame == 2) StartCoroutine("HandleEaseTime");
         }
 
         private void HandleUpdatingAnimGOInPlayMode() {
             // Update animated GO in play mode.
             if (Application.isPlaying && AnimatedObjectUpdateEnabled) {
                 var prevPosition = animatedGO.position;
+
+                Debug.Log("animate go");
 
                 Animate();
                 HandleFireNodeReachedEvent();
@@ -263,10 +272,11 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     prevPosition,
                     animatedGO.position,
                     // TODO Add to global constants.
-                    0.00000001f)) {
+                    //0.00000001f)) {
+                    0.000000000001f)) {
 
                     // TODO Implement.
-                    //AnimatedObjectUpdateEnabled = false;
+                    AnimatedObjectUpdateEnabled = false;
                 }
             }
         }

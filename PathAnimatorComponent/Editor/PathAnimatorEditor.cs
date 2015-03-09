@@ -67,19 +67,51 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
+            GUILayout.Label("References", EditorStyles.boldLabel);
+
             DrawAnimatedGOField();
             DrawTargetGOField();
 
             EditorGUILayout.Space();
 
+
             GUILayout.Label("Tools", EditorStyles.boldLabel);
 
             DrawHandleModeDropdown();
+            DrawTangentModeDropdown();
+            DrawUpdateAllToggle();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawResetEaseButton();
+            DrawResetRotationPathButton();
+            DrawResetTiltingButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Player", EditorStyles.boldLabel);
 
             DrawAnimationTimeValue();
 
+            DrawAutoPlayControl();
+            DrawEnableControlsInPlayModeToggle();
+
+            //EditorGUILayout.Space();
+
+            DrawPlayerControls();
+
+            EditorGUILayout.Space();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            //DrawShortcutsHelpBox();
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Player Options", EditorStyles.boldLabel);
+
             DrawRotationModeDropdown();
-            DrawTangentModeDropdown();
             DrawWrapModeDropdown();
 
             EditorGUILayout.Space();
@@ -96,34 +128,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.BeginHorizontal();
-
-            DrawResetEaseButton();
-            DrawResetRotationPathButton();
-            DrawResetTiltingButton();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            DrawAutoPlayControl();
-            DrawEnableControlsInPlayModeToggle();
-            DrawUpdateAllToggle();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player Controls", EditorStyles.boldLabel);
-
-            DrawPlayerControls();
-
-            EditorGUILayout.Space();
-
-            EditorGUIUtility.labelWidth = 0;
-
-            //DrawShortcutsHelpBox();
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Path Export", EditorStyles.boldLabel);
+            GUILayout.Label("Other", EditorStyles.boldLabel);
 
             PathExporter.DrawExportControls();
 

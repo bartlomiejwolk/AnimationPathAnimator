@@ -412,14 +412,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             var reverse = false;
 
             while (true) {
-                // If animation is enabled and not paused..
+                // If animation is not paused..
                 if (!Pause) {
                     UpdateAnimationTime(reverse);
 
                     HandleClampWrapMode();
                     HandleLoopWrapMode();
                     HandlePingPongWrapMode(ref reverse);
-
                 }
 
                 if (!IsPlaying) break;
@@ -429,23 +428,22 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
         private void UpdateAnimationTime(bool reverse) {
-
-// Get ease value.
+            // Get ease value.
             var timeStep =
                 PathData.GetEaseValueAtTime(AnimationTimeRatio);
 
             if (reverse) {
-                // Increase AnimationTimeRatio.
+                // Increase animation time.
                 AnimationTimeRatio -= timeStep * Time.deltaTime;
             }
             else {
+                // Decrease animation time.
                 AnimationTimeRatio += timeStep * Time.deltaTime;
             }
         }
 
         private void HandleClampWrapMode() {
-
-// Break from animation in Clamp wrap mode.
+            // Break from animation in Clamp wrap mode.
             if (AnimationTimeRatio > 1
                 && Settings.WrapMode == AnimatorWrapMode.Clamp) {
 

@@ -38,6 +38,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         [SerializeField]
         private KeyCode modKey = KeyCode.RightAlt;
 
+        // TODO Remove.
         [SerializeField]
         private Color moveAllModeColor = Color.red;
 
@@ -65,7 +66,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         private KeyCode tiltingModeKey = KeyCode.O;
 
         [SerializeField]
-        private KeyCode updateAllKey = KeyCode.G;
+        private KeyCode updateAllKey = KeyCode.P;
 #endregion
         #region SHORTCUT PROPERTIES
 

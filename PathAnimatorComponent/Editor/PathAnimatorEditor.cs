@@ -166,7 +166,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             Shortcuts.HandleShortcuts();
 
-            Script.UpdateWrapMode();
+            //Script.UpdateWrapMode();
 
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();

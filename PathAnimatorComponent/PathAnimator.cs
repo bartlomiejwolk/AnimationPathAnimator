@@ -419,14 +419,22 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 }
 
                 // Break from animation in Clamp wrap mode.
-                if (Settings.WrapMode == AnimatorWrapMode.Clamp
-                    && AnimationTimeRatio > 1) {
+                if (AnimationTimeRatio > 1
+                    && Settings.WrapMode == AnimatorWrapMode.Clamp) {
 
                     AnimationTimeRatio = 1;
                     IsPlaying = false;
+
                     // TODO
                     Debug.Log("Break from coroutine.");
+
                     break;
+                }
+
+                if (AnimationTimeRatio > 1
+                    && Settings.WrapMode == AnimatorWrapMode.Loop) {
+
+                    AnimationTimeRatio = 0;
                 }
 
                 yield return null;
@@ -542,6 +550,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         }
 
 
+        // TODO Remove.
         public void UpdateWrapMode() {
             PathData.SetPathWrapMode(Settings.WrapMode);
             PathData.SetEaseWrapMode(Settings.WrapMode);

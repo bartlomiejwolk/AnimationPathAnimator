@@ -362,6 +362,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
         [SerializeField]
         private int defaultLabelWidth = 30;
 
+        // TODO Remove.
         [SerializeField]
         private float moveAllModeSize = 0.15f;
 
@@ -404,15 +405,22 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             set { defaultLabelWidth = value; }
         }
 
+        private int easeValueLabelOffsetX = -20;
         public int EaseValueLabelOffsetX {
-            get { return -20; }
+            get { return easeValueLabelOffsetX; }
+            set { easeValueLabelOffsetX = value; }
         }
 
+        private int easeValueLabelOffsetY = -25;
         public int EaseValueLabelOffsetY {
-            get { return -25; }
+            get { return easeValueLabelOffsetY; }
+            set { easeValueLabelOffsetY = value; }
         }
+
+        private float initialArcValue = 15f;
         public float InitialArcValue {
-            get { return 15f; }
+            get { return initialArcValue; }
+            set { initialArcValue = value; }
         }
 
         public Color MoveAllModeColor {
@@ -447,15 +455,23 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             set { scaleHandleSize = value; }
         }
 
+        private int updateAllLabelOffsetX = 10;
+
         public int UpdateAllLabelOffsetX {
-            get { return 0; }
+            get { return updateAllLabelOffsetX; }
+            set { updateAllLabelOffsetX = value; }
         }
 
+        private int updateAllLabelOffsetY = -25;
         public int UpdateAllLabelOffsetY {
-            get { return -25; }
+            get { return updateAllLabelOffsetY; }
+            set { updateAllLabelOffsetY = value; }
         }
+
+        private string updateAllLabelText = "A";
         public string UpdateAllLabelText {
-            get { return "A"; }
+            get { return updateAllLabelText; }
+            set { updateAllLabelText = value; }
         }
 
         public Color RotationHandleColor {

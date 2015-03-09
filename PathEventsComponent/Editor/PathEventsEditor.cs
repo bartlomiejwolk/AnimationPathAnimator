@@ -195,7 +195,17 @@ namespace ATP.SimplePathAnimator.PathEventsComponent {
             int offsetY,
             GUIStyle style) {
 
-            for (var i = 0; i < textValues.Count; i++) {
+            // Calculate difference between elements number in both collection.
+            var elementsNoDelta =
+                Mathf.Abs(nodePositions.Count - textValues.Count);
+            // Find out which collection is bigger.
+            var biggerCollection = (nodePositions.Count > textValues.Count)
+                ? nodePositions.Count
+                : textValues.Count;
+            // Calculate biggest common index.
+            var commonSize = biggerCollection - elementsNoDelta;
+
+            for (var i = 0; i < commonSize; i++) {
                 DrawNodeLabel(
                     nodePositions[i],
                     textValues[i],

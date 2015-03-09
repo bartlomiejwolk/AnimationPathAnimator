@@ -72,10 +72,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
+            GUILayout.Label("Tools", EditorStyles.boldLabel);
+
+            DrawHandleModeDropdown();
+
             DrawAnimationTimeValue();
 
             DrawRotationModeDropdown();
-            DrawHandleModeDropdown();
             DrawTangentModeDropdown();
             DrawWrapModeDropdown();
 
@@ -109,6 +112,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             EditorGUILayout.Space();
 
+            GUILayout.Label("Player Controls", EditorStyles.boldLabel);
+
             DrawPlayerControls();
 
             EditorGUILayout.Space();
@@ -117,6 +122,8 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
             //DrawShortcutsHelpBox();
             EditorGUILayout.Space();
+
+            GUILayout.Label("Path Export", EditorStyles.boldLabel);
 
             PathExporter.DrawExportControls();
 

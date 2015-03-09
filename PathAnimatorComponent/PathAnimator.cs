@@ -464,7 +464,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 // Decrease animation time.
                 AnimationTime += timeStep * Time.deltaTime;
             }
-            Debug.Log("");
         }
 
         private void HandleClampWrapMode() {

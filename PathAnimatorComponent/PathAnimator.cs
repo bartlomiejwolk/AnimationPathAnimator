@@ -264,8 +264,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             if (Application.isPlaying && AnimatedObjectUpdateEnabled) {
                 var prevAnimGOPosition = animatedGO.position;
 
-                Debug.Log("animate go");
-
                 Animate();
                 HandleFireNodeReachedEvent();
 
@@ -280,7 +278,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 // It cannot be done in first two frames because no movement
                 // would be detected.
                 if (destPointReached && Time.frameCount > 2) {
-                    // TODO Implement.
                     AnimatedObjectUpdateEnabled = false;
                 }
             }
@@ -356,8 +353,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 Debug.LogWarning("Assign Path Asset in the inspector.");
                 return;
             }
-            
-            Debug.Log("StartCoroutine");
 
             // Starting node was reached.
             if (AnimationTime == 0) {
@@ -368,10 +363,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             StartCoroutine("HandleEaseTime");
         }
 
+        // TODO Remove.
         public void StopEaseTimeCoroutine() {
             StopCoroutine("HandleEaseTime");
-
-            Debug.Log("StopCoroutine");
 
             // Reset animation.
             //AnimationTime = 0;
@@ -489,11 +483,6 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
 
                 AnimationTime = 1;
                 IsPlaying = false;
-
-                // TODO
-                Debug.Log("Break from coroutine.");
-
-                //break;
             }
         }
 

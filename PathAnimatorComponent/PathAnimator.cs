@@ -276,6 +276,9 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                     //0.00000001f)) {
                     0.000000000001f);
 
+                // Stop updating animated GO after reaching destination point.
+                // It cannot be done in first two frames because no movement
+                // would be detected.
                 if (destPointReached && Time.frameCount > 2) {
                     // TODO Implement.
                     AnimatedObjectUpdateEnabled = false;

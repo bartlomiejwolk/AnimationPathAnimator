@@ -444,21 +444,25 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                         AnimationTimeRatio = 0;
                     }
 
-                    if (AnimationTimeRatio > 1
-                        && Settings.WrapMode == AnimatorWrapMode.PingPong) {
-
-                        reverse = true;
-                    }
-
-                    if (AnimationTimeRatio < 0
-                        && Settings.WrapMode == AnimatorWrapMode.PingPong) {
-
-                        reverse = false;
-                    }
+                    HandlePingPongWrapMode(ref reverse);
 
                 }
 
                 yield return null;
+            }
+        }
+
+        private void HandlePingPongWrapMode(ref bool reverse) {
+            if (AnimationTimeRatio > 1
+                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+
+                reverse = true;
+            }
+
+            if (AnimationTimeRatio < 0
+                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+
+                reverse = false;
             }
         }
 

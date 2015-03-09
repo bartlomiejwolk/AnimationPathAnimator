@@ -223,7 +223,7 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
      
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
-                //StartEaseTimeCoroutine();
+                StartEaseTimeCoroutine();
                 IsPlaying = true;
             }
         }
@@ -250,12 +250,13 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
             UpdateAnimation();
         }
 
-        private int frame;
+        //private int frame;
         private void Update() {
-            frame++;
+            var frame = Time.frameCount;
+            //frame++;
             HandleUpdatingAnimGOInPlayMode();
 
-            if (frame == 2) StartCoroutine("HandleEaseTime");
+            //if (frame == 2) StartCoroutine("HandleEaseTime");
         }
 
         private void HandleUpdatingAnimGOInPlayMode() {
@@ -268,13 +269,14 @@ namespace ATP.SimplePathAnimator.PathAnimatorComponent {
                 Animate();
                 HandleFireNodeReachedEvent();
 
-                if (Utilities.V3Equal(
+                var destPointReached = Utilities.V3Equal(
                     prevAnimGOPosition,
                     animatedGO.position,
                     // TODO Add to global constants.
                     //0.00000001f)) {
-                    0.000000000001f)) {
+                    0.000000000001f);
 
+                if (destPointReached && Time.frameCount > 2) {
                     // TODO Implement.
                     AnimatedObjectUpdateEnabled = false;
                 }

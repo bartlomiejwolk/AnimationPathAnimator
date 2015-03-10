@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     [CustomEditor(typeof (APAnimator))]
-    public sealed class PathAnimatorEditor : Editor {
+    public sealed class APAnimatorEditor : Editor {
         
         #region PROPERTIES
         private GizmoIcons GizmoIcons { get; set; }

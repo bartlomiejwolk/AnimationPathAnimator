@@ -1,5 +1,5 @@
-﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.APEventsMessageComponent;
+﻿using System.Collections.Generic;
+using ATP.AnimationPathAnimator.APAnimatorComponent;
 using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
@@ -19,6 +19,9 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
         [SerializeField]
         private bool advancedSettingsFoldout;
+
+        [SerializeField]
+        private List<NodeEvent> nodeEvents;
         #endregion
 
         #region PROPERTIES

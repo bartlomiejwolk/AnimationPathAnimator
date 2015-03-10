@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using ATP.AnimationPathAnimator.ReorderableList;
+using UnityEditor;
 using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
@@ -12,6 +13,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty skin;
         private SerializedProperty settings;
+        private SerializedProperty nodeEvents;
 
         private void OnEnable() {
             Script = target as APEventsReflection;
@@ -24,18 +26,35 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 serializedObject.FindProperty("skin");
             settings =
                 serializedObject.FindProperty("settings");
+            nodeEvents = serializedObject.FindProperty("nodeEvents");
         }
 
         public override void OnInspectorGUI() {
-            // TODO Extract method.
+            DrawAnimatorField();
+
+            DrawReorderableEventList();
+
+            DrawAdvancedSettingsFoldout();
+            DrawAdvancedSettingsControls();
+        }
+
+        private void DrawAnimatorField() {
+
             EditorGUILayout.PropertyField(
                 apAnimator,
                 new GUIContent(
                     "APAnimator",
                     ""));
+        }
 
-            DrawAdvancedSettingsFoldout();
-            DrawAdvancedSettingsControls();
+        private void DrawReorderableEventList() {
+
+            serializedObject.Update();
+
+            ReorderableListGUI.Title("Events");
+            ReorderableListGUI.ListField(nodeEvents);
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawAdvancedSettingsFoldout() {

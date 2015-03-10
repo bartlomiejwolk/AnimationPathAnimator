@@ -233,9 +233,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void Reset() {
             // Create separate method InitializeFields().
             ThisTransform = GetComponent<Transform>();
-            settings = Resources.Load("DefaultPathAnimatorSettings")
+            settings = Resources.Load("DefaultAnimatorSettings")
                 as AnimatorSettings;
-            skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
+            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
 #if UNITY_EDITOR
             if (AnimatorGizmos == null) {

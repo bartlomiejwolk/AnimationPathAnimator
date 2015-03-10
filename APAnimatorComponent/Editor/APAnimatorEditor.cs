@@ -1033,7 +1033,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             enableControlsInPlayMode =
                 SettingsSerObj.FindProperty("EnableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("messageSettings");
+            settings = serializedObject.FindProperty("settings");
             gizmoCurveColor = SettingsSerObj.FindProperty("gizmoCurveColor");
             rotationCurveColor =
                 SettingsSerObj.FindProperty("rotationCurveColor");

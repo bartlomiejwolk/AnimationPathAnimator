@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     [CustomEditor(typeof (APEventsMessage))]
-    public sealed class PathEventsEditor : Editor {
+    public sealed class APEventsMessageEditor : Editor {
         #region FIELDS
 
         private SerializedObject PathEventsSettingsSerObj;

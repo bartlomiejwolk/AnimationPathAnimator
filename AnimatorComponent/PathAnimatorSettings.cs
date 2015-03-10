@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ATP.SimplePathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.AnimatorComponent {
 
     // TODO Rename to Settings.
     public sealed class PathAnimatorSettings : ScriptableObject {

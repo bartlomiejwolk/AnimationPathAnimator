@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.AnimatorComponent {
     public class GameComponent : MonoBehaviour {
 
         public enum InfoType { Warning, Error }

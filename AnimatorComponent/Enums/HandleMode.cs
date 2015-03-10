@@ -1,5 +1,5 @@
  // ReSharper disable once CheckNamespace
-namespace ATP.SimplePathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.AnimatorComponent {
     public enum HandleMode {
         None,
         Ease,

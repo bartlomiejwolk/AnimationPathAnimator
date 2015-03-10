@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ATP.SimplePathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     public sealed class PathEventsSettings : ScriptableObject {
 

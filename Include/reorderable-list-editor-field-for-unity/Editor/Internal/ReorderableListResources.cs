@@ -5,7 +5,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.ReorderableList.Internal {
+namespace ATP.AnimationPathAnimator.ReorderableList.Internal {
 
 	/// <summary>
 	/// Resources to assist with reorderable list control.

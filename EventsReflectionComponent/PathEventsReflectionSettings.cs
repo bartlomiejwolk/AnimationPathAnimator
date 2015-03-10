@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathEventsHandlerComponent {
+namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
 
     public sealed class PathEventsReflectionSettings : ScriptableObject {
 

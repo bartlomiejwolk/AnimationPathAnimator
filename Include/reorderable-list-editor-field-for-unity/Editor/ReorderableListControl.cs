@@ -4,11 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using ATP.SimplePathAnimator.ReorderableList.Internal;
+using ATP.AnimationPathAnimator.ReorderableList.Internal;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.ReorderableList {
+namespace ATP.AnimationPathAnimator.ReorderableList {
 	
 	/// <summary>
 	/// Arguments which are passed to <see cref="ItemInsertedEventHandler"/>.

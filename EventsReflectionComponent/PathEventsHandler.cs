@@ -1,8 +1,8 @@
-﻿using ATP.SimplePathAnimator.AnimatorComponent;
-using ATP.SimplePathAnimator.EventsMessageComponent;
+﻿using ATP.AnimationPathAnimator.AnimatorComponent;
+using ATP.AnimationPathAnimator.EventsMessageComponent;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathEventsHandlerComponent {
+namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
 
     [RequireComponent(typeof(PathAnimator))]
     public class PathEventsHandler : MonoBehaviour {

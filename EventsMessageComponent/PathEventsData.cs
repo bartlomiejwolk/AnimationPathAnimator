@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ATP.SimplePathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     // TODO Rename to EventsData.
     public sealed class PathEventsData : ScriptableObject {

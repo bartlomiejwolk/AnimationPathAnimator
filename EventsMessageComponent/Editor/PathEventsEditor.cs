@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using ATP.SimplePathAnimator.ReorderableList;
+using ATP.AnimationPathAnimator.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     [CustomEditor(typeof (PathEvents))]
     public sealed class PathEventsEditor : Editor {

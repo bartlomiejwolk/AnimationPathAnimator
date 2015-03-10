@@ -1,8 +1,8 @@
-﻿using ATP.SimplePathAnimator.AnimatorComponent;
-using ATP.SimplePathAnimator.EventsMessageComponent;
+﻿using ATP.AnimationPathAnimator.AnimatorComponent;
+using ATP.AnimationPathAnimator.EventsMessageComponent;
 using UnityEditor;
 
-namespace ATP.SimplePathAnimator {
+namespace ATP.AnimationPathAnimator {
 
     // TODO Specify name for newly created asset.
     public class AssetCreator {

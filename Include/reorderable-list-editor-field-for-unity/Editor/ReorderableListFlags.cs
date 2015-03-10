@@ -3,7 +3,7 @@
 
 using System;
 
-namespace ATP.SimplePathAnimator.ReorderableList {
+namespace ATP.AnimationPathAnimator.ReorderableList {
 
 	/// <summary>
 	/// Additional flags which can be passed into reorderable list field.

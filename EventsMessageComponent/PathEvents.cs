@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using ATP.SimplePathAnimator.AnimatorComponent;
+using ATP.AnimationPathAnimator.AnimatorComponent;
 
-namespace ATP.SimplePathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     [RequireComponent(typeof(PathAnimator))]
     public sealed class PathEvents : MonoBehaviour {

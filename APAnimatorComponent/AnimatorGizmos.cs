@@ -11,8 +11,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region FIELDS
 
         [SerializeField]
-        private PathAnimatorSettings settings;
-        public PathAnimatorSettings Settings {
+        private AnimatorSettings settings;
+        public AnimatorSettings Settings {
             get { return settings; }
             set { settings = value; }
         }
@@ -20,7 +20,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region METHODS
 
-        public AnimatorGizmos(PathAnimatorSettings settings) {
+        public AnimatorGizmos(AnimatorSettings settings) {
             this.settings = settings;
         }
 
@@ -154,7 +154,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 false);
         }
 
-        //public void Init(PathAnimatorSettings settings) {
+        //public void Init(AnimatorSettings settings) {
         //    Settings = settings;
         //}
 

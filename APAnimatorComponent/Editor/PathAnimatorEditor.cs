@@ -25,7 +25,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private Shortcuts Shortcuts { get; set; }
 
-        private PathAnimatorSettings Settings { get; set; }
+        private AnimatorSettings Settings { get; set; }
 
         private PathExporter PathExporter { get; set; }
 

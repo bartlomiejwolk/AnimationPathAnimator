@@ -8,11 +8,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region FIELDS
         private readonly APAnimator apAnimator;
-        private readonly PathAnimatorSettings settings;
+        private readonly AnimatorSettings settings;
         #endregion
 
         #region PROPERTIES
-        public PathAnimatorSettings Settings {
+        public AnimatorSettings Settings {
             get { return settings; }
         }
 

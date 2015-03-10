@@ -22,11 +22,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return apAnimator; }
         }
 
-        private PathAnimatorSettings PathAnimatorSettings {
+        private AnimatorSettings AnimatorSettings {
             get { return ApAnimator.Settings; }
         }
 
-        private PathAnimatorSettings Settings{
+        private AnimatorSettings Settings{
             get { return ApAnimator.Settings; }
         }
         #endregion

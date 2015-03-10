@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.APEventsMessageComponent {
 
     [System.Serializable]
     public sealed class NodeEvent {

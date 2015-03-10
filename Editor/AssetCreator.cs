@@ -1,5 +1,5 @@
 ﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.EventsMessageComponent;
+using ATP.AnimationPathAnimator.APEventsMessageComponent;
 using UnityEditor;
 
 namespace ATP.AnimationPathAnimator {

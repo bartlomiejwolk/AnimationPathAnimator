@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
+namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
     public sealed class APEventsReflectionSettings : ScriptableObject {
 

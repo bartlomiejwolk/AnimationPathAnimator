@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using ATP.AnimationPathAnimator.APAnimatorComponent;
 
-namespace ATP.AnimationPathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.APEventsMessageComponent {
 
     [RequireComponent(typeof(APAnimator))]
     public sealed class APEventsMessage : MonoBehaviour {

@@ -3,7 +3,7 @@ using ATP.AnimationPathAnimator.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.EventsMessageComponent {
+namespace ATP.AnimationPathAnimator.APEventsMessageComponent {
 
     [CustomEditor(typeof (APEventsMessage))]
     public sealed class APEventsMessageEditor : Editor {

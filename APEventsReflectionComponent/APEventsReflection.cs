@@ -1,8 +1,8 @@
 ﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.EventsMessageComponent;
+using ATP.AnimationPathAnimator.APEventsMessageComponent;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
+namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
     [RequireComponent(typeof(APAnimator))]
     public class APEventsReflection : MonoBehaviour {

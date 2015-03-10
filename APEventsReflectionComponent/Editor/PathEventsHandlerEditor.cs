@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
+namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
     [CustomEditor(typeof (APEventsReflection))]
     public class PathEventsHandlerEditor : Editor {

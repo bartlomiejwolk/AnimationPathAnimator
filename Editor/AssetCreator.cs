@@ -1,5 +1,6 @@
 ﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
 using ATP.AnimationPathAnimator.APEventsMessageComponent;
+using ATP.AnimationPathAnimator.APEventsReflectionComponent;
 using UnityEditor;
 
 namespace ATP.AnimationPathAnimator {
@@ -7,24 +8,29 @@ namespace ATP.AnimationPathAnimator {
     // TODO Specify name for newly created asset.
     public class AssetCreator {
 
-        [MenuItem("Assets/Create/ATP/SimplePathAnimator/Path Data")]
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APAnimator Data")]
         private static void CreatePathAsset() {
             ScriptableObjectUtility.CreateAsset<PathData>();
         }
 
-        [MenuItem("Assets/Create/ATP/SimplePathAnimator/Events Data")]
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APEvents Message Data")]
         private static void CreateAnimatorEventsDataAsset() {
             ScriptableObjectUtility.CreateAsset<APEventsMessageData>();
         }
 
-        [MenuItem("Assets/Create/ATP/SimplePathAnimator/Path APAnimator messageSettings")]
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APAnimator Settings")]
         private static void CreateAnimatorSettingsAsset() {
             ScriptableObjectUtility.CreateAsset<APAnimatorSettings>();
         }
 
-        [MenuItem("Assets/Create/ATP/SimplePathAnimator/Path Events messageSettings")]
-        private static void CreatePathEventsSettingsAsset() {
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APEvents Message Settings")]
+        private static void CreateAPEventsMessageSettingsAsset() {
             ScriptableObjectUtility.CreateAsset<APEventsMessageSettings>();
+        }
+
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APEvents Reflection Settings")]
+        private static void CreateAPEventsReflectionSettingsAsset() {
+            ScriptableObjectUtility.CreateAsset<APEventsReflectionSettings>();
         }
     }
 

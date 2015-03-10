@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
-    [CustomEditor(typeof (APEvents))]
+    [CustomEditor(typeof (APEventsMessage))]
     public sealed class PathEventsEditor : Editor {
         #region FIELDS
 
@@ -18,9 +18,9 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         private SerializedObject EventsDataSerObj { get; set; }
 
-        private APEvents Script { get; set; }
+        private APEventsMessage Script { get; set; }
 
-        public EventsData EventsData { get; set; }
+        public APEventsData ApEventsData { get; set; }
         #endregion
 
         #region SERIALIZED PROPERTIES
@@ -62,7 +62,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         }
         private void OnEnable() {
-            Script = (APEvents) target;
+            Script = (APEventsMessage) target;
 
             InitializeSerializedProperties();
         }
@@ -71,7 +71,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
             // Return if path data is not assigned to the APAnimator component.
             if (Script.ApAnimator.PathData == null) return;
-            if (Script.EventsData == null) return;
+            if (Script.ApEventsData == null) return;
 
             // TODO Guard against null Skin.
             HandleDrawingMethodNames();
@@ -142,10 +142,10 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         /// </summary>
         private void InitializeObjectFields() {
             // Initialize EventsDataSerObj.
-            if (Script.EventsData != null && EventsDataSerObj == null) {
-                EventsData = Script.EventsData;
+            if (Script.ApEventsData != null && EventsDataSerObj == null) {
+                ApEventsData = Script.ApEventsData;
                 // Initialize SerializedObject EventsDataSerObj.
-                EventsDataSerObj = new SerializedObject(EventsData);
+                EventsDataSerObj = new SerializedObject(ApEventsData);
                 // Iniatilize SerializedProperty nodeEvents.
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
             }
@@ -235,19 +235,19 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             //serializedObject.Update();
 
             //EditorGUILayout.PropertyField(
-            //    eventsData,
+            //    APEventsData,
             //    new GUIContent(
             //        "Events Data",
             //        ""));
 
             //serializedObject.ApplyModifiedProperties();
 
-            Script.EventsData = (EventsData) EditorGUILayout.ObjectField(
+            Script.ApEventsData = (APEventsData) EditorGUILayout.ObjectField(
                 new GUIContent(
                     "Events Asset",
                     ""),
-                Script.EventsData,
-                typeof(EventsData),
+                Script.ApEventsData,
+                typeof(APEventsData),
                 false);
         }
 
@@ -270,11 +270,11 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
                 // Create new path asset.
                 var asset =
-                    ScriptableObjectUtility.CreateAsset<EventsData>(
+                    ScriptableObjectUtility.CreateAsset<APEventsData>(
                     savePath);
 
                 // Assign asset as the current path.
-                Script.EventsData = asset;
+                Script.ApEventsData = asset;
             }
         }
 
@@ -284,13 +284,13 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
                     "Reset Events",
                     "Reset path to default."))) {
 
-                if (Script.EventsData == null) return;
+                if (Script.ApEventsData == null) return;
 
                 // Allow undo this operation.
-                Undo.RecordObject(Script.EventsData, "Change events data.");
+                Undo.RecordObject(Script.ApEventsData, "Change events data.");
 
                 // Reset curves to its default state.
-                Script.EventsData.ResetEvents();
+                Script.ApEventsData.ResetEvents();
             }
         }
 

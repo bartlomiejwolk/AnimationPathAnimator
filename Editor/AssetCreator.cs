@@ -14,7 +14,7 @@ namespace ATP.AnimationPathAnimator {
 
         [MenuItem("Assets/Create/ATP/SimplePathAnimator/Events Data")]
         private static void CreateAnimatorEventsDataAsset() {
-            ScriptableObjectUtility.CreateAsset<EventsData>();
+            ScriptableObjectUtility.CreateAsset<APEventsData>();
         }
 
         [MenuItem("Assets/Create/ATP/SimplePathAnimator/Path APAnimator Settings")]

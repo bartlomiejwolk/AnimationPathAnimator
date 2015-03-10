@@ -6,7 +6,7 @@ using ATP.AnimationPathAnimator.APAnimatorComponent;
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     [RequireComponent(typeof(APAnimator))]
-    public sealed class APEvents : MonoBehaviour {
+    public sealed class APEventsMessage : MonoBehaviour {
 
         #region FIELDS
         [SerializeField]
@@ -16,7 +16,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         private APAnimator apAnimator;
 
         [SerializeField]
-        private EventsData eventsData;
+        private APEventsData apEventsData;
 
         [SerializeField]
         private APEventsSettings settings;
@@ -36,9 +36,9 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             set { skin = value; }
         }
 
-        public EventsData EventsData {
-            get { return eventsData; }
-            set { eventsData = value; }
+        public APEventsData ApEventsData {
+            get { return apEventsData; }
+            set { apEventsData = value; }
         }
 
         public APEventsSettings Settings {
@@ -72,13 +72,13 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
                     object sender,
                     NodeReachedEventArgs arg) {
 
-            if (EventsData == null) return;
+            if (ApEventsData == null) return;
 
             // Return if no event was specified for current and later nodes.
-            if (arg.NodeIndex > EventsData.NodeEvents.Count - 1) return;
+            if (arg.NodeIndex > ApEventsData.NodeEvents.Count - 1) return;
 
             // Get NodeEvent for current path node.
-            var nodeEvent = EventsData.NodeEvents[arg.NodeIndex];
+            var nodeEvent = ApEventsData.NodeEvents[arg.NodeIndex];
 
             // Call method that will handle this event.
             gameObject.SendMessage(
@@ -92,7 +92,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         public List<string> GetMethodNames() {
             var methodNames = new List<string>();
 
-            foreach (var nodeEvent in EventsData.NodeEvents) {
+            foreach (var nodeEvent in ApEventsData.NodeEvents) {
                 methodNames.Add(nodeEvent.MethodName);
             }
 

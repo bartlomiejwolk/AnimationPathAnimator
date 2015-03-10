@@ -8,7 +8,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
         private APEventsReflection Script { get; set; }
 
-        private SerializedProperty pathAnimator;
+        private SerializedProperty apAnimator;
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty skin;
         private SerializedProperty settings;
@@ -16,20 +16,20 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private void OnEnable() {
             Script = target as APEventsReflection;
 
-            pathAnimator =
-                serializedObject.FindProperty("APAnimator");
+            apAnimator =
+                serializedObject.FindProperty("apAnimator");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             skin =
                 serializedObject.FindProperty("skin");
             settings =
-                serializedObject.FindProperty("messageSettings");
+                serializedObject.FindProperty("settings");
         }
 
         public override void OnInspectorGUI() {
             // TODO Extract method.
             EditorGUILayout.PropertyField(
-                pathAnimator,
+                apAnimator,
                 new GUIContent(
                     "APAnimator",
                     ""));

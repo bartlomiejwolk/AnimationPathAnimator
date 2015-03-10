@@ -15,7 +15,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private APAnimator apAnimator;
 
         [SerializeField]
-        private APEventsMessageSettings settings;
+        private APEventsReflectionSettings settings;
 
         [SerializeField]
         private bool advancedSettingsFoldout;

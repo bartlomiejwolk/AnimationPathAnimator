@@ -10,7 +10,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         #region FIELDS
 
         private SerializedObject PathEventsSettingsSerObj;
-        private PathEventsSettings PathEventsSettings { get; set; }
+        private APEventsSettings ApEventsSettings { get; set; }
 
         #endregion
 
@@ -152,7 +152,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
             // Initialize PathEventsSettingsSerObje.
             if (Script.Settings != null) {
-                PathEventsSettings = Script.Settings;
+                ApEventsSettings = Script.Settings;
 
                 PathEventsSettingsSerObj = new SerializedObject(Script.Settings);
                 drawMethodNames = PathEventsSettingsSerObj.FindProperty("drawMethodNames");
@@ -174,8 +174,8 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                PathEventsSettings.DefaultNodeLabelWidth,
-                PathEventsSettings.DefaultNodeLabelHeight);
+                ApEventsSettings.DefaultNodeLabelWidth,
+                ApEventsSettings.DefaultNodeLabelHeight);
 
             Handles.BeginGUI();
 
@@ -226,8 +226,8 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             DrawNodeLabels(
                 nodePositions,
                 methodNames,
-                PathEventsSettings.MethodNameLabelOffsetX,
-                PathEventsSettings.MethodNameLabelOffsetY,
+                ApEventsSettings.MethodNameLabelOffsetX,
+                ApEventsSettings.MethodNameLabelOffsetY,
                 style);
         }
 

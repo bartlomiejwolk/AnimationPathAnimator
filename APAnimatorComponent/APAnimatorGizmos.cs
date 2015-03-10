@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
-    public sealed class AnimatorGizmos {
+    public sealed class APAnimatorGizmos {
 
         #region FIELDS
 
@@ -20,7 +20,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region METHODS
 
-        public AnimatorGizmos(AnimatorSettings settings) {
+        public APAnimatorGizmos(AnimatorSettings settings) {
             this.settings = settings;
         }
 

@@ -39,7 +39,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private float animationTime;
 
         //[SerializeField]
-        //private AnimatorGizmos animatorGizmos;
+        //private APAnimatorGizmos animatorGizmos;
 
         [SerializeField]
         private PathData pathData;
@@ -75,7 +75,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 #if UNITY_EDITOR
-        AnimatorGizmos AnimatorGizmos { get; set; }
+        APAnimatorGizmos ApAnimatorGizmos { get; set; }
 #endif
 
         private bool isPlaying;
@@ -167,9 +167,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
 #if UNITY_EDITOR
-            if (AnimatorGizmos == null) {
-                AnimatorGizmos =
-                    AnimatorGizmos = new AnimatorGizmos(Settings);
+            if (ApAnimatorGizmos == null) {
+                ApAnimatorGizmos =
+                    ApAnimatorGizmos = new APAnimatorGizmos(Settings);
             }
 #endif
         }
@@ -195,29 +195,29 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.RotationMode == RotationMode.Target
                 && TargetGO != null) {
 
-                AnimatorGizmos.DrawTargetIcon(TargetGO.position);
+                ApAnimatorGizmos.DrawTargetIcon(TargetGO.position);
             }
 
             if (Settings.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
-                AnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
+                ApAnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
             }
 
             if (Settings.HandleMode == HandleMode.Rotation) {
-                AnimatorGizmos.DrawRotationPathCurve(PathData, transform);
+                ApAnimatorGizmos.DrawRotationPathCurve(PathData, transform);
 
-                AnimatorGizmos.DrawCurrentRotationPointGizmo(
+                ApAnimatorGizmos.DrawCurrentRotationPointGizmo(
                     PathData,
                     transform,
                     AnimationTime);
 
-                AnimatorGizmos.DrawRotationPointGizmos(
+                ApAnimatorGizmos.DrawRotationPointGizmos(
                     PathData,
                     transform,
                     AnimationTime);
             }
 
-            AnimatorGizmos.DrawAnimationCurve(PathData, transform);
+            ApAnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 #endif
      
@@ -238,8 +238,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
 #if UNITY_EDITOR
-            if (AnimatorGizmos == null) {
-                AnimatorGizmos = new AnimatorGizmos(Settings);
+            if (ApAnimatorGizmos == null) {
+                ApAnimatorGizmos = new APAnimatorGizmos(Settings);
             }
 #endif
         }

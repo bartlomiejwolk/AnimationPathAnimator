@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
 
-    [CustomEditor(typeof (PathEventsHandler))]
+    [CustomEditor(typeof (APEventsReflection))]
     public class PathEventsHandlerEditor : Editor {
 
-        private PathEventsHandler Script { get; set; }
+        private APEventsReflection Script { get; set; }
 
         private SerializedProperty pathAnimator;
         private SerializedProperty advancedSettingsFoldout;
@@ -14,7 +14,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
         private SerializedProperty settings;
 
         private void OnEnable() {
-            Script = target as PathEventsHandler;
+            Script = target as APEventsReflection;
 
             pathAnimator =
                 serializedObject.FindProperty("APAnimator");

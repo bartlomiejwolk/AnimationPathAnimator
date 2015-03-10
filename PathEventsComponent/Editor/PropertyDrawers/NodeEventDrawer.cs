@@ -8,23 +8,15 @@ namespace ATP.SimplePathAnimator.PathEventsComponent {
     public sealed class NodeEventDrawer : PropertyDrawer {
 
         // How many rows (properties) will be displayed.
-        private static int Rows {
-            get { return 2; }
-        }
+        private const int Rows = 3;
 
         // Hight of a single property.
-        private static int PropHeight {
-            get { return 16; }
-        }
+        private const int PropHeight = 16;
 
         // Margin between properties.
-        private static int PropMargin {
-            get { return 4; }
-        }
+        private const int PropMargin = 4;
 
-        private static int RowsSpace {
-            get { return 8; }
-        }
+        private const int RowsSpace = 8;
 
         // Overall hight of the serialized property.
         public override float GetPropertyHeight(

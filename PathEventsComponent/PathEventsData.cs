@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace ATP.SimplePathAnimator.PathEventsComponent {
 
+    // TODO Rename to EventsData.
     public sealed class PathEventsData : ScriptableObject {
 
         [SerializeField]

@@ -63,8 +63,8 @@ namespace ATP.AnimationPathAnimator.APEventsMessageComponent {
         private void Reset() {
             apAnimator = GetComponent<APAnimator>();
             messageSettings =
-                Resources.Load<APEventsMessageSettings>("DefaultPathEventsSettings");
-            skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
+                Resources.Load<APEventsMessageSettings>("DefaultEventsMessageSettings");
+            skin = Resources.Load("DefaultEventsMessageSkin") as GUISkin;
         }
         #endregion
         #region EVENT HANDLERS

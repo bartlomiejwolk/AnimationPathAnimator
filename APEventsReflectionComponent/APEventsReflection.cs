@@ -32,7 +32,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             set { skin = value; }
         }
 
-        public APEventsMessageSettings Settings {
+        public APEventsReflectionSettings Settings {
             get { return settings; }
             set { settings = value; }
         }
@@ -54,8 +54,8 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private void Reset() {
             apAnimator = GetComponent<APAnimator>();
             settings =
-                Resources.Load<APEventsMessageSettings>("DefaultPathEventsSettings");
-            skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
+                Resources.Load<APEventsReflectionSettings>("DefaultEventsReflectionSettings");
+            skin = Resources.Load("DefaultEventsReflectionSkin") as GUISkin;
         }
         #endregion
         #region EVENT HANDLERS

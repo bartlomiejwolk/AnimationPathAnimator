@@ -5,7 +5,7 @@ using ATP.AnimationPathAnimator.AnimatorComponent;
 
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
-    [RequireComponent(typeof(PathAnimator))]
+    [RequireComponent(typeof(APAnimator))]
     public sealed class PathEvents : MonoBehaviour {
 
         #region FIELDS
@@ -13,7 +13,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         private GUISkin skin;
 
         [SerializeField]
-        private PathAnimator pathAnimator;
+        private APAnimator apAnimator;
 
         [SerializeField]
         private PathEventsData eventsData;
@@ -26,9 +26,9 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         #endregion
 
         #region PROPERTIES
-        public PathAnimator PathAnimator {
-            get { return pathAnimator; }
-            set { pathAnimator = value; }
+        public APAnimator ApAnimator {
+            get { return apAnimator; }
+            set { apAnimator = value; }
         }
 
         public GUISkin Skin {
@@ -51,17 +51,17 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         #region UNITY MESSAGES
 
         private void OnDisable() {
-            PathAnimator.NodeReached -= Animator_NodeReached;
+            ApAnimator.NodeReached -= Animator_NodeReached;
         }
 
         private void OnEnable() {
-            if (PathAnimator == null) return; 
+            if (ApAnimator == null) return; 
 
-            PathAnimator.NodeReached += Animator_NodeReached;
+            ApAnimator.NodeReached += Animator_NodeReached;
         }
 
         private void Reset() {
-            pathAnimator = GetComponent<PathAnimator>();
+            apAnimator = GetComponent<APAnimator>();
             settings =
                 Resources.Load<PathEventsSettings>("DefaultPathEventsSettings");
             skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
@@ -100,9 +100,9 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         }
 
         public Vector3[] GetNodePositions() {
-            // TODO Move GetGlobalNodePositions() to Animator class.
+            // TODO Move GetGlobalNodePositions() to APAnimator class.
             var nodePositions =
-                PathAnimator.PathData.GetGlobalNodePositions(PathAnimator.ThisTransform);
+                ApAnimator.PathData.GetGlobalNodePositions(ApAnimator.ThisTransform);
 
             return nodePositions;
         }

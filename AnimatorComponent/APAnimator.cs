@@ -14,7 +14,7 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
     ///     time.
     /// </summary>
     [ExecuteInEditMode]
-    public sealed class PathAnimator : GameComponent {
+    public sealed class APAnimator : GameComponent {
         #region EVENTS
 
         public event EventHandler<NodeReachedEventArgs> NodeReached;

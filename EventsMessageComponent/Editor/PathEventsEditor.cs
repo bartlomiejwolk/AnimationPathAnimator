@@ -69,8 +69,8 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         private void OnSceneGUI() {
             InitializeObjectFields();
 
-            // Return if path data is not assigned to the PathAnimator component.
-            if (Script.PathAnimator.PathData == null) return;
+            // Return if path data is not assigned to the APAnimator component.
+            if (Script.ApAnimator.PathData == null) return;
             if (Script.EventsData == null) return;
 
             // TODO Guard against null Skin.
@@ -130,7 +130,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
             }
 
-            pathAnimator = serializedObject.FindProperty("pathAnimator");
+            pathAnimator = serializedObject.FindProperty("APAnimator");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settings");
             advancedSettingsFoldout =

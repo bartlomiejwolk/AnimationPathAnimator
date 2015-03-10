@@ -17,7 +17,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
             Script = target as PathEventsHandler;
 
             pathAnimator =
-                serializedObject.FindProperty("pathAnimator");
+                serializedObject.FindProperty("APAnimator");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             skin =
@@ -31,7 +31,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
             EditorGUILayout.PropertyField(
                 pathAnimator,
                 new GUIContent(
-                    "Animator",
+                    "APAnimator",
                     ""));
 
             DrawAdvancedSettingsFoldout();

@@ -8,31 +8,31 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
     /// <summary>
     /// Class responsible for drawing all on scene handles.
     /// </summary>
-    /// <remarks>It has same access to the Animator class as
+    /// <remarks>It has same access to the APAnimator class as
     /// the AnimationPathAnimatorEditor does.</remarks>
-    // TODO Pass ref. to Animator in the constructor.
+    // TODO Pass ref. to APAnimator in the constructor.
     public sealed class SceneHandles {
 
         #region FIELDS
-        private readonly PathAnimator pathAnimator;
+        private readonly APAnimator apAnimator;
         #endregion
 
         #region PROPERTIES
-        private PathAnimator PathAnimator {
-            get { return pathAnimator; }
+        private APAnimator ApAnimator {
+            get { return apAnimator; }
         }
 
         private PathAnimatorSettings PathAnimatorSettings {
-            get { return PathAnimator.Settings; }
+            get { return ApAnimator.Settings; }
         }
 
         private PathAnimatorSettings Settings{
-            get { return PathAnimator.Settings; }
+            get { return ApAnimator.Settings; }
         }
         #endregion
         #region METHDOS
-        public SceneHandles(PathAnimator pathAnimator) {
-            this.pathAnimator = pathAnimator;
+        public SceneHandles(APAnimator apAnimator) {
+            this.apAnimator = apAnimator;
         }
 
 
@@ -174,19 +174,19 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         }
 
         // TODO Rename to DrawPositionHandles().
-        public void DrawMoveSinglePositionsHandles(PathAnimator pathAnimator,
+        public void DrawMoveSinglePositionsHandles(APAnimator apAnimator,
             Action<int, Vector3, Vector3> callback) {
 
             // Node global positions.
-            var nodes = pathAnimator.PathData.GetGlobalNodePositions(
-                pathAnimator.ThisTransform);
+            var nodes = apAnimator.PathData.GetGlobalNodePositions(
+                apAnimator.ThisTransform);
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
             // For each node..
             for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = pathAnimator.Settings.GizmoCurveColor;
+                var handleColor = apAnimator.Settings.GizmoCurveColor;
 
                 // Draw position handle.
                 var newPos = DrawPositionHandle(
@@ -198,10 +198,10 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
                 // If node was moved..
                 if (newPos != nodes[i]) {
                     // Calculate node old local position.
-                    var oldNodeLocalPosition = pathAnimator.ThisTransform.InverseTransformPoint(nodes[i]);
+                    var oldNodeLocalPosition = apAnimator.ThisTransform.InverseTransformPoint(nodes[i]);
 
                     // Calculate node new local position.
-                    var newNodeLocalPosition = pathAnimator.ThisTransform.InverseTransformPoint(newPos);
+                    var newNodeLocalPosition = apAnimator.ThisTransform.InverseTransformPoint(newPos);
 
                     // Calculate movement delta.
                     var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
@@ -241,14 +241,14 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         }
 
         private void DrawNodeLabels(
-            PathAnimator pathAnimator,
+            APAnimator apAnimator,
             string text,
             int offsetX,
             int offsetY,
             GUIStyle style) {
 
-            var nodeGlobalPositions = pathAnimator.PathData.GetGlobalNodePositions(
-                pathAnimator.ThisTransform);
+            var nodeGlobalPositions = apAnimator.PathData.GetGlobalNodePositions(
+                apAnimator.ThisTransform);
 
             foreach (var nodePos in nodeGlobalPositions) {
                 DrawNodeLabel(
@@ -315,7 +315,7 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         }
 
         public void DrawRotationHandle(
-            PathAnimator script,
+            APAnimator script,
             Vector3 rotationPointPosition,
             Action<float, Vector3> callback) {
 
@@ -366,11 +366,11 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         }
 
         public void DrawUpdateAllLabels(
-            PathAnimator pathAnimator,
+            APAnimator apAnimator,
             GUIStyle style) {
 
             DrawNodeLabels(
-                pathAnimator,
+                apAnimator,
                 Settings.UpdateAllLabelText,
                 Settings.UpdateAllLabelOffsetX,
                 Settings.UpdateAllLabelOffsetY,

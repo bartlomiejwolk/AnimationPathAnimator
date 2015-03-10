@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.AnimatorComponent {
 
-    [CustomEditor(typeof (PathAnimator))]
+    [CustomEditor(typeof (APAnimator))]
     public sealed class PathAnimatorEditor : Editor {
         
         #region PROPERTIES
@@ -21,7 +21,7 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private PathAnimator Script { get; set; }
+        private APAnimator Script { get; set; }
 
         private Shortcuts Shortcuts { get; set; }
 
@@ -145,7 +145,7 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
 
         private void OnEnable() {
             // Get target script reference.
-            Script = (PathAnimator) target;
+            Script = (APAnimator) target;
 
             if (Script.Settings != null) {
                 // Initialize Settings property.

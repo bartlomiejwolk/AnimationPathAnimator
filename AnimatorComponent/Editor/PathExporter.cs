@@ -7,7 +7,7 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
     public sealed class PathExporter {
 
         #region FIELDS
-        private readonly PathAnimator pathAnimator;
+        private readonly APAnimator apAnimator;
         private readonly PathAnimatorSettings settings;
         #endregion
 
@@ -16,14 +16,14 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
             get { return settings; }
         }
 
-        public PathAnimator PathAnimator {
-            get { return pathAnimator; }
+        public APAnimator ApAnimator {
+            get { return apAnimator; }
         }
         #endregion
         #region METHODS
-        public PathExporter(PathAnimator pathAnimator) {
-            this.pathAnimator = pathAnimator;
-            this.settings = pathAnimator.Settings;
+        public PathExporter(APAnimator apAnimator) {
+            this.apAnimator = apAnimator;
+            this.settings = apAnimator.Settings;
         }
 
 
@@ -40,8 +40,8 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
 
             if (GUILayout.Button("Export")) {
                 ExportNodes(
-                    PathAnimator.PathData,
-                    PathAnimator.ThisTransform,
+                    ApAnimator.PathData,
+                    ApAnimator.ThisTransform,
                     Settings.ExportSamplingFrequency);
             }
 

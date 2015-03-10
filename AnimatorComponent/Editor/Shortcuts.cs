@@ -7,116 +7,116 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
     public sealed class Shortcuts {
 
         #region FIELDS
-        private readonly PathAnimator pathAnimator;
+        private readonly APAnimator apAnimator;
 
         private readonly PathAnimatorSettings settings;
         #endregion
 
         #region PROPERTIES
-        public PathAnimator PathAnimator {
-            get { return pathAnimator; }
+        public APAnimator ApAnimator {
+            get { return apAnimator; }
         }
 
         public PathAnimatorSettings Settings {
-            // TODO Replace with Animator.Settings.
+            // TODO Replace with APAnimator.Settings.
             get { return settings; }
         }
         #endregion
 
         #region METHODS
-        public Shortcuts(PathAnimator pathAnimator) {
-            this.pathAnimator = pathAnimator;
-            settings = pathAnimator.Settings;
+        public Shortcuts(APAnimator apAnimator) {
+            this.apAnimator = apAnimator;
+            settings = apAnimator.Settings;
         }
 
         public void HandleShortcuts() {
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.EaseModeKey,
+                ApAnimator.Settings.EaseModeKey,
                 () => Settings.HandleMode = HandleMode.Ease);
 
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.RotationModeKey,
+                ApAnimator.Settings.RotationModeKey,
                 () => Settings.HandleMode = HandleMode.Rotation);
 
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.TiltingModeKey,
+                ApAnimator.Settings.TiltingModeKey,
                 () => Settings.HandleMode = HandleMode.Tilting);
 
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.NoneModeKey,
+                ApAnimator.Settings.NoneModeKey,
                 () => Settings.HandleMode = HandleMode.None);
 
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.UpdateAllKey,
+                ApAnimator.Settings.UpdateAllKey,
                 () => Settings.UpdateAllMode = !Settings.UpdateAllMode);
 
             // Short jump forward.
             Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
-                        PathAnimator.AnimationTime + Settings.ShortJumpValue;
+                        ApAnimator.AnimationTime + Settings.ShortJumpValue;
 
-                    PathAnimator.AnimationTime =
+                    ApAnimator.AnimationTime =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
-                PathAnimator.Settings.ShortJumpForwardKey,
+                ApAnimator.Settings.ShortJumpForwardKey,
                 Event.current.alt);
 
             // Short jump backward.
             Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
-                        PathAnimator.AnimationTime - Settings.ShortJumpValue;
+                        ApAnimator.AnimationTime - Settings.ShortJumpValue;
 
-                    PathAnimator.AnimationTime =
+                    ApAnimator.AnimationTime =
                         (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
-                PathAnimator.Settings.ShortJumpBackwardKey,
+                ApAnimator.Settings.ShortJumpBackwardKey,
                 Event.current.alt);
 
             // Long jump forward.
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.LongJumpForwardKey,
-                () => PathAnimator.AnimationTime +=
-                    PathAnimator.Settings.LongJumpValue);
+                ApAnimator.Settings.LongJumpForwardKey,
+                () => ApAnimator.AnimationTime +=
+                    ApAnimator.Settings.LongJumpValue);
 
             // Long jump backward.
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.LongJumpBackwardKey,
-                () => PathAnimator.AnimationTime -=
-                    PathAnimator.Settings.LongJumpValue);
+                ApAnimator.Settings.LongJumpBackwardKey,
+                () => ApAnimator.AnimationTime -=
+                    ApAnimator.Settings.LongJumpValue);
 
             // Jump to next node.
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.JumpToNextNodeKey,
-                () => PathAnimator.AnimationTime =
+                ApAnimator.Settings.JumpToNextNodeKey,
+                () => ApAnimator.AnimationTime =
                     GetNearestForwardNodeTimestamp());
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
-                // TODO Replace Animator.Settings with Settings.
-                PathAnimator.Settings.JumpToPreviousNodeKey,
-                () => PathAnimator.AnimationTime =
+                // TODO Replace APAnimator.Settings with Settings.
+                ApAnimator.Settings.JumpToPreviousNodeKey,
+                () => ApAnimator.AnimationTime =
                     GetNearestBackwardNodeTimestamp());
 
             // Jump to start.
             Utilities.HandleModShortcut(
-                () => PathAnimator.AnimationTime = 0,
-                PathAnimator.Settings.JumpToStartKey,
+                () => ApAnimator.AnimationTime = 0,
+                ApAnimator.Settings.JumpToStartKey,
                 //ModKeyPressed);
                 Event.current.alt);
 
             // Jump to end.
             Utilities.HandleModShortcut(
-                () => PathAnimator.AnimationTime = 1,
-                PathAnimator.Settings.JumpToEndKey,
+                () => ApAnimator.AnimationTime = 1,
+                ApAnimator.Settings.JumpToEndKey,
                 //ModKeyPressed);
                 Event.current.alt);
 
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
-                PathAnimator.Settings.PlayPauseKey,
-                PathAnimator.HandlePlayPause);
+                ApAnimator.Settings.PlayPauseKey,
+                ApAnimator.HandlePlayPause);
 
             //if (Event.current.type == EventType.keyDown
             //    //&& Event.current.keyCode == KeyCode.C) {
@@ -131,10 +131,10 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         }
 
         private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
+            var pathTimestamps = ApAnimator.PathData.GetPathTimestamps();
 
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < PathAnimator.AnimationTime) {
+                if (pathTimestamps[i] < ApAnimator.AnimationTime) {
                     return pathTimestamps[i];
                 }
             }
@@ -144,10 +144,10 @@ namespace ATP.AnimationPathAnimator.AnimatorComponent {
         }
 
         private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = PathAnimator.PathData.GetPathTimestamps();
+            var pathTimestamps = ApAnimator.PathData.GetPathTimestamps();
 
             foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > PathAnimator.AnimationTime)) {
+                .Where(timestamp => timestamp > ApAnimator.AnimationTime)) {
                 return timestamp;
             }
 

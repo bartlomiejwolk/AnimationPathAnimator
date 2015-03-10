@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class Shortcuts {
 

@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class GizmoIcons {
 

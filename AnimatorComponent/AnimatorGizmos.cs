@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class AnimatorGizmos {
 

@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace ATP.AnimationPathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public static class SceneTool {
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 
-namespace ATP.AnimationPathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     /// <summary>
     ///     Component that allows animating transforms position along predefined

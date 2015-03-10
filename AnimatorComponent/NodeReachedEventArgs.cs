@@ -1,6 +1,6 @@
 using System;
 
-namespace ATP.AnimationPathAnimator.AnimatorComponent {
+namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class NodeReachedEventArgs : EventArgs {
 

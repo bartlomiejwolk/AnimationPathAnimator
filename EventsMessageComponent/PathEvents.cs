@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using ATP.AnimationPathAnimator.AnimatorComponent;
+using ATP.AnimationPathAnimator.APAnimatorComponent;
 
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 

@@ -16,7 +16,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         private APAnimator apAnimator;
 
         [SerializeField]
-        private PathEventsData eventsData;
+        private EventsData eventsData;
 
         [SerializeField]
         private PathEventsSettings settings;
@@ -36,7 +36,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             set { skin = value; }
         }
 
-        public PathEventsData EventsData {
+        public EventsData EventsData {
             get { return eventsData; }
             set { eventsData = value; }
         }

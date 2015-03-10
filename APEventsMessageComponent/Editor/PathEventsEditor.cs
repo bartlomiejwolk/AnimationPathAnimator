@@ -20,7 +20,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         private APEvents Script { get; set; }
 
-        public PathEventsData EventsData { get; set; }
+        public EventsData EventsData { get; set; }
         #endregion
 
         #region SERIALIZED PROPERTIES
@@ -242,12 +242,12 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
             //serializedObject.ApplyModifiedProperties();
 
-            Script.EventsData = (PathEventsData) EditorGUILayout.ObjectField(
+            Script.EventsData = (EventsData) EditorGUILayout.ObjectField(
                 new GUIContent(
                     "Events Asset",
                     ""),
                 Script.EventsData,
-                typeof(PathEventsData),
+                typeof(EventsData),
                 false);
         }
 
@@ -270,7 +270,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
                 // Create new path asset.
                 var asset =
-                    ScriptableObjectUtility.CreateAsset<PathEventsData>(
+                    ScriptableObjectUtility.CreateAsset<EventsData>(
                     savePath);
 
                 // Assign asset as the current path.

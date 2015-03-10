@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
     // TODO Rename to EventsData.
-    public sealed class PathEventsData : ScriptableObject {
+    public sealed class EventsData : ScriptableObject {
 
         [SerializeField]
         private List<NodeEvent> nodeEvents;

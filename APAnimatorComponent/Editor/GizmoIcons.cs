@@ -6,9 +6,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class GizmoIcons {
 
-        private AnimatorSettings Settings { get; set; }
+        private APAnimatorSettings Settings { get; set; }
 
-        public GizmoIcons(AnimatorSettings settings) {
+        public GizmoIcons(APAnimatorSettings settings) {
             Settings = settings;
         }
 

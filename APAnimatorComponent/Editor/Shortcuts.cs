@@ -9,7 +9,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region FIELDS
         private readonly APAnimator apAnimator;
 
-        private readonly AnimatorSettings settings;
+        private readonly APAnimatorSettings settings;
         #endregion
 
         #region PROPERTIES
@@ -17,7 +17,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return apAnimator; }
         }
 
-        public AnimatorSettings Settings {
+        public APAnimatorSettings Settings {
             // TODO Replace with APAnimator.messageSettings.
             get { return settings; }
         }

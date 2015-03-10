@@ -45,7 +45,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private PathData pathData;
 
         [SerializeField]
-        private AnimatorSettings settings;
+        private APAnimatorSettings settings;
 
         [SerializeField]
         private GUISkin skin;
@@ -109,7 +109,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public AnimatorSettings Settings {
+        public APAnimatorSettings Settings {
             get { return settings; }
         }
 
@@ -148,7 +148,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void OnEnable() {
             ThisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultAnimatorSettings")
-                as AnimatorSettings;
+                as APAnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
             // Initialize animatedGO field.
@@ -234,7 +234,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Create separate method InitializeFields().
             ThisTransform = GetComponent<Transform>();
             settings = Resources.Load("DefaultAnimatorSettings")
-                as AnimatorSettings;
+                as APAnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
 #if UNITY_EDITOR

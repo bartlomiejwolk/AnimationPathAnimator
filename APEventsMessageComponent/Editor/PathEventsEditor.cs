@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
-    [CustomEditor(typeof (PathEvents))]
+    [CustomEditor(typeof (APEvents))]
     public sealed class PathEventsEditor : Editor {
         #region FIELDS
 
@@ -18,7 +18,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         private SerializedObject EventsDataSerObj { get; set; }
 
-        private PathEvents Script { get; set; }
+        private APEvents Script { get; set; }
 
         public PathEventsData EventsData { get; set; }
         #endregion
@@ -62,7 +62,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         }
         private void OnEnable() {
-            Script = (PathEvents) target;
+            Script = (APEvents) target;
 
             InitializeSerializedProperties();
         }

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
-    public sealed class APEventsSettings : ScriptableObject {
+    public sealed class APEventsMessageSettings : ScriptableObject {
 
         #region FIELDS
 

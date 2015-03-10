@@ -15,7 +15,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
         private APAnimator apAnimator;
 
         [SerializeField]
-        private APEventsSettings settings;
+        private APEventsMessageSettings messageSettings;
 
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -32,9 +32,9 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
             set { skin = value; }
         }
 
-        public APEventsSettings Settings {
-            get { return settings; }
-            set { settings = value; }
+        public APEventsMessageSettings MessageSettings {
+            get { return messageSettings; }
+            set { messageSettings = value; }
         }
 
         #endregion
@@ -53,8 +53,8 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
 
         private void Reset() {
             apAnimator = GetComponent<APAnimator>();
-            settings =
-                Resources.Load<APEventsSettings>("DefaultPathEventsSettings");
+            messageSettings =
+                Resources.Load<APEventsMessageSettings>("DefaultPathEventsSettings");
             skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
         }
         #endregion

@@ -18,7 +18,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public AnimatorSettings Settings {
-            // TODO Replace with APAnimator.Settings.
+            // TODO Replace with APAnimator.messageSettings.
             get { return settings; }
         }
         #endregion
@@ -94,7 +94,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
-                // TODO Replace APAnimator.Settings with Settings.
+                // TODO Replace APAnimator.messageSettings with messageSettings.
                 ApAnimator.Settings.JumpToPreviousNodeKey,
                 () => ApAnimator.AnimationTime =
                     GetNearestBackwardNodeTimestamp());

@@ -154,8 +154,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 false);
         }
 
-        //public void Init(AnimatorSettings settings) {
-        //    Settings = settings;
+        //public void Init(AnimatorSettings messageSettings) {
+        //    messageSettings = messageSettings;
         //}
 
         #endregion

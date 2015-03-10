@@ -23,7 +23,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Directory.CreateDirectory(gizmosDir + "ATP");
             }
 
-            // Check if settings asset has icons specified.
+            // Check if messageSettings asset has icons specified.
             if (Settings.GizmoIcons == null) return;
 
             // For each icon..

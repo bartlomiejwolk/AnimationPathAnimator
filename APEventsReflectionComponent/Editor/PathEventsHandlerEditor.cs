@@ -23,7 +23,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
             skin =
                 serializedObject.FindProperty("skin");
             settings =
-                serializedObject.FindProperty("settings");
+                serializedObject.FindProperty("messageSettings");
         }
 
         public override void OnInspectorGUI() {
@@ -44,7 +44,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced Settings",
+                    "Advanced messageSettings",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -63,7 +63,7 @@ namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "Settings Asset",
+                    "messageSettings Asset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();

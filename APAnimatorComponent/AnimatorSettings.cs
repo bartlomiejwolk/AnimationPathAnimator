@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
-    // TODO Rename to Settings.
+    // TODO Rename to messageSettings.
     public sealed class AnimatorSettings : ScriptableObject {
 
         #region SHORTCUT FIELDS

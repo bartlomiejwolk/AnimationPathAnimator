@@ -10,7 +10,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         #region FIELDS
 
         private SerializedObject PathEventsSettingsSerObj;
-        private APEventsSettings ApEventsSettings { get; set; }
+        private APEventsMessageSettings ApEventsMessageSettings { get; set; }
 
         #endregion
 
@@ -20,7 +20,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         private APEventsMessage Script { get; set; }
 
-        public APEventsData ApEventsData { get; set; }
+        public APEventsMessageData ApEventsMessageData { get; set; }
         #endregion
 
         #region SERIALIZED PROPERTIES
@@ -71,7 +71,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
             // Return if path data is not assigned to the APAnimator component.
             if (Script.ApAnimator.PathData == null) return;
-            if (Script.ApEventsData == null) return;
+            if (Script.ApEventsMessageData == null) return;
 
             // TODO Guard against null Skin.
             HandleDrawingMethodNames();
@@ -103,7 +103,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "Settings Asset",
+                    "messageSettings Asset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -115,7 +115,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced Settings",
+                    "Advanced messageSettings",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -132,7 +132,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
             pathAnimator = serializedObject.FindProperty("APAnimator");
             skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("settings");
+            settings = serializedObject.FindProperty("messageSettings");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
         }
@@ -142,19 +142,19 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         /// </summary>
         private void InitializeObjectFields() {
             // Initialize EventsDataSerObj.
-            if (Script.ApEventsData != null && EventsDataSerObj == null) {
-                ApEventsData = Script.ApEventsData;
+            if (Script.ApEventsMessageData != null && EventsDataSerObj == null) {
+                ApEventsMessageData = Script.ApEventsMessageData;
                 // Initialize SerializedObject EventsDataSerObj.
-                EventsDataSerObj = new SerializedObject(ApEventsData);
+                EventsDataSerObj = new SerializedObject(ApEventsMessageData);
                 // Iniatilize SerializedProperty nodeEvents.
                 nodeEvents = EventsDataSerObj.FindProperty("nodeEvents");
             }
 
             // Initialize PathEventsSettingsSerObje.
-            if (Script.Settings != null) {
-                ApEventsSettings = Script.Settings;
+            if (Script.MessageSettings != null) {
+                ApEventsMessageSettings = Script.MessageSettings;
 
-                PathEventsSettingsSerObj = new SerializedObject(Script.Settings);
+                PathEventsSettingsSerObj = new SerializedObject(Script.MessageSettings);
                 drawMethodNames = PathEventsSettingsSerObj.FindProperty("drawMethodNames");
             }
         }
@@ -174,8 +174,8 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                ApEventsSettings.DefaultNodeLabelWidth,
-                ApEventsSettings.DefaultNodeLabelHeight);
+                ApEventsMessageSettings.DefaultNodeLabelWidth,
+                ApEventsMessageSettings.DefaultNodeLabelHeight);
 
             Handles.BeginGUI();
 
@@ -226,8 +226,8 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             DrawNodeLabels(
                 nodePositions,
                 methodNames,
-                ApEventsSettings.MethodNameLabelOffsetX,
-                ApEventsSettings.MethodNameLabelOffsetY,
+                ApEventsMessageSettings.MethodNameLabelOffsetX,
+                ApEventsMessageSettings.MethodNameLabelOffsetY,
                 style);
         }
 
@@ -235,19 +235,19 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             //serializedObject.Update();
 
             //EditorGUILayout.PropertyField(
-            //    APEventsData,
+            //    APEventsMessageData,
             //    new GUIContent(
             //        "Events Data",
             //        ""));
 
             //serializedObject.ApplyModifiedProperties();
 
-            Script.ApEventsData = (APEventsData) EditorGUILayout.ObjectField(
+            Script.ApEventsMessageData = (APEventsMessageData) EditorGUILayout.ObjectField(
                 new GUIContent(
                     "Events Asset",
                     ""),
-                Script.ApEventsData,
-                typeof(APEventsData),
+                Script.ApEventsMessageData,
+                typeof(APEventsMessageData),
                 false);
         }
 
@@ -270,11 +270,11 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
                 // Create new path asset.
                 var asset =
-                    ScriptableObjectUtility.CreateAsset<APEventsData>(
+                    ScriptableObjectUtility.CreateAsset<APEventsMessageData>(
                     savePath);
 
                 // Assign asset as the current path.
-                Script.ApEventsData = asset;
+                Script.ApEventsMessageData = asset;
             }
         }
 
@@ -284,13 +284,13 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
                     "Reset Events",
                     "Reset path to default."))) {
 
-                if (Script.ApEventsData == null) return;
+                if (Script.ApEventsMessageData == null) return;
 
                 // Allow undo this operation.
-                Undo.RecordObject(Script.ApEventsData, "Change events data.");
+                Undo.RecordObject(Script.ApEventsMessageData, "Change events data.");
 
                 // Reset curves to its default state.
-                Script.ApEventsData.ResetEvents();
+                Script.ApEventsMessageData.ResetEvents();
             }
         }
 

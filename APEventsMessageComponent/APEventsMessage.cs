@@ -16,10 +16,10 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         private APAnimator apAnimator;
 
         [SerializeField]
-        private APEventsData apEventsData;
+        private APEventsMessageData apEventsMessageData;
 
         [SerializeField]
-        private APEventsSettings settings;
+        private APEventsMessageSettings messageSettings;
 
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -36,14 +36,14 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
             set { skin = value; }
         }
 
-        public APEventsData ApEventsData {
-            get { return apEventsData; }
-            set { apEventsData = value; }
+        public APEventsMessageData ApEventsMessageData {
+            get { return apEventsMessageData; }
+            set { apEventsMessageData = value; }
         }
 
-        public APEventsSettings Settings {
-            get { return settings; }
-            set { settings = value; }
+        public APEventsMessageSettings MessageSettings {
+            get { return messageSettings; }
+            set { messageSettings = value; }
         }
 
         #endregion
@@ -62,8 +62,8 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
 
         private void Reset() {
             apAnimator = GetComponent<APAnimator>();
-            settings =
-                Resources.Load<APEventsSettings>("DefaultPathEventsSettings");
+            messageSettings =
+                Resources.Load<APEventsMessageSettings>("DefaultPathEventsSettings");
             skin = Resources.Load("DefaultPathEventsSkin") as GUISkin;
         }
         #endregion
@@ -72,13 +72,13 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
                     object sender,
                     NodeReachedEventArgs arg) {
 
-            if (ApEventsData == null) return;
+            if (ApEventsMessageData == null) return;
 
             // Return if no event was specified for current and later nodes.
-            if (arg.NodeIndex > ApEventsData.NodeEvents.Count - 1) return;
+            if (arg.NodeIndex > ApEventsMessageData.NodeEvents.Count - 1) return;
 
             // Get NodeEvent for current path node.
-            var nodeEvent = ApEventsData.NodeEvents[arg.NodeIndex];
+            var nodeEvent = ApEventsMessageData.NodeEvents[arg.NodeIndex];
 
             // Call method that will handle this event.
             gameObject.SendMessage(
@@ -92,7 +92,7 @@ namespace ATP.AnimationPathAnimator.EventsMessageComponent {
         public List<string> GetMethodNames() {
             var methodNames = new List<string>();
 
-            foreach (var nodeEvent in ApEventsData.NodeEvents) {
+            foreach (var nodeEvent in ApEventsMessageData.NodeEvents) {
                 methodNames.Add(nodeEvent.MethodName);
             }
 

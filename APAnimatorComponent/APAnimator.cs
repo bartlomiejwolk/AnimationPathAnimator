@@ -147,9 +147,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnEnable() {
             ThisTransform = GetComponent<Transform>();
-            settings = Resources.Load("DefaultPathAnimatorSettings")
+            settings = Resources.Load("DefaultAnimatorSettings")
                 as AnimatorSettings;
-            skin = Resources.Load("DefaultPathAnimatorSkin") as GUISkin;
+            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
             // Initialize animatedGO field.
             if (AnimatedGO == null && Camera.main != null) {
@@ -479,7 +479,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleClampWrapMode() {
             // Break from animation in Clamp wrap mode.
             if (AnimationTime > 1
-                && Settings.WrapMode == AnimatorWrapMode.Clamp) {
+                && Settings.WrapMode == WrapMode.Clamp) {
 
                 AnimationTime = 1;
                 IsPlaying = false;
@@ -489,7 +489,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleLoopWrapMode() {
 
             if (AnimationTime > 1
-                && Settings.WrapMode == AnimatorWrapMode.Loop) {
+                && Settings.WrapMode == WrapMode.Loop) {
 
                 AnimationTime = 0;
             }
@@ -497,13 +497,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandlePingPongWrapMode(ref bool reverse) {
             if (AnimationTime > 1
-                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+                && Settings.WrapMode == WrapMode.PingPong) {
 
                 reverse = true;
             }
 
             if (AnimationTime < 0
-                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+                && Settings.WrapMode == WrapMode.PingPong) {
 
                 reverse = false;
             }

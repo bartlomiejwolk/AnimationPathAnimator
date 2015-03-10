@@ -1,4 +1,4 @@
-﻿public enum AnimatorWrapMode {
+﻿public enum WrapMode {
 
     Clamp = 1,
     Loop = 2,

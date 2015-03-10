@@ -25,6 +25,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private Shortcuts Shortcuts { get; set; }
 
+        // TODO Remove all proxy properties like this one.
         private AnimatorSettings Settings { get; set; }
 
         private PathExporter PathExporter { get; set; }
@@ -549,7 +550,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawWrapModeDropdown() {
-            Settings.WrapMode = (AnimatorWrapMode) EditorGUILayout.EnumPopup(
+            Settings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),

@@ -280,7 +280,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private bool updateAllMode;
 
         [SerializeField]
-        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
+        private WrapMode wrapMode = global::WrapMode.Clamp;
         #endregion
         #region ANIMATOR PROPERTIES
         public string GizmosSubfolder {
@@ -342,7 +342,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { updateAllMode = value; }
         }
 
-        public AnimatorWrapMode WrapMode {
+        public WrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
         }

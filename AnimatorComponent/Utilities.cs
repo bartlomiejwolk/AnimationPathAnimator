@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathAnimatorComponent {
+namespace ATP.SimplePathAnimator.AnimatorComponent {
 
     public static class Utilities {
 

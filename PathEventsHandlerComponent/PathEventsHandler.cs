@@ -1,4 +1,4 @@
-﻿using ATP.SimplePathAnimator.PathAnimatorComponent;
+﻿using ATP.SimplePathAnimator.AnimatorComponent;
 using ATP.SimplePathAnimator.PathEventsComponent;
 using UnityEngine;
 

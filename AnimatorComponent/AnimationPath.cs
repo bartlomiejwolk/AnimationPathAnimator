@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathAnimatorComponent {
+namespace ATP.SimplePathAnimator.AnimatorComponent {
 
     /// <summary>
     /// </summary>

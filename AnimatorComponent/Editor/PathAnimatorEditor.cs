@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathAnimatorComponent {
+namespace ATP.SimplePathAnimator.AnimatorComponent {
 
     [CustomEditor(typeof (PathAnimator))]
     public sealed class PathAnimatorEditor : Editor {

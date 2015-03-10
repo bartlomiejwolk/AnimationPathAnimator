@@ -1,4 +1,4 @@
-namespace ATP.SimplePathAnimator.PathAnimatorComponent {
+namespace ATP.SimplePathAnimator.AnimatorComponent {
 
     public static class GlobalConstants {
 

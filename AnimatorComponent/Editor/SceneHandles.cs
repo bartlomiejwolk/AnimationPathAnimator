@@ -3,7 +3,7 @@ using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.SimplePathAnimator.PathAnimatorComponent {
+namespace ATP.SimplePathAnimator.AnimatorComponent {
 
     /// <summary>
     /// Class responsible for drawing all on scene handles.

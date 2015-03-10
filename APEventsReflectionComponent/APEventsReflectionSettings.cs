@@ -2,7 +2,7 @@
 
 namespace ATP.AnimationPathAnimator.PathEventsHandlerComponent {
 
-    public sealed class PathEventsReflectionSettings : ScriptableObject {
+    public sealed class APEventsReflectionSettings : ScriptableObject {
 
         #region FIELDS
 

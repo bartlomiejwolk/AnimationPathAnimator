@@ -25,7 +25,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private Shortcuts Shortcuts { get; set; }
 
-        // TODO Remove all proxy properties like this one.
         private APAnimatorSettings Settings { get; set; }
 
         private PathExporter PathExporter { get; set; }

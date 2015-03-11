@@ -30,7 +30,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private PathExporter PathExporter { get; set; }
 
         private bool SerializedPropertiesInitialized { get; set; }
-        private bool CompositeClassesInstantiated { get; set; }
         #endregion 
 
         #region SERIALIZED PROPERTIES
@@ -181,9 +180,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //if (Settings == null) return;
 
             // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(
-                GUIUtility.GetControlID(
-                    FocusType.Passive));
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
+                FocusType.Passive));
 
             Shortcuts.HandleShortcuts();
 
@@ -1057,8 +1055,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             GizmoIcons = new GizmoIcons(Settings);
             SettingsSerObj = new SerializedObject(Settings);
-
-            CompositeClassesInstantiated = true;
         }
         private void ValidateInspectorSettings() {
             if (Settings == null) return;

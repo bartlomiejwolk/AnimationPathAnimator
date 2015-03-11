@@ -180,6 +180,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnSceneGUI() {
+            // Subscribe animator to path events if not subscribed already.
+            // This is required after animator component reset.
+            if (!Script.SubscribedToEvents) Script.SubscribeToEvents();
+
             // Return is required assets are not referenced.
             if (!Script.AssetsLoaded()) return;
             // Return if path asset is not referenced.

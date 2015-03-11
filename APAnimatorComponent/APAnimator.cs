@@ -75,6 +75,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 #if UNITY_EDITOR
+        // TODO Rename to AnimatorGizmos.
         APAnimatorGizmos ApAnimatorGizmos { get; set; }
 #endif
 
@@ -148,41 +149,65 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnEnable() {
             ThisTransform = GetComponent<Transform>();
-            settings = Resources.Load("DefaultAnimatorSettings")
-                as APAnimatorSettings;
-            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
-            // Initialize animatedGO field.
-            if (AnimatedGO == null && Camera.main != null) {
-                animatedGO = Camera.main.transform;
-            }
-
-            if (pathData != null) {
-                PathData.RotationPointPositionChanged +=
-                    PathData_RotationPointPositionChanged;
-
-                PathData.NodePositionChanged += PathData_NodePositionChanged;
-                PathData.NodeTiltChanged += PathData_NodeTiltChanged;
-                PathData.PathReset += PathData_PathReset;
-                PathData.RotationPathReset += PathData_RotationPathReset;
-            }
+            LoadRequiredResources();
+            AssignMainCameraAsAnimatedGO();
+            SubscribeToEvents();
 
 #if UNITY_EDITOR
+            HandleInstantiateAnimatorGizmos();
+#endif
+        }
+
+        private void HandleInstantiateAnimatorGizmos() {
+
             if (ApAnimatorGizmos == null) {
                 ApAnimatorGizmos =
                     ApAnimatorGizmos = new APAnimatorGizmos(Settings);
             }
-#endif
+        }
+
+        private void LoadRequiredResources() {
+            settings = Resources.Load("DefaultAnimatorSettings")
+                as APAnimatorSettings;
+            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+        }
+
+        public void SubscribeToEvents() {
+            if (pathData != null) {
+                Debug.Log("subscribe");
+                PathData.RotationPointPositionChanged +=
+                    PathData_RotationPointPositionChanged;
+                PathData.NodePositionChanged += PathData_NodePositionChanged;
+                PathData.NodeTiltChanged += PathData_NodeTiltChanged;
+                PathData.PathReset += PathData_PathReset;
+                PathData.RotationPathReset += PathData_RotationPathReset;
+
+                SubscribedToEvents = true;
+            }
+        }
+
+        private void AssignMainCameraAsAnimatedGO() {
+            if (AnimatedGO == null && Camera.main != null) {
+                animatedGO = Camera.main.transform;
+            }
         }
 
         private void OnDisable() {
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents() {
             if (PathData != null) {
                 PathData.NodePositionChanged -= PathData_NodePositionChanged;
                 PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
                 PathData.PathReset -= PathData_PathReset;
                 PathData.RotationPathReset -= PathData_RotationPathReset;
+
+                SubscribedToEvents = false;
             }
         }
+
         private void Awake() {
 
         }
@@ -232,30 +257,29 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 
-        // TODO Check for null first.
         private void Reset() {
             // Create separate method InitializeFields().
             ThisTransform = GetComponent<Transform>();
-            settings = Resources.Load("DefaultAnimatorSettings")
-                as APAnimatorSettings;
-            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
 
+            LoadRequiredResources();
+            UnsubscribeFromEvents();
+            AssignMainCameraAsAnimatedGO();
 #if UNITY_EDITOR
-            if (ApAnimatorGizmos == null) {
-                ApAnimatorGizmos = new APAnimatorGizmos(Settings);
-            }
+            HandleInstantiateAnimatorGizmos();
 #endif
         }
 
         private void OnValidate() {
-            ThisTransform = GetComponent<Transform>();
-
+            //ThisTransform = GetComponent<Transform>();
             UpdateAnimation();
+            //if (!SubscribedToEvents) SubscribeToEvents();
         }
+
+        public bool SubscribedToEvents { get; set; }
 
         //private int frame;
         private void Update() {
-            var frame = Time.frameCount;
+            //var frame = Time.frameCount;
             //frame++;
             HandleUpdatingAnimGOInPlayMode();
 

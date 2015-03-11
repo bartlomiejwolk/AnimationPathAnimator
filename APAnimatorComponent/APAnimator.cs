@@ -56,6 +56,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+        private bool Reverse { get; set; }
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -107,6 +109,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set {
                 pause = value;
                 Debug.Log("Pause: " + pause);
+
+                // On unpause..
+                if (!value) {
+                    // Update animation time.
+                    UpdateAnimationTime();
+                    // Enable animating animated GO.
+                    AnimatedObjectUpdateEnabled = true;
+                }
             }
         }
 
@@ -143,7 +153,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedObjectUpdateEnabled; }
             set {
                 animatedObjectUpdateEnabled = value;
-                Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+                //Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
             }
         }
 
@@ -480,18 +490,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Pause = false;
             AnimatedObjectUpdateEnabled = true;
 
-            var reverse = false;
-
             while (true) {
                 // If animation is not paused..
                 if (!Pause) {
-                    UpdateAnimationTime(reverse);
+                    UpdateAnimationTime();
 
                     HandleClampWrapMode();
                     HandleLoopWrapMode();
-                    HandlePingPongWrapMode(ref reverse);
-
-                    AnimatedObjectUpdateEnabled = true;
+                    HandlePingPongWrapMode();
                 }
 
                 if (!IsPlaying) break;
@@ -500,12 +506,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void UpdateAnimationTime(bool reverse) {
+        private void UpdateAnimationTime() {
             // Get ease value.
             var timeStep =
                 PathData.GetEaseValueAtTime(AnimationTime);
 
-            if (reverse) {
+            if (Reverse) {
                 // Increase animation time.
                 AnimationTime -= timeStep * Time.deltaTime;
             }
@@ -534,17 +540,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void HandlePingPongWrapMode(ref bool reverse) {
+        private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
                 && Settings.WrapMode == WrapMode.PingPong) {
 
-                reverse = true;
+                Reverse = true;
             }
 
             if (AnimationTime < 0
                 && Settings.WrapMode == WrapMode.PingPong) {
 
-                reverse = false;
+                Reverse = false;
             }
         }
 

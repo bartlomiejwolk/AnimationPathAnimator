@@ -72,7 +72,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public float AnimationTime {
             get { return animationTime; }
-            set {
+            private set {
                 animationTime = value;
 
                 if (Application.isPlaying && IsPlaying && !Pause) {
@@ -95,7 +95,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <remarks>When it's true, it means that the HandleEaseTime coroutine is running.</remarks>
         public bool IsPlaying {
             get { return isPlaying; }
-            set {
+            private set {
                 isPlaying = value;
                 Debug.Log("IsPlaying:" + isPlaying);
             }

@@ -37,11 +37,17 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             SerializedProperty sourceGO =
                 prop.FindPropertyRelative("sourceGO");
 
+            SerializedProperty sourceCo =
+                prop.FindPropertyRelative("sourceCo");
+
             SerializedProperty sourceComponentIndex =
                 prop.FindPropertyRelative("sourceComponentIndex");
 
             SerializedProperty sourceMethodIndex =
                 prop.FindPropertyRelative("sourceMethodIndex");
+
+            SerializedProperty sourceMethodName =
+                prop.FindPropertyRelative("sourceMethodName");
 
             //SerializedProperty sourceComponents =
             //    prop.FindPropertyRelative("sourceComponents");
@@ -49,13 +55,14 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             SerializedProperty methodArg =
                 prop.FindPropertyRelative("methodArg");
 
-            EditorGUIUtility.labelWidth = 55;
+            EditorGUIUtility.labelWidth = 80;
 
             EditorGUI.PropertyField(
                     new Rect(pos.x, pos.y, pos.width, PropHeight),
                     sourceGO,
                     new GUIContent("Source GO", ""));
 
+            // TODO Use return instead.
             // If source GO is assigned..
             if (sourceGO.objectReferenceValue != null) {
                 // Get reference to source GO.
@@ -73,6 +80,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 if (sourceComponentIndex.intValue > sourceCoNames.Length) {
                     sourceComponentIndex.intValue = 0;
                 }
+
                 // Display dropdown game object component list.
                 sourceComponentIndex.intValue = EditorGUI.Popup(
                      new Rect(
@@ -84,6 +92,10 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                     sourceComponentIndex.intValue,
                     sourceCoNames);
 
+                // Update source component ref. in the NodeEvent property.
+                sourceCo.objectReferenceValue =
+                    sourceComponents[sourceComponentIndex.intValue];
+
                 // Get target component method names.
                 var methods = sourceComponents[sourceComponentIndex.intValue]
                     .GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
@@ -93,6 +105,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 for (int i = 0; i < methodNames.Length; i++) {
                     methodNames[i] = methods[i].Name;
                 }
+
                 // Display dropdown with component properties.
                 sourceMethodIndex.intValue = EditorGUI.Popup(
                     new Rect(
@@ -103,16 +116,21 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                     "Methods",
                     sourceMethodIndex.intValue,
                     methodNames);
+
+                // Update method name in the NodeEvent property.
+                sourceMethodName.stringValue =
+                    methodNames[sourceMethodIndex.intValue];
             }
 
-            //EditorGUI.PropertyField(
-            //        new Rect(
-            //            pos.x,
-            //            pos.y + 1 * (PropHeight + PropMargin),
-            //            pos.width,
-            //            PropHeight),
-            //        methodArg,
-            //        new GUIContent("Arg.", ""));
+            // TODO Draw only if sourceGO is specified.
+            EditorGUI.PropertyField(
+                    new Rect(
+                        pos.x,
+                        pos.y + 3 * (PropHeight + PropMargin),
+                        pos.width,
+                        PropHeight),
+                    methodArg,
+                    new GUIContent("Argument", ""));
         }
     }
 }

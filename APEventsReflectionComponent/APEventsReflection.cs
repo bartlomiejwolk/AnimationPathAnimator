@@ -66,6 +66,22 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                     object sender,
                     NodeReachedEventArgs arg) {
 
+            // Return if there's no event slot created for current path node.
+            if (arg.NodeIndex > nodeEvents.Count - 1) return;
+
+            // Get event slot.
+            var nodeEvent = nodeEvents[arg.NodeIndex];
+            // Return if source GO was not specified in the event slot.
+            if (nodeEvent.SourceMethodName == null) return;
+            var methodInfo = nodeEvent.SourceCo.GetType()
+                    .GetMethod(nodeEvent.SourceMethodName);
+            var methodParams = methodInfo.GetParameters();
+            if (methodParams.Length == 0) {
+                methodInfo.Invoke(nodeEvent.SourceCo, null);
+            }
+            else if (methodParams.Length == 1) {
+                // TODO Check if param is string.
+            }
         }
 
         #endregion

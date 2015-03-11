@@ -3,6 +3,7 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
     [System.Serializable]
+    // TODO Rename to NodeEventSlot.
     public sealed class NodeEvent {
 
         /// <summary>
@@ -47,6 +48,29 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         public string MethodArg {
             get { return methodArg; }
             set { methodArg = value; }
+        }
+
+        /// <summary>
+        /// Selected source component.
+        /// </summary>
+        public Component SourceCo {
+            get { return sourceCo; }
+        }
+
+        /// <summary>
+        /// Names of components existing on source game object.
+        /// </summary>
+//[SerializeField]
+//private string[] sourceCoNames;
+        public string SourceMethodName {
+            get { return sourceMethodName; }
+        }
+
+        /// <summary>
+        /// Selected source game object.
+        /// </summary>
+        public GameObject SourceGO {
+            get { return sourceGO; }
         }
 
     }

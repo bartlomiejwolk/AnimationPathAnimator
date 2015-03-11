@@ -29,6 +29,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private PathExporter PathExporter { get; set; }
 
+        private bool SerializedPropertiesInitialized { get; set; }
+        private bool CompositeClassesInstantiated { get; set; }
         #endregion 
 
         #region SERIALIZED PROPERTIES
@@ -53,6 +55,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
+            if (!Script.AssetsLoaded()) return;
+
             HandleUndo();
 
             // TODO Rename to DrawPathDataAssetField().
@@ -147,6 +151,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Get target script reference.
             Script = (APAnimator) target;
 
+            if (!Script.AssetsLoaded()) return;
+
             if (Script.Settings != null) {
                 // Initialize messageSettings property.
                 Settings = Script.Settings;
@@ -164,7 +170,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnSceneGUI() {
-            CheckForSkinAsset();
+            //CheckForSkinAsset();
+            if (!Script.AssetsLoaded()) return;
+            if (!SerializedPropertiesInitialized) return;
 
             // Return if path asset does not exist.
             if (Script.PathData == null) return;
@@ -198,6 +206,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Repaint();
             }
         }
+
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
@@ -936,6 +945,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region METHODS
+        // TODO Rename to HandleUndoEvent().
         private void HandleUndo() {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
@@ -1038,6 +1048,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsSerObj.FindProperty("rotationCurveColor");
             shortJumpValue = SettingsSerObj.FindProperty("shortJumpValue");
             longJumpValue = SettingsSerObj.FindProperty("longJumpValue");
+
+            SerializedPropertiesInitialized = true;
         }
 
         private void InstantiateCompositeClasses() {
@@ -1049,6 +1061,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             GizmoIcons = new GizmoIcons(Settings);
             SettingsSerObj = new SerializedObject(Settings);
+
+            CompositeClassesInstantiated = true;
         }
         private void ValidateInspectorSettings() {
             if (Settings == null) return;

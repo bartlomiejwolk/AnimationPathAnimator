@@ -189,6 +189,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         // TODO Refactor.
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
+            if (!AssetsLoaded()) return;
+
             // Return if path asset file is not assigned.
             if (PathData == null) return;
 
@@ -379,6 +381,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
         public void UpdateAnimation() {
+            if (!AssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;
 
@@ -655,6 +658,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion METHODS
+
+        public bool AssetsLoaded() {
+            if (Settings != null
+                && Skin != null) {
+
+                return true;
+            }
+
+            return false;
+        }
+
     }
 
 }

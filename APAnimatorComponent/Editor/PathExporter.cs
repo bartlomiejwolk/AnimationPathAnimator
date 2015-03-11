@@ -23,7 +23,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region METHODS
         public PathExporter(APAnimator apAnimator) {
             this.apAnimator = apAnimator;
-            this.settings = apAnimator.Settings;
+            settings = apAnimator.Settings;
         }
 
 

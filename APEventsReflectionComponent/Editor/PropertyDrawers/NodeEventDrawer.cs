@@ -77,7 +77,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 }
                 // Make sure that name index corresponds to a component.
                 // Important when changing source game object.
-                if (sourceComponentIndex.intValue > sourceCoNames.Length) {
+                if (sourceComponentIndex.intValue > sourceCoNames.Length - 1) {
                     sourceComponentIndex.intValue = 0;
                 }
 

@@ -56,6 +56,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+        private bool Reverse { get; set; }
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -107,6 +109,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set {
                 pause = value;
                 Debug.Log("Pause: " + pause);
+
+                // On unpause..
+                if (!value) {
+                    // Update animation time.
+                    UpdateAnimationTime();
+                    // Enable animating animated GO.
+                    AnimatedObjectUpdateEnabled = true;
+                }
             }
         }
 
@@ -119,7 +129,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return skin; }
         }
 
-        public Transform ThisTransform { get; set; }
+        private Transform thisTransform;
+
+        public Transform ThisTransform {
+            get { return thisTransform; }
+        }
 
         /// <summary>
         ///     Transform that the <c>animatedGO</c> will be looking at.
@@ -139,7 +153,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedObjectUpdateEnabled; }
             set {
                 animatedObjectUpdateEnabled = value;
-                Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+                //Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
             }
         }
 
@@ -148,7 +162,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         private void OnEnable() {
-            ThisTransform = GetComponent<Transform>();
+            Debug.Log("OnEnable");
+            thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
             AssignMainCameraAsAnimatedGO();
@@ -259,7 +274,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void Reset() {
             // Create separate method InitializeFields().
-            ThisTransform = GetComponent<Transform>();
+            thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
             UnsubscribeFromEvents();
@@ -270,7 +285,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnValidate() {
-            //ThisTransform = GetComponent<Transform>();
+            thisTransform = GetComponent<Transform>();
             UpdateAnimation();
             //if (!SubscribedToEvents) SubscribeToEvents();
         }
@@ -379,6 +394,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to StartAnimation().
         public void StartEaseTimeCoroutine() {
             if (PathData == null) {
                 Debug.LogWarning("Assign Path Asset in the inspector.");
@@ -394,10 +410,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             StartCoroutine("HandleEaseTime");
         }
 
-        // TODO Remove.
+        // TODO Rename to StopAnimation().
         public void StopEaseTimeCoroutine() {
             StopCoroutine("HandleEaseTime");
 
+            IsPlaying = false;
+            Pause = false;
             // Reset animation.
             //AnimationTime = 0;
         }
@@ -475,16 +493,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Pause = false;
             AnimatedObjectUpdateEnabled = true;
 
-            var reverse = false;
-
             while (true) {
                 // If animation is not paused..
                 if (!Pause) {
-                    UpdateAnimationTime(reverse);
+                    UpdateAnimationTime();
 
                     HandleClampWrapMode();
                     HandleLoopWrapMode();
-                    HandlePingPongWrapMode(ref reverse);
+                    HandlePingPongWrapMode();
                 }
 
                 if (!IsPlaying) break;
@@ -493,12 +509,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void UpdateAnimationTime(bool reverse) {
+        private void UpdateAnimationTime() {
             // Get ease value.
             var timeStep =
                 PathData.GetEaseValueAtTime(AnimationTime);
 
-            if (reverse) {
+            if (Reverse) {
                 // Increase animation time.
                 AnimationTime -= timeStep * Time.deltaTime;
             }
@@ -527,17 +543,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void HandlePingPongWrapMode(ref bool reverse) {
+        private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
                 && Settings.WrapMode == WrapMode.PingPong) {
 
-                reverse = true;
+                Reverse = true;
             }
 
             if (AnimationTime < 0
                 && Settings.WrapMode == WrapMode.PingPong) {
 
-                reverse = false;
+                Reverse = false;
             }
         }
 
@@ -686,8 +702,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return rotPointPositions;
         }
 
-        #endregion METHODS
-
         public bool AssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
@@ -698,6 +712,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return false;
         }
 
+        #endregion METHODS
     }
 
 }

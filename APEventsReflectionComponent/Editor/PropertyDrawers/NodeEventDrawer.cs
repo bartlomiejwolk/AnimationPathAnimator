@@ -9,7 +9,7 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
     public sealed class NodeEventDrawer : PropertyDrawer {
 
         // How many rows (properties) will be displayed.
-        private const int Rows = 4;
+        //private int Rows = 1;
 
         // Hight of a single property.
         private const int PropHeight = 16;
@@ -25,15 +25,24 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 SerializedProperty property,
                 GUIContent label) {
 
+            // Property with number of rows to be displayed.
+            var rowsProperty = property.FindPropertyRelative("rows");
+            // Copy rows number to local variable.
+            var rows = rowsProperty.intValue;
+
+            // Calculate property height.
             return base.GetPropertyHeight(property, label)
-                * Rows // Each row is 16 px high.
-                + (Rows - 1) * RowsSpace;
+                * rows // Each row is 16 px high.
+                + (rows - 1) * RowsSpace;
         }
 
         public override void OnGUI(
                 Rect pos,
                 SerializedProperty prop,
                 GUIContent label) {
+
+            SerializedProperty rowsProperty =
+                prop.FindPropertyRelative("rows");
 
             SerializedProperty sourceGO =
                 prop.FindPropertyRelative("sourceGO");
@@ -50,9 +59,6 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             SerializedProperty sourceMethodName =
                 prop.FindPropertyRelative("sourceMethodName");
 
-            //SerializedProperty sourceComponents =
-            //    prop.FindPropertyRelative("sourceComponents");
-
             SerializedProperty methodArg =
                 prop.FindPropertyRelative("methodArg");
 
@@ -64,7 +70,14 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                     new GUIContent("Source GO", ""));
 
             // If source GO is assigned..
-            if (sourceGO.objectReferenceValue == null) return;
+            if (sourceGO.objectReferenceValue == null) {
+                // Set rows number to 1.
+                rowsProperty.intValue = 1;
+                return;
+            }
+            // Set rows number to 4.
+            rowsProperty.intValue = 4;
+
             // Get reference to source GO.
             var sourceGORef = sourceGO.objectReferenceValue as GameObject;
             // Get source game object components.

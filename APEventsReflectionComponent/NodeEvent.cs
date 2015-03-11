@@ -37,6 +37,12 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private int sourceComponentIndex;
 
         /// <summary>
+        /// How many rows should be displayed in the inspector.
+        /// </summary>
+        [SerializeField]
+        private int rows = 1;
+
+        /// <summary>
         /// Index of the source component in the source component names list.
         /// </summary>
         //[SerializeField]
@@ -72,7 +78,6 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         public GameObject SourceGO {
             get { return sourceGO; }
         }
-
     }
 
 }

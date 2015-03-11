@@ -275,6 +275,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //if (!SubscribedToEvents) SubscribeToEvents();
         }
 
+        /// <summary>
+        /// If animator is currently subscribed to path events.
+        /// </summary>
+        /// <remarks>It's only public because of the Editor class.</remarks>
         public bool SubscribedToEvents { get; set; }
 
         //private int frame;

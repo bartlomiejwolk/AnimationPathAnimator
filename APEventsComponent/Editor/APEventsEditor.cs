@@ -9,7 +9,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
     public class APEventsEditor : Editor {
 
         private APEvents Script { get; set; }
-        private APEventsReflectionSettings Settings { get; set; }
+        private APEventsSettings Settings { get; set; }
 
         private SerializedProperty apAnimator;
         private SerializedProperty advancedSettingsFoldout;

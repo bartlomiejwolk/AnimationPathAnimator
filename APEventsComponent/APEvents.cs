@@ -15,7 +15,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private APAnimator apAnimator;
 
         [SerializeField]
-        private APEventsReflectionSettings settings;
+        private APEventsSettings settings;
 
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -38,7 +38,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             set { skin = value; }
         }
 
-        public APEventsReflectionSettings Settings {
+        public APEventsSettings Settings {
             get { return settings; }
             set { settings = value; }
         }
@@ -60,7 +60,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private void Reset() {
             apAnimator = GetComponent<APAnimator>();
             settings =
-                Resources.Load<APEventsReflectionSettings>("DefaultAPEventsReflectionSettings");
+                Resources.Load<APEventsSettings>("DefaultAPEventsReflectionSettings");
             skin = Resources.Load("DefaultAPEventsReflectionSkin") as GUISkin;
         }
         #endregion

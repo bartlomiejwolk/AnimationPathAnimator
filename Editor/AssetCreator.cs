@@ -20,7 +20,7 @@ namespace ATP.AnimationPathAnimator {
 
         [MenuItem("Assets/Create/ATP/SimplePathAnimator/APEvents Reflection Settings")]
         private static void CreateAPEventsReflectionSettingsAsset() {
-            ScriptableObjectUtility.CreateAsset<APEventsReflectionSettings>();
+            ScriptableObjectUtility.CreateAsset<APEventsSettings>();
         }
     }
 

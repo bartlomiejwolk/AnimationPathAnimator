@@ -116,7 +116,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
                 ApAnimator.Settings.PlayPauseKey,
-                ApAnimator.HandlePlayPause);
+                //ApAnimator.HandlePlayPause);
+                HandlePlayPause);
 
             //if (Event.current.type == EventType.keyDown
             //    //&& Event.current.keyCode == KeyCode.C) {
@@ -128,6 +129,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //    //Debug.Log(Event.current.modifiers);
             //    Debug.Log("Alt + C");
             //}
+        }
+
+        private void HandlePlayPause() {
+             Utilities.InvokeMethodWithReflection(
+                ApAnimator,
+                "HandlePlayPause",
+                null);
         }
 
         private float GetNearestBackwardNodeTimestamp() {

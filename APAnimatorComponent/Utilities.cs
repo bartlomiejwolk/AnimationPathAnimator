@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
@@ -121,7 +122,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             object[] parameters) {
 
             // Get method metadata.
-            var methodInfo = target.GetType().GetMethod(methodName);
+            var methodInfo = target.GetType().GetMethod(
+                methodName,
+                BindingFlags.NonPublic | BindingFlags.Instance);
 
             if (parameters != null) {
                 // Invoke with parameters.

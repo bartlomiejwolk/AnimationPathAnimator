@@ -372,7 +372,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimateAnimatedGOTilting();
         }
 
-        public void HandlePlayPause() {
+        private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
             // Pause animation.
@@ -427,7 +427,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <remarks>
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
-        public void UpdateAnimation() {
+        private void UpdateAnimation() {
             if (!AssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;

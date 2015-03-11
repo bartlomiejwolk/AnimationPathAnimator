@@ -454,7 +454,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     playPauseBtnText,
                     ""))) {
 
-                Script.HandlePlayPause();
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "HandlePlayPause",
+                    null);
             }
 
             // Draw Stop button.

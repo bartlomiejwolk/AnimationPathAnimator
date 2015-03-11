@@ -3,7 +3,7 @@ using ATP.AnimationPathAnimator.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
+namespace ATP.AnimationPathAnimator.APEventsComponent {
 
     [CustomEditor(typeof (APEventsReflection))]
     public class APEventsReflectionEditor : Editor {

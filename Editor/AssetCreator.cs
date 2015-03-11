@@ -1,6 +1,6 @@
 ﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
 using ATP.AnimationPathAnimator.APEventsMessageComponent;
-using ATP.AnimationPathAnimator.APEventsReflectionComponent;
+using ATP.AnimationPathAnimator.APEventsComponent;
 using UnityEditor;
 
 namespace ATP.AnimationPathAnimator {

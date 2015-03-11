@@ -3,7 +3,7 @@ using System.Collections;
 using System.Reflection;
 using UnityEditor;
 
-namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
+namespace ATP.AnimationPathAnimator.APEventsComponent {
 
     [CustomPropertyDrawer(typeof(NodeEvent))]
     public sealed class NodeEventDrawer : PropertyDrawer {

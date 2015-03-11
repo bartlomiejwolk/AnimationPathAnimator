@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
+namespace ATP.AnimationPathAnimator.APEventsComponent {
 
     [System.Serializable]
     // TODO Rename to NodeEventSlot.

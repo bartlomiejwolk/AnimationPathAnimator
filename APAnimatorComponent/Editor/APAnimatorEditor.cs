@@ -54,7 +54,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            if (!Script.AssetsLoaded()) return;
+            if (!Script.AssetsLoaded()) {
+                DrawInfoLabel(
+                    //"Asset files in extension folder were not found. "
+                    "Required assets were not found.\n"
+                    + "Reload scene and if it does not help, restore extension "
+                    + "folder content to its default state.");
+                return;
+            }
             if (!SerializedPropertiesInitialized) return;
 
             HandleUndo();
@@ -145,6 +152,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
+        }
+
+        private void DrawInfoLabel(string text) {
+            EditorGUILayout.HelpBox(text, MessageType.Error);
         }
 
         private void OnEnable() {

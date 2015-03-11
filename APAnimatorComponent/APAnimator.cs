@@ -53,6 +53,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private GUISkin skin;
 
+        [SerializeField]
+        private bool subscribedToEvents;
+
         private bool animatedObjectUpdateEnabled;
 
         /// <summary>
@@ -130,6 +133,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return skin; }
         }
 
+        /// <summary>
+        /// Helper field.
+        /// </summary>
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -147,10 +153,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public Transform AnimatedGO {
             get { return animatedGO; }
         }
-
-        [SerializeField]
-        private bool subscribedToEvents;
-
         /// <summary>
         ///     If animator is currently subscribed to path events.
         /// </summary>
@@ -713,6 +715,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             return false;
         }
+
+        public Vector3[] GetGlobalNodePositions() {
+            var nodePositions = PathData.GetNodePositions();
+            Utilities.ConvertToGlobalCoordinates(ref nodePositions, ThisTransform);
+
+            return nodePositions;
+        }
+
 
         #endregion METHODS
     }

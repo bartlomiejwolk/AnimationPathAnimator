@@ -727,8 +727,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            var nodePositions = Script.PathData.GetGlobalNodePositions(
-                Script.ThisTransform);
+            var nodePositions = Script.GetGlobalNodePositions();
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -751,7 +750,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Get path node positions.
             var nodePositions =
-                Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
+                Script.GetGlobalNodePositions();
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -770,8 +769,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.HandleMode != HandleMode.Ease) return;
 
             // Get node global positions.
-            var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
-                Script.ThisTransform);
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
@@ -793,7 +791,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
+            var nodes = Script.GetGlobalNodePositions();
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -841,7 +839,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Get path node positions.
             var nodePositions =
-                Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
+                Script.GetGlobalNodePositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -856,8 +854,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.
-            var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
-                Script.ThisTransform);
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,

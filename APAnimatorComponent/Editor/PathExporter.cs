@@ -70,9 +70,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 exportSampling);
 
             // Convert points to global coordinates.
-            for (int i = 0; i < points.Count; i++) {
-                points[i] = transform.TransformPoint(points[i]);
-            }
+            Utilities.ConvertToGlobalCoordinates(ref points, transform);
+            //for (int i = 0; i < points.Count; i++) {
+            //    points[i] = transform.TransformPoint(points[i]);
+            //}
 
             // Create parent GO.
             var exportedPath = new GameObject("exported_path");

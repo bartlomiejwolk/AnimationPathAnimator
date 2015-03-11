@@ -748,14 +748,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             return globalNodePosition;
         }
-
-        public Vector3[] GetGlobalNodePositions(Transform transform) {
-            var nodePositions = GetNodePositions();
-            Utilities.ConvertToGlobalCoordinates(ref nodePositions, transform);
-
-            return nodePositions;
-        }
-
         public float GetNodeEaseValue(int i) {
             return EaseCurve.keys[i].value;
         }

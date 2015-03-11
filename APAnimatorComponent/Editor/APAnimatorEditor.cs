@@ -56,6 +56,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public override void OnInspectorGUI() {
             if (!Script.AssetsLoaded()) return;
+            if (!SerializedPropertiesInitialized) return;
 
             HandleUndo();
 
@@ -153,10 +154,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (!Script.AssetsLoaded()) return;
 
-            if (Script.Settings != null) {
-                // Initialize messageSettings property.
-                Settings = Script.Settings;
-            }
+            // Initialize helper property.
+            Settings = Script.Settings;
 
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
@@ -1036,8 +1035,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
                 SettingsSerObj.FindProperty("MaxAnimationSpeed");
-            //positionLerpSpeed =
-            //    SettingsSerObj.FindProperty("positionLerpSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
                 SettingsSerObj.FindProperty("EnableControlsInPlayMode");
@@ -1056,8 +1053,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneHandles = new SceneHandles(Script);
             Shortcuts = new Shortcuts(Script);
             PathExporter = new PathExporter(Script);
-
-            if (Settings == null) return;
 
             GizmoIcons = new GizmoIcons(Settings);
             SettingsSerObj = new SerializedObject(Settings);

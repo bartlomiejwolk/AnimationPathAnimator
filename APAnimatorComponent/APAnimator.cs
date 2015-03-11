@@ -119,7 +119,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return skin; }
         }
 
-        public Transform ThisTransform { get; set; }
+        private Transform thisTransform;
+
+        public Transform ThisTransform {
+            get { return thisTransform; }
+        }
 
         /// <summary>
         ///     Transform that the <c>animatedGO</c> will be looking at.
@@ -148,7 +152,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         private void OnEnable() {
-            ThisTransform = GetComponent<Transform>();
+            Debug.Log("OnEnable");
+            thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
             AssignMainCameraAsAnimatedGO();
@@ -259,7 +264,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void Reset() {
             // Create separate method InitializeFields().
-            ThisTransform = GetComponent<Transform>();
+            thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
             UnsubscribeFromEvents();
@@ -270,7 +275,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnValidate() {
-            //ThisTransform = GetComponent<Transform>();
+            thisTransform = GetComponent<Transform>();
             UpdateAnimation();
             //if (!SubscribedToEvents) SubscribeToEvents();
         }

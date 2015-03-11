@@ -87,6 +87,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;
+            // Return if path data does not exist.
+            if (Script.ApAnimator.PathData == null) return;
 
             var nodePositions = Script.GetNodePositions();
             var methodNames = Script.GetMethodNames();

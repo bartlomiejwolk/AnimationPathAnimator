@@ -464,7 +464,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     ""))) {
 
                 Script.StopEaseTimeCoroutine();
-                Script.UpdateAnimation();
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -659,7 +663,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Reset curves to its default state.
                 Script.PathData.ResetPath();
 
-                Script.UpdateAnimation();
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
         }
 
@@ -688,7 +695,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// Called on rotation mode change.
         /// </summary>
         private void HandleRotationModeChange() {
-            Script.UpdateAnimation();
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
             Settings.HandleMode = HandleMode.None;
         }
 
@@ -858,7 +868,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Update animated object.
-            Script.UpdateAnimation();
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
         }
 
         private void DrawPositionHandlesCallbackHandler(
@@ -892,7 +905,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Update animated object.
-            Script.UpdateAnimation();
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
         }
 
         private void DrawEaseHandlesCallbackHandler(
@@ -975,7 +991,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Update path with new tangent setting.
                 HandleTangentModeChange();
                 // Update animated object.
-                Script.UpdateAnimation();
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
         }
 

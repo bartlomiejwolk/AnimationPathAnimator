@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -20,10 +18,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         #endregion
+
         #region FIELDS
+
         //[SerializeField]
         //private Transform thisTransform;
-
 
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -63,6 +62,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private Transform targetGO;
 
         private Transform thisTransform;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -83,8 +83,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
 #if UNITY_EDITOR
         // TODO Rename to AnimatorGizmos.
-        APAnimatorGizmos ApAnimatorGizmos { get; set; }
+        private APAnimatorGizmos ApAnimatorGizmos { get; set; }
 #endif
+
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
@@ -101,6 +102,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return pathData; }
             set { pathData = value; }
         }
+
         public bool Pause {
             get { return pause; }
             set {
@@ -127,6 +129,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public GUISkin Skin {
             get { return skin; }
         }
+
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -146,7 +149,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// If animator is currently subscribed to path events.
+        ///     If animator is currently subscribed to path events.
         /// </summary>
         /// <remarks>It's only public because of the Editor class.</remarks>
         public bool SubscribedToEvents { get; set; }
@@ -245,7 +248,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (Settings.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
-                ApAnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
+                ApAnimatorGizmos.DrawForwardPointIcon(
+                    globalForwardPointPosition);
             }
 
             if (Settings.HandleMode == HandleMode.Rotation) {
@@ -265,14 +269,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             ApAnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 #endif
-     
+
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
                 StartEaseTimeCoroutine();
                 IsPlaying = true;
             }
         }
-
 
         private void Reset() {
             // Create separate method InitializeFields().
@@ -291,6 +294,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             UpdateAnimation();
             //if (!SubscribedToEvents) SubscribeToEvents();
         }
+
         //private int frame;
         private void Update() {
             //var frame = Time.frameCount;
@@ -327,6 +331,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
+
         private void PathData_RotationPathReset(object sender, EventArgs e) {
             Settings.RotationMode = RotationMode.Custom;
         }
@@ -335,7 +340,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
-
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             UpdateAnimation();
@@ -637,7 +641,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region HELPER METHODS
-   
+
         // TODO Rename to HandleFiringNodeReachedEvent.
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
@@ -660,7 +664,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             OnNodeReached(args);
         }
 
-
         // TODO Remove.
         private void UpdateWrapMode() {
             PathData.SetPathWrapMode(Settings.WrapMode);
@@ -680,7 +683,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private Vector3 GetGlobalForwardPoint() {
             var localForwardPoint = GetForwardPoint();
-            var globalForwardPoint = ThisTransform.TransformPoint(localForwardPoint);
+            var globalForwardPoint =
+                ThisTransform.TransformPoint(localForwardPoint);
 
             return globalForwardPoint;
         }

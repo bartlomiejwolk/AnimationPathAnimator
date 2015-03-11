@@ -50,6 +50,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty settings;
         private SerializedProperty shortJumpValue;
         private SerializedProperty longJumpValue;
+        private SerializedProperty subscribedToEvents;
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -191,17 +192,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnSceneGUI() {
-            // Subscribe animator to path events if not subscribed already.
-            // This is required after animator component reset.
-            if (!Script.SubscribedToEvents) Utilities.InvokeMethodWithReflection(
-                Script, "SubscribeToEvents", null);
-
             // Return is required assets are not referenced.
             if (!AssetsLoaded()) return;
             // Return if path asset is not referenced.
             if (Script.PathData == null) return;
             // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
+
+            // Subscribe animator to path events if not subscribed already.
+            // This is required after animator component reset.
+            if (!subscribedToEvents.boolValue) {
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "SubscribeToEvents",
+                    null);
+            }
 
             // Return is Settings asset is not assigned in the inspector.
             //if (Settings == null) return;
@@ -1100,6 +1105,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsSerObj.FindProperty("rotationCurveColor");
             shortJumpValue = SettingsSerObj.FindProperty("shortJumpValue");
             longJumpValue = SettingsSerObj.FindProperty("longJumpValue");
+            subscribedToEvents =
+                serializedObject.FindProperty("subscribedToEvents");
 
             SerializedPropertiesInitialized = true;
         }

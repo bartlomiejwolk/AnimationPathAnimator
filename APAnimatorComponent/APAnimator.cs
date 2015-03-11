@@ -148,11 +148,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedGO; }
         }
 
+        [SerializeField]
+        private bool subscribedToEvents;
+
         /// <summary>
         ///     If animator is currently subscribed to path events.
         /// </summary>
         /// <remarks>It's only public because of the Editor class.</remarks>
-        public bool SubscribedToEvents { get; set; }
+        private bool SubscribedToEvents {
+            set { subscribedToEvents = value; }
+        }
 
         public bool AnimatedObjectUpdateEnabled {
             get { return animatedObjectUpdateEnabled; }

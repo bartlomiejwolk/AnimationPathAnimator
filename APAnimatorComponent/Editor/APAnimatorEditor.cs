@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,8 +20,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Reference to target script.
         /// </summary>
         private APAnimator Script { get; set; }
-
-        private Shortcuts Shortcuts { get; set; }
 
         private APAnimatorSettings Settings { get; set; }
 
@@ -51,6 +46,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty shortJumpValue;
         private SerializedProperty longJumpValue;
         private SerializedProperty subscribedToEvents;
+        private SerializedProperty animationTime;
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -184,7 +180,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 "AssetsLoaded",
                 null);
 
-            return assetsLoaded ? true : false;
+            return assetsLoaded;
         }
 
         private void OnDisable() {
@@ -215,7 +211,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                 FocusType.Passive));
 
-            Shortcuts.HandleShortcuts();
+            HandleShortcuts();
 
             //Script.UpdateWrapMode();
 
@@ -359,7 +355,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Math.Abs(newTimeRatio - Script.AnimationTime)
                 > GlobalConstants.FloatPrecision) {
 
-                Script.AnimationTime = newTimeRatio;
+                serializedObject.Update();
+
+                animationTime.floatValue = newTimeRatio;
+
+                serializedObject.ApplyModifiedProperties();
             }
         }
 
@@ -1104,13 +1104,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             longJumpValue = SettingsSerObj.FindProperty("longJumpValue");
             subscribedToEvents =
                 serializedObject.FindProperty("subscribedToEvents");
+            animationTime =
+                serializedObject.FindProperty("animationTime");
 
             SerializedPropertiesInitialized = true;
         }
 
         private void InstantiateCompositeClasses() {
             SceneHandles = new SceneHandles(Script);
-            Shortcuts = new Shortcuts(Script);
             PathExporter = new PathExporter(Script);
 
             GizmoIcons = new GizmoIcons(Settings);
@@ -1166,6 +1167,135 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion PRIVATE METHODS
+        #region SHORTCUTS
+
+        private void HandleShortcuts() {
+            serializedObject.Update();
+
+            Utilities.HandleUnmodShortcut(
+                Settings.EaseModeKey,
+                () => Settings.HandleMode = HandleMode.Ease);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.RotationModeKey,
+                () => Settings.HandleMode = HandleMode.Rotation);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.TiltingModeKey,
+                () => Settings.HandleMode = HandleMode.Tilting);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.NoneModeKey,
+                () => Settings.HandleMode = HandleMode.None);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.UpdateAllKey,
+                () => Settings.UpdateAllMode = !Settings.UpdateAllMode);
+
+            // Short jump forward.
+            Utilities.HandleModShortcut(
+                () => {
+                    var newAnimationTimeRatio =
+                        animationTime.floatValue + Settings.ShortJumpValue;
+
+                    animationTime.floatValue =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                },
+                Settings.ShortJumpForwardKey,
+                Event.current.alt);
+
+            // Short jump backward.
+            Utilities.HandleModShortcut(
+                () => {
+                    var newAnimationTimeRatio =
+                        animationTime.floatValue - Settings.ShortJumpValue;
+
+                    animationTime.floatValue =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                },
+                Settings.ShortJumpBackwardKey,
+                Event.current.alt);
+
+            // Long jump forward.
+            Utilities.HandleUnmodShortcut(
+                Settings.LongJumpForwardKey,
+                () => animationTime.floatValue +=
+                    Settings.LongJumpValue);
+
+            // Long jump backward.
+            Utilities.HandleUnmodShortcut(
+                Settings.LongJumpBackwardKey,
+                () => animationTime.floatValue -=
+                    Settings.LongJumpValue);
+
+            // Jump to next node.
+            Utilities.HandleUnmodShortcut(
+                Settings.JumpToNextNodeKey,
+                () => animationTime.floatValue =
+                    GetNearestForwardNodeTimestamp());
+
+            // Jump to previous node.
+            Utilities.HandleUnmodShortcut(
+                // TODO Replace APAnimator.messageSettings with messageSettings.
+                Settings.JumpToPreviousNodeKey,
+                () => animationTime.floatValue =
+                    GetNearestBackwardNodeTimestamp());
+
+            // Jump to start.
+            Utilities.HandleModShortcut(
+                () => animationTime.floatValue = 0,
+                Settings.JumpToStartKey,
+                //ModKeyPressed);
+                Event.current.alt);
+
+            // Jump to end.
+            Utilities.HandleModShortcut(
+                () => animationTime.floatValue = 1,
+                Settings.JumpToEndKey,
+                //ModKeyPressed);
+                Event.current.alt);
+
+            // Play/pause animation.
+            Utilities.HandleUnmodShortcut(
+                Settings.PlayPauseKey,
+                HandlePlayPause);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandlePlayPause() {
+            Utilities.InvokeMethodWithReflection(
+               Script,
+               "HandlePlayPause",
+               null);
+        }
+
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
+
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < animationTime.floatValue) {
+                    return pathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
+
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > animationTime.floatValue)) {
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
+        }
+
+        #endregion
     }
 
 }

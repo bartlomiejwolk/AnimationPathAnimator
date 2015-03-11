@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
-    [CustomEditor(typeof (APEventsReflection))]
-    public class APEventsReflectionEditor : Editor {
+    [CustomEditor(typeof (APEvents))]
+    public class APEventsEditor : Editor {
 
-        private APEventsReflection Script { get; set; }
+        private APEvents Script { get; set; }
 
         private SerializedProperty apAnimator;
         private SerializedProperty advancedSettingsFoldout;
@@ -18,7 +18,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private SerializedProperty drawMethodNames;
 
         private void OnEnable() {
-            Script = target as APEventsReflection;
+            Script = target as APEvents;
 
             InitializeSerializedProperties();
         }

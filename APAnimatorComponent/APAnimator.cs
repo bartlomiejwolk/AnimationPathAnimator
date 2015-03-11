@@ -490,6 +490,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     HandleClampWrapMode();
                     HandleLoopWrapMode();
                     HandlePingPongWrapMode(ref reverse);
+
+                    AnimatedObjectUpdateEnabled = true;
                 }
 
                 if (!IsPlaying) break;

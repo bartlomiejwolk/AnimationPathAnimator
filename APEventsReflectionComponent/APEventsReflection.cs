@@ -80,7 +80,9 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 methodInfo.Invoke(nodeEvent.SourceCo, null);
             }
             else if (methodParams.Length == 1) {
-                // TODO Check if param is string.
+                if (methodParams[0].ParameterType.Name != "String") return;
+                var stringParam = new object[] {nodeEvent.MethodArg};
+                methodInfo.Invoke(nodeEvent.SourceCo, stringParam);
             }
         }
 

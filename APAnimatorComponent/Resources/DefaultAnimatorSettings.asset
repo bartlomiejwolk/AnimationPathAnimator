@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
+  m_Name: DefaultAnimatorSettings
+  m_EditorClassIdentifier: 
+  easeModeKey: 117
+  jumpToEndKey: 108
+  jumpToNextNodeKey: 108
+  jumpToPreviousNodeKey: 104
+  jumpToStartKey: 104
+  longJumpBackwardKey: 106
+  longJumpForwardKey: 107
+  longJumpValue: .00999999978
+  modKey: 307
+  moveAllModeColor: {r: 1, g: 0, b: 0, a: 1}
+  noneModeKey: 121
+  playPauseKey: 32
+  rotationModeKey: 105
+  shortJumpBackwardKey: 106
+  shortJumpForwardKey: 107
+  shortJumpValue: .00200000009
+  tiltingModeKey: 111
+  updateAllKey: 112
+  gizmoCurveColor: {r: 1, g: .921568632, b: .0156862754, a: 1}
+  rotationCurveColor: {r: .5, g: .5, b: .5, a: 1}
+  currentRotationPointGizmoIcon: rec_16x16-yellow
+  floatPrecision: .00100000005
+  forwardPointIcon: target_22x22-pink
+  gizmoCurveSamplingFrequency: 40
+  rotationCurveSampling: 40
+  rotationPointGizmoIcon: rec_16x16
+  targetGizmoIcon: target_22x22-blue
+  gizmoIcons: []
+  autoPlay: 1
+  EnableControlsInPlayMode: 1
+  exportSamplingFrequency: 5
+  forwardPointOffset: .0500000007
+  handleMode: 0
+  MaxAnimationSpeed: .300000012
+  positionLerpSpeed: 1
+  rotationMode: 0
+  rotationSlerpSpeed: 999
+  tangentMode: 0
+  updateAllMode: 0
+  wrapMode: 1
+  addButtonH: 25
+  addButtonV: 10
+  arcHandleRadius: .600000024
+  defaultLabelHeight: 10
+  defaultLabelWidth: 30
+  moveAllModeSize: .150000006
+  movementHandleSize: .119999997
+  removeButtonH: 44
+  removeButtonV: 10
+  scaleHandleSize: 1.5
+  rotationHandleColor: {r: 1, g: 0, b: 1, a: 1}

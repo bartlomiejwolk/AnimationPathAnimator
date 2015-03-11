@@ -1,0 +1,7 @@
+﻿public enum WrapMode {
+
+    Clamp = 1,
+    Loop = 2,
+    PingPong = 4
+
+}

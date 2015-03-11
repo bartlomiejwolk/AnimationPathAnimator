@@ -68,20 +68,27 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
             // Return if there's no event slot created for current path node.
             if (arg.NodeIndex > nodeEvents.Count - 1) return;
-
             // Get event slot.
             var nodeEvent = nodeEvents[arg.NodeIndex];
             // Return if source GO was not specified in the event slot.
-            if (nodeEvent.SourceMethodName == null) return;
+            if (nodeEvent.SourceGO == null) return;
+            // Get method metadata.
             var methodInfo = nodeEvent.SourceCo.GetType()
                     .GetMethod(nodeEvent.SourceMethodName);
+            // Get method parameters.
             var methodParams = methodInfo.GetParameters();
+            // Method has no parameters.
             if (methodParams.Length == 0) {
+                // Invoke method.
                 methodInfo.Invoke(nodeEvent.SourceCo, null);
             }
+            // Method has one parameter.
             else if (methodParams.Length == 1) {
+                // Return if the parameter is not a string.
                 if (methodParams[0].ParameterType.Name != "String") return;
+                // Create string parameter argument.
                 var stringParam = new object[] {nodeEvent.MethodArg};
+                // Invoke method with string parameter.
                 methodInfo.Invoke(nodeEvent.SourceCo, stringParam);
             }
         }

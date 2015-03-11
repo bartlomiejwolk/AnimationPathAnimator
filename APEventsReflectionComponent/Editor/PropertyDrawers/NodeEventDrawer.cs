@@ -122,7 +122,8 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                     methodNames[sourceMethodIndex.intValue];
             }
 
-            // TODO Draw only if sourceGO is specified.
+            // Don't draw parameter field if source GO is not specified.
+            if (sourceGO.objectReferenceValue == null) return;
             EditorGUI.PropertyField(
                     new Rect(
                         pos.x,

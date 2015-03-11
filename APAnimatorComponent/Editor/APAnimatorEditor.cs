@@ -544,13 +544,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void HandleTargetGOFieldChange(Transform prevTargetGO) {
-
-// Handle adding reference.
+            // Handle adding reference.
             if (Script.TargetGO != prevTargetGO
                 && prevTargetGO == null) {
 
                 Script.Settings.RotationMode = RotationMode.Target;
-                Script.UpdateAnimation();
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
             // Handle removing reference.
             else if (Script.TargetGO != prevTargetGO
@@ -558,7 +561,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                      && Script.TargetGO == null) {
 
                 Script.Settings.RotationMode = RotationMode.Forward;
-                Script.UpdateAnimation();
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
         }
 

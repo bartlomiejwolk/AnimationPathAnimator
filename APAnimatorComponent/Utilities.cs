@@ -114,5 +114,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public static bool V3Equal(Vector3 a, Vector3 b, float precision) {
             return Vector3.SqrMagnitude(a - b) < precision;
         }
+
+        public static void InvokeMethodWithReflection(
+            object target,
+            string methodName,
+            object[] parameters) {
+
+            // Get method metadata.
+            var methodInfo = target.GetType().GetMethod(methodName);
+
+            if (parameters != null) {
+                // Invoke with parameters.
+                methodInfo.Invoke(target, parameters);
+            }
+            else {
+                // Invoke without parameters.
+                methodInfo.Invoke(target, null);
+            }
+        }
+
     }
 }

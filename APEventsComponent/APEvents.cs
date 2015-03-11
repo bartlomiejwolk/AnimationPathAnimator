@@ -66,6 +66,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         }
         #endregion
         #region EVENT HANDLERS
+        // TODO Refactor.
         private void Animator_NodeReached(
                     object sender,
                     NodeReachedEventArgs arg) {

@@ -28,6 +28,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #endregion
 
         #region PROPERTIES
+        // TODO Rename to Animator.
         public APAnimator ApAnimator {
             get { return apAnimator; }
             set { apAnimator = value; }

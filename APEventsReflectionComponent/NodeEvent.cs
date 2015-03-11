@@ -32,6 +32,9 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         [SerializeField]
         private int sourceMethodIndex;
 
+        [SerializeField]
+        private int sourceComponentIndex;
+
         /// <summary>
         /// Index of the source component in the source component names list.
         /// </summary>

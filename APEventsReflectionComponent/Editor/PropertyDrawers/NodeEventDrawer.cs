@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Reflection;
 using UnityEditor;
 
 namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
@@ -36,6 +37,9 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             SerializedProperty sourceGO =
                 prop.FindPropertyRelative("sourceGO");
 
+            SerializedProperty sourceComponentIndex =
+                prop.FindPropertyRelative("sourceComponentIndex");
+
             SerializedProperty sourceMethodIndex =
                 prop.FindPropertyRelative("sourceMethodIndex");
 
@@ -64,16 +68,41 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                 for (int i = 0; i < sourceCoNames.Length; i++) {
                     sourceCoNames[i] = sourceComponents[i].GetType().ToString();
                 }
+                // Make sure that name index corresponds to a component.
+                // Important when changing source game object.
+                if (sourceComponentIndex.intValue > sourceCoNames.Length) {
+                    sourceComponentIndex.intValue = 0;
+                }
                 // Display dropdown game object component list.
-                sourceMethodIndex.intValue = EditorGUI.Popup(
+                sourceComponentIndex.intValue = EditorGUI.Popup(
                      new Rect(
                         pos.x,
                         pos.y + 1 * (PropHeight + PropMargin),
                         pos.width,
                         PropHeight), 
                     "Source Component",
-                    sourceMethodIndex.intValue,
+                    sourceComponentIndex.intValue,
                     sourceCoNames);
+
+                // Get target component method names.
+                var methods = sourceComponents[sourceComponentIndex.intValue]
+                    .GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                // Initialize array with method names.
+                var methodNames = new string[methods.Length];
+                // Fill array with method names.
+                for (int i = 0; i < methodNames.Length; i++) {
+                    methodNames[i] = methods[i].Name;
+                }
+                // Display dropdown with component properties.
+                sourceMethodIndex.intValue = EditorGUI.Popup(
+                    new Rect(
+                        pos.x,
+                        pos.y + 2 * (PropHeight + PropMargin),
+                        pos.width,
+                        PropHeight),
+                    "Methods",
+                    sourceMethodIndex.intValue,
+                    methodNames);
             }
 
             //EditorGUI.PropertyField(

@@ -188,7 +188,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
         }
 
-        public void SubscribeToEvents() {
+        private void SubscribeToEvents() {
             if (pathData != null) {
                 Debug.Log("subscribe");
                 PathData.RotationPointPositionChanged +=
@@ -705,10 +705,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private bool AssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
-
                 return true;
             }
-
             return false;
         }
 

@@ -667,7 +667,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
 
         // TODO Remove.
-        public void UpdateWrapMode() {
+        private void UpdateWrapMode() {
             PathData.SetPathWrapMode(Settings.WrapMode);
             PathData.SetEaseWrapMode(Settings.WrapMode);
         }
@@ -702,7 +702,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return rotPointPositions;
         }
 
-        public bool AssetsLoaded() {
+        private bool AssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
 

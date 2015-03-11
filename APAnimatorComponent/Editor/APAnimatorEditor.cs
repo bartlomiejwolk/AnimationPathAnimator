@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -54,7 +55,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            if (!Script.AssetsLoaded()) {
+            if (!AssetsLoaded()) {
                 DrawInfoLabel(
                     //"Asset files in extension folder were not found. "
                     "Required assets were not found.\n"
@@ -163,7 +164,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script = (APAnimator) target;
 
             // Return is required assets are not referenced.
-            if (!Script.AssetsLoaded()) return;
+            if (!AssetsLoaded()) return;
 
             // Initialize helper property.
             Settings = Script.Settings;
@@ -175,6 +176,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
         }
+
+        private bool AssetsLoaded() {
+            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
+                Script,
+                "AssetsLoaded",
+                null);
+
+            return assetsLoaded ? true : false;
+        }
+
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -185,7 +196,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!Script.SubscribedToEvents) Script.SubscribeToEvents();
 
             // Return is required assets are not referenced.
-            if (!Script.AssetsLoaded()) return;
+            if (!AssetsLoaded()) return;
             // Return if path asset is not referenced.
             if (Script.PathData == null) return;
             // Return if serialized properties are not initialized.

@@ -2,6 +2,7 @@
 
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
+    // TODO Rename to APEventsSettings.
     public sealed class APEventsReflectionSettings : ScriptableObject {
 
         #region FIELDS

@@ -9,6 +9,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
     public class APEventsEditor : Editor {
 
         private APEvents Script { get; set; }
+        private APEventsReflectionSettings Settings { get; set; }
 
         private SerializedProperty apAnimator;
         private SerializedProperty advancedSettingsFoldout;
@@ -19,6 +20,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         private void OnEnable() {
             Script = target as APEvents;
+
+            if (!Script.AssetsLoaded()) return;
+
+            Settings = Script.Settings;
 
             InitializeSerializedProperties();
         }
@@ -90,9 +95,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             DrawNodeLabels(
                 nodePositions,
                 methodNames,
-                // TODO Get value from settings file.
-                20,
-                20,
+                Settings.MethodNameLabelOffsetX,
+                Settings.MethodNameLabelOffsetY,
                 style);
         }
 
@@ -168,9 +172,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                // TODO Get default node width and height from settings file.
-                100,
-                30);
+                Settings.DefaultNodeLabelWidth,
+                Settings.DefaultNodeLabelHeight);
 
             Handles.BeginGUI();
 

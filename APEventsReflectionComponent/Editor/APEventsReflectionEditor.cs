@@ -20,6 +20,10 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private void OnEnable() {
             Script = target as APEventsReflection;
 
+            InitializeSerializedProperties();
+        }
+
+        private void InitializeSerializedProperties() {
             apAnimator =
                 serializedObject.FindProperty("apAnimator");
             advancedSettingsFoldout =
@@ -31,12 +35,28 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             nodeEvents = serializedObject.FindProperty("nodeEvents");
             drawMethodNames =
                 serializedObject.FindProperty("drawMethodNames");
+
+            SerializedPropertiesInitialized = true;
         }
 
+        public bool SerializedPropertiesInitialized { get; set; }
+
         public override void OnInspectorGUI() {
+            if (!Script.AssetsLoaded()) {
+                DrawInfoLabel(
+                    //"Asset files in extension folder were not found. "
+                    "Required assets were not found.\n"
+                    + "Reset component and if it does not help, restore extension "
+                    + "folder content to its default state.");
+                return;
+            }
+            if (!SerializedPropertiesInitialized) return;
+
             DrawAnimatorField();
 
-            DisplayDrawMethodNamesToggle();
+            EditorGUILayout.Space();
+
+            DisplayDrawMethodLabelsToggle();
 
             DrawReorderableEventList();
 
@@ -44,14 +64,19 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
             DrawAdvancedSettingsControls();
         }
 
-        private void DisplayDrawMethodNamesToggle() {
-
+        private void DisplayDrawMethodLabelsToggle() {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(drawMethodNames);
+            EditorGUILayout.PropertyField(
+                drawMethodNames,
+                new GUIContent(
+                    "Draw Labels",
+                    ""));
             serializedObject.ApplyModifiedProperties();
         }
 
         private void OnSceneGUI() {
+            if (!Script.AssetsLoaded()) return;
+
             HandleDrawingMethodNames();
         }
 
@@ -106,8 +131,15 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
                 DrawSettingsAssetField();
-                EditorGUILayout.PropertyField(skin);
+                DrawSkinAssetField();
             }
+        }
+
+        private void DrawSkinAssetField() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(skin);
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawSettingsAssetField() {
@@ -176,6 +208,10 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
                     offsetY,
                     style);
             }
+        }
+
+        private void DrawInfoLabel(string text) {
+            EditorGUILayout.HelpBox(text, MessageType.Error);
         }
 
     }

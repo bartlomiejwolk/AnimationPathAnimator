@@ -115,6 +115,17 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
             return methodNames;
         }
+
+        public bool AssetsLoaded() {
+            if (Settings != null
+                && Skin != null) {
+
+                return true;
+            }
+
+            return false;
+        }
+
         #endregion   
 
     }

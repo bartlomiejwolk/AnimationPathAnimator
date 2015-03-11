@@ -22,6 +22,9 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
         [SerializeField]
         private List<NodeEvent> nodeEvents;
+
+        [SerializeField]
+        private bool drawMethodNames = true;
         #endregion
 
         #region PROPERTIES
@@ -103,7 +106,15 @@ namespace ATP.AnimationPathAnimator.APEventsReflectionComponent {
 
             return nodePositions;
         }
+        public List<string> GetMethodNames() {
+            var methodNames = new List<string>();
 
+            foreach (var nodeEvent in nodeEvents) {
+                methodNames.Add(nodeEvent.SourceMethodName);
+            }
+
+            return methodNames;
+        }
         #endregion   
 
     }

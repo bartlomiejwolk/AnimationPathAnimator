@@ -394,6 +394,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to StartAnimation().
         public void StartEaseTimeCoroutine() {
             if (PathData == null) {
                 Debug.LogWarning("Assign Path Asset in the inspector.");
@@ -409,10 +410,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             StartCoroutine("HandleEaseTime");
         }
 
-        // TODO Remove.
+        // TODO Rename to StopAnimation().
         public void StopEaseTimeCoroutine() {
             StopCoroutine("HandleEaseTime");
 
+            IsPlaying = false;
+            Pause = false;
             // Reset animation.
             //AnimationTime = 0;
         }
@@ -699,8 +702,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return rotPointPositions;
         }
 
-        #endregion METHODS
-
         public bool AssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
@@ -711,6 +712,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return false;
         }
 
+        #endregion METHODS
     }
 
 }

@@ -140,7 +140,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
 
-            // Validate inspector messageSettings.
+            // Validate inspector Settings.
             // Not all inspector controls can be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
 
@@ -152,6 +152,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Get target script reference.
             Script = (APAnimator) target;
 
+            // Return is required assets are not referenced.
             if (!Script.AssetsLoaded()) return;
 
             // Initialize helper property.
@@ -160,24 +161,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
 
+            GizmoIcons.CopyIconsToGizmosFolder();
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
-            GizmoIcons.CopyIconsToGizmosFolder();
         }
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
 
         private void OnSceneGUI() {
-            //CheckForSkinAsset();
+            // Return is required assets are not referenced.
             if (!Script.AssetsLoaded()) return;
+            // Return if path asset is not referenced.
+            if (Script.PathData == null) return;
+            // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
 
-            // Return if path asset does not exist.
-            if (Script.PathData == null) return;
-
-            // Return is messageSettings asset is not assigned in the inspector.
-            if (Settings == null) return;
+            // Return is Settings asset is not assigned in the inspector.
+            //if (Settings == null) return;
 
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(
@@ -211,7 +212,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region INSPECTOR
         private void DrawShortcutsHelpBox() {
             EditorGUILayout.HelpBox(
-                "Check messageSettings Asset for shortcuts.",
+                "Check Settings Asset for shortcuts.",
                 MessageType.Info);
         }
 
@@ -221,7 +222,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "messageSettings Asset",
+                    "Settings Asset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -248,7 +249,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced messageSettings",
+                    "Advanced Settings",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -378,7 +379,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Forward Point Offset",
                     ""), 
                 Settings.ForwardPointOffset,
-                // TODO Create field in messageSettings asset.
+                // TODO Create field in Settings asset.
                 0.001f,
                 1);
         }
@@ -1063,11 +1064,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings == null) return;
 
             // Limit PositionLerpSpeed value.
-            //if (messageSettings.PositionLerpSpeed < 0) {
-            //    messageSettings.PositionLerpSpeed = 0;
+            //if (Settings.PositionLerpSpeed < 0) {
+            //    Settings.PositionLerpSpeed = 0;
             //}
-            //else if (messageSettings.PositionLerpSpeed > 1) {
-            //    messageSettings.PositionLerpSpeed = 1;
+            //else if (Settings.PositionLerpSpeed > 1) {
+            //    Settings.PositionLerpSpeed = 1;
             //}
 
             // Limit RotationSpeed value.
@@ -1076,35 +1077,35 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Limit ForwardPointOffset value.
-            //if (messageSettings.ForwardPointOffset < 0.001f) {
-            //    messageSettings.ForwardPointOffset = 0.001f;
+            //if (Settings.ForwardPointOffset < 0.001f) {
+            //    Settings.ForwardPointOffset = 0.001f;
             //}
-            //else if (messageSettings.ForwardPointOffset > 1) {
-            //    messageSettings.ForwardPointOffset = 1;
+            //else if (Settings.ForwardPointOffset > 1) {
+            //    Settings.ForwardPointOffset = 1;
             //}
 
             // Limit ExmportSamplingFrequency value.
             if (Settings.ExportSamplingFrequency < 1) {
                 Settings.ExportSamplingFrequency = 1;
             }
-            //else if (messageSettings.ExportSamplingFrequency > 100) {
-            //    messageSettings.ExportSamplingFrequency = 100;
+            //else if (Settings.ExportSamplingFrequency > 100) {
+            //    Settings.ExportSamplingFrequency = 100;
             //}
 
             // Limit ShortJumpValue.
-            //if (messageSettings.ShortJumpValue < 0) {
-            //    messageSettings.ShortJumpValue = 0;
+            //if (Settings.ShortJumpValue < 0) {
+            //    Settings.ShortJumpValue = 0;
             //}
-            //else if (messageSettings.ShortJumpValue > 1) {
-            //    messageSettings.ShortJumpValue = 1;
+            //else if (Settings.ShortJumpValue > 1) {
+            //    Settings.ShortJumpValue = 1;
             //}
 
             // Limit LongJumpValue.
-            //if (messageSettings.LongJumpValue < 0) {
-            //    messageSettings.LongJumpValue = 0;
+            //if (Settings.LongJumpValue < 0) {
+            //    Settings.LongJumpValue = 0;
             //}
-            //else if (messageSettings.LongJumpValue > 1) {
-            //    messageSettings.LongJumpValue = 1;
+            //else if (Settings.LongJumpValue > 1) {
+            //    Settings.LongJumpValue = 1;
             //}
         }
 

@@ -109,6 +109,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to SettingsAsset.
         public APAnimatorSettings Settings {
             get { return settings; }
         }

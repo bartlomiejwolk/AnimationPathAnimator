@@ -116,10 +116,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return Vector3.SqrMagnitude(a - b) < precision;
         }
 
-        public static void InvokeMethodWithReflection(
+        public static object InvokeMethodWithReflection(
             object target,
             string methodName,
             object[] parameters) {
+
+            object result;
 
             // Get method metadata.
             var methodInfo = target.GetType().GetMethod(
@@ -128,12 +130,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (parameters != null) {
                 // Invoke with parameters.
-                methodInfo.Invoke(target, parameters);
+                result = methodInfo.Invoke(target, parameters);
             }
             else {
                 // Invoke without parameters.
-                methodInfo.Invoke(target, null);
+                result = methodInfo.Invoke(target, null);
             }
+
+            return result;
         }
 
     }

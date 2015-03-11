@@ -47,8 +47,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private APAnimatorSettings settings;
 
+        private bool pause;
+
+        private bool isPlaying;
+
         [SerializeField]
         private GUISkin skin;
+
+        private bool animatedObjectUpdateEnabled;
 
         /// <summary>
         ///     Transform that the <c>animatedGO</c> will be looking at.
@@ -56,8 +62,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
-        private bool Reverse { get; set; }
-
+        private Transform thisTransform;
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -80,9 +85,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         // TODO Rename to AnimatorGizmos.
         APAnimatorGizmos ApAnimatorGizmos { get; set; }
 #endif
-
-        private bool isPlaying;
-
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
@@ -99,11 +101,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return pathData; }
             set { pathData = value; }
         }
-
-        private bool pause;
-
-        private bool animatedObjectUpdateEnabled;
-
         public bool Pause {
             get { return pause; }
             set {
@@ -125,12 +122,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return settings; }
         }
 
+        private bool Reverse { get; set; }
+
         public GUISkin Skin {
             get { return skin; }
         }
-
-        private Transform thisTransform;
-
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -148,6 +144,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public Transform AnimatedGO {
             get { return animatedGO; }
         }
+
+        /// <summary>
+        /// If animator is currently subscribed to path events.
+        /// </summary>
+        /// <remarks>It's only public because of the Editor class.</remarks>
+        public bool SubscribedToEvents { get; set; }
 
         public bool AnimatedObjectUpdateEnabled {
             get { return animatedObjectUpdateEnabled; }
@@ -289,13 +291,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             UpdateAnimation();
             //if (!SubscribedToEvents) SubscribeToEvents();
         }
-
-        /// <summary>
-        /// If animator is currently subscribed to path events.
-        /// </summary>
-        /// <remarks>It's only public because of the Editor class.</remarks>
-        public bool SubscribedToEvents { get; set; }
-
         //private int frame;
         private void Update() {
             //var frame = Time.frameCount;

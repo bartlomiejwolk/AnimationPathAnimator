@@ -201,6 +201,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Draw position handle.
                 var newPos = DrawPositionHandle(
                     nodes[i],
+                    Settings.MovementHandleSize,
                     handleColor,
                     capFunction);
 
@@ -269,6 +270,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private Vector3 DrawPositionHandle(
             Vector3 nodePosition,
+            float handleSize,
             Color handleColor,
             Handles.DrawCapFunction capFunction) {
 
@@ -276,8 +278,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Handles.color = handleColor;
 
             // Get handle size.
-            var handleSize = HandleUtility.GetHandleSize(nodePosition);
-            var sphereSize = handleSize * Settings.MovementHandleSize;
+            var movementHandleSize = HandleUtility.GetHandleSize(nodePosition);
+            var sphereSize = movementHandleSize * handleSize;
 
             // Draw handle.
             var newPos = Handles.FreeMoveHandle(

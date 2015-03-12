@@ -41,10 +41,9 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         public APEventsSettings Settings {
             get { return settings; }
-            set { settings = value; }
         }
 
-        public List<NodeEvent> NodeEvents {
+        private List<NodeEvent> NodeEvents {
             get { return nodeEvents; }
         }
 

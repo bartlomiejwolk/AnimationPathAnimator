@@ -387,14 +387,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             StartCoroutine("HandleEaseTime");
         }
 
-        // TODO Rename to StopAnimation().
-        public void StopEaseTimeCoroutine() {
+        public void StopAnimation() {
             StopCoroutine("HandleEaseTime");
 
             IsPlaying = false;
             Pause = false;
-            // Reset animation.
-            //AnimationTime = 0;
+            AnimationTime = 0;
         }
 
         /// <summary>

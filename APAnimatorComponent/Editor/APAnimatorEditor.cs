@@ -49,6 +49,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
+            // TODO Extract method.
             if (!AssetsLoaded()) {
                 DrawInfoLabel(
                     //"Asset files in extension folder were not found. "
@@ -488,7 +489,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Stop",
                     ""))) {
 
-                Script.StopEaseTimeCoroutine();
+                Script.StopAnimation();
 
                 Utilities.InvokeMethodWithReflection(
                     Script,

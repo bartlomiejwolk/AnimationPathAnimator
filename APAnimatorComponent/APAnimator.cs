@@ -114,7 +114,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // On unpause..
                 if (!value) {
                     // Update animation time.
-                    UpdateAnimationTime();
+                    //UpdateAnimationTime();
                     // Enable animating animated GO.
                     AnimatedObjectUpdateEnabled = true;
                 }
@@ -354,20 +354,22 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
-            // Pause animation.
             if (IsPlaying && !Pause) {
+                // Pause animation.
                 Pause = true;
                 //Script.IsPlaying = false;
             }
-            // Unpause animation.
             else if (IsPlaying && Pause) {
+                // Unpause animation.
                 Pause = false;
                 //Script.IsPlaying = true;
             }
-            // Start animation.
+            // Animation ended.
+            else if (!IsPlaying && !Pause && AnimationTime >= 1) {
+                AnimationTime = 0;
+                StartEaseTimeCoroutine();
+            }
             else {
-                IsPlaying = true;
-                //AnimationTime = 0;
                 // Start animation.
                 StartEaseTimeCoroutine();
             }

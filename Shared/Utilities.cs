@@ -112,7 +112,11 @@ namespace ATP.AnimationPathAnimator {
                 points[i] = transform.TransformPoint(points[i]);
             }
         }
-        public static bool V3Equal(Vector3 a, Vector3 b, float precision) {
+        public static bool V3Equal(
+            Vector3 a,
+            Vector3 b,
+            float precision = 0.000000000001f) {
+
             return Vector3.SqrMagnitude(a - b) < precision;
         }
 
@@ -138,6 +142,18 @@ namespace ATP.AnimationPathAnimator {
             }
 
             return result;
+        }
+
+        public static bool QuaternionsEqual(
+            Quaternion a,
+            Quaternion b,
+            float threshold = 0.01f) {
+
+            var angle = Quaternion.Angle(a, b);
+
+            if (angle < threshold) return true;
+
+            return false;
         }
 
     }

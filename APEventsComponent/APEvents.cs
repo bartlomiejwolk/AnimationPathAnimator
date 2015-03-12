@@ -105,7 +105,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #endregion
         #region METHODS
 
-        public Vector3[] GetNodePositions(int nodesNo) {
+        private Vector3[] GetNodePositions(int nodesNo) {
             var nodePositions =
                 ApAnimator.GetGlobalNodePositions(nodesNo);
 

@@ -158,7 +158,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 Script,
                 "GetMethodNames",
                 null);
-            var nodePositions = Script.GetNodePositions(methodNames.Length);
+            var nodePositions = (Vector3[])Utilities.InvokeMethodWithReflection(
+                Script,
+                "GetNodePositions",
+                new object[] {methodNames.Length});
             var style = Script.Skin.GetStyle("MethodNameLabel");
 
             SceneHandles.DrawNodeLabels(

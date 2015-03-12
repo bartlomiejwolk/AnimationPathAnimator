@@ -57,10 +57,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private GUISkin skin;
 
         [SerializeField]
+        // todo remove
         private bool subscribedToEvents;
 
-        // TODO Rename to animGOUpdateEnabled.
-        private bool animatedObjectUpdateEnabled;
+        private bool animGOUpdateEnabled;
 
         /// <summary>
         ///     Transform that the <c>animatedGO</c> will be looking at.
@@ -117,7 +117,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     // Update animation time.
                     //UpdateAnimationTime();
                     // Enable animating animated GO.
-                    AnimatedObjectUpdateEnabled = true;
+                    AnimGOUpdateEnabled = true;
                 }
             }
         }
@@ -161,15 +161,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { subscribedToEvents = value; }
         }
 
-        public bool AnimatedObjectUpdateEnabled {
-            get { return animatedObjectUpdateEnabled; }
+        public bool AnimGOUpdateEnabled {
+            get { return animGOUpdateEnabled; }
             set {
-                animatedObjectUpdateEnabled = value;
+                animGOUpdateEnabled = value;
 
                 //if (!value) {
                 //    Debug.Log("");
                 //}
-                //Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+                //Debug.Log("animGOUpdateEnabled: " + animGOUpdateEnabled);
             }
         }
 
@@ -326,7 +326,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 animatedGO.rotation);
 
             if (!positionChanged && !rotationChanged) {
-                AnimatedObjectUpdateEnabled = false;
+                AnimGOUpdateEnabled = false;
             }
         }
 
@@ -334,7 +334,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return if not in play mode.
             if (!Application.isPlaying) return;
             // Return if anim. GO update is disabled.
-            if (!AnimatedObjectUpdateEnabled) return;
+            if (!AnimGOUpdateEnabled) return;
 
             // Remember anim. GO position.
             var prevAnimGOPosition = animatedGO.position;
@@ -487,7 +487,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private IEnumerator HandleEaseTime() {
             IsPlaying = true;
             Pause = false;
-            AnimatedObjectUpdateEnabled = true;
+            AnimGOUpdateEnabled = true;
 
             while (true) {
                 // If animation is not paused..

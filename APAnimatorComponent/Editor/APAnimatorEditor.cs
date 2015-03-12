@@ -11,8 +11,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region PROPERTIES
         private GizmoIcons GizmoIcons { get; set; }
 
-        private SceneHandles SceneHandles { get; set; }
-
         private SerializedObject SettingsSerObj { get; set; }
         //public SerializedObject PathExporterSerObj { get; private set; }
 
@@ -262,6 +260,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Settings.UpdateAllLabelText,
                 Settings.UpdateAllLabelOffsetX,
                 Settings.UpdateAllLabelOffsetY,
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight,
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
 
@@ -777,6 +777,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 nodeGlobalPositions,
                 Settings.EaseValueLabelOffsetX,
                 Settings.EaseValueLabelOffsetY,
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight,
                 ConvertEaseToDegrees,
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
@@ -876,6 +878,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 nodeGlobalPositions,
                 Settings.EaseValueLabelOffsetX,
                 Settings.EaseValueLabelOffsetY, 
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight,
                 ConvertTiltToDegrees,
                 Script.Skin.GetStyle("TiltValueLabel"));
         }
@@ -1137,7 +1141,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
-            SceneHandles = new SceneHandles(Script);
+            //SceneHandles = new SceneHandles(Script);
             PathExporter = new PathExporter(Script);
 
             GizmoIcons = new GizmoIcons(Settings);

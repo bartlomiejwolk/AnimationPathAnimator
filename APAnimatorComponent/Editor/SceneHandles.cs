@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,32 +10,32 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
     /// <remarks>It has same access to the APAnimator class as
     /// the AnimationPathAnimatorEditor does.</remarks>
     // TODO Pass ref. to APAnimator in the constructor.
-    public sealed class SceneHandles {
+    public static class SceneHandles {
 
         #region FIELDS
-        private readonly APAnimator apAnimator;
+        //private readonly APAnimator apAnimator;
         #endregion
 
         #region PROPERTIES
-        private APAnimator ApAnimator {
-            get { return apAnimator; }
-        }
+        //private APAnimator ApAnimator {
+        //    get { return apAnimator; }
+        //}
 
-        private APAnimatorSettings ApAnimatorSettings {
-            get { return ApAnimator.Settings; }
-        }
+        //private APAnimatorSettings ApAnimatorSettings {
+        //    get { return ApAnimator.Settings; }
+        //}
 
-        private APAnimatorSettings Settings{
-            get { return ApAnimator.Settings; }
-        }
+        //private APAnimatorSettings Settings{
+        //    get { return ApAnimator.Settings; }
+        //}
         #endregion
         #region METHDOS
-        public SceneHandles(APAnimator apAnimator) {
-            this.apAnimator = apAnimator;
-        }
+        //public SceneHandles(APAnimator apAnimator) {
+        //    this.apAnimator = apAnimator;
+        //}
 
 
-        public void DrawAddNodeButtons(
+        public static void DrawAddNodeButtons(
             Vector3[] nodePositions,
             int buttonHoffset,
             int buttonVoffset,
@@ -80,7 +79,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        private void DrawArcHandle(
+        private static void DrawArcHandle(
             float value,
             Vector3 position,
             float arcValueMultiplier,
@@ -135,10 +134,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public void DrawArcHandleLabels(
+        public static void DrawArcHandleLabels(
             Vector3[] nodeGlobalPositions,
             int offsetX,
             int offsetY,
+            int labelWidth,
+            int labelHeight,
             Func<int, float> calculateValueCallback,
             GUIStyle style) {
 
@@ -157,11 +158,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     // TODO These should be taken from method args.
                     offsetX,
                     offsetY,
+                    labelWidth,
+                    labelHeight,
                     style);
             }
         }
 
-        public void DrawEaseHandles(
+        public static void DrawEaseHandles(
             Vector3[] nodePositions,
             float[] easeCurveValues,
             float arcValueMultiplier,
@@ -187,7 +190,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         // TODO Rename to DrawPositionHandles().
-        public void DrawMoveSinglePositionsHandles(
+        public static void DrawMoveSinglePositionsHandles(
             Vector3[] nodeGlobalPositions,
             float handleSize,
             Color curveColor,
@@ -217,11 +220,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void DrawNodeLabel(
+        private static void DrawNodeLabel(
             Vector3 nodeGlobalPosition,
             string value,
             int offsetX,
             int offsetY,
+            int labelWidth,
+            int labelHeight,
             GUIStyle style) {
 
             // Translate node's 3d position into screen coordinates.
@@ -231,8 +236,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var labelPosition = new Rect(
                 guiPoint.x + offsetX,
                 guiPoint.y + offsetY,
-                Settings.DefaultLabelWidth,
-                Settings.DefaultLabelHeight);
+                labelWidth,
+                labelHeight);
 
             Handles.BeginGUI();
 
@@ -245,11 +250,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Handles.EndGUI();
         }
 
-        private void DrawNodeLabels(
+        private static void DrawNodeLabels(
             Vector3[] nodeGlobalPositions,
             string text,
             int offsetX,
             int offsetY,
+            int labelWidth,
+            int labelHeight,
             GUIStyle style) {
 
             foreach (var nodePos in nodeGlobalPositions) {
@@ -258,11 +265,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     text,
                     offsetX,
                     offsetY,
+                    labelWidth,
+                    labelHeight,
                     style);
             }
         }
 
-        private Vector3 DrawPositionHandle(
+        private static Vector3 DrawPositionHandle(
             Vector3 nodePosition,
             float handleSize,
             Color handleColor,
@@ -285,7 +294,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return newPos;
         }
 
-        public void DrawRemoveNodeButtons(
+        public static void DrawRemoveNodeButtons(
             Vector3[] nodePositions,
             int offsetH,
             int offsetV,
@@ -319,7 +328,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Handles.EndGUI();
         }
 
-        public void DrawRotationHandle(
+        public static void DrawRotationHandle(
             Vector3 rotationPointGlobalPosition,
             float rotationHandleSize,
             Color rotationHandleColor,
@@ -348,7 +357,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public void DrawTiltingHandles(
+        public static void DrawTiltingHandles(
             Vector3[] nodePositions,
             float[] tiltingCurveValues,
             float arcHandleRadius,
@@ -375,11 +384,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public void DrawUpdateAllLabels(
+        public static void DrawUpdateAllLabels(
             Vector3[] nodeGlobalPositions,
             string labelText,
             int offsetX,
             int offsetY,
+            // TODO Add default values (there's more methods that use same two params.).
+            int labelWidth,
+            int labelHeight,
             GUIStyle style) {
 
             DrawNodeLabels(
@@ -387,10 +399,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 labelText,
                 offsetX,
                 offsetY,
+                labelWidth,
+                labelHeight,
                 style);
         }
 
-        private bool DrawButton(
+        private static bool DrawButton(
             Vector2 position,
             int relativeXPos,
             int relativeYPos,

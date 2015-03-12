@@ -291,8 +291,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             while (true) {
                 frame++;
 
-                // TODO Add to SettingsAsset.
-                if (frame > 10) break;
+                if (frame > SettingsAsset.CountdownToStopFramesNo) break;
 
                 yield return null;
             }

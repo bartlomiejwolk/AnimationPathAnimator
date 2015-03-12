@@ -281,8 +281,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private AnimatorWrapMode wrapMode = global::AnimatorWrapMode.Clamp;
+
+        [SerializeField]
+        private int countdownToStopFramesNo = 10;
         #endregion
         #region ANIMATOR PROPERTIES
+        public int CountdownToStopFramesNo {
+            get { return countdownToStopFramesNo; }
+            set { countdownToStopFramesNo = value; }
+        }
+
         public string GizmosSubfolder {
             get { return gizmosSubfolder; }
             set { gizmosSubfolder = value; }
@@ -477,7 +485,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return rotationHandleColor; }
             set { rotationHandleColor = value; }
         }
-
         #endregion
     }
 

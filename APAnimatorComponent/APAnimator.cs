@@ -523,7 +523,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleClampWrapMode() {
             // Break from animation in Clamp wrap mode.
             if (AnimationTime > 1
-                && Settings.WrapMode == WrapMode.Clamp) {
+                && Settings.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
                 IsPlaying = false;
@@ -533,7 +533,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleLoopWrapMode() {
 
             if (AnimationTime > 1
-                && Settings.WrapMode == WrapMode.Loop) {
+                && Settings.WrapMode == AnimatorWrapMode.Loop) {
 
                 AnimationTime = 0;
             }
@@ -541,13 +541,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
-                && Settings.WrapMode == WrapMode.PingPong) {
+                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = true;
             }
 
             if (AnimationTime < 0
-                && Settings.WrapMode == WrapMode.PingPong) {
+                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = false;
             }

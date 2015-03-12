@@ -210,22 +210,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-		public void SetWrapMode (WrapMode wrapMode) {
-		    UnityEngine.WrapMode unityWrapMode = UnityEngine.WrapMode.Clamp;
-
-            // TODO Use casting instead of switch.
-            // = (WrapMode) wrapMode;
-		    switch (wrapMode) {
-		        case WrapMode.Clamp:
-                    unityWrapMode = UnityEngine.WrapMode.Clamp;
-		            break;
-                case WrapMode.Loop:
-                    unityWrapMode = UnityEngine.WrapMode.Loop;
-		            break;
-                case WrapMode.PingPong:
-		            unityWrapMode = UnityEngine.WrapMode.PingPong;
-		            break;
-		    }
+		public void SetWrapMode (AnimatorWrapMode wrapMode) {
+		    WrapMode unityWrapMode = (WrapMode) wrapMode;
 
 			foreach (var curve in curves) {
 				curve.postWrapMode = unityWrapMode;

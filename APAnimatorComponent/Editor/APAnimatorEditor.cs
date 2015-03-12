@@ -607,7 +607,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawWrapModeDropdown() {
-            Settings.WrapMode = (WrapMode) EditorGUILayout.EnumPopup(
+            Settings.WrapMode = (AnimatorWrapMode) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Wrap Mode",
                     ""),

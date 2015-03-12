@@ -423,11 +423,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
         }
 
-        public void SetPathWrapMode(WrapMode wrapMode) {
+        public void SetPathWrapMode(AnimatorWrapMode wrapMode) {
             AnimatedObjectPath.SetWrapMode(wrapMode);
         }
 
-        public void SetEaseWrapMode (WrapMode wrapMode) {
+        public void SetEaseWrapMode (AnimatorWrapMode wrapMode) {
             EaseCurve.postWrapMode = (UnityEngine.WrapMode) wrapMode;
         }
 

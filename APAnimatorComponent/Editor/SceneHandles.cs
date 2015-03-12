@@ -185,40 +185,32 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         // TODO Rename to DrawPositionHandles().
-        public void DrawMoveSinglePositionsHandles(APAnimator apAnimator,
-            Action<int, Vector3, Vector3> callback) {
-
-            // Node global positions.
-            var nodes = apAnimator.GetGlobalNodePositions();
+        public void DrawMoveSinglePositionsHandles(
+            Vector3[] nodeGlobalPositions,
+            float handleSize,
+            Color curveColor,
+            Action<int, Vector3> callback) {
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
             // For each node..
-            for (var i = 0; i < nodes.Length; i++) {
-                var handleColor = apAnimator.Settings.GizmoCurveColor;
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                var handleColor = curveColor;
 
                 // Draw position handle.
-                var newPos = DrawPositionHandle(
-                    nodes[i],
-                    Settings.MovementHandleSize,
+                var newGlobalPos = DrawPositionHandle(
+                    nodeGlobalPositions[i],
+                    handleSize,
                     handleColor,
                     capFunction);
 
                 // TODO Make it into callback.
                 // If node was moved..
-                if (newPos != nodes[i]) {
-                    // Calculate node old local position.
-                    var oldNodeLocalPosition = apAnimator.ThisTransform.InverseTransformPoint(nodes[i]);
-
-                    // Calculate node new local position.
-                    var newNodeLocalPosition = apAnimator.ThisTransform.InverseTransformPoint(newPos);
-
-                    // Calculate movement delta.
-                    var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+                if (newGlobalPos != nodeGlobalPositions[i]) {
 
                     // Execute callback.
-                    callback(i, newNodeLocalPosition, moveDelta);
+                    callback(i, newGlobalPos);
                 }
             }
         }

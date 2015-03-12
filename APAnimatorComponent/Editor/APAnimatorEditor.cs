@@ -786,8 +786,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+
             SceneHandles.DrawMoveSinglePositionsHandles(
-                Script,
+                nodeGlobalPositions,
+                Settings.MovementHandleSize,
+                Settings.GizmoCurveColor,
                 DrawPositionHandlesCallbackHandler);
         }
 
@@ -903,12 +907,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void DrawPositionHandlesCallbackHandler(
             int movedNodeIndex,
-            Vector3 position,
-            Vector3 moveDelta) {
+            Vector3 newGlobalPos) {
 
             Undo.RecordObject(Script.PathData, "Change path");
 
-            Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
+            // Calculate node new local position.
+            var newNodeLocalPosition =
+                Script.ThisTransform.InverseTransformPoint(newGlobalPos);
+
+            Script.PathData.MoveNodeToPosition(movedNodeIndex, newNodeLocalPosition);
             Script.PathData.DistributeTimestamps();
 
             HandleSmoothTangentMode();

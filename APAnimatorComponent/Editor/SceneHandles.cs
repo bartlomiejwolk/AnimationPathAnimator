@@ -291,6 +291,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public void DrawRemoveNodeButtons(
             Vector3[] nodePositions,
+            int offsetH,
+            int offsetV,
             Action<int> callback,
             GUIStyle buttonStyle) {
 
@@ -306,8 +308,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Draw button.
                 var buttonPressed = DrawButton(
                     guiPoint,
-                    Settings.RemoveButtonH,
-                    Settings.RemoveButtonV,
+                    offsetH,
+                    offsetV,
                     15,
                     15,
                     buttonStyle);
@@ -327,7 +329,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Color rotationHandleColor,
             Action<Vector3> callback) {
 
-            var handleSize = HandleUtility.GetHandleSize(rotationPointGlobalPosition);
+            var handleSize =
+                HandleUtility.GetHandleSize(rotationPointGlobalPosition);
             var sphereSize = handleSize * rotationHandleSize;
 
             // Set handle color.

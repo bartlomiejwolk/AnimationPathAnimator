@@ -806,6 +806,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Draw add node buttons.
             SceneHandles.DrawRemoveNodeButtons(
                 nodes,
+                Settings.RemoveButtonH,
+                Settings.RemoveButtonV,
                 removeNodeCallback,
                 removeButtonStyle);
         }

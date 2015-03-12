@@ -154,7 +154,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             // Return if path data does not exist.
             if (Script.ApAnimator.PathData == null) return;
 
-            var methodNames = Script.GetMethodNames();
+            var methodNames = (string[])Utilities.InvokeMethodWithReflection(
+                Script,
+                "GetMethodNames",
+                null);
             var nodePositions = Script.GetNodePositions(methodNames.Length);
             var style = Script.Skin.GetStyle("MethodNameLabel");
 

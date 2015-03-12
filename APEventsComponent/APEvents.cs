@@ -111,7 +111,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
             return nodePositions;
         }
-        public string[] GetMethodNames() {
+        private string[] GetMethodNames() {
             var methodNames = new string[NodeEvents.Count];
 
             for (int i = 0; i < NodeEvents.Count; i++) {

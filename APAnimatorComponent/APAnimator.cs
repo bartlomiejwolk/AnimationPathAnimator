@@ -210,25 +210,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleDrawingCurrentRotationPointGizmo();
             HandleDrawingRotationPointGizmos();
         }
-
-        private void HandleDrawingForwardPointIcon() {
-            if (SettingsAsset.RotationMode == RotationMode.Forward) {
-                var globalForwardPointPosition = GetGlobalForwardPoint();
-
-                DrawForwardPointIcon(
-                    globalForwardPointPosition);
-            }
-        }
-
-        private void HandleDrawingTargetIcon() {
-        // If rotation mode set to target..
-            if (SettingsAsset.RotationMode == RotationMode.Target
-                // and target obj. is assigned..
-                && TargetGO != null) {
-
-                DrawTargetIcon(TargetGO.position);
-            }
-        }
 #endif
 
         private void Start() {
@@ -640,14 +621,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region HELPER METHODS
         private void UnsubscribeFromEvents() {
-            if (PathData != null) {
-                PathData.NodePositionChanged -= PathData_NodePositionChanged;
-                PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
-                PathData.PathReset -= PathData_PathReset;
-                PathData.RotationPathReset -= PathData_RotationPathReset;
+            if (PathData == null) return;
 
-                SubscribedToEvents = false;
-            }
+            PathData.NodePositionChanged -= PathData_NodePositionChanged;
+            PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
+            PathData.PathReset -= PathData_PathReset;
+            PathData.RotationPathReset -= PathData_RotationPathReset;
+
+            SubscribedToEvents = false;
         }
 
         private void AssignMainCameraAsAnimatedGO() {
@@ -657,17 +638,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void SubscribeToEvents() {
-            if (pathData != null) {
-                Debug.Log("subscribe");
-                PathData.RotationPointPositionChanged +=
-                    PathData_RotationPointPositionChanged;
-                PathData.NodePositionChanged += PathData_NodePositionChanged;
-                PathData.NodeTiltChanged += PathData_NodeTiltChanged;
-                PathData.PathReset += PathData_PathReset;
-                PathData.RotationPathReset += PathData_RotationPathReset;
+            if (pathData == null) return;
 
-                SubscribedToEvents = true;
-            }
+            PathData.RotationPointPositionChanged +=
+                PathData_RotationPointPositionChanged;
+            PathData.NodePositionChanged += PathData_NodePositionChanged;
+            PathData.NodeTiltChanged += PathData_NodeTiltChanged;
+            PathData.PathReset += PathData_PathReset;
+            PathData.RotationPathReset += PathData_RotationPathReset;
+
+            SubscribedToEvents = true;
         }
 
         private void LoadRequiredResources() {
@@ -754,6 +734,25 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion METHODS
         #region GIZMOS
+        private void HandleDrawingForwardPointIcon() {
+            if (SettingsAsset.RotationMode == RotationMode.Forward) {
+                var globalForwardPointPosition = GetGlobalForwardPoint();
+
+                DrawForwardPointIcon(
+                    globalForwardPointPosition);
+            }
+        }
+
+        private void HandleDrawingTargetIcon() {
+            // If rotation mode set to target..
+            if (SettingsAsset.RotationMode == RotationMode.Target
+                // and target obj. is assigned..
+                && TargetGO != null) {
+
+                DrawTargetIcon(TargetGO.position);
+            }
+        }
+
 
 #if UNITY_EDITOR
         private void HandleDrawingRotationPathCurve() {

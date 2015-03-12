@@ -87,9 +87,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-#if UNITY_EDITOR
-#endif
-
         /// <summary>
         ///     If animation is currently enabled.
         /// </summary>
@@ -182,48 +179,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AssignMainCameraAsAnimatedGO();
             SubscribeToEvents();
         }
-
-        private void LoadRequiredResources() {
-            settings = Resources.Load("DefaultAnimatorSettings")
-                as APAnimatorSettings;
-            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
-        }
-
-        private void SubscribeToEvents() {
-            if (pathData != null) {
-                Debug.Log("subscribe");
-                PathData.RotationPointPositionChanged +=
-                    PathData_RotationPointPositionChanged;
-                PathData.NodePositionChanged += PathData_NodePositionChanged;
-                PathData.NodeTiltChanged += PathData_NodeTiltChanged;
-                PathData.PathReset += PathData_PathReset;
-                PathData.RotationPathReset += PathData_RotationPathReset;
-
-                SubscribedToEvents = true;
-            }
-        }
-
-        private void AssignMainCameraAsAnimatedGO() {
-            if (AnimatedGO == null && Camera.main != null) {
-                animatedGO = Camera.main.transform;
-            }
-        }
-
         private void OnDisable() {
             UnsubscribeFromEvents();
         }
-
-        private void UnsubscribeFromEvents() {
-            if (PathData != null) {
-                PathData.NodePositionChanged -= PathData_NodePositionChanged;
-                PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
-                PathData.PathReset -= PathData_PathReset;
-                PathData.RotationPathReset -= PathData_RotationPathReset;
-
-                SubscribedToEvents = false;
-            }
-        }
-
         private void Awake() {
 
         }
@@ -288,7 +246,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             //if (frame == 2) StartCoroutine("HandleEaseTime");
         }
-
+        #endregion UNITY MESSAGES
+        #region METHODS
         private void HandleUpdatingAnimGOInPlayMode() {
             // Update animated GO in play mode.
             if (Application.isPlaying && AnimatedObjectUpdateEnabled) {
@@ -313,7 +272,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        #endregion UNITY MESSAGES
+        #endregion
 
         #region EVENT HANDLERS
 
@@ -321,7 +280,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Settings.RotationMode = RotationMode.Custom;
         }
 
-        private void OnNodeReached(NodeReachedEventArgs eventArgs) {
+        private void APAnimator_NodeReached(NodeReachedEventArgs eventArgs) {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
@@ -388,7 +347,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Starting node was reached.
             if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
-                OnNodeReached(args);
+                APAnimator_NodeReached(args);
             }
 
             StartCoroutine("HandleEaseTime");
@@ -624,11 +583,45 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
-        #region METHODS
-
-        #endregion
 
         #region HELPER METHODS
+        private void UnsubscribeFromEvents() {
+            if (PathData != null) {
+                PathData.NodePositionChanged -= PathData_NodePositionChanged;
+                PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
+                PathData.PathReset -= PathData_PathReset;
+                PathData.RotationPathReset -= PathData_RotationPathReset;
+
+                SubscribedToEvents = false;
+            }
+        }
+
+        private void AssignMainCameraAsAnimatedGO() {
+            if (AnimatedGO == null && Camera.main != null) {
+                animatedGO = Camera.main.transform;
+            }
+        }
+
+        private void SubscribeToEvents() {
+            if (pathData != null) {
+                Debug.Log("subscribe");
+                PathData.RotationPointPositionChanged +=
+                    PathData_RotationPointPositionChanged;
+                PathData.NodePositionChanged += PathData_NodePositionChanged;
+                PathData.NodeTiltChanged += PathData_NodeTiltChanged;
+                PathData.PathReset += PathData_PathReset;
+                PathData.RotationPathReset += PathData_RotationPathReset;
+
+                SubscribedToEvents = true;
+            }
+        }
+
+        private void LoadRequiredResources() {
+            settings = Resources.Load("DefaultAnimatorSettings")
+                as APAnimatorSettings;
+            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+        }
+
 
         // TODO Rename to HandleFiringNodeReachedEvent.
         private void HandleFireNodeReachedEvent() {
@@ -649,7 +642,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var args = new NodeReachedEventArgs(index, AnimationTime);
 
             // Fire event.
-            OnNodeReached(args);
+            APAnimator_NodeReached(args);
         }
 
         // TODO Remove.

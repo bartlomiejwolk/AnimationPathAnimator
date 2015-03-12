@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -644,6 +646,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     break;
             }
         }
+
+        #endregion
+        #region METHODS
 
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
     public sealed class APAnimatorEditor : Editor {
         
         #region PROPERTIES
-        private GizmoIcons GizmoIcons { get; set; }
 
         private SerializedObject SettingsSerObj { get; set; }
         //public SerializedObject PathExporterSerObj { get; private set; }
@@ -166,7 +166,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
 
-            GizmoIcons.CopyIconsToGizmosFolder();
+            CopyIconsToGizmosFolder();
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
         }
@@ -1140,7 +1140,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
-            GizmoIcons = new GizmoIcons(Settings);
             SettingsSerObj = new SerializedObject(Settings);
         }
         private void ValidateInspectorSettings() {
@@ -1192,7 +1191,31 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //}
         }
 
+        private void CopyIconsToGizmosFolder() {
+            // Path to Unity Gizmos folder.
+            var gizmosDir = Application.dataPath + "/Gizmos";
+
+            // Path to ATP folder inside Gizmos.
+
+            // Create Asset/Gizmos folder if not exists.
+            if (!Directory.Exists(gizmosDir + "ATP")) {
+                Directory.CreateDirectory(gizmosDir + "ATP");
+            }
+
+            // Check if messageSettings asset has icons specified.
+            if (Settings.GizmoIcons == null) return;
+
+            // For each icon..
+            foreach (var icon in Settings.GizmoIcons) {
+                // Get icon path.
+                var iconPath = AssetDatabase.GetAssetPath(icon);
+
+                // Copy icon to Gizmos folder.
+                AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
+            }
+        }
         #endregion PRIVATE METHODS
+
         #region SHORTCUTS
 
         private void HandleShortcuts() {

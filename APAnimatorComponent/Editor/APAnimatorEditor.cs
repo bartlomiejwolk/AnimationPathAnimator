@@ -816,6 +816,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
                 Script.PathData.GetRotationAtTime(currentAnimationTime);
+            var rotationPointGlobalPosition =
+                Script.ThisTransform.TransformPoint(rotationPointPosition);
             var nodeTimestamps = Script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
@@ -828,8 +830,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (index < 0) return;
 
             SceneHandles.DrawRotationHandle(
-                Script,
-                rotationPointPosition,
+                rotationPointGlobalPosition,
+                Settings.RotationHandleSize,
+                Settings.RotationHandleColor,
                 DrawRotationHandlesCallbackHandler);
         }
 
@@ -949,11 +952,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawRotationHandlesCallbackHandler(
-            float timestamp,
             Vector3 newPosition) {
+
             Undo.RecordObject(Script.PathData, "Rotation path changed.");
 
-            Script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
+            var newLocalPos =
+                Script.ThisTransform.InverseTransformPoint(newPosition);
+
+            Script.PathData.ChangeRotationAtTimestamp(
+                Script.AnimationTime,
+                newLocalPos);
         }
 
         private void DrawTiltingHandlesCallbackHandler(

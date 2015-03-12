@@ -322,32 +322,30 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void DrawRotationHandle(
-            APAnimator script,
-            Vector3 rotationPointPosition,
-            Action<float, Vector3> callback) {
+            Vector3 rotationPointGlobalPosition,
+            float rotationHandleSize,
+            Color rotationHandleColor,
+            Action<Vector3> callback) {
 
-            var handleSize = HandleUtility.GetHandleSize(rotationPointPosition);
-            var sphereSize = handleSize * Settings.RotationHandleSize;
-
-            var rotationPointGlobalPos =
-                script.transform.TransformPoint(rotationPointPosition);
+            var handleSize = HandleUtility.GetHandleSize(rotationPointGlobalPosition);
+            var sphereSize = handleSize * rotationHandleSize;
 
             // Set handle color.
-            Handles.color = Settings.RotationHandleColor;
+            Handles.color = rotationHandleColor;
 
             // Draw node's handle.
             var newGlobalPosition = Handles.FreeMoveHandle(
-                rotationPointGlobalPos,
+                rotationPointGlobalPosition,
                 Quaternion.identity,
                 sphereSize,
                 Vector3.zero,
                 Handles.SphereCap);
 
-            if (newGlobalPosition != rotationPointGlobalPos) {
-                var newPointLocalPosition =
-                    script.transform.InverseTransformPoint(newGlobalPosition);
+            if (newGlobalPosition != rotationPointGlobalPosition) {
+                //var newPointLocalPosition =
+                //    script.transform.InverseTransformPoint(newGlobalPosition);
 
-                callback(script.AnimationTime, newPointLocalPosition);
+                callback(newGlobalPosition);
             }
         }
 

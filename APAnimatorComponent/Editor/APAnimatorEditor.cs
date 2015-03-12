@@ -264,7 +264,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //    Script.Skin.GetStyle("UpdateAllLabel"));
 
             SceneHandles.DrawUpdateAllLabels(
-                Script,
+                Script.GetGlobalNodePositions(),
+                Settings.UpdateAllLabelText,
+                Settings.UpdateAllLabelOffsetX,
+                Settings.UpdateAllLabelOffsetY,
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
 

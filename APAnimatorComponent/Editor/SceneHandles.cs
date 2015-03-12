@@ -240,13 +240,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawNodeLabels(
-            APAnimator apAnimator,
+            Vector3[] nodeGlobalPositions,
             string text,
             int offsetX,
             int offsetY,
             GUIStyle style) {
-
-            var nodeGlobalPositions = apAnimator.GetGlobalNodePositions();
 
             foreach (var nodePos in nodeGlobalPositions) {
                 DrawNodeLabel(
@@ -364,14 +362,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void DrawUpdateAllLabels(
-            APAnimator apAnimator,
+            Vector3[] nodeGlobalPositions,
+            string labelText,
+            int offsetX,
+            int offsetY,
             GUIStyle style) {
 
             DrawNodeLabels(
-                apAnimator,
-                Settings.UpdateAllLabelText,
-                Settings.UpdateAllLabelOffsetX,
-                Settings.UpdateAllLabelOffsetY,
+                nodeGlobalPositions,
+                labelText,
+                offsetX,
+                offsetY,
                 style);
         }
 

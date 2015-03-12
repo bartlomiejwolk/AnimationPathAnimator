@@ -102,9 +102,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #region METHODS
 
         public Vector3[] GetNodePositions() {
-            // TODO Move GetGlobalNodePositions() to APAnimator class.
             var nodePositions =
-                ApAnimator.PathData.GetGlobalNodePositions(ApAnimator.ThisTransform);
+                ApAnimator.GetGlobalNodePositions();
 
             return nodePositions;
         }

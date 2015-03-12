@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -20,10 +18,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         #endregion
+
         #region FIELDS
+
         //[SerializeField]
         //private Transform thisTransform;
-
 
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -47,8 +46,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private APAnimatorSettings settings;
 
+        private bool pause;
+
+        private bool isPlaying;
+
         [SerializeField]
         private GUISkin skin;
+
+        [SerializeField]
+        private bool subscribedToEvents;
+
+        private bool animatedObjectUpdateEnabled;
 
         /// <summary>
         ///     Transform that the <c>animatedGO</c> will be looking at.
@@ -56,7 +64,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
-        private bool Reverse { get; set; }
+        private Transform thisTransform;
 
         #endregion OPTIONS
 
@@ -64,7 +72,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public float AnimationTime {
             get { return animationTime; }
-            set {
+            private set {
                 animationTime = value;
 
                 if (Application.isPlaying && IsPlaying && !Pause) {
@@ -78,10 +86,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
 #if UNITY_EDITOR
         // TODO Rename to AnimatorGizmos.
-        APAnimatorGizmos ApAnimatorGizmos { get; set; }
+        private APAnimatorGizmos ApAnimatorGizmos { get; set; }
 #endif
-
-        private bool isPlaying;
 
         /// <summary>
         ///     If animation is currently enabled.
@@ -89,7 +95,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <remarks>When it's true, it means that the HandleEaseTime coroutine is running.</remarks>
         public bool IsPlaying {
             get { return isPlaying; }
-            set {
+            private set {
                 isPlaying = value;
                 Debug.Log("IsPlaying:" + isPlaying);
             }
@@ -99,10 +105,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return pathData; }
             set { pathData = value; }
         }
-
-        private bool pause;
-
-        private bool animatedObjectUpdateEnabled;
 
         public bool Pause {
             get { return pause; }
@@ -125,12 +127,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return settings; }
         }
 
+        private bool Reverse { get; set; }
+
         public GUISkin Skin {
             get { return skin; }
         }
 
-        private Transform thisTransform;
-
+        /// <summary>
+        /// Helper field.
+        /// </summary>
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -147,6 +152,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         public Transform AnimatedGO {
             get { return animatedGO; }
+        }
+        /// <summary>
+        ///     If animator is currently subscribed to path events.
+        /// </summary>
+        /// <remarks>It's only public because of the Editor class.</remarks>
+        private bool SubscribedToEvents {
+            set { subscribedToEvents = value; }
         }
 
         public bool AnimatedObjectUpdateEnabled {
@@ -188,7 +200,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
         }
 
-        public void SubscribeToEvents() {
+        private void SubscribeToEvents() {
             if (pathData != null) {
                 Debug.Log("subscribe");
                 PathData.RotationPointPositionChanged +=
@@ -243,7 +255,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (Settings.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
-                ApAnimatorGizmos.DrawForwardPointIcon(globalForwardPointPosition);
+                ApAnimatorGizmos.DrawForwardPointIcon(
+                    globalForwardPointPosition);
             }
 
             if (Settings.HandleMode == HandleMode.Rotation) {
@@ -263,14 +276,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             ApAnimatorGizmos.DrawAnimationCurve(PathData, transform);
         }
 #endif
-     
+
         private void Start() {
             if (Application.isPlaying && Settings.AutoPlay) {
                 StartEaseTimeCoroutine();
                 IsPlaying = true;
             }
         }
-
 
         private void Reset() {
             // Create separate method InitializeFields().
@@ -289,12 +301,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             UpdateAnimation();
             //if (!SubscribedToEvents) SubscribeToEvents();
         }
-
-        /// <summary>
-        /// If animator is currently subscribed to path events.
-        /// </summary>
-        /// <remarks>It's only public because of the Editor class.</remarks>
-        public bool SubscribedToEvents { get; set; }
 
         //private int frame;
         private void Update() {
@@ -332,6 +338,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
+
         private void PathData_RotationPathReset(object sender, EventArgs e) {
             Settings.RotationMode = RotationMode.Custom;
         }
@@ -340,7 +347,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
-
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             UpdateAnimation();
@@ -372,7 +378,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimateAnimatedGOTilting();
         }
 
-        public void HandlePlayPause() {
+        private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
             // Pause animation.
@@ -427,7 +433,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <remarks>
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
-        public void UpdateAnimation() {
+        private void UpdateAnimation() {
             if (!AssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;
@@ -642,7 +648,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region HELPER METHODS
-   
+
         // TODO Rename to HandleFiringNodeReachedEvent.
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
@@ -665,9 +671,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             OnNodeReached(args);
         }
 
-
         // TODO Remove.
-        public void UpdateWrapMode() {
+        private void UpdateWrapMode() {
             PathData.SetPathWrapMode(Settings.WrapMode);
             PathData.SetEaseWrapMode(Settings.WrapMode);
         }
@@ -685,7 +690,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private Vector3 GetGlobalForwardPoint() {
             var localForwardPoint = GetForwardPoint();
-            var globalForwardPoint = ThisTransform.TransformPoint(localForwardPoint);
+            var globalForwardPoint =
+                ThisTransform.TransformPoint(localForwardPoint);
 
             return globalForwardPoint;
         }
@@ -702,15 +708,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return rotPointPositions;
         }
 
-        public bool AssetsLoaded() {
+        private bool AssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
-
                 return true;
             }
-
             return false;
         }
+
+        public Vector3[] GetGlobalNodePositions() {
+            var nodePositions = PathData.GetNodePositions();
+            Utilities.ConvertToGlobalCoordinates(ref nodePositions, ThisTransform);
+
+            return nodePositions;
+        }
+
 
         #endregion METHODS
     }

@@ -178,8 +178,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Action<int, Vector3, Vector3> callback) {
 
             // Node global positions.
-            var nodes = apAnimator.PathData.GetGlobalNodePositions(
-                apAnimator.ThisTransform);
+            var nodes = apAnimator.GetGlobalNodePositions();
 
             // Cap function used to draw handle.
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
@@ -247,8 +246,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             int offsetY,
             GUIStyle style) {
 
-            var nodeGlobalPositions = apAnimator.PathData.GetGlobalNodePositions(
-                apAnimator.ThisTransform);
+            var nodeGlobalPositions = apAnimator.GetGlobalNodePositions();
 
             foreach (var nodePos in nodeGlobalPositions) {
                 DrawNodeLabel(

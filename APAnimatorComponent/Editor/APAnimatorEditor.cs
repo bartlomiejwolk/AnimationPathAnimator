@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -22,8 +20,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Reference to target script.
         /// </summary>
         private APAnimator Script { get; set; }
-
-        private Shortcuts Shortcuts { get; set; }
 
         private APAnimatorSettings Settings { get; set; }
 
@@ -49,12 +45,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty settings;
         private SerializedProperty shortJumpValue;
         private SerializedProperty longJumpValue;
+        private SerializedProperty subscribedToEvents;
+        private SerializedProperty animationTime;
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            if (!Script.AssetsLoaded()) {
+            if (!AssetsLoaded()) {
                 DrawInfoLabel(
                     //"Asset files in extension folder were not found. "
                     "Required assets were not found.\n"
@@ -163,7 +161,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script = (APAnimator) target;
 
             // Return is required assets are not referenced.
-            if (!Script.AssetsLoaded()) return;
+            if (!AssetsLoaded()) return;
 
             // Initialize helper property.
             Settings = Script.Settings;
@@ -175,21 +173,36 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
         }
+
+        private bool AssetsLoaded() {
+            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
+                Script,
+                "AssetsLoaded",
+                null);
+
+            return assetsLoaded;
+        }
+
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
 
         private void OnSceneGUI() {
-            // Subscribe animator to path events if not subscribed already.
-            // This is required after animator component reset.
-            if (!Script.SubscribedToEvents) Script.SubscribeToEvents();
-
             // Return is required assets are not referenced.
-            if (!Script.AssetsLoaded()) return;
+            if (!AssetsLoaded()) return;
             // Return if path asset is not referenced.
             if (Script.PathData == null) return;
             // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
+
+            // Subscribe animator to path events if not subscribed already.
+            // This is required after animator component reset.
+            if (!subscribedToEvents.boolValue) {
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "SubscribeToEvents",
+                    null);
+            }
 
             // Return is Settings asset is not assigned in the inspector.
             //if (Settings == null) return;
@@ -198,7 +211,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                 FocusType.Passive));
 
-            Shortcuts.HandleShortcuts();
+            HandleShortcuts();
 
             //Script.UpdateWrapMode();
 
@@ -342,7 +355,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Math.Abs(newTimeRatio - Script.AnimationTime)
                 > GlobalConstants.FloatPrecision) {
 
-                Script.AnimationTime = newTimeRatio;
+                serializedObject.Update();
+
+                animationTime.floatValue = newTimeRatio;
+
+                serializedObject.ApplyModifiedProperties();
             }
         }
 
@@ -454,7 +471,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     playPauseBtnText,
                     ""))) {
 
-                Script.HandlePlayPause();
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "HandlePlayPause",
+                    null);
             }
 
             // Draw Stop button.
@@ -464,7 +484,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     ""))) {
 
                 Script.StopEaseTimeCoroutine();
-                Script.UpdateAnimation();
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -659,7 +683,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Reset curves to its default state.
                 Script.PathData.ResetPath();
 
-                Script.UpdateAnimation();
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
         }
 
@@ -688,7 +715,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// Called on rotation mode change.
         /// </summary>
         private void HandleRotationModeChange() {
-            Script.UpdateAnimation();
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
             Settings.HandleMode = HandleMode.None;
         }
 
@@ -697,8 +727,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
-            var nodePositions = Script.PathData.GetGlobalNodePositions(
-                Script.ThisTransform);
+            var nodePositions = Script.GetGlobalNodePositions();
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -721,7 +750,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Get path node positions.
             var nodePositions =
-                Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
+                Script.GetGlobalNodePositions();
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -740,8 +769,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.HandleMode != HandleMode.Ease) return;
 
             // Get node global positions.
-            var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
-                Script.ThisTransform);
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
@@ -763,7 +791,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
+            var nodes = Script.GetGlobalNodePositions();
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -811,7 +839,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Get path node positions.
             var nodePositions =
-                Script.PathData.GetGlobalNodePositions(Script.ThisTransform);
+                Script.GetGlobalNodePositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -826,8 +854,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.
-            var nodeGlobalPositions = Script.PathData.GetGlobalNodePositions(
-                Script.ThisTransform);
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
@@ -858,7 +885,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Update animated object.
-            Script.UpdateAnimation();
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
         }
 
         private void DrawPositionHandlesCallbackHandler(
@@ -892,7 +922,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Update animated object.
-            Script.UpdateAnimation();
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
         }
 
         private void DrawEaseHandlesCallbackHandler(
@@ -975,7 +1008,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Update path with new tangent setting.
                 HandleTangentModeChange();
                 // Update animated object.
-                Script.UpdateAnimation();
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
             }
         }
 
@@ -1066,13 +1102,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsSerObj.FindProperty("rotationCurveColor");
             shortJumpValue = SettingsSerObj.FindProperty("shortJumpValue");
             longJumpValue = SettingsSerObj.FindProperty("longJumpValue");
+            subscribedToEvents =
+                serializedObject.FindProperty("subscribedToEvents");
+            animationTime =
+                serializedObject.FindProperty("animationTime");
 
             SerializedPropertiesInitialized = true;
         }
 
         private void InstantiateCompositeClasses() {
             SceneHandles = new SceneHandles(Script);
-            Shortcuts = new Shortcuts(Script);
             PathExporter = new PathExporter(Script);
 
             GizmoIcons = new GizmoIcons(Settings);
@@ -1128,6 +1167,135 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion PRIVATE METHODS
+        #region SHORTCUTS
+
+        private void HandleShortcuts() {
+            serializedObject.Update();
+
+            Utilities.HandleUnmodShortcut(
+                Settings.EaseModeKey,
+                () => Settings.HandleMode = HandleMode.Ease);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.RotationModeKey,
+                () => Settings.HandleMode = HandleMode.Rotation);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.TiltingModeKey,
+                () => Settings.HandleMode = HandleMode.Tilting);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.NoneModeKey,
+                () => Settings.HandleMode = HandleMode.None);
+
+            Utilities.HandleUnmodShortcut(
+                Settings.UpdateAllKey,
+                () => Settings.UpdateAllMode = !Settings.UpdateAllMode);
+
+            // Short jump forward.
+            Utilities.HandleModShortcut(
+                () => {
+                    var newAnimationTimeRatio =
+                        animationTime.floatValue + Settings.ShortJumpValue;
+
+                    animationTime.floatValue =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                },
+                Settings.ShortJumpForwardKey,
+                Event.current.alt);
+
+            // Short jump backward.
+            Utilities.HandleModShortcut(
+                () => {
+                    var newAnimationTimeRatio =
+                        animationTime.floatValue - Settings.ShortJumpValue;
+
+                    animationTime.floatValue =
+                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                },
+                Settings.ShortJumpBackwardKey,
+                Event.current.alt);
+
+            // Long jump forward.
+            Utilities.HandleUnmodShortcut(
+                Settings.LongJumpForwardKey,
+                () => animationTime.floatValue +=
+                    Settings.LongJumpValue);
+
+            // Long jump backward.
+            Utilities.HandleUnmodShortcut(
+                Settings.LongJumpBackwardKey,
+                () => animationTime.floatValue -=
+                    Settings.LongJumpValue);
+
+            // Jump to next node.
+            Utilities.HandleUnmodShortcut(
+                Settings.JumpToNextNodeKey,
+                () => animationTime.floatValue =
+                    GetNearestForwardNodeTimestamp());
+
+            // Jump to previous node.
+            Utilities.HandleUnmodShortcut(
+                // TODO Replace APAnimator.messageSettings with messageSettings.
+                Settings.JumpToPreviousNodeKey,
+                () => animationTime.floatValue =
+                    GetNearestBackwardNodeTimestamp());
+
+            // Jump to start.
+            Utilities.HandleModShortcut(
+                () => animationTime.floatValue = 0,
+                Settings.JumpToStartKey,
+                //ModKeyPressed);
+                Event.current.alt);
+
+            // Jump to end.
+            Utilities.HandleModShortcut(
+                () => animationTime.floatValue = 1,
+                Settings.JumpToEndKey,
+                //ModKeyPressed);
+                Event.current.alt);
+
+            // Play/pause animation.
+            Utilities.HandleUnmodShortcut(
+                Settings.PlayPauseKey,
+                HandlePlayPause);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandlePlayPause() {
+            Utilities.InvokeMethodWithReflection(
+               Script,
+               "HandlePlayPause",
+               null);
+        }
+
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
+
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < animationTime.floatValue) {
+                    return pathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
+
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > animationTime.floatValue)) {
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
+        }
+
+        #endregion
     }
 
 }

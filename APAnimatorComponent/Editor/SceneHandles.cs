@@ -5,35 +5,15 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     /// <summary>
-    /// Class responsible for drawing all on scene handles.
+    ///     Class responsible for drawing all on scene handles.
     /// </summary>
-    /// <remarks>It has same access to the APAnimator class as
-    /// the AnimationPathAnimatorEditor does.</remarks>
+    /// <remarks>
+    ///     It has same access to the APAnimator class as
+    ///     the AnimationPathAnimatorEditor does.
+    /// </remarks>
     // TODO Pass ref. to APAnimator in the constructor.
     public static class SceneHandles {
-
-        #region FIELDS
-        //private readonly APAnimator apAnimator;
-        #endregion
-
-        #region PROPERTIES
-        //private APAnimator ApAnimator {
-        //    get { return apAnimator; }
-        //}
-
-        //private APAnimatorSettings ApAnimatorSettings {
-        //    get { return ApAnimator.Settings; }
-        //}
-
-        //private APAnimatorSettings Settings{
-        //    get { return ApAnimator.Settings; }
-        //}
-        #endregion
         #region METHDOS
-        //public SceneHandles(APAnimator apAnimator) {
-        //    this.apAnimator = apAnimator;
-        //}
-
 
         public static void DrawAddNodeButtons(
             Vector3[] nodePositions,
@@ -67,71 +47,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             Handles.EndGUI();
-        }
-
-        /// <summary>
-        ///     Draw arc handle.
-        /// </summary>
-        /// <param name="value">Arc value.</param>
-        /// <param name="position">Arc position.</param>
-        /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
-        /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
-        /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
-        /// <param name="handleColor">Handle color.</param>
-        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        private static void DrawArcHandle(
-            float value,
-            Vector3 position,
-            float arcValueMultiplier,
-            int minDegrees,
-            int maxDegrees,
-            float arcHandleRadius,
-            float initialArcValue,
-            float scaleHandleSize,
-            Color handleColor,
-            Action<float> callback) {
-
-            var arcValue = value * arcValueMultiplier;
-            var handleSize = HandleUtility.GetHandleSize(position);
-            var arcRadius = handleSize * arcHandleRadius;
-
-            Handles.color = handleColor;
-
-            Handles.DrawWireArc(
-                position,
-                Vector3.up,
-                Quaternion.AngleAxis(
-                    0,
-                    Vector3.up) * Vector3.forward,
-                arcValue,
-                arcRadius);
-
-            Handles.color = handleColor;
-
-            // Set initial arc value to other than zero. If initial value
-            // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
-                ? initialArcValue : arcValue;
-
-            var scaleSize = handleSize * scaleHandleSize;
-            var newArcValue = Handles.ScaleValueHandle(
-                arcValue,
-                position + Vector3.forward * arcRadius
-                * 1.3f,
-                Quaternion.identity,
-                scaleSize,
-                Handles.ConeCap,
-                1);
-
-            // Limit handle value.
-            if (newArcValue > maxDegrees) newArcValue = maxDegrees;
-            if (newArcValue < minDegrees) newArcValue = minDegrees;
-
-            if (Math.Abs(newArcValue - arcValue)
-                > GlobalConstants.FloatPrecision) {
-
-                callback(newArcValue / arcValueMultiplier);
-            }
         }
 
         public static void DrawArcHandleLabels(
@@ -218,80 +133,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     callback(i, newGlobalPos);
                 }
             }
-        }
-
-        private static void DrawNodeLabel(
-            Vector3 nodeGlobalPosition,
-            string value,
-            int offsetX,
-            int offsetY,
-            int labelWidth,
-            int labelHeight,
-            GUIStyle style) {
-
-            // Translate node's 3d position into screen coordinates.
-            var guiPoint = HandleUtility.WorldToGUIPoint(nodeGlobalPosition);
-
-            // Create rectangle for the label.
-            var labelPosition = new Rect(
-                guiPoint.x + offsetX,
-                guiPoint.y + offsetY,
-                labelWidth,
-                labelHeight);
-
-            Handles.BeginGUI();
-
-            // Draw label.
-            GUI.Label(
-                labelPosition,
-                value,
-                style);
-
-            Handles.EndGUI();
-        }
-
-        private static void DrawNodeLabels(
-            Vector3[] nodeGlobalPositions,
-            string text,
-            int offsetX,
-            int offsetY,
-            int labelWidth,
-            int labelHeight,
-            GUIStyle style) {
-
-            foreach (var nodePos in nodeGlobalPositions) {
-                DrawNodeLabel(
-                    nodePos,
-                    text,
-                    offsetX,
-                    offsetY,
-                    labelWidth,
-                    labelHeight,
-                    style);
-            }
-        }
-
-        private static Vector3 DrawPositionHandle(
-            Vector3 nodePosition,
-            float handleSize,
-            Color handleColor,
-            Handles.DrawCapFunction capFunction) {
-
-            // Set handle color.
-            Handles.color = handleColor;
-
-            // Get handle size.
-            var movementHandleSize = HandleUtility.GetHandleSize(nodePosition);
-            var sphereSize = movementHandleSize * handleSize;
-
-            // Draw handle.
-            var newPos = Handles.FreeMoveHandle(
-                nodePosition,
-                Quaternion.identity,
-                sphereSize,
-                Vector3.zero,
-                capFunction);
-            return newPos;
         }
 
         public static void DrawRemoveNodeButtons(
@@ -404,6 +245,72 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 style);
         }
 
+        /// <summary>
+        ///     Draw arc handle.
+        /// </summary>
+        /// <param name="value">Arc value.</param>
+        /// <param name="position">Arc position.</param>
+        /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
+        /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
+        /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
+        /// <param name="handleColor">Handle color.</param>
+        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
+        private static void DrawArcHandle(
+            float value,
+            Vector3 position,
+            float arcValueMultiplier,
+            int minDegrees,
+            int maxDegrees,
+            float arcHandleRadius,
+            float initialArcValue,
+            float scaleHandleSize,
+            Color handleColor,
+            Action<float> callback) {
+
+            var arcValue = value * arcValueMultiplier;
+            var handleSize = HandleUtility.GetHandleSize(position);
+            var arcRadius = handleSize * arcHandleRadius;
+
+            Handles.color = handleColor;
+
+            Handles.DrawWireArc(
+                position,
+                Vector3.up,
+                Quaternion.AngleAxis(
+                    0,
+                    Vector3.up) * Vector3.forward,
+                arcValue,
+                arcRadius);
+
+            Handles.color = handleColor;
+
+            // Set initial arc value to other than zero. If initial value
+            // is zero, handle will always return zero.
+            arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
+                ? initialArcValue
+                : arcValue;
+
+            var scaleSize = handleSize * scaleHandleSize;
+            var newArcValue = Handles.ScaleValueHandle(
+                arcValue,
+                position + Vector3.forward * arcRadius
+                * 1.3f,
+                Quaternion.identity,
+                scaleSize,
+                Handles.ConeCap,
+                1);
+
+            // Limit handle value.
+            if (newArcValue > maxDegrees) newArcValue = maxDegrees;
+            if (newArcValue < minDegrees) newArcValue = minDegrees;
+
+            if (Math.Abs(newArcValue - arcValue)
+                > GlobalConstants.FloatPrecision) {
+
+                callback(newArcValue / arcValueMultiplier);
+            }
+        }
+
         private static bool DrawButton(
             Vector2 position,
             int relativeXPos,
@@ -425,6 +332,81 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             return addButtonPressed;
         }
+
+        private static void DrawNodeLabel(
+            Vector3 nodeGlobalPosition,
+            string value,
+            int offsetX,
+            int offsetY,
+            int labelWidth,
+            int labelHeight,
+            GUIStyle style) {
+
+            // Translate node's 3d position into screen coordinates.
+            var guiPoint = HandleUtility.WorldToGUIPoint(nodeGlobalPosition);
+
+            // Create rectangle for the label.
+            var labelPosition = new Rect(
+                guiPoint.x + offsetX,
+                guiPoint.y + offsetY,
+                labelWidth,
+                labelHeight);
+
+            Handles.BeginGUI();
+
+            // Draw label.
+            GUI.Label(
+                labelPosition,
+                value,
+                style);
+
+            Handles.EndGUI();
+        }
+
+        private static void DrawNodeLabels(
+            Vector3[] nodeGlobalPositions,
+            string text,
+            int offsetX,
+            int offsetY,
+            int labelWidth,
+            int labelHeight,
+            GUIStyle style) {
+
+            foreach (var nodePos in nodeGlobalPositions) {
+                DrawNodeLabel(
+                    nodePos,
+                    text,
+                    offsetX,
+                    offsetY,
+                    labelWidth,
+                    labelHeight,
+                    style);
+            }
+        }
+
+        private static Vector3 DrawPositionHandle(
+            Vector3 nodePosition,
+            float handleSize,
+            Color handleColor,
+            Handles.DrawCapFunction capFunction) {
+
+            // Set handle color.
+            Handles.color = handleColor;
+
+            // Get handle size.
+            var movementHandleSize = HandleUtility.GetHandleSize(nodePosition);
+            var sphereSize = movementHandleSize * handleSize;
+
+            // Draw handle.
+            var newPos = Handles.FreeMoveHandle(
+                nodePosition,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                capFunction);
+            return newPos;
+        }
+
         #endregion
     }
 

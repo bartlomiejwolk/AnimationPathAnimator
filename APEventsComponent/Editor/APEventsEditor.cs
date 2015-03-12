@@ -204,8 +204,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         //    var labelPosition = new Rect(
         //        guiPoint.x + offsetX,
         //        guiPoint.y + offsetY,
-        //        Settings.DefaultNodeLabelWidth,
-        //        Settings.DefaultNodeLabelHeight);
+        //        SettingsAsset.DefaultNodeLabelWidth,
+        //        SettingsAsset.DefaultNodeLabelHeight);
 
         //    Handles.BeginGUI();
 

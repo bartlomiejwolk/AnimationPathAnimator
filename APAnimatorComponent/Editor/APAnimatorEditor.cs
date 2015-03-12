@@ -141,7 +141,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
 
-            // Validate inspector Settings.
+            // Validate inspector SettingsAsset.
             // Not all inspector controls can be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
 
@@ -161,7 +161,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!AssetsLoaded()) return;
 
             // Initialize helper property.
-            Settings = Script.Settings;
+            Settings = Script.SettingsAsset;
 
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
@@ -201,8 +201,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     null);
             }
 
-            // Return is Settings asset is not assigned in the inspector.
-            //if (Settings == null) return;
+            // Return is SettingsAsset asset is not assigned in the inspector.
+            //if (SettingsAsset == null) return;
 
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
@@ -235,7 +235,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region INSPECTOR
         private void DrawShortcutsHelpBox() {
             EditorGUILayout.HelpBox(
-                "Check Settings Asset for shortcuts.",
+                "Check SettingsAsset Asset for shortcuts.",
                 MessageType.Info);
         }
 
@@ -245,7 +245,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "Settings Asset",
+                    "SettingsAsset Asset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -280,7 +280,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced Settings",
+                    "Advanced SettingsAsset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -414,7 +414,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Forward Point Offset",
                     ""), 
                 Settings.ForwardPointOffset,
-                // TODO Create field in Settings asset.
+                // TODO Create field in SettingsAsset asset.
                 0.001f,
                 1);
         }
@@ -577,7 +577,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Script.TargetGO != prevTargetGO
                 && prevTargetGO == null) {
 
-                Script.Settings.RotationMode = RotationMode.Target;
+                Script.SettingsAsset.RotationMode = RotationMode.Target;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -589,7 +589,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                      && prevTargetGO != null
                      && Script.TargetGO == null) {
 
-                Script.Settings.RotationMode = RotationMode.Forward;
+                Script.SettingsAsset.RotationMode = RotationMode.Forward;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -1136,11 +1136,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings == null) return;
 
             // Limit PositionLerpSpeed value.
-            //if (Settings.PositionLerpSpeed < 0) {
-            //    Settings.PositionLerpSpeed = 0;
+            //if (SettingsAsset.PositionLerpSpeed < 0) {
+            //    SettingsAsset.PositionLerpSpeed = 0;
             //}
-            //else if (Settings.PositionLerpSpeed > 1) {
-            //    Settings.PositionLerpSpeed = 1;
+            //else if (SettingsAsset.PositionLerpSpeed > 1) {
+            //    SettingsAsset.PositionLerpSpeed = 1;
             //}
 
             // Limit RotationSpeed value.
@@ -1149,35 +1149,35 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Limit ForwardPointOffset value.
-            //if (Settings.ForwardPointOffset < 0.001f) {
-            //    Settings.ForwardPointOffset = 0.001f;
+            //if (SettingsAsset.ForwardPointOffset < 0.001f) {
+            //    SettingsAsset.ForwardPointOffset = 0.001f;
             //}
-            //else if (Settings.ForwardPointOffset > 1) {
-            //    Settings.ForwardPointOffset = 1;
+            //else if (SettingsAsset.ForwardPointOffset > 1) {
+            //    SettingsAsset.ForwardPointOffset = 1;
             //}
 
             // Limit ExmportSamplingFrequency value.
             if (Settings.ExportSamplingFrequency < 1) {
                 Settings.ExportSamplingFrequency = 1;
             }
-            //else if (Settings.ExportSamplingFrequency > 100) {
-            //    Settings.ExportSamplingFrequency = 100;
+            //else if (SettingsAsset.ExportSamplingFrequency > 100) {
+            //    SettingsAsset.ExportSamplingFrequency = 100;
             //}
 
             // Limit ShortJumpValue.
-            //if (Settings.ShortJumpValue < 0) {
-            //    Settings.ShortJumpValue = 0;
+            //if (SettingsAsset.ShortJumpValue < 0) {
+            //    SettingsAsset.ShortJumpValue = 0;
             //}
-            //else if (Settings.ShortJumpValue > 1) {
-            //    Settings.ShortJumpValue = 1;
+            //else if (SettingsAsset.ShortJumpValue > 1) {
+            //    SettingsAsset.ShortJumpValue = 1;
             //}
 
             // Limit LongJumpValue.
-            //if (Settings.LongJumpValue < 0) {
-            //    Settings.LongJumpValue = 0;
+            //if (SettingsAsset.LongJumpValue < 0) {
+            //    SettingsAsset.LongJumpValue = 0;
             //}
-            //else if (Settings.LongJumpValue > 1) {
-            //    Settings.LongJumpValue = 1;
+            //else if (SettingsAsset.LongJumpValue > 1) {
+            //    SettingsAsset.LongJumpValue = 1;
             //}
         }
 

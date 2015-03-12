@@ -47,7 +47,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private PathData pathData;
 
         [SerializeField]
-        private APAnimatorSettings settings;
+        private APAnimatorSettings settingsAsset;
 
         private bool pause;
 
@@ -57,7 +57,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private GUISkin skin;
 
         [SerializeField]
-        // todo remove
         private bool subscribedToEvents;
 
         private bool animGOUpdateEnabled;
@@ -122,9 +121,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to SettingsAsset.
-        public APAnimatorSettings Settings {
-            get { return settings; }
+        public APAnimatorSettings SettingsAsset {
+            get { return settingsAsset; }
         }
 
         private bool Reverse { get; set; }
@@ -208,19 +206,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return if path asset file is not assigned.
             if (PathData == null) return;
 
-            if (Settings.RotationMode == RotationMode.Target
+            if (SettingsAsset.RotationMode == RotationMode.Target
                 && TargetGO != null) {
 
                 DrawTargetIcon(TargetGO.position);
             }
 
-            if (Settings.RotationMode == RotationMode.Forward) {
+            if (SettingsAsset.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
                 DrawForwardPointIcon(
                     globalForwardPointPosition);
             }
 
-            if (Settings.HandleMode == HandleMode.Rotation) {
+            if (SettingsAsset.HandleMode == HandleMode.Rotation) {
                 DrawRotationPathCurve();
                 DrawCurrentRotationPointGizmo();
                 DrawRotationPointGizmos();
@@ -231,7 +229,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 #endif
 
         private void Start() {
-            if (Application.isPlaying && Settings.AutoPlay) {
+            if (Application.isPlaying && SettingsAsset.AutoPlay) {
                 StartEaseTimeCoroutine();
                 IsPlaying = true;
             }
@@ -267,7 +265,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_RotationPathReset(object sender, EventArgs e) {
-            Settings.RotationMode = RotationMode.Custom;
+            SettingsAsset.RotationMode = RotationMode.Custom;
         }
 
         private void APAnimator_NodeReached(NodeReachedEventArgs eventArgs) {
@@ -309,7 +307,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             while (true) {
                 frame++;
 
-                // TODO Add to settings.
+                // TODO Add to SettingsAsset.
                 if (frame > 10) break;
 
                 yield return null;
@@ -446,7 +444,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimatedGO.position = Vector3.Lerp(
                 AnimatedGO.position,
                 globalPosAtTime,
-                Settings.PositionLerpSpeed);
+                SettingsAsset.PositionLerpSpeed);
 
         }
 
@@ -455,16 +453,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Look at target.
             if (TargetGO != null
-                && Settings.RotationMode == RotationMode.Target) {
+                && SettingsAsset.RotationMode == RotationMode.Target) {
 
                 RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
-            if (Settings.RotationMode == RotationMode.Custom) {
+            if (SettingsAsset.RotationMode == RotationMode.Custom) {
                 RotateObjectWithAnimationCurves();
             }
             // Look forward.
-            else if (Settings.RotationMode == RotationMode.Forward) {
+            else if (SettingsAsset.RotationMode == RotationMode.Forward) {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
@@ -523,7 +521,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleClampWrapMode() {
             // Break from animation in Clamp wrap mode.
             if (AnimationTime > 1
-                && Settings.WrapMode == AnimatorWrapMode.Clamp) {
+                && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
                 IsPlaying = false;
@@ -533,7 +531,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleLoopWrapMode() {
 
             if (AnimationTime > 1
-                && Settings.WrapMode == AnimatorWrapMode.Loop) {
+                && SettingsAsset.WrapMode == AnimatorWrapMode.Loop) {
 
                 AnimationTime = 0;
             }
@@ -541,13 +539,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
-                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = true;
             }
 
             if (AnimationTime < 0
-                && Settings.WrapMode == AnimatorWrapMode.PingPong) {
+                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = false;
             }
@@ -581,7 +579,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime * Settings.RotationSlerpSpeed;
+            var speed = Time.deltaTime * SettingsAsset.RotationSlerpSpeed;
 
             // Lerp rotation.
             AnimatedGO.rotation = Quaternion.Slerp(
@@ -605,7 +603,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void UpdateAnimatedGORotation() {
             if (AnimatedGO == null) return;
 
-            switch (Settings.RotationMode) {
+            switch (SettingsAsset.RotationMode) {
                 case RotationMode.Forward:
                     var globalForwardPoint = GetGlobalForwardPoint();
 
@@ -670,7 +668,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void LoadRequiredResources() {
-            settings = Resources.Load("DefaultAnimatorSettings")
+            settingsAsset = Resources.Load("DefaultAnimatorSettings")
                 as APAnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
         }
@@ -700,14 +698,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         // TODO Remove.
         private void UpdateWrapMode() {
-            PathData.SetPathWrapMode(Settings.WrapMode);
-            PathData.SetEaseWrapMode(Settings.WrapMode);
+            PathData.SetPathWrapMode(SettingsAsset.WrapMode);
+            PathData.SetEaseWrapMode(SettingsAsset.WrapMode);
         }
 
         // TODO Remove the globalPosition arg. and create separate method.
         private Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
-            var forwardPointDelta = Settings.ForwardPointOffset;
+            var forwardPointDelta = SettingsAsset.ForwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = AnimationTime + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
@@ -736,7 +734,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private bool AssetsLoaded() {
-            if (Settings != null
+            if (SettingsAsset != null
                 && Skin != null) {
                 return true;
             }
@@ -757,7 +755,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 #if UNITY_EDITOR
         private void DrawRotationPathCurve() {
             var localPointPositions = pathData.SampleRotationPathForPoints(
-                Settings.RotationCurveSampling);
+                SettingsAsset.RotationCurveSampling);
 
             var globalPointPositions =
                 new Vector3[localPointPositions.Count];
@@ -768,7 +766,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             if (globalPointPositions.Length < 2) return;
 
-            Gizmos.color = Settings.RotationCurveColor;
+            Gizmos.color = SettingsAsset.RotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < globalPointPositions.Length - 1; i++) {
@@ -797,14 +795,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Return if current animation time is the same as any node
                 // time.
                 if (Math.Abs(nodeTimestamps[i] - AnimationTime) <
-                    Settings.FloatPrecision) {
+                    SettingsAsset.FloatPrecision) {
                     continue;
                 }
 
                 //Draw rotation point gizmo.
                 Gizmos.DrawIcon(
                 globalRotPointPositions[i],
-                Settings.GizmosSubfolder + Settings.RotationPointGizmoIcon,
+                SettingsAsset.GizmosSubfolder + SettingsAsset.RotationPointGizmoIcon,
                 false);
             }
         }
@@ -813,7 +811,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetPosition,
-                Settings.GizmosSubfolder + Settings.TargetGizmoIcon,
+                SettingsAsset.GizmosSubfolder + SettingsAsset.TargetGizmoIcon,
                 false);
         }
 
@@ -823,7 +821,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Get path points.
             var points = pathData.SampleAnimationPathForPoints(
-                Settings.GizmoCurveSamplingFrequency);
+                SettingsAsset.GizmoCurveSamplingFrequency);
 
             // Convert points to global coordinates.
             var globalPoints = new Vector3[points.Count];
@@ -834,7 +832,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            Gizmos.color = Settings.GizmoCurveColor;
+            Gizmos.color = SettingsAsset.GizmoCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
@@ -852,7 +850,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (nodeTimestamps.Any(
                 nodeTimestamp =>
                     Math.Abs(nodeTimestamp - AnimationTime)
-                    < Settings.FloatPrecision)) {
+                    < SettingsAsset.FloatPrecision)) {
                 return;
             }
 
@@ -864,7 +862,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(globalRotationPointPosition,
-                Settings.GizmosSubfolder + Settings.CurrentRotationPointGizmoIcon,
+                SettingsAsset.GizmosSubfolder + SettingsAsset.CurrentRotationPointGizmoIcon,
                 false);
         }
 
@@ -872,7 +870,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 forwardPointPosition,
-                Settings.GizmosSubfolder + Settings.ForwardPointIcon,
+                SettingsAsset.GizmosSubfolder + SettingsAsset.ForwardPointIcon,
                 false);
         }
 #endif

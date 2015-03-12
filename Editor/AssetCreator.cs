@@ -13,12 +13,12 @@ namespace ATP.AnimationPathAnimator {
             ScriptableObjectUtility.CreateAsset<PathData>("APAnimatorData");
         }
 
-        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APAnimator Settings")]
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APAnimator SettingsAsset")]
         private static void CreateAnimatorSettingsAsset() {
             ScriptableObjectUtility.CreateAsset<APAnimatorSettings>("APAnimatorSettings");
         }
 
-        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APEvents Reflection Settings")]
+        [MenuItem("Assets/Create/ATP/SimplePathAnimator/APEvents Reflection SettingsAsset")]
         private static void CreateAPEventsReflectionSettingsAsset() {
             ScriptableObjectUtility.CreateAsset<APEventsSettings>("APEventsSettings");
         }

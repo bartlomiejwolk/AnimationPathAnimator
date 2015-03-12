@@ -69,6 +69,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private Transform targetGO;
 
         private Transform thisTransform;
+        private bool countdownCoroutineIsRunning;
 
         #endregion OPTIONS
 
@@ -165,10 +166,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set {
                 animatedObjectUpdateEnabled = value;
 
-                if (!value) {
-                    Debug.Log("");
-                }
-                Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+                //if (!value) {
+                //    Debug.Log("");
+                //}
+                //Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+            }
+        }
+
+        public bool CountdownCoroutineIsRunning {
+            get { return countdownCoroutineIsRunning; }
+            set {
+                countdownCoroutineIsRunning = value;
+                //Debug.Log("CountdownCoroutineIsRunning: " + value);
             }
         }
 
@@ -253,61 +262,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
         #endregion UNITY MESSAGES
         #region METHODS
-        private void HandleUpdatingAnimGOInPlayMode() {
-            // Update animated GO in play mode.
-            if (Application.isPlaying && AnimatedObjectUpdateEnabled) {
-                var prevAnimGOPosition = animatedGO.position;
-
-                Animate();
-                HandleFireNodeReachedEvent();
-
-                var movementDetected = !Utilities.V3Equal(
-                    prevAnimGOPosition,
-                    animatedGO.position,
-                    // TODO Add to global constants.
-                    //0.00000001f)) {
-                    0.000000000001f);
-
-                // Stop updating animated GO after reaching destination point.
-                // It cannot be done in first two frames because no movement
-                // would be detected.
-                if (!movementDetected) {
-                    if (!CountdownCoroutineIsRunning) {
-                        StartCoroutine(CountdownToStopAnimGOUpdate());
-                    }
-                }
-            }
-        }
-
-        public bool CountdownCoroutineIsRunning { get; set; }
-
-        private IEnumerator CountdownToStopAnimGOUpdate() {
-            var frame = 0;
-            var prevGOposition = animatedGO.position;
-            CountdownCoroutineIsRunning = true;
-
-            Debug.Log("Start CounddownToStopAnimGOUpdate coroutine.");
-
-            while (true) {
-                frame++;
-
-                // TODO Add to settings.
-                if (frame > 10) break;
-
-                yield return null;
-            }
-
-            CountdownCoroutineIsRunning = false;
-
-            var positionChanged = !Utilities.V3Equal(
-                prevGOposition,
-                animatedGO.position,
-                // TODO Add to global constants.
-                0.000000000001f);
-
-            if (!positionChanged) AnimatedObjectUpdateEnabled = false;
-        }
-
         #endregion
 
         #region EVENT HANDLERS
@@ -344,6 +298,67 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region ANIMATION
+        private IEnumerator CountdownToStopAnimGOUpdate() {
+            var frame = 0;
+            var prevGOPosition = animatedGO.position;
+            var prevGORotation = animatedGO.rotation;
+            CountdownCoroutineIsRunning = true;
+
+            Debug.Log("Start CounddownToStopAnimGOUpdate coroutine.");
+
+            while (true) {
+                frame++;
+
+                // TODO Add to settings.
+                if (frame > 10) break;
+
+                yield return null;
+            }
+
+            CountdownCoroutineIsRunning = false;
+
+            var positionChanged = !Utilities.V3Equal(
+                prevGOPosition,
+                animatedGO.position);
+
+            var rotationChanged = !Utilities.QuaternionsEqual(
+                prevGORotation,
+                animatedGO.rotation);
+
+            if (!positionChanged && !rotationChanged) {
+                AnimatedObjectUpdateEnabled = false;
+            }
+        }
+
+        private void HandleUpdatingAnimGOInPlayMode() {
+            // Return if not in play mode.
+            if (!Application.isPlaying) return;
+            // Return if anim. GO update is disabled.
+            if (!AnimatedObjectUpdateEnabled) return;
+
+            // Remember anim. GO position.
+            var prevAnimGOPosition = animatedGO.position;
+            // Remember anim. GO rotation.
+            var prevAnimGORotation = animatedGO.rotation;
+
+            Animate();
+            HandleFireNodeReachedEvent();
+
+            var movementDetected = !Utilities.V3Equal(
+                prevAnimGOPosition,
+                animatedGO.position);
+
+            var rotationDetected = !Utilities.QuaternionsEqual(
+                prevAnimGORotation,
+                animatedGO.rotation);
+
+            if (!movementDetected && !rotationDetected) {
+                if (!CountdownCoroutineIsRunning) {
+                    StartCoroutine(CountdownToStopAnimGOUpdate());
+                }
+            }
+        }
+
 
         private void Animate() {
             AnimateAnimatedGOPosition();

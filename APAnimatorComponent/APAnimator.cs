@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -87,8 +88,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 #if UNITY_EDITOR
-        // TODO Rename to AnimatorGizmos.
-        private APAnimatorGizmos ApAnimatorGizmos { get; set; }
 #endif
 
         /// <summary>
@@ -182,18 +181,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             LoadRequiredResources();
             AssignMainCameraAsAnimatedGO();
             SubscribeToEvents();
-
-#if UNITY_EDITOR
-            HandleInstantiateAnimatorGizmos();
-#endif
-        }
-
-        private void HandleInstantiateAnimatorGizmos() {
-
-            if (ApAnimatorGizmos == null) {
-                ApAnimatorGizmos =
-                    ApAnimatorGizmos = new APAnimatorGizmos(Settings);
-            }
         }
 
         private void LoadRequiredResources() {
@@ -252,30 +239,22 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.RotationMode == RotationMode.Target
                 && TargetGO != null) {
 
-                ApAnimatorGizmos.DrawTargetIcon(TargetGO.position);
+                DrawTargetIcon(TargetGO.position);
             }
 
             if (Settings.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
-                ApAnimatorGizmos.DrawForwardPointIcon(
+                DrawForwardPointIcon(
                     globalForwardPointPosition);
             }
 
             if (Settings.HandleMode == HandleMode.Rotation) {
-                ApAnimatorGizmos.DrawRotationPathCurve(PathData, transform);
-
-                ApAnimatorGizmos.DrawCurrentRotationPointGizmo(
-                    PathData,
-                    transform,
-                    AnimationTime);
-
-                ApAnimatorGizmos.DrawRotationPointGizmos(
-                    PathData,
-                    transform,
-                    AnimationTime);
+                DrawRotationPathCurve();
+                DrawCurrentRotationPointGizmo();
+                DrawRotationPointGizmos();
             }
 
-            ApAnimatorGizmos.DrawAnimationCurve(PathData, transform);
+            DrawAnimationCurve();
         }
 #endif
 
@@ -293,9 +272,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             LoadRequiredResources();
             UnsubscribeFromEvents();
             AssignMainCameraAsAnimatedGO();
-#if UNITY_EDITOR
-            HandleInstantiateAnimatorGizmos();
-#endif
         }
 
         private void OnValidate() {
@@ -730,6 +706,129 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
 
         #endregion METHODS
+        #region GIZMOS
+
+        private void DrawRotationPathCurve() {
+            var localPointPositions = pathData.SampleRotationPathForPoints(
+                Settings.RotationCurveSampling);
+
+            var globalPointPositions =
+                new Vector3[localPointPositions.Count];
+
+            for (var i = 0; i < localPointPositions.Count; i++) {
+                globalPointPositions[i] =
+                    transform.TransformPoint(localPointPositions[i]);
+            }
+            if (globalPointPositions.Length < 2) return;
+
+            Gizmos.color = Settings.RotationCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < globalPointPositions.Length - 1; i++) {
+                Gizmos.DrawLine(
+                    globalPointPositions[i], globalPointPositions[i + 1]);
+            }
+        }
+
+        // TODO Add "Icons" to method name end.
+        private void DrawRotationPointGizmos() {
+            var localRotPointPositions =
+                pathData.GetRotationPointPositions();
+
+            var globalRotPointPositions =
+                new Vector3[localRotPointPositions.Length];
+
+            for (int i = 0; i < localRotPointPositions.Length; i++) {
+                globalRotPointPositions[i] =
+                    transform.TransformPoint(localRotPointPositions[i]);
+            }
+
+            // Path node timestamps.
+            var nodeTimestamps = pathData.GetPathTimestamps();
+
+            for (var i = 0; i < globalRotPointPositions.Length; i++) {
+                // Return if current animation time is the same as any node
+                // time.
+                if (Math.Abs(nodeTimestamps[i] - AnimationTime) <
+                    Settings.FloatPrecision) {
+                    continue;
+                }
+
+                //Draw rotation point gizmo.
+                Gizmos.DrawIcon(
+                globalRotPointPositions[i],
+                Settings.GizmosSubfolder + Settings.RotationPointGizmoIcon,
+                false);
+            }
+        }
+
+        private void DrawTargetIcon(Vector3 targetPosition) {
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                targetPosition,
+                Settings.GizmosSubfolder + Settings.TargetGizmoIcon,
+                false);
+        }
+
+        private void DrawAnimationCurve() {
+            // Return if path asset is not assigned.
+            if (pathData == null) return;
+
+            // Get path points.
+            var points = pathData.SampleAnimationPathForPoints(
+                Settings.GizmoCurveSamplingFrequency);
+
+            // Convert points to global coordinates.
+            var globalPoints = new Vector3[points.Count];
+            for (var i = 0; i < points.Count; i++) {
+                globalPoints[i] = transform.TransformPoint(points[i]);
+            }
+
+            // There must be at least 3 points to draw a line.
+            if (points.Count < 3) return;
+
+            Gizmos.color = Settings.GizmoCurveColor;
+
+            // Draw curve.
+            for (var i = 0; i < points.Count - 1; i++) {
+                Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+            }
+        }
+
+
+        // TODO Add "Icon" to method name.
+        private void DrawCurrentRotationPointGizmo() {
+            // Node path node timestamps.
+            var nodeTimestamps = pathData.GetPathTimestamps();
+
+            // Return if current animation time is the same as any node time.
+            if (nodeTimestamps.Any(
+                nodeTimestamp =>
+                    Math.Abs(nodeTimestamp - AnimationTime)
+                    < Settings.FloatPrecision)) {
+                return;
+            }
+
+            // Get rotation point position.
+            var localRotationPointPosition =
+                pathData.GetRotationAtTime(AnimationTime);
+            var globalRotationPointPosition =
+                transform.TransformPoint(localRotationPointPosition);
+
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(globalRotationPointPosition,
+                Settings.GizmosSubfolder + Settings.CurrentRotationPointGizmoIcon,
+                false);
+        }
+
+        private void DrawForwardPointIcon(Vector3 forwardPointPosition) {
+            //Draw rotation point gizmo.
+            Gizmos.DrawIcon(
+                forwardPointPosition,
+                Settings.GizmosSubfolder + Settings.ForwardPointIcon,
+                false);
+        }
+        #endregion
     }
 
 }

@@ -11,8 +11,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region PROPERTIES
         private GizmoIcons GizmoIcons { get; set; }
 
-        private SceneHandles SceneHandles { get; set; }
-
         private SerializedObject SettingsSerObj { get; set; }
         //public SerializedObject PathExporterSerObj { get; private set; }
 
@@ -257,14 +255,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Settings.UpdateAllMode) return;
 
-            //SceneHandles.DrawNodeLabels(
-            //    Script,
-            //    "A",
-            //    upall
-            //    Script.Skin.GetStyle("UpdateAllLabel"));
-
             SceneHandles.DrawUpdateAllLabels(
-                Script,
+                Script.GetGlobalNodePositions(),
+                Settings.UpdateAllLabelText,
+                Settings.UpdateAllLabelOffsetX,
+                Settings.UpdateAllLabelOffsetY,
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight,
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
 
@@ -739,6 +736,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Draw add node buttons.
             SceneHandles.DrawAddNodeButtons(
                 nodePositions,
+                Settings.AddButtonH,
+                Settings.AddButtonV,
                 callbackHandler,
                 addButtonStyle);
         }
@@ -762,6 +761,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 nodePositions,
                 easeCurveValues,
                 arcValueMultiplier,
+                Settings.ArcHandleRadius,
+                Settings.InitialArcValue,
+                Settings.ScaleHandleSize,
                 DrawEaseHandlesCallbackHandler);
         }
 
@@ -773,6 +775,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
+                Settings.EaseValueLabelOffsetX,
+                Settings.EaseValueLabelOffsetY,
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight,
                 ConvertEaseToDegrees,
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
@@ -784,8 +790,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
+            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+
             SceneHandles.DrawMoveSinglePositionsHandles(
-                Script,
+                nodeGlobalPositions,
+                Settings.MovementHandleSize,
+                Settings.GizmoCurveColor,
                 DrawPositionHandlesCallbackHandler);
         }
 
@@ -804,6 +814,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Draw add node buttons.
             SceneHandles.DrawRemoveNodeButtons(
                 nodes,
+                Settings.RemoveButtonH,
+                Settings.RemoveButtonV,
                 removeNodeCallback,
                 removeButtonStyle);
         }
@@ -814,6 +826,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
                 Script.PathData.GetRotationAtTime(currentAnimationTime);
+            var rotationPointGlobalPosition =
+                Script.ThisTransform.TransformPoint(rotationPointPosition);
             var nodeTimestamps = Script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
@@ -826,8 +840,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (index < 0) return;
 
             SceneHandles.DrawRotationHandle(
-                Script,
-                rotationPointPosition,
+                rotationPointGlobalPosition,
+                Settings.RotationHandleSize,
+                Settings.RotationHandleColor,
                 DrawRotationHandlesCallbackHandler);
         }
 
@@ -847,6 +862,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneHandles.DrawTiltingHandles(
                 nodePositions,
                 tiltingCurveValues,
+                Settings.ArcHandleRadius,
+                Settings.InitialArcValue,
+                Settings.ScaleHandleSize,
                 callbackHandler);
         }
 
@@ -858,6 +876,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
+                Settings.EaseValueLabelOffsetX,
+                Settings.EaseValueLabelOffsetY, 
+                Settings.DefaultLabelWidth,
+                Settings.DefaultLabelHeight,
                 ConvertTiltToDegrees,
                 Script.Skin.GetStyle("TiltValueLabel"));
         }
@@ -893,12 +915,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void DrawPositionHandlesCallbackHandler(
             int movedNodeIndex,
-            Vector3 position,
-            Vector3 moveDelta) {
+            Vector3 newGlobalPos) {
 
             Undo.RecordObject(Script.PathData, "Change path");
 
-            Script.PathData.MoveNodeToPosition(movedNodeIndex, position);
+            // Calculate node new local position.
+            var newNodeLocalPosition =
+                Script.ThisTransform.InverseTransformPoint(newGlobalPos);
+
+            Script.PathData.MoveNodeToPosition(movedNodeIndex, newNodeLocalPosition);
             Script.PathData.DistributeTimestamps();
 
             HandleSmoothTangentMode();
@@ -944,11 +969,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawRotationHandlesCallbackHandler(
-            float timestamp,
             Vector3 newPosition) {
+
             Undo.RecordObject(Script.PathData, "Rotation path changed.");
 
-            Script.PathData.ChangeRotationAtTimestamp(timestamp, newPosition);
+            var newLocalPos =
+                Script.ThisTransform.InverseTransformPoint(newPosition);
+
+            Script.PathData.ChangeRotationAtTimestamp(
+                Script.AnimationTime,
+                newLocalPos);
         }
 
         private void DrawTiltingHandlesCallbackHandler(
@@ -1111,7 +1141,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
-            SceneHandles = new SceneHandles(Script);
+            //SceneHandles = new SceneHandles(Script);
             PathExporter = new PathExporter(Script);
 
             GizmoIcons = new GizmoIcons(Settings);

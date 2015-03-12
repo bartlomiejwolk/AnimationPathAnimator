@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -20,8 +21,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private APAnimator Script { get; set; }
 
         private APAnimatorSettings Settings { get; set; }
-
-        private PathExporter PathExporter { get; set; }
 
         private bool SerializedPropertiesInitialized { get; set; }
         #endregion 
@@ -137,7 +136,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             GUILayout.Label("Other", EditorStyles.boldLabel);
 
-            PathExporter.DrawExportControls();
+            DrawExportControls();
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
@@ -1141,9 +1140,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
-            //SceneHandles = new SceneHandles(Script);
-            PathExporter = new PathExporter(Script);
-
             GizmoIcons = new GizmoIcons(Settings);
             SettingsSerObj = new SerializedObject(Settings);
         }
@@ -1323,6 +1319,74 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Return timestamp of the last node.
             return 1.0f;
+        }
+
+        #endregion
+        #region EXPORTER
+
+        public void DrawExportControls() {
+            EditorGUILayout.BeginHorizontal();
+
+            Settings.ExportSamplingFrequency = EditorGUILayout.IntField(
+                new GUIContent(
+                    "Export Sampling",
+                    "Number of points to export for 1 m of the curve. " +
+                    "If set to 0, it'll export only keys defined in " +
+                    "the curve."),
+                Settings.ExportSamplingFrequency);
+
+            if (GUILayout.Button("Export")) {
+                ExportNodes(
+                    // TODO Create PathData property.
+                    Script.PathData,
+                    Script.ThisTransform,
+                    Settings.ExportSamplingFrequency);
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        ///     Export Animation Path nodes as transforms.
+        /// </summary>
+        /// <param name="exportSampling">
+        ///     Amount of result transforms for one meter of Animation Path.
+        /// </param>
+        private void ExportNodes(
+            PathData pathData,
+            Transform transform,
+            int exportSampling) {
+
+            // exportSampling cannot be less than 0.
+            if (exportSampling < 0) return;
+
+            // Points to be exported.
+            List<Vector3> points;
+
+            // Initialize points array with nodes to export.
+            points = pathData.SampleAnimationPathForPoints(
+                exportSampling);
+
+            // Convert points to global coordinates.
+            Utilities.ConvertToGlobalCoordinates(ref points, transform);
+            //for (int i = 0; i < points.Count; i++) {
+            //    points[i] = transform.TransformPoint(points[i]);
+            //}
+
+            // Create parent GO.
+            var exportedPath = new GameObject("exported_path");
+
+            // Create child GOs.
+            for (var i = 0; i < points.Count; i++) {
+                // Create child GO.
+                var nodeGo = new GameObject("Node " + i);
+
+                // Move node under the path GO.
+                nodeGo.transform.parent = exportedPath.transform;
+
+                // Assign node local position.
+                nodeGo.transform.localPosition = points[i];
+            }
         }
 
         #endregion

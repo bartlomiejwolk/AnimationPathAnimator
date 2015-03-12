@@ -667,7 +667,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 // Create new path asset.
                 var asset = ScriptableObjectUtility.CreateAsset<PathData>(
-                    savePath);
+                    fullPath: savePath);
 
                 // Assign asset as the current path.
                 Script.PathData = asset;

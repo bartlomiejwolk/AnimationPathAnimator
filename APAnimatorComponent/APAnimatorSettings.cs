@@ -284,8 +284,20 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private int countdownToStopFramesNo = 10;
+
+        [SerializeField]
+        private string assetsNotLoadedInfoText =
+            "Required assets were not found.\n"
+            + "Reload scene and if it does not help, restore extension "
+            + "folder content to its default state.";
+
         #endregion
         #region ANIMATOR PROPERTIES
+        public string AssetsNotLoadedInfoText {
+            get { return assetsNotLoadedInfoText; }
+            set { assetsNotLoadedInfoText = value; }
+        }
+
         public int CountdownToStopFramesNo {
             get { return countdownToStopFramesNo; }
             set { countdownToStopFramesNo = value; }

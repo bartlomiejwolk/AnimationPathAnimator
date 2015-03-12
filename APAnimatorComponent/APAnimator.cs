@@ -654,7 +654,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 
-        // TODO Rename to HandleFiringNodeReachedEvent.
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
@@ -676,13 +675,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             APAnimator_NodeReached(args);
         }
 
-        // TODO Remove.
-        private void UpdateWrapMode() {
-            PathData.SetPathWrapMode(SettingsAsset.WrapMode);
-            PathData.SetEaseWrapMode(SettingsAsset.WrapMode);
-        }
-
-        // TODO Remove the globalPosition arg. and create separate method.
         private Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = SettingsAsset.ForwardPointOffset;
@@ -776,7 +768,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Add "Icons" to method name end.
         private void HandleDrawingRotationPointGizmos() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
@@ -843,8 +834,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-
-        // TODO Add "Icon" to method name.
         private void HandleDrawingCurrentRotationPointGizmo() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 

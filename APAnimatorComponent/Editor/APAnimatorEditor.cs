@@ -49,15 +49,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         public override void OnInspectorGUI() {
-            // TODO Extract method.
-            if (!AssetsLoaded()) {
-                DrawInfoLabel(
-                    //"Asset files in extension folder were not found. "
-                    "Required assets were not found.\n"
-                    + "Reload scene and if it does not help, restore extension "
-                    + "folder content to its default state.");
+            // Check for required assets.
+            if (!RequiredAssetsLoaded()) {
+                DrawInfoLabel(Settings.AssetsNotLoadedInfoText);
+
                 return;
             }
+
+            // Check if serialized properties were initialized.
             if (!SerializedPropertiesInitialized) return;
 
             HandleUndo();
@@ -159,7 +158,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script = (APAnimator) target;
 
             // Return is required assets are not referenced.
-            if (!AssetsLoaded()) return;
+            if (!RequiredAssetsLoaded()) return;
 
             // Initialize helper property.
             Settings = Script.SettingsAsset;
@@ -172,7 +171,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             FocusOnSceneView();
         }
 
-        private bool AssetsLoaded() {
+        private bool RequiredAssetsLoaded() {
             var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
                 Script,
                 "RequiredAssetsLoaded",
@@ -187,7 +186,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnSceneGUI() {
             // Return is required assets are not referenced.
-            if (!AssetsLoaded()) return;
+            if (!RequiredAssetsLoaded()) return;
             // Return if path asset is not referenced.
             if (Script.PathData == null) return;
             // Return if serialized properties are not initialized.

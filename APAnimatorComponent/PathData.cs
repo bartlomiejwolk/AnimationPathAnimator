@@ -756,10 +756,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return AnimatedObjectPath.GetVectorAtKey(nodeIndex);
         }
 
-        public Vector3[] GetNodePositions() {
-            var result = new Vector3[NodesNo];
+        /// <summary>
+        /// Got positions of all path nodes.
+        /// </summary>
+        /// <param name="nodesNo">Number of nodes to return. If not specified, all nodes will be returned.</param>
+        /// <returns></returns>
+        public Vector3[] GetNodePositions(int nodesNo = 0) {
+            // Specify number of nodes to return.
+            var returnNodesNo = nodesNo > 0 ? nodesNo : NodesNo;
+            // Create empty result array.
+            Vector3[] result = new Vector3[returnNodesNo];
 
-            for (var i = 0; i < NodesNo; i++) {
+            // Fill in array with node positions.
+            for (var i = 0; i < returnNodesNo; i++) {
                 // Get node 3d position.
                 result[i] = AnimatedObjectPath.GetVectorAtKey(i);
             }

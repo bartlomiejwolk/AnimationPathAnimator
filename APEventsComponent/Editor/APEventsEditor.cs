@@ -31,7 +31,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         #region UNITY MESSAGES
         public override void OnInspectorGUI() {
-            if (!Script.AssetsLoaded()) {
+            if (!AssetsLoaded()) {
                 DrawInfoLabel(
                     //"Asset files in extension folder were not found. "
                     "Required assets were not found.\n"
@@ -56,17 +56,25 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private void OnEnable() {
             Script = target as APEvents;
 
-            if (!Script.AssetsLoaded()) return;
+            if (!AssetsLoaded()) return;
 
             Settings = Script.Settings;
 
             InitializeSerializedProperties();
         }
         private void OnSceneGUI() {
-            if (!Script.AssetsLoaded()) return;
+        if (!AssetsLoaded()) return;
 
             HandleDrawingMethodNames();
         }
+
+        private bool AssetsLoaded() {
+            return (bool) Utilities.InvokeMethodWithReflection(
+                Script,
+                "AssetsLoaded",
+                null);
+        }
+
         #endregion
         #region INSPECTOR
         private void DisplayDrawMethodLabelsToggle() {
@@ -146,8 +154,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             // Return if path data does not exist.
             if (Script.ApAnimator.PathData == null) return;
 
-            var nodePositions = Script.GetNodePositions();
             var methodNames = Script.GetMethodNames();
+            var nodePositions = Script.GetNodePositions(methodNames.Length);
             var style = Script.Skin.GetStyle("MethodNameLabel");
 
             SceneHandles.DrawNodeLabels(

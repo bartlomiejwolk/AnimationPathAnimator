@@ -697,8 +697,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return false;
         }
 
-        public Vector3[] GetGlobalNodePositions() {
-            var nodePositions = PathData.GetNodePositions();
+        public Vector3[] GetGlobalNodePositions(int nodesNo = 0) {
+            var nodePositions = PathData.GetNodePositions(nodesNo);
             Utilities.ConvertToGlobalCoordinates(ref nodePositions, ThisTransform);
 
             return nodePositions;

@@ -105,9 +105,9 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #endregion
         #region METHODS
 
-        public Vector3[] GetNodePositions() {
+        public Vector3[] GetNodePositions(int nodesNo) {
             var nodePositions =
-                ApAnimator.GetGlobalNodePositions();
+                ApAnimator.GetGlobalNodePositions(nodesNo);
 
             return nodePositions;
         }
@@ -121,13 +121,11 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             return methodNames;
         }
 
-        public bool AssetsLoaded() {
+        private bool AssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
-
                 return true;
             }
-
             return false;
         }
 

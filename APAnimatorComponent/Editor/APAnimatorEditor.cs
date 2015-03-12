@@ -1076,25 +1076,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        //        ModKeyPressed = false;
-        //    }
-        //}
-        private void CheckForSkinAsset() {
-
-            if (Script.Skin == null) {
-                Script.MissingReferenceError(
-                    "Skin",
-                    "Skin field cannot be empty. You will find default " +
-                    "GUISkin in the \"animationpathtools/GUISkin\" folder");
-            }
-        }
-
-        //        // Remember key state.
-        //        ModKeyPressed = true;
-        //    }
-        //    // If modifier key was released..
-        //    if (Event.current.type == EventType.keyUp
-        //        && Event.current.keyCode == ModKey) {
         // TODO Move to PathData.
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.

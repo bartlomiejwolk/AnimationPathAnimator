@@ -9,44 +9,27 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
     [CustomEditor(typeof (APEvents))]
     public class APEventsEditor : Editor {
 
-        private APEvents Script { get; set; }
-        private APEventsSettings Settings { get; set; }
-
-        private SerializedProperty apAnimator;
-        private SerializedProperty advancedSettingsFoldout;
-        private SerializedProperty skin;
-        private SerializedProperty settings;
-        private SerializedProperty nodeEvents;
-        private SerializedProperty drawMethodNames;
-
-        private void OnEnable() {
-            Script = target as APEvents;
-
-            if (!Script.AssetsLoaded()) return;
-
-            Settings = Script.Settings;
-
-            InitializeSerializedProperties();
-        }
-
-        private void InitializeSerializedProperties() {
-            apAnimator =
-                serializedObject.FindProperty("apAnimator");
-            advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
-            skin =
-                serializedObject.FindProperty("skin");
-            settings =
-                serializedObject.FindProperty("settings");
-            nodeEvents = serializedObject.FindProperty("nodeEvents");
-            drawMethodNames =
-                serializedObject.FindProperty("drawMethodNames");
-
-            SerializedPropertiesInitialized = true;
-        }
-
+        #region FIELDS
+        #endregion
+        #region PROPERTIES
         public bool SerializedPropertiesInitialized { get; set; }
 
+        private APEvents Script { get; set; }
+
+        private APEventsSettings Settings { get; set; }
+        #endregion
+        #region SERIALIZED PROPERTIES
+        private SerializedProperty advancedSettingsFoldout;
+
+        // TODO Rename to animator.
+        private SerializedProperty apAnimator;
+        private SerializedProperty drawMethodNames;
+        private SerializedProperty nodeEvents;
+        private SerializedProperty settings;
+        private SerializedProperty skin;
+        #endregion
+
+        #region UNITY MESSAGES
         public override void OnInspectorGUI() {
             if (!Script.AssetsLoaded()) {
                 DrawInfoLabel(
@@ -70,6 +53,22 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             DrawAdvancedSettingsControls();
         }
 
+        private void OnEnable() {
+            Script = target as APEvents;
+
+            if (!Script.AssetsLoaded()) return;
+
+            Settings = Script.Settings;
+
+            InitializeSerializedProperties();
+        }
+        private void OnSceneGUI() {
+            if (!Script.AssetsLoaded()) return;
+
+            HandleDrawingMethodNames();
+        }
+        #endregion
+        #region INSPECTOR
         private void DisplayDrawMethodLabelsToggle() {
             serializedObject.Update();
             EditorGUILayout.PropertyField(
@@ -80,12 +79,68 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void OnSceneGUI() {
-            if (!Script.AssetsLoaded()) return;
-
-            HandleDrawingMethodNames();
+        private void DrawAdvancedSettingsControls() {
+            if (advancedSettingsFoldout.boolValue) {
+                DrawSettingsAssetField();
+                DrawSkinAssetField();
+            }
         }
 
+        private void DrawAdvancedSettingsFoldout() {
+            serializedObject.Update();
+
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                advancedSettingsFoldout.boolValue,
+                new GUIContent(
+                    "Advanced messageSettings",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawAnimatorField() {
+
+            EditorGUILayout.PropertyField(
+                apAnimator,
+                new GUIContent(
+                    "APAnimator",
+                    ""));
+        }
+
+        private void DrawInfoLabel(string text) {
+            EditorGUILayout.HelpBox(text, MessageType.Error);
+        }
+
+        private void DrawReorderableEventList() {
+
+            serializedObject.Update();
+
+            ReorderableListGUI.Title("Events");
+            ReorderableListGUI.ListField(nodeEvents);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "messageSettings Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawSkinAssetField() {
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(skin);
+            serializedObject.ApplyModifiedProperties();
+        }
+        #endregion
+        #region METHODS
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;
             // Return if path data does not exist.
@@ -105,64 +160,22 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 style);
         }
 
+        private void InitializeSerializedProperties() {
+            apAnimator =
+                serializedObject.FindProperty("apAnimator");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+            skin =
+                serializedObject.FindProperty("skin");
+            settings =
+                serializedObject.FindProperty("settings");
+            nodeEvents = serializedObject.FindProperty("nodeEvents");
+            drawMethodNames =
+                serializedObject.FindProperty("drawMethodNames");
 
-        private void DrawAnimatorField() {
-
-            EditorGUILayout.PropertyField(
-                apAnimator,
-                new GUIContent(
-                    "APAnimator",
-                    ""));
+            SerializedPropertiesInitialized = true;
         }
-
-        private void DrawReorderableEventList() {
-
-            serializedObject.Update();
-
-            ReorderableListGUI.Title("Events");
-            ReorderableListGUI.ListField(nodeEvents);
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawAdvancedSettingsFoldout() {
-            serializedObject.Update();
-
-            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                advancedSettingsFoldout.boolValue,
-                new GUIContent(
-                    "Advanced messageSettings",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawAdvancedSettingsControls() {
-            if (advancedSettingsFoldout.boolValue) {
-                DrawSettingsAssetField();
-                DrawSkinAssetField();
-            }
-        }
-
-        private void DrawSkinAssetField() {
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(skin);
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawSettingsAssetField() {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                settings,
-                new GUIContent(
-                    "messageSettings Asset",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
+        #endregion
         //private void DrawNodeLabel(
         //    Vector3 nodePosition,
         //    string value,
@@ -217,11 +230,6 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         //            style);
         //    }
         //}
-
-        private void DrawInfoLabel(string text) {
-            EditorGUILayout.HelpBox(text, MessageType.Error);
-        }
-
     }
 
 }

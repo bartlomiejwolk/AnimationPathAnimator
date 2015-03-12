@@ -361,7 +361,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 //Script.IsPlaying = true;
             }
             // Animation ended.
-            else if (!IsPlaying && !Pause && AnimationTime >= 1) {
+            else if (!IsPlaying && AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
             }

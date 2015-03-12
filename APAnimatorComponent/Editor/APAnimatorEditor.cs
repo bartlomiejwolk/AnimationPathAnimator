@@ -174,7 +174,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private bool AssetsLoaded() {
             var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
                 Script,
-                "AssetsLoaded",
+                "RequiredAssetsLoaded",
                 null);
 
             return assetsLoaded;

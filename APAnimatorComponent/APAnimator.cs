@@ -198,12 +198,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         }
 
-        // TODO Refactor.
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
-            if (!AssetsLoaded()) return;
+            if (!RequiredAssetsLoaded()) return;
 
-            // Return if path asset file is not assigned.
+            // Return if path data asset file is not assigned.
             if (PathData == null) return;
 
             if (SettingsAsset.RotationMode == RotationMode.Target
@@ -422,7 +421,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Used to update animatedGO with keys, in play mode.
         /// </remarks>
         private void UpdateAnimation() {
-            if (!AssetsLoaded()) return;
+            if (!RequiredAssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;
 
@@ -733,7 +732,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return rotPointPositions;
         }
 
-        private bool AssetsLoaded() {
+        private bool RequiredAssetsLoaded() {
             if (SettingsAsset != null
                 && Skin != null) {
                 return true;

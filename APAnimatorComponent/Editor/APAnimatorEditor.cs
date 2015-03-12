@@ -254,9 +254,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Settings.UpdateAllMode) return;
 
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            var labelText = new string[globalNodePositions.Length];
+            for (int i = 0; i < globalNodePositions.Length; i++) {
+                labelText[i] = Settings.UpdateAllLabelText;
+            }
+
             SceneHandles.DrawUpdateAllLabels(
-                Script.GetGlobalNodePositions(),
-                Settings.UpdateAllLabelText,
+                globalNodePositions,
+                labelText,
                 Settings.UpdateAllLabelOffsetX,
                 Settings.UpdateAllLabelOffsetY,
                 Settings.DefaultLabelWidth,

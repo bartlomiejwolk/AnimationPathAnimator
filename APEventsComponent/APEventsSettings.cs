@@ -7,10 +7,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #region FIELDS
 
         [SerializeField]
-        private float defaultNodeLabelHaight = 30;
+        private int defaultNodeLabelHaight = 30;
 
         [SerializeField]
-        private float defaultNodeLabelWidth = 100;
+        private int defaultNodeLabelWidth = 100;
 
         [SerializeField]
         private int methodNameLabelOffsetX = 30;
@@ -24,12 +24,12 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         #region PROPERTIES
 
-        public float DefaultNodeLabelHeight {
+        public int DefaultNodeLabelHeight {
             get { return defaultNodeLabelHaight; }
             set { defaultNodeLabelHaight = value; }
         }
 
-        public float DefaultNodeLabelWidth {
+        public int DefaultNodeLabelWidth {
             get { return defaultNodeLabelWidth; }
             set { defaultNodeLabelWidth = value; }
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ATP.AnimationPathAnimator.ReorderableList;
+using ATP.AnimationPathAnimator.APAnimatorComponent;
 using UnityEditor;
 using UnityEngine;
 
@@ -94,11 +95,13 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             var methodNames = Script.GetMethodNames();
             var style = Script.Skin.GetStyle("MethodNameLabel");
 
-            DrawNodeLabels(
+            SceneHandles.DrawNodeLabels(
                 nodePositions,
                 methodNames,
                 Settings.MethodNameLabelOffsetX,
                 Settings.MethodNameLabelOffsetY,
+                Settings.DefaultNodeLabelWidth,
+                Settings.DefaultNodeLabelHeight,
                 style);
         }
 
@@ -160,60 +163,60 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawNodeLabel(
-            Vector3 nodePosition,
-            string value,
-            int offsetX,
-            int offsetY,
-            GUIStyle style) {
+        //private void DrawNodeLabel(
+        //    Vector3 nodePosition,
+        //    string value,
+        //    int offsetX,
+        //    int offsetY,
+        //    GUIStyle style) {
 
-            // Translate node's 3d position into screen coordinates.
-            var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
+        //    // Translate node's 3d position into screen coordinates.
+        //    var guiPoint = HandleUtility.WorldToGUIPoint(nodePosition);
 
-            // Create rectangle for the label.
-            var labelPosition = new Rect(
-                guiPoint.x + offsetX,
-                guiPoint.y + offsetY,
-                Settings.DefaultNodeLabelWidth,
-                Settings.DefaultNodeLabelHeight);
+        //    // Create rectangle for the label.
+        //    var labelPosition = new Rect(
+        //        guiPoint.x + offsetX,
+        //        guiPoint.y + offsetY,
+        //        Settings.DefaultNodeLabelWidth,
+        //        Settings.DefaultNodeLabelHeight);
 
-            Handles.BeginGUI();
+        //    Handles.BeginGUI();
 
-            // Draw label.
-            GUI.Label(
-                labelPosition,
-                value,
-                style);
+        //    // Draw label.
+        //    GUI.Label(
+        //        labelPosition,
+        //        value,
+        //        style);
 
-            Handles.EndGUI();
-        }
+        //    Handles.EndGUI();
+        //}
 
-        private void DrawNodeLabels(
-            IList<Vector3> nodePositions,
-            IList<string> textValues,
-            int offsetX,
-            int offsetY,
-            GUIStyle style) {
+        //private void DrawNodeLabels(
+        //    IList<Vector3> nodePositions,
+        //    IList<string> textValues,
+        //    int offsetX,
+        //    int offsetY,
+        //    GUIStyle style) {
 
-            // Calculate difference between elements number in both collection.
-            var elementsNoDelta =
-                Mathf.Abs(nodePositions.Count - textValues.Count);
-            // Find out which collection is bigger.
-            var biggerCollection = (nodePositions.Count > textValues.Count)
-                ? nodePositions.Count
-                : textValues.Count;
-            // Calculate biggest common index.
-            var commonSize = biggerCollection - elementsNoDelta;
+        //    // Calculate difference between elements number in both collection.
+        //    var elementsNoDelta =
+        //        Mathf.Abs(nodePositions.Count - textValues.Count);
+        //    // Find out which collection is bigger.
+        //    var biggerCollection = (nodePositions.Count > textValues.Count)
+        //        ? nodePositions.Count
+        //        : textValues.Count;
+        //    // Calculate biggest common index.
+        //    var commonSize = biggerCollection - elementsNoDelta;
 
-            for (var i = 0; i < commonSize; i++) {
-                DrawNodeLabel(
-                    nodePositions[i],
-                    textValues[i],
-                    offsetX,
-                    offsetY,
-                    style);
-            }
-        }
+        //    for (var i = 0; i < commonSize; i++) {
+        //        DrawNodeLabel(
+        //            nodePositions[i],
+        //            textValues[i],
+        //            offsetX,
+        //            offsetY,
+        //            style);
+        //    }
+        //}
 
         private void DrawInfoLabel(string text) {
             EditorGUILayout.HelpBox(text, MessageType.Error);

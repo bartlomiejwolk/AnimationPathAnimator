@@ -44,6 +44,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             set { settings = value; }
         }
 
+        public List<NodeEvent> NodeEvents {
+            get { return nodeEvents; }
+        }
+
         #endregion
 
         #region UNITY MESSAGES
@@ -72,9 +76,9 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                     NodeReachedEventArgs arg) {
 
             // Return if there's no event slot created for current path node.
-            if (arg.NodeIndex > nodeEvents.Count - 1) return;
+            if (arg.NodeIndex > NodeEvents.Count - 1) return;
             // Get event slot.
-            var nodeEvent = nodeEvents[arg.NodeIndex];
+            var nodeEvent = NodeEvents[arg.NodeIndex];
             // Return if source GO was not specified in the event slot.
             if (nodeEvent.SourceGO == null) return;
             // Get method metadata.
@@ -107,11 +111,11 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
             return nodePositions;
         }
-        public List<string> GetMethodNames() {
-            var methodNames = new List<string>();
+        public string[] GetMethodNames() {
+            var methodNames = new string[NodeEvents.Count];
 
-            foreach (var nodeEvent in nodeEvents) {
-                methodNames.Add(nodeEvent.SourceMethodName);
+            for (int i = 0; i < NodeEvents.Count; i++) {
+                methodNames[i] = NodeEvents[i].SourceMethodName;
             }
 
             return methodNames;

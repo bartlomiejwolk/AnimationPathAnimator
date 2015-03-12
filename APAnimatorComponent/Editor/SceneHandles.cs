@@ -227,7 +227,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public static void DrawUpdateAllLabels(
             Vector3[] nodeGlobalPositions,
-            string labelText,
+            string[] labelText,
             int offsetX,
             int offsetY,
             // TODO Add default values (there's more methods that use same two params.).
@@ -363,19 +363,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Handles.EndGUI();
         }
 
-        private static void DrawNodeLabels(
+        public static void DrawNodeLabels(
             Vector3[] nodeGlobalPositions,
-            string text,
+            string[] text,
             int offsetX,
             int offsetY,
             int labelWidth,
             int labelHeight,
             GUIStyle style) {
 
-            foreach (var nodePos in nodeGlobalPositions) {
+            for (int i = 0; i < nodeGlobalPositions.Length; i++) {
                 DrawNodeLabel(
-                    nodePos,
-                    text,
+                    nodeGlobalPositions[i],
+                    text[i],
                     offsetX,
                     offsetY,
                     labelWidth,

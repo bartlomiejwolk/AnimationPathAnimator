@@ -59,6 +59,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private bool subscribedToEvents;
 
+        // TODO Rename to animGOUpdateEnabled.
         private bool animatedObjectUpdateEnabled;
 
         /// <summary>
@@ -163,7 +164,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedObjectUpdateEnabled; }
             set {
                 animatedObjectUpdateEnabled = value;
-                //Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
+
+                if (!value) {
+                    Debug.Log("");
+                }
+                Debug.Log("AnimatedObjectUpdateEnabled: " + animatedObjectUpdateEnabled);
             }
         }
 
@@ -256,7 +261,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Animate();
                 HandleFireNodeReachedEvent();
 
-                var destPointReached = Utilities.V3Equal(
+                var movementDetected = !Utilities.V3Equal(
                     prevAnimGOPosition,
                     animatedGO.position,
                     // TODO Add to global constants.
@@ -266,10 +271,41 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Stop updating animated GO after reaching destination point.
                 // It cannot be done in first two frames because no movement
                 // would be detected.
-                if (destPointReached && Time.frameCount > 2) {
-                    AnimatedObjectUpdateEnabled = false;
+                if (!movementDetected) {
+                    if (!CountdownCoroutineIsRunning) {
+                        StartCoroutine(CountdownToStopAnimGOUpdate());
+                    }
                 }
             }
+        }
+
+        public bool CountdownCoroutineIsRunning { get; set; }
+
+        private IEnumerator CountdownToStopAnimGOUpdate() {
+            var frame = 0;
+            var prevGOposition = animatedGO.position;
+            CountdownCoroutineIsRunning = true;
+
+            Debug.Log("Start CounddownToStopAnimGOUpdate coroutine.");
+
+            while (true) {
+                frame++;
+
+                // TODO Add to settings.
+                if (frame > 10) break;
+
+                yield return null;
+            }
+
+            CountdownCoroutineIsRunning = false;
+
+            var positionChanged = !Utilities.V3Equal(
+                prevGOposition,
+                animatedGO.position,
+                // TODO Add to global constants.
+                0.000000000001f);
+
+            if (!positionChanged) AnimatedObjectUpdateEnabled = false;
         }
 
         #endregion
@@ -331,7 +367,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Start animation.
             else {
                 IsPlaying = true;
-                AnimationTime = 0;
+                //AnimationTime = 0;
                 // Start animation.
                 StartEaseTimeCoroutine();
             }
@@ -701,6 +737,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion METHODS
         #region GIZMOS
 
+#if UNITY_EDITOR
         private void DrawRotationPathCurve() {
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 Settings.RotationCurveSampling);
@@ -821,6 +858,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Settings.GizmosSubfolder + Settings.ForwardPointIcon,
                 false);
         }
+#endif
         #endregion
     }
 

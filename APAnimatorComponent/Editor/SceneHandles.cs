@@ -86,12 +86,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             float arcValueMultiplier,
             int minDegrees,
             int maxDegrees,
+            float arcHandleRadius,
+            float initialArcValue,
+            float scaleHandleSize,
             Color handleColor,
             Action<float> callback) {
 
             var arcValue = value * arcValueMultiplier;
             var handleSize = HandleUtility.GetHandleSize(position);
-            var arcRadius = handleSize * Settings.ArcHandleRadius;
+            var arcRadius = handleSize * arcHandleRadius;
 
             Handles.color = handleColor;
 
@@ -109,15 +112,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
             arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
-                ? Settings.InitialArcValue : arcValue;
+                ? initialArcValue : arcValue;
 
-            var scaleHandleSize = handleSize * Settings.ScaleHandleSize;
+            var scaleSize = handleSize * scaleHandleSize;
             var newArcValue = Handles.ScaleValueHandle(
                 arcValue,
                 position + Vector3.forward * arcRadius
                 * 1.3f,
                 Quaternion.identity,
-                scaleHandleSize,
+                scaleSize,
                 Handles.ConeCap,
                 1);
 
@@ -160,6 +163,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Vector3[] nodePositions,
             float[] easeCurveValues,
             float arcValueMultiplier,
+            float arcHandleRadius,
+            float initialArcValue,
+            float scaleHandleSize,
             Action<int, float> callback) {
 
             // For each path node..
@@ -170,6 +176,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     arcValueMultiplier,
                     0,
                     360,
+                    arcHandleRadius,
+                    initialArcValue,
+                    scaleHandleSize,
                     Color.red,
                     value => callback(i, value));
             }
@@ -345,6 +354,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public void DrawTiltingHandles(
             Vector3[] nodePositions,
             float[] tiltingCurveValues,
+            float arcHandleRadius,
+            float initialArcValue,
+            float scaleHandleSize,
             Action<int, float> callback) {
 
             // Set arc value multiplier.
@@ -358,6 +370,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     arcValueMultiplier,
                     -90,
                     90,
+                    arcHandleRadius,
+                    initialArcValue,
+                    scaleHandleSize,
                     Color.green,
                     value => callback(i, value));
             }

@@ -761,6 +761,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 nodePositions,
                 easeCurveValues,
                 arcValueMultiplier,
+                Settings.ArcHandleRadius,
+                Settings.InitialArcValue,
+                Settings.ScaleHandleSize,
                 DrawEaseHandlesCallbackHandler);
         }
 
@@ -846,6 +849,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneHandles.DrawTiltingHandles(
                 nodePositions,
                 tiltingCurveValues,
+                Settings.ArcHandleRadius,
+                Settings.InitialArcValue,
+                Settings.ScaleHandleSize,
                 callbackHandler);
         }
 

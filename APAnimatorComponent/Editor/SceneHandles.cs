@@ -38,6 +38,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public void DrawAddNodeButtons(
             Vector3[] nodePositions,
+            int buttonHoffset,
+            int buttonVoffset,
             Action<int> callback,
             GUIStyle buttonStyle) {
 
@@ -53,8 +55,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Draw button.
                 var buttonPressed = DrawButton(
                     guiPoint,
-                    Settings.AddButtonH,
-                    Settings.AddButtonV,
+                    buttonHoffset,
+                    buttonVoffset,
                     15,
                     15,
                     buttonStyle);

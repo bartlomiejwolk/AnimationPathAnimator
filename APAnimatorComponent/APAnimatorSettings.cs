@@ -350,6 +350,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region HANDLES FIELDS
 
         [SerializeField]
+        // TODO Rename.
         private int addButtonH = 25;
         [SerializeField]
         private int addButtonV = 10;

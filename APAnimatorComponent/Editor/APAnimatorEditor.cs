@@ -257,12 +257,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Settings.UpdateAllMode) return;
 
-            //SceneHandles.DrawNodeLabels(
-            //    Script,
-            //    "A",
-            //    upall
-            //    Script.Skin.GetStyle("UpdateAllLabel"));
-
             SceneHandles.DrawUpdateAllLabels(
                 Script.GetGlobalNodePositions(),
                 Settings.UpdateAllLabelText,
@@ -742,6 +736,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Draw add node buttons.
             SceneHandles.DrawAddNodeButtons(
                 nodePositions,
+                Settings.AddButtonH,
+                Settings.AddButtonV,
                 callbackHandler,
                 addButtonStyle);
         }

@@ -30,6 +30,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         [SerializeField]
         private string sourceMethodName;
 
+#if UNITY_EDITOR
         [SerializeField]
         private int sourceMethodIndex;
 
@@ -41,6 +42,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         /// </summary>
         [SerializeField]
         private int rows = 1;
+#endif
 
         /// <summary>
         /// Index of the source component in the source component names list.

@@ -214,7 +214,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void Start() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
-                StartEaseTimeCoroutine();
+                StartAnimation();
                 IsPlaying = true;
             }
         }
@@ -363,22 +363,22 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Animation ended.
             else if (!IsPlaying && !Pause && AnimationTime >= 1) {
                 AnimationTime = 0;
-                StartEaseTimeCoroutine();
+                StartAnimation();
             }
             else {
                 // Start animation.
-                StartEaseTimeCoroutine();
+                StartAnimation();
             }
         }
 
-        // TODO Rename to StartAnimation().
-        public void StartEaseTimeCoroutine() {
+        public void StartAnimation() {
+            // Check for path data asset.
             if (PathData == null) {
                 Debug.LogWarning("Assign Path Asset in the inspector.");
                 return;
             }
 
-            // Starting node was reached.
+            // Fire NodeReached event for first node.
             if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
                 APAnimator_NodeReached(args);

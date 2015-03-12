@@ -201,29 +201,33 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
             if (!RequiredAssetsLoaded()) return;
-
-            // Return if path data asset file is not assigned.
             if (PathData == null) return;
 
+            DrawAnimationCurve();
+            HandleDrawingTargetIcon();
+            HandleDrawingForwardPointIcon();
+            HandleDrawingRotationPathCurve();
+            HandleDrawingCurrentRotationPointGizmo();
+            HandleDrawingRotationPointGizmos();
+        }
+
+        private void HandleDrawingForwardPointIcon() {
+            if (SettingsAsset.RotationMode == RotationMode.Forward) {
+                var globalForwardPointPosition = GetGlobalForwardPoint();
+
+                DrawForwardPointIcon(
+                    globalForwardPointPosition);
+            }
+        }
+
+        private void HandleDrawingTargetIcon() {
+        // If rotation mode set to target..
             if (SettingsAsset.RotationMode == RotationMode.Target
+                // and target obj. is assigned..
                 && TargetGO != null) {
 
                 DrawTargetIcon(TargetGO.position);
             }
-
-            if (SettingsAsset.RotationMode == RotationMode.Forward) {
-                var globalForwardPointPosition = GetGlobalForwardPoint();
-                DrawForwardPointIcon(
-                    globalForwardPointPosition);
-            }
-
-            if (SettingsAsset.HandleMode == HandleMode.Rotation) {
-                DrawRotationPathCurve();
-                DrawCurrentRotationPointGizmo();
-                DrawRotationPointGizmos();
-            }
-
-            DrawAnimationCurve();
         }
 #endif
 
@@ -752,7 +756,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region GIZMOS
 
 #if UNITY_EDITOR
-        private void DrawRotationPathCurve() {
+        private void HandleDrawingRotationPathCurve() {
+            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 SettingsAsset.RotationCurveSampling);
 
@@ -775,7 +781,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         // TODO Add "Icons" to method name end.
-        private void DrawRotationPointGizmos() {
+        private void HandleDrawingRotationPointGizmos() {
+            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+
             var localRotPointPositions =
                 pathData.GetRotationPointPositions();
 
@@ -841,7 +849,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
 
         // TODO Add "Icon" to method name.
-        private void DrawCurrentRotationPointGizmo() {
+        private void HandleDrawingCurrentRotationPointGizmo() {
+            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+
             // Node path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
 

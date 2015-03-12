@@ -137,6 +137,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public void DrawArcHandleLabels(
             Vector3[] nodeGlobalPositions,
+            int offsetX,
+            int offsetY,
             Func<int, float> calculateValueCallback,
             GUIStyle style) {
 
@@ -153,8 +155,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     nodeGlobalPositions[i],
                     arcValue,
                     // TODO These should be taken from method args.
-                    Settings.EaseValueLabelOffsetX,
-                    Settings.EaseValueLabelOffsetY,
+                    offsetX,
+                    offsetY,
                     style);
             }
         }

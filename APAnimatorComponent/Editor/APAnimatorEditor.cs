@@ -775,6 +775,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
+                Settings.EaseValueLabelOffsetX,
+                Settings.EaseValueLabelOffsetY,
                 ConvertEaseToDegrees,
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
@@ -872,6 +874,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
+                Settings.EaseValueLabelOffsetX,
+                Settings.EaseValueLabelOffsetY, 
                 ConvertTiltToDegrees,
                 Script.Skin.GetStyle("TiltValueLabel"));
         }

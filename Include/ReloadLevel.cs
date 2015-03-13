@@ -1,18 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class ReloadLevel : MonoBehaviour
-{
-		
-	void Update ()
-	{
-		if (Input.GetKeyDown (KeyCode.R)) {
-			Reload ();
-		}
-	}
+public class ReloadLevel : MonoBehaviour {
 
-	void Reload ()
-	{
-		Application.LoadLevel (Application.loadedLevel);
-	}
+    private void Reload() {
+        Application.LoadLevel(Application.loadedLevel);
+    }
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.R)) {
+            Reload();
+        }
+    }
+
 }

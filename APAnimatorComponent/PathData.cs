@@ -438,11 +438,22 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             EaseCurve.postWrapMode = (UnityEngine.WrapMode) wrapMode;
         }
 
+        public void SmoothAnimObjPathTangents() {
+            SmoothAllNodeTangents(AnimatedObjectPath);
+        }
+
+        public void SmoothRotationPathTangents() {
+            SmoothAllNodeTangents(RotationPath);
+        }
+
         /// <summary>
         ///     Smooth tangents in all nodes in all animation curves.
         /// </summary>
         /// <param name="weight">Weight to be applied to the tangents.</param>
-        public void SmoothAllNodeTangents(float weight = 0) {
+        public void SmoothAllNodeTangents(
+            AnimationPath path,
+            float weight = 0) {
+
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.

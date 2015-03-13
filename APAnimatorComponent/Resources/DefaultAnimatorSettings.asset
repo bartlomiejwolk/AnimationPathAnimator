@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: DefaultAnimatorSettings
+  m_Name: 
   m_EditorClassIdentifier: 
   easeModeKey: 117
   jumpToEndKey: 108
@@ -38,14 +38,14 @@ MonoBehaviour:
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   gizmoIcons: []
-  autoPlay: 0
+  autoPlay: 1
   enableControlsInPlayMode: 1
   exportSamplingFrequency: 5
-  forwardPointOffset: .100000001
-  handleMode: 2
+  forwardPointOffset: 1
+  handleMode: 0
   maxAnimationSpeed: .300000012
   positionLerpSpeed: 1
-  rotationMode: 1
+  rotationMode: 0
   rotationSlerpSpeed: 999
   tangentMode: 0
   updateAllMode: 0

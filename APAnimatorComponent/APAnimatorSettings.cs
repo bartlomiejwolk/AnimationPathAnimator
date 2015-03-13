@@ -299,6 +299,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region ANIMATOR PROPERTIES
+        public float MaxAnimationSpeed {
+            get { return maxAnimationSpeed; }
+            set { maxAnimationSpeed = value; }
+        }
+
         public string PathDataAssetDefaultName {
             get { return pathDataAssetDefaultName; }
             set { pathDataAssetDefaultName = value; }
@@ -426,6 +431,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private Color rotationHandleColor = Color.magenta;
+
+        [SerializeField]
+        private int arcValueMultiplierNumerator = 360;
         #endregion
         #region HANDLES PROPERTIES
         public int AddButtonH {
@@ -513,6 +521,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return rotationHandleColor; }
             set { rotationHandleColor = value; }
         }
+
+        public int ArcValueMultiplierNumerator {
+            get { return arcValueMultiplierNumerator; }
+            set { arcValueMultiplierNumerator = value; }
+        }
+
         #endregion
     }
 

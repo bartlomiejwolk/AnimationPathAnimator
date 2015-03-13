@@ -841,8 +841,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var nodeTimestamps = pathData.GetPathTimestamps();
 
             // Return if current animation time is the same as any node time.
-            if (nodeTimestamps.Any(
-                nodeTimestamp =>
+            if (nodeTimestamps.Any(nodeTimestamp =>
                     Math.Abs(nodeTimestamp - AnimationTime)
                     < SettingsAsset.FloatPrecision)) {
                 return;

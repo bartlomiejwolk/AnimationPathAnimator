@@ -31,9 +31,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty animatedGO;
         private SerializedProperty enableControlsInPlayMode;
+        // todo remove
         private SerializedProperty forwardPointOffset;
         private SerializedProperty gizmoCurveColor;
-        private SerializedProperty maxAnimationSpeed;
         private SerializedProperty pathData;
         //private SerializedProperty positionLerpSpeed;
         private SerializedProperty rotationCurveColor;
@@ -438,12 +438,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Settings.HandleMode);
         }
 
-        private void DrawMaxAnimationSpeedField() {
+        //private void DrawMaxAnimationSpeedField() {
 
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(maxAnimationSpeed);
-            serializedObject.ApplyModifiedProperties();
-        }
+        //    serializedObject.Update();
+        //    EditorGUILayout.PropertyField(maxAnimationSpeed);
+        //    serializedObject.ApplyModifiedProperties();
+        //}
 
         private void DrawPathDataAssetField() {
             serializedObject.Update();
@@ -750,8 +750,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleDrawingEaseHandles() {
             if (Settings.HandleMode != HandleMode.Ease) return;
 
-            // TODO Move this code to SceneHandles.DrawEaseHandles().
-
             // Get path node positions.
             var nodePositions =
                 Script.GetGlobalNodePositions();
@@ -760,7 +758,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var easeCurveValues = PathData.GetEaseCurveValues();
 
             // TODO Use property.
-            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+            var arcValueMultiplier = Settings.ArcValueMultiplierNumerator
+                / Settings.MaxAnimationSpeed;
 
             SceneHandles.DrawEaseHandles(
                 nodePositions,
@@ -1077,7 +1076,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = PathData.GetNodeEaseValue(nodeIndex);
-            var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
+            var arcValueMultiplier = Settings.ArcValueMultiplierNumerator
+                / Settings.MaxAnimationSpeed;
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
             return easeValueInDegrees;
@@ -1106,13 +1106,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsSerObj.FindProperty("forwardPointOffset");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
-            maxAnimationSpeed =
-                SettingsSerObj.FindProperty("maxAnimationSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
                 SettingsSerObj.FindProperty("enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("settings");
+            settings = serializedObject.FindProperty("settingsAsset");
             gizmoCurveColor = SettingsSerObj.FindProperty("gizmoCurveColor");
             rotationCurveColor =
                 SettingsSerObj.FindProperty("rotationCurveColor");

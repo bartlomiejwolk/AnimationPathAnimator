@@ -711,8 +711,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-
-#if UNITY_EDITOR
         private void HandleDrawingRotationPathCurve() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
@@ -835,7 +833,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsAsset.GizmosSubfolder + SettingsAsset.ForwardPointIcon,
                 false);
         }
-#endif
         #endregion
     }
 

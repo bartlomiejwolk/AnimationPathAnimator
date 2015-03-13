@@ -118,10 +118,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     handleColor,
                     capFunction);
 
-                // TODO Make it into callback.
                 // If node was moved..
                 if (newGlobalPos != nodeGlobalPositions[i]) {
-
                     // Execute callback.
                     callback(i, newGlobalPos);
                 }
@@ -204,6 +202,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
+                var iTemp = i;
                 DrawArcHandle(
                     tiltingCurveValues[i],
                     nodePositions[i],
@@ -214,7 +213,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     initialArcValue,
                     scaleHandleSize,
                     Color.green,
-                    value => callback(i, value));
+                    value => callback(iTemp, value));
             }
         }
 
@@ -223,7 +222,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             string[] labelText,
             int offsetX,
             int offsetY,
-            // TODO Add default values (there's more methods that use same two params.).
             int labelWidth,
             int labelHeight,
             GUIStyle style) {

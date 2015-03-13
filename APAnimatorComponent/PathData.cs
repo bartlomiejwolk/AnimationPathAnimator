@@ -601,46 +601,50 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Refactor.
         private void UpdateRotationPathWithAddedKeys() {
-            // Get animatedObjectPath timestamps.
+            // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
-
-            // Get rotationPath values.
+            // Get rotation path values.
             var rotationPathTimestamps = RotationPath.GetTimestamps();
 
-            // Get number of nodes in the rotation path.
-            var rotationPathNodeNo = rotationPathTimestamps.Length;
-
-            // For each timestamp in animatedObjectPath ..
-            for (var i = 0; i < pathTimestamps.Length; i++) {
+            // For each timestamp in the path..
+            foreach (var pathTimestamp in pathTimestamps) {
+                // Helper variable.
                 var keyExists = false;
-                // For each node in rotationPath..
-                for (var j = 0; j < rotationPathNodeNo; j++) {
+                // For each timestamp in rotation path..
+                for (var j = 0; j < rotationPathTimestamps.Length; j++) {
                     // If both timestamps are the same..
-                    if (Math.Abs(rotationPathTimestamps[j] - pathTimestamps[i])
-                        < GlobalConstants.FloatPrecision) {
+                    if (Utilities.FloatsEqual(
+                        rotationPathTimestamps[j],
+                        pathTimestamp,
+                        GlobalConstants.FloatPrecision)) {
 
                         keyExists = true;
-
                         break;
                     }
                 }
 
                 // If both timestamps are different..
                 if (!keyExists) {
-                    // Get timestamp of the added key.
-                    var addedKeyTimestamp = GetNodeTimestamp(i);
-                    // Calculate value for new rotation point.
-                    var defaultRotation =
-                        RotationPath.GetVectorAtTime(addedKeyTimestamp);
-
-                    // Create new rotation point.
-                    RotationPath.CreateNewNode(
-                        pathTimestamps[i],
-                        defaultRotation);
+                    CreateRotationPoint(pathTimestamp);
                 }
             }
+        }
+
+        /// <summary>
+        /// Create rotation point for given path node.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="nodeTimestamp"></param>
+        private void CreateRotationPoint(float nodeTimestamp) {
+            // Calculate value for new rotation point.
+            var defaultRotation =
+                RotationPath.GetVectorAtTime(nodeTimestamp);
+
+            // Create new rotation point.
+            RotationPath.CreateNewNode(
+                nodeTimestamp,
+                defaultRotation);
         }
 
         private void UpdateRotationPathWithRemovedKeys() {

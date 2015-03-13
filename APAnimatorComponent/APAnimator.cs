@@ -3,8 +3,6 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
-
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     /// <summary>
@@ -22,9 +20,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region FIELDS
 
-        //[SerializeField]
-        //private Transform thisTransform;
-
         [SerializeField]
         private bool advancedSettingsFoldout;
 
@@ -34,12 +29,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform animatedGO;
 
-        /// Current play time represented as a number between 0 and 1.
         [SerializeField]
         private float animationTime;
 
-        //[SerializeField]
-        //private APAnimatorGizmos animatorGizmos;
+       
 
         [SerializeField]
         private PathData pathData;
@@ -112,8 +105,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 // On unpause..
                 if (!value) {
-                    // Update animation time.
-                    //UpdateAnimationTime();
                     // Enable animating animated GO.
                     AnimGOUpdateEnabled = true;
                 }
@@ -345,12 +336,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (IsPlaying && !Pause) {
                 // Pause animation.
                 Pause = true;
-                //Script.IsPlaying = false;
             }
             else if (IsPlaying && Pause) {
                 // Unpause animation.
                 Pause = false;
-                //Script.IsPlaying = true;
             }
             // Animation ended.
             else if (!IsPlaying && AnimationTime >= 1) {

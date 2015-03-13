@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class APAnimatorSettings : ScriptableObject {
-
         #region SHORTCUT FIELDS
 
         [Header("Shortcuts")]
@@ -58,12 +56,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         [SerializeField]
         private float shortJumpValue = 0.002f;
+
         [SerializeField]
         private KeyCode tiltingModeKey = KeyCode.O;
 
         [SerializeField]
         private KeyCode updateAllKey = KeyCode.P;
-#endregion
+
+        #endregion
+
         #region SHORTCUT PROPERTIES
 
         public KeyCode EaseModeKey {
@@ -143,16 +144,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return shortJumpValue; }
             set { shortJumpValue = value; }
         }
+
         public KeyCode TiltingModeKey {
             get { return tiltingModeKey; }
             set { tiltingModeKey = value; }
         }
+
         public KeyCode UpdateAllKey {
             get { return updateAllKey; }
             set { updateAllKey = value; }
         }
+
         #endregion
+
         #region ANIMATOR FIELDS
+
         [Header("Animator")]
         [SerializeField]
         private string assetsNotLoadedInfoText =
@@ -184,12 +190,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private float forwardPointOffsetMinValue = 0.001f;
 
         /// <summary>
-        /// Holds references to icons that will be copied to Assets/Gizmos folder.
+        ///     Holds references to icons that will be copied to Assets/Gizmos folder.
         /// </summary>
         [SerializeField]
         private Texture[] gizmoIcons;
 
         private string gizmosSubfolder = "ATP/";
+
         [SerializeField]
         private HandleMode handleMode =
             HandleMode.None;
@@ -219,9 +226,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
+
         #endregion
 
         #region ANIMATOR PROPERTIES
+
         public string AssetsNotLoadedInfoText {
             get { return assetsNotLoadedInfoText; }
             set { assetsNotLoadedInfoText = value; }
@@ -286,6 +295,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return pathDataAssetDefaultName; }
             set { pathDataAssetDefaultName = value; }
         }
+
         public float PositionLerpSpeed {
             get { return positionLerpSpeed; }
             set { positionLerpSpeed = value; }
@@ -310,10 +320,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return updateAllMode; }
             set { updateAllMode = value; }
         }
+
         public AnimatorWrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
         }
+
         #endregion
 
         #region GIZMO FIELDS
@@ -336,6 +348,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private Color rotationCurveColor = Color.gray;
+
         [SerializeField]
         private int rotationCurveSampling = 40;
 
@@ -344,12 +357,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private string targetGizmoIcon = "target_22x22-blue";
+
         #endregion
+
         #region GIZMO PROPERTIES
+
         public string CurrentRotationPointGizmoIcon {
             get { return currentRotationPointGizmoIcon; }
             set { currentRotationPointGizmoIcon = value; }
         }
+
         public string ForwardPointIcon {
             get { return forwardPointIcon; }
             set { forwardPointIcon = value; }
@@ -389,13 +406,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
+
         #region HANDLES FIELDS
 
         [Header("Handles")]
         [SerializeField]
         private int addButtonOffsetH = 25;
+
         [SerializeField]
         private int addButtonOffsetV = 10;
+
         [SerializeField]
         private float arcHandleRadius = 0.6f;
 
@@ -411,11 +431,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int easeValueLabelOffsetX = -20;
         private int easeValueLabelOffsetY = -25;
         private float initialArcValue = 15f;
+
         [SerializeField]
         private float movementHandleSize = 0.12f;
 
         [SerializeField]
         private int removeButtonH = 44;
+
         [SerializeField]
         private int removeButtonV = 10;
 
@@ -423,14 +445,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private Color rotationHandleColor = Color.magenta;
 
         private float rotationHandleSize = 0.26f;
+
         [SerializeField]
         private float scaleHandleSize = 1.5f;
 
         private int updateAllLabelOffsetX = 10;
         private int updateAllLabelOffsetY = -25;
         private string updateAllLabelText = "A";
+
         #endregion
+
         #region HANDLES PROPERTIES
+
         public int AddButtonOffsetH {
             get { return addButtonOffsetH; }
             set { addButtonOffsetH = value; }
@@ -460,14 +486,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return defaultLabelWidth; }
             set { defaultLabelWidth = value; }
         }
+
         public int EaseValueLabelOffsetX {
             get { return easeValueLabelOffsetX; }
             set { easeValueLabelOffsetX = value; }
         }
+
         public int EaseValueLabelOffsetY {
             get { return easeValueLabelOffsetY; }
             set { easeValueLabelOffsetY = value; }
         }
+
         public float InitialArcValue {
             get { return initialArcValue; }
             set { initialArcValue = value; }
@@ -510,18 +539,22 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return scaleHandleSize; }
             set { scaleHandleSize = value; }
         }
+
         public int UpdateAllLabelOffsetX {
             get { return updateAllLabelOffsetX; }
             set { updateAllLabelOffsetX = value; }
         }
+
         public int UpdateAllLabelOffsetY {
             get { return updateAllLabelOffsetY; }
             set { updateAllLabelOffsetY = value; }
         }
+
         public string UpdateAllLabelText {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
+
         #endregion
     }
 

@@ -65,7 +65,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 #endregion
         #region SHORTCUT PROPERTIES
 
-        // TODO Add setters everywhere.
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
             set { easeModeKey = value; }
@@ -187,13 +186,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region GIZMO PROPERTIES
         public string CurrentRotationPointGizmoIcon {
             get { return currentRotationPointGizmoIcon; }
+            set { currentRotationPointGizmoIcon = value; }
         }
 
         public float FloatPrecision {
             get { return floatPrecision; }
+            set { floatPrecision = value; }
         }
         public string ForwardPointIcon {
             get { return forwardPointIcon; }
+            set { forwardPointIcon = value; }
         }
 
         /// <summary>
@@ -206,6 +208,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public int GizmoCurveSamplingFrequency {
             get { return gizmoCurveSamplingFrequency; }
+            set { gizmoCurveSamplingFrequency = value; }
         }
 
         public Color RotationCurveColor {
@@ -215,14 +218,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public int RotationCurveSampling {
             get { return rotationCurveSampling; }
+            set { rotationCurveSampling = value; }
         }
 
         public string RotationPointGizmoIcon {
             get { return rotationPointGizmoIcon; }
+            set { rotationPointGizmoIcon = value; }
         }
+
         public string TargetGizmoIcon {
             get { return targetGizmoIcon; }
+            set { targetGizmoIcon = value; }
         }
+
         #endregion
         #region ANIMATOR FIELDS
         private string gizmosSubfolder = "ATP/";
@@ -428,6 +436,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [SerializeField]
         private int arcValueMultiplierNumerator = 360;
+
+        private float rotationHandleSize = 0.26f;
+
         #endregion
         #region HANDLES PROPERTIES
         public int AddButtonOffsetH {
@@ -491,7 +502,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public float RotationHandleSize {
-            get { return 0.26f; }
+            get { return rotationHandleSize; }
+            set { rotationHandleSize = value; }
         }
 
         public float ScaleHandleSize {

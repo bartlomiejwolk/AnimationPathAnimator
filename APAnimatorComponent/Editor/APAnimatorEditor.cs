@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -331,7 +330,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTime");
 
-            float newTimeRatio = 0;
+            float newTimeRatio;
 
             newTimeRatio = DrawAnimationTimeSlider();
 
@@ -1287,10 +1286,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Export Animation Path nodes as transforms.
         /// </summary>
+        /// <param name="transform"></param>
         /// <param name="exportSampling">
         ///     Amount of result transforms for one meter of Animation Path.
         /// </param>
-        private void ExportNodes(
+        /// <param name="pathData"></param>
+        private static void ExportNodes(
             PathData pathData,
             Transform transform,
             int exportSampling) {
@@ -1298,11 +1299,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // exportSampling cannot be less than 0.
             if (exportSampling < 0) return;
 
-            // Points to be exported.
-            List<Vector3> points;
-
-            // Initialize points array with nodes to export.
-            points = pathData.SampleAnimationPathForPoints(
+            // Points to export.
+            var points = pathData.SampleAnimationPathForPoints(
                 exportSampling);
 
             // Convert points to global coordinates.

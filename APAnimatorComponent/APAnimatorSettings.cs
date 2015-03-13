@@ -385,6 +385,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { updateAllMode = value; }
         }
 
+        public bool EnableControlsInPlayMode {
+            get { return enableControlsInPlayMode; }
+            set { enableControlsInPlayMode = value; }
+        }
+
         public AnimatorWrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
@@ -527,7 +532,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return arcValueMultiplierNumerator; }
             set { arcValueMultiplierNumerator = value; }
         }
-
         #endregion
     }
 

@@ -144,6 +144,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         public Transform TargetGO {
             get { return targetGO; }
+            set { targetGO = value; }
         }
 
         /// <summary>
@@ -198,7 +199,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         }
 
-#if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
             if (!RequiredAssetsLoaded()) return;
             if (PathData == null) return;
@@ -210,7 +210,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleDrawingCurrentRotationPointGizmo();
             HandleDrawingRotationPointGizmos();
         }
-#endif
 
         private void Start() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
@@ -224,6 +223,23 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             LoadRequiredResources();
             AssignMainCameraAsAnimatedGO();
+            ResetInspectorOptions();
+        }
+
+        private void ResetInspectorOptions() {
+            TargetGO = null;
+            SettingsAsset.HandleMode = HandleMode.None;
+            SettingsAsset.TangentMode = TangentMode.Smooth;
+            SettingsAsset.UpdateAllMode = false;
+            AnimationTime = 0;
+            SettingsAsset.AutoPlay = true;
+            SettingsAsset.EnableControlsInPlayMode = true;
+            SettingsAsset.RotationMode = RotationMode.Forward;
+            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+            SettingsAsset.ForwardPointOffset = 0.001f;
+            SettingsAsset.PositionLerpSpeed = 1;
+            SettingsAsset.RotationSlerpSpeed = 999;
+            SettingsAsset.ExportSamplingFrequency = 5;
         }
 
         private void OnValidate() {

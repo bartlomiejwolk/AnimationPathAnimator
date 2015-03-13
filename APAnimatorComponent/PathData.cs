@@ -389,11 +389,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void ResetPath() {
-            // TODO Create other method for recreating the curves.
-            HandleInstantiateReferenceTypes();
+            ForceInstantiatePathsAndCurves();
             AssignDefaultValues();
 
             OnPathReset();
+        }
+
+        private void ForceInstantiatePathsAndCurves() {
+            animatedObjectPath = new AnimationPath();
+            animatedObjectPath.InstantiateAnimationPathCurves();
+
+            rotationPath = new AnimationPath();
+            rotationPath.InstantiateAnimationPathCurves();
+
+            easeCurve = new AnimationCurve();
+            tiltingCurve = new AnimationCurve();
         }
 
         public void ResetRotationPath() {

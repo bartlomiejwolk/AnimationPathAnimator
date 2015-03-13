@@ -413,6 +413,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Smooth tangents in all nodes in all animation curves.
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="weight">Weight to be applied to the tangents.</param>
         public void SmoothAllNodeTangents(
             AnimationPath path,
@@ -484,7 +485,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Create rotation point for given path node.
         /// </summary>
-        /// <param name="i"></param>
         /// <param name="nodeTimestamp"></param>
         private void CreateRotationPoint(float nodeTimestamp) {
             // Calculate value for new rotation point.

@@ -7,6 +7,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region SHORTCUT FIELDS
 
+        [Header("Shortcuts")]
         [SerializeField]
         private KeyCode easeModeKey = KeyCode.U;
 
@@ -153,6 +154,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
         #region GIZMO FIELDS
 
+        [Header("Gizmos")]
         [SerializeField]
         private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
 
@@ -224,6 +226,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region ANIMATOR FIELDS
+        [Header("Animator")]
         [SerializeField]
         private string assetsNotLoadedInfoText =
             "Required assets were not found.\n"
@@ -386,6 +389,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
         #region HANDLES FIELDS
 
+        [Header("Handles")]
         [SerializeField]
         private int addButtonOffsetH = 25;
         [SerializeField]

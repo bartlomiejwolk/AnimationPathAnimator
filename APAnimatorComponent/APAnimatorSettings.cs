@@ -153,15 +153,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
         #region GIZMO FIELDS
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
-        [SerializeField]
-        private Color rotationCurveColor = Color.gray;
-
         [SerializeField]
         private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
 
@@ -171,9 +162,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private string forwardPointIcon = "target_22x22-pink";
 
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
         [SerializeField]
         private int gizmoCurveSamplingFrequency = 40;
 
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
         [SerializeField]
         private int rotationCurveSampling = 40;
 
@@ -233,22 +232,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region ANIMATOR FIELDS
-        private string gizmosSubfolder = "ATP/";
-
-        /// <summary>
-        /// Holds references to icons that will be copied to Assets/Gizmos folder.
-        /// </summary>
         [SerializeField]
-        private Texture[] gizmoIcons;
+        private string assetsNotLoadedInfoText =
+            "Required assets were not found.\n"
+            + "Reload scene and if it does not help, restore extension "
+            + "folder content to its default state.";
 
         [SerializeField]
         private bool autoPlay = true;
+
+        [SerializeField]
+        private int countdownToStopFramesNo = 10;
 
         [SerializeField]
         private bool enableControlsInPlayMode = true;
 
         [SerializeField]
         private int exportSamplingFrequency = 5;
+
         /// <summary>
         ///     How much look forward point should be positioned away from the
         ///     animated object.
@@ -258,11 +259,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private float forwardPointOffset = 0.05f;
 
         [SerializeField]
+        private float forwardPointOffsetMinValue = 0.001f;
+
+        /// <summary>
+        /// Holds references to icons that will be copied to Assets/Gizmos folder.
+        /// </summary>
+        [SerializeField]
+        private Texture[] gizmoIcons;
+
+        private string gizmosSubfolder = "ATP/";
+        [SerializeField]
         private HandleMode handleMode =
             HandleMode.None;
 
         [SerializeField]
         private float maxAnimationSpeed = 0.3f;
+
+        [SerializeField]
+        private string pathDataAssetDefaultName = "Path";
 
         [SerializeField]
         private float positionLerpSpeed = 1;
@@ -282,43 +296,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private bool updateAllMode;
 
         [SerializeField]
-        private AnimatorWrapMode wrapMode = global::AnimatorWrapMode.Clamp;
-
-        [SerializeField]
-        private int countdownToStopFramesNo = 10;
-
-        [SerializeField]
-        private string assetsNotLoadedInfoText =
-            "Required assets were not found.\n"
-            + "Reload scene and if it does not help, restore extension "
-            + "folder content to its default state.";
-
-        [SerializeField]
-        private float forwardPointOffsetMinValue = 0.001f;
-
-        [SerializeField]
-        private string pathDataAssetDefaultName = "Path";
-
+        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
         #endregion
         #region ANIMATOR PROPERTIES
-        public float MaxAnimationSpeed {
-            get { return maxAnimationSpeed; }
-            set { maxAnimationSpeed = value; }
-        }
-
-        public string PathDataAssetDefaultName {
-            get { return pathDataAssetDefaultName; }
-            set { pathDataAssetDefaultName = value; }
-        }
-
-        public float ForwardPointOffsetMinValue {
-            get { return forwardPointOffsetMinValue; }
-            set { forwardPointOffsetMinValue = value; }
-        }
-
         public string AssetsNotLoadedInfoText {
             get { return assetsNotLoadedInfoText; }
             set { assetsNotLoadedInfoText = value; }
+        }
+
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
         }
 
         public int CountdownToStopFramesNo {
@@ -326,19 +314,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { countdownToStopFramesNo = value; }
         }
 
-        public string GizmosSubfolder {
-            get { return gizmosSubfolder; }
-            set { gizmosSubfolder = value; }
-        }
-
-        public Texture[] GizmoIcons {
-            get { return gizmoIcons; }
-            set { gizmoIcons = value; }
-        }
-
-        public bool AutoPlay {
-            get { return autoPlay; }
-            set { autoPlay = value; }
+        public bool EnableControlsInPlayMode {
+            get { return enableControlsInPlayMode; }
+            set { enableControlsInPlayMode = value; }
         }
 
         public int ExportSamplingFrequency {
@@ -356,9 +334,34 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { forwardPointOffset = value; }
         }
 
+        public float ForwardPointOffsetMinValue {
+            get { return forwardPointOffsetMinValue; }
+            set { forwardPointOffsetMinValue = value; }
+        }
+
+        public Texture[] GizmoIcons {
+            get { return gizmoIcons; }
+            set { gizmoIcons = value; }
+        }
+
+        public string GizmosSubfolder {
+            get { return gizmosSubfolder; }
+            set { gizmosSubfolder = value; }
+        }
+
         public HandleMode HandleMode {
             get { return handleMode; }
             set { handleMode = value; }
+        }
+
+        public float MaxAnimationSpeed {
+            get { return maxAnimationSpeed; }
+            set { maxAnimationSpeed = value; }
+        }
+
+        public string PathDataAssetDefaultName {
+            get { return pathDataAssetDefaultName; }
+            set { pathDataAssetDefaultName = value; }
         }
         public float PositionLerpSpeed {
             get { return positionLerpSpeed; }
@@ -384,12 +387,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return updateAllMode; }
             set { updateAllMode = value; }
         }
-
-        public bool EnableControlsInPlayMode {
-            get { return enableControlsInPlayMode; }
-            set { enableControlsInPlayMode = value; }
-        }
-
         public AnimatorWrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
@@ -404,7 +401,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private float arcHandleRadius = 0.6f;
 
-        private float initialArcValue = 15f;
+        [SerializeField]
+        private int arcValueMultiplierNumerator = 360;
 
         [SerializeField]
         private int defaultLabelHeight = 10;
@@ -412,33 +410,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private int defaultLabelWidth = 30;
 
+        private int easeValueLabelOffsetX = -20;
         private int easeValueLabelOffsetY = -25;
-
+        private float initialArcValue = 15f;
         [SerializeField]
         private float movementHandleSize = 0.12f;
 
         [SerializeField]
         private int removeButtonH = 44;
-        private int easeValueLabelOffsetX = -20;
-
         [SerializeField]
         private int removeButtonV = 10;
-
-        private string updateAllLabelText = "A";
-
-        private int updateAllLabelOffsetY = -25;
-        private int updateAllLabelOffsetX = 10;
-        [SerializeField]
-        private float scaleHandleSize = 1.5f;
 
         [SerializeField]
         private Color rotationHandleColor = Color.magenta;
 
-        [SerializeField]
-        private int arcValueMultiplierNumerator = 360;
-
         private float rotationHandleSize = 0.26f;
+        [SerializeField]
+        private float scaleHandleSize = 1.5f;
 
+        private int updateAllLabelOffsetX = 10;
+        private int updateAllLabelOffsetY = -25;
+        private string updateAllLabelText = "A";
         #endregion
         #region HANDLES PROPERTIES
         public int AddButtonOffsetH {
@@ -454,6 +446,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public float ArcHandleRadius {
             get { return arcHandleRadius; }
             set { arcHandleRadius = value; }
+        }
+
+        public int ArcValueMultiplierNumerator {
+            get { return arcValueMultiplierNumerator; }
+            set { arcValueMultiplierNumerator = value; }
         }
 
         public int DefaultLabelHeight {
@@ -501,6 +498,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { removeButtonV = value; }
         }
 
+        public Color RotationHandleColor {
+            get { return rotationHandleColor; }
+            set { rotationHandleColor = value; }
+        }
+
         public float RotationHandleSize {
             get { return rotationHandleSize; }
             set { rotationHandleSize = value; }
@@ -521,16 +523,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public string UpdateAllLabelText {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
-        }
-
-        public Color RotationHandleColor {
-            get { return rotationHandleColor; }
-            set { rotationHandleColor = value; }
-        }
-
-        public int ArcValueMultiplierNumerator {
-            get { return arcValueMultiplierNumerator; }
-            set { arcValueMultiplierNumerator = value; }
         }
         #endregion
     }

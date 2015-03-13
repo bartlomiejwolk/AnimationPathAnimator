@@ -1,29 +1,22 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
-    [CustomPropertyDrawer(typeof(NodeEventSlot))]
+    [CustomPropertyDrawer(typeof (NodeEventSlot))]
     public sealed class NodeEventDrawer : PropertyDrawer {
-
-        // How many rows (properties) will be displayed.
-        //private int Rows = 1;
 
         // Hight of a single property.
         private const int PropHeight = 16;
-
         // Margin between properties.
         private const int PropMargin = 4;
-
         // Space between rows.
         private const int RowsSpace = 8;
-
         // Overall hight of the serialized property.
         public override float GetPropertyHeight(
-                SerializedProperty property,
-                GUIContent label) {
+            SerializedProperty property,
+            GUIContent label) {
 
             // Property with number of rows to be displayed.
             var rowsProperty = property.FindPropertyRelative("rows");
@@ -32,42 +25,42 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
             // Calculate property height.
             return base.GetPropertyHeight(property, label)
-                * rows // Each row is 16 px high.
-                + (rows - 1) * RowsSpace;
+                   * rows // Each row is 16 px high.
+                   + (rows - 1) * RowsSpace;
         }
 
         public override void OnGUI(
-                Rect pos,
-                SerializedProperty prop,
-                GUIContent label) {
+            Rect pos,
+            SerializedProperty prop,
+            GUIContent label) {
 
-            SerializedProperty rowsProperty =
+            var rowsProperty =
                 prop.FindPropertyRelative("rows");
 
-            SerializedProperty sourceGO =
+            var sourceGO =
                 prop.FindPropertyRelative("sourceGO");
 
-            SerializedProperty sourceCo =
+            var sourceCo =
                 prop.FindPropertyRelative("sourceCo");
 
-            SerializedProperty sourceComponentIndex =
+            var sourceComponentIndex =
                 prop.FindPropertyRelative("sourceComponentIndex");
 
-            SerializedProperty sourceMethodIndex =
+            var sourceMethodIndex =
                 prop.FindPropertyRelative("sourceMethodIndex");
 
-            SerializedProperty sourceMethodName =
+            var sourceMethodName =
                 prop.FindPropertyRelative("sourceMethodName");
 
-            SerializedProperty methodArg =
+            var methodArg =
                 prop.FindPropertyRelative("methodArg");
 
             EditorGUIUtility.labelWidth = 80;
 
             EditorGUI.PropertyField(
-                    new Rect(pos.x, pos.y, pos.width, PropHeight),
-                    sourceGO,
-                    new GUIContent("Source GO", ""));
+                new Rect(pos.x, pos.y, pos.width, PropHeight),
+                sourceGO,
+                new GUIContent("Source GO", ""));
 
             // If source GO is assigned..
             if (sourceGO.objectReferenceValue == null) {
@@ -83,9 +76,9 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             // Get source game object components.
             var sourceComponents = sourceGORef.GetComponents<Component>();
             // Initialize array for source GO component names.
-            var sourceCoNames= new string[sourceComponents.Length];
+            var sourceCoNames = new string[sourceComponents.Length];
             // Fill array with component names.
-            for (int i = 0; i < sourceCoNames.Length; i++) {
+            for (var i = 0; i < sourceCoNames.Length; i++) {
                 sourceCoNames[i] = sourceComponents[i].GetType().ToString();
             }
             // Make sure that current name index corresponds to a component.
@@ -96,11 +89,11 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
             // Display dropdown game object component list.
             sourceComponentIndex.intValue = EditorGUI.Popup(
-                 new Rect(
+                new Rect(
                     pos.x,
                     pos.y + 1 * (PropHeight + PropMargin),
                     pos.width,
-                    PropHeight), 
+                    PropHeight),
                 "Source Component",
                 sourceComponentIndex.intValue,
                 sourceCoNames);
@@ -111,11 +104,14 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
             // Get target component method names.
             var methods = sourceComponents[sourceComponentIndex.intValue]
-                .GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                .GetType()
+                .GetMethods(
+                    BindingFlags.Instance | BindingFlags.Public
+                    | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
             // Initialize array with method names.
             var methodNames = new string[methods.Length];
             // Fill array with method names.
-            for (int i = 0; i < methodNames.Length; i++) {
+            for (var i = 0; i < methodNames.Length; i++) {
                 methodNames[i] = methods[i].Name;
             }
 
@@ -137,13 +133,15 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             // Don't draw parameter field if source GO is not specified.
             if (sourceGO.objectReferenceValue == null) return;
             EditorGUI.PropertyField(
-                    new Rect(
-                        pos.x,
-                        pos.y + 3 * (PropHeight + PropMargin),
-                        pos.width,
-                        PropHeight),
-                    methodArg,
-                    new GUIContent("Argument", ""));
+                new Rect(
+                    pos.x,
+                    pos.y + 3 * (PropHeight + PropMargin),
+                    pos.width,
+                    PropHeight),
+                methodArg,
+                new GUIContent("Argument", ""));
         }
+
     }
+
 }

@@ -243,8 +243,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             //if (frame == 2) StartCoroutine("HandleEaseTime");
         }
         #endregion UNITY MESSAGES
-        #region METHODS
-        #endregion
 
         #region EVENT HANDLERS
 

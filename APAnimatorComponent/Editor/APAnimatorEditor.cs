@@ -141,11 +141,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-
-        private void DrawInfoLabel(string text) {
-            EditorGUILayout.HelpBox(text, MessageType.Error);
-        }
-
         private void OnEnable() {
             // Get target script reference.
             Script = (APAnimator) target;
@@ -164,16 +159,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
         }
-
-        private bool RequiredAssetsLoaded() {
-            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
-                Script,
-                "RequiredAssetsLoaded",
-                null);
-
-            return assetsLoaded;
-        }
-
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -227,6 +212,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+        private void DrawInfoLabel(string text) {
+            EditorGUILayout.HelpBox(text, MessageType.Error);
+        }
+
         private void DrawShortcutsHelpBox() {
             EditorGUILayout.HelpBox(
                 "Check SettingsAsset Asset for shortcuts.",
@@ -1021,6 +1010,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region METHODS
+        private bool RequiredAssetsLoaded() {
+            var assetsLoaded = (bool)Utilities.InvokeMethodWithReflection(
+                Script,
+                "RequiredAssetsLoaded",
+                null);
+
+            return assetsLoaded;
+        }
+
         private void HandleUndoEvent() {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {

@@ -99,6 +99,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        public static void DrawNodeLabels(
+            Vector3[] nodeGlobalPositions,
+            string[] text,
+            int offsetX,
+            int offsetY,
+            int labelWidth,
+            int labelHeight,
+            GUIStyle style) {
+
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                DrawNodeLabel(
+                    nodeGlobalPositions[i],
+                    text[i],
+                    offsetX,
+                    offsetY,
+                    labelWidth,
+                    labelHeight,
+                    style);
+            }
+        }
+
         public static void DrawPositionHandles(
             Vector3[] nodeGlobalPositions,
             float handleSize,
@@ -183,9 +204,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Handles.SphereCap);
 
             if (newGlobalPosition != rotationPointGlobalPosition) {
-                //var newPointLocalPosition =
-                //    script.transform.InverseTransformPoint(newGlobalPosition);
-
                 callback(newGlobalPosition);
             }
         }
@@ -356,27 +374,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 style);
 
             Handles.EndGUI();
-        }
-
-        public static void DrawNodeLabels(
-            Vector3[] nodeGlobalPositions,
-            string[] text,
-            int offsetX,
-            int offsetY,
-            int labelWidth,
-            int labelHeight,
-            GUIStyle style) {
-
-            for (int i = 0; i < nodeGlobalPositions.Length; i++) {
-                DrawNodeLabel(
-                    nodeGlobalPositions[i],
-                    text[i],
-                    offsetX,
-                    offsetY,
-                    labelWidth,
-                    labelHeight,
-                    style);
-            }
         }
 
         private static Vector3 DrawPositionHandle(

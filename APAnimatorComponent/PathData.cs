@@ -609,22 +609,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // For each timestamp in the path..
             foreach (var pathTimestamp in pathTimestamps) {
-                // Helper variable.
-                var keyExists = false;
-                // For each timestamp in rotation path..
-                for (var j = 0; j < rotationPathTimestamps.Length; j++) {
-                    // If both timestamps are the same..
-                    if (Utilities.FloatsEqual(
-                        rotationPathTimestamps[j],
-                        pathTimestamp,
-                        GlobalConstants.FloatPrecision)) {
+                // Check if same timestamp exists in rotation path.
+                var keyExists = rotationPathTimestamps.Any(
+                    t => Utilities.FloatsEqual(
+                        t, pathTimestamp, GlobalConstants.FloatPrecision));
 
-                        keyExists = true;
-                        break;
-                    }
-                }
-
-                // If both timestamps are different..
+                // If not..
                 if (!keyExists) {
                     CreateRotationPoint(pathTimestamp);
                 }

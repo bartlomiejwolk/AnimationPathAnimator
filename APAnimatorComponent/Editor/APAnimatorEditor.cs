@@ -31,11 +31,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty animatedGO;
         private SerializedProperty enableControlsInPlayMode;
-        // todo remove
-        private SerializedProperty forwardPointOffset;
         private SerializedProperty gizmoCurveColor;
         private SerializedProperty pathData;
-        //private SerializedProperty positionLerpSpeed;
         private SerializedProperty rotationCurveColor;
         private SerializedProperty rotationSlerpSpeed;
         private SerializedProperty skin;
@@ -1102,8 +1099,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             rotationSlerpSpeed = SettingsSerObj.FindProperty("rotationSlerpSpeed");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
-            forwardPointOffset =
-                SettingsSerObj.FindProperty("forwardPointOffset");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             pathData = serializedObject.FindProperty("pathData");

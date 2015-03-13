@@ -185,7 +185,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region UNITY MESSAGES
 
         private void OnEnable() {
-            Debug.Log("OnEnable");
             thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
@@ -224,7 +223,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
-            UnsubscribeFromEvents();
             AssignMainCameraAsAnimatedGO();
         }
 

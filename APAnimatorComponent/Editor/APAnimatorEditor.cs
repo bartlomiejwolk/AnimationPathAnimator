@@ -164,14 +164,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
 
-            // Subscribe animator to path events if not subscribed already.
-            // This is required after animator component reset.
-            if (!subscribedToEvents.boolValue) {
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "SubscribeToEvents",
-                    null);
-            }
+            HandleAnimatorEventsSubscription();
 
             // Return is SettingsAsset asset is not assigned in the inspector.
             //if (SettingsAsset == null) return;
@@ -200,6 +193,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        private void HandleAnimatorEventsSubscription() {
+            // Subscribe animator to path events if not subscribed already.
+            // This is required after animator component reset.
+            serializedObject.Update();
+            if (!subscribedToEvents.boolValue) {
+                // Unsubscribe first to avoid multiple subscription after
+                // animator component reset.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UnsubscribeFromEvents",
+                    null);
+
+                // Subscribe to events.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "SubscribeToEvents",
+                    null);
+            }
+            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion UNITY MESSAGES

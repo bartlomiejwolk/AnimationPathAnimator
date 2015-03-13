@@ -3,7 +3,6 @@
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
     public sealed class APEventsSettings : ScriptableObject {
-
         #region FIELDS
 
         [SerializeField]
@@ -13,13 +12,14 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private int defaultNodeLabelWidth = 100;
 
         [SerializeField]
+        private bool drawMethodNames = true;
+
+        [SerializeField]
         private int methodNameLabelOffsetX = 30;
 
         [SerializeField]
         private int methodNameLabelOffsetY = -20;
-        
-        [SerializeField]
-        private bool drawMethodNames = true;
+
         #endregion
 
         #region PROPERTIES
@@ -34,6 +34,11 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             set { defaultNodeLabelWidth = value; }
         }
 
+        public bool DrawMethodNames {
+            get { return drawMethodNames; }
+            set { drawMethodNames = value; }
+        }
+
         public int MethodNameLabelOffsetX {
             get { return methodNameLabelOffsetX; }
             set { methodNameLabelOffsetX = value; }
@@ -41,11 +46,6 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         public int MethodNameLabelOffsetY {
             get { return methodNameLabelOffsetY; }
-        }
-
-        public bool DrawMethodNames {
-            get { return drawMethodNames; }
-            set { drawMethodNames = value; }
         }
 
         #endregion

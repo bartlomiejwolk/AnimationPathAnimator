@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -163,21 +161,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public bool AnimGOUpdateEnabled {
             get { return animGOUpdateEnabled; }
-            set {
-                animGOUpdateEnabled = value;
-
-                //if (!value) {
-                //    Debug.Log("");
-                //}
-                //Debug.Log("animGOUpdateEnabled: " + animGOUpdateEnabled);
-            }
+            set { animGOUpdateEnabled = value; }
         }
 
         public bool CountdownCoroutineIsRunning {
             get { return countdownCoroutineIsRunning; }
             set {
                 countdownCoroutineIsRunning = value;
-                //Debug.Log("CountdownCoroutineIsRunning: " + value);
             }
         }
 
@@ -194,9 +184,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
         private void OnDisable() {
             UnsubscribeFromEvents();
-        }
-        private void Awake() {
-
         }
 
         private void OnDrawGizmosSelected() {
@@ -243,18 +230,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnValidate() {
-            //thisTransform = GetComponent<Transform>();
             UpdateAnimation();
-            //if (!SubscribedToEvents) SubscribeToEvents();
         }
 
-        //private int frame;
         private void Update() {
-            //var frame = Time.frameCount;
-            //frame++;
             HandleUpdatingAnimGOInPlayMode();
-
-            //if (frame == 2) StartCoroutine("HandleEaseTime");
         }
         #endregion UNITY MESSAGES
 
@@ -703,18 +683,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 ThisTransform.TransformPoint(localForwardPoint);
 
             return globalForwardPoint;
-        }
-
-        private Vector3[] GetGlobalRotationPointPositions() {
-            // Get rotation point positions.
-            var rotPointPositions = PathData.GetRotationPointPositions();
-
-            // Convert positions to global coordinates.
-            Utilities.ConvertToGlobalCoordinates(
-                ref rotPointPositions,
-                ThisTransform);
-
-            return rotPointPositions;
         }
 
         private bool RequiredAssetsLoaded() {

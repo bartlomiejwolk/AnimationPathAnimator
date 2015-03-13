@@ -67,6 +67,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+        [SerializeField]
         private Transform thisTransform;
         private bool countdownCoroutineIsRunning;
 
@@ -220,7 +221,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void Reset() {
-            // Create separate method InitializeFields().
             thisTransform = GetComponent<Transform>();
 
             LoadRequiredResources();
@@ -229,7 +229,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnValidate() {
-            thisTransform = GetComponent<Transform>();
+            //thisTransform = GetComponent<Transform>();
             UpdateAnimation();
             //if (!SubscribedToEvents) SubscribeToEvents();
         }

@@ -291,12 +291,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
 
-                EditorGUILayout.Space();
+                //EditorGUILayout.Space();
 
                 DrawShortJumpValueField();
                 DrawLongJumpValueField();
 
-                EditorGUILayout.Space();
+                //EditorGUILayout.Space();
 
                 DrawSettingsAssetField();
                 DrawSkinSelectionControl();

@@ -392,6 +392,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 curves[i] = new AnimationCurve();
             }
         }
+
+        public void InstantiateAnimationPathCurves() {
+            for (var i = 0; i < 3; i++) {
+                curves[i] = new AnimationCurve();
+            }
+        }
+
         #endregion PRIVATE METHODS
     }
 }

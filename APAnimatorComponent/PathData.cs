@@ -95,8 +95,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         // ReSharper disable once UnusedMember.Local
         private void OnEnable() {
-            // Return if fields are initialized.
-            if (animatedObjectPath != null) return;
+            animatedObjectPath = new AnimationPath();
+            rotationPath = new AnimationPath();
 
             InstantiateReferenceTypes();
             AssignDefaultValues();
@@ -213,19 +213,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             TiltingCurve.AddKey(1, 0);
         }
 
-        // TODO This method should be inside AnimationPath.
-        private void InstantiateAnimationPathCurves(AnimationPath animationPath) {
-            for (var i = 0; i < 3; i++) {
-                animationPath[i] = new AnimationCurve();
-            }
-        }
-
         private void InstantiateReferenceTypes() {
-            animatedObjectPath = new AnimationPath();
-            InstantiateAnimationPathCurves(animatedObjectPath);
-
-            rotationPath = new AnimationPath();
-            InstantiateAnimationPathCurves(rotationPath);
+            animatedObjectPath.InstantiateAnimationPathCurves();
+            rotationPath.InstantiateAnimationPathCurves();
 
             easeCurve = new AnimationCurve();
             tiltingCurve = new AnimationCurve();
@@ -401,8 +391,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void ResetRotationPath() {
-            rotationPath = new AnimationPath();
-            InstantiateAnimationPathCurves(rotationPath);
+            rotationPath.InstantiateAnimationPathCurves();
 
             UpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();

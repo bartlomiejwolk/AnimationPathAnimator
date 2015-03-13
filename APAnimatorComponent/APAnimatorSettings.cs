@@ -37,10 +37,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private KeyCode modKey = KeyCode.RightAlt;
 
-        // TODO Remove.
-        [SerializeField]
-        private Color moveAllModeColor = Color.red;
-
         [SerializeField]
         private KeyCode noneModeKey = KeyCode.Y;
 

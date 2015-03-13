@@ -15,7 +15,7 @@ public static class ScriptableObjectUtility {
         // Result file path.
         string assetPathAndName;
 
-        // Path specified through argument.
+        // Set file path to path specified through argument.
         if (fullPath != "") {
             // Use it.
             assetPathAndName = fullPath;
@@ -29,11 +29,12 @@ public static class ScriptableObjectUtility {
 
             // Get file path from selection.
             var selectionFilePath = AssetDatabase.GetAssetPath(Selection.activeObject);
-            // If no selection.
+
+            // If selection returned empty string..
             if (selectionFilePath == "") {
                 selectionFilePath = "Assets";
             }
-            // Selection. 
+            // Selection not empty..
             else if (Path.GetExtension(selectionFilePath) != "") {
                 selectionFilePath = selectionFilePath.Replace(Path.GetFileName(
                     AssetDatabase.GetAssetPath(Selection.activeObject)),
@@ -48,7 +49,7 @@ public static class ScriptableObjectUtility {
         AssetDatabase.CreateAsset(asset, assetPathAndName);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        EditorUtility.FocusProjectWindow();
+        //EditorUtility.FocusProjectWindow();
         Selection.activeObject = asset;
 
         return asset;

@@ -242,7 +242,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private bool autoPlay = true;
 
         [SerializeField]
-        private bool EnableControlsInPlayMode = true;
+        private bool enableControlsInPlayMode = true;
 
         [SerializeField]
         private int exportSamplingFrequency = 5;
@@ -259,7 +259,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleMode.None;
 
         [SerializeField]
-        private float MaxAnimationSpeed = 0.3f;
+        private float maxAnimationSpeed = 0.3f;
 
         [SerializeField]
         private float positionLerpSpeed = 1;
@@ -294,8 +294,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private float forwardPointOffsetMinValue = 0.001f;
 
+        [SerializeField]
+        private string pathDataAssetDefaultName = "Path";
+
         #endregion
         #region ANIMATOR PROPERTIES
+        public string PathDataAssetDefaultName {
+            get { return pathDataAssetDefaultName; }
+            set { pathDataAssetDefaultName = value; }
+        }
+
         public float ForwardPointOffsetMinValue {
             get { return forwardPointOffsetMinValue; }
             set { forwardPointOffsetMinValue = value; }

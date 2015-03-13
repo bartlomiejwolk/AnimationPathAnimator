@@ -656,8 +656,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Display save panel.
                 var savePath = EditorUtility.SaveFilePanelInProject(
                     "Save Path Asset File",
-                    // TODO Make it a property.
-                    "Path",
+                    Settings.PathDataAssetDefaultName,
                     "asset",
                     "");
 
@@ -1109,10 +1108,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             maxAnimationSpeed =
-                SettingsSerObj.FindProperty("MaxAnimationSpeed");
+                SettingsSerObj.FindProperty("maxAnimationSpeed");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
-                SettingsSerObj.FindProperty("EnableControlsInPlayMode");
+                SettingsSerObj.FindProperty("enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settings");
             gizmoCurveColor = SettingsSerObj.FindProperty("gizmoCurveColor");

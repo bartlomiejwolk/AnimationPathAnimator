@@ -272,7 +272,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             RotationMode.Forward;
 
         [SerializeField]
-        // TODO Rename to rotationLerpSpeed.
         private float rotationSlerpSpeed = 999.0f;
 
         [SerializeField]
@@ -409,10 +408,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int defaultLabelWidth = 30;
 
         private int easeValueLabelOffsetY = -25;
-
-        // TODO Remove.
-        [SerializeField]
-        private float moveAllModeSize = 0.15f;
 
         [SerializeField]
         private float movementHandleSize = 0.12f;

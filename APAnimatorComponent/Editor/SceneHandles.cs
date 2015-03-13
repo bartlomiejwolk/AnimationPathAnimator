@@ -7,11 +7,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
     /// <summary>
     ///     Class responsible for drawing all on scene handles.
     /// </summary>
-    /// <remarks>
-    ///     It has same access to the APAnimator class as
-    ///     the AnimationPathAnimatorEditor does.
-    /// </remarks>
-    // TODO Pass ref. to APAnimator in the constructor.
     public static class SceneHandles {
         #region METHDOS
 
@@ -70,7 +65,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 DrawNodeLabel(
                     nodeGlobalPositions[i],
                     arcValue,
-                    // TODO These should be taken from method args.
                     offsetX,
                     offsetY,
                     labelWidth,
@@ -104,8 +98,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to DrawPositionHandles().
-        public static void DrawMoveSinglePositionsHandles(
+        public static void DrawPositionHandles(
             Vector3[] nodeGlobalPositions,
             float handleSize,
             Color curveColor,

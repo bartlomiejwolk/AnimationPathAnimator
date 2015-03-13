@@ -671,27 +671,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             OnNodeTiltChanged();
         }
 
-        //public void UpdateTiltingValues(float delta) {
-        //    for (var i = 0; i < TiltingCurve.length; i++) {
-        //        // Copy key.
-        //        var keyCopy = TiltingCurve[i];
-        //        // Update key value.
-        //        keyCopy.value += delta;
-
-        //        // Remove old key.
-        //        TiltingCurve.RemoveKey(i);
-
-        //        // Add key.
-        //        TiltingCurve.AddKey(keyCopy);
-
-        //        // Smooth all tangents.
-        //        SmoothCurve(TiltingCurve);
-        //    }
-
-        //    // TODO Rename to OnNodeTiltingChange().
-        //    OnNodeTiltChanged();
-        //}
-
         private void EaseCurveExtremeNodes(AnimationCurve curve) {
             // Ease first node.
             var firstKeyCopy = curve.keys[0];

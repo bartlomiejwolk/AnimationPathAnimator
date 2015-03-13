@@ -12,7 +12,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         
         #region PROPERTIES
 
-        private SerializedObject SettingsSerObj { get; set; }
+        private SerializedObject SettingsSerializedObject { get; set; }
         //public SerializedObject PathExporterSerObj { get; private set; }
 
         /// <summary>
@@ -312,19 +312,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawLongJumpValueField() {
-            SettingsSerObj.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(longJumpValue);
 
-            SettingsSerObj.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawShortJumpValueField() {
-            SettingsSerObj.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(shortJumpValue);
 
-            SettingsSerObj.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawAnimatedGOField() {
@@ -389,13 +389,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawEnableControlsInPlayModeToggle() {
-            SettingsSerObj.Update();
+            SettingsSerializedObject.Update();
             EditorGUILayout.PropertyField(
                 enableControlsInPlayMode,
                 new GUIContent(
                     "Play Mode Controls",
                     "Enable keybord controls in play mode."));
-            SettingsSerObj.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawForwardPointOffsetSlider() {
@@ -409,13 +409,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawGizmoCurveColorPicker() {
-            SettingsSerObj.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(
                 gizmoCurveColor,
                 new GUIContent("Curve Color", ""));
 
-            SettingsSerObj.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawHandleModeDropdown() {
@@ -499,15 +499,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawRotationCurveColorPicker() {
-            SettingsSerObj.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(rotationCurveColor);
 
-            SettingsSerObj.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawRotationSpeedField() {
-            SettingsSerObj.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(
                 rotationSlerpSpeed,
@@ -516,7 +516,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
 
-            SettingsSerObj.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawSkinSelectionControl() {
@@ -1088,21 +1088,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void InitializeSerializedProperties() {
-            rotationSlerpSpeed = SettingsSerObj.FindProperty("rotationSlerpSpeed");
+            rotationSlerpSpeed = SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
-                SettingsSerObj.FindProperty("enableControlsInPlayMode");
+                SettingsSerializedObject.FindProperty("enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settingsAsset");
-            gizmoCurveColor = SettingsSerObj.FindProperty("gizmoCurveColor");
+            gizmoCurveColor = SettingsSerializedObject.FindProperty("gizmoCurveColor");
             rotationCurveColor =
-                SettingsSerObj.FindProperty("rotationCurveColor");
-            shortJumpValue = SettingsSerObj.FindProperty("shortJumpValue");
-            longJumpValue = SettingsSerObj.FindProperty("longJumpValue");
+                SettingsSerializedObject.FindProperty("rotationCurveColor");
+            shortJumpValue = SettingsSerializedObject.FindProperty("shortJumpValue");
+            longJumpValue = SettingsSerializedObject.FindProperty("longJumpValue");
             subscribedToEvents =
                 serializedObject.FindProperty("subscribedToEvents");
             animationTime =
@@ -1112,7 +1112,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void InstantiateCompositeClasses() {
-            SettingsSerObj = new SerializedObject(Script.SettingsAsset);
+            SettingsSerializedObject = new SerializedObject(Script.SettingsAsset);
         }
         private void ValidateInspectorSettings() {
             if (Script.SettingsAsset == null) return;

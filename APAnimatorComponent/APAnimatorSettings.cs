@@ -291,8 +291,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             + "Reload scene and if it does not help, restore extension "
             + "folder content to its default state.";
 
+        [SerializeField]
+        private float forwardPointOffsetMinValue = 0.001f;
+
         #endregion
         #region ANIMATOR PROPERTIES
+        public float ForwardPointOffsetMinValue {
+            get { return forwardPointOffsetMinValue; }
+            set { forwardPointOffsetMinValue = value; }
+        }
+
         public string AssetsNotLoadedInfoText {
             get { return assetsNotLoadedInfoText; }
             set { assetsNotLoadedInfoText = value; }

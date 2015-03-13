@@ -298,7 +298,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Undo.RecordObject(PathData, "Reset rotatio path.");
 
                 // Reset curves to its default state.
-                // todo Create direct property for PathData.
                 PathData.ResetRotationPath();
 
                 SceneView.RepaintAll();
@@ -415,8 +414,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Forward Point Offset",
                     ""), 
                 Settings.ForwardPointOffset,
-                // TODO Create field in SettingsAsset asset.
-                0.001f,
+                Settings.ForwardPointOffsetMinValue,
                 1);
         }
 

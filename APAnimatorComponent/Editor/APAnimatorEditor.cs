@@ -8,10 +8,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     [CustomEditor(typeof (APAnimator))]
     public sealed class APAnimatorEditor : Editor {
-        
         #region PROPERTIES
-
-        private SerializedObject SettingsSerializedObject { get; set; }
 
         /// <summary>
         ///     Reference to target script.
@@ -19,24 +16,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private APAnimator Script { get; set; }
 
         private bool SerializedPropertiesInitialized { get; set; }
-        #endregion 
+
+        private SerializedObject SettingsSerializedObject { get; set; }
+
+        #endregion
 
         #region SERIALIZED PROPERTIES
 
         private SerializedProperty advancedSettingsFoldout;
         private SerializedProperty animatedGO;
+        private SerializedProperty animationTime;
         private SerializedProperty enableControlsInPlayMode;
         private SerializedProperty gizmoCurveColor;
+        private SerializedProperty longJumpValue;
         private SerializedProperty pathData;
         private SerializedProperty rotationCurveColor;
         private SerializedProperty rotationSlerpSpeed;
-        private SerializedProperty skin;
-        private SerializedProperty targetGO;
         private SerializedProperty settings;
         private SerializedProperty shortJumpValue;
-        private SerializedProperty longJumpValue;
+        private SerializedProperty skin;
         private SerializedProperty subscribedToEvents;
-        private SerializedProperty animationTime;
+        private SerializedProperty targetGO;
+
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
@@ -113,7 +114,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawForwardPointOffsetSlider();
 
             DrawPositionSpeedSlider();
-            
+
             EditorGUIUtility.labelWidth = 208;
 
             DrawRotationSpeedField();
@@ -135,56 +136,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
-        }
-        private void OnEnable() {
-            // Get target script reference.
-            Script = (APAnimator) target;
-
-            // Return is required assets are not referenced.
-            if (!RequiredAssetsLoaded()) return;
-
-            InstantiateCompositeClasses();
-            InitializeSerializedProperties();
-
-            CopyIconsToGizmosFolder();
-            SceneTool.RememberCurrentTool();
-            FocusOnSceneView();
-        }
-        private void OnDisable() {
-            SceneTool.RestoreTool();
-        }
-
-        private void OnSceneGUI() {
-            // Return is required assets are not referenced.
-            if (!RequiredAssetsLoaded()) return;
-            // Return if path asset is not referenced.
-            if (Script.PathData == null) return;
-            // Return if serialized properties are not initialized.
-            if (!SerializedPropertiesInitialized) return;
-
-            HandleAnimatorEventsSubscription();
-
-            // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
-                FocusType.Passive));
-
-            HandleShortcuts();
-            HandleDrawingEaseHandles();
-            HandleDrawingTiltingHandles();
-            HandleDrawingEaseLabel();
-            HandleDrawingTiltLabel();
-            HandleDrawingUpdateAllModeLabel();
-            HandleDrawingPositionHandles();
-            HandleDrawingRotationHandle();
-            HandleDrawingAddButtons();
-            HandleDrawingRemoveButtons();
-
-            // Repaint inspector if any key was pressed.
-            // Inspector needs to be redrawn after option is changed
-            // with keyboard shortcut.
-            if (Event.current.type == EventType.keyUp) {
-                Repaint();
-            }
         }
 
         private void HandleAnimatorEventsSubscription() {
@@ -208,83 +159,62 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void OnDisable() {
+            SceneTool.RestoreTool();
+        }
+
+        private void OnEnable() {
+            // Get target script reference.
+            Script = (APAnimator) target;
+
+            // Return is required assets are not referenced.
+            if (!RequiredAssetsLoaded()) return;
+
+            InstantiateCompositeClasses();
+            InitializeSerializedProperties();
+
+            CopyIconsToGizmosFolder();
+            SceneTool.RememberCurrentTool();
+            FocusOnSceneView();
+        }
+
+        private void OnSceneGUI() {
+            // Return is required assets are not referenced.
+            if (!RequiredAssetsLoaded()) return;
+            // Return if path asset is not referenced.
+            if (Script.PathData == null) return;
+            // Return if serialized properties are not initialized.
+            if (!SerializedPropertiesInitialized) return;
+
+            HandleAnimatorEventsSubscription();
+
+            // Disable interaction with background scene elements.
+            HandleUtility.AddDefaultControl(
+                GUIUtility.GetControlID(
+                    FocusType.Passive));
+
+            HandleShortcuts();
+            HandleDrawingEaseHandles();
+            HandleDrawingTiltingHandles();
+            HandleDrawingEaseLabel();
+            HandleDrawingTiltLabel();
+            HandleDrawingUpdateAllModeLabel();
+            HandleDrawingPositionHandles();
+            HandleDrawingRotationHandle();
+            HandleDrawingAddButtons();
+            HandleDrawingRemoveButtons();
+
+            // Repaint inspector if any key was pressed.
+            // Inspector needs to be redrawn after option is changed
+            // with keyboard shortcut.
+            if (Event.current.type == EventType.keyUp) {
+                Repaint();
+            }
+        }
+
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
-        private void DrawInfoLabel(string text) {
-            EditorGUILayout.HelpBox(text, MessageType.Error);
-        }
-
-        private void DrawShortcutsHelpBox() {
-            EditorGUILayout.HelpBox(
-                "Check SettingsAsset Asset for shortcuts.",
-                MessageType.Info);
-        }
-
-        private void DrawSettingsAssetField() {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                settings,
-                new GUIContent(
-                    "SettingsAsset Asset",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.SettingsAsset.UpdateAllMode) return;
-
-            // Get global node positions.
-            var globalNodePositions = Script.GetGlobalNodePositions();
-
-            // Create array with text to be displayed for each node.
-            var labelText = new string[globalNodePositions.Length];
-            for (int i = 0; i < globalNodePositions.Length; i++) {
-                labelText[i] = Script.SettingsAsset.UpdateAllLabelText;
-            }
-
-            SceneHandles.DrawUpdateAllLabels(
-                globalNodePositions,
-                labelText,
-                Script.SettingsAsset.UpdateAllLabelOffsetX,
-                Script.SettingsAsset.UpdateAllLabelOffsetY,
-                Script.SettingsAsset.DefaultLabelWidth,
-                Script.SettingsAsset.DefaultLabelHeight,
-                Script.Skin.GetStyle("UpdateAllLabel"));
-        }
-
-
-        private void DrawAdvancedSettingsFoldout() {
-            serializedObject.Update();
-
-            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
-                advancedSettingsFoldout.boolValue,
-                new GUIContent(
-                    "Advanced SettingsAsset",
-                    ""));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawResetRotationPathButton() {
-            if (GUILayout.Button(
-                            new GUIContent(
-                                "Reset Rotation",
-                                ""))) {
-
-                if (Script.PathData == null) return;
-
-                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetRotationPath();
-                Script.PathData.SmoothRotationPathTangents();
-
-                SceneView.RepaintAll();
-            }
-        }
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
@@ -299,25 +229,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void DrawLongJumpValueField() {
-            SettingsSerializedObject.Update();
+        private void DrawAdvancedSettingsFoldout() {
+            serializedObject.Update();
 
-            EditorGUILayout.PropertyField(longJumpValue);
+            advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
+                advancedSettingsFoldout.boolValue,
+                new GUIContent(
+                    "Advanced SettingsAsset",
+                    ""));
 
-            SettingsSerializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawShortJumpValueField() {
-            SettingsSerializedObject.Update();
-
-            EditorGUILayout.PropertyField(shortJumpValue);
-
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawAnimatedGOField() {
             serializedObject.Update();
-            
+
             EditorGUILayout.PropertyField(
                 animatedGO,
                 new GUIContent(
@@ -325,25 +251,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Object to animate."));
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawAnimationTimeValue() {
-            Undo.RecordObject(target, "Update AnimationTime");
-
-            float newTimeRatio;
-
-            newTimeRatio = DrawAnimationTimeSlider();
-
-            // Update AnimationTime only when value was changed.
-            if (Math.Abs(newTimeRatio - Script.AnimationTime)
-                > GlobalConstants.FloatPrecision) {
-
-                serializedObject.Update();
-
-                animationTime.floatValue = newTimeRatio;
-
-                serializedObject.ApplyModifiedProperties();
-            }
         }
 
         private float DrawAnimationTimeFloatField() {
@@ -368,12 +275,56 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return newTimeRatio;
         }
 
+        private void DrawAnimationTimeValue() {
+            Undo.RecordObject(target, "Update AnimationTime");
+
+            float newTimeRatio;
+
+            newTimeRatio = DrawAnimationTimeSlider();
+
+            // Update AnimationTime only when value was changed.
+            if (Math.Abs(newTimeRatio - Script.AnimationTime)
+                > GlobalConstants.FloatPrecision) {
+
+                serializedObject.Update();
+
+                animationTime.floatValue = newTimeRatio;
+
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+
         private void DrawAutoPlayControl() {
             Script.SettingsAsset.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
                     ""),
                 Script.SettingsAsset.AutoPlay);
+        }
+
+        private void DrawCreatePathAssetButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "New Path",
+                    ""))) {
+
+                // Display save panel.
+                var savePath = EditorUtility.SaveFilePanelInProject(
+                    "Save Path Asset File",
+                    Script.SettingsAsset.PathDataAssetDefaultName,
+                    "asset",
+                    "");
+
+                // Path cannot be empty.
+                if (savePath == "") return;
+
+                // Create new path asset.
+                var asset = ScriptableObjectUtility.CreateAsset<PathData>(
+                    fullPath: savePath);
+
+                // Assign asset as the current path.
+                Script.PathData = asset;
+            }
         }
 
         private void DrawEnableControlsInPlayModeToggle() {
@@ -390,7 +341,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
                     "Forward Point Offset",
-                    ""), 
+                    ""),
                 Script.SettingsAsset.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 1);
@@ -409,11 +360,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawHandleModeDropdown() {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
-            Script.SettingsAsset.HandleMode = (HandleMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Handle Mode",
-                    ""),
-                Script.SettingsAsset.HandleMode);
+            Script.SettingsAsset.HandleMode =
+                (HandleMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Handle Mode",
+                        ""),
+                    Script.SettingsAsset.HandleMode);
+        }
+
+        private void DrawInfoLabel(string text) {
+            EditorGUILayout.HelpBox(text, MessageType.Error);
+        }
+
+        private void DrawLongJumpValueField() {
+            SettingsSerializedObject.Update();
+
+            EditorGUILayout.PropertyField(longJumpValue);
+
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPathDataAssetField() {
@@ -479,12 +443,110 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 1);
         }
 
+        private void DrawResetEaseButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Ease",
+                    ""))) {
+
+                if (Script.PathData == null) return;
+
+                Undo.RecordObject(Script.PathData, "Reset ease curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetEaseCurve();
+
+                SceneView.RepaintAll();
+            }
+        }
+
+        private void DrawResetPathInspectorButton() {
+            // Draw button.
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Path",
+                    "Reset path to default."))) {
+
+                if (Script.PathData == null) return;
+
+                // Allow undo this operation.
+                Undo.RecordObject(Script.PathData, "Change path");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetPath();
+
+                // Reset inspector options.
+                Script.AnimationTime = 0;
+                Script.SettingsAsset.HandleMode = HandleMode.None;
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
+            }
+        }
+
+        private void DrawResetRotationPathButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Rotation",
+                    ""))) {
+
+                if (Script.PathData == null) return;
+
+                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetRotationPath();
+                Script.PathData.SmoothRotationPathTangents();
+
+                SceneView.RepaintAll();
+            }
+        }
+
+        private void DrawResetTiltingButton() {
+            if (GUILayout.Button(
+                new GUIContent(
+                    "Reset Tilting",
+                    ""))) {
+
+                if (Script.PathData == null) return;
+
+                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetTiltingCurve();
+
+                SceneView.RepaintAll();
+            }
+        }
+
         private void DrawRotationCurveColorPicker() {
             SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(rotationCurveColor);
 
             SettingsSerializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawRotationModeDropdown(Action callback) {
+            Undo.RecordObject(Script.SettingsAsset, "Change rotation mode.");
+
+            // Remember current RotationMode.
+            var prevRotationMode = Script.SettingsAsset.RotationMode;
+
+            // Draw RotationMode dropdown.
+            Script.SettingsAsset.RotationMode =
+                (RotationMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Rotation Mode",
+                        ""),
+                    Script.SettingsAsset.RotationMode);
+
+            // If value changed, update animated GO in the scene.
+            if (Script.SettingsAsset.RotationMode != prevRotationMode) {
+                callback();
+            }
         }
 
         private void DrawRotationSpeedField() {
@@ -496,6 +558,32 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Rotation Slerp Speed",
                     "Controls how much time (in seconds) it'll take the " +
                     "animated object to finish rotation towards followed target."));
+
+            SettingsSerializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawSettingsAssetField() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                settings,
+                new GUIContent(
+                    "SettingsAsset Asset",
+                    ""));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawShortcutsHelpBox() {
+            EditorGUILayout.HelpBox(
+                "Check SettingsAsset Asset for shortcuts.",
+                MessageType.Info);
+        }
+
+        private void DrawShortJumpValueField() {
+            SettingsSerializedObject.Update();
+
+            EditorGUILayout.PropertyField(shortJumpValue);
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }
@@ -542,6 +630,56 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleTargetGOFieldChange(prevTargetGO);
         }
 
+        private void DrawUpdateAllToggle() {
+            Script.SettingsAsset.UpdateAllMode = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Update All Values",
+                    ""),
+                Script.SettingsAsset.UpdateAllMode);
+        }
+
+        private void DrawWrapModeDropdown() {
+            Script.SettingsAsset.WrapMode =
+                (AnimatorWrapMode) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Wrap Mode",
+                        ""),
+                    Script.SettingsAsset.WrapMode);
+        }
+
+        private void HandleDrawingUpdateAllModeLabel() {
+            if (!Script.SettingsAsset.UpdateAllMode) return;
+
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            var labelText = new string[globalNodePositions.Length];
+            for (var i = 0; i < globalNodePositions.Length; i++) {
+                labelText[i] = Script.SettingsAsset.UpdateAllLabelText;
+            }
+
+            SceneHandles.DrawUpdateAllLabels(
+                globalNodePositions,
+                labelText,
+                Script.SettingsAsset.UpdateAllLabelOffsetX,
+                Script.SettingsAsset.UpdateAllLabelOffsetY,
+                Script.SettingsAsset.DefaultLabelWidth,
+                Script.SettingsAsset.DefaultLabelHeight,
+                Script.Skin.GetStyle("UpdateAllLabel"));
+        }
+
+        /// <summary>
+        ///     Called on rotation mode change.
+        /// </summary>
+        private void HandleRotationModeChange() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
+            Script.SettingsAsset.HandleMode = HandleMode.None;
+        }
+
         private void HandleTargetGOFieldChange(Transform prevTargetGO) {
             // Handle adding reference.
             if (Script.TargetGO != prevTargetGO
@@ -568,139 +706,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void DrawUpdateAllToggle() {
-            Script.SettingsAsset.UpdateAllMode = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Update All Values",
-                    ""),
-                Script.SettingsAsset.UpdateAllMode);
-        }
-
-        private void DrawWrapModeDropdown() {
-            Script.SettingsAsset.WrapMode = (AnimatorWrapMode) EditorGUILayout.EnumPopup(
-                new GUIContent(
-                    "Wrap Mode",
-                    ""),
-                Script.SettingsAsset.WrapMode);
-        }
-
-        private void DrawResetTiltingButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Tilting",
-                    ""))) {
-
-                if (Script.PathData == null) return;
-
-                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetTiltingCurve();
-
-                SceneView.RepaintAll();
-            }
-        }
-
-        private void DrawResetEaseButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Ease",
-                    ""))) {
-
-                if (Script.PathData == null) return;
-
-                Undo.RecordObject(Script.PathData, "Reset ease curve.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetEaseCurve();
-
-                SceneView.RepaintAll();
-            }
-        }
-
-        private void DrawCreatePathAssetButton() {
-            if (GUILayout.Button(
-                new GUIContent(
-                    "New Path",
-                    ""))) {
-
-                // Display save panel.
-                var savePath = EditorUtility.SaveFilePanelInProject(
-                    "Save Path Asset File",
-                    Script.SettingsAsset.PathDataAssetDefaultName,
-                    "asset",
-                    "");
-
-                // Path cannot be empty.
-                if (savePath == "") return;
-
-                // Create new path asset.
-                var asset = ScriptableObjectUtility.CreateAsset<PathData>(
-                    fullPath: savePath);
-
-                // Assign asset as the current path.
-                Script.PathData = asset;
-            }
-        }
-
-        private void DrawResetPathInspectorButton() {
-            // Draw button.
-            if (GUILayout.Button(
-                new GUIContent(
-                    "Reset Path",
-                    "Reset path to default."))) {
-
-                if (Script.PathData == null) return;
-
-                // Allow undo this operation.
-                Undo.RecordObject(Script.PathData, "Change path");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetPath();
-
-                // Reset inspector options.
-                Script.AnimationTime = 0;
-                Script.SettingsAsset.HandleMode = HandleMode.None;
-
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UpdateAnimation",
-                    null);
-            }
-        }
-
-        private void DrawRotationModeDropdown(Action callback) {
-            Undo.RecordObject(Script.SettingsAsset, "Change rotation mode.");
-
-            // Remember current RotationMode.
-            var prevRotationMode = Script.SettingsAsset.RotationMode;
-
-            // Draw RotationMode dropdown.
-            Script.SettingsAsset.RotationMode =
-                (RotationMode) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Rotation Mode",
-                        ""),
-                    Script.SettingsAsset.RotationMode);
-
-            // If value changed, update animated GO in the scene.
-            if (Script.SettingsAsset.RotationMode != prevRotationMode) {
-                callback();
-            }
-        }
-
-        /// <summary>
-        /// Called on rotation mode change.
-        /// </summary>
-        private void HandleRotationModeChange() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "UpdateAnimation",
-                null);
-            Script.SettingsAsset.HandleMode = HandleMode.None;
-        }
-
         #endregion
+
         #region DRAWING HANDLERS
 
         private void HandleDrawingAddButtons() {
@@ -733,7 +740,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
 
-            var arcValueMultiplier = Script.SettingsAsset.ArcValueMultiplierNumerator
+            var arcValueMultiplier =
+                Script.SettingsAsset.ArcValueMultiplierNumerator
                 / Script.SettingsAsset.MaxAnimationSpeed;
 
             SceneHandles.DrawEaseHandles(
@@ -811,7 +819,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var index = Array.FindIndex(
                 nodeTimestamps,
                 x => Math.Abs(x - currentAnimationTime)
-                    < GlobalConstants.FloatPrecision);
+                     < GlobalConstants.FloatPrecision);
 
             if (index < 0) return;
 
@@ -853,7 +861,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SceneHandles.DrawArcHandleLabels(
                 nodeGlobalPositions,
                 Script.SettingsAsset.EaseValueLabelOffsetX,
-                Script.SettingsAsset.EaseValueLabelOffsetY, 
+                Script.SettingsAsset.EaseValueLabelOffsetY,
                 Script.SettingsAsset.DefaultLabelWidth,
                 Script.SettingsAsset.DefaultLabelHeight,
                 ConvertTiltToDegrees,
@@ -889,6 +897,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 null);
         }
 
+        private void DrawEaseHandlesCallbackHandler(
+            int keyIndex,
+            float newValue) {
+            Undo.RecordObject(Script.PathData, "Ease curve changed.");
+
+            if (Script.SettingsAsset.UpdateAllMode) {
+                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
+                var delta = newValue - oldValue;
+                Script.PathData.UpdateEaseCurveValues(delta);
+            }
+            else {
+                Script.PathData.UpdateEaseValue(keyIndex, newValue);
+            }
+        }
+
         private void DrawPositionHandlesCallbackHandler(
             int movedNodeIndex,
             Vector3 newGlobalPos) {
@@ -899,7 +922,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var newNodeLocalPosition =
                 Script.ThisTransform.InverseTransformPoint(newGlobalPos);
 
-            Script.PathData.MoveNodeToPosition(movedNodeIndex, newNodeLocalPosition);
+            Script.PathData.MoveNodeToPosition(
+                movedNodeIndex,
+                newNodeLocalPosition);
             Script.PathData.DistributeTimestamps();
 
             HandleSmoothTangentMode();
@@ -927,21 +952,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script,
                 "UpdateAnimation",
                 null);
-        }
-
-        private void DrawEaseHandlesCallbackHandler(
-            int keyIndex,
-            float newValue) {
-            Undo.RecordObject(Script.PathData, "Ease curve changed.");
-
-            if (Script.SettingsAsset.UpdateAllMode) {
-                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
-                var delta = newValue - oldValue;
-                Script.PathData.UpdateEaseCurveValues(delta);
-            }
-            else {
-                Script.PathData.UpdateEaseValue(keyIndex, newValue);
-            }
         }
 
         private void DrawRotationHandlesCallbackHandler(
@@ -1003,29 +1013,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
+
         #region METHODS
-        private bool RequiredAssetsLoaded() {
-            var assetsLoaded = (bool)Utilities.InvokeMethodWithReflection(
-                Script,
-                "RequiredAssetsLoaded",
-                null);
 
-            return assetsLoaded;
-        }
-
-        private void HandleUndoEvent() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                // Repaint inspector.
-                Repaint();
-                // Update path with new tangent setting.
-                HandleTangentModeChange();
-                // Update animated object.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UpdateAnimation",
-                    null);
+        private static void FocusOnSceneView() {
+            if (SceneView.sceneViews.Count > 0) {
+                var sceneView = (SceneView) SceneView.sceneViews[0];
+                sceneView.Focus();
             }
         }
 
@@ -1045,17 +1039,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.PathData.CreateNodeAtTime(newKeyTime);
         }
 
-        private static void FocusOnSceneView() {
-            if (SceneView.sceneViews.Count > 0) {
-                var sceneView = (SceneView)SceneView.sceneViews[0];
-                sceneView.Focus();
-            }
-        }
-
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
-            var arcValueMultiplier = Script.SettingsAsset.ArcValueMultiplierNumerator
+            var arcValueMultiplier =
+                Script.SettingsAsset.ArcValueMultiplierNumerator
                 / Script.SettingsAsset.MaxAnimationSpeed;
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
@@ -1066,47 +1054,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var rotationValue = Script.PathData.GetNodeTiltValue(nodeIndex);
 
             return rotationValue;
-        }
-
-        private void InitializeSerializedProperties() {
-            rotationSlerpSpeed = SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
-            animatedGO = serializedObject.FindProperty("animatedGO");
-            targetGO = serializedObject.FindProperty("targetGO");
-            advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
-            pathData = serializedObject.FindProperty("pathData");
-            enableControlsInPlayMode =
-                SettingsSerializedObject.FindProperty("enableControlsInPlayMode");
-            skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("settingsAsset");
-            gizmoCurveColor = SettingsSerializedObject.FindProperty("gizmoCurveColor");
-            rotationCurveColor =
-                SettingsSerializedObject.FindProperty("rotationCurveColor");
-            shortJumpValue = SettingsSerializedObject.FindProperty("shortJumpValue");
-            longJumpValue = SettingsSerializedObject.FindProperty("longJumpValue");
-            subscribedToEvents =
-                serializedObject.FindProperty("subscribedToEvents");
-            animationTime =
-                serializedObject.FindProperty("animationTime");
-
-            SerializedPropertiesInitialized = true;
-        }
-
-        private void InstantiateCompositeClasses() {
-            SettingsSerializedObject = new SerializedObject(Script.SettingsAsset);
-        }
-        private void ValidateInspectorSettings() {
-            if (Script.SettingsAsset == null) return;
-
-            // Limit RotationSpeed value.
-            if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
-                Script.SettingsAsset.RotationSlerpSpeed = 0;
-            }
-
-            // Limit ExmportSamplingFrequency value.
-            if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
-                Script.SettingsAsset.ExportSamplingFrequency = 1;
-            }
         }
 
         private void CopyIconsToGizmosFolder() {
@@ -1130,9 +1077,115 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
             }
         }
+
+        private void HandleUndoEvent() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                // Repaint inspector.
+                Repaint();
+                // Update path with new tangent setting.
+                HandleTangentModeChange();
+                // Update animated object.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
+            }
+        }
+
+        private void InitializeSerializedProperties() {
+            rotationSlerpSpeed =
+                SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
+            animatedGO = serializedObject.FindProperty("animatedGO");
+            targetGO = serializedObject.FindProperty("targetGO");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+            pathData = serializedObject.FindProperty("pathData");
+            enableControlsInPlayMode =
+                SettingsSerializedObject.FindProperty(
+                    "enableControlsInPlayMode");
+            skin = serializedObject.FindProperty("skin");
+            settings = serializedObject.FindProperty("settingsAsset");
+            gizmoCurveColor =
+                SettingsSerializedObject.FindProperty("gizmoCurveColor");
+            rotationCurveColor =
+                SettingsSerializedObject.FindProperty("rotationCurveColor");
+            shortJumpValue =
+                SettingsSerializedObject.FindProperty("shortJumpValue");
+            longJumpValue =
+                SettingsSerializedObject.FindProperty("longJumpValue");
+            subscribedToEvents =
+                serializedObject.FindProperty("subscribedToEvents");
+            animationTime =
+                serializedObject.FindProperty("animationTime");
+
+            SerializedPropertiesInitialized = true;
+        }
+
+        private void InstantiateCompositeClasses() {
+            SettingsSerializedObject = new SerializedObject(
+                Script.SettingsAsset);
+        }
+
+        private bool RequiredAssetsLoaded() {
+            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
+                Script,
+                "RequiredAssetsLoaded",
+                null);
+
+            return assetsLoaded;
+        }
+
+        private void ValidateInspectorSettings() {
+            if (Script.SettingsAsset == null) return;
+
+            // Limit RotationSpeed value.
+            if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
+                Script.SettingsAsset.RotationSlerpSpeed = 0;
+            }
+
+            // Limit ExmportSamplingFrequency value.
+            if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
+                Script.SettingsAsset.ExportSamplingFrequency = 1;
+            }
+        }
+
         #endregion PRIVATE METHODS
 
         #region SHORTCUTS
+
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
+
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < animationTime.floatValue) {
+                    return pathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = Script.PathData.GetPathTimestamps();
+
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > animationTime.floatValue)) {
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
+        }
+
+        private void HandlePlayPause() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandlePlayPause",
+                null);
+        }
 
         private void HandleShortcuts() {
             serializedObject.Update();
@@ -1155,16 +1208,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             Utilities.HandleUnmodShortcut(
                 Script.SettingsAsset.UpdateAllKey,
-                () => Script.SettingsAsset.UpdateAllMode = !Script.SettingsAsset.UpdateAllMode);
+                () =>
+                    Script.SettingsAsset.UpdateAllMode =
+                        !Script.SettingsAsset.UpdateAllMode);
 
             // Short jump forward.
             Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
-                        animationTime.floatValue + Script.SettingsAsset.ShortJumpValue;
+                        animationTime.floatValue
+                        + Script.SettingsAsset.ShortJumpValue;
 
                     animationTime.floatValue =
-                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                        (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 Script.SettingsAsset.ShortJumpForwardKey,
                 Event.current.alt);
@@ -1173,10 +1229,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Utilities.HandleModShortcut(
                 () => {
                     var newAnimationTimeRatio =
-                        animationTime.floatValue - Script.SettingsAsset.ShortJumpValue;
+                        animationTime.floatValue
+                        - Script.SettingsAsset.ShortJumpValue;
 
                     animationTime.floatValue =
-                        (float)(Math.Round(newAnimationTimeRatio, 3));
+                        (float) (Math.Round(newAnimationTimeRatio, 3));
                 },
                 Script.SettingsAsset.ShortJumpBackwardKey,
                 Event.current.alt);
@@ -1227,51 +1284,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandlePlayPause() {
-            Utilities.InvokeMethodWithReflection(
-               Script,
-               "HandlePlayPause",
-               null);
-        }
-
-        private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < animationTime.floatValue) {
-                    return pathTimestamps[i];
-                }
-            }
-
-            // Return timestamp of the last node.
-            return 0;
-        }
-
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > animationTime.floatValue)) {
-                return timestamp;
-            }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
         #endregion
+
         #region EXPORTER
 
         public void DrawExportControls() {
             EditorGUILayout.BeginHorizontal();
 
-            Script.SettingsAsset.ExportSamplingFrequency = EditorGUILayout.IntField(
-                new GUIContent(
-                    "Export Sampling",
-                    "Number of points to export for 1 m of the curve. " +
-                    "If set to 0, it'll export only keys defined in " +
-                    "the curve."),
-                Script.SettingsAsset.ExportSamplingFrequency);
+            Script.SettingsAsset.ExportSamplingFrequency =
+                EditorGUILayout.IntField(
+                    new GUIContent(
+                        "Export Sampling",
+                        "Number of points to export for 1 m of the curve. " +
+                        "If set to 0, it'll export only keys defined in " +
+                        "the curve."),
+                    Script.SettingsAsset.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {
                 ExportNodes(

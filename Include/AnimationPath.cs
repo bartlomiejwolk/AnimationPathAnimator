@@ -210,14 +210,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public void SetWrapMode (AnimatorWrapMode wrapMode) {
-            WrapMode unityWrapMode = (WrapMode) wrapMode;
-
-            foreach (var curve in curves) {
-                curve.postWrapMode = unityWrapMode;
-            }
-        }
-
         /// <summary>
         /// Extract 3d points from path.
         /// </summary>

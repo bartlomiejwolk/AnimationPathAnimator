@@ -152,79 +152,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { updateAllKey = value; }
         }
         #endregion
-        #region GIZMO FIELDS
-
-        [Header("Gizmos")]
-        [SerializeField]
-        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
-
-        [SerializeField]
-        private string forwardPointIcon = "target_22x22-pink";
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
-        [SerializeField]
-        private int gizmoCurveSamplingFrequency = 40;
-
-        [SerializeField]
-        private Color rotationCurveColor = Color.gray;
-        [SerializeField]
-        private int rotationCurveSampling = 40;
-
-        [SerializeField]
-        private string rotationPointGizmoIcon = "rec_16x16";
-
-        [SerializeField]
-        private string targetGizmoIcon = "target_22x22-blue";
-        #endregion
-        #region GIZMO PROPERTIES
-        public string CurrentRotationPointGizmoIcon {
-            get { return currentRotationPointGizmoIcon; }
-            set { currentRotationPointGizmoIcon = value; }
-        }
-        public string ForwardPointIcon {
-            get { return forwardPointIcon; }
-            set { forwardPointIcon = value; }
-        }
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
-        }
-
-        public int GizmoCurveSamplingFrequency {
-            get { return gizmoCurveSamplingFrequency; }
-            set { gizmoCurveSamplingFrequency = value; }
-        }
-
-        public Color RotationCurveColor {
-            get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
-        }
-
-        public int RotationCurveSampling {
-            get { return rotationCurveSampling; }
-            set { rotationCurveSampling = value; }
-        }
-
-        public string RotationPointGizmoIcon {
-            get { return rotationPointGizmoIcon; }
-            set { rotationPointGizmoIcon = value; }
-        }
-
-        public string TargetGizmoIcon {
-            get { return targetGizmoIcon; }
-            set { targetGizmoIcon = value; }
-        }
-
-        #endregion
         #region ANIMATOR FIELDS
         [Header("Animator")]
         [SerializeField]
@@ -293,6 +220,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
         #endregion
+
         #region ANIMATOR PROPERTIES
         public string AssetsNotLoadedInfoText {
             get { return assetsNotLoadedInfoText; }
@@ -386,6 +314,80 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return wrapMode; }
             set { wrapMode = value; }
         }
+        #endregion
+
+        #region GIZMO FIELDS
+
+        [Header("Gizmos")]
+        [SerializeField]
+        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
+
+        [SerializeField]
+        private string forwardPointIcon = "target_22x22-pink";
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
+        [SerializeField]
+        private int gizmoCurveSamplingFrequency = 40;
+
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+        [SerializeField]
+        private int rotationCurveSampling = 40;
+
+        [SerializeField]
+        private string rotationPointGizmoIcon = "rec_16x16";
+
+        [SerializeField]
+        private string targetGizmoIcon = "target_22x22-blue";
+        #endregion
+        #region GIZMO PROPERTIES
+        public string CurrentRotationPointGizmoIcon {
+            get { return currentRotationPointGizmoIcon; }
+            set { currentRotationPointGizmoIcon = value; }
+        }
+        public string ForwardPointIcon {
+            get { return forwardPointIcon; }
+            set { forwardPointIcon = value; }
+        }
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
+        public int GizmoCurveSamplingFrequency {
+            get { return gizmoCurveSamplingFrequency; }
+            set { gizmoCurveSamplingFrequency = value; }
+        }
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
+        }
+
+        public int RotationCurveSampling {
+            get { return rotationCurveSampling; }
+            set { rotationCurveSampling = value; }
+        }
+
+        public string RotationPointGizmoIcon {
+            get { return rotationPointGizmoIcon; }
+            set { rotationPointGizmoIcon = value; }
+        }
+
+        public string TargetGizmoIcon {
+            get { return targetGizmoIcon; }
+            set { targetGizmoIcon = value; }
+        }
+
         #endregion
         #region HANDLES FIELDS
 

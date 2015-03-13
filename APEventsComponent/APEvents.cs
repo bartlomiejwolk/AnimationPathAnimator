@@ -81,6 +81,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             // Get method metadata.
             var methodInfo = nodeEvent.SourceCo.GetType()
                     .GetMethod(nodeEvent.SourceMethodName);
+            // Return if method info couldn't be loaded.
+            if (methodInfo == null) return;
             // Get method parameters.
             var methodParams = methodInfo.GetParameters();
 

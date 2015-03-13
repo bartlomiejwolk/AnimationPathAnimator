@@ -877,7 +877,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Settings.EaseValueLabelOffsetY, 
                 Settings.DefaultLabelWidth,
                 Settings.DefaultLabelHeight,
-                PathData.ConvertTiltToDegrees,
+                ConvertTiltToDegrees,
                 Script.Skin.GetStyle("TiltValueLabel"));
         }
 
@@ -1064,7 +1064,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Move to PathData.
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = PathData.GetNodeEaseValue(nodeIndex);
@@ -1073,6 +1072,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
             return easeValueInDegrees;
+        }
+
+        private float ConvertTiltToDegrees(int nodeIndex) {
+            var rotationValue = PathData.GetNodeTiltValue(nodeIndex);
+
+            return rotationValue;
         }
 
         private void InitializeSerializedProperties() {

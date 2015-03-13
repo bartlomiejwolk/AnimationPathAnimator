@@ -3,7 +3,6 @@ using System.Collections;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
-    // TODO Rename to messageSettings.
     public sealed class APAnimatorSettings : ScriptableObject {
 
         #region SHORTCUT FIELDS
@@ -391,10 +390,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region HANDLES FIELDS
 
         [SerializeField]
-        // TODO Rename.
-        private int addButtonH = 25;
+        private int addButtonOffsetH = 25;
         [SerializeField]
-        private int addButtonV = 10;
+        private int addButtonOffsetV = 10;
         [SerializeField]
         private float arcHandleRadius = 0.6f;
 
@@ -436,14 +434,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int arcValueMultiplierNumerator = 360;
         #endregion
         #region HANDLES PROPERTIES
-        public int AddButtonH {
-            get { return addButtonH; }
-            set { addButtonH = value; }
+        public int AddButtonOffsetH {
+            get { return addButtonOffsetH; }
+            set { addButtonOffsetH = value; }
         }
 
-        public int AddButtonV {
-            get { return addButtonV; }
-            set { addButtonV = value; }
+        public int AddButtonOffsetV {
+            get { return addButtonOffsetV; }
+            set { addButtonOffsetV = value; }
         }
 
         public float ArcHandleRadius {

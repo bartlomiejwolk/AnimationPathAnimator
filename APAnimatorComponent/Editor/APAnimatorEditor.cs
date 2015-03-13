@@ -738,8 +738,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Draw add node buttons.
             SceneHandles.DrawAddNodeButtons(
                 nodePositions,
-                Settings.AddButtonH,
-                Settings.AddButtonV,
+                Settings.AddButtonOffsetH,
+                Settings.AddButtonOffsetV,
                 callbackHandler,
                 addButtonStyle);
         }
@@ -1250,7 +1250,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(
-                // TODO Replace APAnimator.messageSettings with messageSettings.
                 Settings.JumpToPreviousNodeKey,
                 () => animationTime.floatValue =
                     GetNearestBackwardNodeTimestamp());
@@ -1325,7 +1324,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (GUILayout.Button("Export")) {
                 ExportNodes(
-                    // TODO Create PathData property.
                     PathData,
                     Script.ThisTransform,
                     Settings.ExportSamplingFrequency);

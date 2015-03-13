@@ -117,7 +117,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             GUILayout.Label("Player Options", EditorStyles.boldLabel);
 
-            DrawRotationModeDropdown();
+            DrawRotationModeDropdown(HandleRotationModeChange);
             DrawWrapModeDropdown();
 
             EditorGUILayout.Space();
@@ -693,7 +693,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void DrawRotationModeDropdown() {
+        private void DrawRotationModeDropdown(Action callback) {
             Undo.RecordObject(Settings, "Change rotation mode.");
 
             // Remember current RotationMode.
@@ -707,10 +707,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                         ""),
                     Settings.RotationMode);
 
-            // TODO Execute it as a callback.
             // If value changed, update animated GO in the scene.
             if (Settings.RotationMode != prevRotationMode) {
-                HandleRotationModeChange();
+                callback();
             }
         }
 

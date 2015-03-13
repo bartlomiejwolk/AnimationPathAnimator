@@ -152,16 +152,18 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;
             // Return if path data does not exist.
-            if (Script.ApAnimator.PathData == null) return;
+            if (Script.Animator.PathData == null) return;
 
             var methodNames = (string[])Utilities.InvokeMethodWithReflection(
                 Script,
                 "GetMethodNames",
                 null);
+
             var nodePositions = (Vector3[])Utilities.InvokeMethodWithReflection(
                 Script,
                 "GetNodePositions",
                 new object[] {methodNames.Length});
+
             var style = Script.Skin.GetStyle("MethodNameLabel");
 
             SceneHandles.DrawNodeLabels(
@@ -176,7 +178,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         private void InitializeSerializedProperties() {
             apAnimator =
-                serializedObject.FindProperty("apAnimator");
+                serializedObject.FindProperty("animator");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             skin =

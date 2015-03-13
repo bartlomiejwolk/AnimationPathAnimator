@@ -12,7 +12,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private GUISkin skin;
 
         [SerializeField]
-        private APAnimator apAnimator;
+        private APAnimator animator;
 
         [SerializeField]
         private APEventsSettings settings;
@@ -28,10 +28,9 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #endregion
 
         #region PROPERTIES
-        // TODO Rename to Animator.
-        public APAnimator ApAnimator {
-            get { return apAnimator; }
-            set { apAnimator = value; }
+        public APAnimator Animator {
+            get { return animator; }
+            set { animator = value; }
         }
 
         public GUISkin Skin {
@@ -52,17 +51,17 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #region UNITY MESSAGES
 
         private void OnDisable() {
-            ApAnimator.NodeReached -= Animator_NodeReached;
+            Animator.NodeReached -= Animator_NodeReached;
         }
 
         private void OnEnable() {
-            if (ApAnimator == null) return; 
+            if (Animator == null) return; 
 
-            ApAnimator.NodeReached += Animator_NodeReached;
+            Animator.NodeReached += Animator_NodeReached;
         }
 
         private void Reset() {
-            apAnimator = GetComponent<APAnimator>();
+            animator = GetComponent<APAnimator>();
             settings =
                 Resources.Load<APEventsSettings>("DefaultAPEventsSettings");
             skin = Resources.Load("DefaultAPEventsSkin") as GUISkin;
@@ -106,7 +105,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         private Vector3[] GetNodePositions(int nodesNo) {
             var nodePositions =
-                ApAnimator.GetGlobalNodePositions(nodesNo);
+                Animator.GetGlobalNodePositions(nodesNo);
 
             return nodePositions;
         }

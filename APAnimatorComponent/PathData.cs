@@ -765,9 +765,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         /// <param name="nodesNo">Number of nodes to return. If not specified, all nodes will be returned.</param>
         /// <returns></returns>
-        public Vector3[] GetNodePositions(int nodesNo = 0) {
+        public Vector3[] GetNodePositions(int nodesNo = -1) {
             // Specify number of nodes to return.
-            var returnNodesNo = nodesNo > 0 ? nodesNo : NodesNo;
+            var returnNodesNo = nodesNo > -1 ? nodesNo : NodesNo;
             // Create empty result array.
             Vector3[] result = new Vector3[returnNodesNo];
 

@@ -713,7 +713,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return false;
         }
 
-        public Vector3[] GetGlobalNodePositions(int nodesNo = 0) {
+        public Vector3[] GetGlobalNodePositions(int nodesNo = -1) {
             var nodePositions = PathData.GetNodePositions(nodesNo);
             Utilities.ConvertToGlobalCoordinates(ref nodePositions, ThisTransform);
 

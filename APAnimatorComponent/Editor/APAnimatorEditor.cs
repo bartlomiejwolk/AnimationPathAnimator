@@ -21,6 +21,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private APAnimator Script { get; set; }
 
         private APAnimatorSettings Settings { get; set; }
+        private PathData PathData { get; set; }
 
         private bool SerializedPropertiesInitialized { get; set; }
         #endregion 
@@ -61,7 +62,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             HandleUndo();
 
-            // TODO Rename to DrawPathDataAssetField().
             DrawPathDataAssetField();
 
             EditorGUILayout.BeginHorizontal();
@@ -162,6 +162,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Initialize helper property.
             Settings = Script.SettingsAsset;
+            PathData = Script.PathData;
 
             InstantiateCompositeClasses();
             InitializeSerializedProperties();
@@ -188,7 +189,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;
             // Return if path asset is not referenced.
-            if (Script.PathData == null) return;
+            if (PathData == null) return;
             // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
 
@@ -292,13 +293,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                                 "Reset Rotation",
                                 ""))) {
 
-                if (Script.PathData == null) return;
+                if (PathData == null) return;
 
-                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
+                Undo.RecordObject(PathData, "Reset rotatio path.");
 
                 // Reset curves to its default state.
                 // todo Create direct property for PathData.
-                Script.PathData.ResetRotationPath();
+                PathData.ResetRotationPath();
 
                 SceneView.RepaintAll();
             }
@@ -620,12 +621,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Reset Tilting",
                     ""))) {
 
-                if (Script.PathData == null) return;
+                if (PathData == null) return;
 
-                Undo.RecordObject(Script.PathData, "Reset tilting curve.");
+                Undo.RecordObject(PathData, "Reset tilting curve.");
 
                 // Reset curves to its default state.
-                Script.PathData.ResetTiltingCurve();
+                PathData.ResetTiltingCurve();
 
                 SceneView.RepaintAll();
             }
@@ -637,12 +638,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Reset Ease",
                     ""))) {
 
-                if (Script.PathData == null) return;
+                if (PathData == null) return;
 
-                Undo.RecordObject(Script.PathData, "Reset ease curve.");
+                Undo.RecordObject(PathData, "Reset ease curve.");
 
                 // Reset curves to its default state.
-                Script.PathData.ResetEaseCurve();
+                PathData.ResetEaseCurve();
 
                 SceneView.RepaintAll();
             }
@@ -670,7 +671,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     fullPath: savePath);
 
                 // Assign asset as the current path.
-                Script.PathData = asset;
+                PathData = asset;
             }
         }
 
@@ -680,13 +681,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Reset Path",
                     "Reset path to default."))) {
 
-                if (Script.PathData == null) return;
+                if (PathData == null) return;
 
                 // Allow undo this operation.
-                Undo.RecordObject(Script.PathData, "Change path");
+                Undo.RecordObject(PathData, "Change path");
 
                 // Reset curves to its default state.
-                Script.PathData.ResetPath();
+                PathData.ResetPath();
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -760,7 +761,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script.GetGlobalNodePositions();
 
             // Get ease values.
-            var easeCurveValues = Script.PathData.GetEaseCurveValues();
+            var easeCurveValues = PathData.GetEaseCurveValues();
 
             // TODO Use property.
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
@@ -833,10 +834,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
-                Script.PathData.GetRotationAtTime(currentAnimationTime);
+                PathData.GetRotationAtTime(currentAnimationTime);
             var rotationPointGlobalPosition =
                 Script.ThisTransform.TransformPoint(rotationPointPosition);
-            var nodeTimestamps = Script.PathData.GetPathTimestamps();
+            var nodeTimestamps = PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
             // timestamp.
@@ -865,7 +866,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script.GetGlobalNodePositions();
 
             // Get tilting curve values.
-            var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
+            var tiltingCurveValues = PathData.GetTiltingCurveValues();
 
             SceneHandles.DrawTiltingHandles(
                 nodePositions,
@@ -898,20 +899,20 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Change path");
+            Undo.RecordObject(PathData, "Change path");
 
             // Add a new node.
             AddNodeBetween(nodeIndex);
 
-            Script.PathData.DistributeTimestamps();
+            PathData.DistributeTimestamps();
 
             // In Smooth mode mooth node tangents.
             if (Settings.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
+                PathData.SmoothAllNodeTangents();
             }
             // In Linear mode set node tangents to linear.
             else if (Settings.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                PathData.SetNodesLinear();
             }
 
             // Update animated object.
@@ -925,14 +926,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             int movedNodeIndex,
             Vector3 newGlobalPos) {
 
-            Undo.RecordObject(Script.PathData, "Change path");
+            Undo.RecordObject(PathData, "Change path");
 
             // Calculate node new local position.
             var newNodeLocalPosition =
                 Script.ThisTransform.InverseTransformPoint(newGlobalPos);
 
-            Script.PathData.MoveNodeToPosition(movedNodeIndex, newNodeLocalPosition);
-            Script.PathData.DistributeTimestamps();
+            PathData.MoveNodeToPosition(movedNodeIndex, newNodeLocalPosition);
+            PathData.DistributeTimestamps();
 
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
@@ -940,18 +941,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void DrawRemoveNodeButtonsCallbackHandles(
             int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Change path");
+            Undo.RecordObject(PathData, "Change path");
 
-            Script.PathData.RemoveNode(nodeIndex);
-            Script.PathData.DistributeTimestamps();
+            PathData.RemoveNode(nodeIndex);
+            PathData.DistributeTimestamps();
 
             // In Smooth mode mooth node tangents.
             if (Settings.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
+                PathData.SmoothAllNodeTangents();
             }
             // In Linear mode set node tangents to linear.
             else if (Settings.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                PathData.SetNodesLinear();
             }
 
             // Update animated object.
@@ -964,27 +965,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawEaseHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
-            Undo.RecordObject(Script.PathData, "Ease curve changed.");
+            Undo.RecordObject(PathData, "Ease curve changed.");
 
             if (Settings.UpdateAllMode) {
-                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
+                var oldValue = PathData.GetEaseValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
-                Script.PathData.UpdateEaseValues(delta);
+                PathData.UpdateEaseValues(delta);
             }
             else {
-                Script.PathData.UpdateEaseValue(keyIndex, newValue);
+                PathData.UpdateEaseValue(keyIndex, newValue);
             }
         }
 
         private void DrawRotationHandlesCallbackHandler(
             Vector3 newPosition) {
 
-            Undo.RecordObject(Script.PathData, "Rotation path changed.");
+            Undo.RecordObject(PathData, "Rotation path changed.");
 
             var newLocalPos =
                 Script.ThisTransform.InverseTransformPoint(newPosition);
 
-            Script.PathData.ChangeRotationAtTimestamp(
+            PathData.ChangeRotationAtTimestamp(
                 Script.AnimationTime,
                 newLocalPos);
         }
@@ -992,15 +993,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawTiltingHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
-            Undo.RecordObject(Script.PathData, "Tilting curve changed.");
+            Undo.RecordObject(PathData, "Tilting curve changed.");
 
             if (Settings.UpdateAllMode) {
-                var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
+                var oldValue = PathData.GetTiltingValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
-                Script.PathData.UpdateTiltingValues(delta);
+                PathData.UpdateTiltingValues(delta);
             }
             else {
-                Script.PathData.UpdateNodeTilting(keyIndex, newValue);
+                PathData.UpdateNodeTilting(keyIndex, newValue);
             }
         }
 
@@ -1010,25 +1011,25 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleLinearTangentMode() {
             if (Settings.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                PathData.SetNodesLinear();
             }
         }
 
         private void HandleSmoothTangentMode() {
             if (Settings.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
+                PathData.SmoothAllNodeTangents();
             }
         }
 
         private void HandleTangentModeChange() {
-            if (Script.PathData == null) return;
+            if (PathData == null) return;
 
             // Update path node tangents.
             if (Settings.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAllNodeTangents();
+                PathData.SmoothAllNodeTangents();
             }
             else if (Settings.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                PathData.SetNodesLinear();
             }
 
             SceneView.RepaintAll();
@@ -1055,9 +1056,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node on which was taken action.
-            var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
+            var currentKeyTime = PathData.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
-            var nextKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex + 1);
+            var nextKeyTime = PathData.GetNodeTimestamp(nodeIndex + 1);
 
             // Calculate timestamps for new key. It'll be placed exactly
             // between the two nodes.
@@ -1066,7 +1067,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 ((nextKeyTime - currentKeyTime) / 2);
 
             // Add node to the animation curves.
-            Script.PathData.CreateNodeAtTime(newKeyTime);
+            PathData.CreateNodeAtTime(newKeyTime);
         }
 
         private static void FocusOnSceneView() {
@@ -1079,7 +1080,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         // TODO Move to PathData.
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
-            var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
+            var easeValue = PathData.GetNodeEaseValue(nodeIndex);
             var arcValueMultiplier = 360 / maxAnimationSpeed.floatValue;
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
@@ -1096,7 +1097,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         //        && Event.current.keyCode == ModKey) {
         // TODO Move to PathData.
         private float ConvertTiltToDegrees(int nodeIndex) {
-            var rotationValue = Script.PathData.GetNodeTiltValue(nodeIndex);
+            var rotationValue = PathData.GetNodeTiltValue(nodeIndex);
 
             return rotationValue;
         }
@@ -1310,7 +1311,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
+            var pathTimestamps = PathData.GetPathTimestamps();
 
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
                 if (pathTimestamps[i] < animationTime.floatValue) {
@@ -1323,7 +1324,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
+            var pathTimestamps = PathData.GetPathTimestamps();
 
             foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > animationTime.floatValue)) {
@@ -1351,7 +1352,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (GUILayout.Button("Export")) {
                 ExportNodes(
                     // TODO Create PathData property.
-                    Script.PathData,
+                    PathData,
                     Script.ThisTransform,
                     Settings.ExportSamplingFrequency);
             }

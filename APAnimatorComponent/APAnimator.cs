@@ -801,7 +801,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Return if current animation time is the same as any node
                 // time.
                 if (Math.Abs(nodeTimestamps[i] - AnimationTime) <
-                    SettingsAsset.FloatPrecision) {
+                    GlobalConstants.FloatPrecision) {
                     continue;
                 }
 
@@ -855,7 +855,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return if current animation time is the same as any node time.
             if (nodeTimestamps.Any(nodeTimestamp =>
                     Math.Abs(nodeTimestamp - AnimationTime)
-                    < SettingsAsset.FloatPrecision)) {
+                    < GlobalConstants.FloatPrecision)) {
                 return;
             }
 

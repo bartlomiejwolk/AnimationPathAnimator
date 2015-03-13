@@ -866,6 +866,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
+        #region HELPER METHODS
+
+        public float ConvertTiltToDegrees(int nodeIndex) {
+            var rotationValue = GetNodeTiltValue(nodeIndex);
+
+            return rotationValue;
+        }
+
+        #endregion
     }
 
 }

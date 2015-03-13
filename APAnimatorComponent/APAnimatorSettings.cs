@@ -157,9 +157,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
 
         [SerializeField]
-        private float floatPrecision = 0.001f;
-
-        [SerializeField]
         private string forwardPointIcon = "target_22x22-pink";
 
         /// <summary>
@@ -186,11 +183,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public string CurrentRotationPointGizmoIcon {
             get { return currentRotationPointGizmoIcon; }
             set { currentRotationPointGizmoIcon = value; }
-        }
-
-        public float FloatPrecision {
-            get { return floatPrecision; }
-            set { floatPrecision = value; }
         }
         public string ForwardPointIcon {
             get { return forwardPointIcon; }

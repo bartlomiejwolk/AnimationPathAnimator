@@ -1,56 +1,40 @@
+using System;
 using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
-    [System.Serializable]
+    [Serializable]
     public sealed class NodeEventSlot {
 
-        /// <summary>
-        /// Selected source game object.
-        /// </summary>
         [SerializeField]
-        private GameObject sourceGO;
+        private string methodArg;
 
         /// <summary>
-        /// Selected source component.
+        ///     How many rows should be displayed in the inspector.
+        /// </summary>
+        [SerializeField]
+        private int rows = 1;
+
+        /// <summary>
+        ///     Selected source component.
         /// </summary>
         [SerializeField]
         private Component sourceCo;
-
-        //[SerializeField]
-        //private Component[] sourceComponents;
-
-        /// <summary>
-        /// Names of components existing on source game object.
-        /// </summary>
-        //[SerializeField]
-        //private string[] sourceCoNames;
-
-        [SerializeField]
-        private string sourceMethodName;
-
-#if UNITY_EDITOR
-        [SerializeField]
-        private int sourceMethodIndex;
 
         [SerializeField]
         private int sourceComponentIndex;
 
         /// <summary>
-        /// How many rows should be displayed in the inspector.
+        ///     Selected source game object.
         /// </summary>
         [SerializeField]
-        private int rows = 1;
-#endif
-
-        /// <summary>
-        /// Index of the source component in the source component names list.
-        /// </summary>
-        //[SerializeField]
-        //private int sourceCoIndex;
+        private GameObject sourceGO;
 
         [SerializeField]
-        private string methodArg;
+        private int sourceMethodIndex;
+
+        [SerializeField]
+        private string sourceMethodName;
 
         public string MethodArg {
             get { return methodArg; }
@@ -58,27 +42,23 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         }
 
         /// <summary>
-        /// Selected source component.
+        ///     Selected source component.
         /// </summary>
         public Component SourceCo {
             get { return sourceCo; }
         }
 
         /// <summary>
-        /// Names of components existing on source game object.
-        /// </summary>
-//[SerializeField]
-//private string[] sourceCoNames;
-        public string SourceMethodName {
-            get { return sourceMethodName; }
-        }
-
-        /// <summary>
-        /// Selected source game object.
+        ///     Selected source game object.
         /// </summary>
         public GameObject SourceGO {
             get { return sourceGO; }
         }
+
+        public string SourceMethodName {
+            get { return sourceMethodName; }
+        }
+
     }
 
 }

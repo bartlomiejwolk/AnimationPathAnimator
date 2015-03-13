@@ -296,18 +296,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
+                DrawSettingsAssetField();
+                DrawSkinSelectionControl();
+
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
 
-                //EditorGUILayout.Space();
-
                 DrawShortJumpValueField();
                 DrawLongJumpValueField();
-
-                //EditorGUILayout.Space();
-
-                DrawSettingsAssetField();
-                DrawSkinSelectionControl();
             }
         }
 

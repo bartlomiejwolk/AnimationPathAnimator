@@ -531,22 +531,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SmoothCurve(EaseCurve);
         }
 
-        // TODO Merge this and UpdateTiltingValues.
-        public void UpdateEaseValues(float delta) {
-            for (var i = 0; i < EaseCurve.length; i++) {
+        private void UpdateCurveValues(AnimationCurve curve, float delta) {
+            for (var i = 0; i < curve.length; i++) {
                 // Copy key.
-                var keyCopy = EaseCurve[i];
+                var keyCopy = curve[i];
                 // Update key value.
                 keyCopy.value += delta;
-
                 // Remove old key.
-                EaseCurve.RemoveKey(i);
-
+                curve.RemoveKey(i);
                 // Add key.
-                EaseCurve.AddKey(keyCopy);
-
+                curve.AddKey(keyCopy);
                 // Smooth all tangents.
-                SmoothCurve(EaseCurve);
+                SmoothCurve(curve);
             }
         }
 
@@ -654,26 +650,36 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public void UpdateTiltingValues(float delta) {
-            for (var i = 0; i < TiltingCurve.length; i++) {
-                // Copy key.
-                var keyCopy = TiltingCurve[i];
-                // Update key value.
-                keyCopy.value += delta;
+        public void UpdateEaseCurveValues(float delta) {
+            UpdateCurveValues(easeCurve, delta);
+        }
 
-                // Remove old key.
-                TiltingCurve.RemoveKey(i);
+        public void UpdateTiltingCurveValues(float delta) {
+            UpdateCurveValues(TiltingCurve, delta);
 
-                // Add key.
-                TiltingCurve.AddKey(keyCopy);
-
-                // Smooth all tangents.
-                SmoothCurve(TiltingCurve);
-            }
-
-            // TODO Rename to OnNodeTiltingChange().
             OnNodeTiltChanged();
         }
+
+        //public void UpdateTiltingValues(float delta) {
+        //    for (var i = 0; i < TiltingCurve.length; i++) {
+        //        // Copy key.
+        //        var keyCopy = TiltingCurve[i];
+        //        // Update key value.
+        //        keyCopy.value += delta;
+
+        //        // Remove old key.
+        //        TiltingCurve.RemoveKey(i);
+
+        //        // Add key.
+        //        TiltingCurve.AddKey(keyCopy);
+
+        //        // Smooth all tangents.
+        //        SmoothCurve(TiltingCurve);
+        //    }
+
+        //    // TODO Rename to OnNodeTiltingChange().
+        //    OnNodeTiltChanged();
+        //}
 
         private void EaseCurveExtremeNodes(AnimationCurve curve) {
             // Ease first node.

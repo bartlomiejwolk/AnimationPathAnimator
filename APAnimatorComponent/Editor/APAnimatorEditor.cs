@@ -958,7 +958,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.UpdateAllMode) {
                 var oldValue = PathData.GetEaseValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
-                PathData.UpdateEaseValues(delta);
+                PathData.UpdateEaseCurveValues(delta);
             }
             else {
                 PathData.UpdateEaseValue(keyIndex, newValue);
@@ -986,7 +986,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Settings.UpdateAllMode) {
                 var oldValue = PathData.GetTiltingValueAtIndex(keyIndex);
                 var delta = newValue - oldValue;
-                PathData.UpdateTiltingValues(delta);
+                PathData.UpdateTiltingCurveValues(delta);
             }
             else {
                 PathData.UpdateNodeTilting(keyIndex, newValue);

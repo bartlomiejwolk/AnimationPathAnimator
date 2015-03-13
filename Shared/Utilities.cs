@@ -7,10 +7,118 @@ namespace ATP.AnimationPathAnimator {
 
     public static class Utilities {
 
+        public static void ConvertToGlobalCoordinates(
+            ref Vector3[] points,
+            Transform transform) {
+
+            // Convert to global.
+            for (var i = 0; i < points.Length; i++) {
+                points[i] = transform.TransformPoint(points[i]);
+            }
+        }
+
+        public static void ConvertToGlobalCoordinates(
+            ref List<Vector3> points,
+            Transform transform) {
+
+            for (var i = 0; i < points.Count; i++) {
+                points[i] = transform.TransformPoint(points[i]);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
+        /// <remarks>http://stackoverflow.com/questions/3874627/floating-point-comparison-functions-for-c-sharp</remarks>
+        public static bool FloatsEqual(float a, float b, float epsilon) {
+            var absA = Math.Abs(a);
+            var absB = Math.Abs(b);
+            var diff = Math.Abs(a - b);
+
+            if (a == b) {
+                // shortcut, handles infinities
+                return true;
+            }
+            if (a == 0 || b == 0) {
+                // a or b is zero or both are extremely close to it
+                // relative error is less meaningful here
+                return diff < (epsilon * float.MinValue);
+            }
+            // use relative error
+            return diff / (absA + absB) < epsilon;
+        }
+
+        public static void HandleModShortcut(
+            Action callback,
+            KeyCode key,
+            bool modKeyPressed) {
+
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == key
+                && modKeyPressed) {
+
+                callback();
+            }
+        }
+
+        public static void HandleUnmodShortcut(
+            //KeyCode key,
+            KeyCode key,
+            Action callback) {
+            //bool modKeyPressed) {
+
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode == key
+                //&& !modKeyPressed) {
+                && Event.current.modifiers == EventModifiers.None) {
+
+                callback();
+            }
+        }
+
+        public static object InvokeMethodWithReflection(
+            object target,
+            string methodName,
+            object[] parameters) {
+
+            object result;
+
+            // Get method metadata.
+            var methodInfo = target.GetType().GetMethod(
+                methodName,
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+            result = methodInfo.Invoke(target, parameters);
+
+            return result;
+        }
+
+        public static bool QuaternionsEqual(
+            Quaternion a,
+            Quaternion b,
+            float threshold = 0.01f) {
+
+            var angle = Quaternion.Angle(a, b);
+
+            if (angle < threshold) return true;
+
+            return false;
+        }
+
+        public static void RemoveAllCurveKeys(AnimationCurve curve) {
+            var keysToRemoveNo = curve.length;
+            for (var i = 0; i < keysToRemoveNo; i++) {
+                curve.RemoveKey(0);
+            }
+        }
+
         /// <summary>
         /// </summary>
         /// <remarks>
-        /// http://forum.unity3d.com/threads/how-to-set-an-animation-curve-to-linear-through-scripting.151683/#post-1121021
+        ///     http://forum.unity3d.com/threads/how-to-set-an-animation-curve-to-linear-through-scripting.151683/#post-1121021
         /// </remarks>
         /// <param name="curve"></param>
         public static void SetCurveLinear(AnimationCurve curve) {
@@ -25,11 +133,13 @@ namespace ATP.AnimationPathAnimator {
                 var key = curve[i];
 
                 if (i == 0) {
-                    intangent = 0; inTangentSet = true;
+                    intangent = 0;
+                    inTangentSet = true;
                 }
 
                 if (i == curve.keys.Length - 1) {
-                    outtangent = 0; outTangentSet = true;
+                    outtangent = 0;
+                    outTangentSet = true;
                 }
 
                 if (!inTangentSet) {
@@ -59,59 +169,6 @@ namespace ATP.AnimationPathAnimator {
             }
         }
 
-        public static void RemoveAllCurveKeys(AnimationCurve curve) {
-            var keysToRemoveNo = curve.length;
-            for (var i = 0; i < keysToRemoveNo; i++) {
-                curve.RemoveKey(0);
-            }
-        }
-
-        public static void HandleUnmodShortcut(
-            //KeyCode key,
-            KeyCode key,
-            Action callback) {
-            //bool modKeyPressed) {
-            
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == key
-                //&& !modKeyPressed) {
-                && Event.current.modifiers == EventModifiers.None) {
-
-                callback();
-            }
-        }
-
-        public static void HandleModShortcut(
-            Action callback,
-            KeyCode key,
-            bool modKeyPressed) {
-
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == key
-                && modKeyPressed) {
-
-                callback();
-            }
-        }
-
-        public static void ConvertToGlobalCoordinates(
-            ref Vector3[] points,
-            Transform transform) {
-
-            // Convert to global.
-            for (int i = 0; i < points.Length; i++) {
-                points[i] = transform.TransformPoint(points[i]);
-            }
-        }
-
-        public static void ConvertToGlobalCoordinates(
-            ref List<Vector3> points,
-            Transform transform) {
-
-            for (int i = 0; i < points.Count; i++) {
-                points[i] = transform.TransformPoint(points[i]);
-            }
-        }
         public static bool V3Equal(
             Vector3 a,
             Vector3 b,
@@ -120,77 +177,6 @@ namespace ATP.AnimationPathAnimator {
             return Vector3.SqrMagnitude(a - b) < precision;
         }
 
-        public static object InvokeMethodWithReflection(
-            object target,
-            string methodName,
-            object[] parameters) {
-
-            object result;
-
-            // Get method metadata.
-            var methodInfo = target.GetType().GetMethod(
-                methodName,
-                BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (parameters != null) {
-                // Invoke with parameters.
-                result = methodInfo.Invoke(target, parameters);
-            }
-            else {
-                // Invoke without parameters.
-                result = methodInfo.Invoke(target, null);
-            }
-
-            return result;
-        }
-
-        public static bool QuaternionsEqual(
-            Quaternion a,
-            Quaternion b,
-            float threshold = 0.01f) {
-
-            var angle = Quaternion.Angle(a, b);
-
-            if (angle < threshold) return true;
-
-            return false;
-        }
-
-        //public static bool FloatsEqual(
-        //    float a,
-        //    float b,
-        //    float threshold = 0.0001f) {
-
-        //    if (Math.Abs(a - b) < threshold) {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="epsilon"></param>
-        /// <returns></returns>
-        /// <remarks>http://stackoverflow.com/questions/3874627/floating-point-comparison-functions-for-c-sharp</remarks>
-        public static bool FloatsEqual(float a, float b, float epsilon) {
-            float absA = Math.Abs(a);
-            float absB = Math.Abs(b);
-            float diff = Math.Abs(a - b);
-
-            if (a == b) { // shortcut, handles infinities
-                return true;
-            }
-            if (a == 0 || b == 0 || diff < float.MinValue) {
-                // a or b is zero or both are extremely close to it
-                // relative error is less meaningful here
-                return diff < (epsilon * float.MinValue);
-            }
-            // use relative error
-            return diff / (absA + absB) < epsilon;
-        }
     }
+
 }

@@ -76,7 +76,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public float AnimationTime {
             get { return animationTime; }
-            private set {
+            set {
                 animationTime = value;
 
                 if (Application.isPlaying && IsPlaying && !Pause) {

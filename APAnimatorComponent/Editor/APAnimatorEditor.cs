@@ -655,6 +655,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawResetPathInspectorButton() {
+            // Draw button.
             if (GUILayout.Button(
                 new GUIContent(
                     "Reset Path",
@@ -667,6 +668,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 // Reset curves to its default state.
                 PathData.ResetPath();
+
+                // Reset inspector options.
+                Script.AnimationTime = 0;
+                Settings.HandleMode = HandleMode.None;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,

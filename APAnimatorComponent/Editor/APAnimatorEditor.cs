@@ -13,7 +13,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region PROPERTIES
 
         private SerializedObject SettingsSerializedObject { get; set; }
-        //public SerializedObject PathExporterSerObj { get; private set; }
 
         /// <summary>
         ///     Reference to target script.
@@ -166,17 +165,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             HandleAnimatorEventsSubscription();
 
-            // Return is SettingsAsset asset is not assigned in the inspector.
-            //if (SettingsAsset == null) return;
-
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                 FocusType.Passive));
 
             HandleShortcuts();
-
-            //Script.UpdateWrapMode();
-
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
@@ -423,13 +416,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     ""),
                 Script.SettingsAsset.HandleMode);
         }
-
-        //private void DrawMaxAnimationSpeedField() {
-
-        //    serializedObject.Update();
-        //    EditorGUILayout.PropertyField(maxAnimationSpeed);
-        //    serializedObject.ApplyModifiedProperties();
-        //}
 
         private void DrawPathDataAssetField() {
             serializedObject.Update();
@@ -1113,57 +1099,20 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void ValidateInspectorSettings() {
             if (Script.SettingsAsset == null) return;
 
-            // Limit PositionLerpSpeed value.
-            //if (SettingsAsset.PositionLerpSpeed < 0) {
-            //    SettingsAsset.PositionLerpSpeed = 0;
-            //}
-            //else if (SettingsAsset.PositionLerpSpeed > 1) {
-            //    SettingsAsset.PositionLerpSpeed = 1;
-            //}
-
             // Limit RotationSpeed value.
             if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
                 Script.SettingsAsset.RotationSlerpSpeed = 0;
             }
 
-            // Limit ForwardPointOffset value.
-            //if (SettingsAsset.ForwardPointOffset < 0.001f) {
-            //    SettingsAsset.ForwardPointOffset = 0.001f;
-            //}
-            //else if (SettingsAsset.ForwardPointOffset > 1) {
-            //    SettingsAsset.ForwardPointOffset = 1;
-            //}
-
             // Limit ExmportSamplingFrequency value.
             if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
                 Script.SettingsAsset.ExportSamplingFrequency = 1;
             }
-            //else if (SettingsAsset.ExportSamplingFrequency > 100) {
-            //    SettingsAsset.ExportSamplingFrequency = 100;
-            //}
-
-            // Limit ShortJumpValue.
-            //if (SettingsAsset.ShortJumpValue < 0) {
-            //    SettingsAsset.ShortJumpValue = 0;
-            //}
-            //else if (SettingsAsset.ShortJumpValue > 1) {
-            //    SettingsAsset.ShortJumpValue = 1;
-            //}
-
-            // Limit LongJumpValue.
-            //if (SettingsAsset.LongJumpValue < 0) {
-            //    SettingsAsset.LongJumpValue = 0;
-            //}
-            //else if (SettingsAsset.LongJumpValue > 1) {
-            //    SettingsAsset.LongJumpValue = 1;
-            //}
         }
 
         private void CopyIconsToGizmosFolder() {
             // Path to Unity Gizmos folder.
             var gizmosDir = Application.dataPath + "/Gizmos";
-
-            // Path to ATP folder inside Gizmos.
 
             // Create Asset/Gizmos folder if not exists.
             if (!Directory.Exists(gizmosDir + "ATP")) {
@@ -1358,9 +1307,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Convert points to global coordinates.
             Utilities.ConvertToGlobalCoordinates(ref points, transform);
-            //for (int i = 0; i < points.Count; i++) {
-            //    points[i] = transform.TransformPoint(points[i]);
-            //}
 
             // Create parent GO.
             var exportedPath = new GameObject("exported_path");

@@ -84,6 +84,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
+                var iTemp = i;
                 DrawArcHandle(
                     easeCurveValues[i],
                     nodePositions[i],
@@ -94,7 +95,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     initialArcValue,
                     scaleHandleSize,
                     Color.red,
-                    value => callback(i, value));
+                    value => callback(iTemp, value));
             }
         }
 
@@ -244,8 +245,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
         /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
         /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
+        /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
+        /// <param name="arcHandleRadius"></param>
+        /// <param name="initialArcValue"></param>
         private static void DrawArcHandle(
             float value,
             Vector3 position,

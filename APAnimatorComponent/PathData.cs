@@ -106,8 +106,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion UNITY MESSAGES
-
         #region EVENT INVOCATORS
+        private void OnRotationPathReset() {
+            var handler = RotationPathReset;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
 
         private void OnNodePositionChanged() {
             var handler = NodePositionChanged;
@@ -862,12 +866,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
-
-        private void OnRotationPathReset() {
-            var handler = RotationPathReset;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
     }
 
 }

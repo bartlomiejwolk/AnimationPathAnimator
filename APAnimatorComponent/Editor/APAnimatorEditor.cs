@@ -1080,14 +1080,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return easeValueInDegrees;
         }
 
-        /// <summary>
-        ///     Checked if modifier key is pressed and remember it in a class
-        ///     field.
-        /// </summary>
-        //public void UpdateModifierKey() {
-        //    // Check if modifier key is currently pressed.
-        //    if (Event.current.type == EventType.keyDown
-        //        && Event.current.keyCode == ModKey) {
         // TODO Move to PathData.
         private float ConvertTiltToDegrees(int nodeIndex) {
             var rotationValue = PathData.GetNodeTiltValue(nodeIndex);

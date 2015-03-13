@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
-    [CustomPropertyDrawer(typeof(NodeEvent))]
+    [CustomPropertyDrawer(typeof(NodeEventSlot))]
     public sealed class NodeEventDrawer : PropertyDrawer {
 
         // How many rows (properties) will be displayed.
@@ -105,7 +105,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 sourceComponentIndex.intValue,
                 sourceCoNames);
 
-            // Update source component ref. in the NodeEvent property.
+            // Update source component ref. in the NodeEventSlot property.
             sourceCo.objectReferenceValue =
                 sourceComponents[sourceComponentIndex.intValue];
 
@@ -130,7 +130,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 sourceMethodIndex.intValue,
                 methodNames);
 
-            // Update method name in the NodeEvent property.
+            // Update method name in the NodeEventSlot property.
             sourceMethodName.stringValue =
                 methodNames[sourceMethodIndex.intValue];
 

@@ -184,7 +184,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 serializedObject.FindProperty("skin");
             settings =
                 serializedObject.FindProperty("settings");
-            nodeEvents = serializedObject.FindProperty("nodeEvents");
+            nodeEvents = serializedObject.FindProperty("nodeEventSlots");
             drawMethodNames =
                 serializedObject.FindProperty("drawMethodNames");
 

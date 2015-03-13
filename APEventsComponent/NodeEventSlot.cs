@@ -3,8 +3,7 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APEventsComponent {
 
     [System.Serializable]
-    // TODO Rename to NodeEventSlot.
-    public sealed class NodeEvent {
+    public sealed class NodeEventSlot {
 
         /// <summary>
         /// Selected source game object.

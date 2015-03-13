@@ -5,7 +5,6 @@ using UnityEditor;
 
 namespace ATP.AnimationPathAnimator {
 
-    // TODO Specify name for newly created asset.
     public static class AssetCreator {
 
         [MenuItem("Assets/Create/ATP/SimplePathAnimator/APAnimator Data")]

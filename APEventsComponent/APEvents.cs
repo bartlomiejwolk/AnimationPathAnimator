@@ -21,7 +21,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private bool advancedSettingsFoldout;
 
         [SerializeField]
-        private List<NodeEvent> nodeEvents;
+        private List<NodeEventSlot> nodeEventSlots;
 
         [SerializeField]
         private bool drawMethodNames = true;
@@ -42,8 +42,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             get { return settings; }
         }
 
-        private List<NodeEvent> NodeEvents {
-            get { return nodeEvents; }
+        private List<NodeEventSlot> NodeEventSlots {
+            get { return nodeEventSlots; }
         }
 
         #endregion
@@ -73,9 +73,9 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                     NodeReachedEventArgs arg) {
 
             // Return if there's no event slot created for current path node.
-            if (arg.NodeIndex > NodeEvents.Count - 1) return;
+            if (arg.NodeIndex > NodeEventSlots.Count - 1) return;
             // Get event slot.
-            var nodeEvent = NodeEvents[arg.NodeIndex];
+            var nodeEvent = NodeEventSlots[arg.NodeIndex];
             // Return if source GO was not specified in the event slot.
             if (nodeEvent.SourceGO == null) return;
             // Get method metadata.
@@ -110,10 +110,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             return nodePositions;
         }
         private string[] GetMethodNames() {
-            var methodNames = new string[NodeEvents.Count];
+            var methodNames = new string[NodeEventSlots.Count];
 
-            for (int i = 0; i < NodeEvents.Count; i++) {
-                methodNames[i] = NodeEvents[i].SourceMethodName;
+            for (int i = 0; i < NodeEventSlots.Count; i++) {
+                methodNames[i] = NodeEventSlots[i].SourceMethodName;
             }
 
             return methodNames;

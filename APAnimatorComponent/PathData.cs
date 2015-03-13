@@ -562,16 +562,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to UpdateTiltingValue.
-        public void UpdateNodeTilting(int keyIndex, float newValue) {
+        public void UpdateTiltingValue(int keyIndex, float newValue) {
             // Copy keyframe.
             var keyframeCopy = TiltingCurve.keys[keyIndex];
             // Update keyframe value.
             keyframeCopy.value = newValue;
 
-            // Replace old key with updated one.
+            // Remove old key.
             TiltingCurve.RemoveKey(keyIndex);
+            // Add updated key.
             TiltingCurve.AddKey(keyframeCopy);
+
             SmoothCurve(TiltingCurve);
             EaseCurveExtremeNodes(TiltingCurve);
 

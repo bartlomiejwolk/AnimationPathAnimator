@@ -54,7 +54,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 return;
             }
 
-            // Check if serialized properties were initialized.
+            // Check if serialized properties are initialized.
             if (!SerializedPropertiesInitialized) return;
 
             HandleUndoEvent();
@@ -76,7 +76,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawTargetGOField();
 
             EditorGUILayout.Space();
-
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
@@ -101,15 +100,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawAutoPlayControl();
             DrawEnableControlsInPlayModeToggle();
 
-            //EditorGUILayout.Space();
-
             DrawPlayerControls();
 
             EditorGUILayout.Space();
 
             EditorGUIUtility.labelWidth = 0;
 
-            //DrawShortcutsHelpBox();
             EditorGUILayout.Space();
 
             GUILayout.Label("Player Options", EditorStyles.boldLabel);
@@ -989,7 +985,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 PathData.UpdateTiltingCurveValues(delta);
             }
             else {
-                PathData.UpdateNodeTilting(keyIndex, newValue);
+                PathData.UpdateTiltingValue(keyIndex, newValue);
             }
         }
 

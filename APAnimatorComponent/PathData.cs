@@ -457,7 +457,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
-                AnimatedObjectPath.SmoothPointTangents(j);
+                path.SmoothPointTangents(j);
             }
         }
 

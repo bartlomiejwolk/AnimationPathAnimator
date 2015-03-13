@@ -274,6 +274,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 // Reset curves to its default state.
                 Script.PathData.ResetRotationPath();
+                Script.PathData.SmoothRotationPathTangents();
 
                 SceneView.RepaintAll();
             }

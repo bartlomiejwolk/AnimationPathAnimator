@@ -21,8 +21,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #region SERIALIZED PROPERTIES
         private SerializedProperty advancedSettingsFoldout;
 
-        // TODO Rename to animator.
-        private SerializedProperty apAnimator;
+        private SerializedProperty animator;
         private SerializedProperty drawMethodNames;
         private SerializedProperty nodeEvents;
         private SerializedProperty settings;
@@ -109,7 +108,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private void DrawAnimatorField() {
 
             EditorGUILayout.PropertyField(
-                apAnimator,
+                animator,
                 new GUIContent(
                     "APAnimator",
                     ""));
@@ -177,7 +176,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         }
 
         private void InitializeSerializedProperties() {
-            apAnimator =
+            animator =
                 serializedObject.FindProperty("animator");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");

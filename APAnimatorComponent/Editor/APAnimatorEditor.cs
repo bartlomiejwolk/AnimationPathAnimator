@@ -57,7 +57,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Check if serialized properties were initialized.
             if (!SerializedPropertiesInitialized) return;
 
-            HandleUndo();
+            HandleUndoEvent();
 
             DrawPathDataAssetField();
 
@@ -754,7 +754,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Get ease values.
             var easeCurveValues = PathData.GetEaseCurveValues();
 
-            // TODO Use property.
             var arcValueMultiplier = Settings.ArcValueMultiplierNumerator
                 / Settings.MaxAnimationSpeed;
 
@@ -783,9 +782,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 ConvertEaseToDegrees,
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
-
-        // TODO Use this method also for HandleDrawingMoveSinglePositionHandes().
-        // .. Use parameters for differences.
 
         /// <summary>
         ///     Handle drawing movement handles.
@@ -1029,8 +1025,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region METHODS
-        // TODO Rename to HandleUndoEvent().
-        private void HandleUndo() {
+        private void HandleUndoEvent() {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
 

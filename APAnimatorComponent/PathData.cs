@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
-    // TODO Use public API instead of using path and curve fields directly.
     public sealed class PathData : ScriptableObject, ISerializationCallbackReceiver {
         #region EVENTS
 
@@ -174,8 +173,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
             UpdateCurveTimestamps(EaseCurve);
             UpdateCurveTimestamps(TiltingCurve);
-            // TODO Rename to UpdateRotationPathTimestamps().
-            UpdateRotationCurvesTimestamps();
+            UpdateRotationPathTimestamps();
         }
 
         #endregion EVENT HANDLERS
@@ -579,7 +577,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             OnNodeTiltChanged();
         }
 
-        private void UpdateRotationCurvesTimestamps() {
+        private void UpdateRotationPathTimestamps() {
             // Get node timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get rotation point timestamps.

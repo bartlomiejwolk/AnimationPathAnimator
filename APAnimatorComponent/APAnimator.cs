@@ -78,9 +78,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set {
                 animationTime = value;
 
-                // Fire AnimationEnded event.
-                if (value >= 1) OnAnimationEnded();
-
                 if (Application.isPlaying && IsPlaying && !Pause) {
                 }
                 // Update animated GO in editor mode.
@@ -231,6 +228,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
         #region EVENT HANDLERS
+        void APAnimator_AnimationEnded(object sender, EventArgs e) {
+            AnimationTime = 0;
+        }
+
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             UpdateAnimation();
         }
@@ -372,6 +373,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (!positionChanged && !rotationChanged) {
                 AnimGOUpdateEnabled = false;
+                // Fire event.
+                OnAnimationEnded();
             }
         }
 
@@ -429,6 +432,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to HandlePlayPauseButton().
+        // TODO Move to Editor class.
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
@@ -691,10 +696,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             PathData.NodeTiltChanged += PathData_NodeTiltChanged;
             PathData.PathReset += PathData_PathReset;
             PathData.RotationPathReset += PathData_RotationPathReset;
+            AnimationEnded += APAnimator_AnimationEnded;
 
             SubscribedToEvents = true;
         }
-
         private void UnsubscribeFromEvents() {
             if (PathData == null) return;
 

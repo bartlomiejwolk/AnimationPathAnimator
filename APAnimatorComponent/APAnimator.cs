@@ -232,7 +232,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region EVENT HANDLERS
 
         private void APAnimator_AnimationEnded(object sender, EventArgs e) {
-            AnimationTime = 0;
+            //AnimationTime = 0;
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {

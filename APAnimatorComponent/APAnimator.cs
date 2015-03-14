@@ -15,6 +15,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region EVENTS
 
         public event EventHandler<NodeReachedEventArgs> NodeReached;
+        public event EventHandler AnimationEnded;
 
         #endregion
 
@@ -117,6 +118,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return pause; }
             set {
                 pause = value;
+
                 Debug.Log("Pause: " + pause);
 
                 // On unpause..
@@ -213,13 +215,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion UNITY MESSAGES
 
-        #region EVENT HANDLERS
+        #region EVENT INVOCATORS
+        private void OnAnimationFinished() {
+            var handler = AnimationEnded;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
 
-        private void APAnimator_NodeReached(NodeReachedEventArgs eventArgs) {
+        private void OnNodeReached(NodeReachedEventArgs eventArgs) {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
 
+        #endregion
+        #region EVENT HANDLERS
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             UpdateAnimation();
         }
@@ -258,14 +266,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Fire NodeReached event for first node.
             if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
-                APAnimator_NodeReached(args);
+                OnNodeReached(args);
             }
 
             StartCoroutine("HandleEaseTime");
+
+            Debug.Log("Animation started");
         }
 
         public void StopAnimation() {
             StopCoroutine("HandleEaseTime");
+
+            Debug.Log("Animation stopped");
 
             IsPlaying = false;
             Pause = false;
@@ -634,7 +646,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var args = new NodeReachedEventArgs(index, AnimationTime);
 
             // Fire event.
-            APAnimator_NodeReached(args);
+            OnNodeReached(args);
         }
 
         private void LoadRequiredResources() {

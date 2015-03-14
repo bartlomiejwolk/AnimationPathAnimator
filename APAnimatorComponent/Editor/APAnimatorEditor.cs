@@ -76,7 +76,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             DrawHandleModeDropdown();
-            DrawTangentModeDropdown();
             DrawUpdateAllToggle();
 
             EditorGUILayout.BeginHorizontal();
@@ -107,6 +106,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             GUILayout.Label("Player Options", EditorStyles.boldLabel);
 
             DrawRotationModeDropdown(HandleRotationModeChange);
+            DrawTangentModeDropdown();
             DrawWrapModeDropdown();
 
             EditorGUILayout.Space();

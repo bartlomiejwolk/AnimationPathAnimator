@@ -15,7 +15,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region EVENTS
 
         public event EventHandler<NodeReachedEventArgs> NodeReached;
+        /// <summary>
+        /// Animation time reached 1 and animated object stopped moving.
+        /// </summary>
         public event EventHandler AnimationEnded;
+
+        /// <summary>
+        /// Animation time is 0 and animation is playing.
+        /// </summary>
+        public event EventHandler AnimationStarted;
 
         #endregion
 
@@ -217,6 +225,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
+        private void OnAnimationStarted() {
+            var handler = AnimationStarted;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         private void OnAnimationEnded() {
             var handler = AnimationEnded;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -315,10 +328,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public void SetTangentSmooth() {
             SettingsAsset.TangentMode = TangentMode.Smooth;
+            PathData.SmoothAnimObjPathTangents();
         }
 
         public void SetTangentLinear() {
             SettingsAsset.TangentMode = TangentMode.Linear;
+            PathData.SetLinearAnimObjPathTangents();
+        }
+
+        public void SetWrapClamp() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+        }
+
+        public void SetWrapLoop() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
+        }
+
+        public void SetWrapPingPong() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
         }
 
         private void Animate() {
@@ -429,6 +456,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             while (true) {
                 // If animation is not paused..
                 if (!Pause) {
+                    HandleFireOnAnimationStartedEvent();
+
                     UpdateAnimationTime();
 
                     HandleClampWrapMode();
@@ -440,6 +469,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 yield return null;
             }
+        }
+
+        private void HandleFireOnAnimationStartedEvent() {
+            if (AnimationTime == 0) OnAnimationStarted();
         }
 
         private void HandleLoopWrapMode() {
@@ -632,6 +665,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        #region ANIMATION HANDLERS
+        #endregion
         #endregion
 
         #region HELPER METHODS

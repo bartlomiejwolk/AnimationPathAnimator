@@ -313,6 +313,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SettingsAsset.RotationMode = RotationMode.Target;
         }
 
+        public void SetTangentSmooth() {
+            SettingsAsset.TangentMode = TangentMode.Smooth;
+        }
+
+        public void SetTangentLinear() {
+            SettingsAsset.TangentMode = TangentMode.Linear;
+        }
+
         private void Animate() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();

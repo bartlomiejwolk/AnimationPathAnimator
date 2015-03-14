@@ -789,7 +789,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var rotationPointPosition =
                 Script.PathData.GetRotationAtTime(currentAnimationTime);
             var rotationPointGlobalPosition =
-                Script.ThisTransform.TransformPoint(rotationPointPosition);
+                Script.transform.TransformPoint(rotationPointPosition);
             var nodeTimestamps = Script.PathData.GetPathTimestamps();
 
             // Return if current animation time is not equal to any node
@@ -898,7 +898,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Calculate node new local position.
             var newNodeLocalPosition =
-                Script.ThisTransform.InverseTransformPoint(newGlobalPos);
+                Script.transform.InverseTransformPoint(newGlobalPos);
 
             Script.PathData.MoveNodeToPosition(
                 movedNodeIndex,
@@ -938,7 +938,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Undo.RecordObject(Script.PathData, "Rotation path changed.");
 
             var newLocalPos =
-                Script.ThisTransform.InverseTransformPoint(newPosition);
+                Script.transform.InverseTransformPoint(newPosition);
 
             Script.PathData.ChangeRotationAtTimestamp(
                 Script.AnimationTime,
@@ -1302,7 +1302,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (GUILayout.Button("Export")) {
                 ExportNodes(
                     Script.PathData,
-                    Script.ThisTransform,
+                    Script.transform,
                     Script.SettingsAsset.ExportSamplingFrequency);
             }
 

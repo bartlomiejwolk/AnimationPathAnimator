@@ -68,9 +68,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
-        [SerializeField]
-        private Transform thisTransform;
-
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -154,14 +151,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { targetGO = value; }
         }
 
-        /// <summary>
-        ///     Helper field.
-        /// </summary>
-        // TODO Make it private.
-        public Transform ThisTransform {
-            get { return thisTransform; }
-        }
-
         private bool Reverse { get; set; }
 
         /// <summary>
@@ -193,8 +182,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnEnable() {
-            thisTransform = GetComponent<Transform>();
-
             LoadRequiredResources();
             AssignMainCameraAsAnimatedGO();
             SubscribeToEvents();
@@ -205,8 +192,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void Reset() {
-            thisTransform = GetComponent<Transform>();
-
             LoadRequiredResources();
             AssignMainCameraAsAnimatedGO();
             ResetInspectorOptions();
@@ -364,7 +349,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 PathData.GetVectorAtTime(AnimationTime);
 
             var globalPosAtTime =
-                ThisTransform.TransformPoint(localPosAtTime);
+                transform.TransformPoint(localPosAtTime);
 
             // Update position.
             AnimatedGO.position = Vector3.Lerp(
@@ -443,7 +428,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var lookAtTarget =
                 PathData.GetRotationAtTime(AnimationTime);
             // Convert target position to global coordinates.
-            var lookAtTargetGlobal = ThisTransform.TransformPoint(lookAtTarget);
+            var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
 
             if (Application.isPlaying) {
                 RotateObjectWithSlerp(lookAtTargetGlobal);
@@ -482,7 +467,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 PathData.GetVectorAtTime(AnimationTime);
 
             var globalPositionAtTimestamp =
-                ThisTransform.TransformPoint(positionAtTimestamp);
+                transform.TransformPoint(positionAtTimestamp);
 
             // Update animatedGO position.
             AnimatedGO.position = globalPositionAtTimestamp;
@@ -506,7 +491,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =
-                        ThisTransform.TransformPoint(rotationPointPos);
+                        transform.TransformPoint(rotationPointPos);
 
                     // Update animatedGO rotation.
                     RotateObjectWithLookAt(rotationPointGlobalPos);
@@ -673,7 +658,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var nodePositions = PathData.GetNodePositions(nodesNo);
             Utilities.ConvertToGlobalCoordinates(
                 ref nodePositions,
-                ThisTransform);
+                transform);
 
             return nodePositions;
         }
@@ -697,7 +682,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private Vector3 GetGlobalForwardPoint() {
             var localForwardPoint = GetForwardPoint();
             var globalForwardPoint =
-                ThisTransform.TransformPoint(localForwardPoint);
+                transform.TransformPoint(localForwardPoint);
 
             return globalForwardPoint;
         }

@@ -78,6 +78,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set {
                 animationTime = value;
 
+                // Fire AnimationEnded event.
+                if (value >= 1) OnAnimationEnded();
+
                 if (Application.isPlaying && IsPlaying && !Pause) {
                 }
                 // Update animated GO in editor mode.
@@ -216,7 +219,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
-        private void OnAnimationFinished() {
+        private void OnAnimationEnded() {
             var handler = AnimationEnded;
             if (handler != null) handler(this, EventArgs.Empty);
         }

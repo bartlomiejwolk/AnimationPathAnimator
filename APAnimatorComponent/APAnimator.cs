@@ -148,6 +148,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Helper field.
         /// </summary>
+        // TODO Make it private.
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -286,6 +287,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             IsPlaying = false;
             Pause = false;
             AnimationTime = 0;
+        }
+
+        public void PlayPauseAnimation() {
+            Pause = !Pause;
+        }
+
+        public void PauseAnimation() {
+            Pause = true;
+        }
+
+        public void UnpauseAnimation() {
+            Pause = false;
         }
 
         private void Animate() {

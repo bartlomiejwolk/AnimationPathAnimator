@@ -301,6 +301,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Pause = false;
         }
 
+        public void SetRotationForward() {
+            SettingsAsset.RotationMode = RotationMode.Forward;
+        }
+
+        public void SetRotationCustom() {
+            SettingsAsset.RotationMode = RotationMode.Custom;
+        }
+
+        public void SetRotationTarget() {
+            SettingsAsset.RotationMode = RotationMode.Target;
+        }
+
         private void Animate() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();

@@ -14,16 +14,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
     public sealed class APAnimator : MonoBehaviour {
         #region EVENTS
 
-        public event EventHandler<NodeReachedEventArgs> NodeReached;
         /// <summary>
-        /// Animation time reached 1 and animated object stopped moving.
+        ///     Animation time reached 1 and animated object stopped moving.
         /// </summary>
         public event EventHandler AnimationEnded;
 
         /// <summary>
-        /// Animation time is 0 and animation is playing.
+        ///     Animation time is 0 and animation is playing.
         /// </summary>
         public event EventHandler AnimationStarted;
+
+        public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         #endregion
 
@@ -225,13 +226,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
-        private void OnAnimationStarted() {
-            var handler = AnimationStarted;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
 
         private void OnAnimationEnded() {
             var handler = AnimationEnded;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnAnimationStarted() {
+            var handler = AnimationStarted;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -241,8 +243,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
+
         #region EVENT HANDLERS
-        void APAnimator_AnimationEnded(object sender, EventArgs e) {
+
+        private void APAnimator_AnimationEnded(object sender, EventArgs e) {
             AnimationTime = 0;
         }
 
@@ -266,13 +270,54 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void PathData_RotationPointPositionChanged(
             object sender,
             EventArgs e) {
-
             UpdateAnimation();
         }
 
         #endregion
 
         #region ANIMATION
+
+        public void PauseAnimation() {
+            Pause = true;
+        }
+
+        public void PlayPauseAnimation() {
+            Pause = !Pause;
+        }
+
+        public void SetRotationCustom() {
+            SettingsAsset.RotationMode = RotationMode.Custom;
+        }
+
+        public void SetRotationForward() {
+            SettingsAsset.RotationMode = RotationMode.Forward;
+        }
+
+        public void SetRotationTarget() {
+            SettingsAsset.RotationMode = RotationMode.Target;
+        }
+
+        public void SetTangentLinear() {
+            SettingsAsset.TangentMode = TangentMode.Linear;
+            PathData.SetLinearAnimObjPathTangents();
+        }
+
+        public void SetTangentSmooth() {
+            SettingsAsset.TangentMode = TangentMode.Smooth;
+            PathData.SmoothAnimObjPathTangents();
+        }
+
+        public void SetWrapClamp() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+        }
+
+        public void SetWrapLoop() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
+        }
+
+        public void SetWrapPingPong() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
+        }
 
         public void StartAnimation() {
             // Check for path data asset.
@@ -302,50 +347,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimationTime = 0;
         }
 
-        public void PlayPauseAnimation() {
-            Pause = !Pause;
-        }
-
-        public void PauseAnimation() {
-            Pause = true;
-        }
-
         public void UnpauseAnimation() {
             Pause = false;
-        }
-
-        public void SetRotationForward() {
-            SettingsAsset.RotationMode = RotationMode.Forward;
-        }
-
-        public void SetRotationCustom() {
-            SettingsAsset.RotationMode = RotationMode.Custom;
-        }
-
-        public void SetRotationTarget() {
-            SettingsAsset.RotationMode = RotationMode.Target;
-        }
-
-        public void SetTangentSmooth() {
-            SettingsAsset.TangentMode = TangentMode.Smooth;
-            PathData.SmoothAnimObjPathTangents();
-        }
-
-        public void SetTangentLinear() {
-            SettingsAsset.TangentMode = TangentMode.Linear;
-            PathData.SetLinearAnimObjPathTangents();
-        }
-
-        public void SetWrapClamp() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
-        }
-
-        public void SetWrapLoop() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
-        }
-
-        public void SetWrapPingPong() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
         }
 
         private void Animate() {
@@ -368,7 +371,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 AnimatedGO.position,
                 globalPosAtTime,
                 SettingsAsset.PositionLerpSpeed);
-
         }
 
         private void AnimateAnimatedGORotation() {
@@ -377,7 +379,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Look at target.
             if (TargetGO != null
                 && SettingsAsset.RotationMode == RotationMode.Target) {
-
                 RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
@@ -435,119 +436,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 AnimGOUpdateEnabled = false;
                 // Fire event.
                 OnAnimationEnded();
-            }
-        }
-
-        private void HandleClampWrapMode() {
-            // Break from animation in Clamp wrap mode.
-            if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
-
-                AnimationTime = 1;
-                IsPlaying = false;
-            }
-        }
-
-        private IEnumerator HandleEaseTime() {
-            IsPlaying = true;
-            Pause = false;
-            AnimGOUpdateEnabled = true;
-
-            while (true) {
-                // If animation is not paused..
-                if (!Pause) {
-                    HandleFireOnAnimationStartedEvent();
-
-                    UpdateAnimationTime();
-
-                    HandleClampWrapMode();
-                    HandleLoopWrapMode();
-                    HandlePingPongWrapMode();
-                }
-
-                if (!IsPlaying) break;
-
-                yield return null;
-            }
-        }
-
-        private void HandleFireOnAnimationStartedEvent() {
-            if (AnimationTime == 0) OnAnimationStarted();
-        }
-
-        private void HandleLoopWrapMode() {
-
-            if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.Loop) {
-
-                AnimationTime = 0;
-            }
-        }
-
-        private void HandlePingPongWrapMode() {
-            if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
-
-                Reverse = true;
-            }
-
-            if (AnimationTime < 0
-                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
-
-                Reverse = false;
-            }
-        }
-
-        // TODO Rename to HandlePlayPauseButton().
-        // TODO Move to Editor class.
-        private void HandlePlayPause() {
-            if (!Application.isPlaying) return;
-
-            if (IsPlaying && !Pause) {
-                // Pause animation.
-                Pause = true;
-            }
-            else if (IsPlaying && Pause) {
-                // Unpause animation.
-                Pause = false;
-            }
-            // Animation ended.
-            else if (!IsPlaying && AnimationTime >= 1) {
-                AnimationTime = 0;
-                StartAnimation();
-            }
-            else {
-                // Start animation.
-                StartAnimation();
-            }
-        }
-
-        private void HandleUpdatingAnimGOInPlayMode() {
-            // Return if not in play mode.
-            if (!Application.isPlaying) return;
-            // Return if anim. GO update is disabled.
-            if (!AnimGOUpdateEnabled) return;
-
-            // Remember anim. GO position.
-            var prevAnimGOPosition = animatedGO.position;
-            // Remember anim. GO rotation.
-            var prevAnimGORotation = animatedGO.rotation;
-
-            Animate();
-            HandleFireNodeReachedEvent();
-
-            var movementDetected = !Utilities.V3Equal(
-                prevAnimGOPosition,
-                animatedGO.position);
-
-            var rotationDetected = !Utilities.QuaternionsEqual(
-                prevAnimGORotation,
-                animatedGO.rotation);
-
-            if (!movementDetected && !rotationDetected) {
-                if (!CountdownCoroutineIsRunning) {
-                    StartCoroutine(CountdownToStopAnimGOUpdate());
-                }
             }
         }
 
@@ -665,8 +553,118 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        #region ANIMATION HANDLERS
         #endregion
+
+        #region ANIMATION HANDLERS
+
+        private void HandleClampWrapMode() {
+            // Break from animation in Clamp wrap mode.
+            if (AnimationTime > 1
+                && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
+                AnimationTime = 1;
+                IsPlaying = false;
+            }
+        }
+
+        private IEnumerator HandleEaseTime() {
+            IsPlaying = true;
+            Pause = false;
+            AnimGOUpdateEnabled = true;
+
+            while (true) {
+                // If animation is not paused..
+                if (!Pause) {
+                    HandleFireOnAnimationStartedEvent();
+
+                    UpdateAnimationTime();
+
+                    HandleClampWrapMode();
+                    HandleLoopWrapMode();
+                    HandlePingPongWrapMode();
+                }
+
+                if (!IsPlaying) break;
+
+                yield return null;
+            }
+        }
+
+        private void HandleFireOnAnimationStartedEvent() {
+            if (AnimationTime == 0) OnAnimationStarted();
+        }
+
+        private void HandleLoopWrapMode() {
+            if (AnimationTime > 1
+                && SettingsAsset.WrapMode == AnimatorWrapMode.Loop) {
+                AnimationTime = 0;
+            }
+        }
+
+        private void HandlePingPongWrapMode() {
+            if (AnimationTime > 1
+                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+                Reverse = true;
+            }
+
+            if (AnimationTime < 0
+                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+                Reverse = false;
+            }
+        }
+
+        // TODO Rename to HandlePlayPauseButton().
+        // TODO Move to Editor class.
+        private void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            if (IsPlaying && !Pause) {
+                // Pause animation.
+                Pause = true;
+            }
+            else if (IsPlaying && Pause) {
+                // Unpause animation.
+                Pause = false;
+            }
+            // Animation ended.
+            else if (!IsPlaying && AnimationTime >= 1) {
+                AnimationTime = 0;
+                StartAnimation();
+            }
+            else {
+                // Start animation.
+                StartAnimation();
+            }
+        }
+
+        private void HandleUpdatingAnimGOInPlayMode() {
+            // Return if not in play mode.
+            if (!Application.isPlaying) return;
+            // Return if anim. GO update is disabled.
+            if (!AnimGOUpdateEnabled) return;
+
+            // Remember anim. GO position.
+            var prevAnimGOPosition = animatedGO.position;
+            // Remember anim. GO rotation.
+            var prevAnimGORotation = animatedGO.rotation;
+
+            Animate();
+            HandleFireNodeReachedEvent();
+
+            var movementDetected = !Utilities.V3Equal(
+                prevAnimGOPosition,
+                animatedGO.position);
+
+            var rotationDetected = !Utilities.QuaternionsEqual(
+                prevAnimGORotation,
+                animatedGO.rotation);
+
+            if (!movementDetected && !rotationDetected) {
+                if (!CountdownCoroutineIsRunning) {
+                    StartCoroutine(CountdownToStopAnimGOUpdate());
+                }
+            }
+        }
+
         #endregion
 
         #region HELPER METHODS
@@ -768,6 +766,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SubscribedToEvents = true;
         }
+
         private void UnsubscribeFromEvents() {
             if (PathData == null) return;
 
@@ -925,7 +924,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (SettingsAsset.RotationMode == RotationMode.Target
                 // and target obj. is assigned..
                 && TargetGO != null) {
-
                 DrawTargetIcon(TargetGO.position);
             }
         }

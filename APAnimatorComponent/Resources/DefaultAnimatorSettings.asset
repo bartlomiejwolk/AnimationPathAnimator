@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: 
+  m_Name: DefaultAnimatorSettings
   m_EditorClassIdentifier: 
   easeModeKey: 117
   jumpToEndKey: 108
@@ -28,43 +28,42 @@ MonoBehaviour:
   shortJumpValue: .00200000009
   tiltingModeKey: 111
   updateAllKey: 112
-  gizmoCurveColor: {r: 1, g: .921568632, b: .0156862754, a: 1}
-  rotationCurveColor: {r: .5, g: .5, b: .5, a: 1}
-  currentRotationPointGizmoIcon: rec_16x16-yellow
-  floatPrecision: .00100000005
-  forwardPointIcon: target_22x22-pink
-  gizmoCurveSamplingFrequency: 40
-  rotationCurveSampling: 40
-  rotationPointGizmoIcon: rec_16x16
-  targetGizmoIcon: target_22x22-blue
-  gizmoIcons: []
-  autoPlay: 1
+  assetsNotLoadedInfoText: 'Required assets were not found.
+
+    Reload scene and if it does not help, restore extension folder content to its
+    default state.'
+  autoPlay: 0
+  countdownToStopFramesNo: 10
   enableControlsInPlayMode: 1
   exportSamplingFrequency: 5
-  forwardPointOffset: 1
+  forwardPointOffset: .00100000005
+  forwardPointOffsetMinValue: .00100000005
+  gizmoIcons: []
   handleMode: 0
   maxAnimationSpeed: .300000012
+  pathDataAssetDefaultName: Path
   positionLerpSpeed: 1
   rotationMode: 0
   rotationSlerpSpeed: 999
   tangentMode: 0
   updateAllMode: 0
-  wrapMode: 1
-  countdownToStopFramesNo: 10
-  assetsNotLoadedInfoText: 'Required assets were not found.
-
-    Reload scene and if it does not help, restore extension folder content to its
-    default state.'
-  forwardPointOffsetMinValue: .00100000005
-  pathDataAssetDefaultName: Path
+  wrapMode: 4
+  currentRotationPointGizmoIcon: rec_16x16-yellow
+  forwardPointIcon: target_22x22-pink
+  gizmoCurveColor: {r: 1, g: .921568632, b: .0156862754, a: 1}
+  gizmoCurveSamplingFrequency: 40
+  rotationCurveColor: {r: .5, g: .5, b: .5, a: 1}
+  rotationCurveSampling: 40
+  rotationPointGizmoIcon: rec_16x16
+  targetGizmoIcon: target_22x22-blue
   addButtonOffsetH: 25
   addButtonOffsetV: 10
   arcHandleRadius: .600000024
+  arcValueMultiplierNumerator: 360
   defaultLabelHeight: 10
   defaultLabelWidth: 30
   movementHandleSize: .119999997
   removeButtonH: 44
   removeButtonV: 10
-  scaleHandleSize: 1.5
   rotationHandleColor: {r: 1, g: 0, b: 1, a: 1}
-  arcValueMultiplierNumerator: 360
+  scaleHandleSize: 1.5

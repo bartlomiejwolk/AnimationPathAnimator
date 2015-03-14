@@ -865,7 +865,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             // In Linear mode set node tangents to linear.
             else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
 
             // Update animated object.
@@ -922,7 +922,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             // In Linear mode set node tangents to linear.
             else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
 
             // Update animated object.
@@ -966,7 +966,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleLinearTangentMode() {
             if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
         }
 
@@ -984,7 +984,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
             else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
 
             SceneView.RepaintAll();

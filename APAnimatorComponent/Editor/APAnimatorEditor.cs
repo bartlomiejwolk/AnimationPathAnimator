@@ -76,7 +76,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             DrawHandleModeDropdown();
-            DrawTangentModeDropdown();
             DrawUpdateAllToggle();
 
             EditorGUILayout.BeginHorizontal();
@@ -107,6 +106,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             GUILayout.Label("Player Options", EditorStyles.boldLabel);
 
             DrawRotationModeDropdown(HandleRotationModeChange);
+            DrawTangentModeDropdown();
             DrawWrapModeDropdown();
 
             EditorGUILayout.Space();
@@ -137,28 +137,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-
-        private void HandleAnimatorEventsSubscription() {
-            // Subscribe animator to path events if not subscribed already.
-            // This is required after animator component reset.
-            serializedObject.Update();
-            if (!subscribedToEvents.boolValue) {
-                // Unsubscribe first to avoid multiple subscription after
-                // animator component reset.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UnsubscribeFromEvents",
-                    null);
-
-                // Subscribe to events.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "SubscribeToEvents",
-                    null);
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -887,7 +865,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             // In Linear mode set node tangents to linear.
             else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
 
             // Update animated object.
@@ -944,7 +922,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             // In Linear mode set node tangents to linear.
             else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
 
             // Update animated object.
@@ -988,7 +966,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void HandleLinearTangentMode() {
             if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
         }
 
@@ -1006,7 +984,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
             else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetNodesLinear();
+                Script.PathData.SetLinearAnimObjPathTangents();
             }
 
             SceneView.RepaintAll();
@@ -1015,6 +993,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+        private void HandleAnimatorEventsSubscription() {
+            // Subscribe animator to path events if not subscribed already.
+            // This is required after animator component reset.
+            serializedObject.Update();
+            if (!subscribedToEvents.boolValue) {
+                // Unsubscribe first to avoid multiple subscription after
+                // animator component reset.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UnsubscribeFromEvents",
+                    null);
+
+                // Subscribe to events.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "SubscribeToEvents",
+                    null);
+            }
+            serializedObject.ApplyModifiedProperties();
+        }
+
 
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {

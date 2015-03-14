@@ -15,6 +15,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region EVENTS
 
         public event EventHandler<NodeReachedEventArgs> NodeReached;
+        /// <summary>
+        /// Animation time reached 1 and animated object stopped moving.
+        /// </summary>
+        public event EventHandler AnimationEnded;
+
+        /// <summary>
+        /// Animation time is 0 and animation is playing.
+        /// </summary>
+        public event EventHandler AnimationStarted;
 
         #endregion
 
@@ -117,6 +126,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return pause; }
             set {
                 pause = value;
+
                 Debug.Log("Pause: " + pause);
 
                 // On unpause..
@@ -146,6 +156,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Helper field.
         /// </summary>
+        // TODO Make it private.
         public Transform ThisTransform {
             get { return thisTransform; }
         }
@@ -213,11 +224,26 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion UNITY MESSAGES
 
-        #region EVENT HANDLERS
+        #region EVENT INVOCATORS
+        private void OnAnimationStarted() {
+            var handler = AnimationStarted;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
 
-        private void APAnimator_NodeReached(NodeReachedEventArgs eventArgs) {
+        private void OnAnimationEnded() {
+            var handler = AnimationEnded;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnNodeReached(NodeReachedEventArgs eventArgs) {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
+        }
+
+        #endregion
+        #region EVENT HANDLERS
+        void APAnimator_AnimationEnded(object sender, EventArgs e) {
+            AnimationTime = 0;
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
@@ -258,18 +284,68 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Fire NodeReached event for first node.
             if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
-                APAnimator_NodeReached(args);
+                OnNodeReached(args);
             }
 
             StartCoroutine("HandleEaseTime");
+
+            Debug.Log("Animation started");
         }
 
         public void StopAnimation() {
             StopCoroutine("HandleEaseTime");
 
+            Debug.Log("Animation stopped");
+
             IsPlaying = false;
             Pause = false;
             AnimationTime = 0;
+        }
+
+        public void PlayPauseAnimation() {
+            Pause = !Pause;
+        }
+
+        public void PauseAnimation() {
+            Pause = true;
+        }
+
+        public void UnpauseAnimation() {
+            Pause = false;
+        }
+
+        public void SetRotationForward() {
+            SettingsAsset.RotationMode = RotationMode.Forward;
+        }
+
+        public void SetRotationCustom() {
+            SettingsAsset.RotationMode = RotationMode.Custom;
+        }
+
+        public void SetRotationTarget() {
+            SettingsAsset.RotationMode = RotationMode.Target;
+        }
+
+        public void SetTangentSmooth() {
+            SettingsAsset.TangentMode = TangentMode.Smooth;
+            PathData.SmoothAnimObjPathTangents();
+        }
+
+        public void SetTangentLinear() {
+            SettingsAsset.TangentMode = TangentMode.Linear;
+            PathData.SetLinearAnimObjPathTangents();
+        }
+
+        public void SetWrapClamp() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+        }
+
+        public void SetWrapLoop() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
+        }
+
+        public void SetWrapPingPong() {
+            SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
         }
 
         private void Animate() {
@@ -357,6 +433,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             if (!positionChanged && !rotationChanged) {
                 AnimGOUpdateEnabled = false;
+                // Fire event.
+                OnAnimationEnded();
             }
         }
 
@@ -378,6 +456,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             while (true) {
                 // If animation is not paused..
                 if (!Pause) {
+                    HandleFireOnAnimationStartedEvent();
+
                     UpdateAnimationTime();
 
                     HandleClampWrapMode();
@@ -389,6 +469,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 yield return null;
             }
+        }
+
+        private void HandleFireOnAnimationStartedEvent() {
+            if (AnimationTime == 0) OnAnimationStarted();
         }
 
         private void HandleLoopWrapMode() {
@@ -414,6 +498,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to HandlePlayPauseButton().
+        // TODO Move to Editor class.
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
@@ -579,6 +665,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        #region ANIMATION HANDLERS
+        #endregion
         #endregion
 
         #region HELPER METHODS
@@ -634,7 +722,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var args = new NodeReachedEventArgs(index, AnimationTime);
 
             // Fire event.
-            APAnimator_NodeReached(args);
+            OnNodeReached(args);
         }
 
         private void LoadRequiredResources() {
@@ -676,10 +764,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             PathData.NodeTiltChanged += PathData_NodeTiltChanged;
             PathData.PathReset += PathData_PathReset;
             PathData.RotationPathReset += PathData_RotationPathReset;
+            AnimationEnded += APAnimator_AnimationEnded;
 
             SubscribedToEvents = true;
         }
-
         private void UnsubscribeFromEvents() {
             if (PathData == null) return;
 

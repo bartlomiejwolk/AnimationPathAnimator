@@ -400,7 +400,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             UpdateCurveWithAddedKeys(TiltingCurve);
         }
 
-        public void SetNodesLinear() {
+        public void SetLinearAnimObjPathTangents() {
             for (var i = 0; i < 3; i++) {
                 Utilities.SetCurveLinear(AnimatedObjectPath[i]);
             }

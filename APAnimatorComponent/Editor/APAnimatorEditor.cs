@@ -1150,6 +1150,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        private void HandlePlayPauseButton() {
+            if (!Application.isPlaying) return;
+
+            if (Script.IsPlaying && !Script.Pause) {
+                // Pause animation.
+                Script.Pause = true;
+            }
+            else if (Script.IsPlaying && Script.Pause) {
+                // Unpause animation.
+                Script.Pause = false;
+            }
+            // Animation ended.
+            else if (!Script.IsPlaying && Script.AnimationTime >= 1) {
+                Script.AnimationTime = 0;
+                Script.StartAnimation();
+            }
+            else {
+                // Start animation.
+                Script.StartAnimation();
+            }
+        }
+
         #endregion PRIVATE METHODS
 
         #region SHORTCUTS
@@ -1177,13 +1199,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Return timestamp of the last node.
             return 1.0f;
-        }
-
-        private void HandlePlayPause() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandlePlayPause",
-                null);
         }
 
         private void HandleShortcuts() {
@@ -1278,7 +1293,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Play/pause animation.
             Utilities.HandleUnmodShortcut(
                 Script.SettingsAsset.PlayPauseKey,
-                HandlePlayPause);
+                HandlePlayPauseButton);
 
             serializedObject.ApplyModifiedProperties();
         }

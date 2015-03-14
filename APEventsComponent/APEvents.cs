@@ -111,9 +111,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         #region METHODS
 
-        // TODO Rename to RequiredAssetsLoaded().
-        // TODO Update Editor class.
-        private bool AssetsLoaded() {
+        private bool RequiredAssetsLoaded() {
             if (Settings != null
                 && Skin != null) {
                 return true;

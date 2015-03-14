@@ -597,30 +597,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to HandlePlayPauseButton().
-        // TODO Move to Editor class.
-        private void HandlePlayPause() {
-            if (!Application.isPlaying) return;
-
-            if (IsPlaying && !Pause) {
-                // Pause animation.
-                Pause = true;
-            }
-            else if (IsPlaying && Pause) {
-                // Unpause animation.
-                Pause = false;
-            }
-            // Animation ended.
-            else if (!IsPlaying && AnimationTime >= 1) {
-                AnimationTime = 0;
-                StartAnimation();
-            }
-            else {
-                // Start animation.
-                StartAnimation();
-            }
-        }
-
         private void HandleUpdatingAnimGOInPlayMode() {
             // Return if not in play mode.
             if (!Application.isPlaying) return;

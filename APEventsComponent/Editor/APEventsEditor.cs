@@ -60,7 +60,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private bool AssetsLoaded() {
             return (bool) Utilities.InvokeMethodWithReflection(
                 Script,
-                "AssetsLoaded",
+                "RequiredAssetsLoaded",
                 null);
         }
 

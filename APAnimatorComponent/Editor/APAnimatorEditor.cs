@@ -1060,11 +1060,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var gizmosDir = Application.dataPath + "/Gizmos";
 
             // Create Asset/Gizmos folder if not exists.
-            if (!Directory.Exists(gizmosDir + "ATP")) {
-                Directory.CreateDirectory(gizmosDir + "ATP");
+            if (!Directory.Exists(gizmosDir)) {
+                Directory.CreateDirectory(gizmosDir);
             }
 
-            // Check if messageSettings asset has icons specified.
+            // Create Asset/Gizmos/ATP folder if not exists.
+            if (!Directory.Exists(gizmosDir + "/ATP")) {
+                Directory.CreateDirectory(gizmosDir + "/ATP");
+            }
+
+            // Check if settings asset has icons specified.
             if (Script.SettingsAsset.GizmoIcons == null) return;
 
             // For each icon..

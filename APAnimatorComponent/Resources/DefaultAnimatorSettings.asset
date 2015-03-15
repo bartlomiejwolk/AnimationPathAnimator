@@ -28,11 +28,12 @@ MonoBehaviour:
   shortJumpValue: .00200000009
   tiltingModeKey: 111
   updateAllKey: 112
+  playModeModKey: 307
   autoPlay: 1
   countdownToStopFramesNo: 10
   enableControlsInPlayMode: 1
   exportSamplingFrequency: 5
-  forwardPointOffset: .0500000007
+  forwardPointOffset: .00100000005
   forwardPointOffsetMinValue: .00100000005
   gizmoIcons:
   - {fileID: 2800000, guid: 7035c5b758f753f4c85443715f7b41a7, type: 3}

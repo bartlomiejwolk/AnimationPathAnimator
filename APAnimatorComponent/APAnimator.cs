@@ -68,6 +68,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+        [SerializeField]
+        private PositionHandle positionHandle = PositionHandle.Free;
+
         #endregion OPTIONS
 
         #region PROPERTIES

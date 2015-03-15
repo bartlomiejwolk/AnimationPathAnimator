@@ -37,6 +37,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty skin;
         private SerializedProperty subscribedToEvents;
         private SerializedProperty targetGO;
+        private SerializedProperty positionHandle;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -78,6 +79,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             DrawHandleModeDropdown();
+            DrawPositionHandleDropdown();
             DrawUpdateAllToggle();
 
             EditorGUILayout.BeginHorizontal();
@@ -139,6 +141,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
+
+        private void DrawPositionHandleDropdown() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                positionHandle,
+                new GUIContent(
+                    "Position Handle",
+                    "Handle used to move nodes on scene."));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -754,13 +769,25 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
+            // Get node positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
-            SceneHandles.DrawCustomPositionHandles(
-                nodeGlobalPositions,
-                Script.SettingsAsset.MovementHandleSize,
-                Script.SettingsAsset.GizmoCurveColor,
-                DrawPositionHandlesCallbackHandler);
+            // Draw custom position handles.
+            if (positionHandle.enumValueIndex ==
+                (int) PositionHandle.Free) {
+
+                SceneHandles.DrawCustomPositionHandles(
+                    nodeGlobalPositions,
+                    Script.SettingsAsset.MovementHandleSize,
+                    Script.SettingsAsset.GizmoCurveColor,
+                    DrawPositionHandlesCallbackHandler);
+            }
+            // Draw default position handles.
+            else {
+                SceneHandles.DrawPositionHandles(
+                    nodeGlobalPositions,
+                    DrawPositionHandlesCallbackHandler);
+            }
         }
 
         private void HandleDrawingRemoveButtons() {
@@ -1125,6 +1152,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 serializedObject.FindProperty("subscribedToEvents");
             animationTime =
                 serializedObject.FindProperty("animationTime");
+            positionHandle = serializedObject.FindProperty("positionHandle");
 
             SerializedPropertiesInitialized = true;
         }

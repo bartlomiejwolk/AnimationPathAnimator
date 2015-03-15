@@ -28,10 +28,6 @@ MonoBehaviour:
   shortJumpValue: .00200000009
   tiltingModeKey: 111
   updateAllKey: 112
-  assetsNotLoadedInfoText: 'Required assets were not found.
-
-    Reload scene and if it does not help, restore extension folder content to its
-    default state.'
   autoPlay: 1
   countdownToStopFramesNo: 10
   enableControlsInPlayMode: 1

@@ -210,6 +210,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void HandleShortcuts() {
+            if (!SettingsAsset.EnableControlsInPlayMode) return;
+
             // Play/Pause.
             if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
                 HandlePlayPause();

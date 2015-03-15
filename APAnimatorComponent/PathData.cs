@@ -658,7 +658,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void UpdateRotationPathWithAddedKeys() {
             // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
-            // Get rotation path values.
+            // Get rotation path timestamps.
             var rotationPathTimestamps = RotationPath.GetTimestamps();
 
             // For each timestamp in the path..

@@ -161,12 +161,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [Header("Animator")]
         [SerializeField]
-        private string assetsNotLoadedInfoText =
-            "Required assets were not found.\n"
-            + "Reload scene and if it does not help, restore extension "
-            + "folder content to its default state.";
-
-        [SerializeField]
         private bool autoPlay = true;
 
         [SerializeField]
@@ -230,11 +224,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region ANIMATOR PROPERTIES
-
-        public string AssetsNotLoadedInfoText {
-            get { return assetsNotLoadedInfoText; }
-            set { assetsNotLoadedInfoText = value; }
-        }
 
         public bool AutoPlay {
             get { return autoPlay; }

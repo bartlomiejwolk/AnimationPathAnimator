@@ -45,7 +45,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public override void OnInspectorGUI() {
             // Check for required assets.
             if (!RequiredAssetsLoaded()) {
-                DrawInfoLabel(Script.SettingsAsset.AssetsNotLoadedInfoText);
+                DrawInfoLabel("Required assets were not found.\n"
+            + "Reload scene and if it does not help, restore extension "
+            + "folder content to its default state.");
 
                 return;
             }

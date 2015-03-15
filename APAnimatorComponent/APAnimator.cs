@@ -206,6 +206,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void Update() {
             HandleUpdatingAnimGOInPlayMode();
+            HandleShortcuts();
+        }
+
+        private void HandleShortcuts() {
+            // Play/Pause.
+            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
+                HandlePlayPause();
+            }
         }
 
         #endregion UNITY MESSAGES
@@ -737,6 +745,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             PathData.RotationPathReset -= PathData_RotationPathReset;
 
             SubscribedToEvents = false;
+        }
+
+        private void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            if (IsPlaying && !Pause) {
+                // Pause animation.
+                Pause = true;
+            }
+            else if (IsPlaying && Pause) {
+                // Unpause animation.
+                Pause = false;
+            }
+            // Animation ended.
+            else if (!IsPlaying && AnimationTime >= 1) {
+                AnimationTime = 0;
+                StartAnimation();
+            }
+            else {
+                // Start animation.
+                StartAnimation();
+            }
         }
 
         #endregion METHODS

@@ -65,14 +65,11 @@ namespace ATP.AnimationPathAnimator {
         }
 
         public static void HandleUnmodShortcut(
-            //KeyCode key,
             KeyCode key,
             Action callback) {
-            //bool modKeyPressed) {
 
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode == key
-                //&& !modKeyPressed) {
                 && Event.current.modifiers == EventModifiers.None) {
 
                 callback();
@@ -84,14 +81,12 @@ namespace ATP.AnimationPathAnimator {
             string methodName,
             object[] parameters) {
 
-            object result;
-
             // Get method metadata.
             var methodInfo = target.GetType().GetMethod(
                 methodName,
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
-            result = methodInfo.Invoke(target, parameters);
+            var result = methodInfo.Invoke(target, parameters);
 
             return result;
         }
@@ -103,9 +98,7 @@ namespace ATP.AnimationPathAnimator {
 
             var angle = Quaternion.Angle(a, b);
 
-            if (angle < threshold) return true;
-
-            return false;
+            return angle < threshold;
         }
 
         public static void RemoveAllCurveKeys(AnimationCurve curve) {

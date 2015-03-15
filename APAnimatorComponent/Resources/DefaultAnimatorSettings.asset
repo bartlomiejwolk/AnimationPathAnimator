@@ -29,6 +29,7 @@ MonoBehaviour:
   tiltingModeKey: 111
   updateAllKey: 112
   playModeModKey: 307
+  positionHandleKey: 103
   autoPlay: 1
   countdownToStopFramesNo: 10
   enableControlsInPlayMode: 1
@@ -44,11 +45,12 @@ MonoBehaviour:
   maxAnimationSpeed: .300000012
   pathDataAssetDefaultName: Path
   positionLerpSpeed: 1
-  rotationMode: 0
+  rotationMode: 1
   rotationSlerpSpeed: 999
   tangentMode: 0
   updateAllMode: 0
   wrapMode: 1
+  positionHandle: 0
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   gizmoCurveColor: {r: 1, g: .921568632, b: .0156862754, a: 1}

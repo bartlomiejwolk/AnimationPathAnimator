@@ -1152,7 +1152,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 serializedObject.FindProperty("subscribedToEvents");
             animationTime =
                 serializedObject.FindProperty("animationTime");
-            positionHandle = serializedObject.FindProperty("positionHandle");
+            positionHandle =
+                SettingsSerializedObject.FindProperty("positionHandle");
 
             SerializedPropertiesInitialized = true;
         }
@@ -1230,6 +1231,23 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 == Script.SettingsAsset.UpdateAllKey) {
 
                 Script.SettingsAsset.UpdateAllMode = !Script.SettingsAsset.UpdateAllMode;
+            }
+
+            // Update position handle.
+            if (Event.current.type == EventType.keyDown
+             && Event.current.keyCode
+             == Script.SettingsAsset.PositionHandleKey) {
+
+                // Change to Position mode.
+                if (Script.SettingsAsset.PositionHandle == PositionHandle.Free) {
+                    Script.SettingsAsset.PositionHandle =
+                        PositionHandle.Position;
+                }
+                // Change to Free mode.
+                else {
+                    Script.SettingsAsset.PositionHandle =
+                        PositionHandle.Free;
+                }
             }
 
             // Short jump forward.

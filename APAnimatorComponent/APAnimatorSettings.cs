@@ -63,9 +63,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private KeyCode updateAllKey = KeyCode.P;
 
+        public KeyCode playModeModKey = KeyCode.RightAlt;
+
         #endregion
 
         #region SHORTCUT PROPERTIES
+        public KeyCode PlayModeModKey {
+            get { return playModeModKey; }
+            set { playModeModKey = value; }
+        }
+
 
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
@@ -441,7 +448,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int updateAllLabelOffsetX = 10;
         private int updateAllLabelOffsetY = -25;
         private string updateAllLabelText = "A";
-
         #endregion
 
         #region HANDLES PROPERTIES
@@ -543,7 +549,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
-
         #endregion
     }
 

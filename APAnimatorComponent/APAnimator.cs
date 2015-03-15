@@ -236,6 +236,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
                 animationTime = GetNearestBackwardNodeTimestamp();
             }
+
+            // Jump to beginning.
+            if (Input.GetKeyDown(
+                SettingsAsset.JumpToPreviousNodeKey)
+                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
+
+                AnimationTime = 0;
+            }
         }
 
         private float GetNearestBackwardNodeTimestamp() {

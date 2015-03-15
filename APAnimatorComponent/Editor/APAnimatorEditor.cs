@@ -756,7 +756,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleDrawingPositionHandles() {
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
-            SceneHandles.DrawPositionHandles(
+            SceneHandles.DrawCustomPositionHandles(
                 nodeGlobalPositions,
                 Script.SettingsAsset.MovementHandleSize,
                 Script.SettingsAsset.GizmoCurveColor,

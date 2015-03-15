@@ -120,7 +120,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public static void DrawPositionHandles(
+        public static void DrawCustomPositionHandles(
             Vector3[] nodeGlobalPositions,
             float handleSize,
             Color curveColor,
@@ -134,7 +134,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 var handleColor = curveColor;
 
                 // Draw position handle.
-                var newGlobalPos = DrawPositionHandle(
+                var newGlobalPos = DrawCustomPositionHandle(
                     nodeGlobalPositions[i],
                     handleSize,
                     handleColor,
@@ -376,7 +376,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Handles.EndGUI();
         }
 
-        private static Vector3 DrawPositionHandle(
+        private static Vector3 DrawCustomPositionHandle(
             Vector3 nodePosition,
             float handleSize,
             Color handleColor,

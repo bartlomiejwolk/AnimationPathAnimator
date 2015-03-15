@@ -131,6 +131,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             DrawExportControls();
 
+            EditorGUILayout.Space();
+
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
 

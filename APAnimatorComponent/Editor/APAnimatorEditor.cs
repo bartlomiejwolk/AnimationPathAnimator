@@ -1212,17 +1212,20 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                         !Script.SettingsAsset.UpdateAllMode);
 
             // Short jump forward.
-            Utilities.HandleModShortcut(
-                () => {
-                    var newAnimationTimeRatio =
-                        animationTime.floatValue
-                        + Script.SettingsAsset.ShortJumpValue;
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.ShortJumpForwardKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    EventModifiers.Alt)) {
 
-                    animationTime.floatValue =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-                },
-                Script.SettingsAsset.ShortJumpForwardKey,
-                Event.current.alt);
+                var newAnimationTimeRatio =
+                    animationTime.floatValue
+                    + Script.SettingsAsset.ShortJumpValue;
+
+                animationTime.floatValue =
+                    (float)(Math.Round(newAnimationTimeRatio, 3));
+            }
 
             // Short jump backward.
             Utilities.HandleModShortcut(
@@ -1250,10 +1253,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     Script.SettingsAsset.LongJumpValue);
 
             // Jump to next node.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.JumpToNextNodeKey,
-                () => animationTime.floatValue =
-                    GetNearestForwardNodeTimestamp());
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToNextNodeKey) {
+
+                animationTime.floatValue = GetNearestForwardNodeTimestamp();
+            }
 
             // Jump to previous node.
             Utilities.HandleUnmodShortcut(

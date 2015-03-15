@@ -206,6 +206,69 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void Update() {
             HandleUpdatingAnimGOInPlayMode();
+            HandleShortcuts();
+        }
+
+        private void HandleShortcuts() {
+            if (!SettingsAsset.EnableControlsInPlayMode) return;
+
+            // Play/Pause.
+            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
+                HandlePlayPause();
+            }
+
+            // Long jump forward
+            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
+                animationTime += SettingsAsset.LongJumpValue;
+            }
+
+            // Long jump backward. 
+            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
+                animationTime -= SettingsAsset.LongJumpValue;
+            }
+
+            // Jump to next node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
+                animationTime = GetNearestForwardNodeTimestamp();
+            }
+
+            // Jump to previous node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
+                animationTime = GetNearestBackwardNodeTimestamp();
+            }
+
+            // Jump to beginning.
+            if (Input.GetKeyDown(
+                SettingsAsset.JumpToPreviousNodeKey)
+                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
+
+                AnimationTime = 0;
+            }
+        }
+
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < AnimationTime) {
+                    return pathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > AnimationTime)) {
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
         }
 
         #endregion UNITY MESSAGES
@@ -737,6 +800,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             PathData.RotationPathReset -= PathData_RotationPathReset;
 
             SubscribedToEvents = false;
+        }
+
+        private void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            if (IsPlaying && !Pause) {
+                // Pause animation.
+                Pause = true;
+            }
+            else if (IsPlaying && Pause) {
+                // Unpause animation.
+                Pause = false;
+            }
+            // Animation ended.
+            else if (!IsPlaying && AnimationTime >= 1) {
+                AnimationTime = 0;
+                StartAnimation();
+            }
+            else {
+                // Start animation.
+                StartAnimation();
+            }
         }
 
         #endregion METHODS

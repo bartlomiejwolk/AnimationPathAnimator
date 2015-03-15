@@ -1157,152 +1157,169 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private void HandlePlayPauseButton() {
-            if (!Application.isPlaying) return;
-
-            if (Script.IsPlaying && !Script.Pause) {
-                // Pause animation.
-                Script.Pause = true;
-            }
-            else if (Script.IsPlaying && Script.Pause) {
-                // Unpause animation.
-                Script.Pause = false;
-            }
-            // Animation ended.
-            else if (!Script.IsPlaying && Script.AnimationTime >= 1) {
-                Script.AnimationTime = 0;
-                Script.StartAnimation();
-            }
-            else {
-                // Start animation.
-                Script.StartAnimation();
-            }
-        }
-
         #endregion PRIVATE METHODS
 
         #region SHORTCUTS
 
-        private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < animationTime.floatValue) {
-                    return pathTimestamps[i];
-                }
-            }
-
-            // Return timestamp of the last node.
-            return 0;
-        }
-
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > animationTime.floatValue)) {
-                return timestamp;
-            }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
         private void HandleShortcuts() {
             serializedObject.Update();
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.EaseModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.Ease);
+            // Ease handle mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.EaseModeKey) {
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.RotationModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.Rotation);
+                Script.SettingsAsset.HandleMode = HandleMode.Ease;
+            }
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.TiltingModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.Tilting);
+            // Rotation mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.RotationModeKey) {
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.NoneModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.None);
+                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+            }
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.UpdateAllKey,
-                () =>
-                    Script.SettingsAsset.UpdateAllMode =
-                        !Script.SettingsAsset.UpdateAllMode);
+            // Tilting mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.TiltingModeKey) {
+
+                Script.SettingsAsset.HandleMode = HandleMode.Tilting;
+            }
+
+            // None mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.NoneModeKey) {
+
+                Script.SettingsAsset.HandleMode = HandleMode.None;
+            }
+
+            // Update all mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.UpdateAllKey) {
+
+                Script.SettingsAsset.UpdateAllMode = !Script.SettingsAsset.UpdateAllMode;
+            }
 
             // Short jump forward.
-            Utilities.HandleModShortcut(
-                () => {
-                    var newAnimationTimeRatio =
-                        animationTime.floatValue
-                        + Script.SettingsAsset.ShortJumpValue;
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.ShortJumpForwardKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
 
-                    animationTime.floatValue =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-                },
-                Script.SettingsAsset.ShortJumpForwardKey,
-                Event.current.alt);
+                var newAnimationTimeRatio =
+                    animationTime.floatValue
+                    + Script.SettingsAsset.ShortJumpValue;
+
+                animationTime.floatValue =
+                    (float)(Math.Round(newAnimationTimeRatio, 3));
+            }
 
             // Short jump backward.
-            Utilities.HandleModShortcut(
-                () => {
-                    var newAnimationTimeRatio =
-                        animationTime.floatValue
-                        - Script.SettingsAsset.ShortJumpValue;
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.ShortJumpBackwardKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
 
-                    animationTime.floatValue =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-                },
-                Script.SettingsAsset.ShortJumpBackwardKey,
-                Event.current.alt);
+                var newAnimationTimeRatio =
+                    animationTime.floatValue
+                    - Script.SettingsAsset.ShortJumpValue;
+
+                animationTime.floatValue =
+                    (float)(Math.Round(newAnimationTimeRatio, 3));
+            }
 
             // Long jump forward.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.LongJumpForwardKey,
-                () => animationTime.floatValue +=
-                    Script.SettingsAsset.LongJumpValue);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.LongJumpForwardKey
+                && !FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue += Script.SettingsAsset.LongJumpValue;
+            }
 
             // Long jump backward.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.LongJumpBackwardKey,
-                () => animationTime.floatValue -=
-                    Script.SettingsAsset.LongJumpValue);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.LongJumpBackwardKey
+                && !FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue -= Script.SettingsAsset.LongJumpValue;
+            }
 
             // Jump to next node.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.JumpToNextNodeKey,
-                () => animationTime.floatValue =
-                    GetNearestForwardNodeTimestamp());
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToNextNodeKey) {
+
+                animationTime.floatValue =
+                    (float) Utilities.InvokeMethodWithReflection(
+                        Script,
+                        "GetNearestForwardNodeTimestamp",
+                        null);
+            }
 
             // Jump to previous node.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.JumpToPreviousNodeKey,
-                () => animationTime.floatValue =
-                    GetNearestBackwardNodeTimestamp());
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToPreviousNodeKey) {
+
+                animationTime.floatValue =
+                    (float) Utilities.InvokeMethodWithReflection(
+                        Script,
+                        "GetNearestBackwardNodeTimestamp",
+                        null);
+            }
 
             // Jump to start.
-            Utilities.HandleModShortcut(
-                () => animationTime.floatValue = 0,
-                Script.SettingsAsset.JumpToStartKey,
-                //ModKeyPressed);
-                Event.current.alt);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToStartKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue = 0;
+            }
 
             // Jump to end.
-            Utilities.HandleModShortcut(
-                () => animationTime.floatValue = 1,
-                Script.SettingsAsset.JumpToEndKey,
-                //ModKeyPressed);
-                Event.current.alt);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToEndKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue = 1;
+            }
 
             // Play/pause animation.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.PlayPauseKey,
-                HandlePlayPauseButton);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.PlayPauseKey) {
+
+                HandlePlayPauseButton();
+            }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandlePlayPauseButton() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandlePlayPause",
+                null);
         }
 
         #endregion

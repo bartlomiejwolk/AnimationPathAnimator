@@ -34,7 +34,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private float longJumpValue = 0.01f;
 
         [SerializeField]
-        private KeyCode modKey = KeyCode.RightAlt;
+        private EventModifiers modKey = EventModifiers.Alt;
 
         [SerializeField]
         private KeyCode noneModeKey = KeyCode.Y;
@@ -107,7 +107,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { longJumpValue = value; }
         }
 
-        public KeyCode ModKey {
+        public EventModifiers ModKey {
             get { return modKey; }
             set { modKey = value; }
         }

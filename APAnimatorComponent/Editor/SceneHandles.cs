@@ -400,6 +400,26 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion
+
+        public static void DrawPositionHandles(
+            Vector3[] nodeGlobalPositions,
+            Action<int, Vector3> callback) {
+
+            // For each node..
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                // Draw position handle.
+                var newGlobalPos = Handles.PositionHandle(
+                    nodeGlobalPositions[i],
+                    Quaternion.identity);
+
+                // If node was moved..
+                if (newGlobalPos != nodeGlobalPositions[i]) {
+                    // Execute callback.
+                    callback(i, newGlobalPos);
+                }
+            } 
+        }
+
     }
 
 }

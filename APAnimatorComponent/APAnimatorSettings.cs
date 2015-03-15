@@ -65,9 +65,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public KeyCode playModeModKey = KeyCode.RightAlt;
 
+        public KeyCode positionHandleKey = KeyCode.G;
+
         #endregion
 
         #region SHORTCUT PROPERTIES
+        public KeyCode PositionHandleKey {
+            get { return positionHandleKey; }
+            set { positionHandleKey = value; }
+        }
+
         public KeyCode PlayModeModKey {
             get { return playModeModKey; }
             set { playModeModKey = value; }
@@ -228,9 +235,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
 
+
+        [SerializeField]
+        private PositionHandle positionHandle = PositionHandle.Free;
         #endregion
 
         #region ANIMATOR PROPERTIES
+        public PositionHandle PositionHandle {
+            get { return positionHandle; }
+            set { positionHandle = value; }
+        }
+
 
         public bool AutoPlay {
             get { return autoPlay; }

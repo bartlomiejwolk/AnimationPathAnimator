@@ -1189,27 +1189,45 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleShortcuts() {
             serializedObject.Update();
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.EaseModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.Ease);
+            // Ease handle mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.EaseModeKey) {
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.RotationModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.Rotation);
+                Script.SettingsAsset.HandleMode = HandleMode.Ease;
+            }
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.TiltingModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.Tilting);
+            // Rotation mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.RotationModeKey) {
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.NoneModeKey,
-                () => Script.SettingsAsset.HandleMode = HandleMode.None);
+                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+            }
 
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.UpdateAllKey,
-                () =>
-                    Script.SettingsAsset.UpdateAllMode =
-                        !Script.SettingsAsset.UpdateAllMode);
+            // Tilting mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.TiltingModeKey) {
+
+                Script.SettingsAsset.HandleMode = HandleMode.Tilting;
+            }
+
+            // None mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.NoneModeKey) {
+
+                Script.SettingsAsset.HandleMode = HandleMode.None;
+            }
+
+            // Update all mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.UpdateAllKey) {
+
+                Script.SettingsAsset.UpdateAllMode = !Script.SettingsAsset.UpdateAllMode;
+            }
 
             // Short jump forward.
             if (Event.current.type == EventType.keyDown
@@ -1217,7 +1235,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 == Script.SettingsAsset.ShortJumpForwardKey
                 && FlagsHelper.IsSet(
                     Event.current.modifiers,
-                    EventModifiers.Alt)) {
+                    Script.SettingsAsset.ModKey)) {
 
                 var newAnimationTimeRatio =
                     animationTime.floatValue
@@ -1228,29 +1246,42 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Short jump backward.
-            Utilities.HandleModShortcut(
-                () => {
-                    var newAnimationTimeRatio =
-                        animationTime.floatValue
-                        - Script.SettingsAsset.ShortJumpValue;
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.ShortJumpBackwardKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
 
-                    animationTime.floatValue =
-                        (float) (Math.Round(newAnimationTimeRatio, 3));
-                },
-                Script.SettingsAsset.ShortJumpBackwardKey,
-                Event.current.alt);
+                var newAnimationTimeRatio =
+                    animationTime.floatValue
+                    - Script.SettingsAsset.ShortJumpValue;
+
+                animationTime.floatValue =
+                    (float)(Math.Round(newAnimationTimeRatio, 3));
+            }
 
             // Long jump forward.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.LongJumpForwardKey,
-                () => animationTime.floatValue +=
-                    Script.SettingsAsset.LongJumpValue);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.LongJumpForwardKey
+                && !FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue += Script.SettingsAsset.LongJumpValue;
+            }
 
             // Long jump backward.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.LongJumpBackwardKey,
-                () => animationTime.floatValue -=
-                    Script.SettingsAsset.LongJumpValue);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.LongJumpBackwardKey
+                && !FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue -= Script.SettingsAsset.LongJumpValue;
+            }
 
             // Jump to next node.
             if (Event.current.type == EventType.keyDown
@@ -1261,29 +1292,42 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             // Jump to previous node.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.JumpToPreviousNodeKey,
-                () => animationTime.floatValue =
-                    GetNearestBackwardNodeTimestamp());
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToPreviousNodeKey) {
+
+                animationTime.floatValue = GetNearestBackwardNodeTimestamp();
+            }
 
             // Jump to start.
-            Utilities.HandleModShortcut(
-                () => animationTime.floatValue = 0,
-                Script.SettingsAsset.JumpToStartKey,
-                //ModKeyPressed);
-                Event.current.alt);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToStartKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue = 0;
+            }
 
             // Jump to end.
-            Utilities.HandleModShortcut(
-                () => animationTime.floatValue = 1,
-                Script.SettingsAsset.JumpToEndKey,
-                //ModKeyPressed);
-                Event.current.alt);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToEndKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                animationTime.floatValue = 1;
+            }
 
             // Play/pause animation.
-            Utilities.HandleUnmodShortcut(
-                Script.SettingsAsset.PlayPauseKey,
-                HandlePlayPauseButton);
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.PlayPauseKey) {
+
+                HandlePlayPauseButton();
+            }
 
             serializedObject.ApplyModifiedProperties();
         }

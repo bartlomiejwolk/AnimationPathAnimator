@@ -51,31 +51,6 @@ namespace ATP.AnimationPathAnimator {
             return diff / (absA + absB) < epsilon;
         }
 
-        public static void HandleModShortcut(
-            Action callback,
-            KeyCode key,
-            bool modKeyPressed) {
-
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == key
-                && modKeyPressed) {
-
-                callback();
-            }
-        }
-
-        public static void HandleUnmodShortcut(
-            KeyCode key,
-            Action callback) {
-
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode == key
-                && Event.current.modifiers == EventModifiers.None) {
-
-                callback();
-            }
-        }
-
         public static object InvokeMethodWithReflection(
             object target,
             string methodName,

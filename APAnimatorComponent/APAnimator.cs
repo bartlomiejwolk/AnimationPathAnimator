@@ -214,6 +214,51 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
                 HandlePlayPause();
             }
+
+            // Long jump forward
+            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
+                animationTime += SettingsAsset.LongJumpValue;
+            }
+
+            // Long jump backward. 
+            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
+                animationTime -= SettingsAsset.LongJumpValue;
+            }
+
+            // Jump to next node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
+                animationTime = GetNearestForwardNodeTimestamp();
+            }
+
+            // Jump to previous node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
+                animationTime = GetNearestBackwardNodeTimestamp();
+            }
+        }
+
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < AnimationTime) {
+                    return pathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > AnimationTime)) {
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
         }
 
         #endregion UNITY MESSAGES

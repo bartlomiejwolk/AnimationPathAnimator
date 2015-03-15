@@ -1161,31 +1161,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region SHORTCUTS
 
-        private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < animationTime.floatValue) {
-                    return pathTimestamps[i];
-                }
-            }
-
-            // Return timestamp of the last node.
-            return 0;
-        }
-
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = Script.PathData.GetPathTimestamps();
-
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > animationTime.floatValue)) {
-                return timestamp;
-            }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
         private void HandleShortcuts() {
             serializedObject.Update();
 
@@ -1288,7 +1263,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToNextNodeKey) {
 
-                animationTime.floatValue = GetNearestForwardNodeTimestamp();
+                animationTime.floatValue =
+                    (float) Utilities.InvokeMethodWithReflection(
+                        Script,
+                        "GetNearestForwardNodeTimestamp",
+                        null);
             }
 
             // Jump to previous node.
@@ -1296,7 +1275,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToPreviousNodeKey) {
 
-                animationTime.floatValue = GetNearestBackwardNodeTimestamp();
+                animationTime.floatValue =
+                    (float) Utilities.InvokeMethodWithReflection(
+                        Script,
+                        "GetNearestBackwardNodeTimestamp",
+                        null);
             }
 
             // Jump to start.

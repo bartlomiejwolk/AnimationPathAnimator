@@ -565,6 +565,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { updateAllLabelText = value; }
         }
         #endregion
+        #region ADVANCED FIELDS
+
+        [SerializeField]
+        private float minNodeTimeSeparation = 0.001f;
+
+        #endregion
+
+        #region ADVANCED PROPERTIES 
+        public float MinNodeTimeSeparation {
+            get { return minNodeTimeSeparation; }
+            set { minNodeTimeSeparation = value; }
+        }
+
+
+        #endregion
     }
 
 }

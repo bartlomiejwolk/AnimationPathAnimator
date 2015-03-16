@@ -1148,8 +1148,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Return if timestamp for new node would be too close to the
             // neighbouring nodes.
-            // TODO Add new setting to asset.
-            if (Mathf.Abs(currentKeyTime - newKeyTime) < 0.001f) {
+            if (Mathf.Abs(currentKeyTime - newKeyTime)
+                < Script.SettingsAsset.MinNodeTimeSeparation) {
+
                 Debug.LogWarning("Cannot add this node. Time difference to " +
                           "previous and next node is too small. " +
                           "Move nodes more far away.");

@@ -57,6 +57,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return TiltingCurve.length; }
         }
 
+        public int RotationPathNodesNo {
+            get { return RotationPath.KeysNo; }
+        }
+
         private AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
         }

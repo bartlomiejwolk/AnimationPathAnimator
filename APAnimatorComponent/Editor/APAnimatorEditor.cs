@@ -306,6 +306,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawCreatePathAssetButton() {
+            // Draw button.
             if (GUILayout.Button(
                 new GUIContent(
                     "New Path",
@@ -497,7 +498,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 if (Script.PathData == null) return;
 
-                Undo.RecordObject(Script.PathData, "Reset rotatio path.");
+                Undo.RecordObject(Script.PathData, "Reset rotation path.");
 
                 // Reset curves to its default state.
                 Script.PathData.ResetRotationPath();
@@ -900,6 +901,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Add a new node.
             AddNodeBetween(nodeIndex);
 
+            HandleUnsyncedObjectAndRotationPaths();
+
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode sooth node tangents.
@@ -918,6 +921,44 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 null);
 
             SceneView.RepaintAll();
+        }
+
+        private void HandleUnsyncedObjectAndRotationPaths() {
+            // Return if object and rotation path have the same number of nodes.
+            if (Script.PathData.NodesNo == Script.PathData.RotationPathNodesNo) {
+                return;
+            }
+
+            // Undo operatio that lead to unsynced state.
+            Undo.PerformUndo();
+
+            // Display modal window.
+            var reset = EditorUtility.DisplayDialog(
+                "Can't add new node!",
+                "Nodes in the rotation path are placed too dense.\n" +
+                "Click \"Reset\" to reset rotation path or \"Cancel\" " +
+                "to update rotation path manually.",
+                "Reset",
+                "Cancel");
+
+            // Handle reset option.
+            if (reset) {
+                Undo.RecordObject(Script.PathData, "Reset rotation path.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetRotationPath();
+                Script.PathData.SmoothRotationPathTangents();
+
+                SceneView.RepaintAll();
+            }
+            else {
+                // Set handle mode to Rotation so that user can fix the
+                // rotatio path.
+                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                // Set rotation mode to Custom so that user can see how
+                // changes to rotation path affect animated object.
+                Script.SettingsAsset.RotationMode = RotationMode.Custom;
+            }
         }
 
         private void DrawEaseHandlesCallbackHandler(
@@ -1139,8 +1180,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 // Repaint inspector.
                 Repaint();
+
                 // Update path with new tangent setting.
                 HandleTangentModeChange();
+
                 // Update animated object.
                 Utilities.InvokeMethodWithReflection(
                     Script,

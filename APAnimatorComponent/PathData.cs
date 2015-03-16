@@ -27,6 +27,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion EVENTS
 
+        #region CONST
+        private const int PathLengthSamplingFrequency = 400;
+        private const float DefaultEaseCurveValue = 0.05f;
+        #endregion
         #region FIELDS
 
         [SerializeField]
@@ -65,18 +69,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedObjectPath; }
         }
 
-        private float DefaultEaseCurveValue {
-            get { return 0.05f; }
-        }
-
         private AnimationCurve EaseCurve {
             get { return easeCurve; }
         }
-
-        private int PathLengthSamplingFrequency {
-            get { return 400; }
-        }
-
         private AnimationPath RotationPath {
             get { return rotationPath; }
         }

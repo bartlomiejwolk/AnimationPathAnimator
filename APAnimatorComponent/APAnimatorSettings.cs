@@ -175,7 +175,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         [Header("Animator")]
         [SerializeField]
-        private bool autoPlay = true;
+        private bool autoPlay;
 
         [SerializeField]
         private int countdownToStopFramesNo = 10;

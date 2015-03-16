@@ -950,17 +950,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleDrawingRotationPointGizmos() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
-            var localRotPointPositions =
-                pathData.GetRotationPointPositions();
-
-            var globalRotPointPositions =
-                new Vector3[localRotPointPositions.Length];
-
-            // TODO Replace with method call.
-            for (var i = 0; i < localRotPointPositions.Length; i++) {
-                globalRotPointPositions[i] =
-                    transform.TransformPoint(localRotPointPositions[i]);
-            }
+            var globalRotPointPositions = GetGlobalRotationPointPositions();
 
             // Path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
@@ -982,6 +972,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     + SettingsAsset.RotationPointGizmoIcon,
                     false);
             }
+        }
+
+        private Vector3[] GetGlobalRotationPointPositions() {
+            var localRotPointPositions =
+                pathData.GetRotationPointPositions();
+
+            var globalRotPointPositions =
+                new Vector3[localRotPointPositions.Length];
+
+            for (var i = 0; i < localRotPointPositions.Length; i++) {
+                globalRotPointPositions[i] =
+                    transform.TransformPoint(localRotPointPositions[i]);
+            }
+
+            return globalRotPointPositions;
         }
 
         private void HandleDrawingTargetIcon() {

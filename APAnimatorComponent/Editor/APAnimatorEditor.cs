@@ -285,13 +285,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             newTimeRatio = DrawAnimationTimeSlider();
 
             // Update AnimationTime only when value was changed.
-            if (Math.Abs(newTimeRatio - Script.AnimationTime)
-                > GlobalConstants.FloatPrecision) {
+            if (!Utilities.FloatsEqual(
+                newTimeRatio,
+                Script.AnimationTime,
+                GlobalConstants.FloatPrecision)) {
 
                 serializedObject.Update();
-
                 animationTime.floatValue = newTimeRatio;
-
                 serializedObject.ApplyModifiedProperties();
             }
         }
@@ -839,8 +839,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // timestamp.
             var index = Array.FindIndex(
                 nodeTimestamps,
-                x => Math.Abs(x - currentAnimationTime)
-                     < GlobalConstants.FloatPrecision);
+                x => Utilities.FloatsEqual(
+                    x,
+                    currentAnimationTime,
+                    GlobalConstants.FloatPrecision));
 
             if (index < 0) return;
 

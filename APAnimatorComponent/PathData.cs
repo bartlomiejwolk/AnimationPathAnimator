@@ -627,9 +627,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 0; i < curveTimestamps.Length; i++) {
                 // Check if key at this timestamp exists..
                 var keyExists = nodeTimestamps.Any(
-                    t =>
-                        Math.Abs(curveTimestamps[i] - t)
-                        < GlobalConstants.FloatPrecision);
+                    t => Utilities.FloatsEqual(
+                        curveTimestamps[i],
+                        t,
+                        GlobalConstants.FloatPrecision));
 
                 if (keyExists) continue;
 
@@ -651,8 +652,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 1; i < RotationPath.KeysNo - 1; i++) {
                 // If resp. path node timestamp is different from rotation
                 // point timestamp..
-                if (Math.Abs(nodeTimestamps[i] - rotationCurvesTimestamps[i])
-                    > GlobalConstants.FloatPrecision) {
+                if (!Utilities.FloatsEqual(
+                    nodeTimestamps[i],
+                    rotationCurvesTimestamps[i],
+                    GlobalConstants.FloatPrecision)) {
 
                     // Update rotation point timestamp.
                     RotationPath.ChangeNodeTimestamp(
@@ -694,9 +697,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {
                 // Check if same timestamp exist in rotationPath.
                 var keyExists = pathTimestamps.Any(
-                    nodeTimestamp =>
-                        Math.Abs(rotationCurvesTimestamps[i] - nodeTimestamp)
-                        < GlobalConstants.FloatPrecision);
+                    nodeTimestamp => Utilities.FloatsEqual(
+                        rotationCurvesTimestamps[i],
+                        nodeTimestamp,
+                        GlobalConstants.FloatPrecision));
 
                 // If key exists check next timestamp.
                 if (keyExists) continue;

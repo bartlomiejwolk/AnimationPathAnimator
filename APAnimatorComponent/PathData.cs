@@ -239,6 +239,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public void ChangeRotationAtTimestamp(
             float timestamp,
             Vector3 newPosition) {
+
             // Get node timestamps.
             var timestamps = RotationPath.GetTimestamps();
             // If matching timestamp in the path was found.
@@ -246,8 +247,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // For each timestamp..
             for (var i = 0; i < RotationPath.KeysNo; i++) {
                 // Check if it is the timestamp to remove..
-                if (Math.Abs(timestamps[i] - timestamp)
-                    < GlobalConstants.FloatPrecision) {
+                if (Utilities.FloatsEqual(
+                    timestamps[i],
+                    timestamp,
+                    GlobalConstants.FloatPrecision)) {
+
                     // Remove node.
                     RotationPath.RemoveNode(i);
 
@@ -550,8 +554,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from easeCurve
                 // timestamp..
-                if (Math.Abs(pathNodeTimestamps[i] - curve.keys[i].value)
-                    > GlobalConstants.FloatPrecision) {
+                if (!Utilities.FloatsEqual(
+                    pathNodeTimestamps[i],
+                    curve.keys[i].value,
+                    GlobalConstants.FloatPrecision)) {
+                    
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp
@@ -594,9 +601,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // For each path timestamp..
             foreach (var nodeTimestamp in nodeTimestamps) {
                 var valueExists = curveTimestamps.Any(
-                    t =>
-                        Math.Abs(nodeTimestamp - t)
-                        < GlobalConstants.FloatPrecision);
+                    t => Utilities.FloatsEqual(
+                        nodeTimestamp,
+                        t,
+                        GlobalConstants.FloatPrecision));
 
                 // Add missing key.
                 if (valueExists) continue;

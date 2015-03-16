@@ -74,7 +74,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private int PathLengthSamplingFrequency {
-            get { return 20; }
+            get { return 400; }
         }
 
         private AnimationPath RotationPath {

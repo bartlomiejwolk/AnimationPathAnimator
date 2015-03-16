@@ -322,6 +322,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 lastNodeIndex);
 
             // Calculate amount of points to extract.
+            // TODO Create backing field for samplingFrequency in settings.
             var samplingRate = (int) (sectionLinearLength * samplingFrequency);
 
             var firstNodeTime = GetTimeAtKey(firstNodeIndex);

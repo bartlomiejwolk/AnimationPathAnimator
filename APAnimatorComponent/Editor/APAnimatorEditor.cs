@@ -1115,7 +1115,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void AddNodeBetween(int nodeIndex) {
-            // Timestamp of node on which was taken action.
+            // Timestamp of node that was taken action on.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
             // Get timestamp of the next node.
             var nextKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex + 1);
@@ -1125,6 +1125,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var newKeyTime =
                 currentKeyTime +
                 ((nextKeyTime - currentKeyTime) / 2);
+
+            // Return if timestamp for new node would be too close to the
+            // neighbouring nodes.
+            // TODO Add new setting to asset.
+            if (Mathf.Abs(currentKeyTime - newKeyTime) < 0.001f) {
+                Debug.Log("Cannot add this node. Time difference to " +
+                          "previous and next node is too small. " +
+                          "Move nodes more far away.");
+                return;
+            }
 
             // Add node to the animation curves.
             Script.PathData.CreateNodeAtTime(newKeyTime);

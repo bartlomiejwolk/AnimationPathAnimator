@@ -890,7 +890,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             Script.PathData.DistributeTimestamps();
 
-            // In Smooth mode mooth node tangents.
+            // In Smooth mode sooth node tangents.
             if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
@@ -904,6 +904,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script,
                 "UpdateAnimation",
                 null);
+
+            SceneView.RepaintAll();
         }
 
         private void DrawEaseHandlesCallbackHandler(

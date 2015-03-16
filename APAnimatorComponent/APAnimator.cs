@@ -189,6 +189,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnValidate() {
             UpdateAnimation();
+            UpdateSubscribedToEventsFlag();
+        }
+
+        private void UpdateSubscribedToEventsFlag() {
+            // Update flag when path data asset is removed.
+            if (PathData == null && subscribedToEvents) {
+                subscribedToEvents = false;
+            }
         }
 
         private void Reset() {

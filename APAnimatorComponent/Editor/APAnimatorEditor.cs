@@ -237,7 +237,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced SettingsAsset",
+                    "Advanced Settings",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -577,7 +577,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "SettingsAsset Asset",
+                    "Settings Asset",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -585,7 +585,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void DrawShortcutsHelpBox() {
             EditorGUILayout.HelpBox(
-                "Check SettingsAsset Asset for shortcuts.",
+                "Check Settings Asset for shortcuts.",
                 MessageType.Info);
         }
 

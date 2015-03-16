@@ -183,7 +183,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnEnable() {
             LoadRequiredResources();
-            AssignMainCameraAsAnimatedGO();
+            //AssignMainCameraAsAnimatedGO();
             SubscribeToEvents();
         }
 
@@ -718,6 +718,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void AssignMainCameraAsAnimatedGO() {
             if (AnimatedGO == null && Camera.main != null) {
                 animatedGO = Camera.main.transform;
+            }
+            else {
+                Debug.LogWarning("Camera with tag \"MainCamera\" not found.");
             }
         }
 

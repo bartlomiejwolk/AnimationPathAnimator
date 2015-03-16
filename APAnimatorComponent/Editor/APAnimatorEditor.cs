@@ -546,9 +546,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                         ""),
                     Script.SettingsAsset.RotationMode);
 
-            // If value changed, update animated GO in the scene.
-            if (Script.SettingsAsset.RotationMode != prevRotationMode) {
-                callback();
+            // Return if rotation mode not changed.
+            if (Script.SettingsAsset.RotationMode == prevRotationMode) return;
+
+            // Update animated GO in the scene.
+            callback();
+
+            // If Custom mode selected, change handle mode to Rotation.
+            if (Script.SettingsAsset.RotationMode == RotationMode.Custom) {
+                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
             }
         }
 

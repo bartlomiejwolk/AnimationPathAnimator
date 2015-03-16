@@ -588,6 +588,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!RequiredAssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;
+            if (!enabled) return;
 
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();

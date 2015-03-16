@@ -1130,7 +1130,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // neighbouring nodes.
             // TODO Add new setting to asset.
             if (Mathf.Abs(currentKeyTime - newKeyTime) < 0.001f) {
-                Debug.Log("Cannot add this node. Time difference to " +
+                Debug.LogWarning("Cannot add this node. Time difference to " +
                           "previous and next node is too small. " +
                           "Move nodes more far away.");
                 return;

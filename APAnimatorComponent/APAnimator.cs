@@ -746,11 +746,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Get path timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
 
-            // Compare current AnimationTime to node timestamps.
+            // If current animation time is the same as any of the path
+            // node timestamps, get node index.
             var index = Array.FindIndex(
                 nodeTimestamps,
-                x => Math.Abs(x - AnimationTime)
-                     < GlobalConstants.FloatPrecision);
+                x => Utilities.FloatsEqual(
+                    x,
+                    AnimationTime,
+                    GlobalConstants.FloatPrecision));
 
             // Return if current AnimationTime is not equal to any node
             // timestamp.
@@ -758,9 +761,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Create event args.
             var args = new NodeReachedEventArgs(index, AnimationTime);
-
             // Fire event.
             OnNodeReached(args);
+            Debug.Log("node reached");
         }
 
         private void LoadRequiredResources() {
@@ -958,9 +961,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 0; i < globalRotPointPositions.Length; i++) {
                 // Return if current animation time is the same as any node
                 // time.
-                // TODO Replace with Utility method to check if equal.
-                if (Math.Abs(nodeTimestamps[i] - AnimationTime) <
-                    GlobalConstants.FloatPrecision) {
+                if (Utilities.FloatsEqual(
+                    nodeTimestamps[i],
+                    AnimationTime,
+                    GlobalConstants.FloatPrecision)) {
 
                     continue;
                 }

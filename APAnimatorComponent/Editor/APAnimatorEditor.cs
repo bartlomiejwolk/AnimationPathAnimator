@@ -143,19 +143,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-
-        private void DrawPositionHandleDropdown() {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                positionHandle,
-                new GUIContent(
-                    "Position Handle",
-                    "Handle used to move nodes on scene."));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -218,6 +205,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+        private void DrawPositionHandleDropdown() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                positionHandle,
+                new GUIContent(
+                    "Position Handle",
+                    "Handle used to move nodes on scene."));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
@@ -922,45 +921,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SceneView.RepaintAll();
         }
-
-        private void HandleUnsyncedObjectAndRotationPaths() {
-            // Return if object and rotation path have the same number of nodes.
-            if (Script.PathData.NodesNo == Script.PathData.RotationPathNodesNo) {
-                return;
-            }
-
-            // Undo operatio that lead to unsynced state.
-            Undo.PerformUndo();
-
-            // Display modal window.
-            var reset = EditorUtility.DisplayDialog(
-                "Can't add new node!",
-                "Nodes in the rotation path are placed too dense.\n" +
-                "Click \"Reset\" to reset rotation path or \"Cancel\" " +
-                "to update rotation path manually.",
-                "Reset",
-                "Cancel");
-
-            // Handle reset option.
-            if (reset) {
-                Undo.RecordObject(Script.PathData, "Reset rotation path.");
-
-                // Reset curves to its default state.
-                Script.PathData.ResetRotationPath();
-                Script.PathData.SmoothRotationPathTangents();
-
-                SceneView.RepaintAll();
-            }
-            else {
-                // Set handle mode to Rotation so that user can fix the
-                // rotatio path.
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
-                // Set rotation mode to Custom so that user can see how
-                // changes to rotation path affect animated object.
-                Script.SettingsAsset.RotationMode = RotationMode.Custom;
-            }
-        }
-
         private void DrawEaseHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
@@ -1084,7 +1044,25 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
 
-        #region METHODS
+        #region OTHER HANDLERS
+        private void HandleUndoEvent() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                // Repaint inspector.
+                Repaint();
+
+                // Update path with new tangent setting.
+                HandleTangentModeChange();
+
+                // Update animated object.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
+            }
+        }
+
         private void HandleAnimatorEventsSubscription() {
             // Subscribe animator to path events if not subscribed already.
             // This is required after animator component reset.
@@ -1106,7 +1084,47 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void HandleUnsyncedObjectAndRotationPaths() {
+            // Return if object and rotation path have the same number of nodes.
+            if (Script.PathData.NodesNo == Script.PathData.RotationPathNodesNo) {
+                return;
+            }
 
+            // Undo operatio that lead to unsynced state.
+            Undo.PerformUndo();
+
+            // Display modal window.
+            var reset = EditorUtility.DisplayDialog(
+                "Can't add new node!",
+                "Nodes in the rotation path are placed too dense.\n" +
+                "Click \"Reset\" to reset rotation path or \"Cancel\" " +
+                "to update rotation path manually.",
+                "Reset",
+                "Cancel");
+
+            // Handle reset option.
+            if (reset) {
+                Undo.RecordObject(Script.PathData, "Reset rotation path.");
+
+                // Reset curves to its default state.
+                Script.PathData.ResetRotationPath();
+                Script.PathData.SmoothRotationPathTangents();
+
+                SceneView.RepaintAll();
+            }
+            else {
+                // Set handle mode to Rotation so that user can fix the
+                // rotatio path.
+                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                // Set rotation mode to Custom so that user can see how
+                // changes to rotation path affect animated object.
+                Script.SettingsAsset.RotationMode = RotationMode.Custom;
+            }
+        }
+
+        #endregion
+
+        #region METHODS
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {
                 var sceneView = (SceneView) SceneView.sceneViews[0];
@@ -1183,25 +1201,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
             }
         }
-
-        private void HandleUndoEvent() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                // Repaint inspector.
-                Repaint();
-
-                // Update path with new tangent setting.
-                HandleTangentModeChange();
-
-                // Update animated object.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UpdateAnimation",
-                    null);
-            }
-        }
-
         private void InitializeSerializedProperties() {
             rotationSlerpSpeed =
                 SettingsSerializedObject.FindProperty("rotationSlerpSpeed");

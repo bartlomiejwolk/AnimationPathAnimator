@@ -206,6 +206,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void Start() {
+            HandleStartAnimation();
+        }
+
+        private void HandleStartAnimation() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
                 StartAnimation();
                 IsPlaying = true;

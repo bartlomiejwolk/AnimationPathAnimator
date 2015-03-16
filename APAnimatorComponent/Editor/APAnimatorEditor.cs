@@ -173,6 +173,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             CopyIconsToGizmosFolder();
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
+
+            // Update animated GO.
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
         }
 
         private void OnSceneGUI() {

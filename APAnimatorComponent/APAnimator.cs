@@ -949,6 +949,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var globalRotPointPositions =
                 new Vector3[localRotPointPositions.Length];
 
+            // TODO Replace with method call.
             for (var i = 0; i < localRotPointPositions.Length; i++) {
                 globalRotPointPositions[i] =
                     transform.TransformPoint(localRotPointPositions[i]);
@@ -960,8 +961,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 0; i < globalRotPointPositions.Length; i++) {
                 // Return if current animation time is the same as any node
                 // time.
+                // TODO Replace with Utility method to check if equal.
                 if (Math.Abs(nodeTimestamps[i] - AnimationTime) <
                     GlobalConstants.FloatPrecision) {
+
                     continue;
                 }
 

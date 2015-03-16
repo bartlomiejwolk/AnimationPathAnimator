@@ -120,8 +120,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             int keyIndex,
             float newTimestamp) {
 
-            //Logger.LogStackTrace();
-
             // For each curve..
             for (var i = 0; i < 3; i++) {
                 // Get copy of the key from animation curves.
@@ -132,12 +130,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 // Replace old key with a new one.
                 curves[i].MoveKey(keyIndex, keyCopy);
-
-                //if (i == 0)
-                //    Logger.LogString(
-                //        "INDEX: {0}, TIME: {1}",
-                //        keyIndex,
-                //        keyCopy.time);
             }
         }
 

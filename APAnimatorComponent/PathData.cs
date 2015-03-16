@@ -492,13 +492,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="nodeTimestamp"></param>
         private void CreateRotationPoint(float nodeTimestamp) {
             // Calculate value for new rotation point.
-            var defaultRotation =
+            var rotationValue =
                 RotationPath.GetVectorAtTime(nodeTimestamp);
 
             // Create new rotation point.
             RotationPath.CreateNewNode(
                 nodeTimestamp,
-                defaultRotation);
+                rotationValue);
         }
 
         private void EaseCurveExtremeNodes(AnimationCurve curve) {

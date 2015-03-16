@@ -933,6 +933,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             int movedNodeIndex,
             Vector3 newGlobalPos) {
 
+            // Return if any Alt key is pressed.
+            if (FlagsHelper.IsSet(Event.current.modifiers, EventModifiers.Alt)) {
+                return;
+            }
+
             Undo.RecordObject(Script.PathData, "Change path");
 
             // Calculate node new local position.
@@ -942,6 +947,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.PathData.MoveNodeToPosition(
                 movedNodeIndex,
                 newNodeLocalPosition);
+
             Script.PathData.DistributeTimestamps();
 
             HandleSmoothTangentMode();

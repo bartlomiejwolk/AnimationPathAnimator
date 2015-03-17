@@ -129,6 +129,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
+        private void DrawSceneToolShortcutsInfoLabel() {
+            EditorGUILayout.HelpBox(
+                "Shortcuts (editor): G, Y, U, I, O, P.",
+                MessageType.Info);
+        }
+
+        private void DrawShortcutsInfoLabel() {
+            EditorGUILayout.HelpBox(
+                "Scene shortcuts to control animation (editor/play mode): " +
+                "[Alt] H, [Alt] J, [Alt] K, [Alt] L. (play mode): Space",
+                MessageType.Info);
+        }
+
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
@@ -171,7 +184,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var newTimeRatio = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
-                    "Current (normalized) animation time. Animated game object will be " +
+                    "Current, normalized animation time. Animated game object will be " +
                     "updated accordingly to the animation time value."),
                 Script.AnimationTime,
                 0,
@@ -351,7 +364,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 positionHandle,
                 new GUIContent(
                     "Position Handle",
-                    "Handle used to move nodes on scene."));
+                    "Handle used to move nodes on scene. Default " +
+                    "shortcut: G"));
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -507,11 +521,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawShortcutsHelpBox() {
-            EditorGUILayout.HelpBox(
-                "Check Settings Asset for shortcuts.",
-                MessageType.Info);
-        }
+        //private void DrawShortcutsHelpBox() {
+        //    EditorGUILayout.HelpBox(
+        //        "Check Settings Asset for shortcuts.",
+        //        MessageType.Info);
+        //}
 
         private void DrawShortJumpValueField() {
             SettingsSerializedObject.Update();
@@ -1084,6 +1098,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawHandleModeDropdown();
             DrawPositionHandleDropdown();
             DrawUpdateAllToggle();
+            DrawSceneToolShortcutsInfoLabel();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -1103,6 +1118,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawEnableControlsInPlayModeToggle();
 
             DrawPlayerControls();
+
+            DrawShortcutsInfoLabel();
 
             EditorGUILayout.Space();
 
@@ -1139,8 +1156,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
         }
-
-
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {
                 var sceneView = (SceneView) SceneView.sceneViews[0];

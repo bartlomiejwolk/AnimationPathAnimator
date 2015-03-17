@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     /// <summary>
-    /// Represents 3d points with three animation curves.
+    ///     Represents 3d points with three animation curves.
     /// </summary>
     /// <remarks>
     ///     - All three curves are always synchronized, ie. keys number and
@@ -21,12 +21,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         [SerializeField]
         private AnimationCurve[] curves;
+
         #endregion FIELDS
 
         #region PROPERTIES
 
         /// <summary>
-        /// Number of nodes in the path.
+        ///     Number of nodes in the path.
         /// </summary>
         public int KeysNo {
             get { return curves[0].length; }
@@ -45,15 +46,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+
         /// <summary>
-        /// Constructor.
+        ///     Constructor.
         /// </summary>
         public AnimationPath() {
             InitializeAnimationPathCurves();
         }
 
         /// <summary>
-        /// Adds node at timestamp. Node's position will be evaluated using existing path.
+        ///     Adds node at timestamp. Node's position will be evaluated using existing path.
         /// </summary>
         /// <param name="timestamp">Timestamp of for the node.</param>
         public void AddNodeAtTime(float timestamp) {
@@ -67,7 +69,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Calculates path length.
+        ///     Calculates path length.
         /// </summary>
         /// <param name="samplingFrequency">Amount of sample points for one meter of path.</param>
         /// <returns>Path length in meters.</returns>
@@ -87,7 +89,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Calculates shortest path between path nodes.
+        ///     Calculates shortest path between path nodes.
         /// </summary>
         /// <returns>Path length in meters.</returns>
         public float CalculatePathLinearLength() {
@@ -104,7 +106,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Calculates path length between two nodes.
+        ///     Calculates path length between two nodes.
         /// </summary>
         /// <param name="firstNodeIndex">Index of the first node.</param>
         /// <param name="secondNodeIndex">Index of the second node.</param>
@@ -133,7 +135,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Calculates shortest distance between two nodes.
+        ///     Calculates shortest distance between two nodes.
         /// </summary>
         /// <param name="firstNodeIndex">Index of the first node.</param>
         /// <param name="secondNodeIndex">Index of the second node.</param>
@@ -152,29 +154,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Changes node timestamp.
-        /// </summary>
-        /// <param name="keyIndex">Node index.</param>
-        /// <param name="newTimestamp">New timestamp.</param>
-        public void ChangeNodeTimestamp(
-            int keyIndex,
-            float newTimestamp) {
-
-            // For each curve..
-            for (var i = 0; i < 3; i++) {
-                // Get copy of the key from animation curves.
-                var keyCopy = curves[i].keys[keyIndex];
-
-                // Change key's time.
-                keyCopy.time = newTimestamp;
-
-                // Replace old key with a new one.
-                curves[i].MoveKey(keyIndex, keyCopy);
-            }
-        }
-
-        /// <summary>
-        /// Changes in/out tangents of a single node.
+        ///     Changes in/out tangents of a single node.
         /// </summary>
         /// <param name="nodeIndex">Node index.</param>
         /// <param name="inTangent">New in tangent.</param>
@@ -205,7 +185,29 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Creates new node at position.
+        ///     Changes node timestamp.
+        /// </summary>
+        /// <param name="keyIndex">Node index.</param>
+        /// <param name="newTimestamp">New timestamp.</param>
+        public void ChangeNodeTimestamp(
+            int keyIndex,
+            float newTimestamp) {
+
+            // For each curve..
+            for (var i = 0; i < 3; i++) {
+                // Get copy of the key from animation curves.
+                var keyCopy = curves[i].keys[keyIndex];
+
+                // Change key's time.
+                keyCopy.time = newTimestamp;
+
+                // Replace old key with a new one.
+                curves[i].MoveKey(keyIndex, keyCopy);
+            }
+        }
+
+        /// <summary>
+        ///     Creates new node at position.
         /// </summary>
         /// <param name="timestamp">Node timestamp.</param>
         /// <param name="position">Node position</param>
@@ -216,7 +218,76 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Returns timestamp of a given node.
+        ///     Extracts 3d points from a path section between two given nodes.
+        /// </summary>
+        /// <param name="firstNodeIndex">First node index.</param>
+        /// <param name="lastNodeIndex">Last node index.</param>
+        /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
+        /// <param name="points">Reference to a list that'll be updated with extracted points.</param>
+        public void ExtractPointsFromSection(
+            int firstNodeIndex,
+            int lastNodeIndex,
+            float samplingFrequency,
+            ref List<Vector3> points) {
+
+            // Calculate section linear length.
+            var sectionLinearLength = CalculateSectionLinearLength(
+                firstNodeIndex,
+                lastNodeIndex);
+            // Calculate amount of points to extract.
+            var samplingRate = (int) (sectionLinearLength * samplingFrequency);
+            // Get first node timestamp.
+            var firstNodeTime = GetTimeAtKey(firstNodeIndex);
+            // Get last node timestamp.
+            var lastNodeTime = GetTimeAtKey(lastNodeIndex);
+            // Calculate time interval between section extreme nodes.
+            var timeInterval = lastNodeTime - firstNodeTime;
+            // Calculate timestep between each point.
+            var timestep = timeInterval / samplingRate;
+
+            // Clear points list.
+            points.Clear();
+
+            // Helper variable.
+            // Used to read values from animation curves.
+            var time = firstNodeTime;
+
+            // For each point to be extracted..
+            for (var i = 0; i < samplingRate; i++) {
+                // Get point position..
+                var point = GetVectorAtTime(time);
+                // Add point to result array.
+                points.Add(point);
+                // Update time.
+                time += timestep;
+            }
+        }
+
+        /// <summary>
+        ///     Extracts 3d points from a path section between two given nodes.
+        /// </summary>
+        /// <param name="firstNodeIndex">First node index.</param>
+        /// <param name="lastNodeIndex">Last node index.</param>
+        /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
+        /// <returns>Extracted points.</returns>
+        public List<Vector3> ExtractPointsFromSection(
+            int firstNodeIndex,
+            int lastNodeIndex,
+            float samplingFrequency) {
+
+            var points = new List<Vector3>();
+
+            ExtractPointsFromSection(
+                firstNodeIndex,
+                lastNodeIndex,
+                samplingFrequency,
+                ref points);
+
+            return points;
+        }
+
+        /// <summary>
+        ///     Returns timestamp of a given node.
         /// </summary>
         /// <param name="keyIndex">Node index</param>
         /// <returns></returns>
@@ -225,7 +296,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Returns timestamps of all nodes.
+        ///     Returns timestamps of all nodes.
         /// </summary>
         /// <returns>Array with node timestamps.</returns>
         public float[] GetTimestamps() {
@@ -239,7 +310,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Returns 3d position of node at index.
+        ///     Returns 3d position of node at index.
         /// </summary>
         /// <param name="keyIndex">Node index</param>
         /// <returns>Node 3d position.</returns>
@@ -252,7 +323,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Returns node 3d position at timestamp.
+        ///     Returns node 3d position at timestamp.
         /// </summary>
         /// <param name="timestamp">
         ///     Point in time for which the 3d vector should be constructed.
@@ -271,18 +342,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        ///     Initializes <c>curves</c> field with empty animation curves.
-        /// </summary>
-        private void InitializeAnimationPathCurves() {
-            curves = new AnimationCurve[3];
-
-            for (var i = 0; i < 3; i++) {
-                curves[i] = new AnimationCurve();
-            }
-        }
-
-        /// <summary>
-        /// Changes node's position at index.
+        ///     Changes node's position at index.
         /// </summary>
         /// <param name="keyIndex">Index of the key to update.</param>
         /// <param name="position">New node position.</param>
@@ -307,7 +367,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Removes all nodes.
+        ///     Removes all nodes.
         /// </summary>
         public void RemoveAllNodes() {
             var keysToRemoveNo = KeysNo;
@@ -317,7 +377,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Removes node at index.
+        ///     Removes node at index.
         /// </summary>
         /// <param name="nodeIndex">Node index.</param>
         public void RemoveNode(int nodeIndex) {
@@ -381,76 +441,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Extracts 3d points from a path section between two given nodes.
-        /// </summary>
-        /// <param name="firstNodeIndex">First node index.</param>
-        /// <param name="lastNodeIndex">Last node index.</param>
-        /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
-        /// <param name="points">Reference to a list that'll be updated with extracted points.</param>
-        public void ExtractPointsFromSection(
-            int firstNodeIndex,
-            int lastNodeIndex,
-            float samplingFrequency,
-            ref List<Vector3> points) {
-
-            // Calculate section linear length.
-            var sectionLinearLength = CalculateSectionLinearLength(
-                firstNodeIndex,
-                lastNodeIndex);
-            // Calculate amount of points to extract.
-            var samplingRate = (int) (sectionLinearLength * samplingFrequency);
-            // Get first node timestamp.
-            var firstNodeTime = GetTimeAtKey(firstNodeIndex);
-            // Get last node timestamp.
-            var lastNodeTime = GetTimeAtKey(lastNodeIndex);
-            // Calculate time interval between section extreme nodes.
-            var timeInterval = lastNodeTime - firstNodeTime;
-            // Calculate timestep between each point.
-            var timestep = timeInterval / samplingRate;
-
-            // Clear points list.
-            points.Clear();
-
-            // Helper variable.
-            // Used to read values from animation curves.
-            var time = firstNodeTime;
-
-            // For each point to be extracted..
-            for (var i = 0; i < samplingRate; i++) {
-                // Get point position..
-                var point = GetVectorAtTime(time);
-                // Add point to result array.
-                points.Add(point);
-                // Update time.
-                time += timestep;
-            }
-        }
-
-        /// <summary>
-        /// Extracts 3d points from a path section between two given nodes.
-        /// </summary>
-        /// <param name="firstNodeIndex">First node index.</param>
-        /// <param name="lastNodeIndex">Last node index.</param>
-        /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
-        /// <returns>Extracted points.</returns>
-        public List<Vector3> ExtractPointsFromSection(
-            int firstNodeIndex,
-            int lastNodeIndex,
-            float samplingFrequency) {
-
-            var points = new List<Vector3>();
-
-            ExtractPointsFromSection(
-                firstNodeIndex,
-                lastNodeIndex,
-                samplingFrequency,
-                ref points);
-
-            return points;
-        }
-
-        /// <summary>
-        /// Smooth in/out tangents of all nodes.
+        ///     Smooth in/out tangents of all nodes.
         /// </summary>
         public void SmoothAllNodes() {
             for (var i = 0; i < KeysNo; i++) {
@@ -467,6 +458,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             foreach (var curve in curves) {
                 // Smooth tangents.
                 curve.SmoothTangents(nodeIndex, 0);
+            }
+        }
+
+        /// <summary>
+        ///     Initializes <c>curves</c> field with empty animation curves.
+        /// </summary>
+        private void InitializeAnimationPathCurves() {
+            curves = new AnimationCurve[3];
+
+            for (var i = 0; i < 3; i++) {
+                curves[i] = new AnimationCurve();
             }
         }
 

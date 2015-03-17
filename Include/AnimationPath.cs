@@ -114,7 +114,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Result path length.
             float pathLength = 0;
 
-            var points = SampleSectionForPoints(
+            var points = ExtractPointsFromSection(
                 firstNodeIndex,
                 secondNodeIndex,
                 samplingFrequency);
@@ -382,8 +382,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="lastNodeIndex">Last node index.</param>
         /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
         /// <param name="points">Reference to a list that'll be updated with extracted points.</param>
-        // TODO Rename this and overload to ExtractPointsFromSection().
-        public void SampleSectionForPoints(
+        public void ExtractPointsFromSection(
             int firstNodeIndex,
             int lastNodeIndex,
             float samplingFrequency,
@@ -429,14 +428,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="lastNodeIndex">Last node index.</param>
         /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
         /// <returns>Extracted points.</returns>
-        public List<Vector3> SampleSectionForPoints(
+        public List<Vector3> ExtractPointsFromSection(
             int firstNodeIndex,
             int lastNodeIndex,
             float samplingFrequency) {
 
             var points = new List<Vector3>();
 
-            SampleSectionForPoints(
+            ExtractPointsFromSection(
                 firstNodeIndex,
                 lastNodeIndex,
                 samplingFrequency,

@@ -294,12 +294,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawLongJumpValueField() {
             SettingsSerializedObject.Update();
 
-            EditorGUILayout.PropertyField(
-                longJumpValue,
+            longJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Long Jump Value",
                     "Fraction of animation time used to jump forward/backward "
-                    + "in time with keyboard keys."));
+                    + "in time with keyboard keys."),
+                longJumpValue.floatValue,
+                0,
+                1);
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }
@@ -530,12 +532,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawShortJumpValueField() {
             SettingsSerializedObject.Update();
 
-            EditorGUILayout.PropertyField(
-                shortJumpValue,
+            shortJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Short Jump Value",
                     "Fraction of animation time used to jump forward/backward "
-                    + "in time with keyboard keys."));
+                    + "in time with keyboard keys."),
+                shortJumpValue.floatValue,
+                0,
+                1);
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }

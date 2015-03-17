@@ -384,22 +384,34 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimationTime = 0;
         }
 
+        /// <summary>
+        /// Unpause animation.
+        /// </summary>
         public void UnpauseAnimation() {
             Pause = false;
         }
 
+        /// <summary>
+        /// Update animated game object position, rotation and tilting.
+        /// </summary>
+        // TODO Rename to UpdateGO().
         private void Animate() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
             AnimateAnimatedGOTilting();
         }
 
+        /// <summary>
+        /// Update animated game object position.
+        /// </summary>
+        // TODO Rename to UpdateAnimatedGOPosition().
         private void AnimateAnimatedGOPosition() {
             if (AnimatedGO == null) return;
 
             var localPosAtTime =
                 PathData.GetVectorAtTime(AnimationTime);
 
+            // Global position that the animated object should be at in this frame.
             var globalPosAtTime =
                 transform.TransformPoint(localPosAtTime);
 
@@ -410,12 +422,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsAsset.PositionLerpSpeed);
         }
 
+        /// <summary>
+        /// Update animated game object rotation.
+        /// </summary>
+        // TODO Rename to UpdateAnimatedGORotation().
         private void AnimateAnimatedGORotation() {
             if (AnimatedGO == null) return;
 
             // Look at target.
             if (TargetGO != null
                 && SettingsAsset.RotationMode == RotationMode.Target) {
+
                 RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
@@ -430,30 +447,40 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Update animated game object tilting.
+        /// </summary>
+        // todo Rename to UpdateAnimatedGOTilting().
         private void AnimateAnimatedGOTilting() {
             if (AnimatedGO == null) return;
 
-            // Get current animatedGO rotation.
+            // Get current animated GO rotation.
             var eulerAngles = AnimatedGO.rotation.eulerAngles;
-            // Get rotation from tiltingCurve.
+            // Get tilting value.
             var zRotation = PathData.GetTiltingValueAtTime(AnimationTime);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-            // Update animatedGO rotation.
+            // Update animated GO rotation.
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         }
 
+        /// <summary>
+        /// Coroutine that will remember animated game object's current position, rotation and tilting
+        /// and after a given number of frames checks if any of those values changed. If none changed, animated GO
+        /// stops being updated and AnimatonEnded event is called.
+        /// </summary>
+        // TODO Should check also for tilting.
         private IEnumerator CountdownToStopAnimGOUpdate() {
+            // Helper variable.
             var frame = 0;
             var prevGOPosition = animatedGO.position;
             var prevGORotation = animatedGO.rotation;
             CountdownCoroutineIsRunning = true;
 
-            Debug.Log("Start CounddownToStopAnimGOUpdate coroutine.");
-
             while (true) {
                 frame++;
 
+                // Break after given number of frames.
                 if (frame > SettingsAsset.CountdownToStopFramesNo) break;
 
                 yield return null;
@@ -470,6 +497,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 animatedGO.rotation);
 
             if (!positionChanged && !rotationChanged) {
+                // Stop updating animated game object.
                 AnimGOUpdateEnabled = false;
                 // Fire event.
                 OnAnimationEnded();
@@ -857,6 +885,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to CalculateForwardPointPosition().
         private Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = SettingsAsset.ForwardPointOffset;

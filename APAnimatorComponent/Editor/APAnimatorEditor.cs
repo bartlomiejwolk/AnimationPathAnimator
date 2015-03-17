@@ -58,83 +58,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             HandleUndoEvent();
 
-            DrawPathDataAssetField();
-
-            EditorGUILayout.BeginHorizontal();
-
-            DrawCreatePathAssetButton();
-            DrawResetPathInspectorButton();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("References", EditorStyles.boldLabel);
-
-            DrawAnimatedGOField();
-            DrawTargetGOField();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
-
-            DrawHandleModeDropdown();
-            DrawPositionHandleDropdown();
-            DrawUpdateAllToggle();
-
-            EditorGUILayout.BeginHorizontal();
-
-            DrawResetEaseButton();
-            DrawResetRotationPathButton();
-            DrawResetTiltingButton();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player", EditorStyles.boldLabel);
-
-            DrawAnimationTimeValue();
-
-            DrawAutoPlayControl();
-            DrawEnableControlsInPlayModeToggle();
-
-            DrawPlayerControls();
-
-            EditorGUILayout.Space();
-
-            EditorGUIUtility.labelWidth = 0;
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player Options", EditorStyles.boldLabel);
-
-            DrawRotationModeDropdown(HandleRotationModeChange);
-            DrawTangentModeDropdown();
-            DrawWrapModeDropdown();
-
-            EditorGUILayout.Space();
-
-            DrawForwardPointOffsetSlider();
-
-            DrawPositionSpeedSlider();
-
-            EditorGUIUtility.labelWidth = 208;
-
-            DrawRotationSpeedField();
-
-            EditorGUIUtility.labelWidth = 0;
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Other", EditorStyles.boldLabel);
-
-            DrawExportControls();
-
-            EditorGUILayout.Space();
-
-            DrawAdvancedSettingsFoldout();
-            DrawAdvancedSettingsControls();
+            DrawInspector();
 
             // Validate inspector SettingsAsset.
             // Not all inspector controls can be validated with OnValidate().
@@ -143,7 +67,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -1130,6 +1053,87 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+        private void DrawInspector() {
+
+            DrawPathDataAssetField();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawCreatePathAssetButton();
+            DrawResetPathInspectorButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("References", EditorStyles.boldLabel);
+
+            DrawAnimatedGOField();
+            DrawTargetGOField();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
+
+            DrawHandleModeDropdown();
+            DrawPositionHandleDropdown();
+            DrawUpdateAllToggle();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawResetEaseButton();
+            DrawResetRotationPathButton();
+            DrawResetTiltingButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Player", EditorStyles.boldLabel);
+
+            DrawAnimationTimeValue();
+
+            DrawAutoPlayControl();
+            DrawEnableControlsInPlayModeToggle();
+
+            DrawPlayerControls();
+
+            EditorGUILayout.Space();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Player Options", EditorStyles.boldLabel);
+
+            DrawRotationModeDropdown(HandleRotationModeChange);
+            DrawTangentModeDropdown();
+            DrawWrapModeDropdown();
+
+            EditorGUILayout.Space();
+
+            DrawForwardPointOffsetSlider();
+
+            DrawPositionSpeedSlider();
+
+            EditorGUIUtility.labelWidth = 208;
+
+            DrawRotationSpeedField();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Other", EditorStyles.boldLabel);
+
+            DrawExportControls();
+
+            EditorGUILayout.Space();
+
+            DrawAdvancedSettingsFoldout();
+            DrawAdvancedSettingsControls();
+        }
+
 
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {

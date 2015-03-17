@@ -68,6 +68,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+        /// <summary>
+        /// Animation time value from previous frame.
+        /// </summary>
+        private float prevAnimationTime;
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -617,6 +621,47 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region ANIMATION HANDLERS
+        private void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            if (IsPlaying && !Pause) {
+                // Pause animation.
+                Pause = true;
+            }
+            else if (IsPlaying && Pause) {
+                // Unpause animation.
+                Pause = false;
+            }
+            // Animation ended.
+            else if (!IsPlaying && AnimationTime >= 1) {
+                AnimationTime = 0;
+                StartAnimation();
+            }
+            else {
+                // Start animation.
+                StartAnimation();
+            }
+        }
+
+        private void HandleFireNodeReachedEvent() {
+            // Get path timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            for (var i = 0; i < nodeTimestamps.Length; i++) {
+                if (prevAnimationTime < nodeTimestamps[i]
+                    && AnimationTime >= nodeTimestamps[i]) {
+
+                    // Create event args.
+                    var args = new NodeReachedEventArgs(i, AnimationTime);
+                    // Fire event.
+                    OnNodeReached(args);
+                    Debug.Log("node reached");
+                }
+            }
+
+            prevAnimationTime = AnimationTime;
+        }
+
 
         private void HandleClampWrapMode() {
             // Break from animation in Clamp wrap mode.
@@ -741,31 +786,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             return globalForwardPoint;
         }
-
-        private void HandleFireNodeReachedEvent() {
-            // Get path timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            // If current animation time is the same as any of the path
-            // node timestamps, get node index.
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Utilities.FloatsEqual(
-                    x,
-                    AnimationTime,
-                    GlobalConstants.FloatPrecision));
-
-            // Return if current AnimationTime is not equal to any node
-            // timestamp.
-            if (index < 0) return;
-
-            // Create event args.
-            var args = new NodeReachedEventArgs(index, AnimationTime);
-            // Fire event.
-            OnNodeReached(args);
-            Debug.Log("node reached");
-        }
-
         private void LoadRequiredResources() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
                 as APAnimatorSettings;
@@ -820,29 +840,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SubscribedToEvents = false;
         }
-
-        private void HandlePlayPause() {
-            if (!Application.isPlaying) return;
-
-            if (IsPlaying && !Pause) {
-                // Pause animation.
-                Pause = true;
-            }
-            else if (IsPlaying && Pause) {
-                // Unpause animation.
-                Pause = false;
-            }
-            // Animation ended.
-            else if (!IsPlaying && AnimationTime >= 1) {
-                AnimationTime = 0;
-                StartAnimation();
-            }
-            else {
-                // Start animation.
-                StartAnimation();
-            }
-        }
-
         #endregion METHODS
 
         #region GIZMOS

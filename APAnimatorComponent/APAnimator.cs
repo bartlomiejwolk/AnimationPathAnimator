@@ -37,43 +37,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private bool advancedSettingsFoldout;
 
-        /// <summary>
-        ///     Transform to be animated.
-        /// </summary>
         [SerializeField]
         private Transform animatedGO;
 
-        /// <summary>
-        /// Percentage of the overall animation progress. 0.5 means position in the middle of the path.
-        /// </summary>
         [SerializeField]
         private float animationTime;
 
-        /// <summary>
-        /// Whether to update animated object positon, rotation and tilting. It's executed independent from animation time,
-        /// so animated object can be updated even if animator is stopped or paused.
-        /// </summary>
         private bool animGOUpdateEnabled;
 
-        /// <summary>
-        /// It's true when <c>CountdownToStopAnimGOUpdate</c> coroutine is running.
-        /// </summary>
         private bool countdownCoroutineIsRunning;
 
-        /// <summary>
-        /// It's set to true when <c>EaseTime</c> coroutine is running.
-        /// </summary>
         private bool isPlaying;
 
-        /// <summary>
-        /// Reference to asset file holding path data.
-        /// </summary>
         [SerializeField]
         private PathData pathData;
 
-        /// <summary>
-        /// Pause backing field.
-        /// </summary>
         private bool pause;
 
         /// <summary>
@@ -81,27 +59,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         private float prevAnimationTime;
 
-        /// <summary>
-        /// Reference to asset file holding animator settings.
-        /// </summary>
         [SerializeField]
         private APAnimatorSettings settingsAsset;
 
-        /// <summary>
-        /// Reference to GUISkin asset.
-        /// </summary>
         [SerializeField]
         private GUISkin skin;
 
-        /// <summary>
-        /// Is set to true after successfull subscription to events.
-        /// </summary>
         [SerializeField]
         private bool subscribedToEvents;
 
-        /// <summary>
-        ///     Transform that the <c>animatedGO</c> will be looking at.
-        /// </summary>
         [SerializeField]
         private Transform targetGO;
 
@@ -116,47 +82,66 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedGO; }
         }
 
+        /// <summary>
+        /// Percentage of the overall animation progress. 0.5 means position in the middle of the path.
+        /// </summary>
         public float AnimationTime {
             get { return animationTime; }
             set {
                 animationTime = value;
 
+                // In play mode, while animation is enabled and not paused..
                 if (Application.isPlaying && IsPlaying && !Pause) {
+                    // Do nothing.
                 }
-                // Update animated GO in editor mode.
                 else {
+                    // Update animated GO.
                     UpdateAnimation();
                 }
             }
         }
 
+        /// <summary>
+        /// Whether to update animated object positon, rotation and tilting. It's executed independent from animation time,
+        /// so animated object can be updated even if animator is stopped or paused.
+        /// </summary>
         public bool AnimGOUpdateEnabled {
             get { return animGOUpdateEnabled; }
             set { animGOUpdateEnabled = value; }
         }
 
+        /// <summary>
+        /// It's true when <c>CountdownToStopAnimGOUpdate</c> coroutine is running.
+        /// </summary>
         public bool CountdownCoroutineIsRunning {
             get { return countdownCoroutineIsRunning; }
             set { countdownCoroutineIsRunning = value; }
         }
 
         /// <summary>
-        ///     If animation is currently enabled.
+        /// It's set to true when <c>EaseTime</c> coroutine is running.
         /// </summary>
-        /// <remarks>When it's true, it means that the HandleEaseTime coroutine is running.</remarks>
+        // TODO Rename to IsRunning.
         public bool IsPlaying {
             get { return isPlaying; }
             private set {
                 isPlaying = value;
-                Debug.Log("IsPlaying:" + isPlaying);
+
+                Debug.Log("Animator is " + (value ? "enabled" : "disabled"));
             }
         }
 
+        /// <summary>
+        /// Reference to asset file holding path data.
+        /// </summary>
         public PathData PathData {
             get { return pathData; }
             set { pathData = value; }
         }
 
+        /// <summary>
+        /// Whether or not animation is paused. Animation can be paused only when animator is running.
+        /// </summary>
         public bool Pause {
             get { return pause; }
             set {
@@ -172,10 +157,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Reference to asset file holding animator settings.
+        /// </summary>
         public APAnimatorSettings SettingsAsset {
             get { return settingsAsset; }
         }
 
+        /// <summary>
+        /// Reference to GUISkin asset.
+        /// </summary>
         public GUISkin Skin {
             get { return skin; }
         }
@@ -188,12 +179,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { targetGO = value; }
         }
 
+        /// <summary>
+        /// If animation should be played backward.
+        /// </summary>
         private bool Reverse { get; set; }
 
         /// <summary>
         ///     If animator is currently subscribed to path events.
         /// </summary>
-        /// <remarks>It's only public because of the Editor class.</remarks>
         private bool SubscribedToEvents {
             set { subscribedToEvents = value; }
         }

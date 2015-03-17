@@ -17,7 +17,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region FIELDS
 
         /// <summary>
-        ///     Animation Curves based on which the Animation Path is constructed.
+        ///     Animation curves based on which the animation path is constructed.
         /// </summary>
         [SerializeField]
         private AnimationCurve[] curves;
@@ -25,6 +25,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region PROPERTIES
 
+        /// <summary>
+        /// Number of nodes in the path.
+        /// </summary>
         public int KeysNo {
             get { return curves[0].length; }
         }
@@ -42,10 +45,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public AnimationPath() {
             InitializeAnimationPathCurves();
         }
-
 
         /// <summary>
         /// Adds node at timestamp. Node's position will be evaluated using existing path.

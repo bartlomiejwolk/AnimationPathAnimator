@@ -162,19 +162,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 animatedGO,
                 new GUIContent(
                     "Animated Object",
-                    "Object to animate."));
+                    "Game object to animate."));
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private float DrawAnimationTimeFloatField() {
-            var newTimeRatio = EditorGUILayout.FloatField(
-                new GUIContent(
-                    "Animation Time",
-                    ""),
-                Script.AnimationTime);
-
-            return newTimeRatio;
         }
 
         private float DrawAnimationTimeSlider() {
@@ -192,11 +182,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTime");
 
-            float newTimeRatio;
+            var newTimeRatio = DrawAnimationTimeSlider();
 
-            newTimeRatio = DrawAnimationTimeSlider();
-
-            // Update AnimationTime only when value was changed.
+            // Update animation time only when value was changed.
             if (!Utilities.FloatsEqual(
                 newTimeRatio,
                 Script.AnimationTime,
@@ -212,7 +200,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
-                    ""),
+                    "Animation will start playing at play mode."),
                 Script.SettingsAsset.AutoPlay);
         }
 
@@ -221,7 +209,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (GUILayout.Button(
                 new GUIContent(
                     "New Path",
-                    ""))) {
+                    "Create new path asset file."))) {
 
                 // Display save panel.
                 var savePath = EditorUtility.SaveFilePanelInProject(
@@ -256,7 +244,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
                     "Forward Point Offset",
-                    ""),
+                    "Distance from animated object to a point used as" +
+                    "a look at target in Forward rotation mode."),
                 Script.SettingsAsset.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 1);
@@ -278,8 +267,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.HandleMode =
                 (HandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
-                        "Handle Mode",
-                        ""),
+                        "Scene Tool",
+                        "Tool displayed next to each node."),
                     Script.SettingsAsset.HandleMode);
         }
 
@@ -290,7 +279,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawLongJumpValueField() {
             SettingsSerializedObject.Update();
 
-            EditorGUILayout.PropertyField(longJumpValue);
+            EditorGUILayout.PropertyField(
+                longJumpValue,
+                new GUIContent(
+                    "Long Jump Value",
+                    "Fraction of animation time used to jump forward/backward "
+                    + "in time with keyboard keys."));
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }
@@ -302,7 +296,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 pathData,
                 new GUIContent(
                     "Path Asset",
-                    ""));
+                    "Asset containing all path data."));
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -364,7 +358,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.PositionLerpSpeed = EditorGUILayout.Slider(
                 new GUIContent(
                     "Position Lerp Speed",
-                    ""),
+                    "Controls how much time it'll take the " +
+                    "animated object to reach position that it should be " +
+                    "at the current animation time. " +
+                    "1 means no delay."),
                 Script.SettingsAsset.PositionLerpSpeed,
                 0,
                 1);
@@ -374,7 +371,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (GUILayout.Button(
                 new GUIContent(
                     "Reset Ease",
-                    ""))) {
+                    "Reset Ease Tool values."))) {
 
                 if (Script.PathData == null) return;
 
@@ -435,7 +432,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (GUILayout.Button(
                 new GUIContent(
                     "Reset Tilting",
-                    ""))) {
+                    "Reset Tilting Tool values."))) {
 
                 if (Script.PathData == null) return;
 
@@ -467,7 +464,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
-                        ""),
+                        "Mode that controls animated game object rotation."),
                     Script.SettingsAsset.RotationMode);
 
             // Return if rotation mode not changed.
@@ -489,7 +486,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 rotationSlerpSpeed,
                 new GUIContent(
                     "Rotation Slerp Speed",
-                    "Controls how much time (in seconds) it'll take the " +
+                    "Controls how much time it'll take the " +
                     "animated object to finish rotation towards followed target."));
 
             SettingsSerializedObject.ApplyModifiedProperties();
@@ -502,7 +499,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 settings,
                 new GUIContent(
                     "Settings Asset",
-                    ""));
+                    "Asset that contains all setting for the animator " +
+                    "component"));
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -528,7 +526,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 skin,
                 new GUIContent(
                     "Skin Asset",
-                    ""));
+                    "Asset containing styles for animator component."));
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -541,7 +539,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 (TangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
-                        ""),
+                        "Tangent mode applied to each path node."),
                     Script.SettingsAsset.TangentMode);
 
             // Update gizmo curve is tangent mode changed.
@@ -567,7 +565,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
-                    ""),
+                    "When checked, values will be changed for all nodes. " +
+                    "Default shortcut: P."),
                 Script.SettingsAsset.UpdateAllMode);
         }
 
@@ -576,7 +575,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 (AnimatorWrapMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Wrap Mode",
-                        ""),
+                        "Determines animator behaviour after animation end."),
                     Script.SettingsAsset.WrapMode);
         }
 

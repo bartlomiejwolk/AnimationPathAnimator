@@ -304,8 +304,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Removes all nodes.
         /// </summary>
-        // TODO Rename to RemoveAllNodes().
-        public void RemoveAllKeys() {
+        public void RemoveAllNodes() {
             var keysToRemoveNo = KeysNo;
             for (var i = 0; i < keysToRemoveNo; i++) {
                 RemoveNode(0);

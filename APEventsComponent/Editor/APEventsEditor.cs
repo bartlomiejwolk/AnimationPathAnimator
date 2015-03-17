@@ -79,7 +79,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 drawMethodNames,
                 new GUIContent(
                     "Draw Labels",
-                    ""));
+                    "Draw on-scene label for each event handling method."));
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -96,7 +96,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             advancedSettingsFoldout.boolValue = EditorGUILayout.Foldout(
                 advancedSettingsFoldout.boolValue,
                 new GUIContent(
-                    "Advanced messageSettings",
+                    "Advanced Settings",
                     ""));
 
             serializedObject.ApplyModifiedProperties();
@@ -108,7 +108,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 animator,
                 new GUIContent(
                     "APAnimator",
-                    ""));
+                    "APAnimator component reference."));
         }
 
         private void DrawInfoLabel(string text) {
@@ -131,8 +131,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             EditorGUILayout.PropertyField(
                 settings,
                 new GUIContent(
-                    "messageSettings Asset",
-                    ""));
+                    "Settings Asset",
+                    "Reference to asset with all APEvents component settings."));
 
             serializedObject.ApplyModifiedProperties();
         }

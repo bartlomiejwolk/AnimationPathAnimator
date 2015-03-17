@@ -184,7 +184,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var newTimeRatio = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
-                    "Current, normalized animation time. Animated game object will be " +
+                    "Normalized animation time. Animated game object will be " +
                     "updated accordingly to the animation time value."),
                 Script.AnimationTime,
                 0,

@@ -358,14 +358,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // NOTE Cannot do any sampling if sampling rate is less than 1.
             if (samplingRate < 1) return;
 
-            // Helper variable.
-            // Used to read values from animation curves.
-            float time = 0;
             // Timestep between each point.
             var timestep = 1f / samplingRate;
 
             // Clear points list.
             points.Clear();
+
+            // Helper variable.
+            // Used to read values from animation curves.
+            float time = 0;
 
             // For each point to extract..
             for (var i = 0; i < samplingRate; i++) {
@@ -425,6 +426,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Extracts 3d points from a path section between two given nodes.
+        /// </summary>
+        /// <param name="firstNodeIndex">First node index.</param>
+        /// <param name="lastNodeIndex">Last node index.</param>
+        /// <param name="samplingFrequency">Amount of points to be extracted for one meter of the path.</param>
+        /// <returns>Extracted points.</returns>
         public List<Vector3> SampleSectionForPoints(
             int firstNodeIndex,
             int lastNodeIndex,
@@ -441,6 +449,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return points;
         }
 
+        /// <summary>
+        /// Smooth in/out tangents of all nodes.
+        /// </summary>
         public void SmoothAllNodes() {
             for (var i = 0; i < KeysNo; i++) {
                 SmoothPointTangents(i);
@@ -448,7 +459,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        ///     Smooth in/out tangents of a single point.
+        ///     Smooth in/out tangents of a single node.
         /// </summary>
         /// <param name="nodeIndex">Point index.</param>
         public void SmoothPointTangents(int nodeIndex) {

@@ -288,42 +288,42 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region ANIMATION
 
         /// <summary>
-        /// Pause animation.
+        /// Pauses animation.
         /// </summary>
         public void PauseAnimation() {
             Pause = true;
         }
 
         /// <summary>
-        /// Toggle play/pause animation.
+        /// Toggles play/pause animation.
         /// </summary>
         public void PlayPauseAnimation() {
             Pause = !Pause;
         }
 
         /// <summary>
-        /// Set rotation mode to Custom.
+        /// Sets rotation mode to Custom.
         /// </summary>
         public void SetRotationCustom() {
             SettingsAsset.RotationMode = RotationMode.Custom;
         }
 
         /// <summary>
-        /// Set rotation mode to Forward.
+        /// Sets rotation mode to Forward.
         /// </summary>
         public void SetRotationForward() {
             SettingsAsset.RotationMode = RotationMode.Forward;
         }
 
         /// <summary>
-        /// Set rotation mode to Target.
+        /// Sets rotation mode to Target.
         /// </summary>
         public void SetRotationTarget() {
             SettingsAsset.RotationMode = RotationMode.Target;
         }
 
         /// <summary>
-        /// Set tangent mode to Linear.
+        /// Sets tangent mode to Linear.
         /// </summary>
         public void SetTangentLinear() {
             SettingsAsset.TangentMode = TangentMode.Linear;
@@ -331,7 +331,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Set tangent mode to Smooth.
+        /// Sets tangent mode to Smooth.
         /// </summary>
         public void SetTangentSmooth() {
             SettingsAsset.TangentMode = TangentMode.Smooth;
@@ -339,14 +339,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Set wrap mode to Clamp.
+        /// Sets wrap mode to Clamp.
         /// </summary>
         public void SetWrapClamp() {
             SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
         }
 
         /// <summary>
-        /// Set wrap mode to Loop.
+        /// Sets wrap mode to Loop.
         /// </summary>
         public void SetWrapLoop() {
             SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
@@ -360,7 +360,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Start animation.
+        /// Starts animation.
         /// </summary>
         public void StartAnimation() {
             if (!PathDataAssetAssigned()) return;
@@ -372,7 +372,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Stop animation.
+        /// Stops animation.
         /// </summary>
         public void StopAnimation() {
             StopCoroutine("HandleEaseTime");
@@ -385,14 +385,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Unpause animation.
+        /// Unpauses animation.
         /// </summary>
         public void UnpauseAnimation() {
             Pause = false;
         }
 
         /// <summary>
-        /// Update animated game object position, rotation and tilting.
+        /// Updates animated game object position, rotation and tilting.
         /// </summary>
         // TODO Rename to UpdateGO().
         private void Animate() {
@@ -402,7 +402,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Update animated game object position.
+        /// Updates animated game object position.
         /// </summary>
         // TODO Rename to UpdateAnimatedGOPosition().
         private void AnimateAnimatedGOPosition() {
@@ -423,7 +423,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Update animated game object rotation.
+        /// Updates animated game object rotation.
         /// </summary>
         // TODO Rename to UpdateAnimatedGORotation().
         private void AnimateAnimatedGORotation() {
@@ -448,7 +448,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Update animated game object tilting.
+        /// Updates animated game object tilting.
         /// </summary>
         // todo Rename to UpdateAnimatedGOTilting().
         private void AnimateAnimatedGOTilting() {
@@ -504,24 +504,39 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to RotateObjectWithRotationPath().
+        /// <summary>
+        /// Updates animated GO rotation using data from rotation path.
+        /// </summary>
         private void RotateObjectWithAnimationCurves() {
+            // Get 3d point to look at.
             var lookAtTarget =
                 PathData.GetRotationAtTime(AnimationTime);
             // Convert target position to global coordinates.
             var lookAtTargetGlobal = transform.TransformPoint(lookAtTarget);
 
+            // In play mode..
             if (Application.isPlaying) {
                 RotateObjectWithSlerp(lookAtTargetGlobal);
             }
+            // In editor mode..
             else {
                 RotateObjectWithLookAt(lookAtTargetGlobal);
             }
         }
 
+        /// <summary>
+        /// Rotates animated GO using LookAt().
+        /// </summary>
+        /// <param name="targetPos">Point to look at.</param>
         private void RotateObjectWithLookAt(Vector3 targetPos) {
             AnimatedGO.LookAt(targetPos);
         }
 
+        /// <summary>
+        /// Rotates animated GO using Slerp function.
+        /// </summary>
+        /// <param name="targetPosition">Point to look at.</param>
         private void RotateObjectWithSlerp(Vector3 targetPosition) {
             // Return when point to look at is at the same position as the
             // animated object.
@@ -541,8 +556,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 speed);
         }
 
+        /// <summary>
+        /// Updates animated game object position accordingly to current animation time. 
+        /// </summary>
         private void UpdateAnimatedGOPosition() {
-            // Get animatedGO position at current animation time.
+            // Get animated GO position at current animation time.
             var positionAtTimestamp =
                 PathData.GetVectorAtTime(AnimationTime);
 
@@ -553,9 +571,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimatedGO.position = globalPositionAtTimestamp;
         }
 
+        /// <summary>
+        /// Updates animated game object rotation accordingly to current animation time.
+        /// </summary>
         private void UpdateAnimatedGORotation() {
             if (AnimatedGO == null) return;
 
+            // If rotation mode is set to..
             switch (SettingsAsset.RotationMode) {
                 case RotationMode.Forward:
                     var globalForwardPoint = GetGlobalForwardPoint();
@@ -563,7 +585,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     RotateObjectWithLookAt(globalForwardPoint);
 
                     break;
-
                 case RotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
@@ -573,11 +594,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     var rotationPointGlobalPos =
                         transform.TransformPoint(rotationPointPos);
 
-                    // Update animatedGO rotation.
+                    // Update animated GO rotation.
                     RotateObjectWithLookAt(rotationPointGlobalPos);
 
                     break;
-
                 case RotationMode.Target:
                     if (TargetGO == null) return;
 
@@ -587,11 +607,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        ///     Update animatedGO position, rotation and tilting based on current
+        ///     Update animated GO position, rotation and tilting base on current
         ///     AnimationTime.
         /// </summary>
         /// <remarks>
-        ///     Used to update animatedGO with keys, in play mode.
+        ///     Used to update animated GO with keys, in play mode.
         /// </remarks>
         private void UpdateAnimation() {
             if (!RequiredAssetsLoaded()) return;
@@ -604,17 +624,22 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             AnimateAnimatedGOTilting();
         }
 
+        /// <summary>
+        /// Update animation time with values taken from ease curve.
+        /// </summary>
+        /// <remarks>This is used to update animation time when animator is running.</remarks>
         private void UpdateAnimationTime() {
             // Get ease value.
             var timeStep =
                 PathData.GetEaseValueAtTime(AnimationTime);
 
+            // If animation is set to play backward..
             if (Reverse) {
-                // Increase animation time.
+                // Decrease animation time.
                 AnimationTime -= timeStep * Time.deltaTime;
             }
             else {
-                // Decrease animation time.
+                // Increase animation time.
                 AnimationTime += timeStep * Time.deltaTime;
             }
         }

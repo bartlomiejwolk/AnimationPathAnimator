@@ -414,7 +414,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void SetNodeTangents(int index, float inTangent, float outTangent) {
-            AnimatedObjectPath.ChangePointTangents(index, inTangent, outTangent);
+            AnimatedObjectPath.ChangeNodeTangents(index, inTangent, outTangent);
         }
 
         /// <summary>

@@ -176,8 +176,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="nodeIndex">Node index.</param>
         /// <param name="inTangent">New in tangent.</param>
         /// <param name="outTangent">New out tangent</param>
-        // TODO Rename to ChangeNodeTangent().
-        public void ChangePointTangents(
+        public void ChangeNodeTangents(
             int nodeIndex,
             float inTangent,
             float outTangent) {

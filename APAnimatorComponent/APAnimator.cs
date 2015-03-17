@@ -53,6 +53,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private bool pause;
 
+        /// <summary>
+        ///     Animation time value from previous frame.
+        /// </summary>
+        private float prevAnimationTime;
+
         [SerializeField]
         private APAnimatorSettings settingsAsset;
 
@@ -68,10 +73,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
-        /// <summary>
-        /// Animation time value from previous frame.
-        /// </summary>
-        private float prevAnimationTime;
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -169,60 +170,29 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region UNITY MESSAGES
 
-        private void OnDisable() {
-            UnsubscribeFromEvents();
-        }
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
 
-        private void OnDrawGizmosSelected() {
-            if (!RequiredAssetsLoaded()) return;
-            if (PathData == null) return;
-
-            DrawAnimationCurve();
-            HandleDrawingTargetIcon();
-            HandleDrawingForwardPointIcon();
-            HandleDrawingRotationPathCurve();
-            HandleDrawingCurrentRotationPointGizmo();
-            HandleDrawingRotationPointGizmos();
-        }
-
-        private void OnEnable() {
-            LoadRequiredResources();
-            //AssignMainCameraAsAnimatedGO();
-            SubscribeToEvents();
-        }
-
-        private void OnValidate() {
-            UpdateAnimation();
-            UpdateSubscribedToEventsFlag();
-        }
-
-        private void UpdateSubscribedToEventsFlag() {
-            // Update flag when path data asset is removed.
-            if (PathData == null && subscribedToEvents) {
-                subscribedToEvents = false;
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < AnimationTime) {
+                    return pathTimestamps[i];
+                }
             }
+
+            // Return timestamp of the last node.
+            return 0;
         }
 
-        private void Reset() {
-            LoadRequiredResources();
-            AssignMainCameraAsAnimatedGO();
-            ResetInspectorOptions();
-        }
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
 
-        private void Start() {
-            HandleStartAnimation();
-        }
-
-        private void HandleStartAnimation() {
-            if (Application.isPlaying && SettingsAsset.AutoPlay) {
-                StartAnimation();
-                IsPlaying = true;
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > AnimationTime)) {
+                return timestamp;
             }
-        }
 
-        private void Update() {
-            HandleUpdatingAnimGOInPlayMode();
-            HandleShortcuts();
+            // Return timestamp of the last node.
+            return 1.0f;
         }
 
         private void HandleShortcuts() {
@@ -262,29 +232,60 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = PathData.GetPathTimestamps();
-
-            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < AnimationTime) {
-                    return pathTimestamps[i];
-                }
+        private void HandleStartAnimation() {
+            if (Application.isPlaying && SettingsAsset.AutoPlay) {
+                StartAnimation();
+                IsPlaying = true;
             }
-
-            // Return timestamp of the last node.
-            return 0;
         }
 
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = PathData.GetPathTimestamps();
+        private void OnDisable() {
+            UnsubscribeFromEvents();
+        }
 
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > AnimationTime)) {
-                return timestamp;
+        private void OnDrawGizmosSelected() {
+            if (!RequiredAssetsLoaded()) return;
+            if (PathData == null) return;
+
+            DrawAnimationCurve();
+            HandleDrawingTargetIcon();
+            HandleDrawingForwardPointIcon();
+            HandleDrawingRotationPathCurve();
+            HandleDrawingCurrentRotationPointGizmo();
+            HandleDrawingRotationPointGizmos();
+        }
+
+        private void OnEnable() {
+            LoadRequiredResources();
+            //AssignMainCameraAsAnimatedGO();
+            SubscribeToEvents();
+        }
+
+        private void OnValidate() {
+            UpdateAnimation();
+            UpdateSubscribedToEventsFlag();
+        }
+
+        private void Reset() {
+            LoadRequiredResources();
+            AssignMainCameraAsAnimatedGO();
+            ResetInspectorOptions();
+        }
+
+        private void Start() {
+            HandleStartAnimation();
+        }
+
+        private void Update() {
+            HandleUpdatingAnimGOInPlayMode();
+            HandleShortcuts();
+        }
+
+        private void UpdateSubscribedToEventsFlag() {
+            // Update flag when path data asset is removed.
+            if (PathData == null && subscribedToEvents) {
+                subscribedToEvents = false;
             }
-
-            // Return timestamp of the last node.
-            return 1.0f;
         }
 
         #endregion UNITY MESSAGES
@@ -621,47 +622,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region ANIMATION HANDLERS
-        private void HandlePlayPause() {
-            if (!Application.isPlaying) return;
-
-            if (IsPlaying && !Pause) {
-                // Pause animation.
-                Pause = true;
-            }
-            else if (IsPlaying && Pause) {
-                // Unpause animation.
-                Pause = false;
-            }
-            // Animation ended.
-            else if (!IsPlaying && AnimationTime >= 1) {
-                AnimationTime = 0;
-                StartAnimation();
-            }
-            else {
-                // Start animation.
-                StartAnimation();
-            }
-        }
-
-        private void HandleFireNodeReachedEvent() {
-            // Get path timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            for (var i = 0; i < nodeTimestamps.Length; i++) {
-                if (prevAnimationTime < nodeTimestamps[i]
-                    && AnimationTime >= nodeTimestamps[i]) {
-
-                    // Create event args.
-                    var args = new NodeReachedEventArgs(i, AnimationTime);
-                    // Fire event.
-                    OnNodeReached(args);
-                    Debug.Log("node reached");
-                }
-            }
-
-            prevAnimationTime = AnimationTime;
-        }
-
 
         private void HandleClampWrapMode() {
             // Break from animation in Clamp wrap mode.
@@ -695,6 +655,25 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        private void HandleFireNodeReachedEvent() {
+            // Get path timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            for (var i = 0; i < nodeTimestamps.Length; i++) {
+                if (prevAnimationTime < nodeTimestamps[i]
+                    && AnimationTime >= nodeTimestamps[i]) {
+
+                    // Create event args.
+                    var args = new NodeReachedEventArgs(i, AnimationTime);
+                    // Fire event.
+                    OnNodeReached(args);
+                    Debug.Log("node reached");
+                }
+            }
+
+            prevAnimationTime = AnimationTime;
+        }
+
         private void HandleFireOnAnimationStartedEvent() {
             if (AnimationTime == 0) OnAnimationStarted();
         }
@@ -715,6 +694,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (AnimationTime < 0
                 && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
                 Reverse = false;
+            }
+        }
+
+        private void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            if (IsPlaying && !Pause) {
+                // Pause animation.
+                Pause = true;
+            }
+            else if (IsPlaying && Pause) {
+                // Unpause animation.
+                Pause = false;
+            }
+            // Animation ended.
+            else if (!IsPlaying && AnimationTime >= 1) {
+                AnimationTime = 0;
+                StartAnimation();
+            }
+            else {
+                // Start animation.
+                StartAnimation();
             }
         }
 
@@ -786,6 +787,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             return globalForwardPoint;
         }
+
         private void LoadRequiredResources() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
                 as APAnimatorSettings;
@@ -840,6 +842,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SubscribedToEvents = false;
         }
+
         #endregion METHODS
 
         #region GIZMOS
@@ -883,6 +886,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 targetPosition,
                 SettingsAsset.GizmosSubfolder + SettingsAsset.TargetGizmoIcon,
                 false);
+        }
+
+        private Vector3[] GetGlobalRotationPointPositions() {
+            var localRotPointPositions =
+                pathData.GetRotationPointPositions();
+
+            var globalRotPointPositions =
+                new Vector3[localRotPointPositions.Length];
+
+            for (var i = 0; i < localRotPointPositions.Length; i++) {
+                globalRotPointPositions[i] =
+                    transform.TransformPoint(localRotPointPositions[i]);
+            }
+
+            return globalRotPointPositions;
         }
 
         private void HandleDrawingCurrentRotationPointGizmo() {
@@ -975,21 +993,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     + SettingsAsset.RotationPointGizmoIcon,
                     false);
             }
-        }
-
-        private Vector3[] GetGlobalRotationPointPositions() {
-            var localRotPointPositions =
-                pathData.GetRotationPointPositions();
-
-            var globalRotPointPositions =
-                new Vector3[localRotPointPositions.Length];
-
-            for (var i = 0; i < localRotPointPositions.Length; i++) {
-                globalRotPointPositions[i] =
-                    transform.TransformPoint(localRotPointPositions[i]);
-            }
-
-            return globalRotPointPositions;
         }
 
         private void HandleDrawingTargetIcon() {

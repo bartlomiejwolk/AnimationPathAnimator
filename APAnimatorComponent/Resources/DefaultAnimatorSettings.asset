@@ -11,6 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
   m_Name: DefaultAnimatorSettings
   m_EditorClassIdentifier: 
+  minNodeTimeSeparation: .00100000005
+  playModeModKey: 307
+  positionHandleKey: 103
   easeModeKey: 117
   jumpToEndKey: 108
   jumpToNextNodeKey: 108
@@ -28,8 +31,6 @@ MonoBehaviour:
   shortJumpValue: .00200000009
   tiltingModeKey: 111
   updateAllKey: 112
-  playModeModKey: 307
-  positionHandleKey: 103
   autoPlay: 1
   countdownToStopFramesNo: 10
   enableControlsInPlayMode: 1
@@ -44,13 +45,13 @@ MonoBehaviour:
   handleMode: 0
   maxAnimationSpeed: .300000012
   pathDataAssetDefaultName: Path
+  positionHandle: 0
   positionLerpSpeed: 1
   rotationMode: 1
   rotationSlerpSpeed: 999
   tangentMode: 0
   updateAllMode: 0
   wrapMode: 1
-  positionHandle: 0
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   gizmoCurveColor: {r: 1, g: .921568632, b: .0156862754, a: 1}

@@ -28,9 +28,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion EVENTS
 
         #region CONST
-        private const int PathLengthSamplingFrequency = 400;
+
         private const float DefaultEaseCurveValue = 0.05f;
+        private const int PathLengthSamplingFrequency = 400;
+
         #endregion
+
         #region FIELDS
 
         [SerializeField]
@@ -57,12 +60,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedObjectPath[0].length; }
         }
 
-        public int TiltingCurveKeysNo {
-            get { return TiltingCurve.length; }
-        }
-
         public int RotationPathNodesNo {
             get { return RotationPath.KeysNo; }
+        }
+
+        public int TiltingCurveKeysNo {
+            get { return TiltingCurve.length; }
         }
 
         private AnimationPath AnimatedObjectPath {
@@ -72,6 +75,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private AnimationCurve EaseCurve {
             get { return easeCurve; }
         }
+
         private AnimationPath RotationPath {
             get { return rotationPath; }
         }
@@ -558,7 +562,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     pathNodeTimestamps[i],
                     curve.keys[i].value,
                     GlobalConstants.FloatPrecision)) {
-                    
+
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp

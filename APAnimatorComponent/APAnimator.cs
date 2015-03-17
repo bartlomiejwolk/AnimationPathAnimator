@@ -195,6 +195,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region UNITY MESSAGES
 
+        /// <summary>
+        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time.
+        /// </summary>
+        /// <returns>Node timestamp.</returns>
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = PathData.GetPathTimestamps();
 
@@ -208,6 +212,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return 0;
         }
 
+        /// <summary>
+        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time. 
+        /// </summary>
+        /// <returns>Node timestamp.</returns>
         private float GetNearestForwardNodeTimestamp() {
             var pathTimestamps = PathData.GetPathTimestamps();
 
@@ -220,6 +228,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return 1.0f;
         }
 
+        /// <summary>
+        /// Method responsible for detecting all shortcuts pressed in play mode.
+        /// </summary>
         private void HandleShortcuts() {
             if (!SettingsAsset.EnableControlsInPlayMode) return;
 
@@ -257,6 +268,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Decides whether to start animation playback on enter play mode.
+        /// </summary>
         private void HandleStartAnimation() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
                 StartAnimation();
@@ -282,7 +296,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnEnable() {
             LoadRequiredResources();
-            //AssignMainCameraAsAnimatedGO();
             SubscribeToEvents();
         }
 

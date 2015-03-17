@@ -171,7 +171,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var newTimeRatio = EditorGUILayout.Slider(
                 new GUIContent(
                     "Animation Time",
-                    "Current animation time."),
+                    "Current (normalized) animation time. Animated game object will be " +
+                    "updated accordingly to the animation time value."),
                 Script.AnimationTime,
                 0,
                 1);
@@ -200,7 +201,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
-                    "Animation will start playing at play mode."),
+                    "Start playing animation after entering play mode."),
                 Script.SettingsAsset.AutoPlay);
         }
 
@@ -244,7 +245,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.SettingsAsset.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
                     "Forward Point Offset",
-                    "Distance from animated object to a point used as" +
+                    "Distance from animated object to the point used as " +
                     "a look at target in Forward rotation mode."),
                 Script.SettingsAsset.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
@@ -268,7 +269,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 (HandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Scene Tool",
-                        "Tool displayed next to each node."),
+                        "Tool displayed next to each node. Default " +
+                        "shortcuts: Y, U, I, O."),
                     Script.SettingsAsset.HandleMode);
         }
 
@@ -414,7 +416,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (GUILayout.Button(
                 new GUIContent(
                     "Reset Rotation",
-                    ""))) {
+                    "Reset Rotation Tool values."))) {
 
                 if (Script.PathData == null) return;
 
@@ -514,7 +516,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawShortJumpValueField() {
             SettingsSerializedObject.Update();
 
-            EditorGUILayout.PropertyField(shortJumpValue);
+            EditorGUILayout.PropertyField(
+                shortJumpValue,
+                new GUIContent(
+                    "Short Jump Value",
+                    "Fraction of animation time used to jump forward/backward "
+                    + "in time with keyboard keys."));
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }
@@ -1466,9 +1473,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 EditorGUILayout.IntField(
                     new GUIContent(
                         "Export Sampling",
-                        "Number of points to export for 1 m of the curve. " +
+                        "Number of points to export for 1 m of the animation path. " +
                         "If set to 0, it'll export only keys defined in " +
-                        "the curve."),
+                        "the path."),
                     Script.SettingsAsset.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,6 +29,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty gizmoCurveColor;
         private SerializedProperty longJumpValue;
         private SerializedProperty pathData;
+        private SerializedProperty positionHandle;
         private SerializedProperty rotationCurveColor;
         private SerializedProperty rotationSlerpSpeed;
         private SerializedProperty settings;
@@ -37,7 +37,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private SerializedProperty skin;
         private SerializedProperty subscribedToEvents;
         private SerializedProperty targetGO;
-        private SerializedProperty positionHandle;
 
         #endregion SERIALIZED PROPERTIES
 
@@ -46,9 +45,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public override void OnInspectorGUI() {
             // Check for required assets.
             if (!RequiredAssetsLoaded()) {
-                DrawInfoLabel("Required assets were not found.\n"
-            + "Reload scene and if it does not help, restore extension "
-            + "folder content to its default state.");
+                DrawInfoLabel(
+                    "Required assets were not found.\n"
+                    + "Reload scene and if it does not help, restore extension "
+                    + "folder content to its default state.");
 
                 return;
             }
@@ -143,6 +143,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
+
         private void OnDisable() {
             SceneTool.RestoreTool();
         }
@@ -205,18 +206,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR
-        private void DrawPositionHandleDropdown() {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                positionHandle,
-                new GUIContent(
-                    "Position Handle",
-                    "Handle used to move nodes on scene."));
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
@@ -434,6 +423,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawPositionHandleDropdown() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                positionHandle,
+                new GUIContent(
+                    "Position Handle",
+                    "Handle used to move nodes on scene."));
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPositionSpeedSlider() {
@@ -923,6 +924,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             SceneView.RepaintAll();
         }
+
         private void DrawEaseHandlesCallbackHandler(
             int keyIndex,
             float newValue) {
@@ -1047,23 +1049,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region OTHER HANDLERS
-        private void HandleUndoEvent() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                // Repaint inspector.
-                Repaint();
-
-                // Update path with new tangent setting.
-                HandleTangentModeChange();
-
-                // Update animated object.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UpdateAnimation",
-                    null);
-            }
-        }
 
         private void HandleAnimatorEventsSubscription() {
             // Subscribe animator to path events if not subscribed already.
@@ -1084,6 +1069,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     null);
             }
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleUndoEvent() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                // Repaint inspector.
+                Repaint();
+
+                // Update path with new tangent setting.
+                HandleTangentModeChange();
+
+                // Update animated object.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
+            }
         }
 
         private void HandleUnsyncedObjectAndRotationPaths() {
@@ -1127,6 +1130,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {
                 var sceneView = (SceneView) SceneView.sceneViews[0];
@@ -1151,9 +1155,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Mathf.Abs(currentKeyTime - newKeyTime)
                 < Script.SettingsAsset.MinNodeTimeSeparation) {
 
-                Debug.LogWarning("Cannot add this node. Time difference to " +
-                          "previous and next node is too small. " +
-                          "Move nodes more far away.");
+                Debug.LogWarning(
+                    "Cannot add this node. Time difference to " +
+                    "previous and next node is too small. " +
+                    "Move nodes more far away.");
                 return;
             }
 
@@ -1204,6 +1209,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
             }
         }
+
         private void InitializeSerializedProperties() {
             rotationSlerpSpeed =
                 SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
@@ -1267,6 +1273,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region SHORTCUTS
 
+        private void HandlePlayPauseButton() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandlePlayPause",
+                null);
+        }
+
         private void HandleShortcuts() {
             serializedObject.Update();
 
@@ -1307,13 +1320,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.UpdateAllKey) {
 
-                Script.SettingsAsset.UpdateAllMode = !Script.SettingsAsset.UpdateAllMode;
+                Script.SettingsAsset.UpdateAllMode =
+                    !Script.SettingsAsset.UpdateAllMode;
             }
 
             // Update position handle.
             if (Event.current.type == EventType.keyDown
-             && Event.current.keyCode
-             == Script.SettingsAsset.PositionHandleKey) {
+                && Event.current.keyCode
+                == Script.SettingsAsset.PositionHandleKey) {
 
                 // Change to Position mode.
                 if (Script.SettingsAsset.PositionHandle == PositionHandle.Free) {
@@ -1340,7 +1354,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     + Script.SettingsAsset.ShortJumpValue;
 
                 animationTime.floatValue =
-                    (float)(Math.Round(newAnimationTimeRatio, 3));
+                    (float) (Math.Round(newAnimationTimeRatio, 3));
             }
 
             // Short jump backward.
@@ -1356,7 +1370,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     - Script.SettingsAsset.ShortJumpValue;
 
                 animationTime.floatValue =
-                    (float)(Math.Round(newAnimationTimeRatio, 3));
+                    (float) (Math.Round(newAnimationTimeRatio, 3));
             }
 
             // Long jump forward.
@@ -1436,13 +1450,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private void HandlePlayPauseButton() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandlePlayPause",
-                null);
         }
 
         #endregion

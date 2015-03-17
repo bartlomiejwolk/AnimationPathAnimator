@@ -258,7 +258,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region EVENT HANDLERS
 
         private void APAnimator_AnimationEnded(object sender, EventArgs e) {
-            //AnimationTime = 0;
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
@@ -288,66 +287,93 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region ANIMATION
 
+        /// <summary>
+        /// Pause animation.
+        /// </summary>
         public void PauseAnimation() {
             Pause = true;
         }
 
+        /// <summary>
+        /// Toggle play/pause animation.
+        /// </summary>
         public void PlayPauseAnimation() {
             Pause = !Pause;
         }
 
+        /// <summary>
+        /// Set rotation mode to Custom.
+        /// </summary>
         public void SetRotationCustom() {
             SettingsAsset.RotationMode = RotationMode.Custom;
         }
 
+        /// <summary>
+        /// Set rotation mode to Forward.
+        /// </summary>
         public void SetRotationForward() {
             SettingsAsset.RotationMode = RotationMode.Forward;
         }
 
+        /// <summary>
+        /// Set rotation mode to Target.
+        /// </summary>
         public void SetRotationTarget() {
             SettingsAsset.RotationMode = RotationMode.Target;
         }
 
+        /// <summary>
+        /// Set tangent mode to Linear.
+        /// </summary>
         public void SetTangentLinear() {
             SettingsAsset.TangentMode = TangentMode.Linear;
             PathData.SetLinearAnimObjPathTangents();
         }
 
+        /// <summary>
+        /// Set tangent mode to Smooth.
+        /// </summary>
         public void SetTangentSmooth() {
             SettingsAsset.TangentMode = TangentMode.Smooth;
             PathData.SmoothAnimObjPathTangents();
         }
 
+        /// <summary>
+        /// Set wrap mode to Clamp.
+        /// </summary>
         public void SetWrapClamp() {
             SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
         }
 
+        /// <summary>
+        /// Set wrap mode to Loop.
+        /// </summary>
         public void SetWrapLoop() {
             SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
         }
 
+        /// <summary>
+        /// Set wrap mode to PingPong.
+        /// </summary>
         public void SetWrapPingPong() {
             SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
         }
 
+        /// <summary>
+        /// Start animation.
+        /// </summary>
         public void StartAnimation() {
-            // Check for path data asset.
-            if (PathData == null) {
-                Debug.LogWarning("Assign Path Asset in the inspector.");
-                return;
-            }
+            if (!PathDataAssetAssigned()) return;
 
-            // Fire NodeReached event for first node.
-            if (AnimationTime == 0) {
-                var args = new NodeReachedEventArgs(0, 0);
-                OnNodeReached(args);
-            }
-
+            HandleFireNodeReachedEventForFirstNode();
             StartCoroutine("HandleEaseTime");
 
             Debug.Log("Animation started");
         }
 
+        /// <summary>
+        /// Stop animation.
+        /// </summary>
         public void StopAnimation() {
             StopCoroutine("HandleEaseTime");
 
@@ -706,7 +732,32 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
         #endregion
 
+        #region OTHER HANDLERS
+        /// <summary>
+        /// Used at animation start to fire NodeReached event for the first node.
+        /// </summary>
+        private void HandleFireNodeReachedEventForFirstNode() {
+            if (AnimationTime == 0) {
+                // Fire event.
+                var args = new NodeReachedEventArgs(0, 0);
+                OnNodeReached(args);
+            }
+        }
+        #endregion
+
         #region HELPER METHODS
+        /// <summary>
+        /// Use it to guard agains null path data asset.
+        /// </summary>
+        /// <returns>True if pata data asset is not null.</returns>
+        private bool PathDataAssetAssigned() {
+            if (PathData == null) {
+                Debug.LogWarning("Assign Path Asset in the inspector.");
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Method responsible for detecting all shortcuts pressed in play mode.
         /// </summary>

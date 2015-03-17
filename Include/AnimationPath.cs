@@ -5,11 +5,12 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     /// <summary>
+    /// Represents 3d points with three animation curves.
     /// </summary>
     /// <remarks>
     ///     - All three curves are always synchronized, ie. keys number and
     ///     respective keys' timestamps are the same.
-    ///     - Three keys with the same timestamp make a point.
+    ///     - Three keys with the same timestamp make a node.
     /// </remarks>
     [Serializable]
     public class AnimationPath {
@@ -47,17 +48,32 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region METHODS
 
+        /// <summary>
+        /// Adds node at timestamp. Node's value will be evaluated using existing path.
+        /// </summary>
+        /// <param name="timestamp">Timestamp of for the node.</param>
         public void AddNodeAtTime(float timestamp) {
+            // For each curve..
             for (var j = 0; j < 3; j++) {
+                // Get key value.
                 var newKeyValue = curves[j].Evaluate(timestamp);
+                // Add new key to path.
                 curves[j].AddKey(timestamp, newKeyValue);
             }
         }
 
+        /// <summary>
+        /// Calculates path length.
+        /// </summary>
+        /// <param name="samplingFrequency">Amount of sample points for one meter of path.</param>
+        /// <returns>Path length in meters.</returns>
+        // TODO Rename to CalculatePathLength().
         public float CalculatePathCurvedLength(int samplingFrequency) {
             float pathLength = 0;
 
+            // For each node..
             for (var i = 0; i < KeysNo - 1; i++) {
+                // Calculate length of the path between two nodes.
                 pathLength += CalculateSectionCurvedLength(
                     i,
                     i + 1,
@@ -68,21 +84,30 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        ///     Calculate path length as if all nodes were in linear mode.
+        /// Calculates shortest path between path nodes.
         /// </summary>
-        /// <returns>Path length.</returns>
+        /// <returns>Path length in meters.</returns>
         public float CalculatePathLinearLength() {
             // Result distance.
             float dist = 0;
 
             // For each node (exclude the first one)..
             for (var i = 0; i < KeysNo - 1; i++) {
+                // Calculate distance between two nodes.
                 dist += CalculateSectionLinearLength(i, i + 1);
             }
 
             return dist;
         }
 
+        /// <summary>
+        /// Calculates path length between two nodes.
+        /// </summary>
+        /// <param name="firstNodeIndex">Index of the first node.</param>
+        /// <param name="secondNodeIndex">Index of the second node.</param>
+        /// <param name="samplingFrequency">Amount of sample points for one meter of path.</param>
+        /// <returns>Section length in meters.</returns>
+        // TODO Rename to CalculateSectionLength().
         public float CalculateSectionCurvedLength(
             int firstNodeIndex,
             int secondNodeIndex,
@@ -96,13 +121,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 secondNodeIndex,
                 samplingFrequency);
 
+            // For each point..
             for (var i = 1; i < points.Count; i++) {
+                // Calculate distance this and previous point.
                 pathLength += Vector3.Distance(points[i - 1], points[i]);
             }
 
             return pathLength;
         }
 
+        /// <summary>
+        /// Calculates shortest distance between two nodes.
+        /// </summary>
+        /// <param name="firstNodeIndex">Index of the first node.</param>
+        /// <param name="secondNodeIndex">Index of the second node.</param>
+        /// <returns>Length in meters.</returns>
         public float CalculateSectionLinearLength(
             int firstNodeIndex,
             int secondNodeIndex) {
@@ -116,6 +149,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return sectionLength;
         }
 
+        /// <summary>
+        /// Changes node timestamp.
+        /// </summary>
+        /// <param name="keyIndex">Node index.</param>
+        /// <param name="newTimestamp">New timestamp.</param>
         public void ChangeNodeTimestamp(
             int keyIndex,
             float newTimestamp) {
@@ -133,6 +171,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Changes in/out tangents of a single node.
+        /// </summary>
+        /// <param name="nodeIndex"></param>
+        /// <param name="newTangents"></param>
+        // TODO Rename to ChangeNodeTangent().
         public void ChangePointTangents(
             int nodeIndex,
             Vector3 newTangents) {

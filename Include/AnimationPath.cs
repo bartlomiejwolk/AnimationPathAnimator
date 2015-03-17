@@ -174,12 +174,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Changes in/out tangents of a single node.
         /// </summary>
-        /// <param name="nodeIndex"></param>
-        /// <param name="newTangents"></param>
+        /// <param name="nodeIndex">Node index.</param>
+        /// <param name="inTangent">New in tangent.</param>
+        /// <param name="outTangent">New out tangent</param>
         // TODO Rename to ChangeNodeTangent().
         public void ChangePointTangents(
             int nodeIndex,
-            Vector3 newTangents) {
+            float inTangent,
+            float outTangent) {
 
             // Copy keys.
             var keyXCopy = curves[0].keys[nodeIndex];
@@ -187,13 +189,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var keyZCopy = curves[2].keys[nodeIndex];
 
             // Update keys' values.
-            keyXCopy.inTangent = newTangents.x;
-            keyYCopy.inTangent = newTangents.y;
-            keyZCopy.inTangent = newTangents.z;
+            keyXCopy.inTangent = inTangent;
+            keyYCopy.inTangent = inTangent;
+            keyZCopy.inTangent = inTangent;
 
-            keyXCopy.outTangent = newTangents.x;
-            keyYCopy.outTangent = newTangents.y;
-            keyZCopy.outTangent = newTangents.z;
+            keyXCopy.outTangent = outTangent;
+            keyYCopy.outTangent = outTangent;
+            keyZCopy.outTangent = outTangent;
 
             // Update keys.
             curves[0].MoveKey(nodeIndex, keyXCopy);

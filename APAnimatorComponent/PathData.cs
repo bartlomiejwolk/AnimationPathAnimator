@@ -307,7 +307,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
                 var sectionLength = AnimatedObjectPath
-                    .CalculateSectionCurvedLength(
+                    .CalculateSectionLength(
                         i - 1,
                         i,
                         PathLengthSamplingFrequency);

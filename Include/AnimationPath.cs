@@ -73,7 +73,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // For each node..
             for (var i = 0; i < KeysNo - 1; i++) {
                 // Calculate length of the path between two nodes.
-                pathLength += CalculateSectionCurvedLength(
+                pathLength += CalculateSectionLength(
                     i,
                     i + 1,
                     samplingFrequency);
@@ -106,8 +106,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="secondNodeIndex">Index of the second node.</param>
         /// <param name="samplingFrequency">Amount of sample points for one meter of path.</param>
         /// <returns>Section length in meters.</returns>
-        // TODO Rename to CalculateSectionLength().
-        public float CalculateSectionCurvedLength(
+        public float CalculateSectionLength(
             int firstNodeIndex,
             int secondNodeIndex,
             int samplingFrequency) {

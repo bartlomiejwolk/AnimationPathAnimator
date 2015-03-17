@@ -194,90 +194,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
-
-        /// <summary>
-        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time.
-        /// </summary>
-        /// <returns>Node timestamp.</returns>
-        private float GetNearestBackwardNodeTimestamp() {
-            var pathTimestamps = PathData.GetPathTimestamps();
-
-            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
-                if (pathTimestamps[i] < AnimationTime) {
-                    return pathTimestamps[i];
-                }
-            }
-
-            // Return timestamp of the last node.
-            return 0;
-        }
-
-        /// <summary>
-        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time. 
-        /// </summary>
-        /// <returns>Node timestamp.</returns>
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = PathData.GetPathTimestamps();
-
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > AnimationTime)) {
-                return timestamp;
-            }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
-        /// <summary>
-        /// Method responsible for detecting all shortcuts pressed in play mode.
-        /// </summary>
-        private void HandleShortcuts() {
-            if (!SettingsAsset.EnableControlsInPlayMode) return;
-
-            // Play/Pause.
-            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
-                HandlePlayPause();
-            }
-
-            // Long jump forward
-            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                animationTime += SettingsAsset.LongJumpValue;
-            }
-
-            // Long jump backward. 
-            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                animationTime -= SettingsAsset.LongJumpValue;
-            }
-
-            // Jump to next node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
-                animationTime = GetNearestForwardNodeTimestamp();
-            }
-
-            // Jump to previous node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
-                animationTime = GetNearestBackwardNodeTimestamp();
-            }
-
-            // Jump to beginning.
-            if (Input.GetKeyDown(
-                SettingsAsset.JumpToPreviousNodeKey)
-                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
-
-                AnimationTime = 0;
-            }
-        }
-
-        /// <summary>
-        /// Decides whether to start animation playback on enter play mode.
-        /// </summary>
-        private void HandleStartAnimation() {
-            if (Application.isPlaying && SettingsAsset.AutoPlay) {
-                StartAnimation();
-                IsPlaying = true;
-            }
-        }
-
         private void OnDisable() {
             UnsubscribeFromEvents();
         }
@@ -318,14 +234,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleUpdatingAnimGOInPlayMode();
             HandleShortcuts();
         }
-
-        private void UpdateSubscribedToEventsFlag() {
-            // Update flag when path data asset is removed.
-            if (PathData == null && subscribedToEvents) {
-                subscribedToEvents = false;
-            }
-        }
-
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
@@ -660,6 +568,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region ANIMATION HANDLERS
+        /// <summary>
+        /// Decides whether to start animation playback on enter play mode.
+        /// </summary>
+        private void HandleStartAnimation() {
+            if (Application.isPlaying && SettingsAsset.AutoPlay) {
+                StartAnimation();
+                IsPlaying = true;
+            }
+        }
+
 
         private void HandleClampWrapMode() {
             // Break from animation in Clamp wrap mode.
@@ -786,10 +704,89 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 }
             }
         }
-
         #endregion
 
         #region HELPER METHODS
+        /// <summary>
+        /// Method responsible for detecting all shortcuts pressed in play mode.
+        /// </summary>
+        private void HandleShortcuts() {
+            if (!SettingsAsset.EnableControlsInPlayMode) return;
+
+            // Play/Pause.
+            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
+                HandlePlayPause();
+            }
+
+            // Long jump forward
+            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
+                animationTime += SettingsAsset.LongJumpValue;
+            }
+
+            // Long jump backward. 
+            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
+                animationTime -= SettingsAsset.LongJumpValue;
+            }
+
+            // Jump to next node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
+                animationTime = GetNearestForwardNodeTimestamp();
+            }
+
+            // Jump to previous node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
+                animationTime = GetNearestBackwardNodeTimestamp();
+            }
+
+            // Jump to beginning.
+            if (Input.GetKeyDown(
+                SettingsAsset.JumpToPreviousNodeKey)
+                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
+
+                AnimationTime = 0;
+            }
+        }
+
+        private void UpdateSubscribedToEventsFlag() {
+            // Update flag when path data asset is removed.
+            if (PathData == null && subscribedToEvents) {
+                subscribedToEvents = false;
+            }
+        }
+
+        /// <summary>
+        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time. 
+        /// </summary>
+        /// <returns>Node timestamp.</returns>
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > AnimationTime)) {
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
+        }
+
+        /// <summary>
+        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time.
+        /// </summary>
+        /// <returns>Node timestamp.</returns>
+        private float GetNearestBackwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
+                if (pathTimestamps[i] < AnimationTime) {
+                    return pathTimestamps[i];
+                }
+            }
+
+            // Return timestamp of the last node.
+            return 0;
+        }
+
 
         public Vector3[] GetGlobalNodePositions(int nodesNo = -1) {
             var nodePositions = PathData.GetNodePositions(nodesNo);

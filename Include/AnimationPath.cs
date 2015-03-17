@@ -21,11 +21,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         [SerializeField]
         private AnimationCurve[] curves;
-
-        public AnimationPath() {
-            curves = new AnimationCurve[3];
-        }
-
         #endregion FIELDS
 
         #region PROPERTIES
@@ -47,6 +42,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+        public AnimationPath() {
+            InitializeAnimationPathCurves();
+        }
+
 
         /// <summary>
         /// Adds node at timestamp. Node's position will be evaluated using existing path.
@@ -269,8 +268,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Initializes <c>curves</c> field with empty animation curves.
         /// </summary>
-        // TODO This should be a constructor.
-        public void InstantiateAnimationPathCurves() {
+        private void InitializeAnimationPathCurves() {
+            curves = new AnimationCurve[3];
+
             for (var i = 0; i < 3; i++) {
                 curves[i] = new AnimationCurve();
             }

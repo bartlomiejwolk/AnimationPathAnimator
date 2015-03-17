@@ -188,11 +188,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleInstantiateReferenceTypes() {
             if (animatedObjectPath == null) {
                 animatedObjectPath = new AnimationPath();
-                animatedObjectPath.InstantiateAnimationPathCurves();
             }
             if (rotationPath == null) {
                 rotationPath = new AnimationPath();
-                rotationPath.InstantiateAnimationPathCurves();
             }
             if (easeCurve == null) {
                 easeCurve = new AnimationCurve();
@@ -394,7 +392,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void ResetRotationPath() {
-            rotationPath.InstantiateAnimationPathCurves();
+            rotationPath = new AnimationPath();
 
             UpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();
@@ -521,10 +519,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void ForceInstantiatePathsAndCurves() {
             animatedObjectPath = new AnimationPath();
-            animatedObjectPath.InstantiateAnimationPathCurves();
-
             rotationPath = new AnimationPath();
-            rotationPath.InstantiateAnimationPathCurves();
 
             easeCurve = new AnimationCurve();
             tiltingCurve = new AnimationCurve();

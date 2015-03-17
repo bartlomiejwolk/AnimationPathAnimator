@@ -2,3 +2,6 @@ obj/
 Trailer
 Trailer
 bin.meta
+bin/Debug.meta
+bin/Release.meta
+obj.meta

@@ -67,8 +67,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         /// <param name="samplingFrequency">Amount of sample points for one meter of path.</param>
         /// <returns>Path length in meters.</returns>
-        // TODO Rename to CalculatePathLength().
-        public float CalculatePathCurvedLength(int samplingFrequency) {
+        public float CalculatePathLength(int samplingFrequency) {
             float pathLength = 0;
 
             // For each node..

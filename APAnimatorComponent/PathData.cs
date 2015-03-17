@@ -294,7 +294,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public void DistributeTimestamps() {
             // Calculate path curved length.
-            var pathLength = AnimatedObjectPath.CalculatePathCurvedLength(
+            var pathLength = AnimatedObjectPath.CalculatePathLength(
                 PathLengthSamplingFrequency);
 
             // Calculate time for one meter of curve length.

@@ -3,7 +3,27 @@
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     public sealed class APAnimatorSettings : ScriptableObject {
+        #region ADVANCED FIELDS
+
+        [SerializeField]
+        private float minNodeTimeSeparation = 0.001f;
+
+        #endregion
+
+        #region ADVANCED PROPERTIES 
+
+        public float MinNodeTimeSeparation {
+            get { return minNodeTimeSeparation; }
+            set { minNodeTimeSeparation = value; }
+        }
+
+        #endregion
+
         #region SHORTCUT FIELDS
+
+        public KeyCode playModeModKey = KeyCode.RightAlt;
+
+        public KeyCode positionHandleKey = KeyCode.G;
 
         [Header("Shortcuts")]
         [SerializeField]
@@ -63,23 +83,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private KeyCode updateAllKey = KeyCode.P;
 
-        public KeyCode playModeModKey = KeyCode.RightAlt;
-
-        public KeyCode positionHandleKey = KeyCode.G;
-
         #endregion
 
         #region SHORTCUT PROPERTIES
-        public KeyCode PositionHandleKey {
-            get { return positionHandleKey; }
-            set { positionHandleKey = value; }
-        }
-
-        public KeyCode PlayModeModKey {
-            get { return playModeModKey; }
-            set { playModeModKey = value; }
-        }
-
 
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
@@ -131,9 +137,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { noneModeKey = value; }
         }
 
+        public KeyCode PlayModeModKey {
+            get { return playModeModKey; }
+            set { playModeModKey = value; }
+        }
+
         public KeyCode PlayPauseKey {
             get { return playPauseKey; }
             set { playPauseKey = value; }
+        }
+
+        public KeyCode PositionHandleKey {
+            get { return positionHandleKey; }
+            set { positionHandleKey = value; }
         }
 
         public KeyCode RotationModeKey {
@@ -216,6 +232,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private string pathDataAssetDefaultName = "Path";
 
         [SerializeField]
+        private PositionHandle positionHandle = PositionHandle.Free;
+
+        [SerializeField]
         private float positionLerpSpeed = 1;
 
         [SerializeField]
@@ -235,17 +254,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
 
-
-        [SerializeField]
-        private PositionHandle positionHandle = PositionHandle.Free;
         #endregion
 
         #region ANIMATOR PROPERTIES
-        public PositionHandle PositionHandle {
-            get { return positionHandle; }
-            set { positionHandle = value; }
-        }
-
 
         public bool AutoPlay {
             get { return autoPlay; }
@@ -305,6 +316,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public string PathDataAssetDefaultName {
             get { return pathDataAssetDefaultName; }
             set { pathDataAssetDefaultName = value; }
+        }
+
+        public PositionHandle PositionHandle {
+            get { return positionHandle; }
+            set { positionHandle = value; }
         }
 
         public float PositionLerpSpeed {
@@ -463,6 +479,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int updateAllLabelOffsetX = 10;
         private int updateAllLabelOffsetY = -25;
         private string updateAllLabelText = "A";
+
         #endregion
 
         #region HANDLES PROPERTIES
@@ -564,20 +581,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
-        #endregion
-        #region ADVANCED FIELDS
-
-        [SerializeField]
-        private float minNodeTimeSeparation = 0.001f;
-
-        #endregion
-
-        #region ADVANCED PROPERTIES 
-        public float MinNodeTimeSeparation {
-            get { return minNodeTimeSeparation; }
-            set { minNodeTimeSeparation = value; }
-        }
-
 
         #endregion
     }

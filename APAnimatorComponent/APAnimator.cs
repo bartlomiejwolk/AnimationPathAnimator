@@ -6,24 +6,25 @@ using UnityEngine;
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
     /// <summary>
-    ///     Component that allows animating transforms position along predefined
-    ///     Animation Paths and also animate their rotation on x and y axis in
-    ///     time.
+    /// Animates object along path.
     /// </summary>
     [ExecuteInEditMode]
     public sealed class APAnimator : MonoBehaviour {
         #region EVENTS
 
         /// <summary>
-        ///     Animation time reached 1 and animated object stopped moving.
+        ///     Event fired when animation time is 1 and animated object stops moving.
         /// </summary>
         public event EventHandler AnimationEnded;
 
         /// <summary>
-        ///     Animation time is 0 and animation is playing.
+        ///     Event fired when animation time is 0 and animation starts playing.
         /// </summary>
         public event EventHandler AnimationStarted;
 
+        /// <summary>
+        /// Event called when animated object goes through any node.
+        /// </summary>
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         #endregion

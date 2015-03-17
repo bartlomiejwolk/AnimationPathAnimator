@@ -7,9 +7,6 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
     [CustomEditor(typeof (APEvents))]
     public class APEventsEditor : Editor {
-        #region FIELDS
-
-        #endregion
 
         #region PROPERTIES
 
@@ -56,14 +53,6 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
         }
-
-        private bool AssetsLoaded() {
-            return (bool) Utilities.InvokeMethodWithReflection(
-                Script,
-                "RequiredAssetsLoaded",
-                null);
-        }
-
         private void OnEnable() {
             Script = target as APEvents;
 
@@ -158,6 +147,13 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         #endregion
 
         #region METHODS
+        private bool AssetsLoaded() {
+            return (bool)Utilities.InvokeMethodWithReflection(
+                Script,
+                "RequiredAssetsLoaded",
+                null);
+        }
+
 
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;

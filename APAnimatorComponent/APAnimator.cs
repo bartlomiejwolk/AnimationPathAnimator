@@ -31,6 +31,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region FIELDS
 
+        /// <summary>
+        /// Whether inspector advanced settings foldout should be open or folded.
+        /// </summary>
         [SerializeField]
         private bool advancedSettingsFoldout;
 
@@ -40,6 +43,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private Transform animatedGO;
 
+        /// <summary>
+        /// Percentage of the overall animation progress. 0.5 means position in the middle of the path.
+        /// </summary>
         [SerializeField]
         private float animationTime;
 

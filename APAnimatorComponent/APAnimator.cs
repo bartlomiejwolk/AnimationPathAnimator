@@ -49,15 +49,31 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private float animationTime;
 
+        /// <summary>
+        /// Whether to update animated object positon, rotation and tilting. It's executed independent from animation time,
+        /// so animated object can be updated even if animator is stopped or paused.
+        /// </summary>
         private bool animGOUpdateEnabled;
 
+        /// <summary>
+        /// It's true when <c>CountdownToStopAnimGOUpdate</c> coroutine is running.
+        /// </summary>
         private bool countdownCoroutineIsRunning;
 
+        /// <summary>
+        /// It's set to true when <c>EaseTime</c> coroutine is running.
+        /// </summary>
         private bool isPlaying;
 
+        /// <summary>
+        /// Reference to asset file holding path data.
+        /// </summary>
         [SerializeField]
         private PathData pathData;
 
+        /// <summary>
+        /// Pause backing field.
+        /// </summary>
         private bool pause;
 
         /// <summary>
@@ -65,12 +81,21 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         private float prevAnimationTime;
 
+        /// <summary>
+        /// Reference to asset file holding animator settings.
+        /// </summary>
         [SerializeField]
         private APAnimatorSettings settingsAsset;
 
+        /// <summary>
+        /// Reference to GUISkin asset.
+        /// </summary>
         [SerializeField]
         private GUISkin skin;
 
+        /// <summary>
+        /// Is set to true after successfull subscription to events.
+        /// </summary>
         [SerializeField]
         private bool subscribedToEvents;
 
@@ -639,6 +664,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        // TODO Rename to EaseTime().
         private IEnumerator HandleEaseTime() {
             IsPlaying = true;
             Pause = false;

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
+    /// <summary>
+    /// Editor class responsible for drawing inspector and on-scene handles. All editor related functionality is defined here.
+    /// </summary>
     [CustomEditor(typeof (APAnimator))]
     public sealed class APAnimatorEditor : Editor {
         #region PROPERTIES
@@ -14,8 +17,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         private APAnimator Script { get; set; }
 
+        /// <summary>
+        /// Is true when serialized properties are initialized.
+        /// </summary>
         private bool SerializedPropertiesInitialized { get; set; }
 
+        /// <summary>
+        /// <c>SerializedObject</c> for <c>APAnimatorSettings</c> asset.
+        /// </summary>
         private SerializedObject SettingsSerializedObject { get; set; }
 
         #endregion
@@ -57,17 +66,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!SerializedPropertiesInitialized) return;
 
             HandleUndoEvent();
-
             DrawInspector();
 
-            // Validate inspector SettingsAsset.
-            // Not all inspector controls can be validated with OnValidate().
+            // Validate inspector settings.
+            // Settings stored in settings asset cannot be validated with OnValidate().
             if (GUI.changed) ValidateInspectorSettings();
 
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
         private void OnDisable() {
+            // Disable Unity scene tool.
             SceneTool.RestoreTool();
         }
 
@@ -78,9 +87,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;
 
-            InstantiateCompositeClasses();
-            InitializeSerializedProperties();
+            // Initialize serialized object for settings asset.
+            SettingsSerializedObject = new SerializedObject(
+                Script.SettingsAsset);
 
+            InitializeSerializedProperties();
             CopyIconsToGizmosFolder();
             SceneTool.RememberCurrentTool();
             FocusOnSceneView();
@@ -1268,11 +1279,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 SettingsSerializedObject.FindProperty("positionHandle");
 
             SerializedPropertiesInitialized = true;
-        }
-
-        private void InstantiateCompositeClasses() {
-            SettingsSerializedObject = new SerializedObject(
-                Script.SettingsAsset);
         }
 
         private bool RequiredAssetsLoaded() {

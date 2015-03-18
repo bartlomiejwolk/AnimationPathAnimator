@@ -833,6 +833,44 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
         #endregion
 
+        #region METHODS
+
+        /// <summary>
+        ///     Export path nodes as transforms.
+        /// </summary>
+        /// <param name="exportSampling">
+        ///     Number of transforms to be extracted from one meter of the path.
+        /// </param>
+        public void ExportNodes(
+            int exportSampling) {
+
+            // exportSampling cannot be less than 0.
+            if (exportSampling < 0) return;
+
+            // Points to export.
+            var points = pathData.SampleAnimationPathForPoints(
+                exportSampling);
+
+            // Convert points to global coordinates.
+            Utilities.ConvertToGlobalCoordinates(ref points, transform);
+
+            // Create parent GO.
+            var exportedPath = new GameObject("exported_path");
+
+            // Create child GOs.
+            for (var i = 0; i < points.Count; i++) {
+                // Create child GO.
+                var nodeGo = new GameObject("Node " + i);
+
+                // Move node under the path GO.
+                nodeGo.transform.parent = exportedPath.transform;
+
+                // Assign node local position.
+                nodeGo.transform.localPosition = points[i];
+            }
+        }
+
+        #endregion
         #region HELPER METHODS
         /// <summary>
         /// Use it to guard agains null path data asset.

@@ -610,6 +610,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region DRAWING HANDLERS
+        /// <summary>
+        /// Handle drawing on-scene label for "Update All" inspector option.
+        /// </summary>
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Script.SettingsAsset.UpdateAllMode) return;
 
@@ -633,6 +636,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 
+        /// <summary>
+        /// Handle drawing on-scene buttons for adding new nodes.
+        /// </summary>
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
             var nodePositions = Script.GetGlobalNodePositions();
@@ -653,6 +659,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 addButtonStyle);
         }
 
+        /// <summary>
+        /// Handle drawine on-scene ease handles.
+        /// </summary>
         private void HandleDrawingEaseHandles() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Ease) return;
 
@@ -663,6 +672,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
 
+            // Value that defines how much of an arc will be draw to represent a value.
             var arcValueMultiplier =
                 Script.SettingsAsset.ArcValueMultiplierNumerator
                 / Script.SettingsAsset.MaxAnimationSpeed;
@@ -677,6 +687,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 DrawEaseHandlesCallbackHandler);
         }
 
+        /// <summary>
+        /// Handle drawing on-scene labes with ease values.
+        /// </summary>
         private void HandleDrawingEaseLabel() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Ease) return;
 
@@ -718,6 +731,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Handle drawing on-scene button for removing nodes.
+        /// </summary>
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
             var nodes = Script.GetGlobalNodePositions();
@@ -739,6 +755,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 removeButtonStyle);
         }
 
+        /// <summary>
+        /// Handle drawing on-scene rotation handle in Custom rotation mode.
+        /// </summary>
         private void HandleDrawingRotationHandle() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
@@ -767,6 +786,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 DrawRotationHandlesCallbackHandler);
         }
 
+        /// <summary>
+        /// Handle drawing on-scene tilting handles.
+        /// </summary>
         private void HandleDrawingTiltingHandles() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
@@ -789,6 +811,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 callbackHandler);
         }
 
+        /// <summary>
+        /// Handle drawing on-scene tilting value labels.
+        /// </summary>
         private void HandleDrawingTiltLabel() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
@@ -809,15 +834,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region CALLBACK HANDLERS
 
+        /// <summary>
+        /// Add node button pressed callback handler.
+        /// </summary>
+        /// <param name="nodeIndex"></param>
         private void DrawAddNodeButtonsCallbackHandler(int nodeIndex) {
             // Make snapshot of the target object.
             Undo.RecordObject(Script.PathData, "Change path");
 
             // Add a new node.
             AddNodeBetween(nodeIndex);
-
             HandleUnsyncedObjectAndRotationPaths();
-
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode sooth node tangents.
@@ -843,12 +870,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
+            // If update all mode is set..
             if (Script.SettingsAsset.UpdateAllMode) {
+                // Get old ease value.
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
+                // Calculate delta.
                 var delta = newValue - oldValue;
+                // Use delta to update ease value for all nodes.
                 Script.PathData.UpdateEaseCurveValues(delta);
             }
             else {
+                // Update ease for single node.
                 Script.PathData.UpdateEaseValue(keyIndex, newValue);
             }
         }
@@ -973,6 +1005,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region OTHER HANDLERS
+        /// <summary>
+        /// Handles adding/removing reference to target game object.
+        /// </summary>
+        /// <param name="prevTargetGO"></param>
         private void HandleTargetGOFieldChange(Transform prevTargetGO) {
             // Handle adding reference.
             if (Script.TargetGO != prevTargetGO
@@ -1000,6 +1036,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 
+        /// <summary>
+        /// Makes sure that animator is always subscribed to path events.
+        /// </summary>
         private void HandleAnimatorEventsSubscription() {
             // Subscribe animator to path events if not subscribed already.
             // This is required after animator component reset.
@@ -1021,6 +1060,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
+        /// <summary>
+        /// Defines what to do when undo event is performed.
+        /// </summary>
         private void HandleUndoEvent() {
             if (Event.current.type == EventType.ValidateCommand
                 && Event.current.commandName == "UndoRedoPerformed") {
@@ -1039,6 +1081,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Handles situation when adding new node to the path would result in
+        /// anim. GO path and rotation path having different number of nodes.
+        /// </summary>
+        /// <remarks>Such situation would be caused by placing rotation nodes too close to each other.</remarks>
         private void HandleUnsyncedObjectAndRotationPaths() {
             // Return if object and rotation path have the same number of nodes.
             if (Script.PathData.NodesNo == Script.PathData.RotationPathNodesNo) {
@@ -1170,6 +1217,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Add new path node between two others, exactly in the middle.
+        /// </summary>
+        /// <param name="nodeIndex">Node index after which a new node will be placed.</param>
         private void AddNodeBetween(int nodeIndex) {
             // Timestamp of node that was taken action on.
             var currentKeyTime = Script.PathData.GetNodeTimestamp(nodeIndex);
@@ -1198,6 +1249,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.PathData.CreateNodeAtTime(newKeyTime);
         }
 
+        /// <summary>
+        /// Converts ease value to degrees that can be displyed with arc handle.
+        /// </summary>
+        /// <param name="nodeIndex">Node index with the ease value to be converted.</param>
+        /// <returns>Ease value as degrees.</returns>
         private float ConvertEaseToDegrees(int nodeIndex) {
             // Calculate value to display.
             var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
@@ -1215,6 +1271,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return rotationValue;
         }
 
+        /// <summary>
+        /// Copies gizmo icons from component Resource folder to Assets/Gizmos/ATP.
+        /// </summary>
         private void CopyIconsToGizmosFolder() {
             // Path to Unity Gizmos folder.
             var gizmosDir = Application.dataPath + "/Gizmos";
@@ -1282,6 +1341,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return assetsLoaded;
         }
 
+        /// <summary>
+        /// Validate inspector settings that cannot be validated in OnValidate().
+        /// </summary>
         private void ValidateInspectorSettings() {
             if (Script.SettingsAsset == null) return;
 
@@ -1496,52 +1558,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     Script.SettingsAsset.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {
-                ExportNodes(
-                    Script.PathData,
-                    Script.transform,
-                    Script.SettingsAsset.ExportSamplingFrequency);
+                Script.ExportNodes(Script.SettingsAsset.ExportSamplingFrequency);
             }
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        ///     Export Animation Path nodes as transforms.
-        /// </summary>
-        /// <param name="transform"></param>
-        /// <param name="exportSampling">
-        ///     Amount of result transforms for one meter of Animation Path.
-        /// </param>
-        /// <param name="pathData"></param>
-        private static void ExportNodes(
-            PathData pathData,
-            Transform transform,
-            int exportSampling) {
-
-            // exportSampling cannot be less than 0.
-            if (exportSampling < 0) return;
-
-            // Points to export.
-            var points = pathData.SampleAnimationPathForPoints(
-                exportSampling);
-
-            // Convert points to global coordinates.
-            Utilities.ConvertToGlobalCoordinates(ref points, transform);
-
-            // Create parent GO.
-            var exportedPath = new GameObject("exported_path");
-
-            // Create child GOs.
-            for (var i = 0; i < points.Count; i++) {
-                // Create child GO.
-                var nodeGo = new GameObject("Node " + i);
-
-                // Move node under the path GO.
-                nodeGo.transform.parent = exportedPath.transform;
-
-                // Assign node local position.
-                nodeGo.transform.localPosition = points[i];
-            }
         }
 
         #endregion

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationPathAnimator", "AnimationPathAnimator.csproj", "{271C8D38-4071-41C7-84CE-FE0EC35C0E03}"
+EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ModelingProject", "..\..\ModelingProject\ModelingProject\ModelingProject.modelproj", "{28D15AED-841D-4FFC-AC25-38FE92538196}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{271C8D38-4071-41C7-84CE-FE0EC35C0E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{271C8D38-4071-41C7-84CE-FE0EC35C0E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{271C8D38-4071-41C7-84CE-FE0EC35C0E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{271C8D38-4071-41C7-84CE-FE0EC35C0E03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D15AED-841D-4FFC-AC25-38FE92538196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D15AED-841D-4FFC-AC25-38FE92538196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D15AED-841D-4FFC-AC25-38FE92538196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D15AED-841D-4FFC-AC25-38FE92538196}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

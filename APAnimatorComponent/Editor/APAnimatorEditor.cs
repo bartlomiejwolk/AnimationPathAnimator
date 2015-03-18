@@ -114,8 +114,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleAnimatorEventsSubscription();
 
             // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(
-                GUIUtility.GetControlID(
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                     FocusType.Passive));
 
             HandleShortcuts();
@@ -534,12 +533,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        //private void DrawShortcutsHelpBox() {
-        //    EditorGUILayout.HelpBox(
-        //        "Check Settings Asset for shortcuts.",
-        //        MessageType.Info);
-        //}
-
         private void DrawShortJumpValueField() {
             SettingsSerializedObject.Update();
 
@@ -614,7 +607,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                         "Determines animator behaviour after animation end."),
                     Script.SettingsAsset.WrapMode);
         }
+        #endregion
 
+        #region DRAWING HANDLERS
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Script.SettingsAsset.UpdateAllMode) return;
 
@@ -637,46 +632,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
 
-        /// <summary>
-        ///     Called on rotation mode change.
-        /// </summary>
-        private void HandleRotationModeChange() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "UpdateAnimation",
-                null);
-            Script.SettingsAsset.HandleMode = HandleMode.None;
-        }
-
-        private void HandleTargetGOFieldChange(Transform prevTargetGO) {
-            // Handle adding reference.
-            if (Script.TargetGO != prevTargetGO
-                && prevTargetGO == null) {
-
-                Script.SettingsAsset.RotationMode = RotationMode.Target;
-
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UpdateAnimation",
-                    null);
-            }
-            // Handle removing reference.
-            else if (Script.TargetGO != prevTargetGO
-                     && prevTargetGO != null
-                     && Script.TargetGO == null) {
-
-                Script.SettingsAsset.RotationMode = RotationMode.Forward;
-
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UpdateAnimation",
-                    null);
-            }
-        }
-
-        #endregion
-
-        #region DRAWING HANDLERS
 
         private void HandleDrawingAddButtons() {
             // Get positions at which to draw movement handles.
@@ -977,6 +932,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion CALLBACK HANDLERS
 
         #region MODE HANDLERS
+        /// <summary>
+        ///     Called on rotation mode change.
+        /// </summary>
+        private void HandleRotationModeChange() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "UpdateAnimation",
+                null);
+            Script.SettingsAsset.HandleMode = HandleMode.None;
+        }
+
 
         private void HandleLinearTangentMode() {
             if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
@@ -1007,6 +973,32 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region OTHER HANDLERS
+        private void HandleTargetGOFieldChange(Transform prevTargetGO) {
+            // Handle adding reference.
+            if (Script.TargetGO != prevTargetGO
+                && prevTargetGO == null) {
+
+                Script.SettingsAsset.RotationMode = RotationMode.Target;
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
+            }
+            // Handle removing reference.
+            else if (Script.TargetGO != prevTargetGO
+                     && prevTargetGO != null
+                     && Script.TargetGO == null) {
+
+                Script.SettingsAsset.RotationMode = RotationMode.Forward;
+
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UpdateAnimation",
+                    null);
+            }
+        }
+
 
         private void HandleAnimatorEventsSubscription() {
             // Subscribe animator to path events if not subscribed already.

@@ -402,7 +402,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Updates animated game object position.
         /// </summary>
-        // TODO Rename to UpdateAnimatedGOPosition().
         private void AnimateAnimatedGOPosition() {
             if (AnimatedGO == null) return;
 
@@ -423,7 +422,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Updates animated game object rotation.
         /// </summary>
-        // TODO Rename to UpdateAnimatedGORotation().
         private void AnimateAnimatedGORotation() {
             if (AnimatedGO == null) return;
 
@@ -435,7 +433,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
             // Use rotation path.
             if (SettingsAsset.RotationMode == RotationMode.Custom) {
-                RotateObjectWithAnimationCurves();
+                RotateObjectWithRotationPath();
             }
             // Look forward.
             else if (SettingsAsset.RotationMode == RotationMode.Forward) {
@@ -448,7 +446,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Updates animated game object tilting.
         /// </summary>
-        // todo Rename to UpdateAnimatedGOTilting().
         private void AnimateAnimatedGOTilting() {
             if (AnimatedGO == null) return;
 
@@ -502,11 +499,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to RotateObjectWithRotationPath().
         /// <summary>
         /// Updates animated GO rotation using data from rotation path.
         /// </summary>
-        private void RotateObjectWithAnimationCurves() {
+        private void RotateObjectWithRotationPath() {
             // Get 3d point to look at.
             var lookAtTarget =
                 PathData.GetRotationAtTime(AnimationTime);

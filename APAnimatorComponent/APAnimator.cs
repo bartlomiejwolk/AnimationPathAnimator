@@ -393,8 +393,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Updates animated game object position, rotation and tilting.
         /// </summary>
-        // TODO Rename to UpdateGO().
-        private void Animate() {
+        private void UpdateGO() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
             AnimateAnimatedGOTilting();
@@ -799,7 +798,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Remember anim. GO rotation.
             var prevAnimGORotation = animatedGO.rotation;
 
-            Animate();
+            UpdateGO();
             HandleFireNodeReachedEvent();
 
             // TODO Extract method.

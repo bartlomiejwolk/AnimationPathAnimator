@@ -126,7 +126,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             private set {
                 isRunning = value;
 
-                Debug.Log("Animator is " + (value ? "enabled" : "disabled"));
+                Debug.Log((value ? "Enable" : "Disable") + " Animator");
             }
         }
 
@@ -146,7 +146,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set {
                 pause = value;
 
-                Debug.Log("Pause: " + pause);
+                Debug.Log((pause ? "Pause" : "Play"));
 
                 // On unpause..
                 if (!value) {
@@ -366,8 +366,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             HandleFireNodeReachedEventForFirstNode();
             StartCoroutine("EaseTime");
-
-            Debug.Log("Animation started");
         }
 
         /// <summary>
@@ -375,8 +373,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         public void StopAnimation() {
             StopCoroutine("EaseTime");
-
-            Debug.Log("Animation stopped");
 
             IsRunning = false;
             Pause = false;
@@ -601,11 +597,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        ///     Update animated GO position, rotation and tilting base on current
-        ///     AnimationTime.
+        ///     Update animated GO position, rotation and tilting accordingly to current
+        ///     animation time.
         /// </summary>
         /// <remarks>
-        ///     Used to update animated GO with keys, in play mode.
+        ///     Used to update animated GO with keys.
         /// </remarks>
         private void UpdateAnimation() {
             if (!RequiredAssetsLoaded()) return;

@@ -1297,7 +1297,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 var iconPath = AssetDatabase.GetAssetPath(icon);
 
                 // Copy icon to Gizmos folder.
-                AssetDatabase.CopyAsset(iconPath, gizmosDir + "/ATP");
+                AssetDatabase.CopyAsset(iconPath, "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath) );
             }
         }
 

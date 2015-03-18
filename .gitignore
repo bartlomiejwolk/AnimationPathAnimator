@@ -2,3 +2,10 @@ obj/
 Trailer
 Trailer
 bin.meta
+bin/Debug.meta
+bin/Release.meta
+obj.meta
+Graph1.dgml
+Graph1.dgml.meta
+API/
+AnimationPathAnimator.v12.suo.meta

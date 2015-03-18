@@ -321,7 +321,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void DrawPlayerControls() {
             // Play/Pause button text.
             string playPauseBtnText;
-            if (!Script.IsPlaying || (Script.IsPlaying && Script.Pause)) {
+            if (!Script.IsRunning || (Script.IsRunning && Script.Pause)) {
                 playPauseBtnText = "Play";
             }
             else {

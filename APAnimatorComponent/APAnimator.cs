@@ -47,7 +47,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private bool countdownCoroutineIsRunning;
 
-        private bool isPlaying;
+        private bool isRunning;
 
         [SerializeField]
         private PathData pathData;
@@ -91,7 +91,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 animationTime = value;
 
                 // In play mode, while animation is enabled and not paused..
-                if (Application.isPlaying && IsPlaying && !Pause) {
+                if (Application.isPlaying && IsRunning && !Pause) {
                     // Do nothing.
                 }
                 else {
@@ -121,11 +121,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// It's set to true when <c>EaseTime</c> coroutine is running.
         /// </summary>
-        // TODO Rename to IsRunning.
-        public bool IsPlaying {
-            get { return isPlaying; }
+        public bool IsRunning {
+            get { return isRunning; }
             private set {
-                isPlaying = value;
+                isRunning = value;
 
                 Debug.Log("Animator is " + (value ? "enabled" : "disabled"));
             }
@@ -379,7 +378,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             Debug.Log("Animation stopped");
 
-            IsPlaying = false;
+            IsRunning = false;
             Pause = false;
             AnimationTime = 0;
         }
@@ -653,7 +652,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleStartAnimation() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
                 StartAnimation();
-                IsPlaying = true;
+                IsRunning = true;
             }
         }
 
@@ -666,7 +665,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
-                IsPlaying = false;
+                IsRunning = false;
             }
         }
 
@@ -676,7 +675,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         /// <returns></returns>
         private IEnumerator HandleEaseTime() {
-            IsPlaying = true;
+            IsRunning = true;
             Pause = false;
             AnimGOUpdateEnabled = true;
 
@@ -692,7 +691,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     HandlePingPongWrapMode();
                 }
 
-                if (!IsPlaying) break;
+                if (!IsRunning) break;
 
                 yield return null;
             }
@@ -766,17 +765,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (IsPlaying && !Pause) {
+            if (IsRunning && !Pause) {
                 // Pause animation.
                 Pause = true;
             }
             // Animation is playing but paused.
-            else if (IsPlaying && Pause) {
+            else if (IsRunning && Pause) {
                 // Unpause animation.
                 Pause = false;
             }
             // Animation ended.
-            else if (!IsPlaying && AnimationTime >= 1) {
+            else if (!IsRunning && AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
             }

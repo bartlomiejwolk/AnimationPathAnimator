@@ -97,7 +97,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnEnable() {
             HandleInstantiateReferenceTypes();
-            AssignDefaultValues();
 
             SubscribeToEvents();
         }
@@ -188,15 +187,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleInstantiateReferenceTypes() {
             if (animatedObjectPath == null) {
                 animatedObjectPath = new AnimationPath();
+                InitializeAnimatedObjectPath();
             }
             if (rotationPath == null) {
                 rotationPath = new AnimationPath();
+                InitializeRotationPath();
             }
             if (easeCurve == null) {
                 easeCurve = new AnimationCurve();
+                InitializeEaseCurve();
             }
             if (tiltingCurve == null) {
                 tiltingCurve = new AnimationCurve();
+                InitializeEaseCurve();
             }
         }
 
@@ -520,7 +523,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void ForceInstantiatePathsAndCurves() {
             animatedObjectPath = new AnimationPath();
             rotationPath = new AnimationPath();
-
             easeCurve = new AnimationCurve();
             tiltingCurve = new AnimationCurve();
         }

@@ -674,7 +674,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleStartAnimation() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
                 StartAnimation();
-                IsRunning = true;
+                //IsRunning = true;
             }
         }
 

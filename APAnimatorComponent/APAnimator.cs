@@ -960,12 +960,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to CalculateForwardPointPosition().
         /// <summary>
         /// Returns local forward point position for current animation time.
         /// </summary>
         /// <returns>Local forward point position.</returns>
-        private Vector3 GetForwardPoint() {
+        private Vector3 CalculateForwardPointPosition() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = SettingsAsset.ForwardPointOffset;
             // Forward point timestamp.
@@ -980,7 +979,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         /// <returns>Global forward point position.</returns>
         private Vector3 GetGlobalForwardPoint() {
-            var localForwardPoint = GetForwardPoint();
+            var localForwardPoint = CalculateForwardPointPosition();
             var globalForwardPoint =
                 transform.TransformPoint(localForwardPoint);
 

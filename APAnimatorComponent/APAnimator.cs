@@ -390,6 +390,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Updates animated game object position, rotation and tilting.
         /// </summary>
+        // TODO Rename to UpdateAnimatedGO().
         private void UpdateGO() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
@@ -610,8 +611,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (AnimatedGO == null) return;
             if (PathData == null) return;
             // NOTE Checking for null is only required in Unity 5.
+            // TODO This condition should be removed.
             if (this == null) {
-                Debug.Log("this == null");
                 return;
             }
             if (!enabled) return;

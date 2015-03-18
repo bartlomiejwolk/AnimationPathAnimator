@@ -279,6 +279,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void PathData_RotationPointPositionChanged(
             object sender,
             EventArgs e) {
+
             UpdateAnimation();
         }
 
@@ -603,10 +604,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <remarks>
         ///     Used to update animated GO with keys.
         /// </remarks>
+        // TODO Rename to HandleUpdatingAnimGOInSceneView().
         private void UpdateAnimation() {
             if (!RequiredAssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;
+            // NOTE Checking for null is only required in Unity 5.
+            if (this == null) {
+                Debug.Log("this == null");
+                return;
+            }
             if (!enabled) return;
 
             UpdateAnimatedGOPosition();

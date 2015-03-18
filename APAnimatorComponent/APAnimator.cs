@@ -619,6 +619,33 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
+        /// Coroutine responsible for updating animation time during playback in play mode.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator EaseTime() {
+            IsRunning = true;
+            Pause = false;
+            AnimGOUpdateEnabled = true;
+
+            while (true) {
+                // If animation is not paused..
+                if (!Pause) {
+                    HandleFireOnAnimationStartedEvent();
+
+                    UpdateAnimationTime();
+
+                    HandleClampWrapMode();
+                    HandleLoopWrapMode();
+                    HandlePingPongWrapMode();
+                }
+
+                if (!IsRunning) break;
+
+                yield return null;
+            }
+        }
+
+        /// <summary>
         /// Update animation time with values taken from ease curve.
         /// </summary>
         /// <remarks>This is used to update animation time when animator is running.</remarks>
@@ -663,34 +690,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 IsRunning = false;
             }
         }
-
-        /// <summary>
-        /// Coroutine responsible for updating animation time during playback in play mode.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator EaseTime() {
-            IsRunning = true;
-            Pause = false;
-            AnimGOUpdateEnabled = true;
-
-            while (true) {
-                // If animation is not paused..
-                if (!Pause) {
-                    HandleFireOnAnimationStartedEvent();
-
-                    UpdateAnimationTime();
-
-                    HandleClampWrapMode();
-                    HandleLoopWrapMode();
-                    HandlePingPongWrapMode();
-                }
-
-                if (!IsRunning) break;
-
-                yield return null;
-            }
-        }
-
         /// <summary>
         /// This method is responsible for firing <c>NodeReached</c> event.
         /// Use in play mode only.
@@ -788,15 +787,20 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
+            UpdateGO();
+            HandleFireNodeReachedEvent();
+            HandleStartCountdownCoroutine();
+        }
+
+        /// <summary>
+        /// Handle starting <c>CountdownToStopAnimGOUpdate</c> coroutine.
+        /// </summary>
+        private void HandleStartCountdownCoroutine() {
             // Remember anim. GO position.
             var prevAnimGOPosition = animatedGO.position;
             // Remember anim. GO rotation.
             var prevAnimGORotation = animatedGO.rotation;
 
-            UpdateGO();
-            HandleFireNodeReachedEvent();
-
-            // TODO Extract method.
             var movementDetected = !Utilities.V3Equal(
                 prevAnimGOPosition,
                 animatedGO.position);
@@ -805,12 +809,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 prevAnimGORotation,
                 animatedGO.rotation);
 
-            if (!movementDetected && !rotationDetected) {
-                if (!CountdownCoroutineIsRunning) {
-                    StartCoroutine(CountdownToStopAnimGOUpdate());
-                }
+            // Return if animated GO is still moving.
+            if (movementDetected || rotationDetected) return;
+
+            // Anim. GO is not moving, start countdown to stop animating it.
+            if (!CountdownCoroutineIsRunning) {
+                StartCoroutine(CountdownToStopAnimGOUpdate());
             }
         }
+
         #endregion
 
         #region OTHER HANDLERS

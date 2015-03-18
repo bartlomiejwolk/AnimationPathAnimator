@@ -365,7 +365,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!PathDataAssetAssigned()) return;
 
             HandleFireNodeReachedEventForFirstNode();
-            StartCoroutine("HandleEaseTime");
+            StartCoroutine("EaseTime");
 
             Debug.Log("Animation started");
         }
@@ -374,7 +374,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// Stops animation.
         /// </summary>
         public void StopAnimation() {
-            StopCoroutine("HandleEaseTime");
+            StopCoroutine("EaseTime");
 
             Debug.Log("Animation stopped");
 
@@ -664,12 +664,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        // TODO Rename to EaseTime().
         /// <summary>
         /// Coroutine responsible for updating animation time during playback in play mode.
         /// </summary>
         /// <returns></returns>
-        private IEnumerator HandleEaseTime() {
+        private IEnumerator EaseTime() {
             IsRunning = true;
             Pause = false;
             AnimGOUpdateEnabled = true;

@@ -610,11 +610,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (!RequiredAssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;
-            // NOTE Checking for null is only required in Unity 5.
-            // TODO This condition should be removed.
-            if (this == null) {
-                return;
-            }
             if (!enabled) return;
 
             UpdateAnimatedGOPosition();
@@ -1095,8 +1090,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
             PathData.PathReset -= PathData_PathReset;
             PathData.RotationPathReset -= PathData_RotationPathReset;
+            PathData.RotationPointPositionChanged -=
+                PathData_RotationPointPositionChanged;
 
             SubscribedToEvents = false;
+            
+            Debug.Log("Unsunbscribed from events");
         }
 
         #endregion METHODS

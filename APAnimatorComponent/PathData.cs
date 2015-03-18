@@ -28,9 +28,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion EVENTS
 
         #region CONST
-        private const int PathLengthSamplingFrequency = 400;
+
         private const float DefaultEaseCurveValue = 0.05f;
+        private const int PathLengthSamplingFrequency = 400;
+
         #endregion
+
         #region FIELDS
 
         [SerializeField]
@@ -57,12 +60,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return animatedObjectPath[0].length; }
         }
 
-        public int TiltingCurveKeysNo {
-            get { return TiltingCurve.length; }
-        }
-
         public int RotationPathNodesNo {
             get { return RotationPath.KeysNo; }
+        }
+
+        public int TiltingCurveKeysNo {
+            get { return TiltingCurve.length; }
         }
 
         private AnimationPath AnimatedObjectPath {
@@ -72,6 +75,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private AnimationCurve EaseCurve {
             get { return easeCurve; }
         }
+
         private AnimationPath RotationPath {
             get { return rotationPath; }
         }
@@ -184,11 +188,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleInstantiateReferenceTypes() {
             if (animatedObjectPath == null) {
                 animatedObjectPath = new AnimationPath();
-                animatedObjectPath.InstantiateAnimationPathCurves();
             }
             if (rotationPath == null) {
                 rotationPath = new AnimationPath();
-                rotationPath.InstantiateAnimationPathCurves();
             }
             if (easeCurve == null) {
                 easeCurve = new AnimationCurve();
@@ -290,7 +292,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         public void DistributeTimestamps() {
             // Calculate path curved length.
-            var pathLength = AnimatedObjectPath.CalculatePathCurvedLength(
+            var pathLength = AnimatedObjectPath.CalculatePathLength(
                 PathLengthSamplingFrequency);
 
             // Calculate time for one meter of curve length.
@@ -303,7 +305,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
                 var sectionLength = AnimatedObjectPath
-                    .CalculateSectionCurvedLength(
+                    .CalculateSectionLength(
                         i - 1,
                         i,
                         PathLengthSamplingFrequency);
@@ -390,7 +392,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         public void ResetRotationPath() {
-            rotationPath.InstantiateAnimationPathCurves();
+            rotationPath = new AnimationPath();
 
             UpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();
@@ -409,8 +411,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
-        public void SetNodeTangents(int index, Vector3 inOutTangent) {
-            AnimatedObjectPath.ChangePointTangents(index, inOutTangent);
+        public void SetNodeTangents(int index, float inTangent, float outTangent) {
+            AnimatedObjectPath.ChangeNodeTangents(index, inTangent, outTangent);
         }
 
         /// <summary>
@@ -517,10 +519,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void ForceInstantiatePathsAndCurves() {
             animatedObjectPath = new AnimationPath();
-            animatedObjectPath.InstantiateAnimationPathCurves();
-
             rotationPath = new AnimationPath();
-            rotationPath.InstantiateAnimationPathCurves();
 
             easeCurve = new AnimationCurve();
             tiltingCurve = new AnimationCurve();
@@ -558,7 +557,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     pathNodeTimestamps[i],
                     curve.keys[i].value,
                     GlobalConstants.FloatPrecision)) {
-                    
+
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp

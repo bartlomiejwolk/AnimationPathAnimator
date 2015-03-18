@@ -658,16 +658,23 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 
+        /// <summary>
+        /// Decided what to at the end of animation when Clamp mode is selected.
+        /// </summary>
         private void HandleClampWrapMode() {
-            // Break from animation in Clamp wrap mode.
             if (AnimationTime > 1
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
+
                 AnimationTime = 1;
                 IsPlaying = false;
             }
         }
 
         // TODO Rename to EaseTime().
+        /// <summary>
+        /// Coroutine responsible for updating animation time during playback in play mode.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator HandleEaseTime() {
             IsPlaying = true;
             Pause = false;
@@ -691,11 +698,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// This method is responsible for firing <c>NodeReached</c> event.
+        /// Use in play mode only.
+        /// </summary>
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
             var nodeTimestamps = PathData.GetPathTimestamps();
 
+            // For each timestamp..
             for (var i = 0; i < nodeTimestamps.Length; i++) {
+                // If animation time "jumped over" a node..
                 if (prevAnimationTime < nodeTimestamps[i]
                     && AnimationTime >= nodeTimestamps[i]) {
 
@@ -703,43 +716,61 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     var args = new NodeReachedEventArgs(i, AnimationTime);
                     // Fire event.
                     OnNodeReached(args);
-                    Debug.Log("node reached");
                 }
             }
 
+            // Update helper field.
             prevAnimationTime = AnimationTime;
         }
 
+        /// <summary>
+        /// Method responsible for firing <c>AnimationStarted</c> event.
+        /// Use in play mode only.
+        /// </summary>
         private void HandleFireOnAnimationStartedEvent() {
             if (AnimationTime == 0) OnAnimationStarted();
         }
 
+        /// <summary>
+        /// Decides what to do on animation end in Loop wrap mode.
+        /// </summary>
         private void HandleLoopWrapMode() {
             if (AnimationTime > 1
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Loop) {
+
                 AnimationTime = 0;
             }
         }
 
+        /// <summary>
+        /// Decides what to do on animation end in PingPong wrap mode.
+        /// </summary>
         private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
                 && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+
                 Reverse = true;
             }
 
             if (AnimationTime < 0
                 && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+
                 Reverse = false;
             }
         }
 
+        /// <summary>
+        /// Allows toggle pause. Use only in play mode.
+        /// </summary>
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
+            // Animation is playing and unpaused.
             if (IsPlaying && !Pause) {
                 // Pause animation.
                 Pause = true;
             }
+            // Animation is playing but paused.
             else if (IsPlaying && Pause) {
                 // Unpause animation.
                 Pause = false;
@@ -755,6 +786,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Method responsible for updating animated GO position, rotation and tilting in play mode during playback.
+        /// </summary>
         private void HandleUpdatingAnimGOInPlayMode() {
             // Return if not in play mode.
             if (!Application.isPlaying) return;
@@ -769,6 +803,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Animate();
             HandleFireNodeReachedEvent();
 
+            // TODO Extract method.
             var movementDetected = !Utilities.V3Equal(
                 prevAnimGOPosition,
                 animatedGO.position);
@@ -787,12 +822,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region OTHER HANDLERS
         /// <summary>
-        /// Used at animation start to fire NodeReached event for the first node.
+        /// Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
         private void HandleFireNodeReachedEventForFirstNode() {
             if (AnimationTime == 0) {
-                // Fire event.
                 var args = new NodeReachedEventArgs(0, 0);
+                // Fire event.
                 OnNodeReached(args);
             }
         }
@@ -851,6 +886,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Update <c>subscribedToEvents</c> flag.
+        /// </summary>
         private void UpdateSubscribedToEventsFlag() {
             // Update flag when path data asset is removed.
             if (PathData == null && subscribedToEvents) {
@@ -859,14 +897,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time. 
+        /// Returns timestamp of a node which timestamp is closest to and bigger than the current animation time. 
         /// </summary>
         /// <returns>Node timestamp.</returns>
         private float GetNearestForwardNodeTimestamp() {
             var pathTimestamps = PathData.GetPathTimestamps();
 
+            // For node timestamp that is bigger than animation time..
             foreach (var timestamp in pathTimestamps
                 .Where(timestamp => timestamp > AnimationTime)) {
+
                 return timestamp;
             }
 
@@ -875,12 +915,13 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Gets timestamp of a node which timestamp is closest to and bigger than the current animation time.
+        /// Returns timestamp of a node which timestamp is closest to and bigger than the current animation time.
         /// </summary>
         /// <returns>Node timestamp.</returns>
         private float GetNearestBackwardNodeTimestamp() {
             var pathTimestamps = PathData.GetPathTimestamps();
 
+            // For node timestamp that is smaller than animation time..
             for (var i = pathTimestamps.Length - 1; i >= 0; i--) {
                 if (pathTimestamps[i] < AnimationTime) {
                     return pathTimestamps[i];
@@ -892,8 +933,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
 
+        /// <summary>
+        /// Returns global node positions.
+        /// </summary>
+        /// <param name="nodesNo">Number of nodes to return, starting from index 0.</param>
+        /// <returns>Global node positions.</returns>
         public Vector3[] GetGlobalNodePositions(int nodesNo = -1) {
             var nodePositions = PathData.GetNodePositions(nodesNo);
+
             Utilities.ConvertToGlobalCoordinates(
                 ref nodePositions,
                 transform);
@@ -901,6 +948,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return nodePositions;
         }
 
+        /// <summary>
+        /// Assigns camera tagged "MainCamera" as animated game object.
+        /// </summary>
         private void AssignMainCameraAsAnimatedGO() {
             if (AnimatedGO == null && Camera.main != null) {
                 animatedGO = Camera.main.transform;
@@ -911,6 +961,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         // TODO Rename to CalculateForwardPointPosition().
+        /// <summary>
+        /// Returns local forward point position for current animation time.
+        /// </summary>
+        /// <returns>Local forward point position.</returns>
         private Vector3 GetForwardPoint() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = SettingsAsset.ForwardPointOffset;
@@ -921,6 +975,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return localPosition;
         }
 
+        /// <summary>
+        /// Returns global forward point position for current animation time.
+        /// </summary>
+        /// <returns>Global forward point position.</returns>
         private Vector3 GetGlobalForwardPoint() {
             var localForwardPoint = GetForwardPoint();
             var globalForwardPoint =
@@ -929,12 +987,19 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return globalForwardPoint;
         }
 
+        /// <summary>
+        /// Loads asset files from component folder, that are required for the component to run.
+        /// </summary>
         private void LoadRequiredResources() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
                 as APAnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
         }
 
+        /// <summary>
+        /// Returns true if assets required by the component are referenced.
+        /// </summary>
+        /// <returns></returns>
         private bool RequiredAssetsLoaded() {
             if (SettingsAsset != null
                 && Skin != null) {
@@ -943,6 +1008,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return false;
         }
 
+        /// <summary>
+        /// Reset inspector options.
+        /// </summary>
         private void ResetInspectorOptions() {
             TargetGO = null;
             SettingsAsset.HandleMode = HandleMode.None;
@@ -959,6 +1027,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SettingsAsset.ExportSamplingFrequency = 5;
         }
 
+        /// <summary>
+        /// Subscribe to events.
+        /// </summary>
         private void SubscribeToEvents() {
             if (pathData == null) return;
 
@@ -973,6 +1044,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             SubscribedToEvents = true;
         }
 
+        /// <summary>
+        /// Unsubscribe from events.
+        /// </summary>
         private void UnsubscribeFromEvents() {
             if (PathData == null) return;
 
@@ -988,6 +1062,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #region GIZMOS
 
+        /// <summary>
+        /// Draw animated object path gizmo curve.
+        /// </summary>
         private void DrawAnimationCurve() {
             // Return if path asset is not assigned.
             if (pathData == null) return;
@@ -1013,6 +1090,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Draw forward poing gizmo icon.
+        /// </summary>
+        /// <param name="forwardPointPosition"></param>
         private void DrawForwardPointIcon(Vector3 forwardPointPosition) {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
@@ -1021,6 +1102,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 false);
         }
 
+        /// <summary>
+        /// Draw gizmo icon for target transform.
+        /// </summary>
+        /// <param name="targetPosition"></param>
         private void DrawTargetIcon(Vector3 targetPosition) {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
@@ -1029,6 +1114,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 false);
         }
 
+        /// <summary>
+        /// Returns global rotation path node positions.
+        /// </summary>
+        /// <returns></returns>
         private Vector3[] GetGlobalRotationPointPositions() {
             var localRotPointPositions =
                 pathData.GetRotationPointPositions();
@@ -1036,7 +1125,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var globalRotPointPositions =
                 new Vector3[localRotPointPositions.Length];
 
+            // For each local point..
             for (var i = 0; i < localRotPointPositions.Length; i++) {
+                // Convert to global.
                 globalRotPointPositions[i] =
                     transform.TransformPoint(localRotPointPositions[i]);
             }
@@ -1044,6 +1135,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return globalRotPointPositions;
         }
 
+        /// <summary>
+        /// Handle drawing rotation point gizmo for current animation time.
+        /// It'll be drawn only when animation time is the same as a path node.
+        /// </summary>
         private void HandleDrawingCurrentRotationPointGizmo() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
@@ -1074,6 +1169,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 false);
         }
 
+        /// <summary>
+        /// Handle drawing forward point icon.
+        /// </summary>
         private void HandleDrawingForwardPointIcon() {
             if (SettingsAsset.RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
@@ -1083,6 +1181,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Handle drawing rotation path curve.
+        /// </summary>
         private void HandleDrawingRotationPathCurve() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
@@ -1108,6 +1209,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Handle drawing rotation point gizmos.
+        /// </summary>
         private void HandleDrawingRotationPointGizmos() {
             if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
 
@@ -1136,6 +1240,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Handle drawing target game object icon.
+        /// </summary>
         private void HandleDrawingTargetIcon() {
             // If rotation mode set to target..
             if (SettingsAsset.RotationMode == RotationMode.Target

@@ -1,0 +1,24 @@
+span.mlabel {
+    font-size: 11pt;
+}
+
+.SREntry {
+    font-size: 10pt;
+}
+
+.SelectItem {
+    font-size: 10pt;
+}
+
+.tabs2 {
+    font-size: 12px;
+}
+
+div.summary {
+    font-size: 10pt;
+}
+
+body, table, div, p, dl {
+    font: 11pt "Merriweather",Georgia,serif;
+    color: #222;
+}

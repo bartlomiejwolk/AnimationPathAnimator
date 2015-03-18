@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
+// TODO Add namespace.
 public static class ScriptableObjectUtility {
 
     public static T CreateAsset<T>(

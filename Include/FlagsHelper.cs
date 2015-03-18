@@ -2,6 +2,7 @@
 // C#'s restriction against a where T : Enum constraint. (There are ways around
 // this, but they're outside the scope of this simple illustration.)
 // http://stackoverflow.com/questions/3261451/using-a-bitmask-in-c-sharp
+// TODO Add namespace.
 public static class FlagsHelper {
     public static bool IsSet<T>(T flags, T flag) where T : struct {
         int flagsValue = (int)(object)flags;

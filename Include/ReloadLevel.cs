@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// TODO Add namespace.
 public class ReloadLevel : MonoBehaviour {
 
     private void Reload() {

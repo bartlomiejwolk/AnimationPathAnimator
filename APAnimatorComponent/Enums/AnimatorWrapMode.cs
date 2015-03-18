@@ -1,4 +1,5 @@
-﻿public enum AnimatorWrapMode {
+﻿// TODO Add namespace.
+public enum AnimatorWrapMode {
 
     Clamp = 1,
     Loop = 2,

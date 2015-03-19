@@ -70,7 +70,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Validate inspector settings.
             // Settings stored in settings asset cannot be validated with OnValidate().
-            if (GUI.changed) ValidateInspectorSettings();
+            if (GUI.changed) {
+                ValidateInspectorSettings();
+                // Save settings asset.
+                EditorUtility.SetDirty(Script.SettingsAsset);
+            }
 
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
@@ -370,7 +374,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawPositionHandleDropdown() {
-            serializedObject.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(
                 positionHandle,
@@ -379,7 +383,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Handle used to move nodes on scene. Default " +
                     "shortcut: G"));
 
-            serializedObject.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPositionSpeedSlider() {
@@ -863,6 +867,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 null);
 
             SceneView.RepaintAll();
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawEaseHandlesCallbackHandler(
@@ -883,6 +889,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Update ease for single node.
                 Script.PathData.UpdateEaseValue(keyIndex, newValue);
             }
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawPositionHandlesCallbackHandler(
@@ -908,6 +916,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawRemoveNodeButtonsCallbackHandles(
@@ -931,6 +941,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script,
                 "UpdateAnimation",
                 null);
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawRotationHandlesCallbackHandler(
@@ -944,6 +956,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.PathData.ChangeRotationAtTimestamp(
                 Script.AnimationTime,
                 newLocalPos);
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawTiltingHandlesCallbackHandler(
@@ -959,6 +973,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             else {
                 Script.PathData.UpdateTiltingValue(keyIndex, newValue);
             }
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         #endregion CALLBACK HANDLERS

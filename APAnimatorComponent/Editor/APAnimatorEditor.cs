@@ -863,6 +863,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 null);
 
             SceneView.RepaintAll();
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawEaseHandlesCallbackHandler(
@@ -883,6 +885,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Update ease for single node.
                 Script.PathData.UpdateEaseValue(keyIndex, newValue);
             }
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawPositionHandlesCallbackHandler(
@@ -908,6 +912,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawRemoveNodeButtonsCallbackHandles(
@@ -931,6 +937,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script,
                 "UpdateAnimation",
                 null);
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawRotationHandlesCallbackHandler(
@@ -944,6 +952,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.PathData.ChangeRotationAtTimestamp(
                 Script.AnimationTime,
                 newLocalPos);
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawTiltingHandlesCallbackHandler(
@@ -959,6 +969,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             else {
                 Script.PathData.UpdateTiltingValue(keyIndex, newValue);
             }
+
+            EditorUtility.SetDirty(Script.PathData);
         }
 
         #endregion CALLBACK HANDLERS

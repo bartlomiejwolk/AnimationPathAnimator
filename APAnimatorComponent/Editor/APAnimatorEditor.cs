@@ -70,7 +70,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Validate inspector settings.
             // Settings stored in settings asset cannot be validated with OnValidate().
-            if (GUI.changed) ValidateInspectorSettings();
+            if (GUI.changed) {
+                ValidateInspectorSettings();
+                // Save settings asset.
+                EditorUtility.SetDirty(Script.SettingsAsset);
+            }
 
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
@@ -370,7 +374,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void DrawPositionHandleDropdown() {
-            serializedObject.Update();
+            SettingsSerializedObject.Update();
 
             EditorGUILayout.PropertyField(
                 positionHandle,
@@ -379,7 +383,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                     "Handle used to move nodes on scene. Default " +
                     "shortcut: G"));
 
-            serializedObject.ApplyModifiedProperties();
+            SettingsSerializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPositionSpeedSlider() {

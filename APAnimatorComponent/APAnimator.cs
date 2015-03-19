@@ -1027,6 +1027,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Loads asset files from component folder, that are required for the component to run.
         /// </summary>
+        // todo rename to LoadRequiredAssets().
         private void LoadRequiredResources() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
                 as APAnimatorSettings;

@@ -453,6 +453,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Smooth in/out tangents of a single node.
         /// </summary>
         /// <param name="nodeIndex">Point index.</param>
+        // todo rename to SmoothNodeInOutTangents().
+        // todo add weight param.
         public void SmoothPointTangents(int nodeIndex) {
             // For each curve..
             foreach (var curve in curves) {

@@ -880,27 +880,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
-            // todo extract method.
             // If update all mode is set..
             if (Script.SettingsAsset.UpdateAllMode) {
-                // Get old ease value.
-                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
-                // Guard against null division.
-                if (Utilities.FloatsEqual(
-                    oldValue,
-                    0,
-                    GlobalConstants.FloatPrecision)) return;
-                // Calculate multiplier.
-                var multiplier = newValue / oldValue;
-
-                // Don't let ease value reach zero.
-                if (Utilities.FloatsEqual(
-                    multiplier,
-                    0,
-                    GlobalConstants.FloatPrecision)) return;
-
-                // Multiply each single ease value.
-                Script.PathData.MultiplyEaseCurveValues(multiplier);
+                MultiplyEaseValues(
+                    Script.PathData.GetEaseValueAtIndex(keyIndex),
+                    newValue);
             }
             else {
                 // Update ease for single node.
@@ -908,6 +892,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             }
 
             EditorUtility.SetDirty(Script.PathData);
+        }
+
+        // todo add docs.
+        private void MultiplyEaseValues(float oldValue, float newValue) {
+            // Guard against null division.
+            if (Utilities.FloatsEqual(
+                oldValue,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Calculate multiplier.
+            var multiplier = newValue / oldValue;
+
+            // Don't let ease value reach zero.
+            if (Utilities.FloatsEqual(
+                multiplier,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
 
         private void DrawPositionHandlesCallbackHandler(
@@ -1124,7 +1129,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 // Update animated object.
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "UpdateAnimation",
+                    "HandleUpdateAnimGOInSceneView",
                     null);
             }
         }

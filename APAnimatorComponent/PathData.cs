@@ -385,6 +385,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public void ResetEaseCurve() {
             easeCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(EaseCurve);
+            // Set default value for each key.
+            UpdateEaseCurveValues(DefaultEaseCurveValue);
         }
 
         public void ResetPath() {

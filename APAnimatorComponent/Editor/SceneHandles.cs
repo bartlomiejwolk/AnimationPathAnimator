@@ -285,13 +285,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             var arcRadius = handleSize * arcHandleRadius;
 
             Handles.color = handleColor;
-            
-            // Set initial arc value to other than zero. If initial value
-            // is zero, handle will always return zero.
-            /*arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
-                ? initialArcValue
-                : arcValue;*/
-
+     
             Handles.DrawWireArc(
                 position,
                 Vector3.up,
@@ -302,6 +296,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 arcRadius);
 
             Handles.color = handleColor;
+
+            // Set initial arc value to other than zero. If initial value
+            // is zero, handle will always return zero.
+            arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
+                ? initialArcValue
+                : arcValue;
 
             var scaleSize = handleSize * scaleHandleSize;
             var newArcValue = Handles.ScaleValueHandle(

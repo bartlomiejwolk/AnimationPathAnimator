@@ -881,13 +881,17 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             if (Script.SettingsAsset.UpdateAllMode) {
                 // Get old ease value.
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
-                // Guard against NaN.
+                // Guard against null division.
                 if (Utilities.FloatsEqual(
                     oldValue,
                     0,
                     GlobalConstants.FloatPrecision)) return;
                 // Calculate multiplier.
                 var multiplier = newValue / oldValue;
+
+                // Don't let ease value reach zero.
+                if (multiplier < Script.SettingsAsset.MinEaseValue) return;
+
                 // Multiply each single ease value.
                 Script.PathData.MultiplyEaseCurveValues(multiplier);
             }

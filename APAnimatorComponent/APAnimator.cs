@@ -389,8 +389,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Updates animated game object position, rotation and tilting.
         /// </summary>
-        // TODO Rename to UpdateAnimatedGO().
-        private void UpdateGO() {
+        private void UpdateAnimatedGO() {
             AnimateAnimatedGOPosition();
             AnimateAnimatedGORotation();
             AnimateAnimatedGOTilting();
@@ -785,7 +784,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
-            UpdateGO();
+            UpdateAnimatedGO();
             HandleFireNodeReachedEvent();
             HandleStartCountdownCoroutine();
         }

@@ -460,7 +460,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private int easeValueLabelOffsetX = -20;
         private int easeValueLabelOffsetY = -25;
-        private float initialArcValue = 15f;
+        private float initialEaseArcValue = 15f;
 
         [SerializeField]
         private float movementHandleSize = 0.12f;
@@ -528,10 +528,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { easeValueLabelOffsetY = value; }
         }
 
-        // todo rename to InitialEaseArcValue.
-        public float InitialArcValue {
-            get { return initialArcValue; }
-            set { initialArcValue = value; }
+        public float InitialEaseArcValue {
+            get { return initialEaseArcValue; }
+            set { initialEaseArcValue = value; }
         }
 
         public float InitialTiltingArcValue {

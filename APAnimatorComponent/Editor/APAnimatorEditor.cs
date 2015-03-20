@@ -690,7 +690,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 easeCurveValues,
                 arcValueMultiplier,
                 Script.SettingsAsset.ArcHandleRadius,
-                Script.SettingsAsset.InitialArcValue,
+                Script.SettingsAsset.InitialEaseArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
                 DrawEaseHandlesCallbackHandler);
         }

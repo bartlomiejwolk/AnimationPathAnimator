@@ -273,8 +273,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void PathData_RotationPathReset(object sender, EventArgs e) {
-            // todo EditorUtility.SetDirty() should be called to save changes to disk.
-            SettingsAsset.RotationMode = RotationMode.Custom;
         }
 
         private void PathData_RotationPointPositionChanged(

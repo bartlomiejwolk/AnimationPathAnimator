@@ -456,6 +456,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 Script.PathData.ResetRotationPath();
                 Script.PathData.SmoothRotationPathTangents();
 
+                // Change rotation mode.
+                Script.SettingsAsset.RotationMode = RotationMode.Custom;
+                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+
                 SceneView.RepaintAll();
             }
         }

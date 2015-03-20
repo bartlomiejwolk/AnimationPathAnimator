@@ -8,6 +8,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
     ///     Class responsible for drawing all on scene handles.
     /// </summary>
     public static class SceneHandles {
+
+        /// <summary>
+        /// Minimum value below which arc handle drawer method will set the 
+        /// value back to default.
+        /// </summary>
+        private static float MinValueThreshold = 0.05f;
         #region METHDOS
 
         public static void DrawAddNodeButtons(
@@ -299,7 +305,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < GlobalConstants.FloatPrecision
+            arcValue = Math.Abs(arcValue) < MinValueThreshold
                 ? initialArcValue
                 : arcValue;
 

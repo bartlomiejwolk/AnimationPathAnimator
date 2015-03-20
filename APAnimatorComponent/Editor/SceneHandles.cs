@@ -59,7 +59,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             for (var i = 0; i < nodesNo; i++) {
                 // Get value to display.
                 var arcValue = String.Format(
-                    "{0:0}",
+                    "{0:0.0}",
                     calculateValueCallback(i));
 
                 DrawNodeLabel(

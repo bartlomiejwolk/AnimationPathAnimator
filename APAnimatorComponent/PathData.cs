@@ -435,7 +435,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
-                path.SmoothPointTangents(j);
+                path.SmoothNodeInOutTangents(j);
             }
         }
 
@@ -550,7 +550,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void SmoothSingleNodeTangents(int nodeIndex) {
-            AnimatedObjectPath.SmoothPointTangents(nodeIndex);
+            AnimatedObjectPath.SmoothNodeInOutTangents(nodeIndex);
         }
 
         private void UpdateCurveTimestamps(AnimationCurve curve) {

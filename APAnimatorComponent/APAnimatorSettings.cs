@@ -441,7 +441,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int addButtonOffsetH = 25;
 
         //[SerializeField]
-        //private float minCurveValueMultiplier = 0.01f;
+        //private float minEaseValueThreshold = 0.01f;
 
         [SerializeField]
         private int addButtonOffsetV = 10;
@@ -586,11 +586,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         /// <summary>
-        /// Minimum multiplier by which a a value in an animation curve can by multiplied.
+        /// Minimum ease value below which ease handle drawer will set ease
+        /// value back to default.
         /// </summary>
-        //public float MinCurveValueMultiplier {
-        //    get { return minCurveValueMultiplier; }
-        //    set { minCurveValueMultiplier = value; }
+        //public float MinEaseValueThreshold {
+        //    get { return minEaseValueThreshold; }
+        //    set { minEaseValueThreshold = value; }
         //}
 
         #endregion

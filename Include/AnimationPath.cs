@@ -443,9 +443,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         ///     Smooth in/out tangents of all nodes.
         /// </summary>
-        public void SmoothAllNodes() {
+        public void SmoothAllNodes(float weight) {
             for (var i = 0; i < KeysNo; i++) {
-                SmoothNodeInOutTangents(i);
+                SmoothNodeInOutTangents(i, weight);
             }
         }
 
@@ -453,12 +453,12 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         ///     Smooth in/out tangents of a single node.
         /// </summary>
         /// <param name="nodeIndex">Point index.</param>
-        // todo add weight param.
-        public void SmoothNodeInOutTangents(int nodeIndex) {
+        /// <param name="weight">A weight of 0 evens out tangents.</param>
+        public void SmoothNodeInOutTangents(int nodeIndex, float weight) {
             // For each curve..
             foreach (var curve in curves) {
                 // Smooth tangents.
-                curve.SmoothTangents(nodeIndex, 0);
+                curve.SmoothTangents(nodeIndex, weight);
             }
         }
 

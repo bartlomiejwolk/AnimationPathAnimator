@@ -32,6 +32,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private const float DefaultEaseCurveValue = 0.05f;
         private const float DefaultTiltingCurveValue = 0.001f;
         private const int PathLengthSamplingFrequency = 400;
+        private const float DefaultSmoothWeight = 0;
 
         #endregion
 
@@ -277,7 +278,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Create new node.
             RotationPath.CreateNewNode(timestamp, newPosition);
             // Smooth all nodes.
-            RotationPath.SmoothAllNodes();
+            RotationPath.SmoothAllNodes(DefaultSmoothWeight);
 
             OnRotationPointPositionChanged();
         }
@@ -435,7 +436,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
                 // Smooth in and out tangents.
-                path.SmoothNodeInOutTangents(j);
+                path.SmoothNodeInOutTangents(j, DefaultSmoothWeight);
             }
         }
 
@@ -550,7 +551,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void SmoothSingleNodeTangents(int nodeIndex) {
-            AnimatedObjectPath.SmoothNodeInOutTangents(nodeIndex);
+            AnimatedObjectPath.SmoothNodeInOutTangents(
+                nodeIndex,
+                DefaultSmoothWeight);
         }
 
         private void UpdateCurveTimestamps(AnimationCurve curve) {

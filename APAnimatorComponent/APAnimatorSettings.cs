@@ -441,6 +441,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int addButtonOffsetH = 25;
 
         [SerializeField]
+        private float minEaseValue = 0.05f;
+
+        [SerializeField]
         private int addButtonOffsetV = 10;
 
         [SerializeField]
@@ -580,6 +583,14 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public string UpdateAllLabelText {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
+        }
+
+        /// <summary>
+        /// Minimum ease value that can be assigned to a node through on-scene ease handle.
+        /// </summary>
+        public float MinEaseValue {
+            get { return minEaseValue; }
+            set { minEaseValue = value; }
         }
 
         #endregion

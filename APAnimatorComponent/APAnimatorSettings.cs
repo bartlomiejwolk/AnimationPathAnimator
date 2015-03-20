@@ -441,7 +441,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int addButtonOffsetH = 25;
 
         [SerializeField]
-        private float minEaseValue = 0.05f;
+        private float minEaseValue = 0.01f;
 
         [SerializeField]
         private int addButtonOffsetV = 10;

@@ -210,7 +210,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnEnable() {
-            LoadRequiredResources();
+            LoadRequiredAssets();
             SubscribeToEvents();
         }
 
@@ -220,7 +220,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void Reset() {
-            LoadRequiredResources();
+            LoadRequiredAssets();
             AssignMainCameraAsAnimatedGO();
             ResetInspectorOptions();
         }
@@ -1023,8 +1023,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Loads asset files from component folder, that are required for the component to run.
         /// </summary>
-        // todo rename to LoadRequiredAssets().
-        private void LoadRequiredResources() {
+        private void LoadRequiredAssets() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
                 as APAnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;

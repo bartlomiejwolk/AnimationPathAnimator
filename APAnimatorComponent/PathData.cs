@@ -30,6 +30,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region CONST
 
         private const float DefaultEaseCurveValue = 0.05f;
+        private const float DefaultTiltingCurveValue = 0.001f;
         private const int PathLengthSamplingFrequency = 400;
 
         #endregion
@@ -408,6 +409,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public void ResetTiltingCurve() {
             tiltingCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(TiltingCurve);
+            // Set default value for each key.
+            UpdateTiltingCurveValues(DefaultTiltingCurveValue);
         }
 
         public void SetLinearAnimObjPathTangents() {
@@ -876,6 +879,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         // todo docs
         public void MultiplyEaseCurveValues(float multiplier) {
             MultiplyCurveValues(EaseCurve, multiplier);
+        }
+
+        // todo docs
+        public void MultiplyTiltingCurveValues(float multiplier) {
+            MultiplyCurveValues(TiltingCurve, multiplier);
         }
 
         private void MultiplyCurveValues(AnimationCurve curve, float multiplier) {

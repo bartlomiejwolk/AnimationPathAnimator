@@ -1,8 +1,11 @@
-﻿// TODO Add namespace.
-public enum AnimatorWrapMode {
+﻿namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
-    Clamp = 1,
-    Loop = 2,
-    PingPong = 4
+    public enum AnimatorWrapMode {
+
+        Clamp = 1,
+        Loop = 2,
+        PingPong = 4
+
+    }
 
 }

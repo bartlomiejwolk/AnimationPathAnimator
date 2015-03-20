@@ -870,6 +870,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region HELPER METHODS
 
         #endregion
+
+        // todo docs
+        public void MultiplyEaseCurveValues(float multiplier) {
+            MultiplyCurveValues(EaseCurve, multiplier);
+        }
+
+        private void MultiplyCurveValues(AnimationCurve curve, float multiplier) {
+            // For each curve..
+            for (var i = 0; i < curve.length; i++) {
+                // Copy key.
+                var keyCopy = curve[i];
+                // Update key value.
+                keyCopy.value *= multiplier;
+                // Remove old key.
+                curve.RemoveKey(i);
+                // Add key.
+                curve.AddKey(keyCopy);
+                // Smooth all tangents.
+                SmoothCurve(curve);
+            }
+        }
+
     }
 
 }

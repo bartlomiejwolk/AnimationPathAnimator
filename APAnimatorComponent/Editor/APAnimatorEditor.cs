@@ -876,14 +876,20 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
+            // todo extract method.
             // If update all mode is set..
             if (Script.SettingsAsset.UpdateAllMode) {
                 // Get old ease value.
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
-                // Calculate delta.
-                var delta = newValue - oldValue;
-                // Use delta to update ease value for all nodes.
-                Script.PathData.UpdateEaseCurveValues(delta);
+                // Guard against NaN.
+                if (Utilities.FloatsEqual(
+                    oldValue,
+                    0,
+                    GlobalConstants.FloatPrecision)) return;
+                // Calculate multiplier.
+                var multiplier = newValue / oldValue;
+                // Multiply each single ease value.
+                Script.PathData.MultiplyEaseCurveValues(multiplier);
             }
             else {
                 // Update ease for single node.

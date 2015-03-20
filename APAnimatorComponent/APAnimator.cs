@@ -96,7 +96,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 }
                 else {
                     // Update animated GO.
-                    UpdateAnimation();
+                    HandleUpdatingAnimGOInSceneView();
                 }
             }
         }
@@ -215,7 +215,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void OnValidate() {
-            UpdateAnimation();
+            HandleUpdatingAnimGOInSceneView();
             UpdateSubscribedToEventsFlag();
         }
 
@@ -260,16 +260,16 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
-            UpdateAnimation();
+            HandleUpdatingAnimGOInSceneView();
         }
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {
-            UpdateAnimation();
+            HandleUpdatingAnimGOInSceneView();
         }
 
         private void PathData_PathReset(object sender, EventArgs e) {
             AnimationTime = 0;
-            UpdateAnimation();
+            HandleUpdatingAnimGOInSceneView();
         }
 
         private void PathData_RotationPathReset(object sender, EventArgs e) {
@@ -279,7 +279,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             object sender,
             EventArgs e) {
 
-            UpdateAnimation();
+            HandleUpdatingAnimGOInSceneView();
         }
 
         #endregion
@@ -603,8 +603,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <remarks>
         ///     Used to update animated GO with keys.
         /// </remarks>
-        // TODO Rename to HandleUpdatingAnimGOInSceneView().
-        private void UpdateAnimation() {
+        private void HandleUpdatingAnimGOInSceneView() {
             if (!RequiredAssetsLoaded()) return;
             if (AnimatedGO == null) return;
             if (PathData == null) return;

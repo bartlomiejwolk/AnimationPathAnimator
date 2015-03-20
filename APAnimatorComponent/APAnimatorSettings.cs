@@ -482,6 +482,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int updateAllLabelOffsetX = 10;
         private int updateAllLabelOffsetY = -25;
         private string updateAllLabelText = "A";
+        private float initialTiltingArcValue = 5;
 
         #endregion
 
@@ -527,9 +528,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { easeValueLabelOffsetY = value; }
         }
 
+        // todo rename to InitialEaseArcValue.
         public float InitialArcValue {
             get { return initialArcValue; }
             set { initialArcValue = value; }
+        }
+
+        public float InitialTiltingArcValue {
+            get { return initialTiltingArcValue; }
+            set { initialTiltingArcValue = value; }
         }
 
         public Color MoveAllModeColor {

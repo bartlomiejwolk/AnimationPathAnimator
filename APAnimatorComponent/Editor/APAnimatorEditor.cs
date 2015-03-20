@@ -890,7 +890,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 var multiplier = newValue / oldValue;
 
                 // Don't let ease value reach zero.
-                if (multiplier < Script.SettingsAsset.MinEaseValue) return;
+                if (Utilities.FloatsEqual(
+                    multiplier,
+                    0,
+                    GlobalConstants.FloatPrecision)) return;
 
                 // Multiply each single ease value.
                 Script.PathData.MultiplyEaseCurveValues(multiplier);

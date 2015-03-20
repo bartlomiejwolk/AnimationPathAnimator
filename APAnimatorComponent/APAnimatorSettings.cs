@@ -440,6 +440,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         [SerializeField]
         private int addButtonOffsetH = 25;
 
+        //[SerializeField]
+        //private float minEaseValueThreshold = 0.01f;
+
         [SerializeField]
         private int addButtonOffsetV = 10;
 
@@ -479,6 +482,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private int updateAllLabelOffsetX = 10;
         private int updateAllLabelOffsetY = -25;
         private string updateAllLabelText = "A";
+        private float initialTiltingArcValue = 5;
 
         #endregion
 
@@ -524,9 +528,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             set { easeValueLabelOffsetY = value; }
         }
 
+        // todo rename to InitialEaseArcValue.
         public float InitialArcValue {
             get { return initialArcValue; }
             set { initialArcValue = value; }
+        }
+
+        public float InitialTiltingArcValue {
+            get { return initialTiltingArcValue; }
+            set { initialTiltingArcValue = value; }
         }
 
         public Color MoveAllModeColor {
@@ -581,6 +591,15 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
+
+        /// <summary>
+        /// Minimum ease value below which ease handle drawer will set ease
+        /// value back to default.
+        /// </summary>
+        //public float MinEaseValueThreshold {
+        //    get { return minEaseValueThreshold; }
+        //    set { minEaseValueThreshold = value; }
+        //}
 
         #endregion
     }

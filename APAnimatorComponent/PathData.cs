@@ -30,6 +30,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region CONST
 
         private const float DefaultEaseCurveValue = 0.05f;
+        private const float DefaultTiltingCurveValue = 0.001f;
         private const int PathLengthSamplingFrequency = 400;
 
         #endregion
@@ -385,6 +386,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public void ResetEaseCurve() {
             easeCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(EaseCurve);
+            // Set default value for each key.
+            UpdateEaseCurveValues(DefaultEaseCurveValue);
         }
 
         public void ResetPath() {
@@ -406,6 +409,8 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         public void ResetTiltingCurve() {
             tiltingCurve = new AnimationCurve();
             UpdateCurveWithAddedKeys(TiltingCurve);
+            // Set default value for each key.
+            UpdateTiltingCurveValues(DefaultTiltingCurveValue);
         }
 
         public void SetLinearAnimObjPathTangents() {
@@ -870,6 +875,33 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #region HELPER METHODS
 
         #endregion
+
+        // todo docs
+        public void MultiplyEaseCurveValues(float multiplier) {
+            MultiplyCurveValues(EaseCurve, multiplier);
+        }
+
+        // todo docs
+        public void MultiplyTiltingCurveValues(float multiplier) {
+            MultiplyCurveValues(TiltingCurve, multiplier);
+        }
+
+        private void MultiplyCurveValues(AnimationCurve curve, float multiplier) {
+            // For each curve..
+            for (var i = 0; i < curve.length; i++) {
+                // Copy key.
+                var keyCopy = curve[i];
+                // Update key value.
+                keyCopy.value *= multiplier;
+                // Remove old key.
+                curve.RemoveKey(i);
+                // Add key.
+                curve.AddKey(keyCopy);
+                // Smooth all tangents.
+                SmoothCurve(curve);
+            }
+        }
+
     }
 
 }

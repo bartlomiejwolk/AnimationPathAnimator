@@ -810,7 +810,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
                 nodePositions,
                 tiltingCurveValues,
                 Script.SettingsAsset.ArcHandleRadius,
-                Script.SettingsAsset.InitialArcValue,
+                Script.SettingsAsset.InitialTiltingArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
                 callbackHandler);
         }
@@ -876,14 +876,27 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
+            // todo extract method.
             // If update all mode is set..
             if (Script.SettingsAsset.UpdateAllMode) {
                 // Get old ease value.
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
-                // Calculate delta.
-                var delta = newValue - oldValue;
-                // Use delta to update ease value for all nodes.
-                Script.PathData.UpdateEaseCurveValues(delta);
+                // Guard against null division.
+                if (Utilities.FloatsEqual(
+                    oldValue,
+                    0,
+                    GlobalConstants.FloatPrecision)) return;
+                // Calculate multiplier.
+                var multiplier = newValue / oldValue;
+
+                // Don't let ease value reach zero.
+                if (Utilities.FloatsEqual(
+                    multiplier,
+                    0,
+                    GlobalConstants.FloatPrecision)) return;
+
+                // Multiply each single ease value.
+                Script.PathData.MultiplyEaseCurveValues(multiplier);
             }
             else {
                 // Update ease for single node.
@@ -966,9 +979,24 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
             if (Script.SettingsAsset.UpdateAllMode) {
+                // Get old ease value.
                 var oldValue = Script.PathData.GetTiltingValueAtIndex(keyIndex);
-                var delta = newValue - oldValue;
-                Script.PathData.UpdateTiltingCurveValues(delta);
+                // Guard against null division.
+                if (Utilities.FloatsEqual(
+                    oldValue,
+                    0,
+                    GlobalConstants.FloatPrecision)) return;
+                // Calculate multiplier.
+                var multiplier = newValue / oldValue;
+
+                // Don't let ease value reach zero.
+                if (Utilities.FloatsEqual(
+                    multiplier,
+                    0,
+                    GlobalConstants.FloatPrecision)) return;
+
+                // Multiply each single ease value.
+                Script.PathData.MultiplyTiltingCurveValues(multiplier);
             }
             else {
                 Script.PathData.UpdateTiltingValue(keyIndex, newValue);

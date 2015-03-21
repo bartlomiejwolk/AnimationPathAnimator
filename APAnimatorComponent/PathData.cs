@@ -809,6 +809,10 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             return result;
         }
 
+        public float GetPathLinearLength() {
+            return AnimatedObjectPath.CalculatePathLinearLength();
+        }
+
         public Vector3 GetRotationAtTime(float timestamp) {
             return RotationPath.GetVectorAtTime(timestamp);
         }

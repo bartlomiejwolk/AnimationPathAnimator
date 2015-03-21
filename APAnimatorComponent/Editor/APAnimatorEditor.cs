@@ -926,6 +926,9 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             Undo.RecordObject(Script.PathData, "Change path");
 
+            // Remember path length before applying changes.
+            var oldAnimGoPathLength = Script.PathData.GetPathLinearLength();
+
             // Calculate node new local position.
             var newNodeLocalPosition =
                 Script.transform.InverseTransformPoint(newGlobalPos);
@@ -939,7 +942,28 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
 
+            // Current path length.
+            var newAnimGoPathLength = Script.PathData.GetPathLinearLength();
+            DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
+
             EditorUtility.SetDirty(Script.PathData);
+        }
+
+        /// <summary>
+        /// Adjust ease values to path length. Making path longer will decrease ease values
+        /// to  maintain constant speed.
+        /// </summary>
+        /// <param name="oldAnimGoLinearLength">Anim. Go path length before path update.</param>
+        /// <param name="newAnimGoLinearLength">Anim. Go path length after path update.</param>
+        private void DistributeEaseValues(
+            float oldAnimGoLinearLength,
+            float newAnimGoLinearLength) {
+
+            // Calculate multiplier.
+            var multiplier = oldAnimGoLinearLength / newAnimGoLinearLength;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
 
         private void DrawRemoveNodeButtonsCallbackHandles(

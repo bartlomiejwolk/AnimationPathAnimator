@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ATP.AnimationPathTools.EventsComponent {
 
     [CustomEditor(typeof (Events))]
-    public class APEventsEditor : Editor {
+    public class EventsEditor : Editor {
 
         #region PROPERTIES
 

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsComponent {
+namespace ATP.AnimationPathTools.APEventsComponent {
 
     [Serializable]
     public sealed class NodeEventSlot {

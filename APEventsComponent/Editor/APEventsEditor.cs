@@ -1,9 +1,9 @@
-﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.ReorderableList;
+﻿using ATP.AnimationPathTools.APAnimatorComponent;
+using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsComponent {
+namespace ATP.AnimationPathTools.APEventsComponent {
 
     [CustomEditor(typeof (APEvents))]
     public class APEventsEditor : Editor {

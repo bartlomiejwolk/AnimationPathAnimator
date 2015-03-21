@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator {
+namespace ATP.AnimationPathTools {
 
     public static class Utilities {
 

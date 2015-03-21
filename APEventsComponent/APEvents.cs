@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ATP.AnimationPathAnimator.APAnimatorComponent;
+using ATP.AnimationPathTools.APAnimatorComponent;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsComponent {
+namespace ATP.AnimationPathTools.APEventsComponent {
 
     [RequireComponent(typeof (APAnimator))]
     public class APEvents : MonoBehaviour {

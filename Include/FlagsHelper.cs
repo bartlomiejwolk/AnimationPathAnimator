@@ -1,4 +1,4 @@
-﻿namespace ATP.AnimationPathAnimator {
+﻿namespace ATP.AnimationPathTools {
 
     public static class FlagsHelper {
 

@@ -1,8 +1,8 @@
-﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.APEventsComponent;
+﻿using ATP.AnimationPathTools.APAnimatorComponent;
+using ATP.AnimationPathTools.APEventsComponent;
 using UnityEditor;
 
-namespace ATP.AnimationPathAnimator {
+namespace ATP.AnimationPathTools {
 
     public static class ComponentCreator {
 

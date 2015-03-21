@@ -63,14 +63,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // For each path node..
             for (var i = 0; i < nodesNo; i++) {
+                // Original value.
+                var value = calculateValueCallback(i);
+                // Value to display.
+                var displayedValue = (Mathf.Abs(value) % 360) * Mathf.Sign(value);
+                // Calculate number of full 360 deg. cycles.
+                var cycles = Mathf.Floor(Mathf.Abs(value) / 360);
+
                 // Get value to display.
-                var arcValue = String.Format(
-                    "{0:0.0}",
-                    calculateValueCallback(i));
+                var labelText = String.Format(
+                    "{1} {0:0.0}",
+                    //value,
+                    displayedValue,
+                    cycles);
 
                 DrawNodeLabel(
                     nodeGlobalPositions[i],
-                    arcValue,
+                    labelText,
                     offsetX,
                     offsetY,
                     labelWidth,
@@ -223,6 +232,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Action<int, float> callback) {
 
             // Set arc value multiplier.
+            // todo make a field.
             const int arcValueMultiplier = 1;
 
             // For each path node..
@@ -290,6 +300,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
 
+            // Displayed value.
+            var displayedValue = arcValue % 360;
+
             Handles.color = handleColor;
      
             Handles.DrawWireArc(
@@ -298,16 +311,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Quaternion.AngleAxis(
                     0,
                     Vector3.up) * Vector3.forward,
-                arcValue,
+                //arcValue,
+                displayedValue,
                 arcRadius);
 
             Handles.color = handleColor;
 
             // Set initial arc value to other than zero. If initial value
             // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < MinValueThreshold
-                ? initialArcValue
-                : arcValue;
+            //arcValue = Math.Abs(arcValue) < MinValueThreshold
+            //    ? initialArcValue
+            //    : arcValue;
 
             var scaleSize = handleSize * scaleHandleSize;
             var newArcValue = Handles.ScaleValueHandle(
@@ -320,13 +334,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 1);
 
             // Limit handle value.
-            if (newArcValue > maxDegrees) newArcValue = maxDegrees;
-            if (newArcValue < minDegrees) newArcValue = minDegrees;
+            // todo create constant.
+            //if (newArcValue > maxDegrees) newArcValue = 0.01f;
+            //if (newArcValue < minDegrees) newArcValue = 0.01f;
 
-            if (Math.Abs(newArcValue - arcValue)
-                > GlobalConstants.FloatPrecision) {
+            if (!Utilities.FloatsEqual(
+                newArcValue,
+                arcValue,
+                GlobalConstants.FloatPrecision)) {
 
-                callback(newArcValue / arcValueMultiplier);
+                // Convert value from degrees to value on animation curve.
+                var convertedValue = newArcValue / arcValueMultiplier;
+
+                callback(convertedValue);
             }
         }
 

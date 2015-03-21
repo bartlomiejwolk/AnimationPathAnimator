@@ -822,6 +822,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Handle drawing on-scene tilting value labels.
         /// </summary>
+        // todo rename to HandleDrawingTiltingLabels().
         private void HandleDrawingTiltLabel() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 

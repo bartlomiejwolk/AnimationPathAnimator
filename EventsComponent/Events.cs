@@ -66,8 +66,8 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private void Reset() {
             animator = GetComponent<Animator>();
             settings =
-                Resources.Load<EventsSettings>("DefaultAPEventsSettings");
-            skin = Resources.Load("DefaultAPEventsSkin") as GUISkin;
+                Resources.Load<EventsSettings>("DefaultEventsSettings");
+            skin = Resources.Load("DefaultEventsSkin") as GUISkin;
         }
 
         #endregion

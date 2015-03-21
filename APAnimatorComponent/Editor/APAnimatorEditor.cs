@@ -366,7 +366,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "UpdateAnimation",
+                    "HandleUpdateAnimGOInSceneView",
                     null);
             }
 
@@ -437,7 +437,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "UpdateAnimation",
+                    "HandleUpdateAnimGOInSceneView",
                     null);
             }
         }
@@ -867,7 +867,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
                 Script,
-                "UpdateAnimation",
+                "HandleUpdateAnimGOInSceneView",
                 null);
 
             SceneView.RepaintAll();
@@ -985,7 +985,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
                 Script,
-                "UpdateAnimation",
+                "HandleUpdateAnimGOInSceneView",
                 null);
 
             EditorUtility.SetDirty(Script.PathData);
@@ -1053,7 +1053,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private void HandleRotationModeChange() {
             Utilities.InvokeMethodWithReflection(
                 Script,
-                "UpdateAnimation",
+                "HandleUpdateAnimGOInSceneView",
                 null);
             Script.SettingsAsset.HandleMode = HandleMode.None;
         }
@@ -1101,7 +1101,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "UpdateAnimation",
+                    "HandleUpdateAnimGOInSceneView",
                     null);
             }
             // Handle removing reference.
@@ -1113,7 +1113,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "UpdateAnimation",
+                    "HandleUpdateAnimGOInSceneView",
                     null);
             }
         }

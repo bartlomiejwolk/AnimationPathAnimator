@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ATP.AnimationPathAnimator {
+namespace ATP.AnimationPathTools {
 
     public class ReloadLevel : MonoBehaviour {
 

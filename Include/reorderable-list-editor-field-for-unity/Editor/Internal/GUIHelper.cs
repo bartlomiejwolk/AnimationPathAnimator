@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.ReorderableList.Internal {
+namespace ATP.AnimationPathTools.ReorderableList.Internal {
 
 	/// <summary>
 	/// Utility functions to assist with GUIs.

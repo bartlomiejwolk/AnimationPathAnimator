@@ -5,7 +5,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.ReorderableList {
+namespace ATP.AnimationPathTools.ReorderableList {
 
 	/// <summary>
 	/// Reorderable list adaptor for serialized array property.

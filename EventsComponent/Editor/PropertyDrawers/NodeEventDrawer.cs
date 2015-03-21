@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsComponent {
+namespace ATP.AnimationPathTools.EventsComponent {
 
     [CustomPropertyDrawer(typeof (NodeEventSlot))]
     public sealed class NodeEventDrawer : PropertyDrawer {

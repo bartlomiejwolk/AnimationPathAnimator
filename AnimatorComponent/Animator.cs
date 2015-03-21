@@ -3,13 +3,13 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APAnimatorComponent {
+namespace ATP.AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     /// Animates object along path.
     /// </summary>
     [ExecuteInEditMode]
-    public sealed class APAnimator : MonoBehaviour {
+    public sealed class Animator : MonoBehaviour {
         #region EVENTS
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private float prevAnimationTime;
 
         [SerializeField]
-        private APAnimatorSettings settingsAsset;
+        private AnimatorSettings settingsAsset;
 
         [SerializeField]
         private GUISkin skin;
@@ -159,7 +159,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <summary>
         /// Reference to asset file holding animator settings.
         /// </summary>
-        public APAnimatorSettings SettingsAsset {
+        public AnimatorSettings SettingsAsset {
             get { return settingsAsset; }
         }
 
@@ -1025,7 +1025,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// </summary>
         private void LoadRequiredAssets() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
-                as APAnimatorSettings;
+                as AnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
         }
 

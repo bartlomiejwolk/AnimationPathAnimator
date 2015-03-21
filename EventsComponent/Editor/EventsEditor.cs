@@ -1,20 +1,20 @@
-﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.ReorderableList;
+﻿using ATP.AnimationPathTools.AnimatorComponent;
+using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APEventsComponent {
+namespace ATP.AnimationPathTools.EventsComponent {
 
-    [CustomEditor(typeof (APEvents))]
-    public class APEventsEditor : Editor {
+    [CustomEditor(typeof (Events))]
+    public class EventsEditor : Editor {
 
         #region PROPERTIES
 
         public bool SerializedPropertiesInitialized { get; set; }
 
-        private APEvents Script { get; set; }
+        private Events Script { get; set; }
 
-        private APEventsSettings Settings { get; set; }
+        private EventsSettings Settings { get; set; }
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             DrawAdvancedSettingsControls();
         }
         private void OnEnable() {
-            Script = target as APEvents;
+            Script = target as Events;
 
             if (!AssetsLoaded()) return;
 
@@ -107,8 +107,8 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
             EditorGUILayout.PropertyField(
                 animator,
                 new GUIContent(
-                    "APAnimator",
-                    "APAnimator component reference."));
+                    "Animator",
+                    "Animator component reference."));
         }
 
         private void DrawInfoLabel(string text) {
@@ -132,7 +132,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
                 settings,
                 new GUIContent(
                     "Settings Asset",
-                    "Reference to asset with all APEvents component settings."));
+                    "Reference to asset with all Events component settings."));
 
             serializedObject.ApplyModifiedProperties();
         }

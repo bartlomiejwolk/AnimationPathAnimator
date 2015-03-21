@@ -1,4 +1,4 @@
-namespace ATP.AnimationPathAnimator.APAnimatorComponent {
+namespace ATP.AnimationPathTools.AnimatorComponent {
 
     public enum TangentMode {
 

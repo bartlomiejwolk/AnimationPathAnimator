@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
-using ATP.AnimationPathAnimator.APAnimatorComponent;
+using ATP.AnimationPathTools.AnimatorComponent;
 using UnityEngine;
+using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
-namespace ATP.AnimationPathAnimator.APEventsComponent {
+namespace ATP.AnimationPathTools.EventsComponent {
 
-    [RequireComponent(typeof (APAnimator))]
-    public class APEvents : MonoBehaviour {
+    [RequireComponent(typeof (Animator))]
+    public class Events : MonoBehaviour {
         #region FIELDS
 
         [SerializeField]
         private bool advancedSettingsFoldout;
 
         [SerializeField]
-        private APAnimator animator;
+        private Animator animator;
 
         [SerializeField]
         private bool drawMethodNames = true;
@@ -21,7 +22,7 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         private List<NodeEventSlot> nodeEventSlots;
 
         [SerializeField]
-        private APEventsSettings settings;
+        private EventsSettings settings;
 
         [SerializeField]
         private GUISkin skin;
@@ -30,12 +31,12 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
 
         #region PROPERTIES
 
-        public APAnimator Animator {
+        public Animator Animator {
             get { return animator; }
             set { animator = value; }
         }
 
-        public APEventsSettings Settings {
+        public EventsSettings Settings {
             get { return settings; }
         }
 
@@ -63,10 +64,10 @@ namespace ATP.AnimationPathAnimator.APEventsComponent {
         }
 
         private void Reset() {
-            animator = GetComponent<APAnimator>();
+            animator = GetComponent<Animator>();
             settings =
-                Resources.Load<APEventsSettings>("DefaultAPEventsSettings");
-            skin = Resources.Load("DefaultAPEventsSkin") as GUISkin;
+                Resources.Load<EventsSettings>("DefaultEventsSettings");
+            skin = Resources.Load("DefaultEventsSkin") as GUISkin;
         }
 
         #endregion

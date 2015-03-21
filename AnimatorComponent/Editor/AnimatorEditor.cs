@@ -3,19 +3,19 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator.APAnimatorComponent {
+namespace ATP.AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     /// Editor class responsible for drawing inspector and on-scene handles. All editor related functionality is defined here.
     /// </summary>
-    [CustomEditor(typeof (APAnimator))]
-    public sealed class APAnimatorEditor : Editor {
+    [CustomEditor(typeof (Animator))]
+    public sealed class AnimatorEditor : Editor {
         #region PROPERTIES
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private APAnimator Script { get; set; }
+        private Animator Script { get; set; }
 
         /// <summary>
         /// Is true when serialized properties are initialized.
@@ -23,7 +23,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         private bool SerializedPropertiesInitialized { get; set; }
 
         /// <summary>
-        /// <c>SerializedObject</c> for <c>APAnimatorSettings</c> asset.
+        /// <c>SerializedObject</c> for <c>AnimatorSettings</c> asset.
         /// </summary>
         private SerializedObject SettingsSerializedObject { get; set; }
 
@@ -86,7 +86,7 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         private void OnEnable() {
             // Get target script reference.
-            Script = (APAnimator) target;
+            Script = (Animator) target;
 
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;

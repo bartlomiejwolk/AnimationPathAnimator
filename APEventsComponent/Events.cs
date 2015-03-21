@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ATP.AnimationPathTools.EventsComponent {
 
     [RequireComponent(typeof (APAnimator))]
-    public class APEvents : MonoBehaviour {
+    public class Events : MonoBehaviour {
         #region FIELDS
 
         [SerializeField]

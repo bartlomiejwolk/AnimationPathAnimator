@@ -11,7 +11,7 @@ namespace ATP.AnimationPathTools {
         //    ScriptableObjectUtility.CreateAsset<APAnimatorSettings>("APAnimatorSettings");
         //}
 
-        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/APEvents Reflection SettingsAsset")]
+        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Events Reflection SettingsAsset")]
         //private static void CreateAPEventsReflectionSettingsAsset() {
         //    ScriptableObjectUtility.CreateAsset<APEventsSettings>("APEventsSettings");
         //}
@@ -28,10 +28,10 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        [MenuItem("Component/ATP/AnimationPathAnimator/APEvents")]
+        [MenuItem("Component/ATP/AnimationPathAnimator/Events")]
         private static void AddAPEventsComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(APEvents));
+                Selection.activeGameObject.AddComponent(typeof(Events));
             }
         }
     }

@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace ATP.AnimationPathTools.EventsComponent {
 
-    [CustomEditor(typeof (APEvents))]
+    [CustomEditor(typeof (Events))]
     public class APEventsEditor : Editor {
 
         #region PROPERTIES
 
         public bool SerializedPropertiesInitialized { get; set; }
 
-        private APEvents Script { get; set; }
+        private Events Script { get; set; }
 
         private APEventsSettings Settings { get; set; }
 
@@ -54,7 +54,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             DrawAdvancedSettingsControls();
         }
         private void OnEnable() {
-            Script = target as APEvents;
+            Script = target as Events;
 
             if (!AssetsLoaded()) return;
 
@@ -132,7 +132,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 settings,
                 new GUIContent(
                     "Settings Asset",
-                    "Reference to asset with all APEvents component settings."));
+                    "Reference to asset with all Events component settings."));
 
             serializedObject.ApplyModifiedProperties();
         }

@@ -232,8 +232,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     tiltingCurveValues[i],
                     nodePositions[i],
                     arcValueMultiplier,
-                    -90,
-                    90,
+                    -359,
+                    359,
                     arcHandleRadius,
                     initialArcValue,
                     scaleHandleSize,
@@ -272,8 +272,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        /// <param name="arcHandleRadius"></param>
-        /// <param name="initialArcValue"></param>
+        /// <param name="arcHandleRadius">Radius of the arc.</param>
+        /// <param name="initialArcValue">When handle is close to zero and user moves the handle, this value will be set as start value.</param>
         private static void DrawArcHandle(
             float value,
             Vector3 position,

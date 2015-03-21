@@ -894,7 +894,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             EditorUtility.SetDirty(Script.PathData);
         }
 
-        // todo add docs.
+        /// <summary>
+        /// Multiply each ease value by a difference between two given values.
+        /// </summary>
+        /// <param name="oldValue"></param>
+        /// <param name="newValue"></param>
         private void MultiplyEaseValues(float oldValue, float newValue) {
             // Guard against null division.
             if (Utilities.FloatsEqual(

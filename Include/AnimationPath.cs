@@ -112,7 +112,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         /// <param name="secondNodeIndex">Index of the second node.</param>
         /// <param name="samplingFrequency">Amount of sample points for one meter of path.</param>
         /// <returns>Section length in meters.</returns>
-        // todo remove.
         public float CalculateSectionLength(
             int firstNodeIndex,
             int secondNodeIndex,

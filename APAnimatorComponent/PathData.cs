@@ -879,12 +879,18 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
         #endregion
 
-        // todo docs
+        /// <summary>
+        /// Multiply ease curve values by a given value.
+        /// </summary>
+        /// <param name="multiplier">Multiplier value.</param>
         public void MultiplyEaseCurveValues(float multiplier) {
             MultiplyCurveValues(EaseCurve, multiplier);
         }
 
-        // todo docs
+        /// <summary>
+        /// Multiply tilting curve values by a given value.
+        /// </summary>
+        /// <param name="multiplier">Multiplier value.</param>
         public void MultiplyTiltingCurveValues(float multiplier) {
             MultiplyCurveValues(TiltingCurve, multiplier);
         }

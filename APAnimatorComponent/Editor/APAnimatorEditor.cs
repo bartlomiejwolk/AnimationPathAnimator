@@ -1423,7 +1423,11 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
             Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
 
-        // todo docs
+        /// <summary>
+        /// Multiply each tilting value by a difference between two given values.
+        /// </summary>
+        /// <param name="oldValue"></param>
+        /// <param name="newValue"></param>
         private void MultiplyTiltingValues(float oldValue, float newValue) {
             // Guard against null division.
             if (Utilities.FloatsEqual(

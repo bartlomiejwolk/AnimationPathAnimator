@@ -14,7 +14,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private Events Script { get; set; }
 
-        private APEventsSettings Settings { get; set; }
+        private EventsSettings Settings { get; set; }
 
         #endregion
 

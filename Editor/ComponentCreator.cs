@@ -13,7 +13,7 @@ namespace ATP.AnimationPathTools {
 
         //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Events Reflection SettingsAsset")]
         //private static void CreateAPEventsReflectionSettingsAsset() {
-        //    ScriptableObjectUtility.CreateAsset<APEventsSettings>("APEventsSettings");
+        //    ScriptableObjectUtility.CreateAsset<EventsSettings>("EventsSettings");
         //}
 
         //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Animator Data")]

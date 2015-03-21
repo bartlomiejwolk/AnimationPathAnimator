@@ -22,7 +22,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private List<NodeEventSlot> nodeEventSlots;
 
         [SerializeField]
-        private APEventsSettings settings;
+        private EventsSettings settings;
 
         [SerializeField]
         private GUISkin skin;
@@ -36,7 +36,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             set { animator = value; }
         }
 
-        public APEventsSettings Settings {
+        public EventsSettings Settings {
             get { return settings; }
         }
 
@@ -66,7 +66,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private void Reset() {
             animator = GetComponent<Animator>();
             settings =
-                Resources.Load<APEventsSettings>("DefaultAPEventsSettings");
+                Resources.Load<EventsSettings>("DefaultAPEventsSettings");
             skin = Resources.Load("DefaultAPEventsSkin") as GUISkin;
         }
 

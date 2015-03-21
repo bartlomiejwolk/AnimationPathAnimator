@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ATP.AnimationPathTools.APEventsComponent {
+namespace ATP.AnimationPathTools.EventsComponent {
 
     public sealed class APEventsSettings : ScriptableObject {
         #region FIELDS

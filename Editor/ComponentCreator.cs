@@ -1,5 +1,5 @@
 ﻿using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.AnimationPathTools.APEventsComponent;
+using ATP.AnimationPathTools.EventsComponent;
 using UnityEditor;
 
 namespace ATP.AnimationPathTools {

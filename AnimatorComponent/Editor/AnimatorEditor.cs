@@ -980,6 +980,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.PathData.UpdateTiltingValue(keyIndex, newValue);
             }
 
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandleUpdateAnimGOInSceneView",
+                null);
+
             EditorUtility.SetDirty(Script.PathData);
         }
         #endregion CALLBACK HANDLERS

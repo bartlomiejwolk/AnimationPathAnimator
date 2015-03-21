@@ -893,32 +893,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             EditorUtility.SetDirty(Script.PathData);
         }
-
-        /// <summary>
-        /// Multiply each ease value by a difference between two given values.
-        /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private void MultiplyEaseValues(float oldValue, float newValue) {
-            // Guard against null division.
-            if (Utilities.FloatsEqual(
-                oldValue,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Calculate multiplier.
-            var multiplier = newValue / oldValue;
-
-            // Don't let ease value reach zero.
-            if (Utilities.FloatsEqual(
-                multiplier,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyEaseCurveValues(multiplier);
-        }
-
         private void DrawPositionHandlesCallbackHandler(
             int movedNodeIndex,
             Vector3 newGlobalPos) {
@@ -952,24 +926,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             EditorUtility.SetDirty(Script.PathData);
         }
-
-        /// <summary>
-        /// Adjust ease values to path length. Making path longer will decrease ease values
-        /// to  maintain constant speed.
-        /// </summary>
-        /// <param name="oldAnimGoLinearLength">Anim. Go path length before path update.</param>
-        /// <param name="newAnimGoLinearLength">Anim. Go path length after path update.</param>
-        private void DistributeEaseValues(
-            float oldAnimGoLinearLength,
-            float newAnimGoLinearLength) {
-
-            // Calculate multiplier.
-            var multiplier = oldAnimGoLinearLength / newAnimGoLinearLength;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyEaseCurveValues(multiplier);
-        }
-
         private void DrawRemoveNodeButtonsCallbackHandles(
             int nodeIndex) {
             Undo.RecordObject(Script.PathData, "Change path");
@@ -1026,28 +982,6 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
 
             EditorUtility.SetDirty(Script.PathData);
         }
-
-        // todo docs
-        private void MultiplyTiltingValues(float oldValue, float newValue) {
-            // Guard against null division.
-            if (Utilities.FloatsEqual(
-                oldValue,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Calculate multiplier.
-            var multiplier = newValue / oldValue;
-
-            // Don't let ease value reach zero.
-            if (Utilities.FloatsEqual(
-                multiplier,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyTiltingCurveValues(multiplier);
-        }
-
         #endregion CALLBACK HANDLERS
 
         #region MODE HANDLERS
@@ -1214,6 +1148,23 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         #endregion
 
         #region METHODS
+        /// <summary>
+        /// Adjust ease values to path length. Making path longer will decrease ease values
+        /// to  maintain constant speed.
+        /// </summary>
+        /// <param name="oldAnimGoLinearLength">Anim. Go path length before path update.</param>
+        /// <param name="newAnimGoLinearLength">Anim. Go path length after path update.</param>
+        private void DistributeEaseValues(
+            float oldAnimGoLinearLength,
+            float newAnimGoLinearLength) {
+
+            // Calculate multiplier.
+            var multiplier = oldAnimGoLinearLength / newAnimGoLinearLength;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
+        }
+
         private void DrawInspector() {
 
             DrawPathDataAssetField();
@@ -1446,6 +1397,54 @@ namespace ATP.AnimationPathAnimator.APAnimatorComponent {
         }
 
         #endregion PRIVATE METHODS
+        #region HELPER METHODS
+        /// <summary>
+        /// Multiply each ease value by a difference between two given values.
+        /// </summary>
+        /// <param name="oldValue"></param>
+        /// <param name="newValue"></param>
+        private void MultiplyEaseValues(float oldValue, float newValue) {
+            // Guard against null division.
+            if (Utilities.FloatsEqual(
+                oldValue,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Calculate multiplier.
+            var multiplier = newValue / oldValue;
+
+            // Don't let ease value reach zero.
+            if (Utilities.FloatsEqual(
+                multiplier,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
+        }
+
+        // todo docs
+        private void MultiplyTiltingValues(float oldValue, float newValue) {
+            // Guard against null division.
+            if (Utilities.FloatsEqual(
+                oldValue,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Calculate multiplier.
+            var multiplier = newValue / oldValue;
+
+            // Don't let ease value reach zero.
+            if (Utilities.FloatsEqual(
+                multiplier,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyTiltingCurveValues(multiplier);
+        }
+
+        #endregion
 
         #region SHORTCUTS
 

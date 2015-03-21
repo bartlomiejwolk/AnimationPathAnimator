@@ -6,7 +6,7 @@ namespace ATP.AnimationPathTools {
 
     public static class ComponentCreator {
 
-        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/APAnimator SettingsAsset")]
+        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Animator SettingsAsset")]
         //private static void CreateAnimatorSettingsAsset() {
         //    ScriptableObjectUtility.CreateAsset<APAnimatorSettings>("APAnimatorSettings");
         //}
@@ -16,15 +16,15 @@ namespace ATP.AnimationPathTools {
         //    ScriptableObjectUtility.CreateAsset<APEventsSettings>("APEventsSettings");
         //}
 
-        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/APAnimator Data")]
+        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Animator Data")]
         //private static void CreatePathAsset() {
         //    ScriptableObjectUtility.CreateAsset<PathData>("APAnimatorData");
         //}
 
-        [MenuItem("Component/ATP/AnimationPathAnimator/APAnimator")]
+        [MenuItem("Component/ATP/AnimationPathAnimator/Animator")]
         private static void AddAPAnimatorComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(APAnimator));
+                Selection.activeGameObject.AddComponent(typeof(Animator));
             }
         }
 

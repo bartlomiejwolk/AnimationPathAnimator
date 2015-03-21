@@ -8,14 +8,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     /// <summary>
     /// Editor class responsible for drawing inspector and on-scene handles. All editor related functionality is defined here.
     /// </summary>
-    [CustomEditor(typeof (APAnimator))]
+    [CustomEditor(typeof (Animator))]
     public sealed class APAnimatorEditor : Editor {
         #region PROPERTIES
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private APAnimator Script { get; set; }
+        private Animator Script { get; set; }
 
         /// <summary>
         /// Is true when serialized properties are initialized.
@@ -86,7 +86,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void OnEnable() {
             // Get target script reference.
-            Script = (APAnimator) target;
+            Script = (Animator) target;
 
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;

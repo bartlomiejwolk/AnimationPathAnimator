@@ -9,7 +9,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     /// Animates object along path.
     /// </summary>
     [ExecuteInEditMode]
-    public sealed class APAnimator : MonoBehaviour {
+    public sealed class Animator : MonoBehaviour {
         #region EVENTS
 
         /// <summary>

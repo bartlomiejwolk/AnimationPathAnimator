@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
 using UnityEngine;
+using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
 namespace ATP.AnimationPathTools.EventsComponent {
 
-    [RequireComponent(typeof (APAnimator))]
+    [RequireComponent(typeof (Animator))]
     public class Events : MonoBehaviour {
         #region FIELDS
 
@@ -12,7 +13,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private bool advancedSettingsFoldout;
 
         [SerializeField]
-        private APAnimator animator;
+        private Animator animator;
 
         [SerializeField]
         private bool drawMethodNames = true;
@@ -30,7 +31,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         #region PROPERTIES
 
-        public APAnimator Animator {
+        public Animator Animator {
             get { return animator; }
             set { animator = value; }
         }
@@ -63,7 +64,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void Reset() {
-            animator = GetComponent<APAnimator>();
+            animator = GetComponent<Animator>();
             settings =
                 Resources.Load<APEventsSettings>("DefaultAPEventsSettings");
             skin = Resources.Load("DefaultAPEventsSkin") as GUISkin;

@@ -107,8 +107,8 @@ namespace ATP.AnimationPathTools.EventsComponent {
             EditorGUILayout.PropertyField(
                 animator,
                 new GUIContent(
-                    "APAnimator",
-                    "APAnimator component reference."));
+                    "Animator",
+                    "Animator component reference."));
         }
 
         private void DrawInfoLabel(string text) {

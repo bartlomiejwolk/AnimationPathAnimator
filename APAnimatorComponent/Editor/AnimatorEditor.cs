@@ -9,7 +9,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     /// Editor class responsible for drawing inspector and on-scene handles. All editor related functionality is defined here.
     /// </summary>
     [CustomEditor(typeof (Animator))]
-    public sealed class APAnimatorEditor : Editor {
+    public sealed class AnimatorEditor : Editor {
         #region PROPERTIES
 
         /// <summary>

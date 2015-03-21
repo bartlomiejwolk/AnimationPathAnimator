@@ -3,7 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.APAnimatorComponent {
+namespace ATP.AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     /// Editor class responsible for drawing inspector and on-scene handles. All editor related functionality is defined here.

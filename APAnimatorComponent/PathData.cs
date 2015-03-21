@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.APAnimatorComponent {
+namespace ATP.AnimationPathTools.AnimatorComponent {
 
     public sealed class PathData : ScriptableObject,
         ISerializationCallbackReceiver {

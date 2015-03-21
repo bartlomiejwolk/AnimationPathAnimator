@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.APAnimatorComponent {
+namespace ATP.AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     /// Animates object along path.

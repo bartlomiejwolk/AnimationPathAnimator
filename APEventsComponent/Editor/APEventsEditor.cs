@@ -1,4 +1,4 @@
-﻿using ATP.AnimationPathTools.APAnimatorComponent;
+﻿using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;

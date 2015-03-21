@@ -1,4 +1,4 @@
-﻿using ATP.AnimationPathTools.APAnimatorComponent;
+﻿using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.AnimationPathTools.APEventsComponent;
 using UnityEditor;
 

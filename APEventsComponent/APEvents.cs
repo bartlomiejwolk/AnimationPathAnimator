@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ATP.AnimationPathTools.APAnimatorComponent;
+using ATP.AnimationPathTools.AnimatorComponent;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.APEventsComponent {

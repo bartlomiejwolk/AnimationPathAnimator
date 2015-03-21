@@ -60,7 +60,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float prevAnimationTime;
 
         [SerializeField]
-        private APAnimatorSettings settingsAsset;
+        private AnimatorSettings settingsAsset;
 
         [SerializeField]
         private GUISkin skin;
@@ -159,7 +159,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Reference to asset file holding animator settings.
         /// </summary>
-        public APAnimatorSettings SettingsAsset {
+        public AnimatorSettings SettingsAsset {
             get { return settingsAsset; }
         }
 
@@ -1025,7 +1025,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void LoadRequiredAssets() {
             settingsAsset = Resources.Load("DefaultAnimatorSettings")
-                as APAnimatorSettings;
+                as AnimatorSettings;
             skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
         }
 

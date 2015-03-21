@@ -8,7 +8,7 @@ namespace ATP.AnimationPathTools {
 
         //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Animator SettingsAsset")]
         //private static void CreateAnimatorSettingsAsset() {
-        //    ScriptableObjectUtility.CreateAsset<APAnimatorSettings>("APAnimatorSettings");
+        //    ScriptableObjectUtility.CreateAsset<AnimatorSettings>("AnimatorSettings");
         //}
 
         //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/Events Reflection SettingsAsset")]

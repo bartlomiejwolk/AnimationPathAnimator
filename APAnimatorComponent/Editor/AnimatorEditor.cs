@@ -23,7 +23,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private bool SerializedPropertiesInitialized { get; set; }
 
         /// <summary>
-        /// <c>SerializedObject</c> for <c>APAnimatorSettings</c> asset.
+        /// <c>SerializedObject</c> for <c>AnimatorSettings</c> asset.
         /// </summary>
         private SerializedObject SettingsSerializedObject { get; set; }
 

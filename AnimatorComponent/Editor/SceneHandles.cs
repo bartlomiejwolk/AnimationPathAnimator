@@ -331,7 +331,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 arcRadius,
                 handleColor);
 
-            SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
+            SaveArcValue(arcValueMultiplier, callback, newArcValue, arcValue);
         }
 
         // todo reorganize args.
@@ -342,7 +342,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="callback">Pass updated value here.</param>
         /// <param name="newArcValue"></param>
         /// <param name="arcValue"></param>
-        private static void SaveTiltValue(
+        private static void SaveArcValue(
             float arcValueMultiplier,
             Action<float> callback,
             float newArcValue,

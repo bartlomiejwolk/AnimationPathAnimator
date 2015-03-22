@@ -254,20 +254,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Action<int, float> callback) {
 
             // For each path node..
-            // todo revert.
-            //for (var i = 0; i < nodePositions.Length; i++) {
-            for (var i = 0; i < 1; i++) {
-                var iTemp = i;
-                DrawArcHandle(
-                    tiltingCurveValues[i],
-                    nodePositions[i],
-                    -359,
-                    359,
-                    arcHandleRadius,
-                    initialArcValue,
-                    scaleHandleSize,
-                    Color.green,
-                    value => callback(iTemp, value));
+            for (var i = 0; i < nodePositions.Length; i++) {
+            var iTemp = i;
+            DrawArcHandle(
+                tiltingCurveValues[i],
+                nodePositions[i],
+                -359,
+                359,
+                arcHandleRadius,
+                initialArcValue,
+                scaleHandleSize,
+                Color.green,
+                value => callback(iTemp, value));
             }
         }
 

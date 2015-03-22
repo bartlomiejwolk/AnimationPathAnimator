@@ -458,8 +458,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private int defaultLabelWidth = 30;
 
+        [SerializeField]
         private int easeValueLabelOffsetX = -20;
+        [SerializeField]
         private int easeValueLabelOffsetY = -25;
+        [SerializeField]
         private float initialEaseArcValue = 15f;
 
         [SerializeField]
@@ -474,14 +477,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private Color rotationHandleColor = Color.magenta;
 
+        [SerializeField]
         private float rotationHandleSize = 0.26f;
 
         [SerializeField]
         private float scaleHandleSize = 1.5f;
 
-        private int updateAllLabelOffsetX = 10;
+        [SerializeField]
+        private int updateAllLabelOffsetX = -35;
+        [SerializeField]
         private int updateAllLabelOffsetY = -25;
+        [SerializeField]
         private string updateAllLabelText = "A";
+        [SerializeField]
         private float initialTiltingArcValue = 5;
 
         #endregion

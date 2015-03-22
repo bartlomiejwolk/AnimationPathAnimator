@@ -17,6 +17,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private static float MinValueThreshold = 0.05f;
 
+        /// <summary>
+        /// It means that one unit of tilt will be represented as one degree
+        /// in the arc handle.
+        /// </summary>
+        private const int ArcValueMultiplier = 1;
+
         public static void DrawPositionHandles(
             Vector3[] nodeGlobalPositions,
             Action<int, Vector3> callback) {
@@ -251,21 +257,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float scaleHandleSize,
             Action<int, float> callback) {
 
-            // Set arc value multiplier.
-            // todo make a field.
-            const int arcValueMultiplier = 1;
-
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
-            var iTemp = i;
-            DrawTiltingTool(
-                tiltingCurveValues[i],
-                nodePositions[i],
-                    arcValueMultiplier,
-                arcHandleRadius,
-                scaleHandleSize,
-                Color.green,
-                value => callback(iTemp, value));
+                var iTemp = i;
+                DrawTiltingTool(
+                    tiltingCurveValues[i],
+                    nodePositions[i],
+                        ArcValueMultiplier,
+                    arcHandleRadius,
+                    scaleHandleSize,
+                    Color.green,
+                    value => callback(iTemp, value));
             }
         }
 

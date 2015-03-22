@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,10 +12,36 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     public static class SceneHandles {
 
         /// <summary>
-        /// Minimum value below which arc handle drawer method will set the 
-        /// value back to default.
+        ///     Minimum value below which arc handle drawer method will set the
+        ///     value back to default.
         /// </summary>
-        private static float MinValueThreshold = 0.05f;
+        private static float MinValueThreshold = 0.01f;
+
+        /// <summary>
+        /// It means that one unit of tilt will be represented as one degree
+        /// in the arc handle.
+        /// </summary>
+        private const int ArcValueMultiplier = 1;
+
+        public static void DrawPositionHandles(
+            Vector3[] nodeGlobalPositions,
+            Action<int, Vector3> callback) {
+
+            // For each node..
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                // Draw position handle.
+                var newGlobalPos = Handles.PositionHandle(
+                    nodeGlobalPositions[i],
+                    Quaternion.identity);
+
+                // If node was moved..
+                if (newGlobalPos != nodeGlobalPositions[i]) {
+                    // Execute callback.
+                    callback(i, newGlobalPos);
+                }
+            }
+        }
+
         #region METHDOS
 
         public static void DrawAddNodeButtons(
@@ -63,14 +91,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // For each path node..
             for (var i = 0; i < nodesNo; i++) {
+                // Original value.
+                var value = calculateValueCallback(i);
+                // Value to display.
+                var displayedValue = (Mathf.Abs(value) % 360)
+                                     * Mathf.Sign(value);
+                // Calculate number of full 360 deg. cycles.
+                var cycles = Mathf.Floor(Mathf.Abs(value) / 360);
+
                 // Get value to display.
-                var arcValue = String.Format(
-                    "{0:0.0}",
-                    calculateValueCallback(i));
+                var labelText = String.Format(
+                    "{1} {0:0.0}",
+                    //value,
+                    displayedValue,
+                    cycles);
 
                 DrawNodeLabel(
                     nodeGlobalPositions[i],
-                    arcValue,
+                    labelText,
                     offsetX,
                     offsetY,
                     labelWidth,
@@ -91,14 +129,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawArcHandle(
+                DrawTiltingTool(
                     easeCurveValues[i],
                     nodePositions[i],
                     arcValueMultiplier,
-                    0,
-                    360,
                     arcHandleRadius,
-                    initialArcValue,
                     scaleHandleSize,
                     Color.red,
                     value => callback(iTemp, value));
@@ -222,20 +257,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float scaleHandleSize,
             Action<int, float> callback) {
 
-            // Set arc value multiplier.
-            const int arcValueMultiplier = 1;
-
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawArcHandle(
+                DrawTiltingTool(
                     tiltingCurveValues[i],
                     nodePositions[i],
-                    arcValueMultiplier,
-                    -90,
-                    90,
+                        ArcValueMultiplier,
                     arcHandleRadius,
-                    initialArcValue,
                     scaleHandleSize,
                     Color.green,
                     value => callback(iTemp, value));
@@ -261,74 +290,155 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
         }
 
+        #region DrawTiltingTool()
+
         /// <summary>
         ///     Draw arc handle.
         /// </summary>
-        /// <param name="value">Arc value.</param>
+        /// <param name="arcValue">Value passed to the tool.</param>
         /// <param name="position">Arc position.</param>
-        /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
-        /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
-        /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
         /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        /// <param name="arcHandleRadius"></param>
-        /// <param name="initialArcValue"></param>
-        private static void DrawArcHandle(
+        /// <param name="arcHandleRadius">Radius of the arc.</param>
+        private static void DrawTiltingTool(
             float value,
             Vector3 position,
             float arcValueMultiplier,
-            int minDegrees,
-            int maxDegrees,
             float arcHandleRadius,
-            float initialArcValue,
             float scaleHandleSize,
             Color handleColor,
             Action<float> callback) {
 
+            // Original arc value.
             var arcValue = value * arcValueMultiplier;
+            // Value to be drawn with arc.
+            var displayedValue = arcValue % 360;
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
 
+            DrawTiltingArcHandle(
+                position,
+                handleColor,
+                displayedValue,
+                arcRadius);
+
+            var newArcValue = DrawTiltingScaleHandle(
+                arcValue,
+                position,
+                scaleHandleSize,
+                arcRadius,
+                handleColor);
+
+            SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
+        }
+
+        // todo reorganize args.
+        // todo remove arcValueMultiplier arg.
+        /// <summary>
+        /// Save new tilting value to animation curve.
+        /// </summary>
+        /// <param name="callback">Pass updated value here.</param>
+        /// <param name="newArcValue"></param>
+        /// <param name="arcValue"></param>
+        private static void SaveTiltValue(
+            float arcValueMultiplier,
+            Action<float> callback,
+            float newArcValue,
+            float arcValue) {
+
+            // todo this might be not necessary.
+            if (Utilities.FloatsEqual(
+                newArcValue,
+                arcValue,
+                GlobalConstants.FloatPrecision)) return;
+
+            var modArcValue = arcValue % 360;
+            var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
+            var resultValue = arcValue + diff;
+
+            // If diff is not zero..
+            if (!Utilities.FloatsEqual(diff, 0, GlobalConstants.FloatPrecision)) {
+                callback(resultValue);
+            }
+        }
+
+        /// <summary>
+        /// Draw handle for changing tilting value.
+        /// </summary>
+        /// <param name="value">Handle value.</param>
+        /// <param name="position">Position to display handle.</param>
+        /// <param name="scaleHandleSize">Handle size.</param>
+        /// <param name="arcRadius">Position offset.</param>
+        /// <param name="handleColor">Handle color.</param>
+        /// <returns></returns>
+        private static float DrawTiltingScaleHandle(
+            float value,
+            Vector3 position,
+            float scaleHandleSize,
+            float arcRadius,
+            Color handleColor) {
+
             Handles.color = handleColor;
-     
+
+            // Calculate size of the scale handle.
+            var handleSize = HandleUtility.GetHandleSize(position);
+            var scaleSize = handleSize * scaleHandleSize;
+
+            // Calculate displayed value.
+            var handleValue = value % 360;
+
+            // Set initial handle value. Without it, after reseting handle value,
+            // the value would change really slow.
+            handleValue = Math.Abs(handleValue) < MinValueThreshold
+                // todo pass through arg.
+                ? 5
+                : handleValue;
+
+            // Draw handle.
+            var newArcValue = Handles.ScaleValueHandle(
+                handleValue,
+                position + Vector3.forward * arcRadius * 1.3f,
+                Quaternion.identity,
+                scaleSize,
+                Handles.ConeCap,
+                1);
+
+            // If value was changed with handle..
+            if (!Utilities.FloatsEqual(
+                handleValue,
+                newArcValue,
+                GlobalConstants.FloatPrecision)) {
+                
+                // Calculate modulo from value.
+                var modValue = newArcValue % 360;
+
+                return modValue;
+            }
+
+            // Return same value.
+            return value;
+        }
+
+        private static void DrawTiltingArcHandle(
+            Vector3 position,
+            Color handleColor,
+            float displayedValue,
+            float arcRadius) {
+
+            Handles.color = handleColor;
+
             Handles.DrawWireArc(
                 position,
                 Vector3.up,
                 Quaternion.AngleAxis(
                     0,
                     Vector3.up) * Vector3.forward,
-                arcValue,
+                displayedValue,
                 arcRadius);
-
-            Handles.color = handleColor;
-
-            // Set initial arc value to other than zero. If initial value
-            // is zero, handle will always return zero.
-            arcValue = Math.Abs(arcValue) < MinValueThreshold
-                ? initialArcValue
-                : arcValue;
-
-            var scaleSize = handleSize * scaleHandleSize;
-            var newArcValue = Handles.ScaleValueHandle(
-                arcValue,
-                position + Vector3.forward * arcRadius
-                * 1.3f,
-                Quaternion.identity,
-                scaleSize,
-                Handles.ConeCap,
-                1);
-
-            // Limit handle value.
-            if (newArcValue > maxDegrees) newArcValue = maxDegrees;
-            if (newArcValue < minDegrees) newArcValue = minDegrees;
-
-            if (Math.Abs(newArcValue - arcValue)
-                > GlobalConstants.FloatPrecision) {
-
-                callback(newArcValue / arcValueMultiplier);
-            }
         }
+
+        #endregion
 
         private static bool DrawButton(
             Vector2 position,
@@ -406,26 +516,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
-
-        public static void DrawPositionHandles(
-            Vector3[] nodeGlobalPositions,
-            Action<int, Vector3> callback) {
-
-            // For each node..
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
-                // Draw position handle.
-                var newGlobalPos = Handles.PositionHandle(
-                    nodeGlobalPositions[i],
-                    Quaternion.identity);
-
-                // If node was moved..
-                if (newGlobalPos != nodeGlobalPositions[i]) {
-                    // Execute callback.
-                    callback(i, newGlobalPos);
-                }
-            } 
-        }
-
     }
 
 }

@@ -42,13 +42,13 @@ MonoBehaviour:
   - {fileID: 2800000, guid: d09a8dd6e0e171b49ba73fd3d5c57205, type: 3}
   - {fileID: 2800000, guid: 649104d15ab43284cb21177f43ec04a4, type: 3}
   - {fileID: 2800000, guid: d777b5e2cb371524fade0782c726f2e6, type: 3}
-  handleMode: 1
+  handleMode: 3
   maxAnimationSpeed: .300000012
   pathDataAssetDefaultName: Path
   positionHandle: 0
   positionLerpSpeed: 1
   rotationMode: 1
-  rotationSlerpSpeed: 999
+  rotationSlerpSpeed: 97336
   tangentMode: 0
   updateAllMode: 1
   wrapMode: 1
@@ -66,8 +66,16 @@ MonoBehaviour:
   arcValueMultiplierNumerator: 360
   defaultLabelHeight: 10
   defaultLabelWidth: 30
+  easeValueLabelOffsetX: -20
+  easeValueLabelOffsetY: -25
+  initialEaseArcValue: 15
   movementHandleSize: .119999997
   removeButtonH: 44
   removeButtonV: 10
   rotationHandleColor: {r: 1, g: 0, b: 1, a: 1}
+  rotationHandleSize: .25999999
   scaleHandleSize: 1.5
+  updateAllLabelOffsetX: -35
+  updateAllLabelOffsetY: -25
+  updateAllLabelText: A
+  initialTiltingArcValue: 5

@@ -1,5 +1,8 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.IO;
+using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -800,6 +803,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingTiltingHandles() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
+            // todo pass directly.
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
 
@@ -822,6 +826,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Handle drawing on-scene tilting value labels.
         /// </summary>
+        // todo rename to HandleDrawingTiltingLabels().
         private void HandleDrawingTiltLabel() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
@@ -979,6 +984,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else {
                 Script.PathData.UpdateTiltingValue(keyIndex, newValue);
             }
+
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandleUpdateAnimGOInSceneView",
+                null);
 
             EditorUtility.SetDirty(Script.PathData);
         }
@@ -1166,7 +1176,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawInspector() {
-
             DrawPathDataAssetField();
 
             EditorGUILayout.BeginHorizontal();
@@ -1438,7 +1447,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate multiplier.
             var multiplier = newValue / oldValue;
 
-            // Don't let ease value reach zero.
+            // Don't let tilting value reach zero.
             if (Utilities.FloatsEqual(
                 multiplier,
                 0,

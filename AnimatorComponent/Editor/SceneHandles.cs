@@ -129,7 +129,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawTiltingTool(
+                DrawArcTool(
                     easeCurveValues[i],
                     nodePositions[i],
                     arcValueMultiplier,
@@ -260,7 +260,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawTiltingTool(
+                DrawArcTool(
                     tiltingCurveValues[i],
                     nodePositions[i],
                         ArcValueMultiplier,
@@ -290,7 +290,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
         }
 
-        #region DrawTiltingTool()
+        #region DrawArcTool()
 
         /// <summary>
         ///     Draw arc handle.
@@ -301,7 +301,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
-        private static void DrawTiltingTool(
+        private static void DrawArcTool(
             float value,
             Vector3 position,
             float arcValueMultiplier,
@@ -310,14 +310,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Color handleColor,
             Action<float> callback) {
 
-            // Original arc value.
+            // Calculate value to display.
             var arcValue = value * arcValueMultiplier;
-            // Value to be drawn with arc.
+            // Limit value to 360.
             var displayedValue = arcValue % 360;
+
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
 
-            DrawTiltingArcHandle(
+            DrawArcHandle(
                 position,
                 handleColor,
                 displayedValue,
@@ -420,7 +421,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return value;
         }
 
-        private static void DrawTiltingArcHandle(
+        private static void DrawArcHandle(
             Vector3 position,
             Color handleColor,
             float displayedValue,

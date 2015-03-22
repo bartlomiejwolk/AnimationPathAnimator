@@ -327,14 +327,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Original arc value.
             var arcValue = value * arcValueMultiplier;
             // Value to be drawn with arc.
-            var drawedValue = arcValue % 360;
+            var displayedValue = arcValue % 360;
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
 
             DrawTiltingArcHandle(
                 position,
                 handleColor,
-                drawedValue,
+                displayedValue,
                 arcRadius);
 
             var newArcValue = DrawTiltingValueHandle(
@@ -356,18 +356,37 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newArcValue,
             float arcValue) {
 
-            if (!Utilities.FloatsEqual(
+            if (Utilities.FloatsEqual(
                 newArcValue,
                 arcValue,
-                GlobalConstants.FloatPrecision)) {
+                GlobalConstants.FloatPrecision)) return;
 
-                // Convert value from degrees to value on animation curve.
-                var convertedValue = newArcValue / arcValueMultiplier;
+            var modArcValue = arcValue % 360;
+            //var diff = CalculateCircleDegreeDiff(modArcValue, newArcValue);
+            var diff = CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
+            var resultValue = arcValue + diff;
 
-                callback(convertedValue);
-            }
+            callback(resultValue);
+        }
+        /// <summary>
+        /// Calculate the real difference between two angles, keeping the correct sign.
+        /// </summary>
+        /// <remarks>http://blog.lexique-du-net.com/index.php?post/Calculate-the-real-difference-between-two-angles-keeping-the-sign</remarks>
+        /// <param name="firstAngle">Old angle value.</param>
+        /// <param name="secondAngle">New angle value.</param>
+        /// <returns></returns>
+        private static float CalculateDifferenceBetweenAngles(
+            float firstAngle,
+            float secondAngle) {
+
+            float difference = secondAngle - firstAngle;
+            while (difference < -180) difference += 360;
+            while (difference > 180) difference -= 360;
+
+            return difference;
         }
 
+        // todo docs.
         private static float DrawTiltingValueHandle(
             float arcValue,
             Vector3 position,
@@ -376,7 +395,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float arcRadius,
             Color handleColor) {
 
-            Logger.LogString("arcValue: {0}", arcValue);
+            //Logger.LogString("arcValue: {0}", arcValue);
 
             Handles.color = handleColor;
 
@@ -404,19 +423,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Handles.ConeCap,
                 1);
 
+            //var valueDiff = 0f;
+
+            //valueDiff = CalculateArcValueDiff(arcValue, newArcValue);
+
             //Logger.LogString("newArcValue: {0}", newArcValue);
 
-            var valueDiff = CalculateArcValueDiff(arcValue, newArcValue);
+            //Logger.LogString("valueDiff: {0}", valueDiff);
 
-            Logger.LogString("valueDiff: {0}", valueDiff);
+            //var returnValue = arcValue + valueDiff;
 
-            var returnValue = arcValue + valueDiff;
+            //Logger.LogString("returnValue: {0}", returnValue);
 
-            Logger.LogString("returnValue: {0}", returnValue);
+            //Logger.LogString("End of DrawTiltingValueHandle()");
 
-            Logger.LogString("End of DrawTiltingValueHandle()");
+            //return returnValue;
 
-            return returnValue;
+            return newArcValue % 360;
         }
 
         private static float CalculateArcValueDiff(
@@ -424,39 +447,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newArcValue) {
 
             // Calculate displayed value.
-            var handleValue = arcValue % 360;
-
-            float modNewArcValue = newArcValue;
-            if (newArcValue >= 360) {
-                modNewArcValue = newArcValue % 360;
-
-                //Logger.LogString("modNewArcValue: {0}", modNewArcValue);
-            }
+            var arcModValue = arcValue % 360;
 
             var valueDiff = 0f;
             if (!Utilities.FloatsEqual(
-                modNewArcValue,
-                handleValue,
+                newArcValue,
+                arcModValue,
                 GlobalConstants.FloatPrecision)) {
 
                 // Calculate value change diff.
-                if (newArcValue < 360) {
-                    valueDiff = newArcValue - handleValue;
-
-                    //Logger.LogString("newValueDiff: {0}", valueDiff);
-                }
-                else if (newArcValue > arcValue) {
-                    valueDiff = newArcValue - arcValue;
-                    //Logger.LogString("newValueDiff: {0}", valueDiff);
-
-                }
-                else if (newArcValue < arcValue) {
-                    var modArcValue = arcValue % 360;
-                    //valueDiff = modNewArcValue - modArcValue;
-                    valueDiff = newArcValue - modArcValue;
-
-                    if (valueDiff >= 360) valueDiff = 0;
-                }
+                valueDiff = newArcValue - arcModValue;
             }
 
             return valueDiff;
@@ -476,7 +476,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Quaternion.AngleAxis(
                     0,
                     Vector3.up) * Vector3.forward,
-                //arcValue,
                 displayedValue,
                 arcRadius);
         }

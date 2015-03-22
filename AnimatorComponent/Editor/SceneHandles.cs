@@ -123,7 +123,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawArcHandle(
+                DrawTiltingTool(
                     easeCurveValues[i],
                     nodePositions[i],
                     arcHandleRadius,
@@ -253,7 +253,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
             var iTemp = i;
-            DrawArcHandle(
+            DrawTiltingTool(
                 tiltingCurveValues[i],
                 nodePositions[i],
                 arcHandleRadius,
@@ -282,21 +282,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
         }
 
-        #region DrawArcHandle()
+        #region DrawTiltingTool()
 
         /// <summary>
         ///     Draw arc handle.
         /// </summary>
-        /// <param name="value">Arc value.</param>
+        /// <param name="arcValue">Value passed to the tool.</param>
         /// <param name="position">Arc position.</param>
-        /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
         /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
-        // todo rename to DrawTiltingTool().
-        // todo remove args.
-        private static void DrawArcHandle(
+        private static void DrawTiltingTool(
             float arcValue,
             Vector3 position,
             float arcHandleRadius,

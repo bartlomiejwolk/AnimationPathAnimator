@@ -800,6 +800,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingTiltingHandles() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
+            // todo pass directly.
             Action<int, float> callbackHandler =
                 DrawTiltingHandlesCallbackHandler;
 

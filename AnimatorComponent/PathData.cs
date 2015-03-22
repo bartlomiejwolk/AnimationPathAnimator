@@ -30,7 +30,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region CONST
 
         private const float DefaultEaseCurveValue = 0.05f;
-        private const float DefaultTiltingCurveValue = 0.001f;
+        // todo revert.
+        //private const float DefaultTiltingCurveValue = 0.001f;
+        private const float DefaultTiltingCurveValue = 90f;
         private const int PathLengthSamplingFrequency = 400;
         private const float DefaultSmoothWeight = 0;
 

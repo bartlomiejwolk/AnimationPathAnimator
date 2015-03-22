@@ -348,6 +348,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
         }
 
+        // todo reorganize args.
+        // todo remove arcValueMultiplier arg.
         private static void SaveTiltValue(
             float arcValueMultiplier,
             Action<float> callback,
@@ -373,6 +375,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float scaleHandleSize,
             float arcRadius,
             Color handleColor) {
+
             Logger.LogString("arcValue: {0}", arcValue);
 
             Handles.color = handleColor;
@@ -383,16 +386,80 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //    ? initialArcValue
             //    : arcValue;
 
+            // Calculate size of the scale handle.
             var scaleSize = handleSize * scaleHandleSize;
+            // Calculate displayed value.
+            var handleValue = arcValue % 360;
+
+            //Logger.LogString("handleValue: {0}", handleValue);
+
+            // Draw handle.
             var newArcValue = Handles.ScaleValueHandle(
-                arcValue,
+                //arcValue,
+                handleValue,
                 position + Vector3.forward * arcRadius
                 * 1.3f,
                 Quaternion.identity,
                 scaleSize,
                 Handles.ConeCap,
                 1);
-            return newArcValue;
+
+            //Logger.LogString("newArcValue: {0}", newArcValue);
+
+            var valueDiff = CalculateArcValueDiff(arcValue, newArcValue);
+
+            Logger.LogString("valueDiff: {0}", valueDiff);
+
+            var returnValue = arcValue + valueDiff;
+
+            Logger.LogString("returnValue: {0}", returnValue);
+
+            Logger.LogString("End of DrawTiltingValueHandle()");
+
+            return returnValue;
+        }
+
+        private static float CalculateArcValueDiff(
+            float arcValue,
+            float newArcValue) {
+
+            // Calculate displayed value.
+            var handleValue = arcValue % 360;
+
+            float modNewArcValue = newArcValue;
+            if (newArcValue >= 360) {
+                modNewArcValue = newArcValue % 360;
+
+                //Logger.LogString("modNewArcValue: {0}", modNewArcValue);
+            }
+
+            var valueDiff = 0f;
+            if (!Utilities.FloatsEqual(
+                modNewArcValue,
+                handleValue,
+                GlobalConstants.FloatPrecision)) {
+
+                // Calculate value change diff.
+                if (newArcValue < 360) {
+                    valueDiff = newArcValue - handleValue;
+
+                    //Logger.LogString("newValueDiff: {0}", valueDiff);
+                }
+                else if (newArcValue > arcValue) {
+                    valueDiff = newArcValue - arcValue;
+                    //Logger.LogString("newValueDiff: {0}", valueDiff);
+
+                }
+                else if (newArcValue < arcValue) {
+                    var modArcValue = arcValue % 360;
+                    //valueDiff = modNewArcValue - modArcValue;
+                    valueDiff = newArcValue - modArcValue;
+
+                    if (valueDiff >= 360) valueDiff = 0;
+                }
+            }
+
+            return valueDiff;
         }
 
         private static void DrawTiltingArcHandle(

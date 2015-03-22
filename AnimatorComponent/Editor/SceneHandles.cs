@@ -344,7 +344,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var newArcValue = DrawTiltingValueHandle(
                 arcValue,
                 position,
-                handleSize,
                 scaleHandleSize,
                 arcRadius,
                 handleColor);
@@ -373,21 +372,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             callback(resultValue);
         }
 
-        // todo docs.
+        /// <summary>
+        /// Draw handle for changing tilting value.
+        /// </summary>
+        /// <param name="value">Handle value.</param>
+        /// <param name="position">Position to display handle.</param>
+        /// <param name="scaleHandleSize">Handle size.</param>
+        /// <param name="arcRadius">Position offset.</param>
+        /// <param name="handleColor">Handle color.</param>
+        /// <returns></returns>
+        // todo rename to DrawTiltingScaleHandle().
         private static float DrawTiltingValueHandle(
-            float arcValue,
+            float value,
             Vector3 position,
-            float handleSize,
             float scaleHandleSize,
             float arcRadius,
             Color handleColor) {
 
+            var handleSize = HandleUtility.GetHandleSize(position);
             Handles.color = handleColor;
 
             // Calculate size of the scale handle.
             var scaleSize = handleSize * scaleHandleSize;
             // Calculate displayed value.
-            var handleValue = arcValue % 360;
+            var handleValue = value % 360;
 
             // Draw handle.
             var newArcValue = Handles.ScaleValueHandle(

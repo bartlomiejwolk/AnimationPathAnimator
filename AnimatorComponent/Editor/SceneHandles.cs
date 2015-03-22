@@ -126,10 +126,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawArcHandle(
                     easeCurveValues[i],
                     nodePositions[i],
-                    0,
-                    360,
                     arcHandleRadius,
-                    initialArcValue,
                     scaleHandleSize,
                     Color.red,
                     value => callback(iTemp, value));
@@ -259,10 +256,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawArcHandle(
                 tiltingCurveValues[i],
                 nodePositions[i],
-                -359,
-                359,
                 arcHandleRadius,
-                initialArcValue,
                 scaleHandleSize,
                 Color.green,
                 value => callback(iTemp, value));
@@ -296,25 +290,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="value">Arc value.</param>
         /// <param name="position">Arc position.</param>
         /// <param name="arcValueMultiplier">If set to 1, values will be converted to degrees in relation 1 to 1.</param>
-        /// <param name="minDegrees">Lower boundary for amount of degrees that will be drawn.</param>
-        /// <param name="maxDegrees">Higher boundary for amount of degrees that will be drawn.</param>
         /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
-        /// <param name="initialArcValue">
-        ///     When handle is close to zero and user moves the handle, this value will be set as start
-        ///     value.
-        /// </param>
         // todo rename to DrawTiltingTool().
         // todo remove args.
         private static void DrawArcHandle(
             float arcValue,
             Vector3 position,
-            int minDegrees,
-            int maxDegrees,
             float arcHandleRadius,
-            float initialArcValue,
             float scaleHandleSize,
             Color handleColor,
             Action<float> callback) {

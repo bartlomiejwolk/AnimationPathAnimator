@@ -1,5 +1,8 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.IO;
+using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -1445,7 +1448,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate multiplier.
             var multiplier = newValue / oldValue;
 
-            // Don't let ease value reach zero.
+            // Don't let tilting value reach zero.
             if (Utilities.FloatsEqual(
                 multiplier,
                 0,

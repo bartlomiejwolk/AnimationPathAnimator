@@ -356,7 +356,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
             var resultValue = arcValue + diff;
 
-            callback(resultValue);
+            // If diff is not zero..
+            if (!Utilities.FloatsEqual(diff, 0, GlobalConstants.FloatPrecision)) {
+                callback(resultValue);
+            }
         }
 
         /// <summary>

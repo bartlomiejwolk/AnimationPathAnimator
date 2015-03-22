@@ -322,9 +322,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SaveTiltValue(callback, newArcValue, arcValue);
         }
 
-        // todo docs
         // todo reorganize args.
         // todo remove arcValueMultiplier arg.
+        /// <summary>
+        /// Save new tilting value to animation curve.
+        /// </summary>
+        /// <param name="callback">Pass updated value here.</param>
+        /// <param name="newArcValue"></param>
+        /// <param name="arcValue"></param>
         private static void SaveTiltValue(
             Action<float> callback,
             float newArcValue,

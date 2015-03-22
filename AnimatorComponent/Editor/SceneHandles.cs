@@ -11,10 +11,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     public static class SceneHandles {
 
         /// <summary>
-        /// Minimum value below which arc handle drawer method will set the 
-        /// value back to default.
+        ///     Minimum value below which arc handle drawer method will set the
+        ///     value back to default.
         /// </summary>
         private static float MinValueThreshold = 0.05f;
+
+        public static void DrawPositionHandles(
+            Vector3[] nodeGlobalPositions,
+            Action<int, Vector3> callback) {
+
+            // For each node..
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                // Draw position handle.
+                var newGlobalPos = Handles.PositionHandle(
+                    nodeGlobalPositions[i],
+                    Quaternion.identity);
+
+                // If node was moved..
+                if (newGlobalPos != nodeGlobalPositions[i]) {
+                    // Execute callback.
+                    callback(i, newGlobalPos);
+                }
+            }
+        }
+
         #region METHDOS
 
         public static void DrawAddNodeButtons(
@@ -67,7 +87,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Original value.
                 var value = calculateValueCallback(i);
                 // Value to display.
-                var displayedValue = (Mathf.Abs(value) % 360) * Mathf.Sign(value);
+                var displayedValue = (Mathf.Abs(value) % 360)
+                                     * Mathf.Sign(value);
                 // Calculate number of full 360 deg. cycles.
                 var cycles = Mathf.Floor(Mathf.Abs(value) / 360);
 
@@ -286,7 +307,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
-        /// <param name="initialArcValue">When handle is close to zero and user moves the handle, this value will be set as start value.</param>
+        /// <param name="initialArcValue">
+        ///     When handle is close to zero and user moves the handle, this value will be set as start
+        ///     value.
+        /// </param>
         // todo rename to DrawTiltingTool().
         private static void DrawArcHandle(
             float value,
@@ -313,8 +337,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 drawedValue,
                 arcRadius);
 
-            var newArcValue = DrawTiltingValueHandle(arcValue,
-                position, handleSize, scaleHandleSize, arcRadius, handleColor);
+            var newArcValue = DrawTiltingValueHandle(
+                arcValue,
+                position,
+                handleSize,
+                scaleHandleSize,
+                arcRadius,
+                handleColor);
 
             SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
         }
@@ -337,7 +366,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private static float DrawTiltingValueHandle(float arcValue, Vector3 position, float handleSize, float scaleHandleSize, float arcRadius, Color handleColor) {
+        private static float DrawTiltingValueHandle(
+            float arcValue,
+            Vector3 position,
+            float handleSize,
+            float scaleHandleSize,
+            float arcRadius,
+            Color handleColor) {
             Logger.LogString("arcValue: {0}", arcValue);
 
             Handles.color = handleColor;
@@ -455,26 +490,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
-
-        public static void DrawPositionHandles(
-            Vector3[] nodeGlobalPositions,
-            Action<int, Vector3> callback) {
-
-            // For each node..
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
-                // Draw position handle.
-                var newGlobalPos = Handles.PositionHandle(
-                    nodeGlobalPositions[i],
-                    Quaternion.identity);
-
-                // If node was moved..
-                if (newGlobalPos != nodeGlobalPositions[i]) {
-                    // Execute callback.
-                    callback(i, newGlobalPos);
-                }
-            } 
-        }
-
     }
 
 }

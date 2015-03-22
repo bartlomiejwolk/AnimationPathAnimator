@@ -1176,7 +1176,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawInspector() {
-
             DrawPathDataAssetField();
 
             EditorGUILayout.BeginHorizontal();

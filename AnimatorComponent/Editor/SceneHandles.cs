@@ -15,7 +15,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Minimum value below which arc handle drawer method will set the
         ///     value back to default.
         /// </summary>
-        private static float MinValueThreshold = 0.05f;
+        private static float MinValueThreshold = 0.01f;
 
         /// <summary>
         /// It means that one unit of tilt will be represented as one degree
@@ -347,6 +347,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newArcValue,
             float arcValue) {
 
+            // todo this might be not necessary.
             if (Utilities.FloatsEqual(
                 newArcValue,
                 arcValue,
@@ -387,20 +388,38 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate displayed value.
             var handleValue = value % 360;
 
+            // Set initial handle value. Without it, after reseting handle value,
+            // the value would change really slow.
+            handleValue = Math.Abs(handleValue) < MinValueThreshold
+                // todo pass through arg.
+                ? 5
+                : handleValue;
+
             // Draw handle.
             var newArcValue = Handles.ScaleValueHandle(
                 handleValue,
-                position + Vector3.forward * arcRadius
-                * 1.3f,
+                position + Vector3.forward * arcRadius * 1.3f,
                 Quaternion.identity,
                 scaleSize,
                 Handles.ConeCap,
                 1);
 
-            // Calculate modulo from value.
-            var modValue = newArcValue % 360;
+            Logger.LogString("handleValue: {0}; newArcValue: {1}", handleValue, newArcValue);
 
-            return modValue;
+            // If value was changed with handle..
+            if (!Utilities.FloatsEqual(
+                handleValue,
+                newArcValue,
+                GlobalConstants.FloatPrecision)) {
+                
+                // Calculate modulo from value.
+                var modValue = newArcValue % 360;
+
+                return modValue;
+            }
+
+            // Return same value.
+            return value;
         }
 
         private static void DrawTiltingArcHandle(

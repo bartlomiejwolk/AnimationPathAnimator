@@ -284,6 +284,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
         /// <param name="initialArcValue">When handle is close to zero and user moves the handle, this value will be set as start value.</param>
+        // todo rename to DrawTiltingTool().
         private static void DrawArcHandle(
             float value,
             Vector3 position,
@@ -296,24 +297,55 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Color handleColor,
             Action<float> callback) {
 
+            // Original arc value.
             var arcValue = value * arcValueMultiplier;
+            // Value to be drawn with arc.
+            var drawedValue = arcValue % 360;
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
 
-            // Displayed value.
-            var displayedValue = arcValue % 360;
-
-            Handles.color = handleColor;
-     
-            Handles.DrawWireArc(
+            DrawTiltingArcHandle(
                 position,
-                Vector3.up,
-                Quaternion.AngleAxis(
-                    0,
-                    Vector3.up) * Vector3.forward,
-                //arcValue,
-                displayedValue,
+                handleColor,
+                drawedValue,
                 arcRadius);
+
+            var newArcValue = DrawTiltingValueHandle(
+                position,
+                scaleHandleSize,
+                handleColor,
+                handleSize,
+                arcValue,
+                arcRadius);
+
+            SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
+        }
+
+        private static void SaveTiltValue(
+            float arcValueMultiplier,
+            Action<float> callback,
+            float newArcValue,
+            float arcValue) {
+
+            if (!Utilities.FloatsEqual(
+                newArcValue,
+                arcValue,
+                GlobalConstants.FloatPrecision)) {
+
+                // Convert value from degrees to value on animation curve.
+                var convertedValue = newArcValue / arcValueMultiplier;
+
+                callback(convertedValue);
+            }
+        }
+
+        private static float DrawTiltingValueHandle(
+            Vector3 position,
+            float scaleHandleSize,
+            Color handleColor,
+            float handleSize,
+            float arcValue,
+            float arcRadius) {
 
             Handles.color = handleColor;
 
@@ -332,22 +364,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 scaleSize,
                 Handles.ConeCap,
                 1);
+            return newArcValue;
+        }
 
-            // Limit handle value.
-            // todo create constant.
-            //if (newArcValue > maxDegrees) newArcValue = 0.01f;
-            //if (newArcValue < minDegrees) newArcValue = 0.01f;
+        private static void DrawTiltingArcHandle(
+            Vector3 position,
+            Color handleColor,
+            float displayedValue,
+            float arcRadius) {
 
-            if (!Utilities.FloatsEqual(
-                newArcValue,
-                arcValue,
-                GlobalConstants.FloatPrecision)) {
+            Handles.color = handleColor;
 
-                // Convert value from degrees to value on animation curve.
-                var convertedValue = newArcValue / arcValueMultiplier;
-
-                callback(convertedValue);
-            }
+            Handles.DrawWireArc(
+                position,
+                Vector3.up,
+                Quaternion.AngleAxis(
+                    0,
+                    Vector3.up) * Vector3.forward,
+                //arcValue,
+                displayedValue,
+                arcRadius);
         }
 
         private static bool DrawButton(

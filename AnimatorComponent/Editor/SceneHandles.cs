@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
@@ -295,6 +296,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
         }
 
+        #region DrawArcHandle()
+
         /// <summary>
         ///     Draw arc handle.
         /// </summary>
@@ -312,6 +315,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     value.
         /// </param>
         // todo rename to DrawTiltingTool().
+        // todo remove args.
         private static void DrawArcHandle(
             float value,
             Vector3 position,
@@ -348,6 +352,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
         }
 
+        // todo docs
         // todo reorganize args.
         // todo remove arcValueMultiplier arg.
         private static void SaveTiltValue(
@@ -362,28 +367,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 GlobalConstants.FloatPrecision)) return;
 
             var modArcValue = arcValue % 360;
-            //var diff = CalculateCircleDegreeDiff(modArcValue, newArcValue);
-            var diff = CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
+            var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
             var resultValue = arcValue + diff;
 
             callback(resultValue);
-        }
-        /// <summary>
-        /// Calculate the real difference between two angles, keeping the correct sign.
-        /// </summary>
-        /// <remarks>http://blog.lexique-du-net.com/index.php?post/Calculate-the-real-difference-between-two-angles-keeping-the-sign</remarks>
-        /// <param name="firstAngle">Old angle value.</param>
-        /// <param name="secondAngle">New angle value.</param>
-        /// <returns></returns>
-        private static float CalculateDifferenceBetweenAngles(
-            float firstAngle,
-            float secondAngle) {
-
-            float difference = secondAngle - firstAngle;
-            while (difference < -180) difference += 360;
-            while (difference > 180) difference -= 360;
-
-            return difference;
         }
 
         // todo docs.
@@ -395,26 +382,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float arcRadius,
             Color handleColor) {
 
-            //Logger.LogString("arcValue: {0}", arcValue);
-
             Handles.color = handleColor;
-
-            // Set initial arc value to other than zero. If initial value
-            // is zero, handle will always return zero.
-            //arcValue = Math.Abs(arcValue) < MinValueThreshold
-            //    ? initialArcValue
-            //    : arcValue;
 
             // Calculate size of the scale handle.
             var scaleSize = handleSize * scaleHandleSize;
             // Calculate displayed value.
             var handleValue = arcValue % 360;
 
-            //Logger.LogString("handleValue: {0}", handleValue);
-
             // Draw handle.
             var newArcValue = Handles.ScaleValueHandle(
-                //arcValue,
                 handleValue,
                 position + Vector3.forward * arcRadius
                 * 1.3f,
@@ -423,43 +399,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Handles.ConeCap,
                 1);
 
-            //var valueDiff = 0f;
-
-            //valueDiff = CalculateArcValueDiff(arcValue, newArcValue);
-
-            //Logger.LogString("newArcValue: {0}", newArcValue);
-
-            //Logger.LogString("valueDiff: {0}", valueDiff);
-
-            //var returnValue = arcValue + valueDiff;
-
-            //Logger.LogString("returnValue: {0}", returnValue);
-
-            //Logger.LogString("End of DrawTiltingValueHandle()");
-
-            //return returnValue;
-
             return newArcValue % 360;
-        }
-
-        private static float CalculateArcValueDiff(
-            float arcValue,
-            float newArcValue) {
-
-            // Calculate displayed value.
-            var arcModValue = arcValue % 360;
-
-            var valueDiff = 0f;
-            if (!Utilities.FloatsEqual(
-                newArcValue,
-                arcModValue,
-                GlobalConstants.FloatPrecision)) {
-
-                // Calculate value change diff.
-                valueDiff = newArcValue - arcModValue;
-            }
-
-            return valueDiff;
         }
 
         private static void DrawTiltingArcHandle(
@@ -479,6 +419,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 displayedValue,
                 arcRadius);
         }
+
+        #endregion
 
         private static bool DrawButton(
             Vector2 position,

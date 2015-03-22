@@ -45,7 +45,7 @@ namespace ATP.AnimationPathTools {
             if (a == 0 || b == 0) {
                 // a or b is zero or both are extremely close to it
                 // relative error is less meaningful here
-                return diff < (epsilon * float.MinValue);
+                return diff < (epsilon * Single.MinValue);
             }
             // use relative error
             return diff / (absA + absB) < epsilon;
@@ -143,6 +143,25 @@ namespace ATP.AnimationPathTools {
             float precision = 0.000000000001f) {
 
             return Vector3.SqrMagnitude(a - b) < precision;
+        }
+
+        /// <summary>
+        /// Calculate the real difference between two angles, keeping the correct sign.
+        /// </summary>
+        /// <remarks>http://blog.lexique-du-net.com/index.php?post/Calculate-the-real-difference-between-two-angles-keeping-the-sign</remarks>
+        /// <param name="firstAngle">Old angle value.</param>
+        /// <param name="secondAngle">New angle value.</param>
+        /// <returns></returns>
+        // todo move to utilities.
+        public static float CalculateDifferenceBetweenAngles(
+            float firstAngle,
+            float secondAngle) {
+
+            float difference = secondAngle - firstAngle;
+            while (difference < -180) difference += 360;
+            while (difference > 180) difference -= 360;
+
+            return difference;
         }
 
     }

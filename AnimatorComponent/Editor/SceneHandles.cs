@@ -324,7 +324,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 displayedValue,
                 arcRadius);
 
-            var newArcValue = DrawTiltingScaleHandle(
+            var newArcValue = DrawArcScaleHandle(
                 arcValue,
                 position,
                 scaleHandleSize,
@@ -373,7 +373,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="arcRadius">Position offset.</param>
         /// <param name="handleColor">Handle color.</param>
         /// <returns></returns>
-        private static float DrawTiltingScaleHandle(
+        private static float DrawArcScaleHandle(
             float value,
             Vector3 position,
             float scaleHandleSize,

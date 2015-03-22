@@ -1,4 +1,5 @@
 using System;
+using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -236,7 +237,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             const int arcValueMultiplier = 1;
 
             // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
+            // todo revert.
+            //for (var i = 0; i < nodePositions.Length; i++) {
+            for (var i = 0; i < 1; i++) {
                 var iTemp = i;
                 DrawArcHandle(
                     tiltingCurveValues[i],
@@ -310,13 +313,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 drawedValue,
                 arcRadius);
 
-            var newArcValue = DrawTiltingValueHandle(
-                position,
-                scaleHandleSize,
-                handleColor,
-                handleSize,
-                arcValue,
-                arcRadius);
+            var newArcValue = DrawTiltingValueHandle(arcValue,
+                position, handleSize, scaleHandleSize, arcRadius, handleColor);
 
             SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
         }
@@ -339,13 +337,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private static float DrawTiltingValueHandle(
-            Vector3 position,
-            float scaleHandleSize,
-            Color handleColor,
-            float handleSize,
-            float arcValue,
-            float arcRadius) {
+        private static float DrawTiltingValueHandle(float arcValue, Vector3 position, float handleSize, float scaleHandleSize, float arcRadius, Color handleColor) {
+            Logger.LogString("arcValue: {0}", arcValue);
 
             Handles.color = handleColor;
 

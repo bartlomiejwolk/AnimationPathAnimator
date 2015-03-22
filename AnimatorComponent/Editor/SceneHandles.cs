@@ -404,8 +404,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Handles.ConeCap,
                 1);
 
-            Logger.LogString("handleValue: {0}; newArcValue: {1}", handleValue, newArcValue);
-
             // If value was changed with handle..
             if (!Utilities.FloatsEqual(
                 handleValue,

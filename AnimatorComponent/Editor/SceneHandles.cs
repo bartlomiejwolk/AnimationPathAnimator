@@ -126,7 +126,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawArcHandle(
                     easeCurveValues[i],
                     nodePositions[i],
-                    arcValueMultiplier,
                     0,
                     360,
                     arcHandleRadius,
@@ -254,10 +253,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float scaleHandleSize,
             Action<int, float> callback) {
 
-            // Set arc value multiplier.
-            // todo make a field.
-            const int arcValueMultiplier = 1;
-
             // For each path node..
             // todo revert.
             //for (var i = 0; i < nodePositions.Length; i++) {
@@ -266,7 +261,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawArcHandle(
                     tiltingCurveValues[i],
                     nodePositions[i],
-                    arcValueMultiplier,
                     -359,
                     359,
                     arcHandleRadius,
@@ -317,9 +311,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         // todo rename to DrawTiltingTool().
         // todo remove args.
         private static void DrawArcHandle(
-            float value,
+            float arcValue,
             Vector3 position,
-            float arcValueMultiplier,
             int minDegrees,
             int maxDegrees,
             float arcHandleRadius,
@@ -328,8 +321,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Color handleColor,
             Action<float> callback) {
 
-            // Original arc value.
-            var arcValue = value * arcValueMultiplier;
             // Value to be drawn with arc.
             var displayedValue = arcValue % 360;
             var handleSize = HandleUtility.GetHandleSize(position);
@@ -348,14 +339,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 arcRadius,
                 handleColor);
 
-            SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
+            SaveTiltValue(callback, newArcValue, arcValue);
         }
 
         // todo docs
         // todo reorganize args.
         // todo remove arcValueMultiplier arg.
         private static void SaveTiltValue(
-            float arcValueMultiplier,
             Action<float> callback,
             float newArcValue,
             float arcValue) {

@@ -307,23 +307,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="callback">Pass updated value here.</param>
         private static void SaveArcValue(float arcValue, float newArcValue, float arcValueMultiplier, Action<float> callback) {
 
-            // todo this might be not necessary.
+            // Limit old value to 360.
+            var modArcValue = arcValue % 360;
+
+            // Return if value wasn't changed.
             if (Utilities.FloatsEqual(
+                modArcValue,
                 newArcValue,
-                arcValue,
                 GlobalConstants.FloatPrecision)) return;
 
-            var modArcValue = arcValue % 360;
             var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
             var resultValue = arcValue + diff;
 
             // Convert value in degrees to back curve value.
             var curveValue = resultValue / arcValueMultiplier;
 
-            // If diff is not zero..
-            if (!Utilities.FloatsEqual(diff, 0, GlobalConstants.FloatPrecision)) {
-                callback(curveValue);
-            }
+            // Save value to animation curve.
+            callback(curveValue);
         }
 
         /// <summary>

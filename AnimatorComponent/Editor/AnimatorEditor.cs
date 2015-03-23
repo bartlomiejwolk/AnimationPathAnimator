@@ -686,7 +686,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Value that defines how much of an arc will be draw to represent a value.
             var arcValueMultiplier =
                 Script.SettingsAsset.ArcValueMultiplierNumerator
-                / Script.SettingsAsset.MaxAnimationSpeed;
+                / Script.SettingsAsset.AnimationSpeedDenominator;
 
             SceneHandles.DrawArcTools(
                 nodePositions,
@@ -1306,7 +1306,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var easeValue = Script.PathData.GetNodeEaseValue(nodeIndex);
             var arcValueMultiplier =
                 Script.SettingsAsset.ArcValueMultiplierNumerator
-                / Script.SettingsAsset.MaxAnimationSpeed;
+                / Script.SettingsAsset.AnimationSpeedDenominator;
             var easeValueInDegrees = easeValue * arcValueMultiplier;
 
             return easeValueInDegrees;

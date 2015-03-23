@@ -225,9 +225,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private HandleMode handleMode =
             HandleMode.None;
 
+        /// <summary>
+        /// Used to convert animation curve value to arc handle value.
+        /// </summary>
         [SerializeField]
-        // todo rename to animationSpeedTo360.
-        private float maxAnimationSpeed = 0.05f;
+        private float animationSpeedDenominator = 0.05f;
 
         [SerializeField]
         private string pathDataAssetDefaultName = "Path";
@@ -309,9 +311,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { handleMode = value; }
         }
 
-        public float MaxAnimationSpeed {
-            get { return maxAnimationSpeed; }
-            set { maxAnimationSpeed = value; }
+        public float AnimationSpeedDenominator {
+            get { return animationSpeedDenominator; }
+            set { animationSpeedDenominator = value; }
         }
 
         public string PathDataAssetDefaultName {

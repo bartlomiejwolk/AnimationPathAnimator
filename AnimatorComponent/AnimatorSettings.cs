@@ -493,6 +493,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float initialTiltingArcValue = 5f;
 
+        [SerializeField]
+        private float tiltingValueMultiplierDenominator = 1;
+
         #endregion
 
         #region HANDLES PROPERTIES
@@ -598,6 +601,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public string UpdateAllLabelText {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
+        }
+
+        public float TiltingValueMultiplierDenominator {
+            get { return tiltingValueMultiplierDenominator; }
+            set { tiltingValueMultiplierDenominator = value; }
         }
 
         /// <summary>

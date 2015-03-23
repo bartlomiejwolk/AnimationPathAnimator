@@ -818,8 +818,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 tiltingCurveValues,
                 Script.SettingsAsset.InitialTiltingArcValue,
                 true,
-                // todo create in settings: TiltingValueMultiplierDenominator.
-                1,
+                Script.SettingsAsset.TiltingValueMultiplierDenominator,
                 Script.SettingsAsset.ArcHandleRadius,
                 Script.SettingsAsset.InitialTiltingArcValue,
                 Script.SettingsAsset.ScaleHandleSize,

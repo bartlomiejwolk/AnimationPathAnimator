@@ -806,10 +806,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingTiltingHandles() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
-            // todo pass directly.
-            Action<int, float> callbackHandler =
-                DrawTiltingHandlesCallbackHandler;
-
             // Get path node positions.
             var nodePositions =
                 Script.GetGlobalNodePositions();
@@ -828,7 +824,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.InitialTiltingArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
                 Color.green,
-                callbackHandler);
+                DrawTiltingHandlesCallbackHandler);
         }
 
         /// <summary>

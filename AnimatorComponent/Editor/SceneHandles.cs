@@ -309,14 +309,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Limit old value to 360.
             var modArcValue = arcValue % 360;
+            var modNewArcValue = newArcValue % 360;
 
             // Return if value wasn't changed.
             if (Utilities.FloatsEqual(
                 modArcValue,
-                newArcValue,
+                modNewArcValue,
                 GlobalConstants.FloatPrecision)) return;
 
-            var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
+            var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, modNewArcValue);
             var resultValue = arcValue + diff;
 
             // Convert value in degrees to back curve value.

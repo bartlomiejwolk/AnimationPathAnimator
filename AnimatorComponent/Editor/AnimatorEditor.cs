@@ -893,9 +893,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // If update all mode is set..
             if (Script.SettingsAsset.UpdateAllMode) {
-                MultiplyEaseValues(
-                    Script.PathData.GetEaseValueAtIndex(keyIndex),
-                    newValue);
+                var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
+                MultiplyEaseValues(oldValue, newValue);
             }
             else {
                 // Update ease for single node.

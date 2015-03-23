@@ -21,7 +21,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// It means that one unit of tilt will be represented as one degree
         /// in the arc handle.
         /// </summary>
-        private const int ArcValueMultiplier = 1;
+        // todo remove.
+        //private const int ArcValueMultiplier = 1;
 
         public static void DrawPositionHandles(
             Vector3[] nodeGlobalPositions,
@@ -129,7 +130,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawTiltingTool(
+                DrawArcTool(
                     easeCurveValues[i],
                     nodePositions[i],
                     arcValueMultiplier,
@@ -249,9 +250,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawTiltingHandles(
+        public static void DrawArcTools(
             Vector3[] nodePositions,
-            float[] tiltingCurveValues,
+            float[] curveValues,
+            float arcValueMultiplier,
             float arcHandleRadius,
             float initialArcValue,
             float scaleHandleSize,
@@ -260,10 +262,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
-                DrawTiltingTool(
-                    tiltingCurveValues[i],
+                DrawArcTool(
+                    curveValues[i],
                     nodePositions[i],
-                        ArcValueMultiplier,
+                    arcValueMultiplier,
                     arcHandleRadius,
                     scaleHandleSize,
                     Color.green,
@@ -290,7 +292,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
         }
 
-        #region DrawTiltingTool()
+        #region DrawArcTool()
 
         /// <summary>
         ///     Draw arc handle.
@@ -301,7 +303,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
-        private static void DrawTiltingTool(
+        private static void DrawArcTool(
             float value,
             Vector3 position,
             float arcValueMultiplier,
@@ -310,27 +312,28 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Color handleColor,
             Action<float> callback) {
 
-            // Original arc value.
+            // Calculate value to display.
             var arcValue = value * arcValueMultiplier;
-            // Value to be drawn with arc.
-            var displayedValue = arcValue % 360;
+            // Limit value to 360.
+            var limitedValue = arcValue % 360;
+
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
 
-            DrawTiltingArcHandle(
+            DrawArcHandle(
                 position,
                 handleColor,
-                displayedValue,
+                limitedValue,
                 arcRadius);
 
-            var newArcValue = DrawTiltingScaleHandle(
+            var newArcValue = DrawArcScaleHandle(
                 arcValue,
                 position,
                 scaleHandleSize,
                 arcRadius,
                 handleColor);
 
-            SaveTiltValue(arcValueMultiplier, callback, newArcValue, arcValue);
+            SaveArcValue(arcValueMultiplier, callback, newArcValue, arcValue);
         }
 
         // todo reorganize args.
@@ -341,7 +344,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="callback">Pass updated value here.</param>
         /// <param name="newArcValue"></param>
         /// <param name="arcValue"></param>
-        private static void SaveTiltValue(
+        private static void SaveArcValue(
             float arcValueMultiplier,
             Action<float> callback,
             float newArcValue,
@@ -357,9 +360,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
             var resultValue = arcValue + diff;
 
+            // Convert value in degrees to back curve value.
+            var curveValue = resultValue / arcValueMultiplier;
+
             // If diff is not zero..
             if (!Utilities.FloatsEqual(diff, 0, GlobalConstants.FloatPrecision)) {
-                callback(resultValue);
+                callback(curveValue);
             }
         }
 
@@ -372,7 +378,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="arcRadius">Position offset.</param>
         /// <param name="handleColor">Handle color.</param>
         /// <returns></returns>
-        private static float DrawTiltingScaleHandle(
+        private static float DrawArcScaleHandle(
             float value,
             Vector3 position,
             float scaleHandleSize,
@@ -420,7 +426,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return value;
         }
 
-        private static void DrawTiltingArcHandle(
+        private static void DrawArcHandle(
             Vector3 position,
             Color handleColor,
             float displayedValue,

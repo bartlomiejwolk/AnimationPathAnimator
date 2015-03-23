@@ -226,7 +226,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleMode.None;
 
         [SerializeField]
-        private float maxAnimationSpeed = 0.3f;
+        // todo rename to animationSpeedTo360.
+        private float maxAnimationSpeed = 0.05f;
 
         [SerializeField]
         private string pathDataAssetDefaultName = "Path";

@@ -45,6 +45,9 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         /// Handle space shortcut.
         /// </summary>
         private void HandleSpaceShortcut() {
+            // Disable shortcut while animator awaits animation start.
+            if (Animator.IsInvoking("StartAnimation")) return;
+
             // If space pressed..
             if (Input.GetKeyDown(KeyCode.Space)) {
                 // Pause

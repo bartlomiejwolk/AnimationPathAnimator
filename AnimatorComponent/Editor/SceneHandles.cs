@@ -110,22 +110,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         // todo docs
-        public static void DrawArcTools(
-            Vector3[] nodePositions,
-            float[] curveValues,
-            bool allowNegative,
-            float arcValueMultiplier,
-            float arcHandleRadius,
-            float initialArcValue,
-            float scaleHandleSize,
-            Color color,
-            Action<int, float> callback) {
+        public static void DrawArcTools(Vector3[] nodePositions, float[] curveValues, float initialValue, bool allowNegative, float arcValueMultiplier, float arcHandleRadius, float initialArcValue, float scaleHandleSize, Color color, Action<int, float> callback) {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
                 DrawArcTool(
                     curveValues[i],
                     allowNegative,
+                    initialValue,
                     nodePositions[i],
                     arcValueMultiplier,
                     arcHandleRadius,
@@ -287,18 +279,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Draw handle for changing tilting value.
         /// </summary>
         /// <param name="value">Handle value.</param>
-        /// <param name="allowNegative">If handle can return negative values.</param>
         /// <param name="position">Position to display handle.</param>
+        /// <param name="initialValue"></param>
         /// <param name="scaleHandleSize">Handle size.</param>
         /// <param name="arcRadius">Position offset.</param>
         /// <param name="handleColor">Handle color.</param>
+        /// <param name="allowNegative">If handle can return negative values.</param>
         /// <returns></returns>
-        private static float DrawArcScaleHandle(
-            float value,
-            Vector3 position,
-            float scaleHandleSize,
-            float arcRadius,
-            Color handleColor) {
+        private static float DrawArcScaleHandle(float value, Vector3 position, float initialValue, float scaleHandleSize, float arcRadius, Color handleColor) {
 
             Handles.color = handleColor;
 
@@ -312,8 +300,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Set initial handle value. Without it, after reseting handle value,
             // the value would change really slow.
             handleValue = Math.Abs(handleValue) < MinValueThreshold
-                // todo pass through arg.
-                ? 5
+                ? initialValue
                 : handleValue;
 
             // Draw handle.
@@ -346,6 +333,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="value"></param>
         /// <param name="allowNegative"></param>
+        /// <param name="initialValue"></param>
         /// <param name="position">Arc position.</param>
         /// <param name="arcValueMultiplier"></param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
@@ -353,15 +341,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcValue">Value passed to the tool.</param>
-        private static void DrawArcTool(
-            float value,
-            bool allowNegative,
-            Vector3 position,
-            float arcValueMultiplier,
-            float arcHandleRadius,
-            float scaleHandleSize,
-            Color handleColor,
-            Action<float> callback) {
+        private static void DrawArcTool(float value, bool allowNegative, float initialValue, Vector3 position, float arcValueMultiplier, float arcHandleRadius, float scaleHandleSize, Color handleColor, Action<float> callback) {
 
             // Calculate value to display.
             var arcValue = value * arcValueMultiplier;
@@ -381,6 +361,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 arcValue,
                 //allowNegative,
                 position,
+                initialValue,
                 scaleHandleSize,
                 arcRadius,
                 handleColor);

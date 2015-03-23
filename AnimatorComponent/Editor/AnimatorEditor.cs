@@ -691,6 +691,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SceneHandles.DrawArcTools(
                 nodePositions,
                 easeCurveValues,
+                Script.SettingsAsset.InitialEaseArcValue,
                 false,
                 arcValueMultiplier,
                 Script.SettingsAsset.ArcHandleRadius,
@@ -819,6 +820,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SceneHandles.DrawArcTools(
                 nodePositions,
                 tiltingCurveValues,
+                Script.SettingsAsset.InitialTiltingArcValue,
                 true,
                 // todo create in settings: TiltingValueMultiplierDenominator.
                 1,

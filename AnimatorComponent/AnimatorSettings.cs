@@ -464,7 +464,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private int easeValueLabelOffsetY = -25;
         [SerializeField]
-        private float initialEaseArcValue = 15f;
+        private float initialEaseArcValue = 5f;
 
         [SerializeField]
         private float movementHandleSize = 0.12f;
@@ -491,7 +491,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private string updateAllLabelText = "A";
         [SerializeField]
-        private float initialTiltingArcValue = 5;
+        private float initialTiltingArcValue = 5f;
 
         #endregion
 

@@ -662,12 +662,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region ANIMATION HANDLERS
         /// <summary>
-        /// Decides whether to start animation playback on enter play mode.
+        /// Decides if to start animation playback on enter play mode.
         /// </summary>
         private void HandleStartAnimation() {
             if (Application.isPlaying && SettingsAsset.AutoPlay) {
-                StartAnimation();
-                //IsRunning = true;
+                Invoke("StartAnimation", SettingsAsset.AutoPlayDelay);
             }
         }
 

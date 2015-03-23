@@ -118,29 +118,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawEaseHandles(
-            Vector3[] nodePositions,
-            float[] easeCurveValues,
-            float arcValueMultiplier,
-            float arcHandleRadius,
-            float initialArcValue,
-            float scaleHandleSize,
-            Action<int, float> callback) {
-
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                var iTemp = i;
-                DrawArcTool(
-                    easeCurveValues[i],
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    arcHandleRadius,
-                    scaleHandleSize,
-                    Color.red,
-                    value => callback(iTemp, value));
-            }
-        }
-
         public static void DrawNodeLabels(
             Vector3[] nodeGlobalPositions,
             string[] text,
@@ -250,15 +227,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawArcTools(
-            Vector3[] nodePositions,
-            float[] curveValues,
-            float arcValueMultiplier,
-            float arcHandleRadius,
-            float initialArcValue,
-            float scaleHandleSize,
-            Action<int, float> callback) {
-
+        public static void DrawArcTools(Vector3[] nodePositions, float[] curveValues, float arcValueMultiplier, float arcHandleRadius, float initialArcValue, float scaleHandleSize, Color color, Action<int, float> callback) {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
@@ -268,7 +237,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     arcValueMultiplier,
                     arcHandleRadius,
                     scaleHandleSize,
-                    Color.green,
+                    color,
                     value => callback(iTemp, value));
             }
         }

@@ -695,6 +695,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.ArcHandleRadius,
                 Script.SettingsAsset.InitialEaseArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
+                Color.red,
                 DrawEaseHandlesCallbackHandler);
         }
 
@@ -822,6 +823,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.ArcHandleRadius,
                 Script.SettingsAsset.InitialTiltingArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
+                Color.green,
                 callbackHandler);
         }
 

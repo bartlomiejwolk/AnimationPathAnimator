@@ -230,10 +230,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         [SerializeField]
         private float animationSpeedDenominator = 0.05f;
-
-        [SerializeField]
-        private string pathDataAssetDefaultName = "Path";
-
         [SerializeField]
         private PositionHandle positionHandle = PositionHandle.Free;
 
@@ -315,12 +311,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return animationSpeedDenominator; }
             set { animationSpeedDenominator = value; }
         }
-
-        public string PathDataAssetDefaultName {
-            get { return pathDataAssetDefaultName; }
-            set { pathDataAssetDefaultName = value; }
-        }
-
         public PositionHandle PositionHandle {
             get { return positionHandle; }
             set { positionHandle = value; }
@@ -356,6 +346,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { wrapMode = value; }
         }
 
+        #endregion
+
+        #region INSPECTOR FIELDS
+        [SerializeField]
+        private string pathDataAssetDefaultName = "AnimationPath";
+
+        #endregion
+        #region INSPECTOR PROPERTIES
+        public string PathDataAssetDefaultName {
+            get { return pathDataAssetDefaultName; }
+            set { pathDataAssetDefaultName = value; }
+        }
         #endregion
 
         #region GIZMO FIELDS

@@ -93,8 +93,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Get value to display.
                 var labelText = String.Format(
-                    "{1} {0:0.0}",
-                    //value,
+                    "{1} : {0:0.0}",
                     displayedValue,
                     cycles);
 

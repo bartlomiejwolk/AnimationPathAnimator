@@ -457,8 +457,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         /// <summary>
         /// Coroutine that will remember animated game object's current position, rotation and tilting
-        /// and after a given number of frames checks if any of those values changed. If none changed, animated GO
-        /// stops being updated and AnimatonEnded event is called.
+        /// and after a given number of frames will check if any of those values changed. If none was changed, animated GO
+        /// stops being updated and <c>AnimatonEnded</c> event is called.
         /// </summary>
         // TODO RELEASE Should check also for tilting.
         private IEnumerator CountdownToStopAnimGOUpdate() {

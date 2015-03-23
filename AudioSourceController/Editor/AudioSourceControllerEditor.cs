@@ -7,9 +7,11 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
     public sealed class AudioSourceControllerEditor : Editor {
 
         private SerializedProperty audioSource;
+        private SerializedProperty animator;
 
         private void OnEnable() {
             audioSource = serializedObject.FindProperty("audioSource");
+            animator = serializedObject.FindProperty("animator");
         }
 
         public override void OnInspectorGUI() {
@@ -19,6 +21,12 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
                 audioSource,
                 new GUIContent(
                     "Audio Source",
+                    ""));
+
+            EditorGUILayout.PropertyField(
+                animator,
+                new GUIContent(
+                    "Animator",
                     ""));
 
             serializedObject.ApplyModifiedProperties();

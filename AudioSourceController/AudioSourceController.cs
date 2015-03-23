@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
 namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
 
@@ -13,12 +13,28 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         [SerializeField]
         private AudioSource audioSource;
 
+        [SerializeField]
+        private Animator animator;
+
+        /// <summary>
+        /// Reference to audio source component.
+        /// </summary>
         public AudioSource AudioSource {
             get { return audioSource; }
+            set { audioSource = value; }
         }
 
-        private void Start() {
+        /// <summary>
+        /// Reference to animator component.
+        /// </summary>
+        public Animator Animator {
+            get { return animator; }
+            set { animator = value; }
+        }
 
+        private void Reset() {
+            AudioSource = GetComponent<AudioSource>();
+            Animator = GetComponent<Animator>();
         }
 
         private void Update() {

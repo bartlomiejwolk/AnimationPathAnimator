@@ -13,12 +13,26 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         [SerializeField]
         private AudioSource audioSource;
 
+        public AudioSource AudioSource {
+            get { return audioSource; }
+        }
+
         private void Start() {
 
         }
 
         private void Update() {
-
+            // Play/Pause.
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                // Pause
+                if (AudioSource.isPlaying) {
+                    AudioSource.Pause();
+                }
+                // Play
+                else {
+                    AudioSource.Play();
+                }
+            }
         }
 
     }

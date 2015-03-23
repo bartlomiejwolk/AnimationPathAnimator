@@ -19,7 +19,12 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         [SerializeField]
         private AnimatorComponent.Animator animator;
 
-        private Dictionary<int, float> audioNodeTimestamps; 
+        private Dictionary<int, float> audioNodeTimestamps;
+
+        /// <summary>
+        /// Shortcut for play/pause.
+        /// </summary>
+        public const KeyCode PlayPauseKey = KeyCode.Space;
 
         /// <summary>
         /// Reference to audio source component.
@@ -64,7 +69,7 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         }
 
         private void Update() {
-            HandleSpaceShortcut();
+            HandleShortcuts();
             RecordTimestamps();
         }
 
@@ -74,20 +79,24 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         /// <summary>
         /// Handle space shortcut.
         /// </summary>
-        private void HandleSpaceShortcut() {
+        private void HandleShortcuts() {
+            // If space pressed..
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                HandlePlayPause();
+            }
+        }
+
+        private void HandlePlayPause() {
             // Disable shortcut while animator awaits animation start.
             if (Animator.IsInvoking("StartAnimation")) return;
 
-            // If space pressed..
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                // Pause
-                if (AudioSource.isPlaying) {
-                    AudioSource.Pause();
-                }
-                // Play
-                else {
-                    AudioSource.Play();
-                }
+            // Pause
+            if (AudioSource.isPlaying) {
+                AudioSource.Pause();
+            }
+            // Play
+            else {
+                AudioSource.Play();
             }
         }
 

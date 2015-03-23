@@ -272,8 +272,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.BeginHorizontal();
             DrawAutoPlayControl();
             DrawAutoPlayDelayField();
+            EditorGUILayout.EndHorizontal();
+
             DrawEnableControlsInPlayModeToggle();
 
             EditorGUILayout.Space();
@@ -380,11 +383,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawAutoPlayDelayField() {
             SettingsSerializedObject.Update();
 
+            EditorGUIUtility.labelWidth = 50;
+
             EditorGUILayout.PropertyField(
                 autoPlayDelay,
                 new GUIContent(
-                    "Auto Play Delay",
-                    ""));
+                    "Delay",
+                    "Auto play delay."));
+
+            EditorGUIUtility.labelWidth = 0;
 
             // Limit value to greater than zero.
             if (autoPlayDelay.floatValue < 0) autoPlayDelay.floatValue = 0;

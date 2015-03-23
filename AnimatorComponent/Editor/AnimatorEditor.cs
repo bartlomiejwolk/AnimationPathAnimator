@@ -147,6 +147,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawForwardPointOffsetSlider();
 
+            EditorGUILayout.Space();
+
             DrawPositionSpeedSlider();
 
             EditorGUIUtility.labelWidth = 208;
@@ -246,14 +248,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region CONTROLS
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-                DrawSettingsAssetField();
-                DrawSkinSelectionControl();
+                DrawShortJumpValueField();
+                DrawLongJumpValueField();
+
+                EditorGUILayout.Space();
 
                 DrawGizmoCurveColorPicker();
                 DrawRotationCurveColorPicker();
 
-                DrawShortJumpValueField();
-                DrawLongJumpValueField();
+                EditorGUILayout.Space();
+
+                DrawSettingsAssetField();
+                DrawSkinSelectionControl();
             }
         }
 

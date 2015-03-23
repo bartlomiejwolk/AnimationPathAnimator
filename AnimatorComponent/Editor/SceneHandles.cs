@@ -250,7 +250,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawTiltingHandles(
+        public static void DrawArcTools(
             Vector3[] nodePositions,
             float[] tiltingCurveValues,
             float arcValueMultiplier,

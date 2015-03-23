@@ -688,7 +688,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.ArcValueMultiplierNumerator
                 / Script.SettingsAsset.MaxAnimationSpeed;
 
-            SceneHandles.DrawEaseHandles(
+            SceneHandles.DrawArcTools(
                 nodePositions,
                 easeCurveValues,
                 arcValueMultiplier,
@@ -814,7 +814,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
 
-            SceneHandles.DrawTiltingHandles(
+            SceneHandles.DrawArcTools(
                 nodePositions,
                 tiltingCurveValues,
                 // todo create in settings: TiltingValueMultiplierDenominator.

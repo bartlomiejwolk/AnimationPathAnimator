@@ -17,13 +17,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private static float MinValueThreshold = 0.01f;
 
-        /// <summary>
-        /// It means that one unit of tilt will be represented as one degree
-        /// in the arc handle.
-        /// </summary>
-        // todo remove.
-        //private const int ArcValueMultiplier = 1;
-
         public static void DrawPositionHandles(
             Vector3[] nodeGlobalPositions,
             Action<int, Vector3> callback) {
@@ -302,22 +295,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 arcRadius,
                 handleColor);
 
-            SaveArcValue(arcValueMultiplier, callback, newArcValue, arcValue);
+            SaveArcValue(arcValue, newArcValue, arcValueMultiplier, callback);
         }
 
-        // todo reorganize args.
-        // todo remove arcValueMultiplier arg.
         /// <summary>
         /// Save new tilting value to animation curve.
         /// </summary>
-        /// <param name="callback">Pass updated value here.</param>
-        /// <param name="newArcValue"></param>
         /// <param name="arcValue"></param>
-        private static void SaveArcValue(
-            float arcValueMultiplier,
-            Action<float> callback,
-            float newArcValue,
-            float arcValue) {
+        /// <param name="newArcValue"></param>
+        /// <param name="arcValueMultiplier"></param>
+        /// <param name="callback">Pass updated value here.</param>
+        private static void SaveArcValue(float arcValue, float newArcValue, float arcValueMultiplier, Action<float> callback) {
 
             // todo this might be not necessary.
             if (Utilities.FloatsEqual(

@@ -764,6 +764,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 AnimationTime = 0;
                 StartAnimation();
             }
+            // Disable play/pause while for animation start being invoked.
+            else if (!IsRunning && IsInvoking("StartAnimation")) {
+                // Do nothing.
+            }
             else {
                 // Start animation.
                 StartAnimation();

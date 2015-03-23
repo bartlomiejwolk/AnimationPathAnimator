@@ -22,7 +22,14 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         }
 
         private void Update() {
-            // Play/Pause.
+            HandleSpaceShortcut();
+        }
+
+        /// <summary>
+        /// Handle space shortcut.
+        /// </summary>
+        private void HandleSpaceShortcut() {
+            // If space pressed..
             if (Input.GetKeyDown(KeyCode.Space)) {
                 // Pause
                 if (AudioSource.isPlaying) {

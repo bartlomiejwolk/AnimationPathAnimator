@@ -54,6 +54,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region UNITY MESSAGES
 
+        #region INSPECTOR
         public override void OnInspectorGUI() {
             // Check for required assets.
             if (!RequiredAssetsLoaded()) {
@@ -82,84 +83,167 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-        private void OnDisable() {
-            // Disable Unity scene tool.
-            SceneTool.RestoreTool();
+
+        private void DrawInspector() {
+            DrawPathDataAssetField();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawCreatePathAssetButton();
+            DrawResetPathInspectorButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("References", EditorStyles.boldLabel);
+
+            DrawAnimatedGOField();
+            DrawTargetGOField();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
+
+            DrawHandleModeDropdown();
+            DrawPositionHandleDropdown();
+            DrawUpdateAllToggle();
+            DrawSceneToolShortcutsInfoLabel();
+
+            EditorGUILayout.BeginHorizontal();
+
+            DrawResetEaseButton();
+            DrawResetRotationPathButton();
+            DrawResetTiltingButton();
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Player", EditorStyles.boldLabel);
+
+            DrawAnimationTimeValue();
+
+            DrawAutoPlayControl();
+            DrawEnableControlsInPlayModeToggle();
+
+            DrawPlayerControls();
+
+            DrawShortcutsInfoLabel();
+
+            EditorGUILayout.Space();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Player Options", EditorStyles.boldLabel);
+
+            DrawRotationModeDropdown(HandleRotationModeChange);
+            DrawTangentModeDropdown();
+            DrawWrapModeDropdown();
+
+            EditorGUILayout.Space();
+
+            DrawForwardPointOffsetSlider();
+
+            DrawPositionSpeedSlider();
+
+            EditorGUIUtility.labelWidth = 208;
+
+            DrawRotationSpeedField();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Other", EditorStyles.boldLabel);
+
+            DrawExportControls();
+
+            EditorGUILayout.Space();
+
+            DrawAdvancedSettingsFoldout();
+            DrawAdvancedSettingsControls();
         }
 
-        private void OnEnable() {
-            // Get target script reference.
-            Script = (Animator) target;
+        /// <summary>
+        /// Defines what to do when undo event is performed.
+        /// </summary>
+        private void HandleUndoEvent() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
 
-            // Return is required assets are not referenced.
-            if (!RequiredAssetsLoaded()) return;
+                // Repaint inspector.
+                Repaint();
 
-            // Initialize serialized object for settings asset.
-            SettingsSerializedObject = new SerializedObject(
-                Script.SettingsAsset);
+                // Update path with new tangent setting.
+                HandleTangentModeChange();
 
-            InitializeSerializedProperties();
-            CopyIconsToGizmosFolder();
-            SceneTool.RememberCurrentTool();
-            FocusOnSceneView();
+                // Update animated object.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "HandleUpdateAnimGOInSceneView",
+                    null);
+            }
+        }
+        /// <summary>
+        /// Validate inspector settings that cannot be validated in OnValidate().
+        /// </summary>
+        private void ValidateInspectorSettings() {
+            if (Script.SettingsAsset == null) return;
 
-            // Update animated GO.
+            // Limit RotationSpeed value.
+            if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
+                Script.SettingsAsset.RotationSlerpSpeed = 0;
+            }
+
+            // Limit ExmportSamplingFrequency value.
+            if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
+                Script.SettingsAsset.ExportSamplingFrequency = 1;
+            }
+        }
+
+        #region MODE HANDLERS
+        private void HandleLinearTangentMode() {
+            if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+                Script.PathData.SetLinearAnimObjPathTangents();
+            }
+        }
+
+        /// <summary>
+        ///     Called on rotation mode change.
+        /// </summary>
+        private void HandleRotationModeChange() {
             Utilities.InvokeMethodWithReflection(
                 Script,
                 "HandleUpdateAnimGOInSceneView",
                 null);
+            Script.SettingsAsset.HandleMode = HandleMode.None;
         }
-
-        private void OnSceneGUI() {
-            // Return is required assets are not referenced.
-            if (!RequiredAssetsLoaded()) return;
-            // Return if path asset is not referenced.
-            if (Script.PathData == null) return;
-            // Return if serialized properties are not initialized.
-            if (!SerializedPropertiesInitialized) return;
-
-            HandleAnimatorEventsSubscription();
-
-            // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
-                    FocusType.Passive));
-
-            HandleShortcuts();
-            HandleDrawingEaseHandles();
-            HandleDrawingTiltingHandles();
-            HandleDrawingEaseLabel();
-            HandleDrawingTiltingLabels();
-            HandleDrawingUpdateAllModeLabel();
-            HandleDrawingPositionHandles();
-            HandleDrawingRotationHandle();
-            HandleDrawingAddButtons();
-            HandleDrawingRemoveButtons();
-
-            // Repaint inspector if any key was pressed.
-            // Inspector needs to be redrawn after option is changed
-            // with keyboard shortcut.
-            if (Event.current.type == EventType.keyUp) {
-                Repaint();
+        private void HandleSmoothTangentMode() {
+            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+                Script.PathData.SmoothAnimObjPathTangents();
             }
         }
 
-        #endregion UNITY MESSAGES
+        private void HandleTangentModeChange() {
+            if (Script.PathData == null) return;
 
-        #region INSPECTOR
-        private void DrawSceneToolShortcutsInfoLabel() {
-            EditorGUILayout.HelpBox(
-                "Shortcuts (editor): G, Y, U, I, O, P.",
-                MessageType.Info);
+            // Update path node tangents.
+            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+                Script.PathData.SmoothAnimObjPathTangents();
+            }
+            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+                Script.PathData.SetLinearAnimObjPathTangents();
+            }
+
+            SceneView.RepaintAll();
         }
 
-        private void DrawShortcutsInfoLabel() {
-            EditorGUILayout.HelpBox(
-                "Scene shortcuts to control animation (editor/play mode): " +
-                "[Alt] H, [Alt] J, [Alt] K, [Alt] L. (play mode): Space",
-                MessageType.Info);
-        }
+        #endregion
 
-
+        #region CONTROLS
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
                 DrawSettingsAssetField();
@@ -296,7 +380,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
             Script.SettingsAsset.HandleMode =
-                (HandleMode) EditorGUILayout.EnumPopup(
+                (HandleMode)EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Scene Tool",
                         "Tool displayed next to each node. Default " +
@@ -500,7 +584,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw RotationMode dropdown.
             Script.SettingsAsset.RotationMode =
-                (RotationMode) EditorGUILayout.EnumPopup(
+                (RotationMode)EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         "Mode that controls animated game object rotation."),
@@ -531,6 +615,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SettingsSerializedObject.ApplyModifiedProperties();
         }
 
+        private void DrawSceneToolShortcutsInfoLabel() {
+            EditorGUILayout.HelpBox(
+                "Shortcuts (editor): G, Y, U, I, O, P.",
+                MessageType.Info);
+        }
+
         private void DrawSettingsAssetField() {
             serializedObject.Update();
 
@@ -544,6 +634,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void DrawShortcutsInfoLabel() {
+            EditorGUILayout.HelpBox(
+                "Scene shortcuts to control animation (editor/play mode): " +
+                "[Alt] H, [Alt] J, [Alt] K, [Alt] L. (play mode): Space",
+                MessageType.Info);
+        }
         private void DrawShortJumpValueField() {
             SettingsSerializedObject.Update();
 
@@ -576,7 +672,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw tangent mode dropdown.
             Script.SettingsAsset.TangentMode =
-                (TangentMode) EditorGUILayout.EnumPopup(
+                (TangentMode)EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         "Tangent mode applied to each path node."),
@@ -612,41 +708,78 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void DrawWrapModeDropdown() {
             Script.SettingsAsset.WrapMode =
-                (AnimatorWrapMode) EditorGUILayout.EnumPopup(
+                (AnimatorWrapMode)EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Wrap Mode",
                         "Determines animator behaviour after animation end."),
                     Script.SettingsAsset.WrapMode);
         }
         #endregion
+        #endregion
 
-        #region DRAWING HANDLERS
-        /// <summary>
-        /// Handle drawing on-scene label for "Update All" inspector option.
-        /// </summary>
-        private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.SettingsAsset.UpdateAllMode) return;
-
-            // Get global node positions.
-            var globalNodePositions = Script.GetGlobalNodePositions();
-
-            // Create array with text to be displayed for each node.
-            var labelText = new string[globalNodePositions.Length];
-            for (var i = 0; i < globalNodePositions.Length; i++) {
-                labelText[i] = Script.SettingsAsset.UpdateAllLabelText;
-            }
-
-            SceneHandles.DrawUpdateAllLabels(
-                globalNodePositions,
-                labelText,
-                Script.SettingsAsset.UpdateAllLabelOffsetX,
-                Script.SettingsAsset.UpdateAllLabelOffsetY,
-                Script.SettingsAsset.DefaultLabelWidth,
-                Script.SettingsAsset.DefaultLabelHeight,
-                Script.Skin.GetStyle("UpdateAllLabel"));
+        private void OnDisable() {
+            // Disable Unity scene tool.
+            SceneTool.RestoreTool();
         }
 
+        private void OnEnable() {
+            // Get target script reference.
+            Script = (Animator) target;
 
+            // Return is required assets are not referenced.
+            if (!RequiredAssetsLoaded()) return;
+
+            // Initialize serialized object for settings asset.
+            SettingsSerializedObject = new SerializedObject(
+                Script.SettingsAsset);
+
+            InitializeSerializedProperties();
+            CopyIconsToGizmosFolder();
+            SceneTool.RememberCurrentTool();
+            FocusOnSceneView();
+
+            // Update animated GO.
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandleUpdateAnimGOInSceneView",
+                null);
+        }
+
+        private void OnSceneGUI() {
+            // Return is required assets are not referenced.
+            if (!RequiredAssetsLoaded()) return;
+            // Return if path asset is not referenced.
+            if (Script.PathData == null) return;
+            // Return if serialized properties are not initialized.
+            if (!SerializedPropertiesInitialized) return;
+
+            HandleAnimatorEventsSubscription();
+
+            // Disable interaction with background scene elements.
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
+                    FocusType.Passive));
+
+            HandleShortcuts();
+            HandleDrawingEaseHandles();
+            HandleDrawingTiltingHandles();
+            HandleDrawingEaseLabel();
+            HandleDrawingTiltingLabels();
+            HandleDrawingUpdateAllModeLabel();
+            HandleDrawingPositionHandles();
+            HandleDrawingRotationHandle();
+            HandleDrawingAddButtons();
+            HandleDrawingRemoveButtons();
+
+            // Repaint inspector if any key was pressed.
+            // Inspector needs to be redrawn after option is changed
+            // with keyboard shortcut.
+            if (Event.current.type == EventType.keyUp) {
+                Repaint();
+            }
+        }
+
+        #endregion UNITY MESSAGES
+        #region DRAWING HANDLERS
         /// <summary>
         /// Handle drawing on-scene buttons for adding new nodes.
         /// </summary>
@@ -728,7 +861,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw custom position handles.
             if (positionHandle.enumValueIndex ==
-                (int) PositionHandle.Free) {
+                (int)PositionHandle.Free) {
 
                 SceneHandles.DrawCustomPositionHandles(
                     nodeGlobalPositions,
@@ -843,6 +976,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.Skin.GetStyle("TiltValueLabel"));
         }
 
+        /// <summary>
+        /// Handle drawing on-scene label for "Update All" inspector option.
+        /// </summary>
+        private void HandleDrawingUpdateAllModeLabel() {
+            if (!Script.SettingsAsset.UpdateAllMode) return;
+
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            var labelText = new string[globalNodePositions.Length];
+            for (var i = 0; i < globalNodePositions.Length; i++) {
+                labelText[i] = Script.SettingsAsset.UpdateAllLabelText;
+            }
+
+            SceneHandles.DrawUpdateAllLabels(
+                globalNodePositions,
+                labelText,
+                Script.SettingsAsset.UpdateAllLabelOffsetX,
+                Script.SettingsAsset.UpdateAllLabelOffsetY,
+                Script.SettingsAsset.DefaultLabelWidth,
+                Script.SettingsAsset.DefaultLabelHeight,
+                Script.Skin.GetStyle("UpdateAllLabel"));
+        }
         #endregion DRAWING HANDLERS
 
         #region CALLBACK HANDLERS
@@ -992,49 +1149,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorUtility.SetDirty(Script.PathData);
         }
         #endregion CALLBACK HANDLERS
-
-        #region MODE HANDLERS
-        /// <summary>
-        ///     Called on rotation mode change.
-        /// </summary>
-        private void HandleRotationModeChange() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandleUpdateAnimGOInSceneView",
-                null);
-            Script.SettingsAsset.HandleMode = HandleMode.None;
-        }
-
-
-        private void HandleLinearTangentMode() {
-            if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
-        }
-
-        private void HandleSmoothTangentMode() {
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAnimObjPathTangents();
-            }
-        }
-
-        private void HandleTangentModeChange() {
-            if (Script.PathData == null) return;
-
-            // Update path node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAnimObjPathTangents();
-            }
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
-
-            SceneView.RepaintAll();
-        }
-
-        #endregion
-
         #region OTHER HANDLERS
+        /// <summary>
+        /// Makes sure that animator is always subscribed to path events.
+        /// </summary>
+        private void HandleAnimatorEventsSubscription() {
+            // Subscribe animator to path events if not subscribed already.
+            // This is required after animator component reset.
+            serializedObject.Update();
+            if (!subscribedToEvents.boolValue) {
+                // Unsubscribe first to avoid multiple subscription after
+                // animator component reset.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "UnsubscribeFromEvents",
+                    null);
+
+                // Subscribe to events.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "SubscribeToEvents",
+                    null);
+            }
+            serializedObject.ApplyModifiedProperties();
+        }
+
         /// <summary>
         /// Handles adding/removing reference to target game object.
         /// </summary>
@@ -1064,53 +1203,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     null);
             }
         }
-
-
-        /// <summary>
-        /// Makes sure that animator is always subscribed to path events.
-        /// </summary>
-        private void HandleAnimatorEventsSubscription() {
-            // Subscribe animator to path events if not subscribed already.
-            // This is required after animator component reset.
-            serializedObject.Update();
-            if (!subscribedToEvents.boolValue) {
-                // Unsubscribe first to avoid multiple subscription after
-                // animator component reset.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UnsubscribeFromEvents",
-                    null);
-
-                // Subscribe to events.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "SubscribeToEvents",
-                    null);
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// Defines what to do when undo event is performed.
-        /// </summary>
-        private void HandleUndoEvent() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                // Repaint inspector.
-                Repaint();
-
-                // Update path with new tangent setting.
-                HandleTangentModeChange();
-
-                // Update animated object.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "HandleUpdateAnimGOInSceneView",
-                    null);
-            }
-        }
-
         /// <summary>
         /// Handles situation when adding new node to the path would result in
         /// anim. GO path and rotation path having different number of nodes.
@@ -1157,108 +1249,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
-        /// <summary>
-        /// Adjust ease values to path length. Making path longer will decrease ease values
-        /// to  maintain constant speed.
-        /// </summary>
-        /// <param name="oldAnimGoLinearLength">Anim. Go path length before path update.</param>
-        /// <param name="newAnimGoLinearLength">Anim. Go path length after path update.</param>
-        private void DistributeEaseValues(
-            float oldAnimGoLinearLength,
-            float newAnimGoLinearLength) {
-
-            // Calculate multiplier.
-            var multiplier = oldAnimGoLinearLength / newAnimGoLinearLength;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyEaseCurveValues(multiplier);
-        }
-
-        private void DrawInspector() {
-            DrawPathDataAssetField();
-
-            EditorGUILayout.BeginHorizontal();
-
-            DrawCreatePathAssetButton();
-            DrawResetPathInspectorButton();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("References", EditorStyles.boldLabel);
-
-            DrawAnimatedGOField();
-            DrawTargetGOField();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
-
-            DrawHandleModeDropdown();
-            DrawPositionHandleDropdown();
-            DrawUpdateAllToggle();
-            DrawSceneToolShortcutsInfoLabel();
-
-            EditorGUILayout.BeginHorizontal();
-
-            DrawResetEaseButton();
-            DrawResetRotationPathButton();
-            DrawResetTiltingButton();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player", EditorStyles.boldLabel);
-
-            DrawAnimationTimeValue();
-
-            DrawAutoPlayControl();
-            DrawEnableControlsInPlayModeToggle();
-
-            DrawPlayerControls();
-
-            DrawShortcutsInfoLabel();
-
-            EditorGUILayout.Space();
-
-            EditorGUIUtility.labelWidth = 0;
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player Options", EditorStyles.boldLabel);
-
-            DrawRotationModeDropdown(HandleRotationModeChange);
-            DrawTangentModeDropdown();
-            DrawWrapModeDropdown();
-
-            EditorGUILayout.Space();
-
-            DrawForwardPointOffsetSlider();
-
-            DrawPositionSpeedSlider();
-
-            EditorGUIUtility.labelWidth = 208;
-
-            DrawRotationSpeedField();
-
-            EditorGUIUtility.labelWidth = 0;
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Other", EditorStyles.boldLabel);
-
-            DrawExportControls();
-
-            EditorGUILayout.Space();
-
-            DrawAdvancedSettingsFoldout();
-            DrawAdvancedSettingsControls();
-        }
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {
-                var sceneView = (SceneView) SceneView.sceneViews[0];
+                var sceneView = (SceneView)SceneView.sceneViews[0];
                 sceneView.Focus();
             }
         }
@@ -1343,10 +1336,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 var iconPath = AssetDatabase.GetAssetPath(icon);
 
                 // Copy icon to Gizmos folder.
-                AssetDatabase.CopyAsset(iconPath, "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath) );
+                AssetDatabase.CopyAsset(iconPath, "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath));
             }
         }
 
+        /// <summary>
+        /// Adjust ease values to path length. Making path longer will decrease ease values
+        /// to  maintain constant speed.
+        /// </summary>
+        /// <param name="oldAnimGoLinearLength">Anim. Go path length before path update.</param>
+        /// <param name="newAnimGoLinearLength">Anim. Go path length after path update.</param>
+        private void DistributeEaseValues(
+            float oldAnimGoLinearLength,
+            float newAnimGoLinearLength) {
+
+            // Calculate multiplier.
+            var multiplier = oldAnimGoLinearLength / newAnimGoLinearLength;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
+        }
         private void InitializeSerializedProperties() {
             rotationSlerpSpeed =
                 SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
@@ -1386,24 +1395,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             return assetsLoaded;
         }
-
-        /// <summary>
-        /// Validate inspector settings that cannot be validated in OnValidate().
-        /// </summary>
-        private void ValidateInspectorSettings() {
-            if (Script.SettingsAsset == null) return;
-
-            // Limit RotationSpeed value.
-            if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
-                Script.SettingsAsset.RotationSlerpSpeed = 0;
-            }
-
-            // Limit ExmportSamplingFrequency value.
-            if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
-                Script.SettingsAsset.ExportSamplingFrequency = 1;
-            }
-        }
-
         #endregion PRIVATE METHODS
         #region HELPER METHODS
         /// <summary>

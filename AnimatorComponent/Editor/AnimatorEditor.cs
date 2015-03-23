@@ -369,7 +369,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "a look at target in Forward rotation mode."),
                 Script.SettingsAsset.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
-                1);
+                // todo add setting
+                0.5f);
         }
 
         private void DrawGizmoCurveColorPicker() {
@@ -407,8 +408,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Fraction of animation time used to jump forward/backward "
                     + "in time with keyboard keys."),
                 longJumpValue.floatValue,
-                0,
-                1);
+                0.004f,
+                0.1f);
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }
@@ -655,8 +656,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Fraction of animation time used to jump forward/backward "
                     + "in time with keyboard keys."),
                 shortJumpValue.floatValue,
-                0,
-                1);
+                // todo create settings for these
+                0.0001f,
+                0.004f);
 
             SettingsSerializedObject.ApplyModifiedProperties();
         }
@@ -1538,7 +1540,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     + Script.SettingsAsset.ShortJumpValue;
 
                 animationTime.floatValue =
-                    (float) (Math.Round(newAnimationTimeRatio, 3));
+                    (float) (Math.Round(newAnimationTimeRatio, 4));
             }
 
             // Short jump backward.
@@ -1554,7 +1556,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     - Script.SettingsAsset.ShortJumpValue;
 
                 animationTime.floatValue =
-                    (float) (Math.Round(newAnimationTimeRatio, 3));
+                    (float) (Math.Round(newAnimationTimeRatio, 4));
             }
 
             // Long jump forward.

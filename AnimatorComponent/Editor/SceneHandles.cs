@@ -109,8 +109,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo docs
-        public static void DrawArcTools(Vector3[] nodePositions, float[] curveValues, float initialValue, bool allowNegative, float arcValueMultiplier, float arcHandleRadius, float initialArcValue, float scaleHandleSize, Color color, Action<int, float> callback) {
+        /// <summary>
+        /// Draws arc tool for each node.
+        /// </summary>
+        /// <param name="nodePositions">Positions to draw the tools.</param>
+        /// <param name="curveValues">Values represented by the tools.</param>
+        /// <param name="initialValue">If tool value is 0 and user moves handle, this will be the initial tool value.</param>
+        /// <param name="allowNegative">If tool should allow setting/displaying negative values.</param>
+        /// <param name="arcValueMultiplier">If set to 1, value of 1 will be represented as 1 degree.</param>
+        /// <param name="arcHandleRadius">Radius of the arc.</param>
+        /// <param name="scaleHandleSize">Size of the scale handle.</param>
+        /// <param name="color">Color for the arc and scale handle.</param>
+        /// <param name="callback">Method used to update animation curve.</param>
+        public static void DrawArcTools(
+            Vector3[] nodePositions,
+            float[] curveValues,
+            float initialValue,
+            bool allowNegative,
+            float arcValueMultiplier,
+            float arcHandleRadius,
+            float scaleHandleSize,
+            Color color,
+            Action<int, float> callback) {
+
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
@@ -286,7 +307,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="handleColor">Handle color.</param>
         /// <param name="allowNegative">If handle can return negative values.</param>
         /// <returns></returns>
-        private static float DrawArcScaleHandle(float value, Vector3 position, float initialValue, float scaleHandleSize, float arcRadius, Color handleColor) {
+        private static float DrawArcScaleHandle(
+            float value,
+            Vector3 position,
+            float initialValue,
+            float scaleHandleSize,
+            float arcRadius,
+            Color handleColor) {
 
             Handles.color = handleColor;
 
@@ -341,7 +368,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
         /// <param name="arcValue">Value passed to the tool.</param>
-        private static void DrawArcTool(float value, bool allowNegative, float initialValue, Vector3 position, float arcValueMultiplier, float arcHandleRadius, float scaleHandleSize, Color handleColor, Action<float> callback) {
+        private static void DrawArcTool(
+            float value,
+            bool allowNegative,
+            float initialValue,
+            Vector3 position,
+            float arcValueMultiplier,
+            float arcHandleRadius,
+            float scaleHandleSize,
+            Color handleColor,
+            Action<float> callback) {
 
             // Calculate value to display.
             var arcValue = value * arcValueMultiplier;

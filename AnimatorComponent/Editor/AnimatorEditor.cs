@@ -695,7 +695,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 false,
                 arcValueMultiplier,
                 Script.SettingsAsset.ArcHandleRadius,
-                Script.SettingsAsset.InitialEaseArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
                 Color.red,
                 DrawEaseHandlesCallbackHandler);
@@ -820,7 +819,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 true,
                 Script.SettingsAsset.TiltingValueMultiplierDenominator,
                 Script.SettingsAsset.ArcHandleRadius,
-                Script.SettingsAsset.InitialTiltingArcValue,
                 Script.SettingsAsset.ScaleHandleSize,
                 Color.green,
                 DrawTiltingHandlesCallbackHandler);

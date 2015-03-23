@@ -21,6 +21,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// It means that one unit of tilt will be represented as one degree
         /// in the arc handle.
         /// </summary>
+        // todo remove.
         private const int ArcValueMultiplier = 1;
 
         public static void DrawPositionHandles(
@@ -252,6 +253,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public static void DrawTiltingHandles(
             Vector3[] nodePositions,
             float[] tiltingCurveValues,
+            float arcValueMultiplier,
             float arcHandleRadius,
             float initialArcValue,
             float scaleHandleSize,
@@ -263,7 +265,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawArcTool(
                     tiltingCurveValues[i],
                     nodePositions[i],
-                        ArcValueMultiplier,
+                    ArcValueMultiplier,
                     arcHandleRadius,
                     scaleHandleSize,
                     Color.green,

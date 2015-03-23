@@ -817,6 +817,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SceneHandles.DrawTiltingHandles(
                 nodePositions,
                 tiltingCurveValues,
+                // todo create in settings: TiltingValueMultiplierDenominator.
+                1,
                 Script.SettingsAsset.ArcHandleRadius,
                 Script.SettingsAsset.InitialTiltingArcValue,
                 Script.SettingsAsset.ScaleHandleSize,

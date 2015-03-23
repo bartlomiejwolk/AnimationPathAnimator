@@ -22,7 +22,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// in the arc handle.
         /// </summary>
         // todo remove.
-        private const int ArcValueMultiplier = 1;
+        //private const int ArcValueMultiplier = 1;
 
         public static void DrawPositionHandles(
             Vector3[] nodeGlobalPositions,
@@ -252,7 +252,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public static void DrawArcTools(
             Vector3[] nodePositions,
-            float[] tiltingCurveValues,
+            float[] curveValues,
             float arcValueMultiplier,
             float arcHandleRadius,
             float initialArcValue,
@@ -263,9 +263,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
                 DrawArcTool(
-                    tiltingCurveValues[i],
+                    curveValues[i],
                     nodePositions[i],
-                    ArcValueMultiplier,
+                    arcValueMultiplier,
                     arcHandleRadius,
                     scaleHandleSize,
                     Color.green,
@@ -315,7 +315,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate value to display.
             var arcValue = value * arcValueMultiplier;
             // Limit value to 360.
-            var displayedValue = arcValue % 360;
+            var limitedValue = arcValue % 360;
 
             var handleSize = HandleUtility.GetHandleSize(position);
             var arcRadius = handleSize * arcHandleRadius;
@@ -323,11 +323,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawArcHandle(
                 position,
                 handleColor,
-                displayedValue,
+                limitedValue,
                 arcRadius);
 
             var newArcValue = DrawArcScaleHandle(
-                arcValue,
+                //arcValue,
+                value,
                 position,
                 scaleHandleSize,
                 arcRadius,

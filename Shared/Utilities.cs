@@ -152,12 +152,12 @@ namespace ATP.AnimationPathTools {
         /// <param name="firstAngle">Old angle value.</param>
         /// <param name="secondAngle">New angle value.</param>
         /// <returns></returns>
-        // todo move to utilities.
         public static float CalculateDifferenceBetweenAngles(
             float firstAngle,
             float secondAngle) {
 
             float difference = secondAngle - firstAngle;
+
             while (difference < -180) difference += 360;
             while (difference > 180) difference -= 360;
 

@@ -327,8 +327,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 arcRadius);
 
             var newArcValue = DrawArcScaleHandle(
-                //arcValue,
-                value,
+                arcValue,
                 position,
                 scaleHandleSize,
                 arcRadius,
@@ -361,9 +360,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, newArcValue);
             var resultValue = arcValue + diff;
 
+            // Convert value in degrees to back curve value.
+            var curveValue = resultValue / arcValueMultiplier;
+
             // If diff is not zero..
             if (!Utilities.FloatsEqual(diff, 0, GlobalConstants.FloatPrecision)) {
-                callback(resultValue);
+                callback(curveValue);
             }
         }
 

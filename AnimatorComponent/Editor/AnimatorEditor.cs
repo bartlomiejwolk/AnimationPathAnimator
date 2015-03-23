@@ -128,7 +128,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
-            HandleDrawingTiltLabel();
+            HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
             HandleDrawingRotationHandle();
@@ -827,8 +827,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Handle drawing on-scene tilting value labels.
         /// </summary>
-        // todo rename to HandleDrawingTiltingLabels().
-        private void HandleDrawingTiltLabel() {
+        private void HandleDrawingTiltingLabels() {
             if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.

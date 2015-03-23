@@ -460,7 +460,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// and after a given number of frames checks if any of those values changed. If none changed, animated GO
         /// stops being updated and AnimatonEnded event is called.
         /// </summary>
-        // TODO Should check also for tilting.
+        // TODO RELEASE Should check also for tilting.
         private IEnumerator CountdownToStopAnimGOUpdate() {
             // Helper variable.
             var frame = 0;

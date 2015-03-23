@@ -1,6 +1,4 @@
 using System;
-using System.Globalization;
-using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -111,24 +109,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawNodeLabels(
-            Vector3[] nodeGlobalPositions,
-            string[] text,
-            int offsetX,
-            int offsetY,
-            int labelWidth,
-            int labelHeight,
-            GUIStyle style) {
-
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
-                DrawNodeLabel(
-                    nodeGlobalPositions[i],
-                    text[i],
-                    offsetX,
-                    offsetY,
-                    labelWidth,
-                    labelHeight,
-                    style);
+        // todo docs
+        public static void DrawArcTools(
+            Vector3[] nodePositions,
+            float[] curveValues,
+            bool allowNegative,
+            float arcValueMultiplier,
+            float arcHandleRadius,
+            float initialArcValue,
+            float scaleHandleSize,
+            Color color,
+            Action<int, float> callback) {
+            // For each path node..
+            for (var i = 0; i < nodePositions.Length; i++) {
+                var iTemp = i;
+                DrawArcTool(
+                    curveValues[i],
+                    allowNegative,
+                    nodePositions[i],
+                    arcValueMultiplier,
+                    arcHandleRadius,
+                    scaleHandleSize,
+                    color,
+                    value => callback(iTemp, value));
             }
         }
 
@@ -157,6 +160,27 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     // Execute callback.
                     callback(i, newGlobalPos);
                 }
+            }
+        }
+
+        public static void DrawNodeLabels(
+            Vector3[] nodeGlobalPositions,
+            string[] text,
+            int offsetX,
+            int offsetY,
+            int labelWidth,
+            int labelHeight,
+            GUIStyle style) {
+
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                DrawNodeLabel(
+                    nodeGlobalPositions[i],
+                    text[i],
+                    offsetX,
+                    offsetY,
+                    labelWidth,
+                    labelHeight,
+                    style);
             }
         }
 
@@ -220,23 +244,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo docs
-        public static void DrawArcTools(Vector3[] nodePositions, float[] curveValues, bool allowNegative, float arcValueMultiplier, float arcHandleRadius, float initialArcValue, float scaleHandleSize, Color color, Action<int, float> callback) {
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                var iTemp = i;
-                DrawArcTool(
-                    curveValues[i],
-                    allowNegative,
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    arcHandleRadius,
-                    scaleHandleSize,
-                    color,
-                    value => callback(iTemp, value));
-            }
-        }
-
         public static void DrawUpdateAllLabels(
             Vector3[] nodeGlobalPositions,
             string[] labelText,
@@ -258,80 +265,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region DrawArcTool()
 
-        /// <summary>
-        ///     Draw arc handle.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="allowNegative"></param>
-        /// <param name="position">Arc position.</param>
-        /// <param name="arcValueMultiplier"></param>
-        /// <param name="arcHandleRadius">Radius of the arc.</param>
-        /// <param name="scaleHandleSize"></param>
-        /// <param name="handleColor">Handle color.</param>
-        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        /// <param name="arcValue">Value passed to the tool.</param>
-        private static void DrawArcTool(float value, bool allowNegative, Vector3 position, float arcValueMultiplier, float arcHandleRadius, float scaleHandleSize, Color handleColor, Action<float> callback) {
+        private static void DrawArcHandle(
+            Vector3 position,
+            Color handleColor,
+            float displayedValue,
+            float arcRadius) {
 
-            // Calculate value to display.
-            var arcValue = value * arcValueMultiplier;
-            // Limit value to 360.
-            var limitedValue = arcValue % 360;
+            Handles.color = handleColor;
 
-            var handleSize = HandleUtility.GetHandleSize(position);
-            var arcRadius = handleSize * arcHandleRadius;
-
-            DrawArcHandle(
+            Handles.DrawWireArc(
                 position,
-                handleColor,
-                limitedValue,
+                Vector3.up,
+                Quaternion.AngleAxis(
+                    0,
+                    Vector3.up) * Vector3.forward,
+                displayedValue,
                 arcRadius);
-
-            var newArcValue = DrawArcScaleHandle(
-                arcValue,
-                //allowNegative,
-                position,
-                scaleHandleSize,
-                arcRadius,
-                handleColor);
-
-            SaveArcValue(arcValue, newArcValue, allowNegative, arcValueMultiplier, callback);
         }
 
         /// <summary>
-        /// Save new tilting value to animation curve.
-        /// </summary>
-        /// <param name="arcValue"></param>
-        /// <param name="newArcValue"></param>
-        /// <param name="allowNegative">If negative values can be saved to the animation curve.</param>
-        /// <param name="arcValueMultiplier"></param>
-        /// <param name="callback">Pass updated value here.</param>
-        private static void SaveArcValue(float arcValue, float newArcValue, bool allowNegative, float arcValueMultiplier, Action<float> callback) {
-
-            // Limit old value to 360.
-            var modArcValue = arcValue % 360;
-            var modNewArcValue = newArcValue % 360;
-
-            // Return if value wasn't changed.
-            if (Utilities.FloatsEqual(
-                modArcValue,
-                modNewArcValue,
-                GlobalConstants.FloatPrecision)) return;
-
-            var diff = Utilities.CalculateDifferenceBetweenAngles(modArcValue, modNewArcValue);
-            var resultValue = arcValue + diff;
-
-            // Convert value in degrees to back curve value.
-            var curveValue = resultValue / arcValueMultiplier;
-
-            // Handle allowNegative parameter.
-            if (!allowNegative && curveValue < 0) curveValue = 0;
-
-            // Save value to animation curve.
-            callback(curveValue);
-        }
-
-        /// <summary>
-        /// Draw handle for changing tilting value.
+        ///     Draw handle for changing tilting value.
         /// </summary>
         /// <param name="value">Handle value.</param>
         /// <param name="allowNegative">If handle can return negative values.</param>
@@ -342,7 +295,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns></returns>
         private static float DrawArcScaleHandle(
             float value,
-            Vector3 position, float scaleHandleSize, float arcRadius, Color handleColor) {
+            Vector3 position,
+            float scaleHandleSize,
+            float arcRadius,
+            Color handleColor) {
 
             Handles.color = handleColor;
 
@@ -374,7 +330,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 handleValue,
                 newArcValue,
                 GlobalConstants.FloatPrecision)) {
-                
+
                 // Calculate modulo from value.
                 var modValue = newArcValue % 360;
 
@@ -385,22 +341,96 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return value;
         }
 
-        private static void DrawArcHandle(
+        /// <summary>
+        ///     Draw arc handle.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="allowNegative"></param>
+        /// <param name="position">Arc position.</param>
+        /// <param name="arcValueMultiplier"></param>
+        /// <param name="arcHandleRadius">Radius of the arc.</param>
+        /// <param name="scaleHandleSize"></param>
+        /// <param name="handleColor">Handle color.</param>
+        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
+        /// <param name="arcValue">Value passed to the tool.</param>
+        private static void DrawArcTool(
+            float value,
+            bool allowNegative,
             Vector3 position,
+            float arcValueMultiplier,
+            float arcHandleRadius,
+            float scaleHandleSize,
             Color handleColor,
-            float displayedValue,
-            float arcRadius) {
+            Action<float> callback) {
 
-            Handles.color = handleColor;
+            // Calculate value to display.
+            var arcValue = value * arcValueMultiplier;
+            // Limit value to 360.
+            var limitedValue = arcValue % 360;
 
-            Handles.DrawWireArc(
+            var handleSize = HandleUtility.GetHandleSize(position);
+            var arcRadius = handleSize * arcHandleRadius;
+
+            DrawArcHandle(
                 position,
-                Vector3.up,
-                Quaternion.AngleAxis(
-                    0,
-                    Vector3.up) * Vector3.forward,
-                displayedValue,
+                handleColor,
+                limitedValue,
                 arcRadius);
+
+            var newArcValue = DrawArcScaleHandle(
+                arcValue,
+                //allowNegative,
+                position,
+                scaleHandleSize,
+                arcRadius,
+                handleColor);
+
+            SaveArcValue(
+                arcValue,
+                newArcValue,
+                allowNegative,
+                arcValueMultiplier,
+                callback);
+        }
+
+        /// <summary>
+        ///     Save new tilting value to animation curve.
+        /// </summary>
+        /// <param name="arcValue"></param>
+        /// <param name="newArcValue"></param>
+        /// <param name="allowNegative">If negative values can be saved to the animation curve.</param>
+        /// <param name="arcValueMultiplier"></param>
+        /// <param name="callback">Pass updated value here.</param>
+        private static void SaveArcValue(
+            float arcValue,
+            float newArcValue,
+            bool allowNegative,
+            float arcValueMultiplier,
+            Action<float> callback) {
+
+            // Limit old value to 360.
+            var modArcValue = arcValue % 360;
+            var modNewArcValue = newArcValue % 360;
+
+            // Return if value wasn't changed.
+            if (Utilities.FloatsEqual(
+                modArcValue,
+                modNewArcValue,
+                GlobalConstants.FloatPrecision)) return;
+
+            var diff = Utilities.CalculateDifferenceBetweenAngles(
+                modArcValue,
+                modNewArcValue);
+            var resultValue = arcValue + diff;
+
+            // Convert value in degrees to back curve value.
+            var curveValue = resultValue / arcValueMultiplier;
+
+            // Handle allowNegative parameter.
+            if (!allowNegative && curveValue < 0) curveValue = 0;
+
+            // Save value to animation curve.
+            callback(curveValue);
         }
 
         #endregion
@@ -425,6 +455,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var addButtonPressed = GUI.Button(rectAdd, buttonText, style);
 
             return addButtonPressed;
+        }
+
+        private static Vector3 DrawCustomPositionHandle(
+            Vector3 nodePosition,
+            float handleSize,
+            Color handleColor,
+            Handles.DrawCapFunction capFunction) {
+
+            // Set handle color.
+            Handles.color = handleColor;
+
+            // Get handle size.
+            var movementHandleSize = HandleUtility.GetHandleSize(nodePosition);
+            var sphereSize = movementHandleSize * handleSize;
+
+            // Draw handle.
+            var newPos = Handles.FreeMoveHandle(
+                nodePosition,
+                Quaternion.identity,
+                sphereSize,
+                Vector3.zero,
+                capFunction);
+            return newPos;
         }
 
         private static void DrawNodeLabel(
@@ -455,29 +508,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
 
             Handles.EndGUI();
-        }
-
-        private static Vector3 DrawCustomPositionHandle(
-            Vector3 nodePosition,
-            float handleSize,
-            Color handleColor,
-            Handles.DrawCapFunction capFunction) {
-
-            // Set handle color.
-            Handles.color = handleColor;
-
-            // Get handle size.
-            var movementHandleSize = HandleUtility.GetHandleSize(nodePosition);
-            var sphereSize = movementHandleSize * handleSize;
-
-            // Draw handle.
-            var newPos = Handles.FreeMoveHandle(
-                nodePosition,
-                Quaternion.identity,
-                sphereSize,
-                Vector3.zero,
-                capFunction);
-            return newPos;
         }
 
         #endregion

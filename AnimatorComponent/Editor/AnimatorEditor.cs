@@ -282,10 +282,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUILayout.Space();
 
             DrawPositionSpeedSlider();
-
-            EditorGUIUtility.labelWidth = 208;
-            DrawRotationSpeedField();
-            EditorGUIUtility.labelWidth = 0;
+            DrawRotationSpeedSlider();
 
             EditorGUILayout.Space();
 
@@ -517,9 +514,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawForwardPointOffsetSlider() {
             Script.SettingsAsset.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
-                    "Forward Point Offset",
-                    "Distance from animated object to the point used as " +
-                    "a look at target in Forward rotation mode."),
+                    "Forward Point",
+                    "Distance from animated object to point used as " +
+                    "target in Forward rotation mode."),
                 Script.SettingsAsset.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 // todo add setting
@@ -636,7 +633,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawPositionSpeedSlider() {
             Script.SettingsAsset.PositionLerpSpeed = EditorGUILayout.Slider(
                 new GUIContent(
-                    "Position Lerp Speed",
+                    "Position Lerp",
                     "Controls how much time it'll take the " +
                     "animated object to reach position that it should be " +
                     "at the current animation time. " +
@@ -762,17 +759,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void DrawRotationSpeedField() {
-            SettingsSerializedObject.Update();
-
-            EditorGUILayout.PropertyField(
-                rotationSlerpSpeed,
-                new GUIContent(
-                    "Rotation Slerp Speed",
-                    "Controls how much time it'll take the " +
-                    "animated object to finish rotation towards followed target."));
-
-            SettingsSerializedObject.ApplyModifiedProperties();
+        private void DrawRotationSpeedSlider() {
+            Script.SettingsAsset.RotationSlerpSpeed =
+                EditorGUILayout.Slider(
+                    new GUIContent(
+                        "Rotation Slerp",
+                        "Controls how much time it'll take the " +
+                        "animated object to finish rotation towards followed target."),
+                    Script.SettingsAsset.RotationSlerpSpeed,
+                    0,
+                    // todo create setting for that
+                    999);
         }
 
         private void DrawSceneToolShortcutsInfoLabel() {

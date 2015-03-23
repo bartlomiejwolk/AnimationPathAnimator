@@ -49,10 +49,142 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private SerializedProperty skin;
         private SerializedProperty subscribedToEvents;
         private SerializedProperty targetGO;
+        private SerializedProperty autoPlayDelay;
 
         #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
+        private void OnDisable() {
+            // Disable Unity scene tool.
+            SceneTool.RestoreTool();
+        }
+        private void OnSceneGUI() {
+            // Return is required assets are not referenced.
+            if (!RequiredAssetsLoaded()) return;
+            // Return if path asset is not referenced.
+            if (Script.PathData == null) return;
+            // Return if serialized properties are not initialized.
+            if (!SerializedPropertiesInitialized) return;
+
+            HandleAnimatorEventsSubscription();
+
+            // Disable interaction with background scene elements.
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
+                    FocusType.Passive));
+
+            HandleShortcuts();
+            HandleDrawingEaseHandles();
+            HandleDrawingTiltingHandles();
+            HandleDrawingEaseLabel();
+            HandleDrawingTiltingLabels();
+            HandleDrawingUpdateAllModeLabel();
+            HandleDrawingPositionHandles();
+            HandleDrawingRotationHandle();
+            HandleDrawingAddButtons();
+            HandleDrawingRemoveButtons();
+
+            // Repaint inspector if any key was pressed.
+            // Inspector needs to be redrawn after option is changed
+            // with keyboard shortcut.
+            if (Event.current.type == EventType.keyUp) {
+                Repaint();
+            }
+        }
+
+        #region ENABLE
+        private static void FocusOnSceneView() {
+            if (SceneView.sceneViews.Count > 0) {
+                var sceneView = (SceneView)SceneView.sceneViews[0];
+                sceneView.Focus();
+            }
+        }
+
+        /// <summary>
+        /// Copies gizmo icons from component Resource folder to Assets/Gizmos/ATP.
+        /// </summary>
+        private void CopyIconsToGizmosFolder() {
+            // Path to Unity Gizmos folder.
+            var gizmosDir = Application.dataPath + "/Gizmos";
+
+            // Create Asset/Gizmos folder if not exists.
+            if (!Directory.Exists(gizmosDir)) {
+                Directory.CreateDirectory(gizmosDir);
+            }
+
+            // Create Asset/Gizmos/ATP folder if not exists.
+            if (!Directory.Exists(gizmosDir + "/ATP")) {
+                Directory.CreateDirectory(gizmosDir + "/ATP");
+            }
+
+            // Check if settings asset has icons specified.
+            if (Script.SettingsAsset.GizmoIcons == null) return;
+
+            // For each icon..
+            foreach (var icon in Script.SettingsAsset.GizmoIcons) {
+                // Get icon path.
+                var iconPath = AssetDatabase.GetAssetPath(icon);
+
+                // Copy icon to Gizmos folder.
+                AssetDatabase.CopyAsset(iconPath, "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath));
+            }
+        }
+
+        private void InitializeSerializedProperties() {
+            rotationSlerpSpeed =
+                SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
+            animatedGO = serializedObject.FindProperty("animatedGO");
+            targetGO = serializedObject.FindProperty("targetGO");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+            pathData = serializedObject.FindProperty("pathData");
+            enableControlsInPlayMode =
+                SettingsSerializedObject.FindProperty(
+                    "enableControlsInPlayMode");
+            skin = serializedObject.FindProperty("skin");
+            settings = serializedObject.FindProperty("settingsAsset");
+            gizmoCurveColor =
+                SettingsSerializedObject.FindProperty("gizmoCurveColor");
+            rotationCurveColor =
+                SettingsSerializedObject.FindProperty("rotationCurveColor");
+            shortJumpValue =
+                SettingsSerializedObject.FindProperty("shortJumpValue");
+            longJumpValue =
+                SettingsSerializedObject.FindProperty("longJumpValue");
+            subscribedToEvents =
+                serializedObject.FindProperty("subscribedToEvents");
+            animationTime =
+                serializedObject.FindProperty("animationTime");
+            positionHandle =
+                SettingsSerializedObject.FindProperty("positionHandle");
+            autoPlayDelay =
+                SettingsSerializedObject.FindProperty("autoPlayDelay");
+
+            SerializedPropertiesInitialized = true;
+        }
+
+        private void OnEnable() {
+            // Get target script reference.
+            Script = (Animator) target;
+
+            // Return is required assets are not referenced.
+            if (!RequiredAssetsLoaded()) return;
+
+            // Initialize serialized object for settings asset.
+            SettingsSerializedObject = new SerializedObject(
+                Script.SettingsAsset);
+
+            InitializeSerializedProperties();
+            CopyIconsToGizmosFolder();
+            SceneTool.RememberCurrentTool();
+            FocusOnSceneView();
+
+            // Update animated GO.
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandleUpdateAnimGOInSceneView",
+                null);
+        }
+        #endregion
 
         #region INSPECTOR
         public override void OnInspectorGUI() {
@@ -123,12 +255,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             GUILayout.Label("Player", EditorStyles.boldLabel);
 
             DrawAnimationTimeValue();
-
-            DrawAutoPlayControl();
-            DrawEnableControlsInPlayModeToggle();
-
             DrawPlayerControls();
-
             DrawShortcutsInfoLabel();
 
             EditorGUILayout.Space();
@@ -145,17 +272,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            DrawForwardPointOffsetSlider();
+            DrawAutoPlayControl();
+            DrawAutoPlayDelayField();
+            DrawEnableControlsInPlayModeToggle();
 
             EditorGUILayout.Space();
 
             DrawPositionSpeedSlider();
 
             EditorGUIUtility.labelWidth = 208;
-
             DrawRotationSpeedField();
-
             EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.Space();
+
+            DrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 
@@ -168,7 +299,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
         }
-
         /// <summary>
         /// Defines what to do when undo event is performed.
         /// </summary>
@@ -192,6 +322,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Validate inspector settings that cannot be validated in OnValidate().
         /// </summary>
+        // todo this can be done in controls drawing methods.
         private void ValidateInspectorSettings() {
             if (Script.SettingsAsset == null) return;
 
@@ -246,6 +377,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region CONTROLS
+        private void DrawAutoPlayDelayField() {
+            SettingsSerializedObject.Update();
+
+            EditorGUILayout.PropertyField(
+                autoPlayDelay,
+                new GUIContent(
+                    "Auto Play Delay",
+                    ""));
+
+            // Limit value to greater than zero.
+            if (autoPlayDelay.floatValue < 0) autoPlayDelay.floatValue = 0;
+
+            SettingsSerializedObject.ApplyModifiedProperties();
+        }
+
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
                 DrawShortJumpValueField();
@@ -725,67 +871,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
         #endregion
 
-        private void OnDisable() {
-            // Disable Unity scene tool.
-            SceneTool.RestoreTool();
-        }
-
-        private void OnEnable() {
-            // Get target script reference.
-            Script = (Animator) target;
-
-            // Return is required assets are not referenced.
-            if (!RequiredAssetsLoaded()) return;
-
-            // Initialize serialized object for settings asset.
-            SettingsSerializedObject = new SerializedObject(
-                Script.SettingsAsset);
-
-            InitializeSerializedProperties();
-            CopyIconsToGizmosFolder();
-            SceneTool.RememberCurrentTool();
-            FocusOnSceneView();
-
-            // Update animated GO.
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandleUpdateAnimGOInSceneView",
-                null);
-        }
-
-        private void OnSceneGUI() {
-            // Return is required assets are not referenced.
-            if (!RequiredAssetsLoaded()) return;
-            // Return if path asset is not referenced.
-            if (Script.PathData == null) return;
-            // Return if serialized properties are not initialized.
-            if (!SerializedPropertiesInitialized) return;
-
-            HandleAnimatorEventsSubscription();
-
-            // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
-                    FocusType.Passive));
-
-            HandleShortcuts();
-            HandleDrawingEaseHandles();
-            HandleDrawingTiltingHandles();
-            HandleDrawingEaseLabel();
-            HandleDrawingTiltingLabels();
-            HandleDrawingUpdateAllModeLabel();
-            HandleDrawingPositionHandles();
-            HandleDrawingRotationHandle();
-            HandleDrawingAddButtons();
-            HandleDrawingRemoveButtons();
-
-            // Repaint inspector if any key was pressed.
-            // Inspector needs to be redrawn after option is changed
-            // with keyboard shortcut.
-            if (Event.current.type == EventType.keyUp) {
-                Repaint();
-            }
-        }
-
         #endregion UNITY MESSAGES
         #region DRAWING HANDLERS
         /// <summary>
@@ -1257,13 +1342,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
-        private static void FocusOnSceneView() {
-            if (SceneView.sceneViews.Count > 0) {
-                var sceneView = (SceneView)SceneView.sceneViews[0];
-                sceneView.Focus();
-            }
-        }
-
         /// <summary>
         /// Add new path node between two others, exactly in the middle.
         /// </summary>
@@ -1317,37 +1395,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             return rotationValue;
         }
-
-        /// <summary>
-        /// Copies gizmo icons from component Resource folder to Assets/Gizmos/ATP.
-        /// </summary>
-        private void CopyIconsToGizmosFolder() {
-            // Path to Unity Gizmos folder.
-            var gizmosDir = Application.dataPath + "/Gizmos";
-
-            // Create Asset/Gizmos folder if not exists.
-            if (!Directory.Exists(gizmosDir)) {
-                Directory.CreateDirectory(gizmosDir);
-            }
-
-            // Create Asset/Gizmos/ATP folder if not exists.
-            if (!Directory.Exists(gizmosDir + "/ATP")) {
-                Directory.CreateDirectory(gizmosDir + "/ATP");
-            }
-
-            // Check if settings asset has icons specified.
-            if (Script.SettingsAsset.GizmoIcons == null) return;
-
-            // For each icon..
-            foreach (var icon in Script.SettingsAsset.GizmoIcons) {
-                // Get icon path.
-                var iconPath = AssetDatabase.GetAssetPath(icon);
-
-                // Copy icon to Gizmos folder.
-                AssetDatabase.CopyAsset(iconPath, "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath));
-            }
-        }
-
         /// <summary>
         /// Adjust ease values to path length. Making path longer will decrease ease values
         /// to  maintain constant speed.
@@ -1364,37 +1411,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Multiply each single ease value.
             Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
-        private void InitializeSerializedProperties() {
-            rotationSlerpSpeed =
-                SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
-            animatedGO = serializedObject.FindProperty("animatedGO");
-            targetGO = serializedObject.FindProperty("targetGO");
-            advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
-            pathData = serializedObject.FindProperty("pathData");
-            enableControlsInPlayMode =
-                SettingsSerializedObject.FindProperty(
-                    "enableControlsInPlayMode");
-            skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("settingsAsset");
-            gizmoCurveColor =
-                SettingsSerializedObject.FindProperty("gizmoCurveColor");
-            rotationCurveColor =
-                SettingsSerializedObject.FindProperty("rotationCurveColor");
-            shortJumpValue =
-                SettingsSerializedObject.FindProperty("shortJumpValue");
-            longJumpValue =
-                SettingsSerializedObject.FindProperty("longJumpValue");
-            subscribedToEvents =
-                serializedObject.FindProperty("subscribedToEvents");
-            animationTime =
-                serializedObject.FindProperty("animationTime");
-            positionHandle =
-                SettingsSerializedObject.FindProperty("positionHandle");
-
-            SerializedPropertiesInitialized = true;
-        }
-
         private bool RequiredAssetsLoaded() {
             var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
                 Script,

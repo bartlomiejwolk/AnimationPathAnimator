@@ -71,6 +71,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -125,8 +126,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return isRunning; }
             private set {
                 isRunning = value;
-
-                Debug.Log((value ? "Enable" : "Disable") + " Animator");
             }
         }
 
@@ -145,8 +144,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return pause; }
             set {
                 pause = value;
-
-                Debug.Log((pause ? "Pause" : "Play"));
 
                 // On unpause..
                 if (!value) {
@@ -1092,8 +1089,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimationEnded -= APAnimator_AnimationEnded;
 
             SubscribedToEvents = false;
-            
-            Debug.Log("Unsunbscribed from events");
         }
 
         #endregion METHODS

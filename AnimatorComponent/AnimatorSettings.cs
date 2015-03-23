@@ -253,9 +253,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
 
+        /// <summary>
+        /// If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        [SerializeField]
+        private float autoPlayDelay;
         #endregion
 
         #region ANIMATOR PROPERTIES
+        /// <summary>
+        /// If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        public float AutoPlayDelay {
+            get { return autoPlayDelay; }
+            set { autoPlayDelay = value; }
+        }
+
 
         public bool AutoPlay {
             get { return autoPlay; }
@@ -611,7 +624,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return tiltingValueMultiplierDenominator; }
             set { tiltingValueMultiplierDenominator = value; }
         }
-
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

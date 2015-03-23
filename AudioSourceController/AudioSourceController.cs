@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using ATP.AnimationPathTools.AnimatorComponent;
 
 namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
 
@@ -8,13 +9,17 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
     /// and with keyboard shortcuts.
     /// </summary>
     // todo add menu option to create component
+    [RequireComponent(typeof(AnimatorComponent.Animator))]
+    [RequireComponent(typeof(AudioSource))]
     public sealed class AudioSourceController : MonoBehaviour {
 
         [SerializeField]
         private AudioSource audioSource;
 
         [SerializeField]
-        private Animator animator;
+        private AnimatorComponent.Animator animator;
+
+        private Dictionary<int, float> audioNodeTimestamps; 
 
         /// <summary>
         /// Reference to audio source component.
@@ -27,18 +32,43 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
         /// <summary>
         /// Reference to animator component.
         /// </summary>
-        public Animator Animator {
+        public AnimatorComponent.Animator Animator {
             get { return animator; }
             set { animator = value; }
         }
 
+        /// <summary>
+        /// Collection of node indexes and corresponding audio timestamps.
+        /// </summary>
+        public Dictionary<int, float> AudioNodeTimestamps {
+            get { return audioNodeTimestamps; }
+            set { audioNodeTimestamps = value; }
+        }
+
         private void Reset() {
             AudioSource = GetComponent<AudioSource>();
-            Animator = GetComponent<Animator>();
+            Animator = GetComponent<AnimatorComponent.Animator>();
+
+            Animator.NodeReached += Animator_NodeReached;
+        }
+
+        void Animator_NodeReached(object sender, NodeReachedEventArgs e) {
+            // If audio is playing, record timestamps.
+            if (AudioSource.isPlaying) {
+                AudioNodeTimestamps[e.NodeIndex] = e.Timestamp;
+            }
+            // Play from recorded time.
+            else {
+                AudioSource.PlayScheduled(AudioNodeTimestamps[e.NodeIndex]);
+            }
         }
 
         private void Update() {
             HandleSpaceShortcut();
+            RecordTimestamps();
+        }
+
+        private void RecordTimestamps() {
         }
 
         /// <summary>

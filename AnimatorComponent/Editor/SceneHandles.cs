@@ -220,12 +220,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawArcTools(Vector3[] nodePositions, float[] curveValues, float arcValueMultiplier, float arcHandleRadius, float initialArcValue, float scaleHandleSize, Color color, Action<int, float> callback) {
+        // todo docs
+        public static void DrawArcTools(Vector3[] nodePositions, float[] curveValues, bool allowNegative, float arcValueMultiplier, float arcHandleRadius, float initialArcValue, float scaleHandleSize, Color color, Action<int, float> callback) {
             // For each path node..
             for (var i = 0; i < nodePositions.Length; i++) {
                 var iTemp = i;
                 DrawArcTool(
                     curveValues[i],
+                    allowNegative,
                     nodePositions[i],
                     arcValueMultiplier,
                     arcHandleRadius,
@@ -259,20 +261,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Draw arc handle.
         /// </summary>
-        /// <param name="arcValue">Value passed to the tool.</param>
+        /// <param name="value"></param>
+        /// <param name="allowNegative"></param>
         /// <param name="position">Arc position.</param>
+        /// <param name="arcValueMultiplier"></param>
+        /// <param name="arcHandleRadius">Radius of the arc.</param>
         /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
         /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        /// <param name="arcHandleRadius">Radius of the arc.</param>
-        private static void DrawArcTool(
-            float value,
-            Vector3 position,
-            float arcValueMultiplier,
-            float arcHandleRadius,
-            float scaleHandleSize,
-            Color handleColor,
-            Action<float> callback) {
+        /// <param name="arcValue">Value passed to the tool.</param>
+        private static void DrawArcTool(float value, bool allowNegative, Vector3 position, float arcValueMultiplier, float arcHandleRadius, float scaleHandleSize, Color handleColor, Action<float> callback) {
 
             // Calculate value to display.
             var arcValue = value * arcValueMultiplier;
@@ -290,12 +288,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             var newArcValue = DrawArcScaleHandle(
                 arcValue,
+                //allowNegative,
                 position,
                 scaleHandleSize,
                 arcRadius,
                 handleColor);
 
-            SaveArcValue(arcValue, newArcValue, arcValueMultiplier, callback);
+            SaveArcValue(arcValue, newArcValue, allowNegative, arcValueMultiplier, callback);
         }
 
         /// <summary>
@@ -303,9 +302,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="arcValue"></param>
         /// <param name="newArcValue"></param>
+        /// <param name="allowNegative">If negative values can be saved to the animation curve.</param>
         /// <param name="arcValueMultiplier"></param>
         /// <param name="callback">Pass updated value here.</param>
-        private static void SaveArcValue(float arcValue, float newArcValue, float arcValueMultiplier, Action<float> callback) {
+        private static void SaveArcValue(float arcValue, float newArcValue, bool allowNegative, float arcValueMultiplier, Action<float> callback) {
 
             // Limit old value to 360.
             var modArcValue = arcValue % 360;
@@ -322,6 +322,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Convert value in degrees to back curve value.
             var curveValue = resultValue / arcValueMultiplier;
 
+            // Handle allowNegative parameter.
+            if (!allowNegative && curveValue < 0) curveValue = 0;
+
             // Save value to animation curve.
             callback(curveValue);
         }
@@ -330,6 +333,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Draw handle for changing tilting value.
         /// </summary>
         /// <param name="value">Handle value.</param>
+        /// <param name="allowNegative">If handle can return negative values.</param>
         /// <param name="position">Position to display handle.</param>
         /// <param name="scaleHandleSize">Handle size.</param>
         /// <param name="arcRadius">Position offset.</param>
@@ -337,10 +341,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns></returns>
         private static float DrawArcScaleHandle(
             float value,
-            Vector3 position,
-            float scaleHandleSize,
-            float arcRadius,
-            Color handleColor) {
+            Vector3 position, float scaleHandleSize, float arcRadius, Color handleColor) {
 
             Handles.color = handleColor;
 

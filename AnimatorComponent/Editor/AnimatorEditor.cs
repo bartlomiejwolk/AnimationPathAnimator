@@ -767,9 +767,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         "Controls how much time it'll take the " +
                         "animated object to finish rotation towards followed target."),
                     Script.SettingsAsset.RotationSlerpSpeed,
-                    0,
-                    // todo create setting for that
-                    999);
+                    Script.SettingsAsset.MinRotationSlerpSpeed,
+                    Script.SettingsAsset.MaxRotationSlerpSpeed);
         }
 
         private void DrawSceneToolShortcutsInfoLabel() {

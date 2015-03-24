@@ -903,6 +903,27 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
+        /// <summary>
+        /// Returns global rotation path node positions.
+        /// </summary>
+        /// <returns></returns>
+        private Vector3[] GetGlobalRotationPointPositions() {
+            var localRotPointPositions =
+                pathData.GetRotationPointPositions();
+
+            var globalRotPointPositions =
+                new Vector3[localRotPointPositions.Length];
+
+            // For each local point..
+            for (var i = 0; i < localRotPointPositions.Length; i++) {
+                // Convert to global.
+                globalRotPointPositions[i] =
+                    transform.TransformPoint(localRotPointPositions[i]);
+            }
+
+            return globalRotPointPositions;
+        }
+
         private void FireJumpedToNodeEvent() {
             // Create event args.
             var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
@@ -1191,28 +1212,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 SettingsAsset.GizmosSubfolder + SettingsAsset.TargetGizmoIcon,
                 false);
         }
-
-        /// <summary>
-        /// Returns global rotation path node positions.
-        /// </summary>
-        /// <returns></returns>
-        private Vector3[] GetGlobalRotationPointPositions() {
-            var localRotPointPositions =
-                pathData.GetRotationPointPositions();
-
-            var globalRotPointPositions =
-                new Vector3[localRotPointPositions.Length];
-
-            // For each local point..
-            for (var i = 0; i < localRotPointPositions.Length; i++) {
-                // Convert to global.
-                globalRotPointPositions[i] =
-                    transform.TransformPoint(localRotPointPositions[i]);
-            }
-
-            return globalRotPointPositions;
-        }
-
         /// <summary>
         /// Handle drawing rotation point gizmo for current animation time.
         /// It'll be drawn only when animation time is the same as a path node.

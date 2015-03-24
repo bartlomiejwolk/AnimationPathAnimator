@@ -45,9 +45,13 @@ MonoBehaviour:
   handleMode: 2
   animationSpeedDenominator: .0500000007
   positionHandle: 0
-  positionLerpSpeed: 1
+  positionLerpSpeed: .00999999978
   rotationMode: 1
-  rotationSlerpSpeed: 0
+  rotationSlerpSpeed: .100000001
+  maxRotationSlerpSpeed: 20
+  minRotationSlerpSpeed: .100000001
+  minPositionLerpSpeed: .00999999978
+  maxPositionLerpSpeed: 1
   tangentMode: 0
   updateAllMode: 0
   wrapMode: 1

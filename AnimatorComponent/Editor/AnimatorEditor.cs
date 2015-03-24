@@ -639,8 +639,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "at the current animation time. " +
                     "1 means no delay."),
                 Script.SettingsAsset.PositionLerpSpeed,
-                0,
-                1);
+                Script.SettingsAsset.MinPositionLerpSpeed,
+                Script.SettingsAsset.MaxPositionLerpSpeed);
         }
 
         private void DrawResetEaseButton() {

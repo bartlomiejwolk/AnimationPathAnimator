@@ -579,7 +579,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawPlayerControls() {
             // Play/Pause button text.
             string playPauseBtnText;
-            if (!Script.EaseCoroutineRunning || (Script.EaseCoroutineRunning && Script.Pause)) {
+            if (!Script.IsPlaying) {
                 playPauseBtnText = "Play";
             }
             else {
@@ -606,7 +606,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Stop",
                     ""))) {
 
-                Script.StopAnimation();
+                Script.IsPlaying = false;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,

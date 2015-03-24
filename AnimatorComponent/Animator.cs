@@ -54,7 +54,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private bool countdownCoroutineIsRunning;
 
-        private bool easeCoroutineRunning;
+        //private bool easeCoroutineRunning;
 
         private bool isPlaying;
 
@@ -132,12 +132,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// It's set to true when <c>EaseTime</c> coroutine is running.
         /// </summary>
         // todo should be private
-        public bool EaseCoroutineRunning {
-            get { return easeCoroutineRunning; }
-            private set {
-                easeCoroutineRunning = value;
-            }
-        }
+        //public bool EaseCoroutineRunning {
+        //    get { return easeCoroutineRunning; }
+        //    private set {
+        //        easeCoroutineRunning = value;
+        //    }
+        //}
 
         /// <summary>
         /// Reference to asset file holding path data.
@@ -245,9 +245,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void Update() {
+            UpdateAnimationTime();
             HandleUpdatingAnimGOInPlayMode();
             HandleShortcuts();
         }
+
+        private void UpdateAnimationTime() {
+            if (!Application.isPlaying) return;
+            // Return if not playing.
+            if (!IsPlaying) return;
+
+            // Get ease value.
+            var timeStep =
+                PathData.GetEaseValueAtTime(AnimationTime);
+
+            // If animation is set to play backward..
+            if (Reverse) {
+                // Decrease animation time.
+                AnimationTime -= timeStep * Time.deltaTime;
+            }
+            else {
+                // Increase animation time.
+                AnimationTime += timeStep * Time.deltaTime;
+            }
+        }
+
         #endregion UNITY MESSAGES
         #region EVENT INVOCATORS
         private void OnJumpedToNode(NodeReachedEventArgs e) {
@@ -383,21 +405,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void StartAnimation() {
             if (!PathDataAssetAssigned()) return;
 
+            IsPlaying = true;
+            AnimGOUpdateEnabled = true;
+
             HandleFireNodeReachedEventForFirstNode();
-            StartCoroutine("EaseTime");
         }
 
         /// <summary>
         /// Stops animation.
         /// </summary>
-        public void StopAnimation() {
-            StopCoroutine("EaseTime");
+        //public void StopAnimation() {
+        //    StopCoroutine("EaseTime");
 
-            EaseCoroutineRunning = false;
-            Pause = false;
-            IsPlaying = false;
-            AnimationTime = 0;
-        }
+        //    EaseCoroutineRunning = false;
+        //    Pause = false;
+        //    IsPlaying = false;
+        //    AnimationTime = 0;
+        //}
 
         /// <summary>
         /// Unpauses animation.
@@ -639,24 +663,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns></returns>
         private IEnumerator EaseTime() {
-            EaseCoroutineRunning = true;
-            Pause = false;
-            IsPlaying = true;
-            AnimGOUpdateEnabled = true;
+            //EaseCoroutineRunning = true;
+            //Pause = false;
+            //IsPlaying = true;
+            //AnimGOUpdateEnabled = true;
 
             while (true) {
                 // If animation is not paused..
                 if (!Pause) {
-                    HandleFireOnAnimationStartedEvent();
+                    //HandleFireOnAnimationStartedEvent();
 
-                    UpdateAnimationTime();
+                    //UpdateAnimationTime();
 
-                    HandleClampWrapMode();
-                    HandleLoopWrapMode();
-                    HandlePingPongWrapMode();
+                    //HandleClampWrapMode();
+                    //HandleLoopWrapMode();
+                    //HandlePingPongWrapMode();
                 }
 
-                if (!EaseCoroutineRunning) break;
+                //if (!EaseCoroutineRunning) break;
 
                 yield return null;
             }
@@ -666,21 +690,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Update animation time with values taken from ease curve.
         /// </summary>
         /// <remarks>This is used to update animation time when animator is running.</remarks>
-        private void UpdateAnimationTime() {
-            // Get ease value.
-            var timeStep =
-                PathData.GetEaseValueAtTime(AnimationTime);
+        //private void UpdateAnimationTime() {
+        //    // Get ease value.
+        //    var timeStep =
+        //        PathData.GetEaseValueAtTime(AnimationTime);
 
-            // If animation is set to play backward..
-            if (Reverse) {
-                // Decrease animation time.
-                AnimationTime -= timeStep * Time.deltaTime;
-            }
-            else {
-                // Increase animation time.
-                AnimationTime += timeStep * Time.deltaTime;
-            }
-        }
+        //    // If animation is set to play backward..
+        //    if (Reverse) {
+        //        // Decrease animation time.
+        //        AnimationTime -= timeStep * Time.deltaTime;
+        //    }
+        //    else {
+        //        // Increase animation time.
+        //        AnimationTime += timeStep * Time.deltaTime;
+        //    }
+        //}
 
         #endregion
 
@@ -703,7 +727,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
-                EaseCoroutineRunning = false;
+                //EaseCoroutineRunning = false;
                 IsPlaying = false;
             }
         }
@@ -775,24 +799,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (EaseCoroutineRunning && !Pause) {
+            if (!Pause) {
                 // Pause animation.
                 Pause = true;
                 IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (EaseCoroutineRunning && Pause) {
+            else if (Pause) {
                 // Unpause animation.
                 Pause = false;
                 IsPlaying = true;
             }
             // Animation ended.
-            else if (!EaseCoroutineRunning && AnimationTime >= 1) {
+            else if (AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
             }
             // Disable play/pause while for animation start being invoked.
-            else if (!EaseCoroutineRunning && IsInvoking("StartAnimation")) {
+            else if (IsInvoking("StartAnimation")) {
                 // Do nothing.
             }
             else {

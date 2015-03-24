@@ -67,14 +67,12 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
             if (!AudioNodeTimestamps.ContainsKey(e.NodeIndex)) return;
 
             AudioSource.time = AudioNodeTimestamps[e.NodeIndex];
-            Debug.Log("play from timestamp");
         }
 
         void Animator_NodeReached(object sender, NodeReachedEventArgs e) {
             // If audio is playing, record timestamps.
             if (AudioSource.isPlaying) {
                 AudioNodeTimestamps[e.NodeIndex] = AudioSource.time;
-                Debug.Log("audio timestamp saved!");
             }
         }
 

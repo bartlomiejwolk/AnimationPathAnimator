@@ -253,7 +253,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void OnJumpedToNode(NodeReachedEventArgs e) {
             var handler = JumpedToNode;
             if (handler != null) handler(this, e);
-            Debug.Log("JumpedToNode event called");
         }
 
 
@@ -268,7 +267,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnNodeReached(NodeReachedEventArgs eventArgs) {
-            Debug.Log("OnNodeReached");
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }

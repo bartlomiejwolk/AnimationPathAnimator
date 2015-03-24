@@ -47,7 +47,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private bool countdownCoroutineIsRunning;
 
-        private bool isRunning;
+        private bool easeCoroutineRunning;
+
+        private bool isPlaying;
 
         [SerializeField]
         private PathData pathData;
@@ -92,7 +94,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 animationTime = value;
 
                 // In play mode, while animation is enabled and not paused..
-                if (Application.isPlaying && IsRunning && !Pause) {
+                if (Application.isPlaying && EaseCoroutineRunning && !Pause) {
                     // Do nothing.
                 }
                 else {
@@ -122,10 +124,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// It's set to true when <c>EaseTime</c> coroutine is running.
         /// </summary>
-        public bool IsRunning {
-            get { return isRunning; }
+        // todo should be private
+        public bool EaseCoroutineRunning {
+            get { return easeCoroutineRunning; }
             private set {
-                isRunning = value;
+                easeCoroutineRunning = value;
             }
         }
 
@@ -185,6 +188,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private bool SubscribedToEvents {
             set { subscribedToEvents = value; }
+        }
+
+        /// <summary>
+        /// If animation is playing. It's true only when <c>EaseCoroutineRunning</c> is true and <c>Pause</c> is false.
+        /// </summary>
+        public bool IsPlaying {
+            get { return isPlaying; }
+            set { isPlaying = value; }
         }
 
         #endregion PROPERTIES
@@ -371,8 +382,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void StopAnimation() {
             StopCoroutine("EaseTime");
 
-            IsRunning = false;
+            EaseCoroutineRunning = false;
             Pause = false;
+            IsPlaying = false;
             AnimationTime = 0;
         }
 
@@ -616,8 +628,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns></returns>
         private IEnumerator EaseTime() {
-            IsRunning = true;
+            EaseCoroutineRunning = true;
             Pause = false;
+            IsPlaying = true;
             AnimGOUpdateEnabled = true;
 
             while (true) {
@@ -632,7 +645,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     HandlePingPongWrapMode();
                 }
 
-                if (!IsRunning) break;
+                if (!EaseCoroutineRunning) break;
 
                 yield return null;
             }
@@ -679,7 +692,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
-                IsRunning = false;
+                EaseCoroutineRunning = false;
+                IsPlaying = false;
             }
         }
         /// <summary>
@@ -750,22 +764,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (IsRunning && !Pause) {
+            if (EaseCoroutineRunning && !Pause) {
                 // Pause animation.
                 Pause = true;
+                IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (IsRunning && Pause) {
+            else if (EaseCoroutineRunning && Pause) {
                 // Unpause animation.
                 Pause = false;
+                IsPlaying = true;
             }
             // Animation ended.
-            else if (!IsRunning && AnimationTime >= 1) {
+            else if (!EaseCoroutineRunning && AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
             }
             // Disable play/pause while for animation start being invoked.
-            else if (!IsRunning && IsInvoking("StartAnimation")) {
+            else if (!EaseCoroutineRunning && IsInvoking("StartAnimation")) {
                 // Do nothing.
             }
             else {

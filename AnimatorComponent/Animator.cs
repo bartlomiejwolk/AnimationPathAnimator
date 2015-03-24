@@ -870,13 +870,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Jump to next node.
             if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
                 animationTime = GetNearestForwardNodeTimestamp();
+
+                FireJumpedToNodeEvent();
             }
 
             // Jump to previous node.
             if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
                 animationTime = GetNearestBackwardNodeTimestamp();
 
-                FireGoToPreviousNodeEvent();
+                FireJumpedToNodeEvent();
             }
 
             // Jump to beginning.
@@ -885,6 +887,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Input.GetKey(SettingsAsset.PlayModeModKey)) {
 
                 AnimationTime = 0;
+
+                FireJumpedToNodeEvent();
             }
         }
 
@@ -901,7 +905,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
-        private void FireGoToPreviousNodeEvent() {
+        private void FireJumpedToNodeEvent() {
             // Create event args.
             var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
                 animationTime);

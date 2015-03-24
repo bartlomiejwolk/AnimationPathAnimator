@@ -1601,19 +1601,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 animationTime.floatValue -= Script.SettingsAsset.LongJumpValue;
             }
 
+            serializedObject.ApplyModifiedProperties();
+
             // Jump to next node.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToNextNodeKey) {
+
+                serializedObject.Update();
 
                 animationTime.floatValue =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestForwardNodeTimestamp",
                         null);
+
+                serializedObject.ApplyModifiedProperties();
+
+                // Call JumpedToNode event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireJumpedToNodeEvent",
+                    null);
             }
 
-            serializedObject.ApplyModifiedProperties();
 
             // Jump to previous node.
             if (Event.current.type == EventType.keyDown
@@ -1633,11 +1644,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "FireGoToPreviousNodeEvent",
+                    "FireJumpedToNodeEvent",
                     null);
             }
-
-            serializedObject.Update();
 
             // Jump to start.
             if (Event.current.type == EventType.keyDown
@@ -1647,7 +1656,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
+                serializedObject.Update();
+
                 animationTime.floatValue = 0;
+
+                serializedObject.ApplyModifiedProperties();
+
+                // Call JumpedToNode event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireJumpedToNodeEvent",
+                    null);
             }
 
             // Jump to end.
@@ -1658,7 +1677,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
+                serializedObject.Update();
+
                 animationTime.floatValue = 1;
+
+                serializedObject.ApplyModifiedProperties();
+
+                // Call JumpedToNode event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireJumpedToNodeEvent",
+                    null);
             }
 
             // Play/pause animation.
@@ -1669,7 +1698,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 HandlePlayPauseButton();
             }
 
-            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion

@@ -1631,13 +1631,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 serializedObject.ApplyModifiedProperties();
 
                 // Call GoToPreviousNode event.
-                var nodeIndex = Script.PathData.GetAnimObjNodeIndexAtTime(
-                        animationTime.floatValue);
-                var args = new NodeReachedEventArgs(nodeIndex, animationTime.floatValue);
                 Utilities.InvokeMethodWithReflection(
                     Script,
-                    "OnGoToPreviousNode",
-                    new object[] { args });
+                    "FireGoToPreviousNodeEvent",
+                    null);
             }
 
             serializedObject.Update();

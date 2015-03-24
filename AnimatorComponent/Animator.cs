@@ -248,6 +248,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
         #endregion UNITY MESSAGES
 
+        private void FireGoToPreviousNodeEvent() {
+            // Create event args.
+            var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
+                animationTime);
+            var args = new NodeReachedEventArgs(nodeIndex, animationTime);
+
+            // Fire event.
+            OnGoToPreviousNode(args);
+        }
+
         #region EVENT INVOCATORS
         private void OnGoToPreviousNode(NodeReachedEventArgs e) {
             var handler = GoToPreviousNode;
@@ -845,6 +855,48 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region OTHER HANDLERS
         /// <summary>
+        /// Method responsible for detecting all shortcuts pressed in play mode.
+        /// </summary>
+        private void HandleShortcuts() {
+            if (!SettingsAsset.EnableControlsInPlayMode) return;
+
+            // Play/Pause.
+            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
+                HandlePlayPause();
+            }
+
+            // Long jump forward
+            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
+                animationTime += SettingsAsset.LongJumpValue;
+            }
+
+            // Long jump backward. 
+            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
+                animationTime -= SettingsAsset.LongJumpValue;
+            }
+
+            // Jump to next node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
+                animationTime = GetNearestForwardNodeTimestamp();
+            }
+
+            // Jump to previous node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
+                animationTime = GetNearestBackwardNodeTimestamp();
+
+                FireGoToPreviousNodeEvent();
+            }
+
+            // Jump to beginning.
+            if (Input.GetKeyDown(
+                SettingsAsset.JumpToPreviousNodeKey)
+                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
+
+                AnimationTime = 0;
+            }
+        }
+
+        /// <summary>
         /// Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
         private void HandleFireNodeReachedEventForFirstNode() {
@@ -906,53 +958,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             return true;
         }
-
-        /// <summary>
-        /// Method responsible for detecting all shortcuts pressed in play mode.
-        /// </summary>
-        private void HandleShortcuts() {
-            if (!SettingsAsset.EnableControlsInPlayMode) return;
-
-            // Play/Pause.
-            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
-                HandlePlayPause();
-            }
-
-            // Long jump forward
-            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                animationTime += SettingsAsset.LongJumpValue;
-            }
-
-            // Long jump backward. 
-            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                animationTime -= SettingsAsset.LongJumpValue;
-            }
-
-            // Jump to next node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
-                animationTime = GetNearestForwardNodeTimestamp();
-            }
-
-            // Jump to previous node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
-                animationTime = GetNearestBackwardNodeTimestamp();
-
-                var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
-                    animationTime);
-                var args = new NodeReachedEventArgs(nodeIndex, animationTime);
-                // Fire event.
-                OnGoToPreviousNode(args);
-            }
-
-            // Jump to beginning.
-            if (Input.GetKeyDown(
-                SettingsAsset.JumpToPreviousNodeKey)
-                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
-
-                AnimationTime = 0;
-            }
-        }
-
         /// <summary>
         /// Update <c>subscribedToEvents</c> flag.
         /// </summary>

@@ -22,6 +22,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private AnimationCurve[] curves;
 
+        private const float FloatPrecision = 0.0000001f;
+
         #endregion FIELDS
 
         #region PROPERTIES
@@ -471,6 +473,35 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             for (var i = 0; i < 3; i++) {
                 curves[i] = new AnimationCurve();
             }
+        }
+
+        /// <summary>
+        /// Returns node index at the specified timestamp.
+        /// </summary>
+        /// <param name="searchedTimestamps">Timestamp to search for.</param>
+        /// <returns>Node index.</returns>
+        public int GetNodeIndexAtTime(float searchedTimestamps) {
+            List<float> timestamps = new List<float>();
+            // For each key in a curve..
+            foreach (var key in curves[0].keys) {
+                // Remember timestamp.
+                timestamps.Add(key.time);
+            }
+
+            // For each timestamp in the path..
+            for (int i = 0; i < timestamps.Count; i++) {
+                // If is equal with arg.
+                if (Utilities.FloatsEqual(
+                    timestamps[i],
+                    searchedTimestamps,
+                    FloatPrecision)) {
+
+                    // Return node index.
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         #endregion PRIVATE METHODS

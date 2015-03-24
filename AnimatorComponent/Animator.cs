@@ -23,9 +23,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler AnimationStarted;
 
         /// <summary>
-        /// Event called when animated object goes through any node.
+        /// Event called when animated object passes a node.
+        /// It'll be called only when anim. go is before a node in one frame
+        /// and after in the next one.
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> NodeReached;
+
+        /// <summary>
+        /// Event called right after animation jump backward to the previous node.
+        /// </summary>
+        public event EventHandler<NodeReachedEventArgs> JumpedToNode;
 
         #endregion
 
@@ -47,7 +54,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private bool countdownCoroutineIsRunning;
 
-        private bool isRunning;
+        private bool easeCoroutineRunning;
+
+        private bool isPlaying;
 
         [SerializeField]
         private PathData pathData;
@@ -91,8 +100,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set {
                 animationTime = value;
 
-                // In play mode, while animation is enabled and not paused..
-                if (Application.isPlaying && IsRunning && !Pause) {
+                // In play mode, when animation is playing..
+                if (Application.isPlaying && IsPlaying) {
                     // Do nothing.
                 }
                 else {
@@ -122,10 +131,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// It's set to true when <c>EaseTime</c> coroutine is running.
         /// </summary>
-        public bool IsRunning {
-            get { return isRunning; }
+        // todo should be private
+        public bool EaseCoroutineRunning {
+            get { return easeCoroutineRunning; }
             private set {
-                isRunning = value;
+                easeCoroutineRunning = value;
             }
         }
 
@@ -187,6 +197,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { subscribedToEvents = value; }
         }
 
+        /// <summary>
+        /// If animation is playing. It's true only when <c>EaseCoroutineRunning</c> is true and <c>Pause</c> is false.
+        /// </summary>
+        public bool IsPlaying {
+            get { return isPlaying; }
+            set { isPlaying = value; }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -231,8 +249,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleShortcuts();
         }
         #endregion UNITY MESSAGES
-
         #region EVENT INVOCATORS
+        private void OnJumpedToNode(NodeReachedEventArgs e) {
+            var handler = JumpedToNode;
+            if (handler != null) handler(this, e);
+        }
+
 
         private void OnAnimationEnded() {
             var handler = AnimationEnded;
@@ -371,8 +393,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void StopAnimation() {
             StopCoroutine("EaseTime");
 
-            IsRunning = false;
+            EaseCoroutineRunning = false;
             Pause = false;
+            IsPlaying = false;
             AnimationTime = 0;
         }
 
@@ -616,8 +639,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns></returns>
         private IEnumerator EaseTime() {
-            IsRunning = true;
+            EaseCoroutineRunning = true;
             Pause = false;
+            IsPlaying = true;
             AnimGOUpdateEnabled = true;
 
             while (true) {
@@ -632,7 +656,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     HandlePingPongWrapMode();
                 }
 
-                if (!IsRunning) break;
+                if (!EaseCoroutineRunning) break;
 
                 yield return null;
             }
@@ -679,7 +703,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
-                IsRunning = false;
+                EaseCoroutineRunning = false;
+                IsPlaying = false;
             }
         }
         /// <summary>
@@ -750,19 +775,25 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (IsRunning && !Pause) {
+            if (EaseCoroutineRunning && !Pause) {
                 // Pause animation.
                 Pause = true;
+                IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (IsRunning && Pause) {
+            else if (EaseCoroutineRunning && Pause) {
                 // Unpause animation.
                 Pause = false;
+                IsPlaying = true;
             }
             // Animation ended.
-            else if (!IsRunning && AnimationTime >= 1) {
+            else if (!EaseCoroutineRunning && AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
+            }
+            // Disable play/pause while for animation start being invoked.
+            else if (!EaseCoroutineRunning && IsInvoking("StartAnimation")) {
+                // Do nothing.
             }
             else {
                 // Start animation.
@@ -814,6 +845,52 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region OTHER HANDLERS
         /// <summary>
+        /// Method responsible for detecting all shortcuts pressed in play mode.
+        /// </summary>
+        private void HandleShortcuts() {
+            if (!SettingsAsset.EnableControlsInPlayMode) return;
+
+            // Play/Pause.
+            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
+                HandlePlayPause();
+            }
+
+            // Long jump forward
+            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
+                AnimationTime += SettingsAsset.LongJumpValue;
+            }
+
+            // Long jump backward. 
+            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
+                AnimationTime -= SettingsAsset.LongJumpValue;
+            }
+
+            // Jump to next node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
+                AnimationTime = GetNearestForwardNodeTimestamp();
+
+                FireJumpedToNodeEvent();
+            }
+
+            // Jump to previous node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
+                AnimationTime = GetNearestBackwardNodeTimestamp();
+
+                FireJumpedToNodeEvent();
+            }
+
+            // Jump to beginning.
+            if (Input.GetKeyDown(
+                SettingsAsset.JumpToPreviousNodeKey)
+                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
+
+                AnimationTime = 0;
+
+                FireJumpedToNodeEvent();
+            }
+        }
+
+        /// <summary>
         /// Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
         private void HandleFireNodeReachedEventForFirstNode() {
@@ -826,6 +903,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
+        private void FireJumpedToNodeEvent() {
+            // Create event args.
+            var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
+                animationTime);
+            var args = new NodeReachedEventArgs(nodeIndex, animationTime);
+
+            // Fire event.
+            OnJumpedToNode(args);
+        }
+
 
         /// <summary>
         ///     Export path nodes as transforms.
@@ -875,47 +962,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             return true;
         }
-
-        /// <summary>
-        /// Method responsible for detecting all shortcuts pressed in play mode.
-        /// </summary>
-        private void HandleShortcuts() {
-            if (!SettingsAsset.EnableControlsInPlayMode) return;
-
-            // Play/Pause.
-            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
-                HandlePlayPause();
-            }
-
-            // Long jump forward
-            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                animationTime += SettingsAsset.LongJumpValue;
-            }
-
-            // Long jump backward. 
-            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                animationTime -= SettingsAsset.LongJumpValue;
-            }
-
-            // Jump to next node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
-                animationTime = GetNearestForwardNodeTimestamp();
-            }
-
-            // Jump to previous node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
-                animationTime = GetNearestBackwardNodeTimestamp();
-            }
-
-            // Jump to beginning.
-            if (Input.GetKeyDown(
-                SettingsAsset.JumpToPreviousNodeKey)
-                && Input.GetKey(SettingsAsset.PlayModeModKey)) {
-
-                AnimationTime = 0;
-            }
-        }
-
         /// <summary>
         /// Update <c>subscribedToEvents</c> flag.
         /// </summary>

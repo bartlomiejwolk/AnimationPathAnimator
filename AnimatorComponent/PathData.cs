@@ -872,6 +872,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return RotationPath.SamplePathForPoints(samplingFrequency);
         }
 
+        /// <summary>
+        /// Returns animated object node index at the specified timestamp.
+        /// </summary>
+        /// <param name="timestamp">Timestamp to search for.</param>
+        /// <returns>Node index.</returns>
+        public int GetAnimObjNodeIndexAtTime(float timestamp) {
+            return AnimatedObjectPath.GetNodeIndexAtTime(timestamp);
+        }
+
         #endregion
 
         #region HELPER METHODS

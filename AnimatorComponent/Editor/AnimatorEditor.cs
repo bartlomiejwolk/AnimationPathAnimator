@@ -1613,17 +1613,34 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         null);
             }
 
+            serializedObject.ApplyModifiedProperties();
+
             // Jump to previous node.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToPreviousNodeKey) {
+
+                serializedObject.Update();
 
                 animationTime.floatValue =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestBackwardNodeTimestamp",
                         null);
+
+                serializedObject.ApplyModifiedProperties();
+
+                // Call GoToPreviousNode event.
+                var nodeIndex = Script.PathData.GetAnimObjNodeIndexAtTime(
+                        animationTime.floatValue);
+                var args = new NodeReachedEventArgs(nodeIndex, animationTime.floatValue);
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnGoToPreviousNode",
+                    new object[] { args });
             }
+
+            serializedObject.Update();
 
             // Jump to start.
             if (Event.current.type == EventType.keyDown

@@ -27,6 +27,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
+        /// <summary>
+        /// Event called right after animation jump backward to the previous node.
+        /// </summary>
+        public event EventHandler<NodeReachedEventArgs> GoToPreviousNode;
+
         #endregion
 
         #region FIELDS
@@ -244,6 +249,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
+        private void OnGoToPreviousNode(NodeReachedEventArgs e) {
+            var handler = GoToPreviousNode;
+            if (handler != null) handler(this, e);
+            Debug.Log("GoToPreviousNode event called");
+        }
+
 
         private void OnAnimationEnded() {
             var handler = AnimationEnded;
@@ -925,6 +936,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Jump to previous node.
             if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
                 animationTime = GetNearestBackwardNodeTimestamp();
+
+                var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
+                    animationTime);
+                var args = new NodeReachedEventArgs(nodeIndex, animationTime);
+                // Fire event.
+                OnGoToPreviousNode(args);
             }
 
             // Jump to beginning.

@@ -23,14 +23,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler AnimationStarted;
 
         /// <summary>
-        /// Event called when animated object goes through any node.
+        /// Event called when animated object passes a node.
+        /// It'll be called only when anim. go is before a node in one frame
+        /// and after in the next one.
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         /// <summary>
         /// Event called right after animation jump backward to the previous node.
         /// </summary>
-        public event EventHandler<NodeReachedEventArgs> GoToPreviousNode;
+        public event EventHandler<NodeReachedEventArgs> JumpedToNode;
 
         #endregion
 
@@ -247,22 +249,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleShortcuts();
         }
         #endregion UNITY MESSAGES
-
-        private void FireGoToPreviousNodeEvent() {
-            // Create event args.
-            var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
-                animationTime);
-            var args = new NodeReachedEventArgs(nodeIndex, animationTime);
-
-            // Fire event.
-            OnGoToPreviousNode(args);
-        }
-
         #region EVENT INVOCATORS
-        private void OnGoToPreviousNode(NodeReachedEventArgs e) {
-            var handler = GoToPreviousNode;
+        private void OnJumpedToNode(NodeReachedEventArgs e) {
+            var handler = JumpedToNode;
             if (handler != null) handler(this, e);
-            Debug.Log("GoToPreviousNode event called");
+            Debug.Log("JumpedToNode event called");
         }
 
 
@@ -277,6 +268,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnNodeReached(NodeReachedEventArgs eventArgs) {
+            Debug.Log("OnNodeReached");
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
@@ -909,6 +901,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
+        private void FireGoToPreviousNodeEvent() {
+            // Create event args.
+            var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
+                animationTime);
+            var args = new NodeReachedEventArgs(nodeIndex, animationTime);
+
+            // Fire event.
+            OnJumpedToNode(args);
+        }
+
 
         /// <summary>
         ///     Export path nodes as transforms.

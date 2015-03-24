@@ -1630,7 +1630,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 serializedObject.ApplyModifiedProperties();
 
-                // Call GoToPreviousNode event.
+                // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
                     Script,
                     "FireGoToPreviousNodeEvent",

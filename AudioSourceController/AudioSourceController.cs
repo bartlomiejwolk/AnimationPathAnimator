@@ -50,22 +50,35 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
             set { audioNodeTimestamps = value; }
         }
 
-        private void Reset() {
+        private void Awake() {
+            AudioNodeTimestamps = new Dictionary<int, float>();
+        }
+
+        private void OnEnable() {
             AudioSource = GetComponent<AudioSource>();
             Animator = GetComponent<AnimatorComponent.Animator>();
 
             Animator.NodeReached += Animator_NodeReached;
+            Animator.JumpedToNode += Animator_JumpedToNode;
+        }
+
+        void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
+            //AudioSource.PlayScheduled(AudioNodeTimestamps[e.NodeIndex]);
+            AudioSource.time = AudioNodeTimestamps[e.NodeIndex];
+            Debug.Log("play from timestamp");
         }
 
         void Animator_NodeReached(object sender, NodeReachedEventArgs e) {
             // If audio is playing, record timestamps.
             if (AudioSource.isPlaying) {
-                AudioNodeTimestamps[e.NodeIndex] = e.Timestamp;
+                //AudioNodeTimestamps[e.NodeIndex] = e.Timestamp;
+                AudioNodeTimestamps[e.NodeIndex] = AudioSource.time;
+                Debug.Log("audio timestamp saved!");
             }
-            // Play from recorded time.
-            else {
-                AudioSource.PlayScheduled(AudioNodeTimestamps[e.NodeIndex]);
-            }
+        }
+
+        private void OnDisable() {
+            // todo unsubscribe from events.
         }
 
         private void Update() {

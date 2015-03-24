@@ -47,9 +47,9 @@ MonoBehaviour:
   positionHandle: 0
   positionLerpSpeed: 1
   rotationMode: 1
-  rotationSlerpSpeed: 999
+  rotationSlerpSpeed: 0
   tangentMode: 0
-  updateAllMode: 1
+  updateAllMode: 0
   wrapMode: 1
   autoPlayDelay: 0
   pathDataAssetDefaultName: Path

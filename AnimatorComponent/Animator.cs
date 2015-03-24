@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
@@ -52,7 +53,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private bool animGOUpdateEnabled;
 
-        private bool countdownCoroutineIsRunning;
+        //private bool countdownCoroutineIsRunning;
 
         //private bool easeCoroutineRunning;
 
@@ -123,10 +124,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// It's true when <c>CountdownToStopAnimGOUpdate</c> coroutine is running.
         /// </summary>
-        public bool CountdownCoroutineIsRunning {
-            get { return countdownCoroutineIsRunning; }
-            set { countdownCoroutineIsRunning = value; }
-        }
+        //public bool CountdownCoroutineIsRunning {
+        //    get { return countdownCoroutineIsRunning; }
+        //    set { countdownCoroutineIsRunning = value; }
+        //}
 
         /// <summary>
         /// It's set to true when <c>EaseTime</c> coroutine is running.
@@ -505,39 +506,39 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// stops being updated and <c>AnimatonEnded</c> event is called.
         /// </summary>
         // TODO RELEASE Should check also for tilting.
-        private IEnumerator CountdownToStopAnimGOUpdate() {
-            // Helper variable.
-            var frame = 0;
-            var prevGOPosition = animatedGO.position;
-            var prevGORotation = animatedGO.rotation;
-            CountdownCoroutineIsRunning = true;
+        //private IEnumerator CountdownToStopAnimGOUpdate() {
+        //    // Helper variable.
+        //    var frame = 0;
+        //    var prevGOPosition = animatedGO.position;
+        //    var prevGORotation = animatedGO.rotation;
+        //    CountdownCoroutineIsRunning = true;
 
-            while (true) {
-                frame++;
+        //    while (true) {
+        //        frame++;
 
-                // Break after given number of frames.
-                if (frame > SettingsAsset.CountdownToStopFramesNo) break;
+        //        // Break after given number of frames.
+        //        if (frame > SettingsAsset.CountdownToStopFramesNo) break;
 
-                yield return null;
-            }
+        //        yield return null;
+        //    }
 
-            CountdownCoroutineIsRunning = false;
+        //    CountdownCoroutineIsRunning = false;
 
-            var positionChanged = !Utilities.V3Equal(
-                prevGOPosition,
-                animatedGO.position);
+        //    var positionChanged = !Utilities.V3Equal(
+        //        prevGOPosition,
+        //        animatedGO.position);
 
-            var rotationChanged = !Utilities.QuaternionsEqual(
-                prevGORotation,
-                animatedGO.rotation);
+        //    var rotationChanged = !Utilities.QuaternionsEqual(
+        //        prevGORotation,
+        //        animatedGO.rotation);
 
-            if (!positionChanged && !rotationChanged) {
-                // Stop updating animated game object.
-                AnimGOUpdateEnabled = false;
-                // Fire event.
-                OnAnimationEnded();
-            }
-        }
+        //    if (!positionChanged && !rotationChanged) {
+        //        // Stop updating animated game object.
+        //        AnimGOUpdateEnabled = false;
+        //        // Fire event.
+        //        OnAnimationEnded();
+        //    }
+        //}
 
         /// <summary>
         /// Updates animated GO rotation using data from rotation path.
@@ -622,7 +623,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 case RotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
-                        PathData.GetRotationValueAtTime(AnimationTime);
+                        PathData.GetRotationAtTime(AnimationTime);
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =
@@ -834,36 +835,55 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
+            var prevGOPosition = animatedGO.position;
+            var prevGORotation = animatedGO.rotation;
+
             UpdateAnimatedGO();
             HandleFireNodeReachedEvent();
-            HandleStartCountdownCoroutine();
+            //HandleStartCountdownCoroutine();
+
+            var positionChanged = !Utilities.V3Equal(
+                        prevGOPosition,
+                        animatedGO.position);
+
+            var rotationChanged = !Utilities.QuaternionsEqual(
+                prevGORotation,
+                animatedGO.rotation);
+
+            if (!positionChanged && !rotationChanged) {
+                // Stop updating animated game object.
+                //AnimGOUpdateEnabled = false;
+                // Fire event.
+                // todo move it somewhere else.
+                //OnAnimationEnded();
+            }
         }
 
         /// <summary>
         /// Handle starting <c>CountdownToStopAnimGOUpdate</c> coroutine.
         /// </summary>
-        private void HandleStartCountdownCoroutine() {
-            // Remember anim. GO position.
-            var prevAnimGOPosition = animatedGO.position;
-            // Remember anim. GO rotation.
-            var prevAnimGORotation = animatedGO.rotation;
+        //private void HandleStartCountdownCoroutine() {
+        //    // Remember anim. GO position.
+        //    var prevAnimGOPosition = animatedGO.position;
+        //    // Remember anim. GO rotation.
+        //    var prevAnimGORotation = animatedGO.rotation;
 
-            var movementDetected = !Utilities.V3Equal(
-                prevAnimGOPosition,
-                animatedGO.position);
+        //    var movementDetected = !Utilities.V3Equal(
+        //        prevAnimGOPosition,
+        //        animatedGO.position);
 
-            var rotationDetected = !Utilities.QuaternionsEqual(
-                prevAnimGORotation,
-                animatedGO.rotation);
+        //    var rotationDetected = !Utilities.QuaternionsEqual(
+        //        prevAnimGORotation,
+        //        animatedGO.rotation);
 
-            // Return if animated GO is still moving.
-            if (movementDetected || rotationDetected) return;
+        //    // Return if animated GO is still moving.
+        //    if (movementDetected || rotationDetected) return;
 
-            // Anim. GO is not moving, start countdown to stop animating it.
-            if (!CountdownCoroutineIsRunning) {
-                StartCoroutine(CountdownToStopAnimGOUpdate());
-            }
-        }
+        //    // Anim. GO is not moving, start countdown to stop animating it.
+        //    if (!CountdownCoroutineIsRunning) {
+        //        StartCoroutine(CountdownToStopAnimGOUpdate());
+        //    }
+        //}
 
         #endregion
 

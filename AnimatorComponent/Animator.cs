@@ -100,8 +100,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set {
                 animationTime = value;
 
-                // In play mode, while animation is enabled and not paused..
-                if (Application.isPlaying && EaseCoroutineRunning && !Pause) {
+                // In play mode, when animation is playing..
+                if (Application.isPlaying && IsPlaying) {
                     // Do nothing.
                 }
                 else {
@@ -857,24 +857,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Long jump forward
             if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                animationTime += SettingsAsset.LongJumpValue;
+                AnimationTime += SettingsAsset.LongJumpValue;
             }
 
             // Long jump backward. 
             if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                animationTime -= SettingsAsset.LongJumpValue;
+                AnimationTime -= SettingsAsset.LongJumpValue;
             }
 
             // Jump to next node.
             if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
-                animationTime = GetNearestForwardNodeTimestamp();
+                AnimationTime = GetNearestForwardNodeTimestamp();
 
                 FireJumpedToNodeEvent();
             }
 
             // Jump to previous node.
             if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
-                animationTime = GetNearestBackwardNodeTimestamp();
+                AnimationTime = GetNearestBackwardNodeTimestamp();
 
                 FireJumpedToNodeEvent();
             }

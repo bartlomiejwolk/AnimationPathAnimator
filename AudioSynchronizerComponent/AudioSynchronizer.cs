@@ -2,7 +2,7 @@
 using UnityEngine;
 using ATP.AnimationPathTools.AnimatorComponent;
 
-namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
+namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
     /// <summary>
     /// Allows controlling <c>AudioSource</c> component from inspector
@@ -11,7 +11,7 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
     // todo add menu option to create component
     [RequireComponent(typeof(AnimatorComponent.Animator))]
     [RequireComponent(typeof(AudioSource))]
-    public sealed class AudioSourceController : MonoBehaviour {
+    public sealed class AudioSynchronizer : MonoBehaviour {
 
         [SerializeField]
         private AudioSource audioSource;

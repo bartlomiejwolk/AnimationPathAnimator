@@ -1,18 +1,18 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
+namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
-    [CustomEditor(typeof (AudioSourceController))]
-    public sealed class AudioSourceControllerEditor : Editor {
+    [CustomEditor(typeof (AudioSynchronizer))]
+    public sealed class AudioSynchronizerEditor : Editor {
 
-        private AudioSourceController Script { get; set; }
+        private AudioSynchronizer Script { get; set; }
 
         private SerializedProperty audioSource;
         private SerializedProperty animator;
 
         private void OnEnable() {
-            Script = (AudioSourceController) target;
+            Script = (AudioSynchronizer) target;
 
             audioSource = serializedObject.FindProperty("audioSource");
             animator = serializedObject.FindProperty("animator");
@@ -42,7 +42,7 @@ namespace ATP.AnimationPathTools.AudioSourceControllerComponent {
 
         private void HandlePlayPauseShortcut() {
             if (Event.current.type == EventType.KeyDown
-                && Event.current.keyCode == AudioSourceController.PlayPauseKey) {
+                && Event.current.keyCode == AudioSynchronizer.PlayPauseKey) {
 
                 Utilities.InvokeMethodWithReflection(
                     Script,

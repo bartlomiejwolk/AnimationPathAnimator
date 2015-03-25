@@ -55,11 +55,13 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void OnEnable() {
-            AudioSource = GetComponent<AudioSource>();
-            Animator = GetComponent<AnimatorComponent.Animator>();
-
             Animator.NodeReached += Animator_NodeReached;
             Animator.JumpedToNode += Animator_JumpedToNode;
+        }
+
+        private void Reset() {
+            AudioSource = GetComponent<AudioSource>();
+            Animator = GetComponent<AnimatorComponent.Animator>();
         }
 
         void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {

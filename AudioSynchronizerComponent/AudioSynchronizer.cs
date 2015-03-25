@@ -19,6 +19,18 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         [SerializeField]
         private AnimatorComponent.Animator animator;
 
+        /// <summary>
+        /// If to start audio playback on play mode enter.
+        /// </summary>
+        [SerializeField]
+        private bool autoPlay;
+
+        /// <summary>
+        /// If auto play is enabled, delay playback by this value.
+        /// </summary>
+        [SerializeField]
+        private float audioStartDelay;
+
         private Dictionary<int, float> audioNodeTimestamps;
 
         /// <summary>
@@ -48,6 +60,16 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         public Dictionary<int, float> AudioNodeTimestamps {
             get { return audioNodeTimestamps; }
             set { audioNodeTimestamps = value; }
+        }
+
+        public float AudioStartDelay {
+            get { return audioStartDelay; }
+            set { audioStartDelay = value; }
+        }
+
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
         }
 
         private void Awake() {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
@@ -52,9 +53,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private bool animGOUpdateEnabled;
 
-        private bool countdownCoroutineIsRunning;
+        //private bool countdownCoroutineIsRunning;
 
-        private bool easeCoroutineRunning;
+        //private bool easeCoroutineRunning;
 
         private bool isPlaying;
 
@@ -123,21 +124,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// It's true when <c>CountdownToStopAnimGOUpdate</c> coroutine is running.
         /// </summary>
-        public bool CountdownCoroutineIsRunning {
-            get { return countdownCoroutineIsRunning; }
-            set { countdownCoroutineIsRunning = value; }
-        }
+        //public bool CountdownCoroutineIsRunning {
+        //    get { return countdownCoroutineIsRunning; }
+        //    set { countdownCoroutineIsRunning = value; }
+        //}
 
         /// <summary>
         /// It's set to true when <c>EaseTime</c> coroutine is running.
         /// </summary>
         // todo should be private
-        public bool EaseCoroutineRunning {
-            get { return easeCoroutineRunning; }
-            private set {
-                easeCoroutineRunning = value;
-            }
-        }
+        //public bool EaseCoroutineRunning {
+        //    get { return easeCoroutineRunning; }
+        //    private set {
+        //        easeCoroutineRunning = value;
+        //    }
+        //}
 
         /// <summary>
         /// Reference to asset file holding path data.
@@ -245,9 +246,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void Update() {
+            UpdateAnimationTime();
             HandleUpdatingAnimGOInPlayMode();
             HandleShortcuts();
         }
+
+        private void UpdateAnimationTime() {
+            if (!Application.isPlaying) return;
+            // Return if not playing.
+            if (!IsPlaying) return;
+
+            // Get ease value.
+            var timeStep =
+                PathData.GetEaseValueAtTime(AnimationTime);
+
+            // If animation is set to play backward..
+            if (Reverse) {
+                // Decrease animation time.
+                AnimationTime -= timeStep * Time.deltaTime;
+            }
+            else {
+                // Increase animation time.
+                AnimationTime += timeStep * Time.deltaTime;
+            }
+        }
+
         #endregion UNITY MESSAGES
         #region EVENT INVOCATORS
         private void OnJumpedToNode(NodeReachedEventArgs e) {
@@ -383,21 +406,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void StartAnimation() {
             if (!PathDataAssetAssigned()) return;
 
+            IsPlaying = true;
+            AnimGOUpdateEnabled = true;
+
             HandleFireNodeReachedEventForFirstNode();
-            StartCoroutine("EaseTime");
         }
 
         /// <summary>
         /// Stops animation.
         /// </summary>
-        public void StopAnimation() {
-            StopCoroutine("EaseTime");
+        //public void StopAnimation() {
+        //    StopCoroutine("EaseTime");
 
-            EaseCoroutineRunning = false;
-            Pause = false;
-            IsPlaying = false;
-            AnimationTime = 0;
-        }
+        //    EaseCoroutineRunning = false;
+        //    Pause = false;
+        //    IsPlaying = false;
+        //    AnimationTime = 0;
+        //}
 
         /// <summary>
         /// Unpauses animation.
@@ -481,39 +506,39 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// stops being updated and <c>AnimatonEnded</c> event is called.
         /// </summary>
         // TODO RELEASE Should check also for tilting.
-        private IEnumerator CountdownToStopAnimGOUpdate() {
-            // Helper variable.
-            var frame = 0;
-            var prevGOPosition = animatedGO.position;
-            var prevGORotation = animatedGO.rotation;
-            CountdownCoroutineIsRunning = true;
+        //private IEnumerator CountdownToStopAnimGOUpdate() {
+        //    // Helper variable.
+        //    var frame = 0;
+        //    var prevGOPosition = animatedGO.position;
+        //    var prevGORotation = animatedGO.rotation;
+        //    CountdownCoroutineIsRunning = true;
 
-            while (true) {
-                frame++;
+        //    while (true) {
+        //        frame++;
 
-                // Break after given number of frames.
-                if (frame > SettingsAsset.CountdownToStopFramesNo) break;
+        //        // Break after given number of frames.
+        //        if (frame > SettingsAsset.CountdownToStopFramesNo) break;
 
-                yield return null;
-            }
+        //        yield return null;
+        //    }
 
-            CountdownCoroutineIsRunning = false;
+        //    CountdownCoroutineIsRunning = false;
 
-            var positionChanged = !Utilities.V3Equal(
-                prevGOPosition,
-                animatedGO.position);
+        //    var positionChanged = !Utilities.V3Equal(
+        //        prevGOPosition,
+        //        animatedGO.position);
 
-            var rotationChanged = !Utilities.QuaternionsEqual(
-                prevGORotation,
-                animatedGO.rotation);
+        //    var rotationChanged = !Utilities.QuaternionsEqual(
+        //        prevGORotation,
+        //        animatedGO.rotation);
 
-            if (!positionChanged && !rotationChanged) {
-                // Stop updating animated game object.
-                AnimGOUpdateEnabled = false;
-                // Fire event.
-                OnAnimationEnded();
-            }
-        }
+        //    if (!positionChanged && !rotationChanged) {
+        //        // Stop updating animated game object.
+        //        AnimGOUpdateEnabled = false;
+        //        // Fire event.
+        //        OnAnimationEnded();
+        //    }
+        //}
 
         /// <summary>
         /// Updates animated GO rotation using data from rotation path.
@@ -598,7 +623,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 case RotationMode.Custom:
                     // Get rotation point position.
                     var rotationPointPos =
-                        PathData.GetRotationValueAtTime(AnimationTime);
+                        PathData.GetRotationAtTime(AnimationTime);
 
                     // Convert target position to global coordinates.
                     var rotationPointGlobalPos =
@@ -639,24 +664,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns></returns>
         private IEnumerator EaseTime() {
-            EaseCoroutineRunning = true;
-            Pause = false;
-            IsPlaying = true;
-            AnimGOUpdateEnabled = true;
+            //EaseCoroutineRunning = true;
+            //Pause = false;
+            //IsPlaying = true;
+            //AnimGOUpdateEnabled = true;
 
             while (true) {
                 // If animation is not paused..
                 if (!Pause) {
-                    HandleFireOnAnimationStartedEvent();
+                    //HandleFireOnAnimationStartedEvent();
 
-                    UpdateAnimationTime();
+                    //UpdateAnimationTime();
 
-                    HandleClampWrapMode();
-                    HandleLoopWrapMode();
-                    HandlePingPongWrapMode();
+                    //HandleClampWrapMode();
+                    //HandleLoopWrapMode();
+                    //HandlePingPongWrapMode();
                 }
 
-                if (!EaseCoroutineRunning) break;
+                //if (!EaseCoroutineRunning) break;
 
                 yield return null;
             }
@@ -666,21 +691,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Update animation time with values taken from ease curve.
         /// </summary>
         /// <remarks>This is used to update animation time when animator is running.</remarks>
-        private void UpdateAnimationTime() {
-            // Get ease value.
-            var timeStep =
-                PathData.GetEaseValueAtTime(AnimationTime);
+        //private void UpdateAnimationTime() {
+        //    // Get ease value.
+        //    var timeStep =
+        //        PathData.GetEaseValueAtTime(AnimationTime);
 
-            // If animation is set to play backward..
-            if (Reverse) {
-                // Decrease animation time.
-                AnimationTime -= timeStep * Time.deltaTime;
-            }
-            else {
-                // Increase animation time.
-                AnimationTime += timeStep * Time.deltaTime;
-            }
-        }
+        //    // If animation is set to play backward..
+        //    if (Reverse) {
+        //        // Decrease animation time.
+        //        AnimationTime -= timeStep * Time.deltaTime;
+        //    }
+        //    else {
+        //        // Increase animation time.
+        //        AnimationTime += timeStep * Time.deltaTime;
+        //    }
+        //}
 
         #endregion
 
@@ -703,7 +728,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
-                EaseCoroutineRunning = false;
+                //EaseCoroutineRunning = false;
                 IsPlaying = false;
             }
         }
@@ -775,24 +800,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (EaseCoroutineRunning && !Pause) {
+            if (!Pause) {
                 // Pause animation.
                 Pause = true;
                 IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (EaseCoroutineRunning && Pause) {
+            else if (Pause) {
                 // Unpause animation.
                 Pause = false;
                 IsPlaying = true;
             }
             // Animation ended.
-            else if (!EaseCoroutineRunning && AnimationTime >= 1) {
+            else if (AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
             }
             // Disable play/pause while for animation start being invoked.
-            else if (!EaseCoroutineRunning && IsInvoking("StartAnimation")) {
+            else if (IsInvoking("StartAnimation")) {
                 // Do nothing.
             }
             else {
@@ -810,36 +835,55 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
+            var prevGOPosition = animatedGO.position;
+            var prevGORotation = animatedGO.rotation;
+
             UpdateAnimatedGO();
             HandleFireNodeReachedEvent();
-            HandleStartCountdownCoroutine();
+            //HandleStartCountdownCoroutine();
+
+            var positionChanged = !Utilities.V3Equal(
+                        prevGOPosition,
+                        animatedGO.position);
+
+            var rotationChanged = !Utilities.QuaternionsEqual(
+                prevGORotation,
+                animatedGO.rotation);
+
+            if (!positionChanged && !rotationChanged) {
+                // Stop updating animated game object.
+                //AnimGOUpdateEnabled = false;
+                // Fire event.
+                // todo move it somewhere else.
+                //OnAnimationEnded();
+            }
         }
 
         /// <summary>
         /// Handle starting <c>CountdownToStopAnimGOUpdate</c> coroutine.
         /// </summary>
-        private void HandleStartCountdownCoroutine() {
-            // Remember anim. GO position.
-            var prevAnimGOPosition = animatedGO.position;
-            // Remember anim. GO rotation.
-            var prevAnimGORotation = animatedGO.rotation;
+        //private void HandleStartCountdownCoroutine() {
+        //    // Remember anim. GO position.
+        //    var prevAnimGOPosition = animatedGO.position;
+        //    // Remember anim. GO rotation.
+        //    var prevAnimGORotation = animatedGO.rotation;
 
-            var movementDetected = !Utilities.V3Equal(
-                prevAnimGOPosition,
-                animatedGO.position);
+        //    var movementDetected = !Utilities.V3Equal(
+        //        prevAnimGOPosition,
+        //        animatedGO.position);
 
-            var rotationDetected = !Utilities.QuaternionsEqual(
-                prevAnimGORotation,
-                animatedGO.rotation);
+        //    var rotationDetected = !Utilities.QuaternionsEqual(
+        //        prevAnimGORotation,
+        //        animatedGO.rotation);
 
-            // Return if animated GO is still moving.
-            if (movementDetected || rotationDetected) return;
+        //    // Return if animated GO is still moving.
+        //    if (movementDetected || rotationDetected) return;
 
-            // Anim. GO is not moving, start countdown to stop animating it.
-            if (!CountdownCoroutineIsRunning) {
-                StartCoroutine(CountdownToStopAnimGOUpdate());
-            }
-        }
+        //    // Anim. GO is not moving, start countdown to stop animating it.
+        //    if (!CountdownCoroutineIsRunning) {
+        //        StartCoroutine(CountdownToStopAnimGOUpdate());
+        //    }
+        //}
 
         #endregion
 

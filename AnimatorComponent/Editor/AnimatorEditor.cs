@@ -579,7 +579,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawPlayerControls() {
             // Play/Pause button text.
             string playPauseBtnText;
-            if (!Script.EaseCoroutineRunning || (Script.EaseCoroutineRunning && Script.Pause)) {
+            if (!Script.IsPlaying) {
                 playPauseBtnText = "Play";
             }
             else {
@@ -606,7 +606,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Stop",
                     ""))) {
 
-                Script.StopAnimation();
+                Script.IsPlaying = false;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -639,8 +639,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "at the current animation time. " +
                     "1 means no delay."),
                 Script.SettingsAsset.PositionLerpSpeed,
-                0,
-                1);
+                Script.SettingsAsset.MinPositionLerpSpeed,
+                Script.SettingsAsset.MaxPositionLerpSpeed);
         }
 
         private void DrawResetEaseButton() {
@@ -767,9 +767,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         "Controls how much time it'll take the " +
                         "animated object to finish rotation towards followed target."),
                     Script.SettingsAsset.RotationSlerpSpeed,
-                    0,
-                    // todo create setting for that
-                    999);
+                    Script.SettingsAsset.MinRotationSlerpSpeed,
+                    Script.SettingsAsset.MaxRotationSlerpSpeed);
         }
 
         private void DrawSceneToolShortcutsInfoLabel() {

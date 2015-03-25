@@ -831,10 +831,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return rotationPointPositions;
         }
 
-        public Vector3 GetRotationValueAtTime(float timestamp) {
-            return RotationPath.GetVectorAtTime(timestamp);
-        }
-
         public float[] GetTiltingCurveValues() {
             var values = new float[TiltingCurveKeysNo];
 

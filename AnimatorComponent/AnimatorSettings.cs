@@ -244,6 +244,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float rotationSlerpSpeed = 999.0f;
 
         [SerializeField]
+        private float maxRotationSlerpSpeed = 20f;
+
+        [SerializeField]
+        private float minRotationSlerpSpeed = 0.1f;
+
+        [SerializeField]
+        private float minPositionLerpSpeed = 0.001f;
+
+        [SerializeField]
+        private float maxPositionLerpSpeed = 1;
+
+        [SerializeField]
         private TangentMode tangentMode =
             TangentMode.Smooth;
 
@@ -261,6 +273,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region ANIMATOR PROPERTIES
+        public float MinPositionLerpSpeed {
+            get { return minPositionLerpSpeed; }
+            set { minPositionLerpSpeed = value; }
+        }
+
+        public float MaxPositionLerpSpeed {
+            get { return maxPositionLerpSpeed; }
+            set { maxPositionLerpSpeed = value; }
+        }
+
+        public float MinRotationSlerpSpeed {
+            get { return minRotationSlerpSpeed; }
+            set { minRotationSlerpSpeed = value; }
+        }
+
+        public float MaxRotationSlerpSpeed {
+            get { return maxRotationSlerpSpeed; }
+            set { maxRotationSlerpSpeed = value; }
+        }
+
         /// <summary>
         /// If autoplay is enabled, this is delay before animation starts playing.
         /// </summary>

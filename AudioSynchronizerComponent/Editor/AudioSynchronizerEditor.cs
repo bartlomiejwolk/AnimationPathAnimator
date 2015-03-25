@@ -53,7 +53,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
                 autoPlayDelay,
                 new GUIContent(
                     "Delay",
-                    "Auto play delay."));
+                    "Auto play delay in seconds."));
 
             EditorGUIUtility.labelWidth = 00;
 

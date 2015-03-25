@@ -89,6 +89,27 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             Animator = GetComponent<AnimatorComponent.Animator>();
         }
 
+        private void Start() {
+            HandleAutoPlay();
+        }
+
+        /// <summary>
+        /// Handle auto play inspector option.
+        /// </summary>
+        private void HandleAutoPlay() {
+            // Return if auto play is disabled.
+            if (!AutoPlay) return;
+
+            if (AutoPlayDelay != 0) {
+                // Apply delay.
+                AudioSource.PlayDelayed(AutoPlayDelay);
+            }
+            else {
+                // Play.
+                AudioSource.Play();
+            }
+        }
+
         void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
             // Return if audio timestamp for this node was not recorded.
             if (!AudioNodeTimestamps.ContainsKey(e.NodeIndex)) return;

@@ -9,11 +9,13 @@ namespace ATP.AnimationPathTools.EventsComponent {
         [SerializeField]
         private string methodArg;
 
+#pragma warning disable 0414
         /// <summary>
         ///     How many rows should be displayed in the inspector.
         /// </summary>
         [SerializeField]
         private int rows = 1;
+#pragma warning restore 0414
 
         /// <summary>
         ///     Selected source component.

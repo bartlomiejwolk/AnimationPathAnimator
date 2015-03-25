@@ -43,7 +43,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private SerializedProperty pathData;
         private SerializedProperty positionHandle;
         private SerializedProperty rotationCurveColor;
-        private SerializedProperty rotationSlerpSpeed;
         private SerializedProperty settings;
         private SerializedProperty shortJumpValue;
         private SerializedProperty skin;
@@ -130,8 +129,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void InitializeSerializedProperties() {
-            rotationSlerpSpeed =
-                SettingsSerializedObject.FindProperty("rotationSlerpSpeed");
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
             advancedSettingsFoldout =

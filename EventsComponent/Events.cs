@@ -15,8 +15,10 @@ namespace ATP.AnimationPathTools.EventsComponent {
         [SerializeField]
         private Animator animator;
 
+#pragma warning disable 0414 
         [SerializeField]
         private bool drawMethodNames = true;
+#pragma warning restore 0414 
 
         [SerializeField]
         private List<NodeEventSlot> nodeEventSlots;

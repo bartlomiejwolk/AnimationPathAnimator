@@ -35,7 +35,7 @@ MonoBehaviour:
   countdownToStopFramesNo: 10
   enableControlsInPlayMode: 1
   exportSamplingFrequency: 5
-  forwardPointOffset: .00100000005
+  forwardPointOffset: .0810000002
   forwardPointOffsetMinValue: .00100000005
   gizmoIcons:
   - {fileID: 2800000, guid: 7035c5b758f753f4c85443715f7b41a7, type: 3}
@@ -45,15 +45,15 @@ MonoBehaviour:
   handleMode: 2
   animationSpeedDenominator: .0500000007
   positionHandle: 0
-  positionLerpSpeed: .00999999978
+  positionLerpSpeed: 1
   rotationMode: 1
-  rotationSlerpSpeed: .100000001
+  rotationSlerpSpeed: 20
   maxRotationSlerpSpeed: 20
   minRotationSlerpSpeed: .100000001
   minPositionLerpSpeed: .00999999978
   maxPositionLerpSpeed: 1
   tangentMode: 0
-  updateAllMode: 0
+  updateAllMode: 1
   wrapMode: 1
   autoPlayDelay: 0
   pathDataAssetDefaultName: Path

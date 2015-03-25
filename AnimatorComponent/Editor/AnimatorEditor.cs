@@ -383,7 +383,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 autoPlayDelay,
                 new GUIContent(
                     "Delay",
-                    "Auto play delay."));
+                    "Auto play delay in seconds."));
 
             EditorGUIUtility.labelWidth = 0;
 

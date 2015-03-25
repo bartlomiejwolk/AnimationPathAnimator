@@ -19,6 +19,18 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         [SerializeField]
         private AnimatorComponent.Animator animator;
 
+        /// <summary>
+        /// If to start audio playback on play mode enter.
+        /// </summary>
+        [SerializeField]
+        private bool autoPlay;
+
+        /// <summary>
+        /// If auto play is enabled, delay playback by this value.
+        /// </summary>
+        [SerializeField]
+        private float autoPlayDelay;
+
         private Dictionary<int, float> audioNodeTimestamps;
 
         /// <summary>
@@ -50,6 +62,19 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             set { audioNodeTimestamps = value; }
         }
 
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
+        }
+
+        /// <summary>
+        /// If auto play is enabled, delay playback by this value.
+        /// </summary>
+        public float AutoPlayDelay {
+            get { return autoPlayDelay; }
+            set { autoPlayDelay = value; }
+        }
+
         private void Awake() {
             AudioNodeTimestamps = new Dictionary<int, float>();
         }
@@ -62,6 +87,27 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         private void Reset() {
             AudioSource = GetComponent<AudioSource>();
             Animator = GetComponent<AnimatorComponent.Animator>();
+        }
+
+        private void Start() {
+            HandleAutoPlay();
+        }
+
+        /// <summary>
+        /// Handle auto play inspector option.
+        /// </summary>
+        private void HandleAutoPlay() {
+            // Return if auto play is disabled.
+            if (!AutoPlay) return;
+
+            if (AutoPlayDelay != 0) {
+                // Apply delay.
+                AudioSource.PlayDelayed(AutoPlayDelay);
+            }
+            else {
+                // Play.
+                AudioSource.Play();
+            }
         }
 
         void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {

@@ -10,12 +10,16 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
         private SerializedProperty audioSource;
         private SerializedProperty animator;
+        private SerializedProperty autoPlay;
+        private SerializedProperty autoPlayDelay;
 
         private void OnEnable() {
             Script = (AudioSynchronizer) target;
 
             audioSource = serializedObject.FindProperty("audioSource");
             animator = serializedObject.FindProperty("animator");
+            autoPlay = serializedObject.FindProperty("autoPlay");
+            autoPlayDelay = serializedObject.FindProperty("autoPlayDelay");
         }
 
         public override void OnInspectorGUI() {
@@ -25,13 +29,35 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
                 audioSource,
                 new GUIContent(
                     "Audio Source",
-                    ""));
+                    "AudioSource component reference."));
 
             EditorGUILayout.PropertyField(
                 animator,
                 new GUIContent(
                     "Animator",
-                    ""));
+                    "Animator component reference."));
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.PropertyField(
+                autoPlay,
+                new GUIContent(
+                    "Auto Play",
+                    "Play on enter game mode."));
+
+            EditorGUIUtility.labelWidth = 50;
+
+            EditorGUILayout.PropertyField(
+                autoPlayDelay,
+                new GUIContent(
+                    "Delay",
+                    "Auto play delay in seconds."));
+
+            EditorGUIUtility.labelWidth = 00;
+
+            EditorGUILayout.EndHorizontal();
 
             serializedObject.ApplyModifiedProperties();
         }

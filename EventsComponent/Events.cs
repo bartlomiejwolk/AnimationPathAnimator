@@ -123,6 +123,9 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private string[] GetMethodNames() {
+            // Return empty array is slots list was not yet initalized.
+            if (NodeEventSlots == null) return new string[0];
+
             var methodNames = new string[NodeEventSlots.Count];
 
             for (var i = 0; i < NodeEventSlots.Count; i++) {

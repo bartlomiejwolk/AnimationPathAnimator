@@ -158,6 +158,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return autoPlay; }
             set { autoPlay = value; }
         }
+
+        /// <summary>
+        /// If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        [SerializeField]
+        private float autoPlayDelay;
+
+        /// <summary>
+        /// If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        public float AutoPlayDelay {
+            get { return autoPlayDelay; }
+            set { autoPlayDelay = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -792,7 +806,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleStartAnimation() {
             if (Application.isPlaying && AutoPlay) {
-                Invoke("StartAnimation", SettingsAsset.AutoPlayDelay);
+                Invoke("StartAnimation", AutoPlayDelay);
             }
         }
 

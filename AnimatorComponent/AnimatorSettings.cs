@@ -242,12 +242,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [SerializeField]
         private float maxPositionLerpSpeed = 1;
-
-        /// <summary>
-        /// If autoplay is enabled, this is delay before animation starts playing.
-        /// </summary>
-        [SerializeField]
-        private float autoPlayDelay;
         #endregion
 
         #region ANIMATOR PROPERTIES
@@ -269,14 +263,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float MaxRotationSlerpSpeed {
             get { return maxRotationSlerpSpeed; }
             set { maxRotationSlerpSpeed = value; }
-        }
-
-        /// <summary>
-        /// If autoplay is enabled, this is delay before animation starts playing.
-        /// </summary>
-        public float AutoPlayDelay {
-            get { return autoPlayDelay; }
-            set { autoPlayDelay = value; }
         }
 
 

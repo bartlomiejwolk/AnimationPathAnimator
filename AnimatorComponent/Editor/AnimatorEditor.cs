@@ -910,7 +910,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             positionHandle =
                 serializedObject.FindProperty("positionHandle");
             autoPlayDelay =
-                SettingsSerializedObject.FindProperty("autoPlayDelay");
+                serializedObject.FindProperty("autoPlayDelay");
 
             SerializedPropertiesInitialized = true;
         }

@@ -209,6 +209,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return forwardPointOffset; }
             set { forwardPointOffset = value; }
         }
+
+        [SerializeField]
+        private int exportSamplingFrequency = 5;
+
+        public int ExportSamplingFrequency {
+            get { return exportSamplingFrequency; }
+            set { exportSamplingFrequency = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -1300,7 +1308,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             ForwardPointOffset = 0.001f;
             PositionLerpSpeed = 1;
             RotationSlerpSpeed = 999;
-            SettingsAsset.ExportSamplingFrequency = 5;
+            ExportSamplingFrequency = 5;
         }
 
         /// <summary>

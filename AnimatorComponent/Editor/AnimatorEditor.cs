@@ -19,7 +19,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void DrawExportControls() {
             EditorGUILayout.BeginHorizontal();
 
-            Script.SettingsAsset.ExportSamplingFrequency =
+            Script.ExportSamplingFrequency =
                 EditorGUILayout.IntField(
                     new GUIContent(
                         "Export Sampling",
@@ -27,10 +27,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         +
                         "If set to 0, it'll export only keys defined in " +
                         "the path."),
-                    Script.SettingsAsset.ExportSamplingFrequency);
+                    Script.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {
-                Script.ExportNodes(Script.SettingsAsset.ExportSamplingFrequency);
+                Script.ExportNodes(Script.ExportSamplingFrequency);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -937,8 +937,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             // Limit ExmportSamplingFrequency value.
-            if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
-                Script.SettingsAsset.ExportSamplingFrequency = 1;
+            if (Script.ExportSamplingFrequency < 1) {
+                Script.ExportSamplingFrequency = 1;
             }
         }
 

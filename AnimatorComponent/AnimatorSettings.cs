@@ -195,9 +195,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private int countdownToStopFramesNo = 10;
 
         [SerializeField]
-        private int exportSamplingFrequency = 5;
-
-        [SerializeField]
         private float forwardPointOffsetMinValue = 0.001f;
 
         /// <summary>
@@ -252,11 +249,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public int CountdownToStopFramesNo {
             get { return countdownToStopFramesNo; }
             set { countdownToStopFramesNo = value; }
-        }
-
-        public int ExportSamplingFrequency {
-            get { return exportSamplingFrequency; }
-            set { exportSamplingFrequency = value; }
         }
 
         public float ForwardPointOffsetMinValue {

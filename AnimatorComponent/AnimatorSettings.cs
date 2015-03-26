@@ -272,12 +272,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private string forwardPointIcon = "target_22x22-pink";
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
         [SerializeField]
         private int gizmoCurveSamplingFrequency = 40;
 
@@ -305,14 +299,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public string ForwardPointIcon {
             get { return forwardPointIcon; }
             set { forwardPointIcon = value; }
-        }
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
         }
 
         public int GizmoCurveSamplingFrequency {

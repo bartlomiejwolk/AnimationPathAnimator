@@ -236,6 +236,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return longJumpValue; }
             set { longJumpValue = value; }
         }
+
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -1385,7 +1396,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            Gizmos.color = SettingsAsset.GizmoCurveColor;
+            Gizmos.color = GizmoCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {

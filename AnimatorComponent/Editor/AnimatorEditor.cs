@@ -258,7 +258,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 SceneHandles.DrawCustomPositionHandles(
                     nodeGlobalPositions,
                     Script.SettingsAsset.MovementHandleSize,
-                    Script.SettingsAsset.GizmoCurveColor,
+                    Script.GizmoCurveColor,
                     DrawPositionHandlesCallbackHandler);
             }
             // Draw default position handles.
@@ -898,7 +898,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settingsAsset");
             gizmoCurveColor =
-                SettingsSerializedObject.FindProperty("gizmoCurveColor");
+                serializedObject.FindProperty("gizmoCurveColor");
             rotationCurveColor =
                 SettingsSerializedObject.FindProperty("rotationCurveColor");
             shortJumpValue =

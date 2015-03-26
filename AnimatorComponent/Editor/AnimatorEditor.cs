@@ -908,7 +908,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             animationTime =
                 serializedObject.FindProperty("animationTime");
             positionHandle =
-                SettingsSerializedObject.FindProperty("positionHandle");
+                serializedObject.FindProperty("positionHandle");
             autoPlayDelay =
                 SettingsSerializedObject.FindProperty("autoPlayDelay");
 
@@ -1057,13 +1057,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 == Script.SettingsAsset.PositionHandleKey) {
 
                 // Change to Position mode.
-                if (Script.SettingsAsset.PositionHandle == PositionHandle.Free) {
-                    Script.SettingsAsset.PositionHandle =
+                if (Script.PositionHandle == PositionHandle.Free) {
+                    Script.PositionHandle =
                         PositionHandle.Position;
                 }
                 // Change to Free mode.
                 else {
-                    Script.SettingsAsset.PositionHandle =
+                    Script.PositionHandle =
                         PositionHandle.Free;
                 }
             }

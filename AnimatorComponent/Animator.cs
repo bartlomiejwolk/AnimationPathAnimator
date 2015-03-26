@@ -108,6 +108,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return handleMode; }
             set { handleMode = value; }
         }
+
+        [SerializeField]
+        private PositionHandle positionHandle = PositionHandle.Free;
+        public PositionHandle PositionHandle {
+            get { return positionHandle; }
+            set { positionHandle = value; }
+        }
         #endregion
 
         #region PROPERTIES

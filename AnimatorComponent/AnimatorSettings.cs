@@ -71,12 +71,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private KeyCode shortJumpForwardKey = KeyCode.K;
 
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        [SerializeField]
-        private float shortJumpValue = 0.002f;
-
         [SerializeField]
         private KeyCode tiltingModeKey = KeyCode.O;
 
@@ -165,14 +159,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public KeyCode ShortJumpForwardKey {
             get { return shortJumpForwardKey; }
             set { shortJumpForwardKey = value; }
-        }
-
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public float ShortJumpValue {
-            get { return shortJumpValue; }
-            set { shortJumpValue = value; }
         }
 
         public KeyCode TiltingModeKey {

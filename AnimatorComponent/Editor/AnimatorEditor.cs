@@ -902,7 +902,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             rotationCurveColor =
                 SettingsSerializedObject.FindProperty("rotationCurveColor");
             shortJumpValue =
-                SettingsSerializedObject.FindProperty("shortJumpValue");
+                serializedObject.FindProperty("shortJumpValue");
             longJumpValue =
                 SettingsSerializedObject.FindProperty("longJumpValue");
             animationTime =
@@ -1078,7 +1078,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 var newAnimationTimeRatio =
                     animationTime.floatValue
-                    + Script.SettingsAsset.ShortJumpValue;
+                    + Script.ShortJumpValue;
 
                 animationTime.floatValue =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
@@ -1094,7 +1094,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 var newAnimationTimeRatio =
                     animationTime.floatValue
-                    - Script.SettingsAsset.ShortJumpValue;
+                    - Script.ShortJumpValue;
 
                 animationTime.floatValue =
                     (float) (Math.Round(newAnimationTimeRatio, 4));

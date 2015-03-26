@@ -217,6 +217,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return exportSamplingFrequency; }
             set { exportSamplingFrequency = value; }
         }
+
+        [SerializeField]
+        private float shortJumpValue = 0.002f;
+
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        public float ShortJumpValue {
+            get { return shortJumpValue; }
+            set { shortJumpValue = value; }
+        }
         #endregion
 
         #region PROPERTIES

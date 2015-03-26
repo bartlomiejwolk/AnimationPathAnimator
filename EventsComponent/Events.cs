@@ -74,6 +74,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             Debug.Log("OnEnable()");
             if (Animator == null) return;
 
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -90,6 +91,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
             InitializeSlots();
             LoadRequiredResources();
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -119,12 +121,28 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void SubscribeToEvents() {
             Animator.NodeReached += Animator_NodeReached;
+            Animator.NewPathDataCreated += Animator_NewPathDataCreated;
+            Animator.PathDataRefChanged += Animator_PathDataRefChanged;
 
             if (Animator.PathData != null) {
-                Debug.Log("subscribe Events to PathData");
                 Animator.PathData.NodeAdded += PathData_NodeAdded;
                 Animator.PathData.NodeRemoved += PathData_NodeRemoved;
             }
+        }
+
+        void Animator_PathDataRefChanged(object sender, System.EventArgs e) {
+            if (Animator.PathData != null) {
+                UnsubscribeFromEvents();
+                SubscribeToEvents();
+            }
+            else {
+                UnsubscribeFromEvents();
+            }
+
+        }
+
+        void Animator_NewPathDataCreated(object sender, System.EventArgs e) {
+
         }
 
 

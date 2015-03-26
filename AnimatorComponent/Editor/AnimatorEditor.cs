@@ -826,12 +826,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             GUILayout.Label("Player Options", EditorStyles.boldLabel);
 
-            DrawRotationModeDropdown(HandleRotationModeChange);
-            DrawTangentModeDropdown();
-            DrawWrapModeDropdown();
-
-            EditorGUILayout.Space();
-
             EditorGUILayout.BeginHorizontal();
             DrawAutoPlayControl();
             DrawAutoPlayDelayField();
@@ -841,12 +835,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            DrawPositionSpeedSlider();
-            DrawRotationSpeedSlider();
+            DrawRotationModeDropdown(HandleRotationModeChange);
+
+            HandleDrawForwardPointOffsetSlider();
+
+            DrawTangentModeDropdown();
+            DrawWrapModeDropdown();
 
             EditorGUILayout.Space();
 
-            DrawForwardPointOffsetSlider();
+            DrawPositionSpeedSlider();
+            DrawRotationSpeedSlider();
 
             EditorGUILayout.Space();
 
@@ -1358,7 +1357,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SettingsSerializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawForwardPointOffsetSlider() {
+        private void HandleDrawForwardPointOffsetSlider() {
+            if (Script.RotationMode != RotationMode.Forward) return;
+
             Script.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
                     "Forward Point",

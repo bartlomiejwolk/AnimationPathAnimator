@@ -188,6 +188,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return positionLerpSpeed; }
             set { positionLerpSpeed = value; }
         }
+
+        [SerializeField]
+        private float rotationSlerpSpeed = 999.0f;
+
+        public float RotationSlerpSpeed {
+            get { return rotationSlerpSpeed; }
+            set { rotationSlerpSpeed = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -689,7 +697,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime * SettingsAsset.RotationSlerpSpeed;
+            var speed = Time.deltaTime * RotationSlerpSpeed;
 
             // Lerp rotation.
             AnimatedGO.rotation = Quaternion.Slerp(
@@ -1278,7 +1286,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             WrapMode = AnimatorWrapMode.Clamp;
             SettingsAsset.ForwardPointOffset = 0.001f;
             PositionLerpSpeed = 1;
-            SettingsAsset.RotationSlerpSpeed = 999;
+            RotationSlerpSpeed = 999;
             SettingsAsset.ExportSamplingFrequency = 5;
         }
 

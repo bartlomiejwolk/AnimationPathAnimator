@@ -932,8 +932,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.SettingsAsset == null) return;
 
             // Limit RotationSpeed value.
-            if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
-                Script.SettingsAsset.RotationSlerpSpeed = 0;
+            if (Script.RotationSlerpSpeed < 0) {
+                Script.RotationSlerpSpeed = 0;
             }
 
             // Limit ExmportSamplingFrequency value.
@@ -1605,13 +1605,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawRotationSpeedSlider() {
-            Script.SettingsAsset.RotationSlerpSpeed =
+            Script.RotationSlerpSpeed =
                 EditorGUILayout.Slider(
                     new GUIContent(
                         "Rotation Slerp",
                         "Controls how much time it'll take the " +
                         "animated object to finish rotation towards followed target."),
-                    Script.SettingsAsset.RotationSlerpSpeed,
+                    Script.RotationSlerpSpeed,
                     Script.SettingsAsset.MinRotationSlerpSpeed,
                     Script.SettingsAsset.MaxRotationSlerpSpeed);
         }

@@ -223,9 +223,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float animationSpeedDenominator = 0.05f;
 
         [SerializeField]
-        private float rotationSlerpSpeed = 999.0f;
-
-        [SerializeField]
         private float maxRotationSlerpSpeed = 20f;
 
         [SerializeField]
@@ -298,11 +295,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float AnimationSpeedDenominator {
             get { return animationSpeedDenominator; }
             set { animationSpeedDenominator = value; }
-        }
-
-        public float RotationSlerpSpeed {
-            get { return rotationSlerpSpeed; }
-            set { rotationSlerpSpeed = value; }
         }
 
         #endregion

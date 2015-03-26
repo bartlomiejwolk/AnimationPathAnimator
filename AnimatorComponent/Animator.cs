@@ -1124,9 +1124,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Loads asset files from component folder, that are required for the component to run.
         /// </summary>
         private void LoadRequiredAssets() {
-            settingsAsset = Resources.Load("DefaultAnimatorSettings")
-                as AnimatorSettings;
-            skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+            if (settingsAsset == null) {
+                settingsAsset = Resources.Load("DefaultAnimatorSettings")
+                    as AnimatorSettings;
+            }
+
+            if (skin == null) {
+                skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+            }
         }
 
         /// <summary>

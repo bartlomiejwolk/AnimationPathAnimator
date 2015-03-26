@@ -24,6 +24,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler AnimationStarted;
 
         /// <summary>
+        /// Event fired every time path data inspector field is changed or set to null.
+        /// </summary>
+        public event EventHandler PathDataRefChanged;
+
+        /// <summary>
         /// Event called when animated object passes a node.
         /// It'll be called only when anim. go is before a node in one frame
         /// and after in the next one.
@@ -224,6 +229,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnValidate() {
+            Debug.Log(PathData);
             HandleUpdateAnimGOInSceneView();
             UpdateSubscribedToEventsFlag();
         }
@@ -971,6 +977,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnJumpedToNode(args);
         }
 
+        private void FirePathDataRefChangedEvent() {
+            OnPathDataRefChanged();
+        }
 
         /// <summary>
         ///     Export path nodes as transforms.
@@ -1369,6 +1378,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
+
+        // todo move to region
+        private void OnPathDataRefChanged() {
+            Debug.Log("PathDataChanged event");
+            var handler = PathDataRefChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
     }
 
 }

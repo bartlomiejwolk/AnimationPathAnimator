@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -1434,6 +1435,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPathDataAssetField() {
+            var prevPathData = pathData.objectReferenceValue;
+
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(
@@ -1443,6 +1446,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Asset containing all path data."));
 
             serializedObject.ApplyModifiedProperties();
+
+            // If path data field was changed..
+            if (pathData.objectReferenceValue != prevPathData) {
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FirePathDataRefChangedEvent",
+                    null);
+            }
         }
 
         private void DrawPlayerControls() {

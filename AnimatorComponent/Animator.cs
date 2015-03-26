@@ -180,6 +180,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return enableControlsInPlayMode; }
             set { enableControlsInPlayMode = value; }
         }
+
+        [SerializeField]
+        private float positionLerpSpeed = 1;
+
+        public float PositionLerpSpeed {
+            get { return positionLerpSpeed; }
+            set { positionLerpSpeed = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -556,7 +564,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimatedGO.position = Vector3.Lerp(
                 AnimatedGO.position,
                 globalPosAtTime,
-                SettingsAsset.PositionLerpSpeed);
+                PositionLerpSpeed);
         }
 
         /// <summary>
@@ -1269,7 +1277,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             RotationMode = RotationMode.Forward;
             WrapMode = AnimatorWrapMode.Clamp;
             SettingsAsset.ForwardPointOffset = 0.001f;
-            SettingsAsset.PositionLerpSpeed = 1;
+            PositionLerpSpeed = 1;
             SettingsAsset.RotationSlerpSpeed = 999;
             SettingsAsset.ExportSamplingFrequency = 5;
         }

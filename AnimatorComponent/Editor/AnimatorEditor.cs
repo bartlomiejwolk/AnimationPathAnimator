@@ -1476,14 +1476,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPositionSpeedSlider() {
-            Script.SettingsAsset.PositionLerpSpeed = EditorGUILayout.Slider(
+            Script.PositionLerpSpeed = EditorGUILayout.Slider(
                 new GUIContent(
                     "Position Lerp",
                     "Controls how much time it'll take the " +
                     "animated object to reach position that it should be " +
                     "at the current animation time. " +
                     "1 means no delay."),
-                Script.SettingsAsset.PositionLerpSpeed,
+                Script.PositionLerpSpeed,
                 Script.SettingsAsset.MinPositionLerpSpeed,
                 Script.SettingsAsset.MaxPositionLerpSpeed);
         }

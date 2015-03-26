@@ -447,6 +447,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion UNITY MESSAGES
         #region EVENT INVOCATORS
+        // todo move to region
+        private void OnUndoRedoPerformed() {
+            var handler = UndoRedoPerformed;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        // todo move to region
+        private void OnPathDataRefChanged() {
+            Debug.Log("PathDataRefChanged");
+            var handler = PathDataRefChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         private void OnJumpedToNode(NodeReachedEventArgs e) {
             var handler = JumpedToNode;
             if (handler != null) handler(this, e);
@@ -1553,25 +1566,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
-
-        // todo move to region
-        private void OnPathDataRefChanged() {
-            Debug.Log("PathDataRefChanged");
-            var handler = PathDataRefChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         //private void OnNewPathDataCreated() {
         //    var handler = NewPathDataCreated;
         //    if (handler != null) handler(this, EventArgs.Empty);
         //}
-
-        // todo move to region
-        private void OnUndoRedoPerformed() {
-            var handler = UndoRedoPerformed;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
     }
 
 }

@@ -1359,12 +1359,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawForwardPointOffsetSlider() {
-            Script.SettingsAsset.ForwardPointOffset = EditorGUILayout.Slider(
+            Script.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
                     "Forward Point",
                     "Distance from animated object to point used as " +
                     "target in Forward rotation mode."),
-                Script.SettingsAsset.ForwardPointOffset,
+                Script.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 // todo add setting
                 0.5f);

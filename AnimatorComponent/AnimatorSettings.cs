@@ -197,14 +197,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private int exportSamplingFrequency = 5;
 
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        [SerializeField]
-        private float forwardPointOffset = 0.05f;
-
         [SerializeField]
         private float forwardPointOffsetMinValue = 0.001f;
 
@@ -265,16 +257,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public int ExportSamplingFrequency {
             get { return exportSamplingFrequency; }
             set { exportSamplingFrequency = value; }
-        }
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        public float ForwardPointOffset {
-            get { return forwardPointOffset; }
-            set { forwardPointOffset = value; }
         }
 
         public float ForwardPointOffsetMinValue {

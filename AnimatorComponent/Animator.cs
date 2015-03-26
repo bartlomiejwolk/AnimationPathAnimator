@@ -196,6 +196,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return rotationSlerpSpeed; }
             set { rotationSlerpSpeed = value; }
         }
+
+        [SerializeField]
+        private float forwardPointOffset = 0.05f;
+
+        /// <summary>
+        ///     How much look forward point should be positioned away from the
+        ///     animated object.
+        /// </summary>
+        /// <remarks>Value is a time in range from 0 to 1.</remarks>
+        public float ForwardPointOffset {
+            get { return forwardPointOffset; }
+            set { forwardPointOffset = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -1225,7 +1238,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Local forward point position.</returns>
         private Vector3 CalculateForwardPointPosition() {
             // Timestamp offset of the forward point.
-            var forwardPointDelta = SettingsAsset.ForwardPointOffset;
+            var forwardPointDelta = ForwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = AnimationTime + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
@@ -1284,7 +1297,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EnableControlsInPlayMode = true;
             RotationMode = RotationMode.Forward;
             WrapMode = AnimatorWrapMode.Clamp;
-            SettingsAsset.ForwardPointOffset = 0.001f;
+            ForwardPointOffset = 0.001f;
             PositionLerpSpeed = 1;
             RotationSlerpSpeed = 999;
             SettingsAsset.ExportSamplingFrequency = 5;

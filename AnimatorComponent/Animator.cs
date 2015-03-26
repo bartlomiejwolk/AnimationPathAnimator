@@ -95,167 +95,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion OPTIONS
 
-        #region INSPECTOR SETTINGS
-
-        [SerializeField]
-        private bool autoPlay;
-
-        /// <summary>
-        ///     If autoplay is enabled, this is delay before animation starts playing.
-        /// </summary>
-        [SerializeField]
-        private float autoPlayDelay;
-
-        [SerializeField]
-        private bool enableControlsInPlayMode = true;
-
-        [SerializeField]
-        private int exportSamplingFrequency = 5;
-
-        [SerializeField]
-        private float forwardPointOffset = 0.05f;
-
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
-        [SerializeField]
-        private HandleMode handleMode =
-            HandleMode.None;
-
-        [SerializeField]
-        private float longJumpValue = 0.01f;
-
-        [SerializeField]
-        private PositionHandle positionHandle = PositionHandle.Free;
-
-        [SerializeField]
-        private float positionLerpSpeed = 1;
-
-        [SerializeField]
-        private Color rotationCurveColor = Color.gray;
-
-        [SerializeField]
-        private RotationMode rotationMode =
-            RotationMode.Forward;
-
-        [SerializeField]
-        private float rotationSlerpSpeed = 999.0f;
-
-        [SerializeField]
-        private float shortJumpValue = 0.002f;
-
-        [SerializeField]
-        private TangentMode tangentMode =
-            TangentMode.Smooth;
-
-        // todo rename to updateAllValues.
-        [SerializeField]
-        private bool updateAllMode;
-
-        [SerializeField]
-        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
-
-        public bool AutoPlay {
-            get { return autoPlay; }
-            set { autoPlay = value; }
-        }
-
-        /// <summary>
-        ///     If autoplay is enabled, this is delay before animation starts playing.
-        /// </summary>
-        public float AutoPlayDelay {
-            get { return autoPlayDelay; }
-            set { autoPlayDelay = value; }
-        }
-
-        public bool EnableControlsInPlayMode {
-            get { return enableControlsInPlayMode; }
-            set { enableControlsInPlayMode = value; }
-        }
-
-        public int ExportSamplingFrequency {
-            get { return exportSamplingFrequency; }
-            set { exportSamplingFrequency = value; }
-        }
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        public float ForwardPointOffset {
-            get { return forwardPointOffset; }
-            set { forwardPointOffset = value; }
-        }
-
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
-        }
-
-        public HandleMode HandleMode {
-            get { return handleMode; }
-            set { handleMode = value; }
-        }
-
-        public float LongJumpValue {
-            get { return longJumpValue; }
-            set { longJumpValue = value; }
-        }
-
-        public PositionHandle PositionHandle {
-            get { return positionHandle; }
-            set { positionHandle = value; }
-        }
-
-        public float PositionLerpSpeed {
-            get { return positionLerpSpeed; }
-            set { positionLerpSpeed = value; }
-        }
-
-        public Color RotationCurveColor {
-            get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
-        }
-
-        public RotationMode RotationMode {
-            get { return rotationMode; }
-            set { rotationMode = value; }
-        }
-
-        public float RotationSlerpSpeed {
-            get { return rotationSlerpSpeed; }
-            set { rotationSlerpSpeed = value; }
-        }
-
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public float ShortJumpValue {
-            get { return shortJumpValue; }
-            set { shortJumpValue = value; }
-        }
-
-        public TangentMode TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
-        }
-
-        public bool UpdateAllMode {
-            get { return updateAllMode; }
-            set { updateAllMode = value; }
-        }
-
-        public AnimatorWrapMode WrapMode {
-            get { return wrapMode; }
-            set { wrapMode = value; }
-        }
-
-        #endregion
-
         #region PROPERTIES
 
         /// <summary>
@@ -368,6 +207,168 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion PROPERTIES
 
+        #region INSPECTOR SETTINGS
+
+        [SerializeField]
+        private bool autoPlay;
+
+        /// <summary>
+        ///     If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        [SerializeField]
+        private float autoPlayDelay;
+
+        [SerializeField]
+        private bool enableControlsInPlayMode = true;
+
+        [SerializeField]
+        private int exportSamplingFrequency = 5;
+
+        [SerializeField]
+        private float forwardPointOffset = 0.05f;
+
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
+        [SerializeField]
+        private HandleMode handleMode =
+            HandleMode.None;
+
+        [SerializeField]
+        private float longJumpValue = 0.01f;
+
+        [SerializeField]
+        private PositionHandle positionHandle = PositionHandle.Free;
+
+        [SerializeField]
+        private float positionLerpSpeed = 1;
+
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+
+        [SerializeField]
+        private RotationMode rotationMode =
+            RotationMode.Forward;
+
+        [SerializeField]
+        private float rotationSlerpSpeed = 999.0f;
+
+        [SerializeField]
+        private float shortJumpValue = 0.002f;
+
+        [SerializeField]
+        private TangentMode tangentMode =
+            TangentMode.Smooth;
+
+        // todo rename to updateAllValues.
+        [SerializeField]
+        private bool updateAllMode;
+
+        [SerializeField]
+        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
+#endregion
+        #region INSPECTOR SETTINGS PROPERTIES
+
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
+        }
+
+        /// <summary>
+        ///     If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        public float AutoPlayDelay {
+            get { return autoPlayDelay; }
+            set { autoPlayDelay = value; }
+        }
+
+        public bool EnableControlsInPlayMode {
+            get { return enableControlsInPlayMode; }
+            set { enableControlsInPlayMode = value; }
+        }
+
+        public int ExportSamplingFrequency {
+            get { return exportSamplingFrequency; }
+            set { exportSamplingFrequency = value; }
+        }
+
+        /// <summary>
+        ///     How much look forward point should be positioned away from the
+        ///     animated object.
+        /// </summary>
+        /// <remarks>Value is a time in range from 0 to 1.</remarks>
+        public float ForwardPointOffset {
+            get { return forwardPointOffset; }
+            set { forwardPointOffset = value; }
+        }
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
+        public HandleMode HandleMode {
+            get { return handleMode; }
+            set { handleMode = value; }
+        }
+
+        public float LongJumpValue {
+            get { return longJumpValue; }
+            set { longJumpValue = value; }
+        }
+
+        public PositionHandle PositionHandle {
+            get { return positionHandle; }
+            set { positionHandle = value; }
+        }
+
+        public float PositionLerpSpeed {
+            get { return positionLerpSpeed; }
+            set { positionLerpSpeed = value; }
+        }
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
+        }
+
+        public RotationMode RotationMode {
+            get { return rotationMode; }
+            set { rotationMode = value; }
+        }
+
+        public float RotationSlerpSpeed {
+            get { return rotationSlerpSpeed; }
+            set { rotationSlerpSpeed = value; }
+        }
+
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        public float ShortJumpValue {
+            get { return shortJumpValue; }
+            set { shortJumpValue = value; }
+        }
+
+        public TangentMode TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
+
+        public bool UpdateAllMode {
+            get { return updateAllMode; }
+            set { updateAllMode = value; }
+        }
+
+        public AnimatorWrapMode WrapMode {
+            get { return wrapMode; }
+            set { wrapMode = value; }
+        }
+
+        #endregion
         #region UNITY MESSAGES
 
         private void OnDisable() {

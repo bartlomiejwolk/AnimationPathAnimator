@@ -121,7 +121,6 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void SubscribeToEvents() {
             Animator.NodeReached += Animator_NodeReached;
-            Animator.NewPathDataCreated += Animator_NewPathDataCreated;
             Animator.PathDataRefChanged += Animator_PathDataRefChanged;
 
             if (Animator.PathData != null) {
@@ -141,11 +140,6 @@ namespace ATP.AnimationPathTools.EventsComponent {
             }
 
         }
-
-        void Animator_NewPathDataCreated(object sender, System.EventArgs e) {
-
-        }
-
 
         #endregion
 

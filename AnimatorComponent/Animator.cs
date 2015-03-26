@@ -31,7 +31,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Event called after a new <c>PathData</c> asset is successfully created.
         /// </summary>
-        public event EventHandler NewPathDataCreated;
+        //public event EventHandler NewPathDataCreated;
 
         /// <summary>
         /// Event called when animated object passes a node.
@@ -155,7 +155,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public PathData PathData {
             get { return pathData; }
-            set { pathData = value; }
+            set {
+                // Remember current value.
+                var oldValue = pathData;
+
+                pathData = value;
+
+                // Call event.
+                if (pathData != oldValue) OnPathDataRefChanged();
+            }
         }
 
         /// <summary>
@@ -234,7 +242,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnValidate() {
-            Debug.Log(PathData);
             HandleUpdateAnimGOInSceneView();
             UpdateSubscribedToEventsFlag();
         }
@@ -982,14 +989,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnJumpedToNode(args);
         }
 
-        private void FirePathDataRefChangedEvent() {
-            OnPathDataRefChanged();
-        }
-
-        private void FireNewPathDataCreatedEvent() {
-            OnNewPathDataCreated();
-        }
-
         /// <summary>
         ///     Export path nodes as transforms.
         /// </summary>
@@ -1390,15 +1389,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo move to region
         private void OnPathDataRefChanged() {
+            Debug.Log("PathDataRefChanged");
             var handler = PathDataRefChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        // todo move to region
-        private void OnNewPathDataCreated() {
-            var handler = NewPathDataCreated;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
+        //private void OnNewPathDataCreated() {
+        //    var handler = NewPathDataCreated;
+        //    if (handler != null) handler(this, EventArgs.Empty);
+        //}
 
     }
 

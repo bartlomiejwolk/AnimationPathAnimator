@@ -880,6 +880,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script,
                     "HandleUpdateAnimGOInSceneView",
                     null);
+
+                // Fire event.
             }
         }
 
@@ -1344,12 +1346,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Assign asset as the current path.
                 Script.PathData = asset;
-
-                // Call event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "FireNewPathDataCreatedEvent",
-                    null);
             }
         }
 
@@ -1417,26 +1413,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPathDataAssetField() {
-            var prevPathData = pathData.objectReferenceValue;
+            Undo.RecordObject(Script, "Change PathData inspector field.");
 
-            serializedObject.Update();
+            Script.PathData = (PathData) EditorGUILayout.ObjectField(
+                new GUIContent("Path Asset", "Asset containing all path data."), 
+                Script.PathData,
+                typeof (PathData),
+                false);
 
-            EditorGUILayout.PropertyField(
-                pathData,
-                new GUIContent(
-                    "Path Asset",
-                    "Asset containing all path data."));
-
-            serializedObject.ApplyModifiedProperties();
-
-            // If path data field was changed..
-            if (pathData.objectReferenceValue != prevPathData) {
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "FirePathDataRefChangedEvent",
-                    null);
-            }
         }
 
         private void DrawPlayerControls() {

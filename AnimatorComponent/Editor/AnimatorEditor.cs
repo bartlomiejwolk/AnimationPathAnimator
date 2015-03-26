@@ -598,7 +598,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.TargetGO != prevTargetGO
                 && prevTargetGO == null) {
 
-                Script.SettingsAsset.RotationMode = RotationMode.Target;
+                Script.RotationMode = RotationMode.Target;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -610,7 +610,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                      && prevTargetGO != null
                      && Script.TargetGO == null) {
 
-                Script.SettingsAsset.RotationMode = RotationMode.Forward;
+                Script.RotationMode = RotationMode.Forward;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -658,7 +658,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.HandleMode = HandleMode.Rotation;
                 // Set rotation mode to Custom so that user can see how
                 // changes to rotation path affect animated object.
-                Script.SettingsAsset.RotationMode = RotationMode.Custom;
+                Script.RotationMode = RotationMode.Custom;
             }
         }
 
@@ -1546,7 +1546,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.PathData.SmoothRotationPathTangents();
 
                 // Change rotation mode.
-                Script.SettingsAsset.RotationMode = RotationMode.Custom;
+                Script.RotationMode = RotationMode.Custom;
                 Script.HandleMode = HandleMode.Rotation;
 
                 SceneView.RepaintAll();
@@ -1582,24 +1582,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.SettingsAsset, "Change rotation mode.");
 
             // Remember current RotationMode.
-            var prevRotationMode = Script.SettingsAsset.RotationMode;
+            var prevRotationMode = Script.RotationMode;
 
             // Draw RotationMode dropdown.
-            Script.SettingsAsset.RotationMode =
+            Script.RotationMode =
                 (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         "Mode that controls animated game object rotation."),
-                    Script.SettingsAsset.RotationMode);
+                    Script.RotationMode);
 
             // Return if rotation mode not changed.
-            if (Script.SettingsAsset.RotationMode == prevRotationMode) return;
+            if (Script.RotationMode == prevRotationMode) return;
 
             // Update animated GO in the scene.
             callback();
 
             // If Custom mode selected, change handle mode to Rotation.
-            if (Script.SettingsAsset.RotationMode == RotationMode.Custom) {
+            if (Script.RotationMode == RotationMode.Custom) {
                 Script.HandleMode = HandleMode.Rotation;
             }
         }

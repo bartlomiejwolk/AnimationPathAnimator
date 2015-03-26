@@ -231,10 +231,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float positionLerpSpeed = 1;
 
         [SerializeField]
-        private RotationMode rotationMode =
-            RotationMode.Forward;
-
-        [SerializeField]
         private float rotationSlerpSpeed = 999.0f;
 
         [SerializeField]
@@ -346,11 +342,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float PositionLerpSpeed {
             get { return positionLerpSpeed; }
             set { positionLerpSpeed = value; }
-        }
-
-        public RotationMode RotationMode {
-            get { return rotationMode; }
-            set { rotationMode = value; }
         }
 
         public float RotationSlerpSpeed {

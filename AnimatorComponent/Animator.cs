@@ -124,6 +124,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return updateAllMode; }
             set { updateAllMode = value; }
         }
+
+        [SerializeField]
+        private RotationMode rotationMode =
+            RotationMode.Forward;
+
+        public RotationMode RotationMode {
+            get { return rotationMode; }
+            set { rotationMode = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -389,21 +398,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets rotation mode to Custom.
         /// </summary>
         public void SetRotationCustom() {
-            SettingsAsset.RotationMode = RotationMode.Custom;
+            RotationMode = RotationMode.Custom;
         }
 
         /// <summary>
         /// Sets rotation mode to Forward.
         /// </summary>
         public void SetRotationForward() {
-            SettingsAsset.RotationMode = RotationMode.Forward;
+            RotationMode = RotationMode.Forward;
         }
 
         /// <summary>
         /// Sets rotation mode to Target.
         /// </summary>
         public void SetRotationTarget() {
-            SettingsAsset.RotationMode = RotationMode.Target;
+            RotationMode = RotationMode.Target;
         }
 
         /// <summary>
@@ -511,16 +520,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Look at target.
             if (TargetGO != null
-                && SettingsAsset.RotationMode == RotationMode.Target) {
+                && RotationMode == RotationMode.Target) {
 
                 RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
-            if (SettingsAsset.RotationMode == RotationMode.Custom) {
+            if (RotationMode == RotationMode.Custom) {
                 RotateObjectWithRotationPath();
             }
             // Look forward.
-            else if (SettingsAsset.RotationMode == RotationMode.Forward) {
+            else if (RotationMode == RotationMode.Forward) {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
@@ -656,7 +665,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (AnimatedGO == null) return;
 
             // If rotation mode is set to..
-            switch (SettingsAsset.RotationMode) {
+            switch (RotationMode) {
                 case RotationMode.Forward:
                     var globalForwardPoint = GetGlobalForwardPoint();
 
@@ -1210,7 +1219,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimationTime = 0;
             SettingsAsset.AutoPlay = true;
             SettingsAsset.EnableControlsInPlayMode = true;
-            SettingsAsset.RotationMode = RotationMode.Forward;
+            RotationMode = RotationMode.Forward;
             SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
             SettingsAsset.ForwardPointOffset = 0.001f;
             SettingsAsset.PositionLerpSpeed = 1;
@@ -1342,7 +1351,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Handle drawing forward point icon.
         /// </summary>
         private void HandleDrawingForwardPointIcon() {
-            if (SettingsAsset.RotationMode == RotationMode.Forward) {
+            if (RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
 
                 DrawForwardPointIcon(
@@ -1414,7 +1423,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingTargetIcon() {
             // If rotation mode set to target..
-            if (SettingsAsset.RotationMode == RotationMode.Target
+            if (RotationMode == RotationMode.Target
                 // and target obj. is assigned..
                 && TargetGO != null) {
                 DrawTargetIcon(TargetGO.position);

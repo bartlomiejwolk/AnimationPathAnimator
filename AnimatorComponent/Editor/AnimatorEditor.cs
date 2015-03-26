@@ -66,13 +66,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private SerializedProperty enableControlsInPlayMode;
         private SerializedProperty gizmoCurveColor;
         private SerializedProperty longJumpValue;
-        private SerializedProperty pathData;
         private SerializedProperty positionHandle;
         private SerializedProperty rotationCurveColor;
         private SerializedProperty settings;
         private SerializedProperty shortJumpValue;
         private SerializedProperty skin;
-        private SerializedProperty subscribedToEvents;
         private SerializedProperty targetGO;
 
         #endregion SERIALIZED PROPERTIES
@@ -894,7 +892,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             targetGO = serializedObject.FindProperty("targetGO");
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
-            pathData = serializedObject.FindProperty("pathData");
             enableControlsInPlayMode =
                 SettingsSerializedObject.FindProperty(
                     "enableControlsInPlayMode");
@@ -908,8 +905,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 SettingsSerializedObject.FindProperty("shortJumpValue");
             longJumpValue =
                 SettingsSerializedObject.FindProperty("longJumpValue");
-            subscribedToEvents =
-                serializedObject.FindProperty("subscribedToEvents");
             animationTime =
                 serializedObject.FindProperty("animationTime");
             positionHandle =

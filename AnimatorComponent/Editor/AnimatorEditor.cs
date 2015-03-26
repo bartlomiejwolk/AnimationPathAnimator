@@ -143,7 +143,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
 
-            HandleAnimatorEventsSubscription();
+            //HandleAnimatorEventsSubscription();
 
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(

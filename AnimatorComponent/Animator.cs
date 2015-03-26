@@ -192,13 +192,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private bool Reverse { get; set; }
 
         /// <summary>
-        ///     If animator is currently subscribed to path events.
-        /// </summary>
-        private bool SubscribedToEvents {
-            set { subscribedToEvents = value; }
-        }
-
-        /// <summary>
         /// If animation is playing. It's true only when <c>EaseCoroutineRunning</c> is true and <c>Pause</c> is false.
         /// </summary>
         public bool IsPlaying {
@@ -1181,7 +1174,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.RotationPathReset += PathData_RotationPathReset;
             AnimationEnded += APAnimator_AnimationEnded;
 
-            SubscribedToEvents = true;
         }
 
         /// <summary>
@@ -1197,8 +1189,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.PathReset -= PathData_PathReset;
             PathData.RotationPathReset -= PathData_RotationPathReset;
             AnimationEnded -= APAnimator_AnimationEnded;
-
-            SubscribedToEvents = false;
         }
 
         #endregion METHODS

@@ -150,6 +150,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return wrapMode; }
             set { wrapMode = value; }
         }
+
+        [SerializeField]
+        private bool autoPlay;
+
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -783,7 +791,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Decides if to start animation playback on enter play mode.
         /// </summary>
         private void HandleStartAnimation() {
-            if (Application.isPlaying && SettingsAsset.AutoPlay) {
+            if (Application.isPlaying && AutoPlay) {
                 Invoke("StartAnimation", SettingsAsset.AutoPlayDelay);
             }
         }
@@ -1234,7 +1242,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TangentMode = TangentMode.Smooth;
             UpdateAllMode = false;
             AnimationTime = 0;
-            SettingsAsset.AutoPlay = true;
+            AutoPlay = true;
             SettingsAsset.EnableControlsInPlayMode = true;
             RotationMode = RotationMode.Forward;
             WrapMode = AnimatorWrapMode.Clamp;

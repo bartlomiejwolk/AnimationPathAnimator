@@ -1296,11 +1296,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawAutoPlayControl() {
-            Script.SettingsAsset.AutoPlay = EditorGUILayout.Toggle(
+            Script.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
                     "Start playing animation after entering play mode."),
-                Script.SettingsAsset.AutoPlay);
+                Script.AutoPlay);
         }
 
         private void DrawAutoPlayDelayField() {

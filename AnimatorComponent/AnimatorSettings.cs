@@ -190,8 +190,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region ANIMATOR FIELDS
 
         [Header("Animator")]
-        [SerializeField]
-        private bool autoPlay;
 
         [SerializeField]
         private int countdownToStopFramesNo = 10;
@@ -281,11 +279,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { autoPlayDelay = value; }
         }
 
-
-        public bool AutoPlay {
-            get { return autoPlay; }
-            set { autoPlay = value; }
-        }
 
         public int CountdownToStopFramesNo {
             get { return countdownToStopFramesNo; }

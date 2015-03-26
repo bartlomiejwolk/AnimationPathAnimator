@@ -195,9 +195,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private int countdownToStopFramesNo = 10;
 
         [SerializeField]
-        private bool enableControlsInPlayMode = true;
-
-        [SerializeField]
         private int exportSamplingFrequency = 5;
 
         /// <summary>
@@ -269,11 +266,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public int CountdownToStopFramesNo {
             get { return countdownToStopFramesNo; }
             set { countdownToStopFramesNo = value; }
-        }
-
-        public bool EnableControlsInPlayMode {
-            get { return enableControlsInPlayMode; }
-            set { enableControlsInPlayMode = value; }
         }
 
         public int ExportSamplingFrequency {

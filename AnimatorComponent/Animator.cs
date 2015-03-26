@@ -172,6 +172,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return autoPlayDelay; }
             set { autoPlayDelay = value; }
         }
+
+        [SerializeField]
+        private bool enableControlsInPlayMode = true;
+
+        public bool EnableControlsInPlayMode {
+            get { return enableControlsInPlayMode; }
+            set { enableControlsInPlayMode = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -983,7 +991,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Method responsible for detecting all shortcuts pressed in play mode.
         /// </summary>
         private void HandleShortcuts() {
-            if (!SettingsAsset.EnableControlsInPlayMode) return;
+            if (!EnableControlsInPlayMode) return;
 
             // Play/Pause.
             if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
@@ -1257,7 +1265,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateAllMode = false;
             AnimationTime = 0;
             AutoPlay = true;
-            SettingsAsset.EnableControlsInPlayMode = true;
+            EnableControlsInPlayMode = true;
             RotationMode = RotationMode.Forward;
             WrapMode = AnimatorWrapMode.Clamp;
             SettingsAsset.ForwardPointOffset = 0.001f;

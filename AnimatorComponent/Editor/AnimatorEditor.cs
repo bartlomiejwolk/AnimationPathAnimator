@@ -893,7 +893,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             enableControlsInPlayMode =
-                SettingsSerializedObject.FindProperty(
+                serializedObject.FindProperty(
                     "enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settingsAsset");

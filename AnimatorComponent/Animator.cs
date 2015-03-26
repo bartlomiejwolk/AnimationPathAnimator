@@ -411,27 +411,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUpdatingAnimGOInPlayMode();
             HandleShortcuts();
         }
-
-        private void UpdateAnimationTime() {
-            if (!Application.isPlaying) return;
-            // Return if not playing.
-            if (!IsPlaying) return;
-
-            // Get ease value.
-            var timeStep =
-                PathData.GetEaseValueAtTime(AnimationTime);
-
-            // If animation is set to play backward..
-            if (Reverse) {
-                // Decrease animation time.
-                AnimationTime -= timeStep * Time.deltaTime;
-            }
-            else {
-                // Increase animation time.
-                AnimationTime += timeStep * Time.deltaTime;
-            }
-        }
-
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
@@ -502,6 +481,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region ANIMATION
+        private void UpdateAnimationTime() {
+            if (!Application.isPlaying) return;
+            // Return if not playing.
+            if (!IsPlaying) return;
+
+            // Get ease value.
+            var timeStep =
+                PathData.GetEaseValueAtTime(AnimationTime);
+
+            // If animation is set to play backward..
+            if (Reverse) {
+                // Decrease animation time.
+                AnimationTime -= timeStep * Time.deltaTime;
+            }
+            else {
+                // Increase animation time.
+                AnimationTime += timeStep * Time.deltaTime;
+            }
+        }
+
 
         /// <summary>
         ///     Pauses animation.
@@ -824,7 +823,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     break;
             }
         }
+        #endregion
 
+        #region ANIMATION HANDLERS
         /// <summary>
         ///     Update animation time with values taken from ease curve.
         /// </summary>
@@ -991,6 +992,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 OnNodeReached(args);
             }
         }
+        #endregion
+        #region OTHER HANDLERS
 
         /// <summary>
         ///     Method responsible for detecting all shortcuts pressed in play mode.

@@ -45,6 +45,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> JumpedToNode;
 
+        /// <summary>
+        /// Event called from Editor after ValidateCommand of type UndoRedoPerformed was executed.
+        /// </summary>
+        public event EventHandler UndoRedoPerformed;
+
         #endregion
 
         #region FIELDS
@@ -989,6 +994,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnJumpedToNode(args);
         }
 
+        private void FireUndoRedoPerformedEvent() {
+            OnUndoRedoPerformed();
+        }
+
         /// <summary>
         ///     Export path nodes as transforms.
         /// </summary>
@@ -1398,6 +1407,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         //    var handler = NewPathDataCreated;
         //    if (handler != null) handler(this, EventArgs.Empty);
         //}
+
+        // todo move to region
+        private void OnUndoRedoPerformed() {
+            var handler = UndoRedoPerformed;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
 
     }
 

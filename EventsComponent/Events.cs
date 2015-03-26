@@ -122,11 +122,18 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private void SubscribeToEvents() {
             Animator.NodeReached += Animator_NodeReached;
             Animator.PathDataRefChanged += Animator_PathDataRefChanged;
+            Animator.UndoRedoPerformed += Animator_UndoRedoPerformed;
 
             if (Animator.PathData != null) {
                 Animator.PathData.NodeAdded += PathData_NodeAdded;
                 Animator.PathData.NodeRemoved += PathData_NodeRemoved;
             }
+        }
+
+        void Animator_UndoRedoPerformed(object sender, System.EventArgs e) {
+            // During animator undo event, reference to path data could have been changed.
+            UnsubscribeFromEvents();
+            SubscribeToEvents();
         }
 
         void Animator_PathDataRefChanged(object sender, System.EventArgs e) {

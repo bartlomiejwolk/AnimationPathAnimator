@@ -882,6 +882,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     null);
 
                 // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireUndoRedoPerformedEvent",
+                    null);
             }
         }
 
@@ -1420,7 +1424,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.PathData,
                 typeof (PathData),
                 false);
-
         }
 
         private void DrawPlayerControls() {

@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -591,30 +592,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region OTHER HANDLERS
 
         /// <summary>
-        ///     Makes sure that animator is always subscribed to path events.
-        /// </summary>
-        private void HandleAnimatorEventsSubscription() {
-            // Subscribe animator to path events if not subscribed already.
-            // This is required after animator component reset.
-            serializedObject.Update();
-            if (!subscribedToEvents.boolValue) {
-                // Unsubscribe first to avoid multiple subscription after
-                // animator component reset.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "UnsubscribeFromEvents",
-                    null);
-
-                // Subscribe to events.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "SubscribeToEvents",
-                    null);
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
         ///     Handles adding/removing reference to target game object.
         /// </summary>
         /// <param name="prevTargetGO"></param>
@@ -902,6 +879,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Utilities.InvokeMethodWithReflection(
                     Script,
                     "HandleUpdateAnimGOInSceneView",
+                    null);
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireUndoRedoPerformedEvent",
                     null);
             }
         }
@@ -1434,15 +1417,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPathDataAssetField() {
-            serializedObject.Update();
+            Undo.RecordObject(Script, "Change PathData inspector field.");
 
-            EditorGUILayout.PropertyField(
-                pathData,
-                new GUIContent(
-                    "Path Asset",
-                    "Asset containing all path data."));
-
-            serializedObject.ApplyModifiedProperties();
+            Script.PathData = (PathData) EditorGUILayout.ObjectField(
+                new GUIContent("Path Asset", "Asset containing all path data."), 
+                Script.PathData,
+                typeof (PathData),
+                false);
         }
 
         private void DrawPlayerControls() {

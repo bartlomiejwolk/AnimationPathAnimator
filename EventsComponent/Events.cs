@@ -7,7 +7,7 @@ using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 namespace ATP.AnimationPathTools.EventsComponent {
 
     [RequireComponent(typeof (Animator))]
-    public class Events : MonoBehaviour {
+    public class Events : MonoBehaviour, ISerializationCallbackReceiver {
         #region FIELDS
 
         [SerializeField]
@@ -74,6 +74,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             Debug.Log("OnEnable()");
             if (Animator == null) return;
 
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -90,6 +91,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
             InitializeSlots();
             LoadRequiredResources();
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -119,14 +121,35 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void SubscribeToEvents() {
             Animator.NodeReached += Animator_NodeReached;
+            Animator.PathDataRefChanged += Animator_PathDataRefChanged;
+            Animator.UndoRedoPerformed += Animator_UndoRedoPerformed;
 
             if (Animator.PathData != null) {
-                Debug.Log("subscribe Events to PathData");
                 Animator.PathData.NodeAdded += PathData_NodeAdded;
                 Animator.PathData.NodeRemoved += PathData_NodeRemoved;
             }
         }
 
+        void Animator_UndoRedoPerformed(object sender, System.EventArgs e) {
+            // During animator undo event, reference to path data could have been changed.
+            HandlePathDataRefChange();
+        }
+
+        void Animator_PathDataRefChanged(object sender, System.EventArgs e) {
+            HandlePathDataRefChange();
+        }
+
+        private void HandlePathDataRefChange() {
+            if (Animator.PathData != null) {
+                UnsubscribeFromEvents();
+                SubscribeToEvents();
+                InitializeSlots();
+            }
+            else {
+                UnsubscribeFromEvents();
+                NodeEventSlots.Clear();
+            }
+        }
 
         #endregion
 
@@ -200,6 +223,15 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         #endregion
+
+        // todo move to region
+        public void OnBeforeSerialize() {
+        }
+
+        public void OnAfterDeserialize() {
+            SubscribeToEvents();
+        }
+
     }
 
 }

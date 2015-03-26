@@ -133,6 +133,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return rotationMode; }
             set { rotationMode = value; }
         }
+
+        [SerializeField]
+        private TangentMode tangentMode =
+            TangentMode.Smooth;
+
+        public TangentMode TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -419,7 +428,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets tangent mode to Linear.
         /// </summary>
         public void SetTangentLinear() {
-            SettingsAsset.TangentMode = TangentMode.Linear;
+            TangentMode = TangentMode.Linear;
             PathData.SetLinearAnimObjPathTangents();
         }
 
@@ -427,7 +436,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets tangent mode to Smooth.
         /// </summary>
         public void SetTangentSmooth() {
-            SettingsAsset.TangentMode = TangentMode.Smooth;
+            TangentMode = TangentMode.Smooth;
             PathData.SmoothAnimObjPathTangents();
         }
 
@@ -1214,7 +1223,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void ResetInspectorOptions() {
             TargetGO = null;
             HandleMode = HandleMode.None;
-            SettingsAsset.TangentMode = TangentMode.Smooth;
+            TangentMode = TangentMode.Smooth;
             UpdateAllMode = false;
             AnimationTime = 0;
             SettingsAsset.AutoPlay = true;

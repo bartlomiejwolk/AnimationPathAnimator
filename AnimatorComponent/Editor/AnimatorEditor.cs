@@ -411,11 +411,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode sooth node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
             // In Linear mode set node tangents to linear.
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
 
@@ -490,11 +490,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode mooth node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
             // In Linear mode set node tangents to linear.
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
 
@@ -549,7 +549,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region MODE HANDLERS
 
         private void HandleLinearTangentMode() {
-            if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
         }
@@ -566,7 +566,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleSmoothTangentMode() {
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
         }
@@ -575,10 +575,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.PathData == null) return;
 
             // Update path node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
 
@@ -1671,18 +1671,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void DrawTangentModeDropdown() {
             // Remember current tangent mode.
-            var prevTangentMode = Script.SettingsAsset.TangentMode;
+            var prevTangentMode = Script.TangentMode;
 
             // Draw tangent mode dropdown.
-            Script.SettingsAsset.TangentMode =
+            Script.TangentMode =
                 (TangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         "Tangent mode applied to each path node."),
-                    Script.SettingsAsset.TangentMode);
+                    Script.TangentMode);
 
             // Update gizmo curve is tangent mode changed.
-            if (Script.SettingsAsset.TangentMode != prevTangentMode) {
+            if (Script.TangentMode != prevTangentMode) {
                 HandleTangentModeChange();
             }
         }

@@ -246,10 +246,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float maxPositionLerpSpeed = 1;
 
         [SerializeField]
-        private TangentMode tangentMode =
-            TangentMode.Smooth;
-
-        [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
 
         /// <summary>
@@ -347,11 +343,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float RotationSlerpSpeed {
             get { return rotationSlerpSpeed; }
             set { rotationSlerpSpeed = value; }
-        }
-
-        public TangentMode TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
         }
 
         public AnimatorWrapMode WrapMode {

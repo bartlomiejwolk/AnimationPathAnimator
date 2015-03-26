@@ -1368,6 +1368,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Assign asset as the current path.
                 Script.PathData = asset;
+
+                // Call event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireNewPathDataCreatedEvent",
+                    null);
             }
         }
 

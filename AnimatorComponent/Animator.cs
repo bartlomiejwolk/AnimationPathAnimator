@@ -29,6 +29,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler PathDataRefChanged;
 
         /// <summary>
+        /// Event called after a new <c>PathData</c> asset is successfully created.
+        /// </summary>
+        public event EventHandler NewPathDataCreated;
+
+        /// <summary>
         /// Event called when animated object passes a node.
         /// It'll be called only when anim. go is before a node in one frame
         /// and after in the next one.
@@ -981,6 +986,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnPathDataRefChanged();
         }
 
+        private void FireNewPathDataCreatedEvent() {
+            OnNewPathDataCreated();
+        }
+
         /// <summary>
         ///     Export path nodes as transforms.
         /// </summary>
@@ -1381,8 +1390,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo move to region
         private void OnPathDataRefChanged() {
-            Debug.Log("PathDataChanged event");
             var handler = PathDataRefChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        // todo move to region
+        private void OnNewPathDataCreated() {
+            var handler = NewPathDataCreated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

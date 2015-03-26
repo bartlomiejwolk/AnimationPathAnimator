@@ -19,7 +19,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void DrawExportControls() {
             EditorGUILayout.BeginHorizontal();
 
-            Script.SettingsAsset.ExportSamplingFrequency =
+            Script.ExportSamplingFrequency =
                 EditorGUILayout.IntField(
                     new GUIContent(
                         "Export Sampling",
@@ -27,10 +27,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         +
                         "If set to 0, it'll export only keys defined in " +
                         "the path."),
-                    Script.SettingsAsset.ExportSamplingFrequency);
+                    Script.ExportSamplingFrequency);
 
             if (GUILayout.Button("Export")) {
-                Script.ExportNodes(Script.SettingsAsset.ExportSamplingFrequency);
+                Script.ExportNodes(Script.ExportSamplingFrequency);
             }
 
             EditorGUILayout.EndHorizontal();
@@ -199,7 +199,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawine on-scene ease handles.
         /// </summary>
         private void HandleDrawingEaseHandles() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Ease) return;
+            if (Script.HandleMode != HandleMode.Ease) return;
 
             // Get path node positions.
             var nodePositions =
@@ -229,7 +229,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene labes with ease values.
         /// </summary>
         private void HandleDrawingEaseLabel() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Ease) return;
+            if (Script.HandleMode != HandleMode.Ease) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
@@ -258,7 +258,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 SceneHandles.DrawCustomPositionHandles(
                     nodeGlobalPositions,
                     Script.SettingsAsset.MovementHandleSize,
-                    Script.SettingsAsset.GizmoCurveColor,
+                    Script.GizmoCurveColor,
                     DrawPositionHandlesCallbackHandler);
             }
             // Draw default position handles.
@@ -297,7 +297,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene rotation handle in Custom rotation mode.
         /// </summary>
         private void HandleDrawingRotationHandle() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (Script.HandleMode != HandleMode.Rotation) return;
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
@@ -328,7 +328,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene tilting handles.
         /// </summary>
         private void HandleDrawingTiltingHandles() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
+            if (Script.HandleMode != HandleMode.Tilting) return;
 
             // Get path node positions.
             var nodePositions =
@@ -353,7 +353,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene tilting value labels.
         /// </summary>
         private void HandleDrawingTiltingLabels() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
+            if (Script.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
@@ -372,7 +372,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene label for "Update All" inspector option.
         /// </summary>
         private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.SettingsAsset.UpdateAllMode) return;
+            if (!Script.UpdateAllMode) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -411,11 +411,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode sooth node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
             // In Linear mode set node tangents to linear.
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
 
@@ -436,7 +436,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
             // If update all mode is set..
-            if (Script.SettingsAsset.UpdateAllMode) {
+            if (Script.UpdateAllMode) {
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 MultiplyEaseValues(oldValue, newValue);
             }
@@ -490,11 +490,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode mooth node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
             // In Linear mode set node tangents to linear.
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
 
@@ -527,7 +527,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            if (Script.SettingsAsset.UpdateAllMode) {
+            if (Script.UpdateAllMode) {
                 MultiplyTiltingValues(
                     Script.PathData.GetTiltingValueAtIndex(keyIndex),
                     newValue);
@@ -549,7 +549,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region MODE HANDLERS
 
         private void HandleLinearTangentMode() {
-            if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
         }
@@ -562,11 +562,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script,
                 "HandleUpdateAnimGOInSceneView",
                 null);
-            Script.SettingsAsset.HandleMode = HandleMode.None;
+            Script.HandleMode = HandleMode.None;
         }
 
         private void HandleSmoothTangentMode() {
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
         }
@@ -575,10 +575,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.PathData == null) return;
 
             // Update path node tangents.
-            if (Script.SettingsAsset.TangentMode == TangentMode.Smooth) {
+            if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothAnimObjPathTangents();
             }
-            else if (Script.SettingsAsset.TangentMode == TangentMode.Linear) {
+            else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
             }
 
@@ -598,7 +598,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.TargetGO != prevTargetGO
                 && prevTargetGO == null) {
 
-                Script.SettingsAsset.RotationMode = RotationMode.Target;
+                Script.RotationMode = RotationMode.Target;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -610,7 +610,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                      && prevTargetGO != null
                      && Script.TargetGO == null) {
 
-                Script.SettingsAsset.RotationMode = RotationMode.Forward;
+                Script.RotationMode = RotationMode.Forward;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -655,10 +655,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else {
                 // Set handle mode to Rotation so that user can fix the
                 // rotatio path.
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.HandleMode = HandleMode.Rotation;
                 // Set rotation mode to Custom so that user can see how
                 // changes to rotation path affect animated object.
-                Script.SettingsAsset.RotationMode = RotationMode.Custom;
+                Script.RotationMode = RotationMode.Custom;
             }
         }
 
@@ -893,24 +893,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             advancedSettingsFoldout =
                 serializedObject.FindProperty("advancedSettingsFoldout");
             enableControlsInPlayMode =
-                SettingsSerializedObject.FindProperty(
+                serializedObject.FindProperty(
                     "enableControlsInPlayMode");
             skin = serializedObject.FindProperty("skin");
             settings = serializedObject.FindProperty("settingsAsset");
             gizmoCurveColor =
-                SettingsSerializedObject.FindProperty("gizmoCurveColor");
+                serializedObject.FindProperty("gizmoCurveColor");
             rotationCurveColor =
-                SettingsSerializedObject.FindProperty("rotationCurveColor");
+                serializedObject.FindProperty("rotationCurveColor");
             shortJumpValue =
-                SettingsSerializedObject.FindProperty("shortJumpValue");
+                serializedObject.FindProperty("shortJumpValue");
             longJumpValue =
-                SettingsSerializedObject.FindProperty("longJumpValue");
+                serializedObject.FindProperty("longJumpValue");
             animationTime =
                 serializedObject.FindProperty("animationTime");
             positionHandle =
-                SettingsSerializedObject.FindProperty("positionHandle");
+                serializedObject.FindProperty("positionHandle");
             autoPlayDelay =
-                SettingsSerializedObject.FindProperty("autoPlayDelay");
+                serializedObject.FindProperty("autoPlayDelay");
 
             SerializedPropertiesInitialized = true;
         }
@@ -932,13 +932,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.SettingsAsset == null) return;
 
             // Limit RotationSpeed value.
-            if (Script.SettingsAsset.RotationSlerpSpeed < 0) {
-                Script.SettingsAsset.RotationSlerpSpeed = 0;
+            if (Script.RotationSlerpSpeed < 0) {
+                Script.RotationSlerpSpeed = 0;
             }
 
             // Limit ExmportSamplingFrequency value.
-            if (Script.SettingsAsset.ExportSamplingFrequency < 1) {
-                Script.SettingsAsset.ExportSamplingFrequency = 1;
+            if (Script.ExportSamplingFrequency < 1) {
+                Script.ExportSamplingFrequency = 1;
             }
         }
 
@@ -1015,7 +1015,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.EaseModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.Ease;
+                Script.HandleMode = HandleMode.Ease;
             }
 
             // Rotation mode key.
@@ -1023,7 +1023,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.RotationModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.HandleMode = HandleMode.Rotation;
             }
 
             // Tilting mode key.
@@ -1031,7 +1031,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.TiltingModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.Tilting;
+                Script.HandleMode = HandleMode.Tilting;
             }
 
             // None mode key.
@@ -1039,7 +1039,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.NoneModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.None;
+                Script.HandleMode = HandleMode.None;
             }
 
             // Update all mode.
@@ -1047,8 +1047,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.UpdateAllKey) {
 
-                Script.SettingsAsset.UpdateAllMode =
-                    !Script.SettingsAsset.UpdateAllMode;
+                Script.UpdateAllMode =
+                    !Script.UpdateAllMode;
             }
 
             // Update position handle.
@@ -1057,13 +1057,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 == Script.SettingsAsset.PositionHandleKey) {
 
                 // Change to Position mode.
-                if (Script.SettingsAsset.PositionHandle == PositionHandle.Free) {
-                    Script.SettingsAsset.PositionHandle =
+                if (Script.PositionHandle == PositionHandle.Free) {
+                    Script.PositionHandle =
                         PositionHandle.Position;
                 }
                 // Change to Free mode.
                 else {
-                    Script.SettingsAsset.PositionHandle =
+                    Script.PositionHandle =
                         PositionHandle.Free;
                 }
             }
@@ -1078,7 +1078,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 var newAnimationTimeRatio =
                     animationTime.floatValue
-                    + Script.SettingsAsset.ShortJumpValue;
+                    + Script.ShortJumpValue;
 
                 animationTime.floatValue =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
@@ -1094,7 +1094,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 var newAnimationTimeRatio =
                     animationTime.floatValue
-                    - Script.SettingsAsset.ShortJumpValue;
+                    - Script.ShortJumpValue;
 
                 animationTime.floatValue =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
@@ -1108,7 +1108,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                animationTime.floatValue += Script.SettingsAsset.LongJumpValue;
+                animationTime.floatValue += Script.LongJumpValue;
             }
 
             // Long jump backward.
@@ -1119,7 +1119,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                animationTime.floatValue -= Script.SettingsAsset.LongJumpValue;
+                animationTime.floatValue -= Script.LongJumpValue;
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -1296,11 +1296,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawAutoPlayControl() {
-            Script.SettingsAsset.AutoPlay = EditorGUILayout.Toggle(
+            Script.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
                     "Start playing animation after entering play mode."),
-                Script.SettingsAsset.AutoPlay);
+                Script.AutoPlay);
         }
 
         private void DrawAutoPlayDelayField() {
@@ -1359,12 +1359,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawForwardPointOffsetSlider() {
-            Script.SettingsAsset.ForwardPointOffset = EditorGUILayout.Slider(
+            Script.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
                     "Forward Point",
                     "Distance from animated object to point used as " +
                     "target in Forward rotation mode."),
-                Script.SettingsAsset.ForwardPointOffset,
+                Script.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 // todo add setting
                 0.5f);
@@ -1383,13 +1383,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawHandleModeDropdown() {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
-            Script.SettingsAsset.HandleMode =
+            Script.HandleMode =
                 (HandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Scene Tool",
                         "Tool displayed next to each node. Default " +
                         "shortcuts: Y, U, I, O."),
-                    Script.SettingsAsset.HandleMode);
+                    Script.HandleMode);
         }
 
         private void DrawInfoLabel(string text) {
@@ -1476,14 +1476,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPositionSpeedSlider() {
-            Script.SettingsAsset.PositionLerpSpeed = EditorGUILayout.Slider(
+            Script.PositionLerpSpeed = EditorGUILayout.Slider(
                 new GUIContent(
                     "Position Lerp",
                     "Controls how much time it'll take the " +
                     "animated object to reach position that it should be " +
                     "at the current animation time. " +
                     "1 means no delay."),
-                Script.SettingsAsset.PositionLerpSpeed,
+                Script.PositionLerpSpeed,
                 Script.SettingsAsset.MinPositionLerpSpeed,
                 Script.SettingsAsset.MaxPositionLerpSpeed);
         }
@@ -1522,7 +1522,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Reset inspector options.
                 Script.AnimationTime = 0;
-                Script.SettingsAsset.HandleMode = HandleMode.None;
+                Script.HandleMode = HandleMode.None;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -1546,8 +1546,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.PathData.SmoothRotationPathTangents();
 
                 // Change rotation mode.
-                Script.SettingsAsset.RotationMode = RotationMode.Custom;
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.RotationMode = RotationMode.Custom;
+                Script.HandleMode = HandleMode.Rotation;
 
                 SceneView.RepaintAll();
             }
@@ -1582,36 +1582,36 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.SettingsAsset, "Change rotation mode.");
 
             // Remember current RotationMode.
-            var prevRotationMode = Script.SettingsAsset.RotationMode;
+            var prevRotationMode = Script.RotationMode;
 
             // Draw RotationMode dropdown.
-            Script.SettingsAsset.RotationMode =
+            Script.RotationMode =
                 (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         "Mode that controls animated game object rotation."),
-                    Script.SettingsAsset.RotationMode);
+                    Script.RotationMode);
 
             // Return if rotation mode not changed.
-            if (Script.SettingsAsset.RotationMode == prevRotationMode) return;
+            if (Script.RotationMode == prevRotationMode) return;
 
             // Update animated GO in the scene.
             callback();
 
             // If Custom mode selected, change handle mode to Rotation.
-            if (Script.SettingsAsset.RotationMode == RotationMode.Custom) {
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+            if (Script.RotationMode == RotationMode.Custom) {
+                Script.HandleMode = HandleMode.Rotation;
             }
         }
 
         private void DrawRotationSpeedSlider() {
-            Script.SettingsAsset.RotationSlerpSpeed =
+            Script.RotationSlerpSpeed =
                 EditorGUILayout.Slider(
                     new GUIContent(
                         "Rotation Slerp",
                         "Controls how much time it'll take the " +
                         "animated object to finish rotation towards followed target."),
-                    Script.SettingsAsset.RotationSlerpSpeed,
+                    Script.RotationSlerpSpeed,
                     Script.SettingsAsset.MinRotationSlerpSpeed,
                     Script.SettingsAsset.MaxRotationSlerpSpeed);
         }
@@ -1671,18 +1671,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void DrawTangentModeDropdown() {
             // Remember current tangent mode.
-            var prevTangentMode = Script.SettingsAsset.TangentMode;
+            var prevTangentMode = Script.TangentMode;
 
             // Draw tangent mode dropdown.
-            Script.SettingsAsset.TangentMode =
+            Script.TangentMode =
                 (TangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         "Tangent mode applied to each path node."),
-                    Script.SettingsAsset.TangentMode);
+                    Script.TangentMode);
 
             // Update gizmo curve is tangent mode changed.
-            if (Script.SettingsAsset.TangentMode != prevTangentMode) {
+            if (Script.TangentMode != prevTangentMode) {
                 HandleTangentModeChange();
             }
         }
@@ -1701,21 +1701,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawUpdateAllToggle() {
-            Script.SettingsAsset.UpdateAllMode = EditorGUILayout.Toggle(
+            Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
                     "When checked, values will be changed for all nodes. " +
                     "Default shortcut: P."),
-                Script.SettingsAsset.UpdateAllMode);
+                Script.UpdateAllMode);
         }
 
         private void DrawWrapModeDropdown() {
-            Script.SettingsAsset.WrapMode =
+            Script.WrapMode =
                 (AnimatorWrapMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Wrap Mode",
                         "Determines animator behaviour after animation end."),
-                    Script.SettingsAsset.WrapMode);
+                    Script.WrapMode);
         }
 
         #endregion

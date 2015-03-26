@@ -51,9 +51,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode longJumpForwardKey = KeyCode.K;
 
         [SerializeField]
-        private float longJumpValue = 0.01f;
-
-        [SerializeField]
         private EventModifiers modKey = EventModifiers.Alt;
 
         [SerializeField]
@@ -70,12 +67,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [SerializeField]
         private KeyCode shortJumpForwardKey = KeyCode.K;
-
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        [SerializeField]
-        private float shortJumpValue = 0.002f;
 
         [SerializeField]
         private KeyCode tiltingModeKey = KeyCode.O;
@@ -122,11 +113,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { longJumpForwardKey = value; }
         }
 
-        public float LongJumpValue {
-            get { return longJumpValue; }
-            set { longJumpValue = value; }
-        }
-
         public EventModifiers ModKey {
             get { return modKey; }
             set { modKey = value; }
@@ -167,14 +153,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { shortJumpForwardKey = value; }
         }
 
-        /// <summary>
-        ///     Value of the jump when modifier key is pressed.
-        /// </summary>
-        public float ShortJumpValue {
-            get { return shortJumpValue; }
-            set { shortJumpValue = value; }
-        }
-
         public KeyCode TiltingModeKey {
             get { return tiltingModeKey; }
             set { tiltingModeKey = value; }
@@ -190,25 +168,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region ANIMATOR FIELDS
 
         [Header("Animator")]
-        [SerializeField]
-        private bool autoPlay;
 
         [SerializeField]
         private int countdownToStopFramesNo = 10;
-
-        [SerializeField]
-        private bool enableControlsInPlayMode = true;
-
-        [SerializeField]
-        private int exportSamplingFrequency = 5;
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        [SerializeField]
-        private float forwardPointOffset = 0.05f;
 
         [SerializeField]
         private float forwardPointOffsetMinValue = 0.001f;
@@ -221,27 +183,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private string gizmosSubfolder = "ATP/";
 
-        [SerializeField]
-        private HandleMode handleMode =
-            HandleMode.None;
-
         /// <summary>
         /// Used to convert animation curve value to arc handle value.
         /// </summary>
         [SerializeField]
         private float animationSpeedDenominator = 0.05f;
-        [SerializeField]
-        private PositionHandle positionHandle = PositionHandle.Free;
-
-        [SerializeField]
-        private float positionLerpSpeed = 1;
-
-        [SerializeField]
-        private RotationMode rotationMode =
-            RotationMode.Forward;
-
-        [SerializeField]
-        private float rotationSlerpSpeed = 999.0f;
 
         [SerializeField]
         private float maxRotationSlerpSpeed = 20f;
@@ -254,22 +200,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [SerializeField]
         private float maxPositionLerpSpeed = 1;
-
-        [SerializeField]
-        private TangentMode tangentMode =
-            TangentMode.Smooth;
-
-        [SerializeField]
-        private bool updateAllMode;
-
-        [SerializeField]
-        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
-
-        /// <summary>
-        /// If autoplay is enabled, this is delay before animation starts playing.
-        /// </summary>
-        [SerializeField]
-        private float autoPlayDelay;
         #endregion
 
         #region ANIMATOR PROPERTIES
@@ -293,43 +223,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { maxRotationSlerpSpeed = value; }
         }
 
-        /// <summary>
-        /// If autoplay is enabled, this is delay before animation starts playing.
-        /// </summary>
-        public float AutoPlayDelay {
-            get { return autoPlayDelay; }
-            set { autoPlayDelay = value; }
-        }
-
-
-        public bool AutoPlay {
-            get { return autoPlay; }
-            set { autoPlay = value; }
-        }
 
         public int CountdownToStopFramesNo {
             get { return countdownToStopFramesNo; }
             set { countdownToStopFramesNo = value; }
-        }
-
-        public bool EnableControlsInPlayMode {
-            get { return enableControlsInPlayMode; }
-            set { enableControlsInPlayMode = value; }
-        }
-
-        public int ExportSamplingFrequency {
-            get { return exportSamplingFrequency; }
-            set { exportSamplingFrequency = value; }
-        }
-
-        /// <summary>
-        ///     How much look forward point should be positioned away from the
-        ///     animated object.
-        /// </summary>
-        /// <remarks>Value is a time in range from 0 to 1.</remarks>
-        public float ForwardPointOffset {
-            get { return forwardPointOffset; }
-            set { forwardPointOffset = value; }
         }
 
         public float ForwardPointOffsetMinValue {
@@ -347,48 +244,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { gizmosSubfolder = value; }
         }
 
-        public HandleMode HandleMode {
-            get { return handleMode; }
-            set { handleMode = value; }
-        }
-
         public float AnimationSpeedDenominator {
             get { return animationSpeedDenominator; }
             set { animationSpeedDenominator = value; }
-        }
-        public PositionHandle PositionHandle {
-            get { return positionHandle; }
-            set { positionHandle = value; }
-        }
-
-        public float PositionLerpSpeed {
-            get { return positionLerpSpeed; }
-            set { positionLerpSpeed = value; }
-        }
-
-        public RotationMode RotationMode {
-            get { return rotationMode; }
-            set { rotationMode = value; }
-        }
-
-        public float RotationSlerpSpeed {
-            get { return rotationSlerpSpeed; }
-            set { rotationSlerpSpeed = value; }
-        }
-
-        public TangentMode TangentMode {
-            get { return tangentMode; }
-            set { tangentMode = value; }
-        }
-
-        public bool UpdateAllMode {
-            get { return updateAllMode; }
-            set { updateAllMode = value; }
-        }
-
-        public AnimatorWrapMode WrapMode {
-            get { return wrapMode; }
-            set { wrapMode = value; }
         }
 
         #endregion
@@ -414,17 +272,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private string forwardPointIcon = "target_22x22-pink";
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
-
         [SerializeField]
         private int gizmoCurveSamplingFrequency = 40;
-
-        [SerializeField]
-        private Color rotationCurveColor = Color.gray;
 
         [SerializeField]
         private int rotationCurveSampling = 40;
@@ -449,22 +298,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { forwardPointIcon = value; }
         }
 
-        /// <summary>
-        ///     Color of the gizmo curve.
-        /// </summary>
-        public Color GizmoCurveColor {
-            get { return gizmoCurveColor; }
-            set { gizmoCurveColor = value; }
-        }
-
         public int GizmoCurveSamplingFrequency {
             get { return gizmoCurveSamplingFrequency; }
             set { gizmoCurveSamplingFrequency = value; }
-        }
-
-        public Color RotationCurveColor {
-            get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
         }
 
         public int RotationCurveSampling {

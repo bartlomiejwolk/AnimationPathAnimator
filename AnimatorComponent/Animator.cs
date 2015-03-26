@@ -99,6 +99,164 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion OPTIONS
 
+        #region INSPECTOR SETTINGS
+        [SerializeField]
+        private HandleMode handleMode =
+            HandleMode.None;
+
+        public HandleMode HandleMode {
+            get { return handleMode; }
+            set { handleMode = value; }
+        }
+
+        [SerializeField]
+        private PositionHandle positionHandle = PositionHandle.Free;
+        public PositionHandle PositionHandle {
+            get { return positionHandle; }
+            set { positionHandle = value; }
+        }
+
+        // todo rename to updateAllValues.
+        [SerializeField]
+        private bool updateAllMode;
+
+        public bool UpdateAllMode {
+            get { return updateAllMode; }
+            set { updateAllMode = value; }
+        }
+
+        [SerializeField]
+        private RotationMode rotationMode =
+            RotationMode.Forward;
+
+        public RotationMode RotationMode {
+            get { return rotationMode; }
+            set { rotationMode = value; }
+        }
+
+        [SerializeField]
+        private TangentMode tangentMode =
+            TangentMode.Smooth;
+
+        public TangentMode TangentMode {
+            get { return tangentMode; }
+            set { tangentMode = value; }
+        }
+
+        [SerializeField]
+        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
+
+        public AnimatorWrapMode WrapMode {
+            get { return wrapMode; }
+            set { wrapMode = value; }
+        }
+
+        [SerializeField]
+        private bool autoPlay;
+
+        public bool AutoPlay {
+            get { return autoPlay; }
+            set { autoPlay = value; }
+        }
+
+        /// <summary>
+        /// If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        [SerializeField]
+        private float autoPlayDelay;
+
+        /// <summary>
+        /// If autoplay is enabled, this is delay before animation starts playing.
+        /// </summary>
+        public float AutoPlayDelay {
+            get { return autoPlayDelay; }
+            set { autoPlayDelay = value; }
+        }
+
+        [SerializeField]
+        private bool enableControlsInPlayMode = true;
+
+        public bool EnableControlsInPlayMode {
+            get { return enableControlsInPlayMode; }
+            set { enableControlsInPlayMode = value; }
+        }
+
+        [SerializeField]
+        private float positionLerpSpeed = 1;
+
+        public float PositionLerpSpeed {
+            get { return positionLerpSpeed; }
+            set { positionLerpSpeed = value; }
+        }
+
+        [SerializeField]
+        private float rotationSlerpSpeed = 999.0f;
+
+        public float RotationSlerpSpeed {
+            get { return rotationSlerpSpeed; }
+            set { rotationSlerpSpeed = value; }
+        }
+
+        [SerializeField]
+        private float forwardPointOffset = 0.05f;
+
+        /// <summary>
+        ///     How much look forward point should be positioned away from the
+        ///     animated object.
+        /// </summary>
+        /// <remarks>Value is a time in range from 0 to 1.</remarks>
+        public float ForwardPointOffset {
+            get { return forwardPointOffset; }
+            set { forwardPointOffset = value; }
+        }
+
+        [SerializeField]
+        private int exportSamplingFrequency = 5;
+
+        public int ExportSamplingFrequency {
+            get { return exportSamplingFrequency; }
+            set { exportSamplingFrequency = value; }
+        }
+
+        [SerializeField]
+        private float shortJumpValue = 0.002f;
+
+        /// <summary>
+        ///     Value of the jump when modifier key is pressed.
+        /// </summary>
+        public float ShortJumpValue {
+            get { return shortJumpValue; }
+            set { shortJumpValue = value; }
+        }
+
+        [SerializeField]
+        private float longJumpValue = 0.01f;
+
+        public float LongJumpValue {
+            get { return longJumpValue; }
+            set { longJumpValue = value; }
+        }
+
+        [SerializeField]
+        private Color gizmoCurveColor = Color.yellow;
+
+        /// <summary>
+        ///     Color of the gizmo curve.
+        /// </summary>
+        public Color GizmoCurveColor {
+            get { return gizmoCurveColor; }
+            set { gizmoCurveColor = value; }
+        }
+
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
+        }
+        #endregion
+
         #region PROPERTIES
 
         /// <summary>
@@ -362,28 +520,28 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets rotation mode to Custom.
         /// </summary>
         public void SetRotationCustom() {
-            SettingsAsset.RotationMode = RotationMode.Custom;
+            RotationMode = RotationMode.Custom;
         }
 
         /// <summary>
         /// Sets rotation mode to Forward.
         /// </summary>
         public void SetRotationForward() {
-            SettingsAsset.RotationMode = RotationMode.Forward;
+            RotationMode = RotationMode.Forward;
         }
 
         /// <summary>
         /// Sets rotation mode to Target.
         /// </summary>
         public void SetRotationTarget() {
-            SettingsAsset.RotationMode = RotationMode.Target;
+            RotationMode = RotationMode.Target;
         }
 
         /// <summary>
         /// Sets tangent mode to Linear.
         /// </summary>
         public void SetTangentLinear() {
-            SettingsAsset.TangentMode = TangentMode.Linear;
+            TangentMode = TangentMode.Linear;
             PathData.SetLinearAnimObjPathTangents();
         }
 
@@ -391,7 +549,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets tangent mode to Smooth.
         /// </summary>
         public void SetTangentSmooth() {
-            SettingsAsset.TangentMode = TangentMode.Smooth;
+            TangentMode = TangentMode.Smooth;
             PathData.SmoothAnimObjPathTangents();
         }
 
@@ -399,21 +557,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets wrap mode to Clamp.
         /// </summary>
         public void SetWrapClamp() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+            WrapMode = AnimatorWrapMode.Clamp;
         }
 
         /// <summary>
         /// Sets wrap mode to Loop.
         /// </summary>
         public void SetWrapLoop() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
+            WrapMode = AnimatorWrapMode.Loop;
         }
 
         /// <summary>
         /// Set wrap mode to PingPong.
         /// </summary>
         public void SetWrapPingPong() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
+            WrapMode = AnimatorWrapMode.PingPong;
         }
 
         /// <summary>
@@ -473,7 +631,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimatedGO.position = Vector3.Lerp(
                 AnimatedGO.position,
                 globalPosAtTime,
-                SettingsAsset.PositionLerpSpeed);
+                PositionLerpSpeed);
         }
 
         /// <summary>
@@ -484,16 +642,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Look at target.
             if (TargetGO != null
-                && SettingsAsset.RotationMode == RotationMode.Target) {
+                && RotationMode == RotationMode.Target) {
 
                 RotateObjectWithSlerp(TargetGO.position);
             }
             // Use rotation path.
-            if (SettingsAsset.RotationMode == RotationMode.Custom) {
+            if (RotationMode == RotationMode.Custom) {
                 RotateObjectWithRotationPath();
             }
             // Look forward.
-            else if (SettingsAsset.RotationMode == RotationMode.Forward) {
+            else if (RotationMode == RotationMode.Forward) {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
@@ -598,7 +756,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
             // Calculate rotation speed.
-            var speed = Time.deltaTime * SettingsAsset.RotationSlerpSpeed;
+            var speed = Time.deltaTime * RotationSlerpSpeed;
 
             // Lerp rotation.
             AnimatedGO.rotation = Quaternion.Slerp(
@@ -629,7 +787,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (AnimatedGO == null) return;
 
             // If rotation mode is set to..
-            switch (SettingsAsset.RotationMode) {
+            switch (RotationMode) {
                 case RotationMode.Forward:
                     var globalForwardPoint = GetGlobalForwardPoint();
 
@@ -730,8 +888,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Decides if to start animation playback on enter play mode.
         /// </summary>
         private void HandleStartAnimation() {
-            if (Application.isPlaying && SettingsAsset.AutoPlay) {
-                Invoke("StartAnimation", SettingsAsset.AutoPlayDelay);
+            if (Application.isPlaying && AutoPlay) {
+                Invoke("StartAnimation", AutoPlayDelay);
             }
         }
 
@@ -741,7 +899,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleClampWrapMode() {
             if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
+                && WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
                 //EaseCoroutineRunning = false;
@@ -786,7 +944,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleLoopWrapMode() {
             if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.Loop) {
+                && WrapMode == AnimatorWrapMode.Loop) {
 
                 AnimationTime = 0;
             }
@@ -797,13 +955,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+                && WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = true;
             }
 
             if (AnimationTime < 0
-                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+                && WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = false;
             }
@@ -908,7 +1066,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Method responsible for detecting all shortcuts pressed in play mode.
         /// </summary>
         private void HandleShortcuts() {
-            if (!SettingsAsset.EnableControlsInPlayMode) return;
+            if (!EnableControlsInPlayMode) return;
 
             // Play/Pause.
             if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
@@ -917,12 +1075,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Long jump forward
             if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                AnimationTime += SettingsAsset.LongJumpValue;
+                AnimationTime += LongJumpValue;
             }
 
             // Long jump backward. 
             if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                AnimationTime -= SettingsAsset.LongJumpValue;
+                AnimationTime -= LongJumpValue;
             }
 
             // Jump to next node.
@@ -1126,7 +1284,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Local forward point position.</returns>
         private Vector3 CalculateForwardPointPosition() {
             // Timestamp offset of the forward point.
-            var forwardPointDelta = SettingsAsset.ForwardPointOffset;
+            var forwardPointDelta = ForwardPointOffset;
             // Forward point timestamp.
             var forwardPointTimestamp = AnimationTime + forwardPointDelta;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
@@ -1177,18 +1335,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void ResetInspectorOptions() {
             TargetGO = null;
-            SettingsAsset.HandleMode = HandleMode.None;
-            SettingsAsset.TangentMode = TangentMode.Smooth;
-            SettingsAsset.UpdateAllMode = false;
+            HandleMode = HandleMode.None;
+            TangentMode = TangentMode.Smooth;
+            UpdateAllMode = false;
             AnimationTime = 0;
-            SettingsAsset.AutoPlay = true;
-            SettingsAsset.EnableControlsInPlayMode = true;
-            SettingsAsset.RotationMode = RotationMode.Forward;
-            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
-            SettingsAsset.ForwardPointOffset = 0.001f;
-            SettingsAsset.PositionLerpSpeed = 1;
-            SettingsAsset.RotationSlerpSpeed = 999;
-            SettingsAsset.ExportSamplingFrequency = 5;
+            AutoPlay = true;
+            EnableControlsInPlayMode = true;
+            RotationMode = RotationMode.Forward;
+            WrapMode = AnimatorWrapMode.Clamp;
+            ForwardPointOffset = 0.001f;
+            PositionLerpSpeed = 1;
+            RotationSlerpSpeed = 999;
+            ExportSamplingFrequency = 5;
         }
 
         /// <summary>
@@ -1246,7 +1404,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            Gizmos.color = SettingsAsset.GizmoCurveColor;
+            Gizmos.color = GizmoCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
@@ -1282,7 +1440,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// It'll be drawn only when animation time is the same as a path node.
         /// </summary>
         private void HandleDrawingCurrentRotationPointGizmo() {
-            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (HandleMode != HandleMode.Rotation) return;
 
             // Node path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
@@ -1315,7 +1473,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Handle drawing forward point icon.
         /// </summary>
         private void HandleDrawingForwardPointIcon() {
-            if (SettingsAsset.RotationMode == RotationMode.Forward) {
+            if (RotationMode == RotationMode.Forward) {
                 var globalForwardPointPosition = GetGlobalForwardPoint();
 
                 DrawForwardPointIcon(
@@ -1327,7 +1485,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Handle drawing rotation path curve.
         /// </summary>
         private void HandleDrawingRotationPathCurve() {
-            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (HandleMode != HandleMode.Rotation) return;
 
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 SettingsAsset.RotationCurveSampling);
@@ -1341,7 +1499,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             if (globalPointPositions.Length < 2) return;
 
-            Gizmos.color = SettingsAsset.RotationCurveColor;
+            Gizmos.color = RotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < globalPointPositions.Length - 1; i++) {
@@ -1355,7 +1513,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Handle drawing rotation point gizmos.
         /// </summary>
         private void HandleDrawingRotationPointGizmos() {
-            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (HandleMode != HandleMode.Rotation) return;
 
             var globalRotPointPositions = GetGlobalRotationPointPositions();
 
@@ -1387,7 +1545,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingTargetIcon() {
             // If rotation mode set to target..
-            if (SettingsAsset.RotationMode == RotationMode.Target
+            if (RotationMode == RotationMode.Target
                 // and target obj. is assigned..
                 && TargetGO != null) {
                 DrawTargetIcon(TargetGO.position);

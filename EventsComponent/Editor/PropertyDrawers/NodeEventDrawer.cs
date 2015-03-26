@@ -106,8 +106,8 @@ namespace ATP.AnimationPathTools.EventsComponent {
             var methods = sourceComponents[sourceComponentIndex.intValue]
                 .GetType()
                 .GetMethods(
-                    BindingFlags.Instance | BindingFlags.Public
-                    | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                    BindingFlags.Instance | BindingFlags.Static
+                    | BindingFlags.Public | BindingFlags.DeclaredOnly);
             // Initialize array with method names.
             var methodNames = new string[methods.Length];
             // Fill array with method names.

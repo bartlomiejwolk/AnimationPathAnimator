@@ -900,7 +900,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             gizmoCurveColor =
                 serializedObject.FindProperty("gizmoCurveColor");
             rotationCurveColor =
-                SettingsSerializedObject.FindProperty("rotationCurveColor");
+                serializedObject.FindProperty("rotationCurveColor");
             shortJumpValue =
                 serializedObject.FindProperty("shortJumpValue");
             longJumpValue =

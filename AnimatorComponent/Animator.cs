@@ -247,6 +247,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return gizmoCurveColor; }
             set { gizmoCurveColor = value; }
         }
+
+        [SerializeField]
+        private Color rotationCurveColor = Color.gray;
+
+        public Color RotationCurveColor {
+            get { return rotationCurveColor; }
+            set { rotationCurveColor = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -1491,7 +1499,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             if (globalPointPositions.Length < 2) return;
 
-            Gizmos.color = SettingsAsset.RotationCurveColor;
+            Gizmos.color = RotationCurveColor;
 
             // Draw curve.
             for (var i = 0; i < globalPointPositions.Length - 1; i++) {

@@ -276,9 +276,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private int gizmoCurveSamplingFrequency = 40;
 
         [SerializeField]
-        private Color rotationCurveColor = Color.gray;
-
-        [SerializeField]
         private int rotationCurveSampling = 40;
 
         [SerializeField]
@@ -304,11 +301,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public int GizmoCurveSamplingFrequency {
             get { return gizmoCurveSamplingFrequency; }
             set { gizmoCurveSamplingFrequency = value; }
-        }
-
-        public Color RotationCurveColor {
-            get { return rotationCurveColor; }
-            set { rotationCurveColor = value; }
         }
 
         public int RotationCurveSampling {

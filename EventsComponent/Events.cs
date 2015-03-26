@@ -7,7 +7,7 @@ using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 namespace ATP.AnimationPathTools.EventsComponent {
 
     [RequireComponent(typeof (Animator))]
-    public class Events : MonoBehaviour {
+    public class Events : MonoBehaviour, ISerializationCallbackReceiver {
         #region FIELDS
 
         [SerializeField]
@@ -134,6 +134,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             if (Animator.PathData != null) {
                 UnsubscribeFromEvents();
                 SubscribeToEvents();
+                InitializeSlots();
             }
             else {
                 UnsubscribeFromEvents();
@@ -218,6 +219,15 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         #endregion
+
+        // todo move to region
+        public void OnBeforeSerialize() {
+        }
+
+        public void OnAfterDeserialize() {
+            SubscribeToEvents();
+        }
+
     }
 
 }

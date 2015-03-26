@@ -199,7 +199,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawine on-scene ease handles.
         /// </summary>
         private void HandleDrawingEaseHandles() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Ease) return;
+            if (Script.HandleMode != HandleMode.Ease) return;
 
             // Get path node positions.
             var nodePositions =
@@ -229,7 +229,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene labes with ease values.
         /// </summary>
         private void HandleDrawingEaseLabel() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Ease) return;
+            if (Script.HandleMode != HandleMode.Ease) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
@@ -297,7 +297,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene rotation handle in Custom rotation mode.
         /// </summary>
         private void HandleDrawingRotationHandle() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (Script.HandleMode != HandleMode.Rotation) return;
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
@@ -328,7 +328,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene tilting handles.
         /// </summary>
         private void HandleDrawingTiltingHandles() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
+            if (Script.HandleMode != HandleMode.Tilting) return;
 
             // Get path node positions.
             var nodePositions =
@@ -353,7 +353,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene tilting value labels.
         /// </summary>
         private void HandleDrawingTiltingLabels() {
-            if (Script.SettingsAsset.HandleMode != HandleMode.Tilting) return;
+            if (Script.HandleMode != HandleMode.Tilting) return;
 
             // Get node global positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
@@ -562,7 +562,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script,
                 "HandleUpdateAnimGOInSceneView",
                 null);
-            Script.SettingsAsset.HandleMode = HandleMode.None;
+            Script.HandleMode = HandleMode.None;
         }
 
         private void HandleSmoothTangentMode() {
@@ -655,7 +655,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else {
                 // Set handle mode to Rotation so that user can fix the
                 // rotatio path.
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.HandleMode = HandleMode.Rotation;
                 // Set rotation mode to Custom so that user can see how
                 // changes to rotation path affect animated object.
                 Script.SettingsAsset.RotationMode = RotationMode.Custom;
@@ -1015,7 +1015,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.EaseModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.Ease;
+                Script.HandleMode = HandleMode.Ease;
             }
 
             // Rotation mode key.
@@ -1023,7 +1023,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.RotationModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.HandleMode = HandleMode.Rotation;
             }
 
             // Tilting mode key.
@@ -1031,7 +1031,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.TiltingModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.Tilting;
+                Script.HandleMode = HandleMode.Tilting;
             }
 
             // None mode key.
@@ -1039,7 +1039,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.NoneModeKey) {
 
-                Script.SettingsAsset.HandleMode = HandleMode.None;
+                Script.HandleMode = HandleMode.None;
             }
 
             // Update all mode.
@@ -1383,13 +1383,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawHandleModeDropdown() {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
-            Script.SettingsAsset.HandleMode =
+            Script.HandleMode =
                 (HandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Scene Tool",
                         "Tool displayed next to each node. Default " +
                         "shortcuts: Y, U, I, O."),
-                    Script.SettingsAsset.HandleMode);
+                    Script.HandleMode);
         }
 
         private void DrawInfoLabel(string text) {
@@ -1522,7 +1522,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Reset inspector options.
                 Script.AnimationTime = 0;
-                Script.SettingsAsset.HandleMode = HandleMode.None;
+                Script.HandleMode = HandleMode.None;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -1547,7 +1547,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Change rotation mode.
                 Script.SettingsAsset.RotationMode = RotationMode.Custom;
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.HandleMode = HandleMode.Rotation;
 
                 SceneView.RepaintAll();
             }
@@ -1600,7 +1600,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // If Custom mode selected, change handle mode to Rotation.
             if (Script.SettingsAsset.RotationMode == RotationMode.Custom) {
-                Script.SettingsAsset.HandleMode = HandleMode.Rotation;
+                Script.HandleMode = HandleMode.Rotation;
             }
         }
 

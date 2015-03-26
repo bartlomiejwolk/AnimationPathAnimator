@@ -221,10 +221,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private string gizmosSubfolder = "ATP/";
 
-        [SerializeField]
-        private HandleMode handleMode =
-            HandleMode.None;
-
         /// <summary>
         /// Used to convert animation curve value to arc handle value.
         /// </summary>
@@ -345,11 +341,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public string GizmosSubfolder {
             get { return gizmosSubfolder; }
             set { gizmosSubfolder = value; }
-        }
-
-        public HandleMode HandleMode {
-            get { return handleMode; }
-            set { handleMode = value; }
         }
 
         public float AnimationSpeedDenominator {

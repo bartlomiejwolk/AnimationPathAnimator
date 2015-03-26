@@ -99,6 +99,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion OPTIONS
 
+        #region INSPECTOR SETTINGS
+        [SerializeField]
+        private HandleMode handleMode =
+            HandleMode.None;
+
+        public HandleMode HandleMode {
+            get { return handleMode; }
+            set { handleMode = value; }
+        }
+        #endregion
+
         #region PROPERTIES
 
         /// <summary>
@@ -1177,7 +1188,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void ResetInspectorOptions() {
             TargetGO = null;
-            SettingsAsset.HandleMode = HandleMode.None;
+            HandleMode = HandleMode.None;
             SettingsAsset.TangentMode = TangentMode.Smooth;
             SettingsAsset.UpdateAllMode = false;
             AnimationTime = 0;
@@ -1282,7 +1293,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// It'll be drawn only when animation time is the same as a path node.
         /// </summary>
         private void HandleDrawingCurrentRotationPointGizmo() {
-            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (HandleMode != HandleMode.Rotation) return;
 
             // Node path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
@@ -1327,7 +1338,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Handle drawing rotation path curve.
         /// </summary>
         private void HandleDrawingRotationPathCurve() {
-            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (HandleMode != HandleMode.Rotation) return;
 
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 SettingsAsset.RotationCurveSampling);
@@ -1355,7 +1366,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Handle drawing rotation point gizmos.
         /// </summary>
         private void HandleDrawingRotationPointGizmos() {
-            if (SettingsAsset.HandleMode != HandleMode.Rotation) return;
+            if (HandleMode != HandleMode.Rotation) return;
 
             var globalRotPointPositions = GetGlobalRotationPointPositions();
 

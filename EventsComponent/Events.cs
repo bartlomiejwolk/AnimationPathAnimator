@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
 using UnityEngine;
+// todo use qualified name instead.
 using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
 namespace ATP.AnimationPathTools.EventsComponent {
@@ -56,21 +57,76 @@ namespace ATP.AnimationPathTools.EventsComponent {
         #region UNITY MESSAGES
 
         private void OnDisable() {
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents() {
+
             Animator.NodeReached -= Animator_NodeReached;
+
+            if (Animator.PathData != null) {
+                Animator.PathData.NodeAdded -= PathData_NodeAdded;
+                Animator.PathData.NodeRemoved -= PathData_NodeRemoved;
+            }
         }
 
         private void OnEnable() {
+            Debug.Log("OnEnable()");
             if (Animator == null) return;
 
-            Animator.NodeReached += Animator_NodeReached;
+            SubscribeToEvents();
+        }
+
+        void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
+            NodeEventSlots.RemoveAt(e.NodeIndex);
+        }
+
+        void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
+            NodeEventSlots.Insert(e.NodeIndex, new NodeEventSlot());
         }
 
         private void Reset() {
             animator = GetComponent<Animator>();
+
+            InitializeSlots();
+            LoadRequiredResources();
+            SubscribeToEvents();
+        }
+
+        private void InitializeSlots() {
+            // Instantiate slots list.
+            nodeEventSlots = new List<NodeEventSlot>();
+            // Get number of nodes in the path.
+            var nodesNo = Animator.PathData.NodesNo;
+
+            // For each path node..
+            for (int i = 0; i < nodesNo; i++) {
+                // Add empty slot.
+                NodeEventSlots.Add(new NodeEventSlot());
+            }
+        }
+
+        private void LoadRequiredResources() {
             settings =
                 Resources.Load<EventsSettings>("DefaultEventsSettings");
             skin = Resources.Load("DefaultEventsSkin") as GUISkin;
         }
+
+        // todo add same to other behaviours
+        private void OnDestroy() {
+            UnsubscribeFromEvents();
+        }
+
+        private void SubscribeToEvents() {
+            Animator.NodeReached += Animator_NodeReached;
+
+            if (Animator.PathData != null) {
+                Debug.Log("subscribe Events to PathData");
+                Animator.PathData.NodeAdded += PathData_NodeAdded;
+                Animator.PathData.NodeRemoved += PathData_NodeRemoved;
+            }
+        }
+
 
         #endregion
 
@@ -123,6 +179,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private string[] GetMethodNames() {
+            // todo this may not be necessary if slots are always in sync with nodes
             // Return empty array is slots list was not yet initalized.
             if (NodeEventSlots == null) return new string[0];
 

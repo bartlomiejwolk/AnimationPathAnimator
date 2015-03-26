@@ -9,11 +9,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ISerializationCallbackReceiver {
         #region EVENTS
 
-        public event EventHandler NodeAdded;
+        public event EventHandler<NodeAddedRemovedEventArgs> NodeAdded;
 
         public event EventHandler NodePositionChanged;
 
-        public event EventHandler NodeRemoved;
+        public event EventHandler<NodeAddedRemovedEventArgs> NodeRemoved;
 
         public event EventHandler NodeTiltChanged;
 
@@ -106,9 +106,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region EVENT INVOCATORS
 
-        private void OnNodeAdded() {
+        private void OnNodeAdded(int nodeIndex) {
+            var args = new NodeAddedRemovedEventArgs(nodeIndex);
+
             var handler = NodeAdded;
-            if (handler != null) handler(this, EventArgs.Empty);
+            if (handler != null) handler(this, args);
         }
 
         private void OnNodePositionChanged() {
@@ -116,9 +118,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        private void OnNodeRemoved() {
+        private void OnNodeRemoved(int nodeIndex) {
+            var args = new NodeAddedRemovedEventArgs(nodeIndex);
+
             var handler = NodeRemoved;
-            if (handler != null) handler(this, EventArgs.Empty);
+            if (handler != null) handler(this, args);
         }
 
         private void OnNodeTiltChanged() {
@@ -285,13 +289,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void CreateNewNode(float timestamp, Vector3 position) {
             AnimatedObjectPath.CreateNewNode(timestamp, position);
 
-            OnNodeAdded();
+            var nodeIndex = AnimatedObjectPath.GetNodeIndexAtTime(timestamp);
+            OnNodeAdded(nodeIndex);
         }
 
         public void CreateNodeAtTime(float timestamp) {
             AnimatedObjectPath.AddNodeAtTime(timestamp);
 
-            OnNodeAdded();
+            var nodeIndex = AnimatedObjectPath.GetNodeIndexAtTime(timestamp);
+            OnNodeAdded(nodeIndex);
         }
 
         public void DistributeTimestamps() {
@@ -376,7 +382,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void RemoveNode(int nodeIndex) {
             AnimatedObjectPath.RemoveNode(nodeIndex);
 
-            OnNodeRemoved();
+            OnNodeRemoved(nodeIndex);
         }
 
         public void ResetEaseCurve() {

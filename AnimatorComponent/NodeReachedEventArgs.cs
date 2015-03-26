@@ -14,4 +14,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
     }
 
+    // todo move to own file.
+    public sealed class NodeAddedRemovedEventArgs : EventArgs {
+
+        public NodeAddedRemovedEventArgs(int nodeIndex) {
+            NodeIndex = nodeIndex;
+        }
+
+        public int NodeIndex { get; set; }
+
+    }
+
 }

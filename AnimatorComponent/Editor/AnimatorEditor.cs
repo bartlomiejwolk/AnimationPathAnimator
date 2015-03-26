@@ -1710,12 +1710,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawWrapModeDropdown() {
-            Script.SettingsAsset.WrapMode =
+            Script.WrapMode =
                 (AnimatorWrapMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Wrap Mode",
                         "Determines animator behaviour after animation end."),
-                    Script.SettingsAsset.WrapMode);
+                    Script.WrapMode);
         }
 
         #endregion

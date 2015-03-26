@@ -142,6 +142,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return tangentMode; }
             set { tangentMode = value; }
         }
+
+        [SerializeField]
+        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
+
+        public AnimatorWrapMode WrapMode {
+            get { return wrapMode; }
+            set { wrapMode = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -444,21 +452,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sets wrap mode to Clamp.
         /// </summary>
         public void SetWrapClamp() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+            WrapMode = AnimatorWrapMode.Clamp;
         }
 
         /// <summary>
         /// Sets wrap mode to Loop.
         /// </summary>
         public void SetWrapLoop() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.Loop;
+            WrapMode = AnimatorWrapMode.Loop;
         }
 
         /// <summary>
         /// Set wrap mode to PingPong.
         /// </summary>
         public void SetWrapPingPong() {
-            SettingsAsset.WrapMode = AnimatorWrapMode.PingPong;
+            WrapMode = AnimatorWrapMode.PingPong;
         }
 
         /// <summary>
@@ -786,7 +794,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleClampWrapMode() {
             if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.Clamp) {
+                && WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
                 //EaseCoroutineRunning = false;
@@ -831,7 +839,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleLoopWrapMode() {
             if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.Loop) {
+                && WrapMode == AnimatorWrapMode.Loop) {
 
                 AnimationTime = 0;
             }
@@ -842,13 +850,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandlePingPongWrapMode() {
             if (AnimationTime > 1
-                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+                && WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = true;
             }
 
             if (AnimationTime < 0
-                && SettingsAsset.WrapMode == AnimatorWrapMode.PingPong) {
+                && WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = false;
             }
@@ -1229,7 +1237,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SettingsAsset.AutoPlay = true;
             SettingsAsset.EnableControlsInPlayMode = true;
             RotationMode = RotationMode.Forward;
-            SettingsAsset.WrapMode = AnimatorWrapMode.Clamp;
+            WrapMode = AnimatorWrapMode.Clamp;
             SettingsAsset.ForwardPointOffset = 0.001f;
             SettingsAsset.PositionLerpSpeed = 1;
             SettingsAsset.RotationSlerpSpeed = 999;

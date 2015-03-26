@@ -245,9 +245,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float maxPositionLerpSpeed = 1;
 
-        [SerializeField]
-        private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
-
         /// <summary>
         /// If autoplay is enabled, this is delay before animation starts playing.
         /// </summary>
@@ -343,11 +340,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float RotationSlerpSpeed {
             get { return rotationSlerpSpeed; }
             set { rotationSlerpSpeed = value; }
-        }
-
-        public AnimatorWrapMode WrapMode {
-            get { return wrapMode; }
-            set { wrapMode = value; }
         }
 
         #endregion

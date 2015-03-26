@@ -904,7 +904,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             shortJumpValue =
                 serializedObject.FindProperty("shortJumpValue");
             longJumpValue =
-                SettingsSerializedObject.FindProperty("longJumpValue");
+                serializedObject.FindProperty("longJumpValue");
             animationTime =
                 serializedObject.FindProperty("animationTime");
             positionHandle =
@@ -1108,7 +1108,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                animationTime.floatValue += Script.SettingsAsset.LongJumpValue;
+                animationTime.floatValue += Script.LongJumpValue;
             }
 
             // Long jump backward.
@@ -1119,7 +1119,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                animationTime.floatValue -= Script.SettingsAsset.LongJumpValue;
+                animationTime.floatValue -= Script.LongJumpValue;
             }
 
             serializedObject.ApplyModifiedProperties();

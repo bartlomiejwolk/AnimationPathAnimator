@@ -51,9 +51,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode longJumpForwardKey = KeyCode.K;
 
         [SerializeField]
-        private float longJumpValue = 0.01f;
-
-        [SerializeField]
         private EventModifiers modKey = EventModifiers.Alt;
 
         [SerializeField]
@@ -114,11 +111,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public KeyCode LongJumpForwardKey {
             get { return longJumpForwardKey; }
             set { longJumpForwardKey = value; }
-        }
-
-        public float LongJumpValue {
-            get { return longJumpValue; }
-            set { longJumpValue = value; }
         }
 
         public EventModifiers ModKey {

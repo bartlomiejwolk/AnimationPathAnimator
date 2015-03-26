@@ -228,6 +228,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return shortJumpValue; }
             set { shortJumpValue = value; }
         }
+
+        [SerializeField]
+        private float longJumpValue = 0.01f;
+
+        public float LongJumpValue {
+            get { return longJumpValue; }
+            set { longJumpValue = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -1048,12 +1056,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Long jump forward
             if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                AnimationTime += SettingsAsset.LongJumpValue;
+                AnimationTime += LongJumpValue;
             }
 
             // Long jump backward. 
             if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                AnimationTime -= SettingsAsset.LongJumpValue;
+                AnimationTime -= LongJumpValue;
             }
 
             // Jump to next node.

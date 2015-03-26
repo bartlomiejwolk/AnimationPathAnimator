@@ -406,7 +406,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void OnValidate() {
             HandleUpdateAnimGOInSceneView();
-            UpdateSubscribedToEventsFlag();
         }
 
         private void Reset() {
@@ -1135,6 +1134,112 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region METHODS
         /// <summary>
+        /// Returns timestamp of a node which timestamp is closest to and bigger than the current animation time. 
+        /// </summary>
+        /// <returns>Node timestamp.</returns>
+        private float GetNearestForwardNodeTimestamp() {
+            var pathTimestamps = PathData.GetPathTimestamps();
+
+            // For node timestamp that is bigger than animation time..
+            foreach (var timestamp in pathTimestamps
+                .Where(timestamp => timestamp > AnimationTime)) {
+
+                return timestamp;
+            }
+
+            // Return timestamp of the last node.
+            return 1.0f;
+        }
+
+        /// <summary>
+        /// Reset inspector options.
+        /// </summary>
+        private void ResetInspectorOptions() {
+            TargetGO = null;
+            HandleMode = HandleMode.None;
+            TangentMode = TangentMode.Smooth;
+            UpdateAllMode = false;
+            AnimationTime = 0;
+            AutoPlay = true;
+            EnableControlsInPlayMode = true;
+            RotationMode = RotationMode.Forward;
+            WrapMode = AnimatorWrapMode.Clamp;
+            ForwardPointOffset = 0.001f;
+            PositionLerpSpeed = 1;
+            RotationSlerpSpeed = 999;
+            ExportSamplingFrequency = 5;
+        }
+
+        /// <summary>
+        /// Subscribe to events.
+        /// </summary>
+        private void SubscribeToEvents() {
+            if (pathData == null) return;
+
+            PathData.RotationPointPositionChanged +=
+                PathData_RotationPointPositionChanged;
+            PathData.NodePositionChanged += PathData_NodePositionChanged;
+            PathData.NodeTiltChanged += PathData_NodeTiltChanged;
+            PathData.PathReset += PathData_PathReset;
+            PathData.RotationPathReset += PathData_RotationPathReset;
+            AnimationEnded += APAnimator_AnimationEnded;
+
+        }
+
+        /// <summary>
+        /// Unsubscribe from events.
+        /// </summary>
+        private void UnsubscribeFromEvents() {
+            if (PathData == null) return;
+
+            PathData.RotationPointPositionChanged -=
+                PathData_RotationPointPositionChanged;
+            PathData.NodePositionChanged -= PathData_NodePositionChanged;
+            PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
+            PathData.PathReset -= PathData_PathReset;
+            PathData.RotationPathReset -= PathData_RotationPathReset;
+            AnimationEnded -= APAnimator_AnimationEnded;
+        }
+
+        /// <summary>
+        /// Loads asset files from component folder, that are required for the component to run.
+        /// </summary>
+        private void LoadRequiredAssets() {
+            if (settingsAsset == null) {
+                settingsAsset = Resources.Load("DefaultAnimatorSettings")
+                    as AnimatorSettings;
+            }
+
+            if (skin == null) {
+                skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+            }
+        }
+
+        /// <summary>
+        /// Use it to guard agains null path data asset.
+        /// </summary>
+        /// <returns>True if pata data asset is not null.</returns>
+        private bool PathDataAssetAssigned() {
+            if (PathData == null) {
+                Debug.LogWarning("Assign Path Asset in the inspector.");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Assigns camera tagged "MainCamera" as animated game object.
+        /// </summary>
+        private void AssignMainCameraAsAnimatedGO() {
+            if (AnimatedGO == null && Camera.main != null) {
+                animatedGO = Camera.main.transform;
+            }
+            else {
+                Debug.LogWarning("Camera with tag \"MainCamera\" not found.");
+            }
+        }
+
+        /// <summary>
         /// Returns global rotation path node positions.
         /// </summary>
         /// <returns></returns>
@@ -1204,47 +1309,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        #endregion
-        #region HELPER METHODS
-        /// <summary>
-        /// Use it to guard agains null path data asset.
-        /// </summary>
-        /// <returns>True if pata data asset is not null.</returns>
-        private bool PathDataAssetAssigned() {
-            if (PathData == null) {
-                Debug.LogWarning("Assign Path Asset in the inspector.");
-                return false;
-            }
-            return true;
-        }
-        /// <summary>
-        /// Update <c>subscribedToEvents</c> flag.
-        /// </summary>
-        private void UpdateSubscribedToEventsFlag() {
-            // Update flag when path data asset is removed.
-            if (PathData == null && subscribedToEvents) {
-                subscribedToEvents = false;
-            }
-        }
-
-        /// <summary>
-        /// Returns timestamp of a node which timestamp is closest to and bigger than the current animation time. 
-        /// </summary>
-        /// <returns>Node timestamp.</returns>
-        private float GetNearestForwardNodeTimestamp() {
-            var pathTimestamps = PathData.GetPathTimestamps();
-
-            // For node timestamp that is bigger than animation time..
-            foreach (var timestamp in pathTimestamps
-                .Where(timestamp => timestamp > AnimationTime)) {
-
-                return timestamp;
-            }
-
-            // Return timestamp of the last node.
-            return 1.0f;
-        }
-
         /// <summary>
         /// Returns timestamp of a node which timestamp is closest to and bigger than the current animation time.
         /// </summary>
@@ -1263,7 +1327,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return 0;
         }
 
-
         /// <summary>
         /// Returns global node positions.
         /// </summary>
@@ -1278,23 +1341,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             return nodePositions;
         }
-
-        /// <summary>
-        /// Assigns camera tagged "MainCamera" as animated game object.
-        /// </summary>
-        private void AssignMainCameraAsAnimatedGO() {
-            if (AnimatedGO == null && Camera.main != null) {
-                animatedGO = Camera.main.transform;
-            }
-            else {
-                Debug.LogWarning("Camera with tag \"MainCamera\" not found.");
-            }
-        }
-
         /// <summary>
         /// Returns local forward point position for current animation time.
         /// </summary>
         /// <returns>Local forward point position.</returns>
+        // todo rename to CalculateLocalForwardPointPosition().
         private Vector3 CalculateForwardPointPosition() {
             // Timestamp offset of the forward point.
             var forwardPointDelta = ForwardPointOffset;
@@ -1316,21 +1367,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             return globalForwardPoint;
         }
-
-        /// <summary>
-        /// Loads asset files from component folder, that are required for the component to run.
-        /// </summary>
-        private void LoadRequiredAssets() {
-            if (settingsAsset == null) {
-                settingsAsset = Resources.Load("DefaultAnimatorSettings")
-                    as AnimatorSettings;
-            }
-
-            if (skin == null) {
-                skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
-            }
-        }
-
         /// <summary>
         /// Returns true if assets required by the component are referenced.
         /// </summary>
@@ -1342,58 +1378,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             return false;
         }
-
-        /// <summary>
-        /// Reset inspector options.
-        /// </summary>
-        private void ResetInspectorOptions() {
-            TargetGO = null;
-            HandleMode = HandleMode.None;
-            TangentMode = TangentMode.Smooth;
-            UpdateAllMode = false;
-            AnimationTime = 0;
-            AutoPlay = true;
-            EnableControlsInPlayMode = true;
-            RotationMode = RotationMode.Forward;
-            WrapMode = AnimatorWrapMode.Clamp;
-            ForwardPointOffset = 0.001f;
-            PositionLerpSpeed = 1;
-            RotationSlerpSpeed = 999;
-            ExportSamplingFrequency = 5;
-        }
-
-        /// <summary>
-        /// Subscribe to events.
-        /// </summary>
-        private void SubscribeToEvents() {
-            if (pathData == null) return;
-
-            PathData.RotationPointPositionChanged +=
-                PathData_RotationPointPositionChanged;
-            PathData.NodePositionChanged += PathData_NodePositionChanged;
-            PathData.NodeTiltChanged += PathData_NodeTiltChanged;
-            PathData.PathReset += PathData_PathReset;
-            PathData.RotationPathReset += PathData_RotationPathReset;
-            AnimationEnded += APAnimator_AnimationEnded;
-
-        }
-
-        /// <summary>
-        /// Unsubscribe from events.
-        /// </summary>
-        private void UnsubscribeFromEvents() {
-            if (PathData == null) return;
-
-            PathData.RotationPointPositionChanged -=
-                PathData_RotationPointPositionChanged;
-            PathData.NodePositionChanged -= PathData_NodePositionChanged;
-            PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
-            PathData.PathReset -= PathData_PathReset;
-            PathData.RotationPathReset -= PathData_RotationPathReset;
-            AnimationEnded -= APAnimator_AnimationEnded;
-        }
-
-        #endregion METHODS
+        #endregion
 
         #region GIZMOS
 
@@ -1566,10 +1551,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
-        //private void OnNewPathDataCreated() {
-        //    var handler = NewPathDataCreated;
-        //    if (handler != null) handler(this, EventArgs.Empty);
-        //}
     }
 
 }

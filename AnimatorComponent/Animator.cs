@@ -115,6 +115,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return positionHandle; }
             set { positionHandle = value; }
         }
+
+        // todo rename to updateAllValues.
+        [SerializeField]
+        private bool updateAllMode;
+
+        public bool UpdateAllMode {
+            get { return updateAllMode; }
+            set { updateAllMode = value; }
+        }
         #endregion
 
         #region PROPERTIES
@@ -1197,7 +1206,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TargetGO = null;
             HandleMode = HandleMode.None;
             SettingsAsset.TangentMode = TangentMode.Smooth;
-            SettingsAsset.UpdateAllMode = false;
+            UpdateAllMode = false;
             AnimationTime = 0;
             SettingsAsset.AutoPlay = true;
             SettingsAsset.EnableControlsInPlayMode = true;

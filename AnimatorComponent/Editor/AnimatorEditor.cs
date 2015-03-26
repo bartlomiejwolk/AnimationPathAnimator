@@ -372,7 +372,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene label for "Update All" inspector option.
         /// </summary>
         private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.SettingsAsset.UpdateAllMode) return;
+            if (!Script.UpdateAllMode) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -436,7 +436,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
             // If update all mode is set..
-            if (Script.SettingsAsset.UpdateAllMode) {
+            if (Script.UpdateAllMode) {
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 MultiplyEaseValues(oldValue, newValue);
             }
@@ -527,7 +527,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            if (Script.SettingsAsset.UpdateAllMode) {
+            if (Script.UpdateAllMode) {
                 MultiplyTiltingValues(
                     Script.PathData.GetTiltingValueAtIndex(keyIndex),
                     newValue);
@@ -1047,8 +1047,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.UpdateAllKey) {
 
-                Script.SettingsAsset.UpdateAllMode =
-                    !Script.SettingsAsset.UpdateAllMode;
+                Script.UpdateAllMode =
+                    !Script.UpdateAllMode;
             }
 
             // Update position handle.
@@ -1701,12 +1701,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawUpdateAllToggle() {
-            Script.SettingsAsset.UpdateAllMode = EditorGUILayout.Toggle(
+            Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
                     "When checked, values will be changed for all nodes. " +
                     "Default shortcut: P."),
-                Script.SettingsAsset.UpdateAllMode);
+                Script.UpdateAllMode);
         }
 
         private void DrawWrapModeDropdown() {

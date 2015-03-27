@@ -413,7 +413,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleLoopWrapMode();
             HandlePingPongWrapMode();
 
-            HandleUpdatingAnimGOInPlayMode();
+            HandleAnimatingAnimatedGO();
             HandleShortcuts();
         }
         #endregion UNITY MESSAGES
@@ -954,7 +954,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Method responsible for updating animated GO position, rotation and tilting in play mode during playback.
         /// </summary>
-        private void HandleUpdatingAnimGOInPlayMode() {
+        private void HandleAnimatingAnimatedGO() {
             // Return if not in play mode.
             if (!Application.isPlaying) return;
             // Return if anim. GO update is disabled.

@@ -132,6 +132,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script,
                 "HandleUpdateAnimGOInSceneView",
                 null);
+
+            SceneView.RepaintAll();
         }
 
         private void OnSceneGUI() {

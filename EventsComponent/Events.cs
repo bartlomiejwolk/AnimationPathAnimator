@@ -61,8 +61,12 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void UnsubscribeFromEvents() {
+            // Guard agains null reference.
+            if (Animator == null) Animator = GetComponent<Animator>();
 
             Animator.NodeReached -= Animator_NodeReached;
+            Animator.PathDataRefChanged -= Animator_PathDataRefChanged;
+            Animator.UndoRedoPerformed -= Animator_UndoRedoPerformed;
 
             if (Animator.PathData != null) {
                 Animator.PathData.NodeAdded -= PathData_NodeAdded;
@@ -87,7 +91,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void Reset() {
-            animator = GetComponent<Animator>();
+            Animator = GetComponent<Animator>();
 
             InitializeSlots();
             LoadRequiredResources();
@@ -120,6 +124,9 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void SubscribeToEvents() {
+            // Guard agains null reference.
+            if (Animator == null) Animator = GetComponent<Animator>();
+
             Animator.NodeReached += Animator_NodeReached;
             Animator.PathDataRefChanged += Animator_PathDataRefChanged;
             Animator.UndoRedoPerformed += Animator_UndoRedoPerformed;

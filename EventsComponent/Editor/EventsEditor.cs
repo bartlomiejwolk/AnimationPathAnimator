@@ -174,7 +174,11 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 (Vector3[]) Utilities.InvokeMethodWithReflection(
                     Script,
                     "GetNodePositions",
-                    new object[] {methodNames.Length});
+                    new object[] { -1 });
+                    //new object[] {methodNames.Length});
+
+            // Wait until event slots number is synced with path nodes number.
+            if (methodNames.Length != nodePositions.Length) return;
 
             var style = Script.Skin.GetStyle("MethodNameLabel");
 

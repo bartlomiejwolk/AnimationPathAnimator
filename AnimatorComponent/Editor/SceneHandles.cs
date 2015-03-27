@@ -8,6 +8,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     ///     Class responsible for drawing all on scene handles.
     /// </summary>
     public static class SceneHandles {
+        #region FIELDS
 
         /// <summary>
         ///     Minimum value below which arc handle drawer method will set the
@@ -15,24 +16,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private static float MinValueThreshold = 0.01f;
 
-        public static void DrawPositionHandles(
-            Vector3[] nodeGlobalPositions,
-            Action<int, Vector3> callback) {
-
-            // For each node..
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
-                // Draw position handle.
-                var newGlobalPos = Handles.PositionHandle(
-                    nodeGlobalPositions[i],
-                    Quaternion.identity);
-
-                // If node was moved..
-                if (newGlobalPos != nodeGlobalPositions[i]) {
-                    // Execute callback.
-                    callback(i, newGlobalPos);
-                }
-            }
-        }
+        #endregion
 
         #region METHDOS
 
@@ -109,7 +93,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        /// Draws arc tool for each node.
+        ///     Draws arc tool for each node.
         /// </summary>
         /// <param name="nodePositions">Positions to draw the tools.</param>
         /// <param name="curveValues">Values represented by the tools.</param>
@@ -196,6 +180,25 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        public static void DrawPositionHandles(
+            Vector3[] nodeGlobalPositions,
+            Action<int, Vector3> callback) {
+
+            // For each node..
+            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+                // Draw position handle.
+                var newGlobalPos = Handles.PositionHandle(
+                    nodeGlobalPositions[i],
+                    Quaternion.identity);
+
+                // If node was moved..
+                if (newGlobalPos != nodeGlobalPositions[i]) {
+                    // Execute callback.
+                    callback(i, newGlobalPos);
+                }
+            }
+        }
+
         public static void DrawRemoveNodeButtons(
             Vector3[] nodePositions,
             int offsetH,
@@ -274,8 +277,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 labelHeight,
                 style);
         }
-
-        #region DrawArcTool()
 
         private static void DrawArcHandle(
             Vector3 position,
@@ -409,48 +410,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 callback);
         }
 
-        /// <summary>
-        ///     Save new tilting value to animation curve.
-        /// </summary>
-        /// <param name="arcValue"></param>
-        /// <param name="newArcValue"></param>
-        /// <param name="allowNegative">If negative values can be saved to the animation curve.</param>
-        /// <param name="arcValueMultiplier"></param>
-        /// <param name="callback">Pass updated value here.</param>
-        private static void SaveArcValue(
-            float arcValue,
-            float newArcValue,
-            bool allowNegative,
-            float arcValueMultiplier,
-            Action<float> callback) {
-
-            // Limit old value to 360.
-            var modArcValue = arcValue % 360;
-            var modNewArcValue = newArcValue % 360;
-
-            // Return if value wasn't changed.
-            if (Utilities.FloatsEqual(
-                modArcValue,
-                modNewArcValue,
-                GlobalConstants.FloatPrecision)) return;
-
-            var diff = Utilities.CalculateDifferenceBetweenAngles(
-                modArcValue,
-                modNewArcValue);
-            var resultValue = arcValue + diff;
-
-            // Convert value in degrees to back curve value.
-            var curveValue = resultValue / arcValueMultiplier;
-
-            // Handle allowNegative parameter.
-            if (!allowNegative && curveValue < 0) curveValue = 0;
-
-            // Save value to animation curve.
-            callback(curveValue);
-        }
-
-        #endregion
-
         private static bool DrawButton(
             Vector2 position,
             int relativeXPos,
@@ -524,6 +483,46 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 style);
 
             Handles.EndGUI();
+        }
+
+        /// <summary>
+        ///     Save new tilting value to animation curve.
+        /// </summary>
+        /// <param name="arcValue"></param>
+        /// <param name="newArcValue"></param>
+        /// <param name="allowNegative">If negative values can be saved to the animation curve.</param>
+        /// <param name="arcValueMultiplier"></param>
+        /// <param name="callback">Pass updated value here.</param>
+        private static void SaveArcValue(
+            float arcValue,
+            float newArcValue,
+            bool allowNegative,
+            float arcValueMultiplier,
+            Action<float> callback) {
+
+            // Limit old value to 360.
+            var modArcValue = arcValue % 360;
+            var modNewArcValue = newArcValue % 360;
+
+            // Return if value wasn't changed.
+            if (Utilities.FloatsEqual(
+                modArcValue,
+                modNewArcValue,
+                GlobalConstants.FloatPrecision)) return;
+
+            var diff = Utilities.CalculateDifferenceBetweenAngles(
+                modArcValue,
+                modNewArcValue);
+            var resultValue = arcValue + diff;
+
+            // Convert value in degrees to back curve value.
+            var curveValue = resultValue / arcValueMultiplier;
+
+            // Handle allowNegative parameter.
+            if (!allowNegative && curveValue < 0) curveValue = 0;
+
+            // Save value to animation curve.
+            callback(curveValue);
         }
 
         #endregion

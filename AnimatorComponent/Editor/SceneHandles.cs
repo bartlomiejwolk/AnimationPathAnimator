@@ -14,7 +14,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Minimum value below which arc handle drawer method will set the
         ///     value back to default.
         /// </summary>
-        private static float MinValueThreshold = 0.01f;
+        private static float MinValueThreshold = 0.1f;
 
         #endregion
 

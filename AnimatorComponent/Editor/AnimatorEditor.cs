@@ -374,7 +374,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene label for "Update All" inspector option.
         /// </summary>
         private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.UpdateAllMode) return;
+            if (!Script.UpdateAllValues) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -438,7 +438,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
             // If update all mode is set..
-            if (Script.UpdateAllMode) {
+            if (Script.UpdateAllValues) {
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 MultiplyEaseValues(oldValue, newValue);
             }
@@ -529,7 +529,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            if (Script.UpdateAllMode) {
+            if (Script.UpdateAllValues) {
                 MultiplyTiltingValues(
                     Script.PathData.GetTiltingValueAtIndex(keyIndex),
                     newValue);
@@ -1048,8 +1048,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.UpdateAllKey) {
 
-                Script.UpdateAllMode =
-                    !Script.UpdateAllMode;
+                Script.UpdateAllValues =
+                    !Script.UpdateAllValues;
             }
 
             // Update position handle.
@@ -1704,12 +1704,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawUpdateAllToggle() {
-            Script.UpdateAllMode = EditorGUILayout.Toggle(
+            Script.UpdateAllValues = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All Values",
                     "When checked, values will be changed for all nodes. " +
                     "Default shortcut: P."),
-                Script.UpdateAllMode);
+                Script.UpdateAllValues);
         }
 
         private void DrawWrapModeDropdown() {

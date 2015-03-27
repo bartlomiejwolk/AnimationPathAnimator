@@ -260,9 +260,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private TangentMode tangentMode =
             TangentMode.Smooth;
 
-        // todo rename to updateAllValues.
         [SerializeField]
-        private bool updateAllMode;
+        private bool updateAllValues;
 
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
@@ -358,9 +357,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { tangentMode = value; }
         }
 
-        public bool UpdateAllMode {
-            get { return updateAllMode; }
-            set { updateAllMode = value; }
+        public bool UpdateAllValues {
+            get { return updateAllValues; }
+            set { updateAllValues = value; }
         }
 
         public AnimatorWrapMode WrapMode {
@@ -1314,7 +1313,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TargetGO = null;
             HandleMode = HandleMode.None;
             TangentMode = TangentMode.Smooth;
-            UpdateAllMode = false;
+            UpdateAllValues = false;
             AnimationTime = 0;
             AutoPlay = true;
             EnableControlsInPlayMode = true;

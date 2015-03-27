@@ -991,7 +991,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (IsPlaying && Pause) {
+            else if (!IsPlaying && Pause) {
                 // Unpause animation.
                 Pause = false;
                 IsPlaying = true;

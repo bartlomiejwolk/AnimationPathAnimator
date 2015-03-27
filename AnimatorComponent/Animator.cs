@@ -604,28 +604,45 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Updates animated game object position.
         /// </summary>
-        private void AnimateAnimatedGOPosition() {
-            if (AnimatedGO == null) return;
+        private bool AnimateAnimatedGOPosition() {
+            if (AnimatedGO == null) return false;
 
+            // Local position that the animated object should be at in this frame.
             var localPosAtTime =
                 PathData.GetVectorAtTime(AnimationTime);
 
-            // Global position that the animated object should be at in this frame.
+            // Convert position to global.
             var globalPosAtTime =
                 transform.TransformPoint(localPosAtTime);
+
+            // Helper variable.
+            var prevGOPosition = animatedGO.position;
 
             // Update position.
             AnimatedGO.position = Vector3.Lerp(
                 AnimatedGO.position,
                 globalPosAtTime,
                 PositionLerpSpeed);
+
+            // Check if position changed.
+            var positionChanged = !Utilities.V3Equal(
+                prevGOPosition,
+                animatedGO.position);
+
+            // If position changed, return true.
+            if (positionChanged) return true;
+
+            return false;
         }
 
         /// <summary>
         ///     Updates animated game object rotation.
         /// </summary>
-        private void AnimateAnimatedGORotation() {
-            if (AnimatedGO == null) return;
+        private bool AnimateAnimatedGORotation() {
+            if (AnimatedGO == null) return false;
+
+            // Helper variable.
+            var prevGORotation = animatedGO.rotation;
 
             // Look at target.
             if (TargetGO != null
@@ -643,13 +660,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 RotateObjectWithSlerp(globalForwardPoint);
             }
+
+            // Check if rotation changed.
+            var rotationChanged = !Utilities.QuaternionsEqual(
+                prevGORotation,
+                animatedGO.rotation);
+
+            if (rotationChanged) return true;
+
+            return false;
         }
 
         /// <summary>
         ///     Updates animated game object tilting.
         /// </summary>
-        private void AnimateAnimatedGOTilting() {
-            if (AnimatedGO == null) return;
+        private bool AnimateAnimatedGOTilting() {
+            if (AnimatedGO == null) return false;
+
+            var prevTilting = AnimatedGO.rotation.z;
 
             // Get current animated GO rotation.
             var eulerAngles = AnimatedGO.rotation.eulerAngles;
@@ -659,6 +687,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
             // Update animated GO rotation.
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
+        
+            // Check if tilting changed.
+            var tiltingChanged = !Utilities.FloatsEqual(
+                prevTilting,
+                animatedGO.rotation.z,
+                GlobalConstants.FloatPrecision);
+
+            if (tiltingChanged) return true;
+
+            return false;
         }
 
         /// <summary>
@@ -951,24 +989,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
-            var prevGOPosition = animatedGO.position;
-            var prevGORotation = animatedGO.rotation;
-
-            AnimateAnimatedGOPosition();
-            AnimateAnimatedGORotation();
-            AnimateAnimatedGOTilting();
+            var positionChanged = AnimateAnimatedGOPosition();
+            var rotationChanged = AnimateAnimatedGORotation();
+            var tiltingChanged = AnimateAnimatedGOTilting();
 
             HandleFireNodeReachedEvent();
 
-            var positionChanged = !Utilities.V3Equal(
-                prevGOPosition,
-                animatedGO.position);
-
-            var rotationChanged = !Utilities.QuaternionsEqual(
-                prevGORotation,
-                animatedGO.rotation);
-
-            if (!positionChanged && !rotationChanged) {
+            if (!positionChanged && !rotationChanged && !tiltingChanged) {
                 // Stop updating animated game object.
                 AnimGOUpdateEnabled = false;
             }

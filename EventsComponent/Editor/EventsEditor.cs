@@ -120,7 +120,12 @@ namespace ATP.AnimationPathTools.EventsComponent {
             serializedObject.Update();
 
             ReorderableListGUI.Title("Events");
-            ReorderableListGUI.ListField(nodeEvents);
+            ReorderableListGUI.ListField(
+                nodeEvents,
+                ReorderableListFlags.HideAddButton
+                | ReorderableListFlags.HideRemoveButtons
+                | ReorderableListFlags.DisableContextMenu
+                | ReorderableListFlags.ShowIndices);
 
             serializedObject.ApplyModifiedProperties();
         }

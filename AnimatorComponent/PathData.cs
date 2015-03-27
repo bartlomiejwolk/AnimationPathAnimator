@@ -204,7 +204,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             if (tiltingCurve == null) {
                 tiltingCurve = new AnimationCurve();
-                InitializeEaseCurve();
+                InitializeTiltingCurve();
             }
         }
 

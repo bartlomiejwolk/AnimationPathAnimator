@@ -1338,7 +1338,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.PathReset += PathData_PathReset;
             PathData.RotationPathReset += PathData_RotationPathReset;
             AnimationEnded += APAnimator_AnimationEnded;
+            PathDataRefChanged += Animator_PathDataRefChanged;
+        }
 
+        void Animator_PathDataRefChanged(object sender, EventArgs e) {
+            SubscribeToEvents();
         }
 
         /// <summary>
@@ -1354,6 +1358,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.PathReset -= PathData_PathReset;
             PathData.RotationPathReset -= PathData_RotationPathReset;
             AnimationEnded -= APAnimator_AnimationEnded;
+            PathDataRefChanged -= Animator_PathDataRefChanged;
         }
 
         #endregion

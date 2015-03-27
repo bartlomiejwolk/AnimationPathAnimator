@@ -630,9 +630,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 animatedGO.position);
 
             // If position changed, return true.
-            if (positionChanged) return true;
-
-            return false;
+            return positionChanged;
         }
 
         /// <summary>
@@ -666,9 +664,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 prevGORotation,
                 animatedGO.rotation);
 
-            if (rotationChanged) return true;
-
-            return false;
+            return rotationChanged;
         }
 
         /// <summary>
@@ -677,26 +673,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private bool AnimateAnimatedGOTilting() {
             if (AnimatedGO == null) return false;
 
-            var prevTilting = AnimatedGO.rotation.z;
+            var prevTilting = AnimatedGO.rotation.eulerAngles.z;
 
             // Get current animated GO rotation.
             var eulerAngles = AnimatedGO.rotation.eulerAngles;
             // Get tilting value.
             var zRotation = PathData.GetTiltingValueAtTime(AnimationTime);
+            // Lerp tilting value.
+            var zRotationLerped = Mathf.Lerp(
+                prevTilting,
+                zRotation,
+                // todo create setting in animator
+                0.01f);
             // Update value on Z axis.
-            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotationLerped);
             // Update animated GO rotation.
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         
             // Check if tilting changed.
             var tiltingChanged = !Utilities.FloatsEqual(
                 prevTilting,
-                animatedGO.rotation.z,
+                AnimatedGO.rotation.eulerAngles.z,
                 GlobalConstants.FloatPrecision);
 
-            if (tiltingChanged) return true;
-
-            return false;
+            return tiltingChanged;
         }
 
         /// <summary>
@@ -742,7 +743,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
-            AnimateAnimatedGOTilting();
+            UpdateAnimatedGOTilting();
+        }
+
+        private void UpdateAnimatedGOTilting() {
+            if (AnimatedGO == null) return;
+
+            // Get current animated GO rotation.
+            var eulerAngles = AnimatedGO.rotation.eulerAngles;
+            // Get tilting value.
+            var zRotation = PathData.GetTiltingValueAtTime(AnimationTime);
+            // Update value on Z axis.
+            eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
+            // Update animated GO rotation.
+            AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         }
 
         /// <summary>
@@ -773,13 +787,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        //    if (!positionChanged && !rotationChanged) {
-        //        // Stop updating animated game object.
-        //        AnimGOUpdateEnabled = false;
-        //        // Fire event.
-        //        OnAnimationEnded();
-        //    }
-        //}
         /// <summary>
         ///     Rotates animated GO using Slerp function.
         /// </summary>
@@ -788,6 +795,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return when point to look at is at the same position as the
             // animated object.
             if (targetPosition == AnimatedGO.position) return;
+
+            // Remember tilting.
+            var tiltingEulerAngle = AnimatedGO.rotation.eulerAngles.z;
 
             // Calculate direction to target.
             var targetDirection = targetPosition - AnimatedGO.position;
@@ -801,6 +811,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 AnimatedGO.rotation,
                 rotation,
                 speed);
+
+            // Restore tilting.
+            var rotationEuler = AnimatedGO.rotation.eulerAngles;
+            rotationEuler.z = tiltingEulerAngle;
+            AnimatedGO.rotation = Quaternion.Euler(rotationEuler);
         }
 
         /// <summary>
@@ -989,12 +1004,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
+            // Animate animated GO.
             var positionChanged = AnimateAnimatedGOPosition();
             var rotationChanged = AnimateAnimatedGORotation();
             var tiltingChanged = AnimateAnimatedGOTilting();
 
             HandleFireNodeReachedEvent();
 
+            // Stop animating anim. GO if none of its properties changes.
             if (!positionChanged && !rotationChanged && !tiltingChanged) {
                 // Stop updating animated game object.
                 AnimGOUpdateEnabled = false;

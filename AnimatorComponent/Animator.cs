@@ -985,19 +985,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (!Pause) {
+            if (IsPlaying && !Pause) {
                 // Pause animation.
                 Pause = true;
                 IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (Pause) {
+            else if (IsPlaying && Pause) {
                 // Unpause animation.
                 Pause = false;
                 IsPlaying = true;
             }
             // Animation ended.
-            else if (AnimationTime >= 1) {
+            else if (!IsPlaying && !Pause && AnimationTime >= 1) {
                 AnimationTime = 0;
                 StartAnimation();
             }

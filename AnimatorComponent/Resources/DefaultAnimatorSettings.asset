@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: DefaultAnimatorSettings
+  m_Name: 
   m_EditorClassIdentifier: 
   minNodeTimeSeparation: .00100000005
   playModeModKey: 307
@@ -21,7 +21,7 @@ MonoBehaviour:
   jumpToStartKey: 104
   longJumpBackwardKey: 106
   longJumpForwardKey: 107
-  modKey: 307
+  modKey: 4
   noneModeKey: 121
   playPauseKey: 32
   rotationModeKey: 105
@@ -31,17 +31,13 @@ MonoBehaviour:
   updateAllKey: 112
   countdownToStopFramesNo: 10
   forwardPointOffsetMinValue: .00100000005
-  gizmoIcons:
-  - {fileID: 2800000, guid: 7035c5b758f753f4c85443715f7b41a7, type: 3}
-  - {fileID: 2800000, guid: d09a8dd6e0e171b49ba73fd3d5c57205, type: 3}
-  - {fileID: 2800000, guid: 649104d15ab43284cb21177f43ec04a4, type: 3}
-  - {fileID: 2800000, guid: d777b5e2cb371524fade0782c726f2e6, type: 3}
+  gizmoIcons: []
   animationSpeedDenominator: .0500000007
   maxRotationSlerpSpeed: 20
   minRotationSlerpSpeed: .100000001
-  minPositionLerpSpeed: .00999999978
+  minPositionLerpSpeed: .00100000005
   maxPositionLerpSpeed: 1
-  pathDataAssetDefaultName: Path
+  pathDataAssetDefaultName: AnimationPath
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   gizmoCurveSamplingFrequency: 40
@@ -56,10 +52,10 @@ MonoBehaviour:
   defaultLabelWidth: 30
   easeValueLabelOffsetX: -20
   easeValueLabelOffsetY: -25
-  initialEaseArcValue: 15
+  initialEaseArcValue: 5
   movementHandleSize: .119999997
-  removeButtonH: 44
-  removeButtonV: 10
+  removeButtonH: 34
+  removeButtonV: 5
   rotationHandleColor: {r: 1, g: 0, b: 1, a: 1}
   rotationHandleSize: .25999999
   scaleHandleSize: 1.5

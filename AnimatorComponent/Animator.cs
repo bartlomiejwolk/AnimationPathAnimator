@@ -856,34 +856,46 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void UpdateAnimatedGORotation() {
             if (AnimatedGO == null) return;
 
-            // If rotation mode is set to..
-            switch (RotationMode) {
-                case RotationMode.Forward:
-                    var globalForwardPoint = GetGlobalForwardPoint();
+            HandleForwardRotationModeInEditor();
+            HandleCustomRotationModeInEditor();
+            HandleTargetRotationModeInEditor();
+        }
 
-                    RotateObjectWithLookAt(globalForwardPoint);
+        private void HandleTargetRotationModeInEditor() {
 
-                    break;
-                case RotationMode.Custom:
-                    // Get rotation point position.
-                    var rotationPointPos =
-                        PathData.GetRotationAtTime(AnimationTime);
+            if (RotationMode == RotationMode.Target) {
+                if (TargetGO == null) return;
 
-                    // Convert target position to global coordinates.
-                    var rotationPointGlobalPos =
-                        transform.TransformPoint(rotationPointPos);
-
-                    // Update animated GO rotation.
-                    RotateObjectWithLookAt(rotationPointGlobalPos);
-
-                    break;
-                case RotationMode.Target:
-                    if (TargetGO == null) return;
-
-                    RotateObjectWithLookAt(TargetGO.position);
-                    break;
+                RotateObjectWithLookAt(TargetGO.position);
             }
         }
+
+        private void HandleCustomRotationModeInEditor() {
+
+            if (RotationMode == RotationMode.Custom) {
+                // Get rotation point position.
+                var rotationPointPos =
+                    PathData.GetRotationAtTime(AnimationTime);
+
+                // Convert target position to global coordinates.
+                var rotationPointGlobalPos =
+                    transform.TransformPoint(rotationPointPos);
+
+                // Update animated GO rotation.
+                RotateObjectWithLookAt(rotationPointGlobalPos);
+            }
+        }
+
+        private void HandleForwardRotationModeInEditor() {
+
+// If rotation mode is set to..
+            if (RotationMode == RotationMode.Forward) {
+                var globalForwardPoint = GetGlobalForwardPoint();
+
+                RotateObjectWithLookAt(globalForwardPoint);
+            }
+        }
+
         #endregion
 
         #region ANIMATION HANDLERS

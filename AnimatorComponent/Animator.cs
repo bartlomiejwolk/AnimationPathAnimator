@@ -408,6 +408,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void Update() {
             UpdateAnimationTime();
+
+            HandleClampWrapMode();
+            HandleLoopWrapMode();
+            HandlePingPongWrapMode();
+
             HandleUpdatingAnimGOInPlayMode();
             HandleShortcuts();
         }
@@ -838,8 +843,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && WrapMode == AnimatorWrapMode.Clamp) {
 
                 AnimationTime = 1;
-                //EaseCoroutineRunning = false;
                 IsPlaying = false;
+
+                // Fire event.
+                OnAnimationEnded();
             }
         }
 
@@ -880,9 +887,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Decides what to do on animation end in Loop wrap mode.
         /// </summary>
         private void HandleLoopWrapMode() {
-            if (AnimationTime > 1
-                && WrapMode == AnimatorWrapMode.Loop) {
-
+            if (AnimationTime > 1 && WrapMode == AnimatorWrapMode.Loop) {
                 AnimationTime = 0;
             }
         }
@@ -972,10 +977,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             if (!positionChanged && !rotationChanged) {
                 // Stop updating animated game object.
-                //AnimGOUpdateEnabled = false;
-                // Fire event.
-                // todo move it somewhere else.
-                //OnAnimationEnded();
+                AnimGOUpdateEnabled = false;
             }
         }
 

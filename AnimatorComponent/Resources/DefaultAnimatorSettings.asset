@@ -48,8 +48,8 @@ MonoBehaviour:
   rotationCurveSampling: 40
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
-  addButtonOffsetH: 25
-  addButtonOffsetV: 10
+  addButtonOffsetH: 15
+  addButtonOffsetV: 5
   arcHandleRadius: .600000024
   arcValueMultiplierNumerator: 360
   defaultLabelHeight: 10

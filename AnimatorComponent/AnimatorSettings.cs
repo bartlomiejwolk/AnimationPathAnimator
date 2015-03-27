@@ -324,13 +324,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [Header("Handles")]
         [SerializeField]
-        private int addButtonOffsetH = 25;
+        private int addButtonOffsetH = 15;
 
         //[SerializeField]
         //private float minEaseValueThreshold = 0.01f;
 
         [SerializeField]
-        private int addButtonOffsetV = 10;
+        private int addButtonOffsetV = 5;
 
         [SerializeField]
         private float arcHandleRadius = 0.6f;
@@ -355,10 +355,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float movementHandleSize = 0.12f;
 
         [SerializeField]
-        private int removeButtonH = 44;
+        private int removeButtonH = 34;
 
         [SerializeField]
-        private int removeButtonV = 10;
+        private int removeButtonV = 5;
 
         [SerializeField]
         private Color rotationHandleColor = Color.magenta;

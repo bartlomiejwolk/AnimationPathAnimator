@@ -413,7 +413,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleLoopWrapMode();
             HandlePingPongWrapMode();
 
-            HandleAnimatingAnimatedGO();
+            HandleAnimateAnimatedGO();
             HandleShortcuts();
         }
         #endregion UNITY MESSAGES
@@ -766,15 +766,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Updates animated game object position, rotation and tilting.
-        /// </summary>
-        private void AnimateAnimatedGO() {
-            AnimateAnimatedGOPosition();
-            AnimateAnimatedGORotation();
-            AnimateAnimatedGOTilting();
-        }
-
-        /// <summary>
         ///     Coroutine that will remember animated game object's current position, rotation and tilting
         ///     and after a given number of frames will check if any of those values changed. If none was changed, animated GO
         ///     stops being updated and <c>AnimatonEnded</c> event is called.
@@ -954,7 +945,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Method responsible for updating animated GO position, rotation and tilting in play mode during playback.
         /// </summary>
-        private void HandleAnimatingAnimatedGO() {
+        private void HandleAnimateAnimatedGO() {
             // Return if not in play mode.
             if (!Application.isPlaying) return;
             // Return if anim. GO update is disabled.
@@ -963,9 +954,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var prevGOPosition = animatedGO.position;
             var prevGORotation = animatedGO.rotation;
 
-            AnimateAnimatedGO();
+            AnimateAnimatedGOPosition();
+            AnimateAnimatedGORotation();
+            AnimateAnimatedGOTilting();
+
             HandleFireNodeReachedEvent();
-            //HandleStartCountdownCoroutine();
 
             var positionChanged = !Utilities.V3Equal(
                 prevGOPosition,

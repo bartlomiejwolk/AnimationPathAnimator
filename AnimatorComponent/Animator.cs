@@ -388,7 +388,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void OnEnable() {
             LoadRequiredAssets();
-            // todo unsubscribe first
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -419,6 +419,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
+        private void OnPathDataRefChanged() {
+            Debug.Log("PathDataRefChanged");
+            var handler = PathDataRefChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
 
         private void OnAnimationEnded() {
             var handler = AnimationEnded;
@@ -439,15 +445,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var handler = NodeReached;
             if (handler != null) handler(this, eventArgs);
         }
-
-        // todo move to region
-        private void OnPathDataRefChanged() {
-            Debug.Log("PathDataRefChanged");
-            var handler = PathDataRefChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        // todo move to region
         private void OnUndoRedoPerformed() {
             var handler = UndoRedoPerformed;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -456,7 +453,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region EVENT HANDLERS
-
         private void APAnimator_AnimationEnded(object sender, EventArgs e) {
         }
 

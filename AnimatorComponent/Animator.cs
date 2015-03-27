@@ -642,22 +642,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Helper variable.
             var prevGORotation = animatedGO.rotation;
 
-            // Look at target.
-            if (TargetGO != null
-                && RotationMode == RotationMode.Target) {
-
-                RotateObjectWithSlerp(TargetGO.position);
-            }
-            // Use rotation path.
-            if (RotationMode == RotationMode.Custom) {
-                RotateObjectWithRotationPath();
-            }
-            // Look forward.
-            else if (RotationMode == RotationMode.Forward) {
-                var globalForwardPoint = GetGlobalForwardPoint();
-
-                RotateObjectWithSlerp(globalForwardPoint);
-            }
+            HandleTargetRotationModeInPlayMode();
+            HandleCustomRotationModeInPlayMode();
+            HandleForwardRotationModeInPlayMode();
 
             // Check if rotation changed.
             var rotationChanged = !Utilities.QuaternionsEqual(
@@ -665,6 +652,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 animatedGO.rotation);
 
             return rotationChanged;
+        }
+
+        private void HandleForwardRotationModeInPlayMode() {
+            // Look forward.
+            if (RotationMode == RotationMode.Forward) {
+                var globalForwardPoint = GetGlobalForwardPoint();
+
+                RotateObjectWithSlerp(globalForwardPoint);
+            }
+        }
+
+        private void HandleCustomRotationModeInPlayMode() {
+            // Use rotation path.
+            if (RotationMode == RotationMode.Custom) {
+                RotateObjectWithRotationPath();
+            }
+        }
+
+        private void HandleTargetRotationModeInPlayMode() {
+            // Look at target.
+            if (TargetGO != null
+                && RotationMode == RotationMode.Target) {
+
+                RotateObjectWithSlerp(TargetGO.position);
+            }
         }
 
         /// <summary>

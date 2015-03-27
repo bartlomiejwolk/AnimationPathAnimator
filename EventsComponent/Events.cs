@@ -82,11 +82,18 @@ namespace ATP.AnimationPathTools.EventsComponent {
             SubscribeToEvents();
         }
 
+        private void OnValidate() {
+            Debug.Log("OnValidate()");
+            UnsubscribeFromEvents();
+            SubscribeToEvents();
+        }
+
         void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
             NodeEventSlots.RemoveAt(e.NodeIndex);
         }
 
         void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
+            Debug.Log("NodeAdded event");
             NodeEventSlots.Insert(e.NodeIndex, new NodeEventSlot());
         }
 
@@ -136,6 +143,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 Animator.PathData.NodeRemoved += PathData_NodeRemoved;
             }
         }
+
 
         void Animator_UndoRedoPerformed(object sender, System.EventArgs e) {
             // During animator undo event, reference to path data could have been changed.
@@ -236,7 +244,6 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         public void OnAfterDeserialize() {
-            SubscribeToEvents();
         }
 
     }

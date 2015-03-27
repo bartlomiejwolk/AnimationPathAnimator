@@ -389,6 +389,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void OnEnable() {
             LoadRequiredAssets();
+            // todo unsubscribe first
             SubscribeToEvents();
         }
 
@@ -1342,6 +1343,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         void Animator_PathDataRefChanged(object sender, EventArgs e) {
+            // todo unsubscribe first
             SubscribeToEvents();
         }
 

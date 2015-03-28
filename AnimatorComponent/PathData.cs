@@ -88,12 +88,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// List with with indexes of nodes that have ease value assigned.
         /// </summary>
-        public List<int> NodesWithEaseAssigned { get; set; }
+        public List<bool> NodeEaseEnabled { get; set; }
 
         /// <summary>
         /// List with with indexes of nodes that have tilting value assigned.
         /// </summary>
-        public List<int> NodesWithTiltingAssigned { get; set; }
+        public List<bool> NodeTiltingEnabled { get; set; }
 
         #endregion PROPERTIES
 
@@ -164,18 +164,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region EVENT HANDLERS
 
-        private void PathData_NodeAdded(object sender, EventArgs e) {
+        private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
             //UpdateCurveWithAddedKeys(EaseCurve);
             //UpdateCurveWithAddedKeys(TiltingCurve);
+            //AddEntryToNodeEaseEnabledList(e.NodeIndex);
+            NodeEaseEnabled.Insert(e.NodeIndex, false);
+            
             UpdateRotationPathWithAddedKeys();
         }
+
+        /// <summary>
+        /// Add new entry <c>NodeTiltingEnabled</c> list.
+        /// </summary>
+        //private void AddEntryToNodeEaseEnabledList(int nodeIndex) {
+
+        //}
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
         }
 
-        private void PathData_NodeRemoved(object sender, EventArgs e) {
+        private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
             //UpdateCurveWithRemovedKeys(EaseCurve);
             //UpdateCurveWithRemovedKeys(TiltingCurve);
+            NodeEaseEnabled.RemoveAt(e.NodeIndex);
             UpdateRotationPathWithRemovedKeys();
         }
 
@@ -216,11 +227,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 tiltingCurve = new AnimationCurve();
                 InitializeTiltingCurve();
             }
-            if (NodesWithEaseAssigned == null) {
-                NodesWithEaseAssigned = new List<int>() {0, 1};
+            if (NodeEaseEnabled == null) {
+                NodeEaseEnabled = new List<bool>() {true, true};
             }
-            if (NodesWithTiltingAssigned== null) {
-                NodesWithTiltingAssigned = new List<int>() {0, 1};
+            if (NodeTiltingEnabled== null) {
+                NodeTiltingEnabled = new List<bool>() {true, true};
             }
         }
 
@@ -261,6 +272,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion METHODS
 
         #region EDIT METHODS
+
+        /// <summary>
+        /// Add a new key to ease curve. Value will be read from existing curve.
+        /// </summary>
+        /// <param name="time"></param>
+        public void AddKeyToEaseCurve(float time) {
+            var valueAtTime = EaseCurve.Evaluate(time);
+            EaseCurve.AddKey(time, valueAtTime);
+        }
 
         public void ChangeRotationAtTimestamp(
             float timestamp,

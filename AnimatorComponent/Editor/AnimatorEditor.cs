@@ -188,7 +188,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 toggleButtonStyle);
         }
 
-        private void DrawSceneToolToggleButtonsCallbackHandler(int obj) {
+        private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
+            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+            Script.PathData.AddKeyToEaseCurve(nodeTimestamp);
+            Script.PathData.NodeEaseEnabled[index] = true;
         }
 
         #endregion UNITY MESSAGES

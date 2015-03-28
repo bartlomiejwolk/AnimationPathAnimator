@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -1540,16 +1541,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Node positions.</returns>
         public Vector3[] GetGlobalEaseNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
-            var nodesWithEaseEnabled = PathData.NodesWithEaseAssigned;
+            var resultPositions = new List<Vector3>();
 
-            var resultPositions = new Vector3[nodesWithEaseEnabled.Count];
-
-            for (int i = 0; i < nodesWithEaseEnabled.Count; i++) {
-                resultPositions[i] =
-                    globalNodePositions[nodesWithEaseEnabled[i]];
+            for (int i = 0; i < globalNodePositions.Length; i++) {
+                if (PathData.NodeEaseEnabled[i]) {
+                    resultPositions.Add(globalNodePositions[i]);
+                }
             }
 
-            return resultPositions;
+            return resultPositions.ToArray();
         }
 
     }

@@ -167,6 +167,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
             EaseToolState.Insert(e.NodeIndex, false);
+            TiltingToolState.Insert(e.NodeIndex, false);
             
             UpdateRotationPathWithAddedKeys();
         }
@@ -176,6 +177,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
             EaseToolState.RemoveAt(e.NodeIndex);
+            TiltingToolState.RemoveAt(e.NodeIndex);
+
             UpdateRotationPathWithRemovedKeys();
         }
 
@@ -1011,16 +1014,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        /// <summary>
-        /// Returns indexes of nodes that have a ease value assigned.
-        /// </summary>
-        /// <returns></returns>
-        //public int[] GetNodesWithEaseEnabled() {
-        //}
-
         public void RemoveKeyFromEaseCurve(float timestamp) {
             var index = Utilities.GetIndexAtTimestamp(EaseCurve, timestamp);
             EaseCurve.RemoveKey(index);
+        }
+
+        public void RemoveKeyFromTiltingCurve(float timestamp) {
+            var index = Utilities.GetIndexAtTimestamp(TiltingCurve, timestamp);
+            TiltingCurve.RemoveKey(index);
+        }
+
+        public void AddKeyToTiltingCurve(float time) {
+            var valueAtTime = TiltingCurve.Evaluate(time);
+            TiltingCurve.AddKey(time, valueAtTime);
         }
 
     }

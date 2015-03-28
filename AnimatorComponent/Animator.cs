@@ -1544,7 +1544,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var resultPositions = new List<Vector3>();
 
             for (int i = 0; i < globalNodePositions.Length; i++) {
-                if (PathData.NodeEaseEnabled[i]) {
+                if (PathData.EaseToolState[i]) {
                     resultPositions.Add(globalNodePositions[i]);
                 }
             }

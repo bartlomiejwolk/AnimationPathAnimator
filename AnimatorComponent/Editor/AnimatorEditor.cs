@@ -189,16 +189,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
-            HandleNodeToolButtonPress(index);
-        }
-
-        /// <summary>
-        /// Handles enabling/disabling node tools after on-scene button was pressed.
-        /// </summary>
-        /// <param name="index">Node index.</param>
-        private void HandleNodeToolButtonPress(int index) {
             var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
-            if (Script.PathData.NodeEaseEnabled[index]) {
+            if (Script.PathData.EaseToolState[index]) {
                 HandleDisablingTool(index, nodeTimestamp);
             }
             else {
@@ -210,14 +202,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Remove key from ease curve.
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
             // Disable ease tool.
-            Script.PathData.NodeEaseEnabled[index] = false;
+            Script.PathData.EaseToolState[index] = false;
         }
 
         private void HandleEnablingTool(int index, float timestamp) {
             // Add new key to ease curve.
             Script.PathData.AddKeyToEaseCurve(timestamp);
             // Enable ease tool for the node.
-            Script.PathData.NodeEaseEnabled[index] = true;
+            Script.PathData.EaseToolState[index] = true;
         }
 
         #endregion UNITY MESSAGES

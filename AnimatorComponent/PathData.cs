@@ -89,7 +89,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// List with with indexes of nodes that have ease value assigned.
         /// </summary>
-        public List<bool> NodeEaseEnabled { get; set; }
+        public List<bool> EaseToolState { get; set; }
 
         /// <summary>
         /// List with with indexes of nodes that have tilting value assigned.
@@ -169,7 +169,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //UpdateCurveWithAddedKeys(EaseCurve);
             //UpdateCurveWithAddedKeys(TiltingCurve);
             //AddEntryToNodeEaseEnabledList(e.NodeIndex);
-            NodeEaseEnabled.Insert(e.NodeIndex, false);
+            EaseToolState.Insert(e.NodeIndex, false);
             
             UpdateRotationPathWithAddedKeys();
         }
@@ -191,7 +191,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
             //UpdateCurveWithRemovedKeys(EaseCurve);
             //UpdateCurveWithRemovedKeys(TiltingCurve);
-            NodeEaseEnabled.RemoveAt(e.NodeIndex);
+            EaseToolState.RemoveAt(e.NodeIndex);
             UpdateRotationPathWithRemovedKeys();
         }
 
@@ -234,8 +234,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 tiltingCurve = new AnimationCurve();
                 InitializeTiltingCurve();
             }
-            if (NodeEaseEnabled == null) {
-                NodeEaseEnabled = new List<bool>() {true, true};
+            if (EaseToolState == null) {
+                EaseToolState = new List<bool>() {true, true};
             }
             if (NodeTiltingEnabled== null) {
                 NodeTiltingEnabled = new List<bool>() {true, true};
@@ -662,7 +662,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var resultTimestamps = new List<float>();
 
             for (int i = 0; i < pathTimestamps.Length; i++) {
-                if (NodeEaseEnabled[i]) {
+                if (EaseToolState[i]) {
                     resultTimestamps.Add(pathTimestamps[i]);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
@@ -181,6 +182,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         //}
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
+            //Logger.LogString(
+            //    "Node 1 timestamp: {0}; Ease 1 timestamp: {1}",
+            //    GetNodeTimestamp(1),
+            //    EaseCurve.keys[1].time);
         }
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
@@ -194,6 +199,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
+            //Logger.LogString("Ease curve keys no: {0}", EaseCurve.length);
             //UpdateCurveTimestamps(EaseCurve);
             UpdateCurveEnabledTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateCurveTimestamps(TiltingCurve);
@@ -279,6 +285,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="time"></param>
         public void AddKeyToEaseCurve(float time) {
+            Debug.Log("AddKeyToEaseCurve: " + time);
             var valueAtTime = EaseCurve.Evaluate(time);
             EaseCurve.AddKey(time, valueAtTime);
         }
@@ -1010,7 +1017,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         //public int[] GetNodesWithEaseEnabled() {
         //}
 
-        public void RemoveKeyFromEaseCurve(int index) {
+        public void RemoveKeyFromEaseCurve(float timestamp) {
+            var index = Utilities.GetIndexAtTimestamp(EaseCurve, timestamp);
             EaseCurve.RemoveKey(index);
         }
 

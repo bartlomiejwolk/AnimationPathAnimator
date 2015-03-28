@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ATP.AnimationPathTools.AnimatorComponent;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
 
     public static class Utilities {
+
+        private const float FloatPrecision = 0.0000001f;
 
         public static void ConvertToGlobalCoordinates(
             ref Vector3[] points,
@@ -162,6 +165,20 @@ namespace ATP.AnimationPathTools {
             while (difference > 180) difference -= 360;
 
             return difference;
+        }
+
+        public static int GetIndexAtTimestamp(AnimationCurve curve, float timestamp) {
+            for (int i = 0; i < curve.length; i++) {
+                if (FloatsEqual(
+                    curve.keys[i].time,
+                    timestamp,
+                    FloatPrecision)) {
+
+                    return i;
+                }
+            }
+
+            return - 1;
         }
 
     }

@@ -197,26 +197,25 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="index">Node index.</param>
         private void HandleNodeToolButtonPress(int index) {
+            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
             if (Script.PathData.NodeEaseEnabled[index]) {
-                HandleDisablingTool(index);
+                HandleDisablingTool(index, nodeTimestamp);
             }
             else {
-                HandleEnablingTool(index);
+                HandleEnablingTool(index, nodeTimestamp);
             }
         }
 
-        private void HandleDisablingTool(int index) {
+        private void HandleDisablingTool(int index, float timestamp) {
             // Remove key from ease curve.
-            Script.PathData.RemoveKeyFromEaseCurve(index);
+            Script.PathData.RemoveKeyFromEaseCurve(timestamp);
             // Disable ease tool.
             Script.PathData.NodeEaseEnabled[index] = false;
         }
 
-        private void HandleEnablingTool(int index) {
-            // Get timestamp of the passed node.
-            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+        private void HandleEnablingTool(int index, float timestamp) {
             // Add new key to ease curve.
-            Script.PathData.AddKeyToEaseCurve(nodeTimestamp);
+            Script.PathData.AddKeyToEaseCurve(timestamp);
             // Enable ease tool for the node.
             Script.PathData.NodeEaseEnabled[index] = true;
         }

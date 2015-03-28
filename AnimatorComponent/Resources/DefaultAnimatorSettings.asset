@@ -44,6 +44,8 @@ MonoBehaviour:
   rotationCurveSampling: 40
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
+  sceneToolToggleOffsetH: 55
+  sceneToolToggleOffsetV: 5
   addButtonOffsetH: 15
   addButtonOffsetV: 5
   arcHandleRadius: .600000024

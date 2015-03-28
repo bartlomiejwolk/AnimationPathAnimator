@@ -1543,7 +1543,7 @@ MonoBehaviour:
     m_StretchHeight: 0
   - m_Name: SceneToolToggleButton
     m_Normal:
-      m_Background: {fileID: 0}
+      m_Background: {fileID: 2800000, guid: 4db017495c69e8140a56a0e2b669e3f8, type: 3}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_Hover:
       m_Background: {fileID: 0}

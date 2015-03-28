@@ -155,8 +155,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_NodeAdded(object sender, EventArgs e) {
-            UpdateCurveWithAddedKeys(EaseCurve);
-            UpdateCurveWithAddedKeys(TiltingCurve);
+            //UpdateCurveWithAddedKeys(EaseCurve);
+            //UpdateCurveWithAddedKeys(TiltingCurve);
             UpdateRotationPathWithAddedKeys();
         }
 
@@ -164,8 +164,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeRemoved(object sender, EventArgs e) {
-            UpdateCurveWithRemovedKeys(EaseCurve);
-            UpdateCurveWithRemovedKeys(TiltingCurve);
+            //UpdateCurveWithRemovedKeys(EaseCurve);
+            //UpdateCurveWithRemovedKeys(TiltingCurve);
             UpdateRotationPathWithRemovedKeys();
         }
 

@@ -236,7 +236,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.ArcValueMultiplierNumerator
                 / Script.SettingsAsset.AnimationSpeedDenominator;
 
-            SceneHandles.DrawArcTools(
+            SceneHandles.DrawEnabledArcTools(
                 nodePositions,
                 easeCurveValues,
                 Script.SettingsAsset.InitialEaseArcValue,
@@ -360,7 +360,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
 
-            SceneHandles.DrawArcTools(
+            SceneHandles.DrawEnabledArcTools(
                 nodePositions,
                 tiltingCurveValues,
                 Script.SettingsAsset.InitialTiltingArcValue,

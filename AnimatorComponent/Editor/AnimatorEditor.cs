@@ -189,14 +189,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
-            HandleToggleNodeTool(index);
+            HandleNodeToolButtonPress(index);
         }
 
         /// <summary>
         /// Handles enabling/disabling node tools after on-scene button was pressed.
         /// </summary>
         /// <param name="index">Node index.</param>
-        private void HandleToggleNodeTool(int index) {
+        private void HandleNodeToolButtonPress(int index) {
             if (Script.PathData.NodeEaseEnabled[index]) {
                 HandleDisablingTool(index);
             }

@@ -161,6 +161,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingRotationHandle();
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
+            HandleDrawingSceneToolToggleButtons();
 
             // Repaint inspector if any key was pressed.
             // Inspector needs to be redrawn after option is changed
@@ -168,6 +169,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        private void HandleDrawingSceneToolToggleButtons() {
+            // Get positions at which to draw movement handles.
+            var nodePositions = Script.GetGlobalNodePositions();
+
+            // Get style for add button.
+            var toggleButtonStyle = Script.Skin.GetStyle(
+                "SceneToolToggleButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SceneToolToggleOffsetH,
+                Script.SettingsAsset.SceneToolToggleOffsetV,
+                DrawSceneToolToggleButtonsCallbackHandler,
+                toggleButtonStyle);
+        }
+
+        private void DrawSceneToolToggleButtonsCallbackHandler(int obj) {
         }
 
         #endregion UNITY MESSAGES
@@ -189,7 +210,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Action<int> callbackHandler = DrawAddNodeButtonsCallbackHandler;
 
             // Draw add node buttons.
-            SceneHandles.DrawAddNodeButtons(
+            SceneHandles.DrawNodeButtons(
                 nodePositions,
                 Script.SettingsAsset.AddButtonOffsetH,
                 Script.SettingsAsset.AddButtonOffsetV,
@@ -287,7 +308,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawRemoveNodeButtonsCallbackHandles;
 
             // Draw add node buttons.
-            SceneHandles.DrawRemoveNodeButtons(
+            SceneHandles.DrawNodeButtons(
                 nodes,
                 Script.SettingsAsset.RemoveButtonH,
                 Script.SettingsAsset.RemoveButtonV,

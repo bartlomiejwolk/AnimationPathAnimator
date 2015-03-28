@@ -1185,7 +1185,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void FireJumpedToNodeEvent() {
             // Create event args.
-            var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
+            var nodeIndex = PathData.GetNodeIndexAtTime(
                 animationTime);
             var args = new NodeReachedEventArgs(nodeIndex, animationTime);
 

@@ -961,7 +961,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="timestamp">Timestamp to search for.</param>
         /// <returns>Node index.</returns>
-        public int GetAnimObjNodeIndexAtTime(float timestamp) {
+        public int GetNodeIndexAtTime(float timestamp) {
             return AnimatedObjectPath.GetNodeIndexAtTime(timestamp);
         }
 

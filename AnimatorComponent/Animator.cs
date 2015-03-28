@@ -1529,6 +1529,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (RotationMode == RotationMode.Target
                 // and target obj. is assigned..
                 && TargetGO != null) {
+
                 DrawTargetIcon(TargetGO.position);
             }
         }
@@ -1541,10 +1542,25 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Node positions.</returns>
         public Vector3[] GetGlobalEasedNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
-            var resultPositions = new List<Vector3>();
 
+            // Filter out unwanted nodes.
+            var resultPositions = new List<Vector3>();
             for (int i = 0; i < globalNodePositions.Length; i++) {
                 if (PathData.EaseToolState[i]) {
+                    resultPositions.Add(globalNodePositions[i]);
+                }
+            }
+
+            return resultPositions.ToArray();
+        }
+
+        public Vector3[] GetGlobalTiltingNodePositions() {
+             var globalNodePositions = GetGlobalNodePositions();
+
+            // Filter out unwanted nodes.
+            var resultPositions = new List<Vector3>();
+            for (int i = 0; i < globalNodePositions.Length; i++) {
+                if (PathData.TiltingToolState[i]) {
                     resultPositions.Add(globalNodePositions[i]);
                 }
             }

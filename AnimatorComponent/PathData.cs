@@ -94,7 +94,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// List with with indexes of nodes that have tilting value assigned.
         /// </summary>
-        public List<bool> NodeTiltingEnabled { get; set; }
+        public List<bool> TiltingToolState { get; set; }
 
         #endregion PROPERTIES
 
@@ -183,9 +183,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
-            UpdateCurveEnabledTimestamps(EaseCurve, GetEasedNodeTimestamps);
-            UpdateCurveTimestamps(TiltingCurve);
+            UpdateToolTimestamps(EaseCurve, GetEasedNodeTimestamps);
+            UpdateToolTimestamps(TiltingCurve, GetTiltedNodeTimestamps);
             UpdateRotationPathTimestamps();
+        }
+
+        private List<float> GetTiltedNodeTimestamps() {
+            var pathTimestamps = GetPathTimestamps();
+            var resultTimestamps = new List<float>();
+
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                if (TiltingToolState[i]) {
+                    resultTimestamps.Add(pathTimestamps[i]);
+                }
+            }
+
+            return resultTimestamps;
         }
 
         #endregion EVENT HANDLERS
@@ -219,8 +232,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (EaseToolState == null) {
                 EaseToolState = new List<bool>() {true, true};
             }
-            if (NodeTiltingEnabled== null) {
-                NodeTiltingEnabled = new List<bool>() {true, true};
+            if (TiltingToolState== null) {
+                TiltingToolState = new List<bool>() {true, true};
             }
         }
 
@@ -611,7 +624,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Updates curve timestamps but only for nodes that have tool enabled.
         /// </summary>
         /// <param name="curve"></param>
-        private void UpdateCurveEnabledTimestamps(
+        private void UpdateToolTimestamps(
             AnimationCurve curve,
             Func<List<float>> nodeTimestampsCallback) {
 
@@ -798,9 +811,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region GET METHODS
 
+        /// <summary>
+        /// Get all values from ease curve.
+        /// </summary>
+        /// <returns></returns>
         public float[] GetEaseCurveValues() {
             var values = new float[EaseCurveKeysNo];
 
+            // Fill array with values.
             for (var i = 0; i < values.Length; i++) {
                 values[i] = EaseCurve.keys[i].value;
             }

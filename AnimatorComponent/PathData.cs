@@ -194,7 +194,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
-            UpdateCurveTimestamps(EaseCurve);
+            //UpdateCurveTimestamps(EaseCurve);
+            UpdateCurveEnabledTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateCurveTimestamps(TiltingCurve);
             UpdateRotationPathTimestamps();
         }
@@ -594,7 +595,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void UpdateCurveTimestamps(AnimationCurve curve) {
-            // Get node timestamps.
+            // Get path timestamps.
             var pathNodeTimestamps = GetPathTimestamps();
             // For each key in easeCurve..
             for (var i = 1; i < curve.length - 1; i++) {
@@ -616,6 +617,51 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 }
             }
         }
+
+        /// <summary>
+        /// Updates curve timestamps but only for nodes that have tool enabled.
+        /// </summary>
+        /// <param name="curve"></param>
+        private void UpdateCurveEnabledTimestamps(
+            AnimationCurve curve,
+            Func<List<float>> nodeTimestampsCallback) {
+
+            // Get path timestamps.
+            var pathNodeTimestamps = nodeTimestampsCallback();
+            // For each key in easeCurve..
+            for (var i = 1; i < curve.length - 1; i++) {
+                // If resp. node timestamp is different from easeCurve
+                // timestamp..
+                if (!Utilities.FloatsEqual(
+                    pathNodeTimestamps[i],
+                    curve.keys[i].value,
+                    GlobalConstants.FloatPrecision)) {
+
+                    // Copy key
+                    var keyCopy = curve.keys[i];
+                    // Update timestamp
+                    keyCopy.time = pathNodeTimestamps[i];
+                    // Move key to new value.
+                    curve.MoveKey(i, keyCopy);
+
+                    SmoothCurve(curve);
+                }
+            }
+        }
+
+
+        public List<float> GetEasedNodeTimestamps() {
+            var pathTimestamps = GetPathTimestamps();
+            var resultTimestamps = new List<float>();
+
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                if (NodeEaseEnabled[i]) {
+                    resultTimestamps.Add(pathTimestamps[i]);
+                }
+            }
+
+            return resultTimestamps;
+        } 
 
         private void UpdateCurveValues(AnimationCurve curve, float delta) {
             for (var i = 0; i < curve.length; i++) {

@@ -263,7 +263,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //    Script.PathData.GetEasedNodeIndexes();
 
             // Get path node positions with ease enabled.
-            var easedNodePositions = Script.GetGlobalEaseNodePositions();
+            var easedNodePositions = Script.GetGlobalEasedNodePositions();
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();

@@ -1539,7 +1539,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Get positions of all nodes that have ease value assigned.
         /// </summary>
         /// <returns>Node positions.</returns>
-        public Vector3[] GetGlobalEaseNodePositions() {
+        public Vector3[] GetGlobalEasedNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
             var resultPositions = new List<Vector3>();
 

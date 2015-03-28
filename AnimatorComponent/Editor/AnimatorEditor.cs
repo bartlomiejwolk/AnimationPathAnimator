@@ -171,6 +171,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        // todo Don't draw for extreme nodes.
         private void HandleDrawingSceneToolToggleButtons() {
             // Get positions at which to draw movement handles.
             var nodePositions = Script.GetGlobalNodePositions();
@@ -276,7 +277,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.ArcValueMultiplierNumerator
                 / Script.SettingsAsset.AnimationSpeedDenominator;
 
-            SceneHandles.DrawEnabledArcTools(
+            SceneHandles.DrawArcTools(
                 easedNodePositions,
                 easeCurveValues,
                 Script.SettingsAsset.InitialEaseArcValue,
@@ -400,7 +401,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
 
-            SceneHandles.DrawEnabledArcTools(
+            SceneHandles.DrawArcTools(
                 nodePositions,
                 tiltingCurveValues,
                 Script.SettingsAsset.InitialTiltingArcValue,

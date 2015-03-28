@@ -492,35 +492,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
-
-        public static void DrawEnabledArcTools(
-            Vector3[] nodePositions,
-            float[] curveValues,
-            float initialValue,
-            bool allowNegative,
-            float arcValueMultiplier,
-            float arcHandleRadius,
-            float scaleHandleSize,
-            Color color,
-            Action<int, float> callback) {
-            
-            // For each path node..
-            for (var i = 0; i < nodePositions.Length; i++) {
-                var iTemp = i;
-                DrawArcTool(
-                    curveValues[i],
-                    allowNegative,
-                    initialValue,
-                    nodePositions[i],
-                    arcValueMultiplier,
-                    arcHandleRadius,
-                    scaleHandleSize,
-                    color,
-                    value => callback(iTemp, value));
-            }
-
-        }
-
     }
 
 }

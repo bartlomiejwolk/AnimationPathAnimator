@@ -85,6 +85,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return tiltingCurve; }
         }
 
+        /// <summary>
+        /// List with with indexes of nodes that have ease value assigned.
+        /// </summary>
+        public List<int> NodesWithEaseEnabled { get; set; }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -920,6 +925,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 SmoothCurve(curve);
             }
         }
+
+        /// <summary>
+        /// Returns indexes of nodes that have a ease value assigned.
+        /// </summary>
+        /// <returns></returns>
+        //public int[] GetNodesWithEaseEnabled() {
+        //}
 
     }
 

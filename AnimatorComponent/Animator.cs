@@ -1533,6 +1533,25 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
+
+        /// <summary>
+        /// Get positions of all nodes that have ease value assigned.
+        /// </summary>
+        /// <returns>Node positions.</returns>
+        public Vector3[] GetGlobalEaseNodePositions() {
+            var globalNodePositions = GetGlobalNodePositions();
+            var nodesWithEaseEnabled = PathData.NodesWithEaseEnabled;
+
+            var resultPositions = new Vector3[nodesWithEaseEnabled.Count];
+
+            for (int i = 0; i < nodesWithEaseEnabled.Count; i++) {
+                resultPositions[i] =
+                    globalNodePositions[nodesWithEaseEnabled[i]];
+            }
+
+            return resultPositions;
+        }
+
     }
 
 }

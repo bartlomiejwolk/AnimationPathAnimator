@@ -153,9 +153,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             HandleShortcuts();
             HandleDrawingEaseHandles();
-            HandleDrawingTiltingHandles();
-            HandleDrawingEaseLabel();
-            HandleDrawingTiltingLabels();
+            //HandleDrawingTiltingHandles();
+            //HandleDrawingEaseLabel();
+            //HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
             HandleDrawingRotationHandle();
@@ -224,9 +224,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingEaseHandles() {
             if (Script.HandleMode != HandleMode.Ease) return;
 
-            // Get path node positions.
-            var nodePositions =
-                Script.GetGlobalNodePositions();
+            // todo should store only nodes that have the tool enabled.
+            //var nodePositions =
+            //    Script.GetGlobalNodePositions();
+
+            //Vector3[] nodePosWithEaseEnabled;
+            //var nodeIndexesWithEaseEnabled =
+            //    Script.PathData.GetEasedNodeIndexes();
+
+            // Get path node positions with ease enabled.
+            var easedNodePositions = Script.GetGlobalEaseNodePositions();
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -237,7 +244,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 / Script.SettingsAsset.AnimationSpeedDenominator;
 
             SceneHandles.DrawEnabledArcTools(
-                nodePositions,
+                easedNodePositions,
                 easeCurveValues,
                 Script.SettingsAsset.InitialEaseArcValue,
                 false,

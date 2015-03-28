@@ -964,6 +964,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         //public int[] GetNodesWithEaseEnabled() {
         //}
 
+        public void RemoveKeyFromEaseCurve(int index) {
+            EaseCurve.RemoveKey(index);
+        }
+
     }
 
 }

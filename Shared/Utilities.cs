@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ATP.AnimationPathTools.AnimatorComponent;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools {
@@ -167,7 +166,10 @@ namespace ATP.AnimationPathTools {
             return difference;
         }
 
-        public static int GetIndexAtTimestamp(AnimationCurve curve, float timestamp) {
+        public static int GetIndexAtTimestamp(
+            AnimationCurve curve,
+            float timestamp) {
+
             for (int i = 0; i < curve.length; i++) {
                 if (FloatsEqual(
                     curve.keys[i].time,

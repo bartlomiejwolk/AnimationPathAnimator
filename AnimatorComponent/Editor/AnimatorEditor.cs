@@ -189,7 +189,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
+            // Get node timestamp.
             var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+            // If tool enabled for node at index..
             if (Script.PathData.EaseToolState[index]) {
                 HandleDisablingTool(index, nodeTimestamp);
             }
@@ -198,6 +200,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Disable selected node tool.
+        /// </summary>
+        /// <param name="index">Index of node which tool will be disabled.</param>
+        /// <param name="timestamp">Timestamp of node which tool will be disabled.</param>
         private void HandleDisablingTool(int index, float timestamp) {
             // Remove key from ease curve.
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
@@ -205,6 +212,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.EaseToolState[index] = false;
         }
 
+        /// <summary>
+        /// Enable selected node tool.
+        /// </summary>
+        /// <param name="index">Index of node which tool will be enabled.</param>
+        /// <param name="timestamp">Timestamp of node which tool will be enabled.</param>
         private void HandleEnablingTool(int index, float timestamp) {
             // Add new key to ease curve.
             Script.PathData.AddKeyToEaseCurve(timestamp);

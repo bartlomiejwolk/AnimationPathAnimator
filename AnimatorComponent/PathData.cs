@@ -166,31 +166,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
-            //UpdateCurveWithAddedKeys(EaseCurve);
-            //UpdateCurveWithAddedKeys(TiltingCurve);
-            //AddEntryToNodeEaseEnabledList(e.NodeIndex);
             EaseToolState.Insert(e.NodeIndex, false);
             
             UpdateRotationPathWithAddedKeys();
         }
 
-        /// <summary>
-        /// Add new entry <c>NodeTiltingEnabled</c> list.
-        /// </summary>
-        //private void AddEntryToNodeEaseEnabledList(int nodeIndex) {
-
-        //}
-
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
-            //Logger.LogString(
-            //    "Node 1 timestamp: {0}; Ease 1 timestamp: {1}",
-            //    GetNodeTimestamp(1),
-            //    EaseCurve.keys[1].time);
         }
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
-            //UpdateCurveWithRemovedKeys(EaseCurve);
-            //UpdateCurveWithRemovedKeys(TiltingCurve);
             EaseToolState.RemoveAt(e.NodeIndex);
             UpdateRotationPathWithRemovedKeys();
         }
@@ -199,8 +183,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
-            //Logger.LogString("Ease curve keys no: {0}", EaseCurve.length);
-            //UpdateCurveTimestamps(EaseCurve);
             UpdateCurveEnabledTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateCurveTimestamps(TiltingCurve);
             UpdateRotationPathTimestamps();
@@ -285,7 +267,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="time"></param>
         public void AddKeyToEaseCurve(float time) {
-            Debug.Log("AddKeyToEaseCurve: " + time);
             var valueAtTime = EaseCurve.Evaluate(time);
             EaseCurve.AddKey(time, valueAtTime);
         }
@@ -604,9 +585,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void UpdateCurveTimestamps(AnimationCurve curve) {
             // Get path timestamps.
             var pathNodeTimestamps = GetPathTimestamps();
-            // For each key in easeCurve..
+            // For each key in animation curve..
             for (var i = 1; i < curve.length - 1; i++) {
-                // If resp. node timestamp is different from easeCurve
+                // If appropriate node timestamp is different from curve 
                 // timestamp..
                 if (!Utilities.FloatsEqual(
                     pathNodeTimestamps[i],
@@ -620,6 +601,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
 
+                    // todo call this with callback.
                     SmoothCurve(curve);
                 }
             }
@@ -651,6 +633,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
 
+                    // todo call this with callback.
                     SmoothCurve(curve);
                 }
             }

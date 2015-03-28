@@ -88,7 +88,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// List with with indexes of nodes that have ease value assigned.
         /// </summary>
-        public List<int> NodesWithEaseEnabled { get; set; }
+        public List<int> NodesWithEaseAssigned { get; set; }
+
+        /// <summary>
+        /// List with with indexes of nodes that have tilting value assigned.
+        /// </summary>
+        public List<int> NodesWithTiltingAssigned { get; set; }
 
         #endregion PROPERTIES
 
@@ -210,6 +215,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (tiltingCurve == null) {
                 tiltingCurve = new AnimationCurve();
                 InitializeTiltingCurve();
+            }
+            if (NodesWithEaseAssigned == null) {
+                NodesWithEaseAssigned = new List<int>() {0, 1};
+            }
+            if (NodesWithTiltingAssigned== null) {
+                NodesWithTiltingAssigned = new List<int>() {0, 1};
             }
         }
 

@@ -1540,7 +1540,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Node positions.</returns>
         public Vector3[] GetGlobalEaseNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
-            var nodesWithEaseEnabled = PathData.NodesWithEaseEnabled;
+            var nodesWithEaseEnabled = PathData.NodesWithEaseAssigned;
 
             var resultPositions = new Vector3[nodesWithEaseEnabled.Count];
 

@@ -157,8 +157,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingSceneToolToggleButtons();
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
-            //HandleDrawingEaseLabel();
-            //HandleDrawingTiltingLabels();
+            HandleDrawingEaseLabel();
+            HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
             HandleDrawingRotationHandle();
@@ -318,11 +318,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingEaseLabel() {
             if (Script.HandleMode != HandleMode.Ease) return;
 
-            // Get node global positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            // Get path node positions with ease enabled.
+            var easedNodePositions = Script.GetGlobalEasedNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
-                nodeGlobalPositions,
+                easedNodePositions,
                 Script.SettingsAsset.EaseValueLabelOffsetX,
                 Script.SettingsAsset.EaseValueLabelOffsetY,
                 Script.SettingsAsset.DefaultLabelWidth,
@@ -419,7 +419,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Get path node positions.
             var nodePositions =
-                Script.GetGlobalTiltingNodePositions();
+                Script.GetGlobalTiltedNodePositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -442,11 +442,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingTiltingLabels() {
             if (Script.HandleMode != HandleMode.Tilting) return;
 
-            // Get node global positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            // Get path node positions with ease enabled.
+            var tiltedNodePositions = Script.GetGlobalTiltedNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
-                nodeGlobalPositions,
+                tiltedNodePositions,
                 Script.SettingsAsset.EaseValueLabelOffsetX,
                 Script.SettingsAsset.EaseValueLabelOffsetY,
                 Script.SettingsAsset.DefaultLabelWidth,

@@ -88,6 +88,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private GUISkin skin;
 
+        // todo remove
         [SerializeField]
         private bool subscribedToEvents;
 
@@ -1340,7 +1341,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         void Animator_PathDataRefChanged(object sender, EventArgs e) {
-            // todo unsubscribe first
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -1554,7 +1555,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return resultPositions.ToArray();
         }
 
-        public Vector3[] GetGlobalTiltingNodePositions() {
+        public Vector3[] GetGlobalTiltedNodePositions() {
              var globalNodePositions = GetGlobalNodePositions();
 
             // Filter out unwanted nodes.

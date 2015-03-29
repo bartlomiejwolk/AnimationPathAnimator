@@ -168,6 +168,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
+            Debug.Log("Node added to list: " + e.NodeIndex
+                + " Current tilting entries: " + TiltingToolState.Count);
             
             UpdateRotationPathWithAddedKeys();
         }
@@ -178,6 +180,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
+            Debug.Log("Node removed from list: " + e.NodeIndex
+                + " Current tilting entries: " + TiltingToolState.Count);
 
             UpdateRotationPathWithRemovedKeys();
         }

@@ -1458,13 +1458,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawGizmoCurveColorPicker() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
 
             EditorGUILayout.PropertyField(
                 gizmoCurveColor,
                 new GUIContent("Curve Color", ""));
 
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawHandleModeDropdown() {
@@ -1484,7 +1484,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawLongJumpValueField() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
 
             longJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
@@ -1495,7 +1495,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 0.004f,
                 0.1f);
 
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPathDataAssetField() {
@@ -1658,11 +1658,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawRotationCurveColorPicker() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
 
             EditorGUILayout.PropertyField(rotationCurveColor);
 
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawRotationModeDropdown(Action callback) {
@@ -1730,7 +1730,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawShortJumpValueField() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
 
             shortJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
@@ -1738,11 +1738,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Fraction of animation time used to jump forward/backward "
                     + "in time with keyboard keys."),
                 shortJumpValue.floatValue,
-                // todo create settings for these
-                0.0001f,
-                0.004f);
+                Script.SettingsAsset.ShortJumpMinValue,
+                Script.SettingsAsset.ShortJumpMaxValue);
 
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawSkinSelectionControl() {

@@ -263,8 +263,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private string pathDataAssetDefaultName = "AnimationPath";
 
+        [SerializeField]
+        private float shortJumpMinValue = 0.0001f;
+
+        [SerializeField]
+        private float shortJumpMaxValue = 0.004f;
+
         #endregion
         #region INSPECTOR PROPERTIES
+        public float ShortJumpMaxValue {
+            get { return shortJumpMaxValue; }
+            set { shortJumpMaxValue = value; }
+        }
+
+        public float ShortJumpMinValue {
+            get { return shortJumpMinValue; }
+            set { shortJumpMinValue = value; }
+        }
+
         public string PathDataAssetDefaultName {
             get { return pathDataAssetDefaultName; }
             set { pathDataAssetDefaultName = value; }

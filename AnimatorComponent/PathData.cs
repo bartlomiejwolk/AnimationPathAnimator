@@ -483,7 +483,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="path"></param>
         /// <param name="weight">Weight to be applied to the tangents.</param>
-        public void SmoothAllNodeTangents(
+        public void SmoothAnimationPathTangents(
             AnimationPath path,
             float weight = 0) {
 
@@ -495,11 +495,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void SmoothPathNodeTangents() {
-            SmoothAllNodeTangents(AnimatedObjectPath);
+            SmoothAnimationPathTangents(AnimatedObjectPath);
         }
 
         public void SmoothRotationPathTangents() {
-            SmoothAllNodeTangents(RotationPath);
+            SmoothAnimationPathTangents(RotationPath);
         }
 
         public void UpdateEaseCurveValues(float delta) {

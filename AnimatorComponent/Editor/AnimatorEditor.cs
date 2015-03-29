@@ -903,7 +903,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawUpdateAllToggle();
 
             DrawEaseCurve();
-            //DrawTiltingCurve();
+            DrawTiltingCurve();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -962,6 +962,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawTiltingCurve() {
+            Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
+                new GUIContent(
+                    "Tilting Curve",
+                    ""),
+                Script.PathData.TiltingCurve);
         }
 
         private void DrawEaseCurve() {

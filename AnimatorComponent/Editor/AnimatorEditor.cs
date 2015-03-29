@@ -190,6 +190,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
+            Undo.RecordObject(Script.PathData, "Toggle node tool.");
+
             // If Ease tool is enabled..
             if (Script.HandleMode == HandleMode.Ease) {
                 // Toggle ease tool.

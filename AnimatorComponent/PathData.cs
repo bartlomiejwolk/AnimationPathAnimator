@@ -50,6 +50,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private AnimationCurve tiltingCurve;
 
+        [SerializeField]
+        private List<bool> easeToolState;
+
+        [SerializeField]
+        private List<bool> tiltingToolState;
+
         #endregion FIELDS
 
         #region PROPERTIES
@@ -91,12 +97,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// List with with indexes of nodes that have ease value assigned.
         /// </summary>
-        public List<bool> EaseToolState { get; set; }
+        public List<bool> EaseToolState {
+            get { return easeToolState; }
+            set { easeToolState = value; }
+        }
 
         /// <summary>
         /// List with with indexes of nodes that have tilting value assigned.
         /// </summary>
-        public List<bool> TiltingToolState { get; set; }
+        public List<bool> TiltingToolState {
+            get { return tiltingToolState; }
+            set { tiltingToolState = value; }
+        }
 
         #endregion PROPERTIES
 

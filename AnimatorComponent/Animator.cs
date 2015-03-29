@@ -1564,6 +1564,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return resultPositions.ToArray();
         }
 
+        public void ChangeNodeTangents(int index, Vector3 inOutTangent) {
+            PathData.ChangePointTangents(index, inOutTangent);
+        }
+
     }
 
 }

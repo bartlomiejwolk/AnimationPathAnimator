@@ -1055,6 +1055,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TiltingCurve.AddKey(time, valueAtTime);
         }
 
+        public void ChangePointTangents(
+            int nodeIndex,
+            Vector3 tangentDelta) {
+
+            AnimatedObjectPath.ChangePointTangents(nodeIndex, tangentDelta);
+            // todo create event NodeTangentsChanged
+        }
+
     }
 
 }

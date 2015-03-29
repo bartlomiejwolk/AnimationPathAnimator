@@ -1,6 +1,7 @@
 ﻿#define DEBUG
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEditor;
@@ -159,6 +160,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
+            HandleDrawingTangentHandles();
             HandleDrawingRotationHandle();
 
             // Repaint inspector if any key was pressed.
@@ -167,6 +169,67 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        private void HandleDrawingTangentHandles() {
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Draw tangent handles.
+            DrawTangentHandles(
+                nodes,
+                DrawTangentHandlesCallbackHandler);
+        }
+
+        /// <summary>
+        /// For each node in the scene draw handle that allow manipulating
+        /// tangents for each of the animation curves separately.
+        /// </summary>
+        /// <returns>True if any handle was moved.</returns>
+        // todo move to SceneHandles class.
+        private void DrawTangentHandles(
+            List<Vector3> nodes,
+            Action<int, Vector3> callback) {
+
+            Handles.color = Script.GizmoCurveColor;
+
+            // For each node..
+            for (var i = 0; i < nodes.Count; i++) {
+                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                // todo create setting in asset .
+                var sphereSize = handleSize * 0.25f;
+
+                // draw node's handle.
+                var newHandleValue = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.CircleCap);
+
+                // How much tangent's value changed in this frame.
+                var tangentDelta = newHandleValue - nodes[i];
+
+                // Remember if handle was moved.
+                if (tangentDelta != Vector3.zero) {
+                    // Execute callback.
+                    callback(i, tangentDelta);
+                }
+            }
+        }
+
+        private void DrawTangentHandlesCallbackHandler(
+                    int index,
+                    Vector3 inOutTangent) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update node tangents.");
+
+            Script.ChangeNodeTangents(index, inOutTangent);
+            Script.PathData.DistributeTimestamps();
         }
 
         private void HandleDrawingSceneToolToggleButtons() {

@@ -170,6 +170,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingSceneToolToggleButtons() {
+            // Don't draw node tool in rotation mode.
+            if (Script.HandleMode == HandleMode.Rotation) return;
+
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();
             // Remove extreme node positions.

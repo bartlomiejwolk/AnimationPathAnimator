@@ -29,6 +29,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         "the path."),
                     Script.ExportSamplingFrequency);
 
+            // Limit value.
+            if (Script.ExportSamplingFrequency < 1) {
+                Script.ExportSamplingFrequency = 1;
+            }
+
             if (GUILayout.Button("Export")) {
                 Script.ExportNodes(Script.ExportSamplingFrequency);
             }
@@ -94,10 +99,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUndoEvent();
             DrawInspector();
 
-            // Validate inspector settings.
-            // Settings stored in settings asset cannot be validated with OnValidate().
             if (GUI.changed) {
-                ValidateInspectorSettings();
                 // Save settings asset.
                 EditorUtility.SetDirty(Script.SettingsAsset);
             }
@@ -1024,24 +1026,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 null);
 
             return assetsLoaded;
-        }
-
-        /// <summary>
-        ///     Validate inspector settings that cannot be validated in OnValidate().
-        /// </summary>
-        // todo this can be done in controls drawing methods.
-        private void ValidateInspectorSettings() {
-            if (Script.SettingsAsset == null) return;
-
-            // Limit RotationSpeed value.
-            if (Script.RotationSlerpSpeed < 0) {
-                Script.RotationSlerpSpeed = 0;
-            }
-
-            // Limit ExmportSamplingFrequency value.
-            if (Script.ExportSamplingFrequency < 1) {
-                Script.ExportSamplingFrequency = 1;
-            }
         }
 
         #endregion PRIVATE METHODS

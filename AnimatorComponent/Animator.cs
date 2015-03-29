@@ -689,11 +689,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var zRotationLerped = Mathf.Lerp(
                 prevTilting,
                 zRotation,
-                // todo create setting in animator
+                // todo release create setting in animator
                 0.01f);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-            // todo enable tilting lerping
+            // todo release enable tilting lerping
             //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotationLerped);
             // Update animated GO rotation.
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);

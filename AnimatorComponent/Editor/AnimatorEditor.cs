@@ -1454,8 +1454,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "target in Forward rotation mode."),
                 Script.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
-                // todo add setting
-                0.5f);
+                Script.SettingsAsset.ForwardPointOffsetMaxValue);
         }
 
         private void DrawGizmoCurveColorPicker() {

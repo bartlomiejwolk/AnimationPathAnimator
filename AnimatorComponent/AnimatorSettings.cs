@@ -175,6 +175,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float forwardPointOffsetMinValue = 0.001f;
 
+        [SerializeField]
+        private float forwardPointOffsetMaxValue = 0.5f;
+
         /// <summary>
         ///     Holds references to icons that will be copied to Assets/Gizmos folder.
         /// </summary>
@@ -203,6 +206,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region ANIMATOR PROPERTIES
+        public float ForwardPointOffsetMaxValue {
+            get { return forwardPointOffsetMaxValue; }
+            set { forwardPointOffsetMaxValue = value; }
+        }
+
         public float MinPositionLerpSpeed {
             get { return minPositionLerpSpeed; }
             set { minPositionLerpSpeed = value; }
@@ -509,7 +517,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return sceneToolToggleOffsetV; }
             set { sceneToolToggleOffsetV = value; }
         }
-
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

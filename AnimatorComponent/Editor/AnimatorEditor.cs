@@ -173,8 +173,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo Don't draw for extreme nodes.
         private void HandleDrawingSceneToolToggleButtons() {
-            // Get positions at which to draw movement handles.
+            // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme node positions.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
 
             // Get style for add button.
             var toggleButtonStyle = Script.Skin.GetStyle(
@@ -272,8 +275,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene buttons for adding new nodes.
         /// </summary>
         private void HandleDrawingAddButtons() {
-            // Get positions at which to draw movement handles.
+            // Get node positions.
             var nodePositions = Script.GetGlobalNodePositions();
+            // Remove last node's position.
+            nodePositions.RemoveAt(nodePositions.Count - 1);
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -366,7 +371,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingRemoveButtons() {
             // Positions at which to draw movement handles.
-            var nodes = Script.GetGlobalNodePositions();
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme node positions.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -378,7 +386,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw add node buttons.
             SceneHandles.DrawNodeButtons(
-                nodes,
+                nodePositions,
                 Script.SettingsAsset.RemoveButtonH,
                 Script.SettingsAsset.RemoveButtonV,
                 removeNodeCallback,

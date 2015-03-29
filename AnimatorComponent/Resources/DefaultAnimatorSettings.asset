@@ -31,6 +31,7 @@ MonoBehaviour:
   updateAllKey: 112
   countdownToStopFramesNo: 10
   forwardPointOffsetMinValue: .00100000005
+  forwardPointOffsetMaxValue: .5
   gizmoIcons: []
   animationSpeedDenominator: .0500000007
   maxRotationSlerpSpeed: 20
@@ -38,6 +39,8 @@ MonoBehaviour:
   minPositionLerpSpeed: .00100000005
   maxPositionLerpSpeed: 1
   pathDataAssetDefaultName: AnimationPath
+  shortJumpMinValue: 9.99999975e-05
+  shortJumpMaxValue: .00400000019
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   gizmoCurveSamplingFrequency: 40

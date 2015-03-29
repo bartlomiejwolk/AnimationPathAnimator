@@ -103,8 +103,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region UNITY MESSAGES
 
         private void OnEnable() {
-            HandleInstantiateReferenceTypes();
-
+            HandleInitializeReferenceTypes();
             SubscribeToEvents();
         }
 
@@ -225,9 +224,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             InitializeRotationPath();
             InitializeEaseCurve();
             InitializeTiltingCurve();
+
+            EaseToolState.Add(true);
+            EaseToolState.Add(true);
+            TiltingToolState.Add(true);
+            TiltingToolState.Add(true);
         }
 
-        private void HandleInstantiateReferenceTypes() {
+        private void HandleInitializeReferenceTypes() {
             if (animatedObjectPath == null) {
                 animatedObjectPath = new AnimationPath();
                 InitializeAnimatedObjectPath();
@@ -516,7 +520,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EaseCurve.RemoveKey(keyIndex);
             EaseCurve.AddKey(keyframeCopy);
 
-            SmoothCurve(EaseCurve);
+            //SmoothCurve(EaseCurve);
         }
 
         public void UpdateTiltingCurveValues(float delta) {
@@ -536,7 +540,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Add updated key.
             TiltingCurve.AddKey(keyframeCopy);
 
-            SmoothCurve(TiltingCurve);
+            //SmoothCurve(TiltingCurve);
             EaseCurveExtremeNodes(TiltingCurve);
 
             OnNodeTiltChanged();
@@ -585,6 +589,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             rotationPath = new AnimationPath();
             easeCurve = new AnimationCurve();
             tiltingCurve = new AnimationCurve();
+            EaseToolState = new List<bool>();
+            TiltingToolState = new List<bool>();
         }
 
         /// <summary>
@@ -630,7 +636,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     curve.MoveKey(i, keyCopy);
 
                     // todo call this with callback.
-                    SmoothCurve(curve);
+                    //SmoothCurve(curve);
                 }
             }
         }
@@ -647,8 +653,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var pathNodeTimestamps = nodeTimestampsCallback();
             // For each key in easeCurve..
             for (var i = 1; i < curve.length - 1; i++) {
-                // If resp. node timestamp is different from easeCurve
-                // timestamp..
+                // If resp. node timestamp is different from curve timestamp..
                 if (!Utilities.FloatsEqual(
                     pathNodeTimestamps[i],
                     curve.keys[i].value,
@@ -662,7 +667,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     curve.MoveKey(i, keyCopy);
 
                     // todo call this with callback.
-                    SmoothCurve(curve);
+                    //SmoothCurve(curve);
                 }
             }
         }
@@ -692,7 +697,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Add key.
                 curve.AddKey(keyCopy);
                 // Smooth all tangents.
-                SmoothCurve(curve);
+                //SmoothCurve(curve);
             }
         }
 
@@ -720,7 +725,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 if (valueExists) continue;
 
                 AddKeyToCurve(curve, nodeTimestamp);
-                SmoothCurve(curve);
+                //SmoothCurve(curve);
             }
         }
 
@@ -745,7 +750,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 if (keyExists) continue;
 
                 curve.RemoveKey(i);
-                SmoothCurve(curve);
+                //SmoothCurve(curve);
 
                 break;
             }
@@ -1022,7 +1027,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Add key.
                 curve.AddKey(keyCopy);
                 // Smooth all tangents.
-                SmoothCurve(curve);
+                //SmoothCurve(curve);
             }
         }
 

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using ATP.LoggingTools;
+using UnityEditor;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
 
-    public sealed class PathData : ScriptableObject,
-        ISerializationCallbackReceiver {
+    public sealed class PathData : ScriptableObject {
         #region EVENTS
 
         public event EventHandler<NodeAddedRemovedEventArgs> NodeAdded;
@@ -100,17 +100,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region UNITY MESSAGES
 
-        public void OnAfterDeserialize() {
-            SubscribeToEvents();
-        }
-
-        public void OnBeforeSerialize() {
-        }
-
         private void OnEnable() {
             HandleInstantiateReferenceTypes();
 
             SubscribeToEvents();
+        }
+
+
+        private void OnDisable() {
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents() {
+            NodeAdded -= PathData_NodeAdded;
+            NodeRemoved -= PathData_NodeRemoved;
+            NodeTiltChanged -= PathData_NodeTiltChanged;
+            NodeTimeChanged -= PathData_NodeTimeChanged;
+            NodePositionChanged -= PathData_NodePositionChanged;
         }
 
         #endregion UNITY MESSAGES

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ATP.LoggingTools;
+using UnityEditor;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
 
-    public sealed class PathData : ScriptableObject,
-        ISerializationCallbackReceiver {
+    public sealed class PathData : ScriptableObject {
         #region EVENTS
 
         public event EventHandler<NodeAddedRemovedEventArgs> NodeAdded;
@@ -85,21 +86,37 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return tiltingCurve; }
         }
 
+        /// <summary>
+        /// List with with indexes of nodes that have ease value assigned.
+        /// </summary>
+        public List<bool> EaseToolState { get; set; }
+
+        /// <summary>
+        /// List with with indexes of nodes that have tilting value assigned.
+        /// </summary>
+        public List<bool> TiltingToolState { get; set; }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
-
-        public void OnAfterDeserialize() {
-            SubscribeToEvents();
-        }
-
-        public void OnBeforeSerialize() {
-        }
 
         private void OnEnable() {
             HandleInstantiateReferenceTypes();
 
             SubscribeToEvents();
+        }
+
+
+        private void OnDisable() {
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents() {
+            NodeAdded -= PathData_NodeAdded;
+            NodeRemoved -= PathData_NodeRemoved;
+            NodeTiltChanged -= PathData_NodeTiltChanged;
+            NodeTimeChanged -= PathData_NodeTimeChanged;
+            NodePositionChanged -= PathData_NodePositionChanged;
         }
 
         #endregion UNITY MESSAGES
@@ -154,18 +171,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region EVENT HANDLERS
 
-        private void PathData_NodeAdded(object sender, EventArgs e) {
-            UpdateCurveWithAddedKeys(EaseCurve);
-            UpdateCurveWithAddedKeys(TiltingCurve);
+        private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
+            EaseToolState.Insert(e.NodeIndex, false);
+            TiltingToolState.Insert(e.NodeIndex, false);
+            Debug.Log("Node added to list: " + e.NodeIndex
+                + " Current tilting entries: " + TiltingToolState.Count);
+            
             UpdateRotationPathWithAddedKeys();
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
         }
 
-        private void PathData_NodeRemoved(object sender, EventArgs e) {
-            UpdateCurveWithRemovedKeys(EaseCurve);
-            UpdateCurveWithRemovedKeys(TiltingCurve);
+        private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
+            EaseToolState.RemoveAt(e.NodeIndex);
+            TiltingToolState.RemoveAt(e.NodeIndex);
+            Debug.Log("Node removed from list: " + e.NodeIndex
+                + " Current tilting entries: " + TiltingToolState.Count);
+
             UpdateRotationPathWithRemovedKeys();
         }
 
@@ -173,9 +196,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
-            UpdateCurveTimestamps(EaseCurve);
-            UpdateCurveTimestamps(TiltingCurve);
+            UpdateToolTimestamps(EaseCurve, GetEasedNodeTimestamps);
+            UpdateToolTimestamps(TiltingCurve, GetTiltedNodeTimestamps);
             UpdateRotationPathTimestamps();
+        }
+
+        private List<float> GetTiltedNodeTimestamps() {
+            var pathTimestamps = GetPathTimestamps();
+            var resultTimestamps = new List<float>();
+
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                if (TiltingToolState[i]) {
+                    resultTimestamps.Add(pathTimestamps[i]);
+                }
+            }
+
+            return resultTimestamps;
         }
 
         #endregion EVENT HANDLERS
@@ -205,6 +241,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (tiltingCurve == null) {
                 tiltingCurve = new AnimationCurve();
                 InitializeTiltingCurve();
+            }
+            if (EaseToolState == null) {
+                EaseToolState = new List<bool>() {true, true};
+            }
+            if (TiltingToolState== null) {
+                TiltingToolState = new List<bool>() {true, true};
             }
         }
 
@@ -245,6 +287,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion METHODS
 
         #region EDIT METHODS
+
+        /// <summary>
+        /// Add a new key to ease curve. Value will be read from existing curve.
+        /// </summary>
+        /// <param name="time"></param>
+        public void AddKeyToEaseCurve(float time) {
+            var valueAtTime = EaseCurve.Evaluate(time);
+            EaseCurve.AddKey(time, valueAtTime);
+        }
 
         public void ChangeRotationAtTimestamp(
             float timestamp,
@@ -558,8 +609,40 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void UpdateCurveTimestamps(AnimationCurve curve) {
-            // Get node timestamps.
+            // Get path timestamps.
             var pathNodeTimestamps = GetPathTimestamps();
+            // For each key in animation curve..
+            for (var i = 1; i < curve.length - 1; i++) {
+                // If appropriate node timestamp is different from curve 
+                // timestamp..
+                if (!Utilities.FloatsEqual(
+                    pathNodeTimestamps[i],
+                    curve.keys[i].value,
+                    GlobalConstants.FloatPrecision)) {
+
+                    // Copy key
+                    var keyCopy = curve.keys[i];
+                    // Update timestamp
+                    keyCopy.time = pathNodeTimestamps[i];
+                    // Move key to new value.
+                    curve.MoveKey(i, keyCopy);
+
+                    // todo call this with callback.
+                    SmoothCurve(curve);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates curve timestamps but only for nodes that have tool enabled.
+        /// </summary>
+        /// <param name="curve"></param>
+        private void UpdateToolTimestamps(
+            AnimationCurve curve,
+            Func<List<float>> nodeTimestampsCallback) {
+
+            // Get path timestamps.
+            var pathNodeTimestamps = nodeTimestampsCallback();
             // For each key in easeCurve..
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from easeCurve
@@ -576,10 +659,25 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
 
+                    // todo call this with callback.
                     SmoothCurve(curve);
                 }
             }
         }
+
+
+        public List<float> GetEasedNodeTimestamps() {
+            var pathTimestamps = GetPathTimestamps();
+            var resultTimestamps = new List<float>();
+
+            for (int i = 0; i < pathTimestamps.Length; i++) {
+                if (EaseToolState[i]) {
+                    resultTimestamps.Add(pathTimestamps[i]);
+                }
+            }
+
+            return resultTimestamps;
+        } 
 
         private void UpdateCurveValues(AnimationCurve curve, float delta) {
             for (var i = 0; i < curve.length; i++) {
@@ -726,9 +824,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region GET METHODS
 
+        /// <summary>
+        /// Get all values from ease curve.
+        /// </summary>
+        /// <returns></returns>
         public float[] GetEaseCurveValues() {
             var values = new float[EaseCurveKeysNo];
 
+            // Fill array with values.
             for (var i = 0; i < values.Length; i++) {
                 values[i] = EaseCurve.keys[i].value;
             }
@@ -879,7 +982,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="timestamp">Timestamp to search for.</param>
         /// <returns>Node index.</returns>
-        public int GetAnimObjNodeIndexAtTime(float timestamp) {
+        public int GetNodeIndexAtTime(float timestamp) {
             return AnimatedObjectPath.GetNodeIndexAtTime(timestamp);
         }
 
@@ -919,6 +1022,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Smooth all tangents.
                 SmoothCurve(curve);
             }
+        }
+
+        public void RemoveKeyFromEaseCurve(float timestamp) {
+            var index = Utilities.GetIndexAtTimestamp(EaseCurve, timestamp);
+            EaseCurve.RemoveKey(index);
+        }
+
+        public void RemoveKeyFromTiltingCurve(float timestamp) {
+            var index = Utilities.GetIndexAtTimestamp(TiltingCurve, timestamp);
+            TiltingCurve.RemoveKey(index);
+        }
+
+        public void AddKeyToTiltingCurve(float time) {
+            var valueAtTime = TiltingCurve.Evaluate(time);
+            TiltingCurve.AddKey(time, valueAtTime);
         }
 
     }

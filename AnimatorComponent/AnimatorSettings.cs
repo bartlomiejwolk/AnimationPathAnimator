@@ -323,6 +323,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region HANDLES FIELDS
 
         [Header("Handles")]
+
+        [SerializeField]
+        private int sceneToolToggleOffsetH = 55;
+
+        [SerializeField]
+        private int sceneToolToggleOffsetV = 5;
+
         [SerializeField]
         private int addButtonOffsetH = 15;
 
@@ -492,6 +499,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return tiltingValueMultiplierDenominator; }
             set { tiltingValueMultiplierDenominator = value; }
         }
+
+        public int SceneToolToggleOffsetH {
+            get { return sceneToolToggleOffsetH; }
+            set { sceneToolToggleOffsetH = value; }
+        }
+
+        public int SceneToolToggleOffsetV {
+            get { return sceneToolToggleOffsetV; }
+            set { sceneToolToggleOffsetV = value; }
+        }
+
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

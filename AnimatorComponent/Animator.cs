@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -87,6 +88,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private GUISkin skin;
 
+        // todo remove
         [SerializeField]
         private bool subscribedToEvents;
 
@@ -1184,7 +1186,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void FireJumpedToNodeEvent() {
             // Create event args.
-            var nodeIndex = PathData.GetAnimObjNodeIndexAtTime(
+            var nodeIndex = PathData.GetNodeIndexAtTime(
                 animationTime);
             var args = new NodeReachedEventArgs(nodeIndex, animationTime);
 
@@ -1339,7 +1341,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         void Animator_PathDataRefChanged(object sender, EventArgs e) {
-            // todo unsubscribe first
+            UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
@@ -1528,11 +1530,45 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (RotationMode == RotationMode.Target
                 // and target obj. is assigned..
                 && TargetGO != null) {
+
                 DrawTargetIcon(TargetGO.position);
             }
         }
 
         #endregion
+
+        /// <summary>
+        /// Get positions of all nodes that have ease value assigned.
+        /// </summary>
+        /// <returns>Node positions.</returns>
+        public Vector3[] GetGlobalEasedNodePositions() {
+            var globalNodePositions = GetGlobalNodePositions();
+
+            // Filter out unwanted nodes.
+            var resultPositions = new List<Vector3>();
+            for (int i = 0; i < globalNodePositions.Length; i++) {
+                if (PathData.EaseToolState[i]) {
+                    resultPositions.Add(globalNodePositions[i]);
+                }
+            }
+
+            return resultPositions.ToArray();
+        }
+
+        public Vector3[] GetGlobalTiltedNodePositions() {
+             var globalNodePositions = GetGlobalNodePositions();
+
+            // Filter out unwanted nodes.
+            var resultPositions = new List<Vector3>();
+            for (int i = 0; i < globalNodePositions.Length; i++) {
+                if (PathData.TiltingToolState[i]) {
+                    resultPositions.Add(globalNodePositions[i]);
+                }
+            }
+
+            return resultPositions.ToArray();
+        }
+
     }
 
 }

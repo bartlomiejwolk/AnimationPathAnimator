@@ -20,7 +20,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region METHDOS
 
-        public static void DrawAddNodeButtons(
+        public static void DrawNodeButtons(
             Vector3[] nodePositions,
             int buttonHoffset,
             int buttonVoffset,
@@ -197,40 +197,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     callback(i, newGlobalPos);
                 }
             }
-        }
-
-        public static void DrawRemoveNodeButtons(
-            Vector3[] nodePositions,
-            int offsetH,
-            int offsetV,
-            Action<int> callback,
-            GUIStyle buttonStyle) {
-
-            Handles.BeginGUI();
-
-            // Draw remove buttons for each node except for the first and the
-            // last one. Execute callback on button press.
-            for (var i = 1; i < nodePositions.Length - 1; i++) {
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(
-                    nodePositions[i]);
-
-                // Draw button.
-                var buttonPressed = DrawButton(
-                    guiPoint,
-                    offsetH,
-                    offsetV,
-                    15,
-                    15,
-                    buttonStyle);
-
-                // Execute callback.
-                if (buttonPressed) {
-                    callback(i);
-                }
-            }
-
-            Handles.EndGUI();
         }
 
         public static void DrawRotationHandle(

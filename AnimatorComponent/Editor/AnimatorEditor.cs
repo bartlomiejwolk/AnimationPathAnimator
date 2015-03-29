@@ -152,6 +152,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     FocusType.Passive));
 
             HandleShortcuts();
+            HandleDrawingAddButtons();
+            HandleDrawingRemoveButtons();
+            HandleDrawingSceneToolToggleButtons();
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
@@ -159,8 +162,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
             HandleDrawingRotationHandle();
-            HandleDrawingAddButtons();
-            HandleDrawingRemoveButtons();
 
             // Repaint inspector if any key was pressed.
             // Inspector needs to be redrawn after option is changed
@@ -168,6 +169,91 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        // todo Don't draw for extreme nodes.
+        private void HandleDrawingSceneToolToggleButtons() {
+            // Get positions at which to draw movement handles.
+            var nodePositions = Script.GetGlobalNodePositions();
+
+            // Get style for add button.
+            var toggleButtonStyle = Script.Skin.GetStyle(
+                "SceneToolToggleButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SceneToolToggleOffsetH,
+                Script.SettingsAsset.SceneToolToggleOffsetV,
+                DrawSceneToolToggleButtonsCallbackHandler,
+                toggleButtonStyle);
+        }
+
+        private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
+            HandleToggleEaseTool(index);
+            HandleToggleTiltingTool(index);
+        }
+
+        private void HandleToggleTiltingTool(int index) {
+            // Get node timestamp.
+            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+            // If tool enabled for node at index..
+            if (Script.PathData.TiltingToolState[index]) {
+                HandleDisablingTiltingTool(index, nodeTimestamp);
+            }
+            else {
+                HandleEnablingTiltingTool(index, nodeTimestamp);
+            }
+        }
+
+        private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
+            // Add new key to ease curve.
+            Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
+            // Enable ease tool for the node.
+            Script.PathData.TiltingToolState[index] = true;
+        }
+
+        private void HandleDisablingTiltingTool(int index, float nodeTimestamp) {
+            // Remove key from ease curve.
+            Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
+            // Disable ease tool.
+            Script.PathData.TiltingToolState[index] = false;
+        }
+
+        private void HandleToggleEaseTool(int index) {
+            // Get node timestamp.
+            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+            // If tool enabled for node at index..
+            if (Script.PathData.EaseToolState[index]) {
+                HandleDisablingEaseTool(index, nodeTimestamp);
+            }
+            else {
+                HandleEnablingEaseTool(index, nodeTimestamp);
+            }
+        }
+
+        /// <summary>
+        /// Disable selected node tool.
+        /// </summary>
+        /// <param name="index">Index of node which tool will be disabled.</param>
+        /// <param name="timestamp">Timestamp of node which tool will be disabled.</param>
+        private void HandleDisablingEaseTool(int index, float timestamp) {
+            // Remove key from ease curve.
+            Script.PathData.RemoveKeyFromEaseCurve(timestamp);
+            // Disable ease tool.
+            Script.PathData.EaseToolState[index] = false;
+        }
+
+        /// <summary>
+        /// Enable selected node tool.
+        /// </summary>
+        /// <param name="index">Index of node which tool will be enabled.</param>
+        /// <param name="timestamp">Timestamp of node which tool will be enabled.</param>
+        private void HandleEnablingEaseTool(int index, float timestamp) {
+            // Add new key to ease curve.
+            Script.PathData.AddKeyToEaseCurve(timestamp);
+            // Enable ease tool for the node.
+            Script.PathData.EaseToolState[index] = true;
         }
 
         #endregion UNITY MESSAGES
@@ -189,7 +275,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Action<int> callbackHandler = DrawAddNodeButtonsCallbackHandler;
 
             // Draw add node buttons.
-            SceneHandles.DrawAddNodeButtons(
+            SceneHandles.DrawNodeButtons(
                 nodePositions,
                 Script.SettingsAsset.AddButtonOffsetH,
                 Script.SettingsAsset.AddButtonOffsetV,
@@ -203,9 +289,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingEaseHandles() {
             if (Script.HandleMode != HandleMode.Ease) return;
 
-            // Get path node positions.
-            var nodePositions =
-                Script.GetGlobalNodePositions();
+            // Get path node positions with ease enabled.
+            var easedNodePositions = Script.GetGlobalEasedNodePositions();
 
             // Get ease values.
             var easeCurveValues = Script.PathData.GetEaseCurveValues();
@@ -216,7 +301,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 / Script.SettingsAsset.AnimationSpeedDenominator;
 
             SceneHandles.DrawArcTools(
-                nodePositions,
+                easedNodePositions,
                 easeCurveValues,
                 Script.SettingsAsset.InitialEaseArcValue,
                 false,
@@ -233,11 +318,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingEaseLabel() {
             if (Script.HandleMode != HandleMode.Ease) return;
 
-            // Get node global positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            // Get path node positions with ease enabled.
+            var easedNodePositions = Script.GetGlobalEasedNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
-                nodeGlobalPositions,
+                easedNodePositions,
                 Script.SettingsAsset.EaseValueLabelOffsetX,
                 Script.SettingsAsset.EaseValueLabelOffsetY,
                 Script.SettingsAsset.DefaultLabelWidth,
@@ -287,7 +372,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawRemoveNodeButtonsCallbackHandles;
 
             // Draw add node buttons.
-            SceneHandles.DrawRemoveNodeButtons(
+            SceneHandles.DrawNodeButtons(
                 nodes,
                 Script.SettingsAsset.RemoveButtonH,
                 Script.SettingsAsset.RemoveButtonV,
@@ -334,7 +419,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Get path node positions.
             var nodePositions =
-                Script.GetGlobalNodePositions();
+                Script.GetGlobalTiltedNodePositions();
 
             // Get tilting curve values.
             var tiltingCurveValues = Script.PathData.GetTiltingCurveValues();
@@ -357,11 +442,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingTiltingLabels() {
             if (Script.HandleMode != HandleMode.Tilting) return;
 
-            // Get node global positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            // Get path node positions with ease enabled.
+            var tiltedNodePositions = Script.GetGlobalTiltedNodePositions();
 
             SceneHandles.DrawArcHandleLabels(
-                nodeGlobalPositions,
+                tiltedNodePositions,
                 Script.SettingsAsset.EaseValueLabelOffsetX,
                 Script.SettingsAsset.EaseValueLabelOffsetY,
                 Script.SettingsAsset.DefaultLabelWidth,

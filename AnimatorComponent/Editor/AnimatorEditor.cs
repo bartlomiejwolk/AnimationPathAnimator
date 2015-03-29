@@ -579,13 +579,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode sooth node tangents.
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
-            }
+            //if (Script.TangentMode == TangentMode.Smooth) {
+            //    Script.PathData.SmoothPathNodeTangents();
+            //}
+            HandleSmoothTangentMode();
             // In Linear mode set node tangents to linear.
-            else if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
+            //else if (Script.TangentMode == TangentMode.Linear) {
+            //    Script.PathData.SetLinearAnimObjPathTangents();
+            //}
+            HandleLinearTangentMode();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -661,13 +663,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode mooth node tangents.
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
-            }
+            //if (Script.TangentMode == TangentMode.Smooth) {
+            //    Script.PathData.SmoothPathNodeTangents();
+            //}
+            HandleSmoothTangentMode();
             // In Linear mode set node tangents to linear.
-            else if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
+            //else if (Script.TangentMode == TangentMode.Linear) {
+            //    Script.PathData.SetLinearAnimObjPathTangents();
+            //}
+            HandleLinearTangentMode();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -746,12 +750,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.PathData == null) return;
 
             // Update path node tangents.
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
-            }
-            else if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
+            //if (Script.TangentMode == TangentMode.Smooth) {
+            //    Script.PathData.SmoothPathNodeTangents();
+            //}
+            HandleSmoothTangentMode();
+            //else if (Script.TangentMode == TangentMode.Linear) {
+            //    Script.PathData.SetLinearAnimObjPathTangents();
+            //}
+            HandleLinearTangentMode();
 
             SceneView.RepaintAll();
         }

@@ -487,6 +487,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateTiltingCurveValues(DefaultTiltingCurveValue);
         }
 
+        // todo rename to SetPathTangentsToLinear().
         public void SetLinearAnimObjPathTangents() {
             for (var i = 0; i < 3; i++) {
                 Utilities.SetCurveLinear(AnimatedObjectPath[i]);

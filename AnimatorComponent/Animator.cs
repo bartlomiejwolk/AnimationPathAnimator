@@ -1143,7 +1143,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodesNo">Number of nodes to return, starting from index 0.</param>
         /// <returns>Global node positions.</returns>
-        public Vector3[] GetGlobalNodePositions(int nodesNo = -1) {
+        public List<Vector3> GetGlobalNodePositions(int nodesNo = -1) {
             var nodePositions = PathData.GetNodePositions(nodesNo);
 
             Utilities.ConvertToGlobalCoordinates(
@@ -1541,7 +1541,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Filter out unwanted nodes.
             var resultPositions = new List<Vector3>();
-            for (int i = 0; i < globalNodePositions.Length; i++) {
+            for (int i = 0; i < globalNodePositions.Count; i++) {
                 if (PathData.EaseToolState[i]) {
                     resultPositions.Add(globalNodePositions[i]);
                 }
@@ -1555,7 +1555,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Filter out unwanted nodes.
             var resultPositions = new List<Vector3>();
-            for (int i = 0; i < globalNodePositions.Length; i++) {
+            for (int i = 0; i < globalNodePositions.Count; i++) {
                 if (PathData.TiltingToolState[i]) {
                     resultPositions.Add(globalNodePositions[i]);
                 }

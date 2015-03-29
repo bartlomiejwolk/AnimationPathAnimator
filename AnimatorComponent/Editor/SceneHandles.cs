@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region METHDOS
 
         public static void DrawNodeButtons(
-            Vector3[] nodePositions,
+            List<Vector3> nodePositions,
             int buttonHoffset,
             int buttonVoffset,
             Action<int> callback,
@@ -31,7 +32,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw add buttons for each node (except the last one). Execute
             // callback on button press.
-            for (var i = 0; i < nodePositions.Length - 1; i++) {
+            for (var i = 0; i < nodePositions.Count; i++) {
                 // Translate node's 3d position into screen coordinates.
                 var guiPoint = HandleUtility.WorldToGUIPoint(
                     nodePositions[i]);
@@ -132,7 +133,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public static void DrawCustomPositionHandles(
-            Vector3[] nodeGlobalPositions,
+            List<Vector3> nodeGlobalPositions,
             float handleSize,
             Color curveColor,
             Action<int, Vector3> callback) {
@@ -141,7 +142,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Handles.DrawCapFunction capFunction = Handles.CircleCap;
 
             // For each node..
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
                 var handleColor = curveColor;
 
                 // Draw position handle.
@@ -160,7 +161,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public static void DrawNodeLabels(
-            Vector3[] nodeGlobalPositions,
+            List<Vector3> nodeGlobalPositions,
             string[] text,
             int offsetX,
             int offsetY,
@@ -168,7 +169,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             int labelHeight,
             GUIStyle style) {
 
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
                 DrawNodeLabel(
                     nodeGlobalPositions[i],
                     text[i],
@@ -181,11 +182,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public static void DrawPositionHandles(
-            Vector3[] nodeGlobalPositions,
+            List<Vector3> nodeGlobalPositions,
             Action<int, Vector3> callback) {
 
             // For each node..
-            for (var i = 0; i < nodeGlobalPositions.Length; i++) {
+            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
                 // Draw position handle.
                 var newGlobalPos = Handles.PositionHandle(
                     nodeGlobalPositions[i],
@@ -226,7 +227,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public static void DrawUpdateAllLabels(
-            Vector3[] nodeGlobalPositions,
+            List<Vector3> nodeGlobalPositions,
             string[] labelText,
             int offsetX,
             int offsetY,

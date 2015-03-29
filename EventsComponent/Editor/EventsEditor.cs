@@ -1,4 +1,5 @@
-﻿using ATP.AnimationPathTools.AnimatorComponent;
+﻿using System.Collections.Generic;
+using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
@@ -171,14 +172,13 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 null);
 
             var nodePositions =
-                (Vector3[]) Utilities.InvokeMethodWithReflection(
+                (List<Vector3>) Utilities.InvokeMethodWithReflection(
                     Script,
                     "GetNodePositions",
                     new object[] { -1 });
-                    //new object[] {methodNames.Length});
 
             // Wait until event slots number is synced with path nodes number.
-            if (methodNames.Length != nodePositions.Length) return;
+            if (methodNames.Length != nodePositions.Count) return;
 
             var style = Script.Skin.GetStyle("MethodNameLabel");
 

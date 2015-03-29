@@ -230,7 +230,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             return methodNames;
         }
 
-        private Vector3[] GetNodePositions(int nodesNo) {
+        private List<Vector3> GetNodePositions(int nodesNo) {
             var nodePositions =
                 Animator.GetGlobalNodePositions(nodesNo);
 

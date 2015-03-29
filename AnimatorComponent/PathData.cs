@@ -591,7 +591,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void ResetRotationPathValues() {
             var animPathNodePositions = GetNodePositions();
 
-            for (var i = 0; i < animPathNodePositions.Length; i++) {
+            for (var i = 0; i < animPathNodePositions.Count; i++) {
                 RotationPath.MovePointToPosition(i, animPathNodePositions[i]);
             }
         }
@@ -877,16 +877,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodesNo">Number of nodes to return. If not specified, all nodes will be returned.</param>
         /// <returns></returns>
-        public Vector3[] GetNodePositions(int nodesNo = -1) {
+        public List<Vector3> GetNodePositions(int nodesNo = -1) {
             // Specify number of nodes to return.
             var returnNodesNo = nodesNo > -1 ? nodesNo : NodesNo;
             // Create empty result array.
-            var result = new Vector3[returnNodesNo];
+            var result = new List<Vector3>();
 
             // Fill in array with node positions.
             for (var i = 0; i < returnNodesNo; i++) {
                 // Get node 3d position.
-                result[i] = AnimatedObjectPath.GetVectorAtKey(i);
+                result.Add(AnimatedObjectPath.GetVectorAtKey(i));
             }
 
             return result;

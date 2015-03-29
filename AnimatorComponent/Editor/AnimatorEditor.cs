@@ -473,8 +473,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var globalNodePositions = Script.GetGlobalNodePositions();
 
             // Create array with text to be displayed for each node.
-            var labelText = new string[globalNodePositions.Length];
-            for (var i = 0; i < globalNodePositions.Length; i++) {
+            var labelText = new string[globalNodePositions.Count];
+            for (var i = 0; i < globalNodePositions.Count; i++) {
                 labelText[i] = Script.SettingsAsset.UpdateAllLabelText;
             }
 

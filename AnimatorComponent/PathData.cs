@@ -637,9 +637,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     keyCopy.time = pathNodeTimestamps[i];
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
-
-                    // todo call this with callback.
-                    //SmoothCurve(curve);
                 }
             }
         }
@@ -668,9 +665,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     keyCopy.time = pathNodeTimestamps[i];
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
-
-                    // todo call this with callback.
-                    //SmoothCurve(curve);
                 }
             }
         }

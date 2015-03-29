@@ -30,7 +30,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             Handles.BeginGUI();
 
-            // Draw add buttons for each node (except the last one). Execute
+            // Draw add buttons for each node. Execute
             // callback on button press.
             for (var i = 0; i < nodePositions.Count; i++) {
                 // Translate node's 3d position into screen coordinates.

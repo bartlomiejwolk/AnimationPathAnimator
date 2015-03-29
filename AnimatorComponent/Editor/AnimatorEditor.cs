@@ -276,6 +276,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene buttons for adding new nodes.
         /// </summary>
         private void HandleDrawingAddButtons() {
+            // todo extract to AddNodeButtonPositions().
             // Get node positions.
             var nodePositions = Script.GetGlobalNodePositions();
             // Remove last node's position.
@@ -371,9 +372,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene button for removing nodes.
         /// </summary>
         private void HandleDrawingRemoveButtons() {
-            // Positions at which to draw movement handles.
+            // todo extract to RemoveNodeButtonPositions().
+            // Node positions.
             var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme node positions.
+            // Remove extreme nodes.
+            // Extreme nodes can't be removed.
             nodePositions.RemoveAt(0);
             nodePositions.RemoveAt(nodePositions.Count - 1);
 
@@ -381,16 +384,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var removeButtonStyle = Script.Skin.GetStyle(
                 "RemoveButton");
 
-            // Callback to add a new node after add button was pressed.
-            Action<int> removeNodeCallback =
-                DrawRemoveNodeButtonsCallbackHandles;
-
             // Draw add node buttons.
             SceneHandles.DrawNodeButtons(
                 nodePositions,
                 Script.SettingsAsset.RemoveButtonH,
                 Script.SettingsAsset.RemoveButtonV,
-                removeNodeCallback,
+                DrawRemoveNodeButtonsCallbackHandler,
                 removeButtonStyle);
         }
 
@@ -583,7 +582,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorUtility.SetDirty(Script.PathData);
         }
 
-        private void DrawRemoveNodeButtonsCallbackHandles(int index) {
+        private void DrawRemoveNodeButtonsCallbackHandler(int index) {
             Undo.RecordObject(Script.PathData, "Change path");
 
             // Increment node index.

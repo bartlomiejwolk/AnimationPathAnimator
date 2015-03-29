@@ -1116,6 +1116,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 null);
         }
 
+        // todo extract to separate methods.
         private void HandleShortcuts() {
             serializedObject.Update();
 
@@ -1186,10 +1187,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.SettingsAsset.ModKey)) {
 
                 var newAnimationTimeRatio =
-                    animationTime.floatValue
+                    Script.AnimationTime
                     + Script.ShortJumpValue;
 
-                animationTime.floatValue =
+                Script.AnimationTime =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
             }
 
@@ -1202,10 +1203,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.SettingsAsset.ModKey)) {
 
                 var newAnimationTimeRatio =
-                    animationTime.floatValue
+                    Script.AnimationTime
                     - Script.ShortJumpValue;
 
-                animationTime.floatValue =
+                Script.AnimationTime =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
             }
 
@@ -1217,7 +1218,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                animationTime.floatValue += Script.LongJumpValue;
+                Script.AnimationTime += Script.LongJumpValue;
             }
 
             // Long jump backward.
@@ -1228,7 +1229,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                animationTime.floatValue -= Script.LongJumpValue;
+                Script.AnimationTime -= Script.LongJumpValue;
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -1240,7 +1241,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 serializedObject.Update();
 
-                animationTime.floatValue =
+                Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestForwardNodeTimestamp",
@@ -1262,7 +1263,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 serializedObject.Update();
 
-                animationTime.floatValue =
+                Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestBackwardNodeTimestamp",
@@ -1287,7 +1288,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 serializedObject.Update();
 
-                animationTime.floatValue = 0;
+                Script.AnimationTime = 0;
 
                 serializedObject.ApplyModifiedProperties();
 
@@ -1308,7 +1309,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 serializedObject.Update();
 
-                animationTime.floatValue = 1;
+                Script.AnimationTime = 1;
 
                 serializedObject.ApplyModifiedProperties();
 

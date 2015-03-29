@@ -750,21 +750,49 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void HandleTangentModeChange() {
+        /// <summary>
+        /// Handles tangent mode change.
+        /// </summary>
+        /// <param name="prevTangentMode"></param>
+        private void HandleTangentModeChange(TangentMode prevTangentMode) {
             if (Script.PathData == null) return;
+
             Undo.RecordObject(Script.PathData, "Smooth path node tangents.");
 
-            // Update path node tangents.
-            //if (Script.TangentMode == TangentMode.Smooth) {
-            //    Script.PathData.SmoothPathNodeTangents();
-            //}
+            // Display modal window.
+            var canExitCustomTangentMode = HandleAskIfExitTangentMode(prevTangentMode);
+            // If user canceled operation..
+            if (!canExitCustomTangentMode) {
+                // Restore Custom tangent mode.
+                Script.TangentMode = TangentMode.Custom;
+
+                return;
+            }
+
+            // Handle selected tangent mode.
             HandleSmoothTangentMode();
-            //else if (Script.TangentMode == TangentMode.Linear) {
-            //    Script.PathData.SetLinearAnimObjPathTangents();
-            //}
             HandleLinearTangentMode();
 
             SceneView.RepaintAll();
+        }
+
+        /// <summary>
+        /// Defines what to do when tangent mode is changed from custom to something else.
+        /// </summary>
+        private bool HandleAskIfExitTangentMode(
+            TangentMode prevTangentMode) {
+
+            // Return true if user is not trying to exit Custom rotation mode.
+            if (prevTangentMode != TangentMode.Custom) return true;
+
+            // Display confirmation dialog
+            var canExit = EditorUtility.DisplayDialog(
+                "Are you sure to exit Custom tangent mode?",
+                "If you exit this mode, all custom rotation data will be lost.",
+                "Exit",
+                "Cancel");
+
+            return (canExit);
         }
 
         #endregion
@@ -1072,7 +1100,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Repaint();
 
                 // Update path with new tangent setting.
-                HandleTangentModeChange();
+                HandleSmoothTangentMode();
+                HandleLinearTangentMode();
 
                 // Update animated object.
                 Utilities.InvokeMethodWithReflection(
@@ -1085,6 +1114,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script,
                     "FireUndoRedoPerformedEvent",
                     null);
+
+                SceneView.RepaintAll();
             }
         }
 
@@ -1866,7 +1897,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) {
-                HandleTangentModeChange();
+                HandleTangentModeChange(prevTangentMode);
             }
         }
 

@@ -58,7 +58,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     <c>SerializedObject</c> for <c>AnimatorSettings</c> asset.
         /// </summary>
-        private SerializedObject SettingsSerializedObject { get; set; }
+        //private SerializedObject serializedObject { get; set; }
 
         #endregion
 
@@ -119,10 +119,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;
-
-            // Initialize serialized object for settings asset.
-            SettingsSerializedObject = new SerializedObject(
-                Script.SettingsAsset);
 
             InitializeSerializedProperties();
             CopyIconsToGizmosFolder();
@@ -905,7 +901,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawHandleModeDropdown();
             DrawPositionHandleDropdown();
             DrawUpdateAllToggle();
-            DrawSceneToolShortcutsInfoLabel();
+
+            DrawEaseCurve();
+            //DrawTiltingCurve();
 
             EditorGUILayout.BeginHorizontal();
 
@@ -914,6 +912,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawResetTiltingButton();
 
             EditorGUILayout.EndHorizontal();
+
+            DrawSceneToolShortcutsInfoLabel();
 
             EditorGUILayout.Space();
 
@@ -962,6 +962,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawEaseCurve() {
+            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
+                new GUIContent(
+                    "Ease Curve",
+                    ""),
+                Script.PathData.EaseCurve);
         }
 
         /// <summary>
@@ -1390,7 +1398,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawAutoPlayDelayField() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
 
             EditorGUIUtility.labelWidth = 50;
 
@@ -1405,7 +1413,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Limit value to greater than zero.
             if (autoPlayDelay.floatValue < 0) autoPlayDelay.floatValue = 0;
 
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawCreatePathAssetButton() {
@@ -1435,13 +1443,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawEnableControlsInPlayModeToggle() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
             EditorGUILayout.PropertyField(
                 enableControlsInPlayMode,
                 new GUIContent(
                     "Play Mode Controls",
                     "Enable keybord controls in play mode."));
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void HandleDrawForwardPointOffsetSlider() {
@@ -1550,7 +1558,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPositionHandleDropdown() {
-            SettingsSerializedObject.Update();
+            serializedObject.Update();
 
             EditorGUILayout.PropertyField(
                 positionHandle,
@@ -1559,7 +1567,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Handle used to move nodes on scene. Default " +
                     "shortcut: G"));
 
-            SettingsSerializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPositionSpeedSlider() {
@@ -1745,7 +1753,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSkinSelectionControl() {
-
             serializedObject.Update();
             EditorGUILayout.PropertyField(
                 skin,

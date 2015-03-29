@@ -74,16 +74,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return animatedObjectPath; }
         }
 
-        private AnimationCurve EaseCurve {
+        public AnimationCurve EaseCurve {
             get { return easeCurve; }
+            set { easeCurve = value; }
         }
 
         private AnimationPath RotationPath {
             get { return rotationPath; }
         }
 
-        private AnimationCurve TiltingCurve {
+        public AnimationCurve TiltingCurve {
             get { return tiltingCurve; }
+            set { tiltingCurve = value; }
         }
 
         /// <summary>

@@ -494,7 +494,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public void SmoothAnimObjPathTangents() {
+        public void SmoothPathNodeTangents() {
             SmoothAllNodeTangents(AnimatedObjectPath);
         }
 

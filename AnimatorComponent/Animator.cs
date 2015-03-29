@@ -549,7 +549,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public void SetTangentSmooth() {
             TangentMode = TangentMode.Smooth;
-            PathData.SmoothAnimObjPathTangents();
+            PathData.SmoothPathNodeTangents();
         }
 
         /// <summary>

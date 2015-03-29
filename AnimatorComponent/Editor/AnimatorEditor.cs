@@ -513,7 +513,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // In Smooth mode sooth node tangents.
             if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAnimObjPathTangents();
+                Script.PathData.SmoothPathNodeTangents();
             }
             // In Linear mode set node tangents to linear.
             else if (Script.TangentMode == TangentMode.Linear) {
@@ -592,7 +592,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // In Smooth mode mooth node tangents.
             if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAnimObjPathTangents();
+                Script.PathData.SmoothPathNodeTangents();
             }
             // In Linear mode set node tangents to linear.
             else if (Script.TangentMode == TangentMode.Linear) {
@@ -668,7 +668,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAnimObjPathTangents();
+                Script.PathData.SmoothPathNodeTangents();
             }
         }
 
@@ -677,7 +677,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Update path node tangents.
             if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAnimObjPathTangents();
+                Script.PathData.SmoothPathNodeTangents();
             }
             else if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();

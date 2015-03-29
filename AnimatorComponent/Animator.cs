@@ -88,10 +88,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private GUISkin skin;
 
-        // todo remove
-        [SerializeField]
-        private bool subscribedToEvents;
-
         [SerializeField]
         private Transform targetGO;
 

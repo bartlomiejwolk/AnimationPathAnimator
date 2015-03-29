@@ -190,8 +190,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
-            HandleToggleEaseTool(index);
-            HandleToggleTiltingTool(index);
+            if (Script.HandleMode == HandleMode.Ease) {
+                HandleToggleEaseTool(index);
+            }
+            else if (Script.HandleMode == HandleMode.Tilting) {
+                HandleToggleTiltingTool(index);
+            }
         }
 
         private void HandleToggleTiltingTool(int index) {

@@ -279,15 +279,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var addButtonStyle = Script.Skin.GetStyle(
                 "AddButton");
 
-            // Callback executed after add button was pressed.
-            Action<int> callbackHandler = DrawAddNodeButtonsCallbackHandler;
-
             // Draw add node buttons.
             SceneHandles.DrawNodeButtons(
                 nodePositions,
                 Script.SettingsAsset.AddButtonOffsetH,
                 Script.SettingsAsset.AddButtonOffsetV,
-                callbackHandler,
+                DrawAddNodeButtonsCallbackHandler,
                 addButtonStyle);
         }
 

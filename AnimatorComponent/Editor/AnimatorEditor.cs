@@ -190,10 +190,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
+            // If Ease tool is enabled..
             if (Script.HandleMode == HandleMode.Ease) {
+                // Toggle ease tool.
                 HandleToggleEaseTool(index);
             }
+            // If Tilting tool is enabled..
             else if (Script.HandleMode == HandleMode.Tilting) {
+                // Toggle tilting tool.
                 HandleToggleTiltingTool(index);
             }
         }

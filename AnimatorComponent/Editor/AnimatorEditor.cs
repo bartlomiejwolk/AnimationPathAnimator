@@ -174,6 +174,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingTangentHandles() {
             // Draw tangent handles only in custom tangent mode.
             if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only in tangent handle mode.
+            if (Script.HandleMode != HandleMode.Tangent) return;
 
             // Positions at which to draw tangent handles.
             var nodes = Script.GetGlobalNodePositions();

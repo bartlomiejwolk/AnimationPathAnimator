@@ -748,6 +748,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleTangentModeChange() {
             if (Script.PathData == null) return;
+            Undo.RecordObject(Script.PathData, "Smooth path node tangents.");
 
             // Update path node tangents.
             //if (Script.TangentMode == TangentMode.Smooth) {

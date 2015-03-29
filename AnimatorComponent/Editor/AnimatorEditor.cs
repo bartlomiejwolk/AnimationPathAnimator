@@ -171,7 +171,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo Don't draw for extreme nodes.
         private void HandleDrawingSceneToolToggleButtons() {
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();
@@ -205,15 +204,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void HandleToggleTiltingTool(int index) {
+        private void HandleToggleTiltingTool(int pressedButtonIndex) {
+            // Calculate index of path node for which the ease tool should be toggled.
+            var pathNodeIndex = pressedButtonIndex + 1;
             // Get node timestamp.
-            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+            var nodeTimestamp = Script.PathData.GetNodeTimestamp(pathNodeIndex);
             // If tool enabled for node at index..
-            if (Script.PathData.TiltingToolState[index]) {
-                HandleDisablingTiltingTool(index, nodeTimestamp);
+            if (Script.PathData.TiltingToolState[pathNodeIndex]) {
+                HandleDisablingTiltingTool(pathNodeIndex, nodeTimestamp);
             }
             else {
-                HandleEnablingTiltingTool(index, nodeTimestamp);
+                HandleEnablingTiltingTool(pathNodeIndex, nodeTimestamp);
             }
         }
 
@@ -231,15 +232,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.TiltingToolState[index] = false;
         }
 
-        private void HandleToggleEaseTool(int index) {
+        private void HandleToggleEaseTool(int pressedButtonIndex) {
+            // Calculate index of path node for which the ease tool should be toggled.
+            var pathNodeIndex = pressedButtonIndex + 1;
             // Get node timestamp.
-            var nodeTimestamp = Script.PathData.GetNodeTimestamp(index);
+            var pathNodeTimestamp = Script.PathData.GetNodeTimestamp(pathNodeIndex);
             // If tool enabled for node at index..
-            if (Script.PathData.EaseToolState[index]) {
-                HandleDisablingEaseTool(index, nodeTimestamp);
+            if (Script.PathData.EaseToolState[pathNodeIndex]) {
+                HandleDisablingEaseTool(pathNodeIndex, pathNodeTimestamp);
             }
             else {
-                HandleEnablingEaseTool(index, nodeTimestamp);
+                HandleEnablingEaseTool(pathNodeIndex, pathNodeTimestamp);
             }
         }
 

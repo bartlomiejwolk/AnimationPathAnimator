@@ -231,6 +231,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TiltingToolState.Add(true);
         }
 
+        /// <summary>
+        /// Instantiates and initializes class fields. Used in OnEnable().
+        /// </summary>
         private void HandleInitializeReferenceTypes() {
             if (animatedObjectPath == null) {
                 animatedObjectPath = new AnimationPath();

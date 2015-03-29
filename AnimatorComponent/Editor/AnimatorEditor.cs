@@ -583,9 +583,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorUtility.SetDirty(Script.PathData);
         }
 
-        private void DrawRemoveNodeButtonsCallbackHandles(
-            int nodeIndex) {
+        private void DrawRemoveNodeButtonsCallbackHandles(int index) {
             Undo.RecordObject(Script.PathData, "Change path");
+
+            // Increment node index.
+            // Indexes passed through arg. don't include extreme nodes.
+            var nodeIndex = index + 1;
 
             Script.PathData.RemoveNode(nodeIndex);
             Script.PathData.DistributeTimestamps();

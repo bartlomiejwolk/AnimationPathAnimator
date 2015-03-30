@@ -505,6 +505,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Utilities.SetCurveLinear(AnimatedObjectPath[i]);
             }
         }
+        public void SetRotationPathTangentsToLineear() {
+            for (var i = 0; i < 3; i++) {
+                Utilities.SetCurveLinear(RotationPath[i]);
+            }
+        }
 
         public void SetNodeTangents(int index, float inTangent, float outTangent) {
             AnimatedObjectPath.ChangeNodeTangents(index, inTangent, outTangent);

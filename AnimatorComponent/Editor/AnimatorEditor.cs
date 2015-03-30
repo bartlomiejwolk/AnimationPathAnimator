@@ -694,6 +694,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleLinearTangentMode() {
             if (Script.TangentMode == TangentMode.Linear) {
                 Script.PathData.SetLinearAnimObjPathTangents();
+                Script.PathData.SetRotationPathTangentsToLineear();
             }
         }
 

@@ -1266,122 +1266,42 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo extract to separate methods.
         private void HandleShortcuts() {
-            // Ease handle mode.
+            HandleEaseModeShortcut();
+            HandleTiltingModeShortcut();
+            HandleNoneHandleModeShortcut();
+            HandleUpdateAllModeShortcut();
+            HandlePositionHandleShortcut();
+            HandleShortJumpForwardShortcut();
+            HandleShortJumpBackwardShortcut();
+            HandleLongJumpForwardShortcut();
+            HandleLongJumpBackwardShortcut();
+            HandleJumpToNextNodeShortcut();
+            HandleJumpToPreviousNodeShortcut();
+            HandleJumpToStartShortcut();
+            HandleJumpToEndShortcut();
+            HandlePlayPauseShortcut();
+        }
+
+        private void HandlePlayPauseShortcut() {
+            // Play/pause animation.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
-                == Script.SettingsAsset.EaseModeKey) {
+                == Script.SettingsAsset.PlayPauseKey) {
 
-                Script.HandleMode = HandleMode.Ease;
+                HandlePlayPauseButton();
             }
+        }
 
-            // Tilting mode key.
+        private void HandleJumpToEndShortcut() {
+            // Jump to end.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
-                == Script.SettingsAsset.TiltingModeKey) {
-
-                Script.HandleMode = HandleMode.Tilting;
-            }
-
-            // None mode key.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.NoneModeKey) {
-
-                Script.HandleMode = HandleMode.None;
-            }
-
-            // Update all mode.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.UpdateAllKey) {
-
-                Script.UpdateAllValues =
-                    !Script.UpdateAllValues;
-            }
-
-            // Update position handle.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.PositionHandleKey) {
-
-                // Change to Position mode.
-                if (Script.PositionHandle == PositionHandle.Free) {
-                    Script.PositionHandle =
-                        PositionHandle.Position;
-                }
-                // Change to Free mode.
-                else {
-                    Script.PositionHandle =
-                        PositionHandle.Free;
-                }
-            }
-
-            // Short jump forward.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.ShortJumpForwardKey
+                == Script.SettingsAsset.JumpToEndKey
                 && FlagsHelper.IsSet(
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                var newAnimationTimeRatio =
-                    Script.AnimationTime
-                    + Script.ShortJumpValue;
-
-                Script.AnimationTime =
-                    (float) (Math.Round(newAnimationTimeRatio, 4));
-            }
-
-            // Short jump backward.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.ShortJumpBackwardKey
-                && FlagsHelper.IsSet(
-                    Event.current.modifiers,
-                    Script.SettingsAsset.ModKey)) {
-
-                var newAnimationTimeRatio =
-                    Script.AnimationTime
-                    - Script.ShortJumpValue;
-
-                Script.AnimationTime =
-                    (float) (Math.Round(newAnimationTimeRatio, 4));
-            }
-
-            // Long jump forward.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.LongJumpForwardKey
-                && !FlagsHelper.IsSet(
-                    Event.current.modifiers,
-                    Script.SettingsAsset.ModKey)) {
-
-                Script.AnimationTime += Script.LongJumpValue;
-            }
-
-            // Long jump backward.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.LongJumpBackwardKey
-                && !FlagsHelper.IsSet(
-                    Event.current.modifiers,
-                    Script.SettingsAsset.ModKey)) {
-
-                Script.AnimationTime -= Script.LongJumpValue;
-            }
-
-            serializedObject.ApplyModifiedProperties();
-
-            // Jump to next node.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.JumpToNextNodeKey) {
-
-                Script.AnimationTime =
-                    (float) Utilities.InvokeMethodWithReflection(
-                        Script,
-                        "GetNearestForwardNodeTimestamp",
-                        null);
+                Script.AnimationTime = 1;
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -1389,7 +1309,28 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "FireJumpedToNodeEvent",
                     null);
             }
+        }
 
+        private void HandleJumpToStartShortcut() {
+            // Jump to start.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.JumpToStartKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                Script.AnimationTime = 0;
+
+                // Call JumpedToNode event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireJumpedToNodeEvent",
+                    null);
+            }
+        }
+
+        private void HandleJumpToPreviousNodeShortcut() {
             // Jump to previous node.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
@@ -1407,16 +1348,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "FireJumpedToNodeEvent",
                     null);
             }
+        }
 
-            // Jump to start.
+        private void HandleJumpToNextNodeShortcut() {
+            // Jump to next node.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
-                == Script.SettingsAsset.JumpToStartKey
-                && FlagsHelper.IsSet(
-                    Event.current.modifiers,
-                    Script.SettingsAsset.ModKey)) {
+                == Script.SettingsAsset.JumpToNextNodeKey) {
 
-                Script.AnimationTime = 0;
+                Script.AnimationTime =
+                    (float) Utilities.InvokeMethodWithReflection(
+                        Script,
+                        "GetNearestForwardNodeTimestamp",
+                        null);
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -1424,32 +1368,128 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "FireJumpedToNodeEvent",
                     null);
             }
+        }
 
-            // Jump to end.
+        private void HandleLongJumpBackwardShortcut() {
+            // Long jump backward.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
-                == Script.SettingsAsset.JumpToEndKey
+                == Script.SettingsAsset.LongJumpBackwardKey
+                && !FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                Script.AnimationTime -= Script.LongJumpValue;
+            }
+        }
+
+        private void HandleLongJumpForwardShortcut() {
+            // Long jump forward.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.LongJumpForwardKey
+                && !FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
+
+                Script.AnimationTime += Script.LongJumpValue;
+            }
+        }
+
+        private void HandleShortJumpBackwardShortcut() {
+            // Short jump backward.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.ShortJumpBackwardKey
                 && FlagsHelper.IsSet(
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                Script.AnimationTime = 1;
+                var newAnimationTimeRatio =
+                    Script.AnimationTime
+                    - Script.ShortJumpValue;
 
-                // Call JumpedToNode event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "FireJumpedToNodeEvent",
-                    null);
+                Script.AnimationTime =
+                    (float) (Math.Round(newAnimationTimeRatio, 4));
             }
+        }
 
-            // Play/pause animation.
+        private void HandleShortJumpForwardShortcut() {
+            // Short jump forward.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
-                == Script.SettingsAsset.PlayPauseKey) {
+                == Script.SettingsAsset.ShortJumpForwardKey
+                && FlagsHelper.IsSet(
+                    Event.current.modifiers,
+                    Script.SettingsAsset.ModKey)) {
 
-                HandlePlayPauseButton();
+                var newAnimationTimeRatio =
+                    Script.AnimationTime
+                    + Script.ShortJumpValue;
+
+                Script.AnimationTime =
+                    (float) (Math.Round(newAnimationTimeRatio, 4));
             }
+        }
 
+        private void HandlePositionHandleShortcut() {
+            // Update position handle.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.PositionHandleKey) {
+
+                // Change to Position mode.
+                if (Script.PositionHandle == PositionHandle.Free) {
+                    Script.PositionHandle =
+                        PositionHandle.Position;
+                }
+                // Change to Free mode.
+                else {
+                    Script.PositionHandle =
+                        PositionHandle.Free;
+                }
+            }
+        }
+
+        private void HandleUpdateAllModeShortcut() {
+// Update all mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.UpdateAllKey) {
+
+                Script.UpdateAllValues =
+                    !Script.UpdateAllValues;
+            }
+        }
+
+        private void HandleNoneHandleModeShortcut() {
+// None mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.NoneModeKey) {
+
+                Script.HandleMode = HandleMode.None;
+            }
+        }
+
+        private void HandleTiltingModeShortcut() {
+// Tilting mode key.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.TiltingModeKey) {
+
+                Script.HandleMode = HandleMode.Tilting;
+            }
+        }
+
+        private void HandleEaseModeShortcut() {
+// Ease handle mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.EaseModeKey) {
+
+                Script.HandleMode = HandleMode.Ease;
+            }
         }
 
         #endregion

@@ -787,9 +787,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Display confirmation dialog
             var canExit = EditorUtility.DisplayDialog(
-                "Are you sure to exit Custom tangent mode?",
+                "Are you sure want to exit custom tangent mode?",
                 "If you exit this mode, all custom rotation data will be lost.",
-                "Exit",
+                "Continue",
                 "Cancel");
 
             return (canExit);
@@ -1077,12 +1077,40 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawRotationPathToggle() {
+            var prevToggleValue = Script.RotationPathEnabled;
+
             // todo handle undo
-            Script.RotationPathEnabled = EditorGUILayout.Toggle(
+            var currentToggleValue = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Rotation Path",
                     ""),
                 Script.RotationPathEnabled);
+
+            HandleRotationPathEnabledToggleChange(prevToggleValue, currentToggleValue);
+        }
+
+        private void HandleRotationPathEnabledToggleChange(bool prevToggleValue, bool currentToggleValue) {
+            // Return if value did not change.
+            if (currentToggleValue == prevToggleValue) return;
+
+            // Enable rotation path if toggle is true.
+            if (currentToggleValue) {
+                Script.RotationPathEnabled = true;
+                return;
+            }
+
+            // Display modal window.
+            var canDisableRotationPath = EditorUtility.DisplayDialog(
+                "Are you sure want to disable rotation path?",
+                "If you disable rotation path, all rotation path data " +
+                "will be lost.",
+                "Continue",
+                "Cancel");
+
+            // If user continues, disable rotation path.
+            if (canDisableRotationPath) {
+                Script.RotationPathEnabled = false;
+            }
         }
 
         private void DrawTiltingCurve() {

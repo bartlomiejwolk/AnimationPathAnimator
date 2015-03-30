@@ -236,7 +236,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleDrawingSceneToolToggleButtons() {
             // Don't draw node tool in rotation mode.
-            if (Script.HandleMode == HandleMode.Rotation) return;
+            if (Script.RotationPathEnabled) return;
             // Don't draw node tool in tangent handle mode.
             if (Script.HandleMode == HandleMode.Tangent) return;
 
@@ -469,7 +469,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene rotation handle in Custom rotation mode.
         /// </summary>
         private void HandleDrawingRotationHandle() {
-            if (Script.HandleMode != HandleMode.Rotation) return;
+            if (!Script.RotationPathEnabled) return;
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
@@ -865,7 +865,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else {
                 // Set handle mode to Rotation so that user can fix the
                 // rotatio path.
-                Script.HandleMode = HandleMode.Rotation;
+                Script.RotationPathEnabled = true;
                 // Set rotation mode to Custom so that user can see how
                 // changes to rotation path affect animated object.
                 Script.RotationMode = RotationMode.Custom;
@@ -1244,12 +1244,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             // Rotation mode key.
-            if (Event.current.type == EventType.keyDown
-                && Event.current.keyCode
-                == Script.SettingsAsset.RotationModeKey) {
+            //if (Event.current.type == EventType.keyDown
+            //    && Event.current.keyCode
+            //    == Script.SettingsAsset.RotationModeKey) {
 
-                Script.HandleMode = HandleMode.Rotation;
-            }
+            //    Script.HandleMode = HandleMode.Rotation;
+            //}
 
             // Tilting mode key.
             if (Event.current.type == EventType.keyDown
@@ -1773,7 +1773,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Change rotation mode.
                 Script.RotationMode = RotationMode.Custom;
-                Script.HandleMode = HandleMode.Rotation;
+                Script.RotationPathEnabled = true;
 
                 SceneView.RepaintAll();
             }
@@ -1826,7 +1826,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // If Custom mode selected, change handle mode to Rotation.
             if (Script.RotationMode == RotationMode.Custom) {
-                Script.HandleMode = HandleMode.Rotation;
+                Script.RotationPathEnabled = true;
             }
         }
 

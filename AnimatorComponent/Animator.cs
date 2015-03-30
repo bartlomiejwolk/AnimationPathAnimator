@@ -1428,7 +1428,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     It'll be drawn only when animation time is the same as a path node.
         /// </summary>
         private void HandleDrawingCurrentRotationPointGizmo() {
-            if (HandleMode != HandleMode.Rotation) return;
+            if (!RotationPathEnabled) return;
 
             // Node path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
@@ -1473,7 +1473,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing rotation path curve.
         /// </summary>
         private void HandleDrawingRotationPathCurve() {
-            if (HandleMode != HandleMode.Rotation) return;
+            if (!RotationPathEnabled) return;
 
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 SettingsAsset.RotationCurveSampling);
@@ -1501,7 +1501,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing rotation point gizmos.
         /// </summary>
         private void HandleDrawingRotationPointGizmos() {
-            if (HandleMode != HandleMode.Rotation) return;
+            if (!RotationPathEnabled) return;
 
             var globalRotPointPositions = GetGlobalRotationPointPositions();
 

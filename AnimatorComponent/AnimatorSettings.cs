@@ -349,7 +349,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [Header("Handles")]
 
         [SerializeField]
-        private int sceneToolToggleOffsetH = 55;
+        private int sceneToolToggleOffsetH = 53;
 
         [SerializeField]
         private int sceneToolToggleOffsetV = 5;

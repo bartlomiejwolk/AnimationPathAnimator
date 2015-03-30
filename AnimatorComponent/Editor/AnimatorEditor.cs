@@ -1,6 +1,7 @@
 ﻿#define DEBUG
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEditor;
@@ -159,6 +160,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
+            HandleDrawingTangentHandles();
             HandleDrawingRotationHandle();
 
             // Repaint inspector if any key was pressed.
@@ -169,9 +171,74 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        private void HandleDrawingTangentHandles() {
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only in tangent handle mode.
+            if (Script.HandleMode != HandleMode.Tangent) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Draw tangent handles.
+            DrawTangentHandles(
+                nodes,
+                DrawTangentHandlesCallbackHandler);
+        }
+
+        /// <summary>
+        /// For each node in the scene draw handle that allow manipulating
+        /// tangents for each of the animation curves separately.
+        /// </summary>
+        /// <returns>True if any handle was moved.</returns>
+        // todo move to SceneHandles class.
+        private void DrawTangentHandles(
+            List<Vector3> nodes,
+            Action<int, Vector3> callback) {
+
+            Handles.color = Script.GizmoCurveColor;
+
+            // For each node..
+            for (var i = 0; i < nodes.Count; i++) {
+                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                // todo create setting in asset .
+                var sphereSize = handleSize * 0.25f;
+
+                // draw node's handle.
+                var newHandleValue = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.CircleCap);
+
+                // How much tangent's value changed in this frame.
+                var tangentDelta = newHandleValue - nodes[i];
+
+                // Remember if handle was moved.
+                if (tangentDelta != Vector3.zero) {
+                    // Execute callback.
+                    callback(i, tangentDelta);
+                }
+            }
+        }
+
+        private void DrawTangentHandlesCallbackHandler(
+                    int index,
+                    Vector3 inOutTangent) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update node tangents.");
+
+            Script.ChangeNodeTangents(index, inOutTangent);
+            Script.PathData.DistributeTimestamps();
+        }
+
         private void HandleDrawingSceneToolToggleButtons() {
             // Don't draw node tool in rotation mode.
             if (Script.HandleMode == HandleMode.Rotation) return;
+            // Don't draw node tool in tangent handle mode.
+            if (Script.HandleMode == HandleMode.Tangent) return;
 
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();
@@ -516,13 +583,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode sooth node tangents.
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
-            }
+            //if (Script.TangentMode == TangentMode.Smooth) {
+            //    Script.PathData.SmoothPathNodeTangents();
+            //}
+            HandleSmoothTangentMode();
             // In Linear mode set node tangents to linear.
-            else if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
+            //else if (Script.TangentMode == TangentMode.Linear) {
+            //    Script.PathData.SetLinearAnimObjPathTangents();
+            //}
+            HandleLinearTangentMode();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -598,13 +667,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps();
 
             // In Smooth mode mooth node tangents.
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
-            }
+            //if (Script.TangentMode == TangentMode.Smooth) {
+            //    Script.PathData.SmoothPathNodeTangents();
+            //}
+            HandleSmoothTangentMode();
             // In Linear mode set node tangents to linear.
-            else if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
-            }
+            //else if (Script.TangentMode == TangentMode.Linear) {
+            //    Script.PathData.SetLinearAnimObjPathTangents();
+            //}
+            HandleLinearTangentMode();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -679,18 +750,49 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void HandleTangentModeChange() {
+        /// <summary>
+        /// Handles tangent mode change.
+        /// </summary>
+        /// <param name="prevTangentMode"></param>
+        private void HandleTangentModeChange(TangentMode prevTangentMode) {
             if (Script.PathData == null) return;
 
-            // Update path node tangents.
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
-            }
-            else if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
+            Undo.RecordObject(Script.PathData, "Smooth path node tangents.");
+
+            // Display modal window.
+            var canExitCustomTangentMode = HandleAskIfExitTangentMode(prevTangentMode);
+            // If user canceled operation..
+            if (!canExitCustomTangentMode) {
+                // Restore Custom tangent mode.
+                Script.TangentMode = TangentMode.Custom;
+
+                return;
             }
 
+            // Handle selected tangent mode.
+            HandleSmoothTangentMode();
+            HandleLinearTangentMode();
+
             SceneView.RepaintAll();
+        }
+
+        /// <summary>
+        /// Defines what to do when tangent mode is changed from custom to something else.
+        /// </summary>
+        private bool HandleAskIfExitTangentMode(
+            TangentMode prevTangentMode) {
+
+            // Return true if user is not trying to exit Custom rotation mode.
+            if (prevTangentMode != TangentMode.Custom) return true;
+
+            // Display confirmation dialog
+            var canExit = EditorUtility.DisplayDialog(
+                "Are you sure to exit Custom tangent mode?",
+                "If you exit this mode, all custom rotation data will be lost.",
+                "Exit",
+                "Cancel");
+
+            return (canExit);
         }
 
         #endregion
@@ -998,7 +1100,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Repaint();
 
                 // Update path with new tangent setting.
-                HandleTangentModeChange();
+                HandleSmoothTangentMode();
+                HandleLinearTangentMode();
 
                 // Update animated object.
                 Utilities.InvokeMethodWithReflection(
@@ -1011,6 +1114,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script,
                     "FireUndoRedoPerformedEvent",
                     null);
+
+                SceneView.RepaintAll();
             }
         }
 
@@ -1792,7 +1897,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Update gizmo curve is tangent mode changed.
             if (Script.TangentMode != prevTangentMode) {
-                HandleTangentModeChange();
+                HandleTangentModeChange(prevTangentMode);
             }
         }
 

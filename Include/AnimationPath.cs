@@ -504,6 +504,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return -1;
         }
 
+        public void ChangePointTangents(
+                int nodeIndex,
+                Vector3 tangentDelta) {
+
+            // Copy keys.
+            var keyXCopy = curves[0].keys[nodeIndex];
+            var keyYCopy = curves[1].keys[nodeIndex];
+            var keyZCopy = curves[2].keys[nodeIndex];
+
+            // Update keys' values.
+            keyXCopy.inTangent += tangentDelta.x;
+            keyYCopy.inTangent += tangentDelta.y;
+            keyZCopy.inTangent += tangentDelta.z;
+
+            keyXCopy.outTangent += tangentDelta.x;
+            keyYCopy.outTangent += tangentDelta.y;
+            keyZCopy.outTangent += tangentDelta.z;
+
+            // Update keys.
+            curves[0].MoveKey(nodeIndex, keyXCopy);
+            curves[1].MoveKey(nodeIndex, keyYCopy);
+            curves[2].MoveKey(nodeIndex, keyZCopy);
+        }
+
         #endregion PRIVATE METHODS
     }
 

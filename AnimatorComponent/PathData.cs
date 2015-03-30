@@ -487,6 +487,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateTiltingCurveValues(DefaultTiltingCurveValue);
         }
 
+        // todo rename to SetPathTangentsToLinear().
         public void SetLinearAnimObjPathTangents() {
             for (var i = 0; i < 3; i++) {
                 Utilities.SetCurveLinear(AnimatedObjectPath[i]);
@@ -1053,6 +1054,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void AddKeyToTiltingCurve(float time) {
             var valueAtTime = TiltingCurve.Evaluate(time);
             TiltingCurve.AddKey(time, valueAtTime);
+        }
+
+        public void ChangePointTangents(
+            int nodeIndex,
+            Vector3 tangentDelta) {
+
+            AnimatedObjectPath.ChangePointTangents(nodeIndex, tangentDelta);
+            // todo create event NodeTangentsChanged
         }
 
     }

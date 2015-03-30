@@ -637,6 +637,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 newLocalPos,
                 ChangeRotationAtTimestampCallbackHandler);
 
+            HandleLinearTangentMode();
+
             EditorUtility.SetDirty(Script.PathData);
         }
 

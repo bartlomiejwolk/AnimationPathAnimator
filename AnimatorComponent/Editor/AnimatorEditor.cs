@@ -23,10 +23,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 EditorGUILayout.IntField(
                     new GUIContent(
                         "Export Sampling",
-                        "Number of points to export for 1 m of the animation path. "
-                        +
-                        "If set to 0, it'll export only keys defined in " +
-                        "the path."),
+                        "Number of points to export for 1 m of the animation "
+                        + "path. If set to 0, it'll export only keys defined in "
+                        + "the path."),
                     Script.ExportSamplingFrequency);
 
             // Limit value.
@@ -1487,6 +1486,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleUpdateAllModeShortcut() {
+            // Handle shortcut only in Ease and Tilting handle mode.
+            if ((Script.HandleMode != HandleMode.Ease)
+                && (Script.HandleMode != HandleMode.Tilting)) {
+
+                return;
+            }
+
             // Update all mode.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode

@@ -1532,13 +1532,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             for (var i = 0; i < globalRotPointPositions.Count; i++) {
                 // Return if current animation time is the same as any node
                 // time.
-                if (Utilities.FloatsEqual(
-                    nodeTimestamps[i],
-                    AnimationTime,
-                    GlobalConstants.FloatPrecision)) {
+                //if (Utilities.FloatsEqual(
+                //    nodeTimestamps[i],
+                //    AnimationTime,
+                //    GlobalConstants.FloatPrecision)) {
 
-                    continue;
-                }
+                //    continue;
+                //}
 
                 //Draw rotation point gizmo.
                 Gizmos.DrawIcon(

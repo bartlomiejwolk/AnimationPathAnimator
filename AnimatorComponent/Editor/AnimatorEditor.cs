@@ -106,22 +106,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-
-        private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
-            Undo.RecordObject(Script.PathData, "Toggle node tool.");
-
-            // If Ease tool is enabled..
-            if (Script.HandleMode == HandleMode.Ease) {
-                // Toggle ease tool.
-                HandleToggleEaseTool(index);
-            }
-            // If Tilting tool is enabled..
-            else if (Script.HandleMode == HandleMode.Tilting) {
-                // Toggle tilting tool.
-                HandleToggleTiltingTool(index);
-            }
-        }
-
         /// <summary>
         ///     For each node in the scene draw handle that allow manipulating
         ///     tangents for each of the animation curves separately.
@@ -158,127 +142,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 }
             }
         }
-
-        private void DrawTangentHandlesCallbackHandler(
-            int index,
-            Vector3 inOutTangent) {
-
-            // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Update node tangents.");
-
-            Script.ChangeNodeTangents(index, inOutTangent);
-            Script.PathData.DistributeTimestamps();
-        }
-
-        /// <summary>
-        ///     Disable selected node tool.
-        /// </summary>
-        /// <param name="index">Index of node which tool will be disabled.</param>
-        /// <param name="timestamp">Timestamp of node which tool will be disabled.</param>
-        private void HandleDisablingEaseTool(int index, float timestamp) {
-            // Remove key from ease curve.
-            Script.PathData.RemoveKeyFromEaseCurve(timestamp);
-            // Disable ease tool.
-            Script.PathData.EaseToolState[index] = false;
-        }
-
-        private void HandleDisablingTiltingTool(int index, float nodeTimestamp) {
-            // Remove key from ease curve.
-            Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
-            // Disable ease tool.
-            Script.PathData.TiltingToolState[index] = false;
-        }
-
-        private void HandleDrawingSceneToolToggleButtons() {
-            // Handle shortcut only in Ease and Tilting handle mode.
-            if ((Script.HandleMode != HandleMode.Ease)
-                && (Script.HandleMode != HandleMode.Tilting)) {
-
-                return;
-            }
-
-            // Get positions positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme node positions.
-            nodePositions.RemoveAt(0);
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-
-            // Get style for add button.
-            var toggleButtonStyle = Script.Skin.GetStyle(
-                "SceneToolToggleButton");
-
-            // Draw add node buttons.
-            SceneHandles.DrawNodeButtons(
-                nodePositions,
-                Script.SettingsAsset.SceneToolToggleOffsetH,
-                Script.SettingsAsset.SceneToolToggleOffsetV,
-                DrawSceneToolToggleButtonsCallbackHandler,
-                toggleButtonStyle);
-        }
-
-        private void HandleDrawingTangentHandles() {
-            // Draw tangent handles only in custom tangent mode.
-            if (Script.TangentMode != TangentMode.Custom) return;
-            // Draw tangent handles only in tangent handle mode.
-            if (Script.HandleMode != HandleMode.Tangent) return;
-
-            // Positions at which to draw tangent handles.
-            var nodes = Script.GetGlobalNodePositions();
-
-            // Draw tangent handles.
-            DrawTangentHandles(
-                nodes,
-                DrawTangentHandlesCallbackHandler);
-        }
-
-        /// <summary>
-        ///     Enable selected node tool.
-        /// </summary>
-        /// <param name="index">Index of node which tool will be enabled.</param>
-        /// <param name="timestamp">Timestamp of node which tool will be enabled.</param>
-        private void HandleEnablingEaseTool(int index, float timestamp) {
-            // Add new key to ease curve.
-            Script.PathData.AddKeyToEaseCurve(timestamp);
-            // Enable ease tool for the node.
-            Script.PathData.EaseToolState[index] = true;
-        }
-
-        private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
-            // Add new key to ease curve.
-            Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
-            // Enable ease tool for the node.
-            Script.PathData.TiltingToolState[index] = true;
-        }
-
-        private void HandleToggleEaseTool(int pressedButtonIndex) {
-            // Calculate index of path node for which the ease tool should be toggled.
-            var pathNodeIndex = pressedButtonIndex + 1;
-            // Get node timestamp.
-            var pathNodeTimestamp =
-                Script.PathData.GetNodeTimestamp(pathNodeIndex);
-            // If tool enabled for node at index..
-            if (Script.PathData.EaseToolState[pathNodeIndex]) {
-                HandleDisablingEaseTool(pathNodeIndex, pathNodeTimestamp);
-            }
-            else {
-                HandleEnablingEaseTool(pathNodeIndex, pathNodeTimestamp);
-            }
-        }
-
-        private void HandleToggleTiltingTool(int pressedButtonIndex) {
-            // Calculate index of path node for which the ease tool should be toggled.
-            var pathNodeIndex = pressedButtonIndex + 1;
-            // Get node timestamp.
-            var nodeTimestamp = Script.PathData.GetNodeTimestamp(pathNodeIndex);
-            // If tool enabled for node at index..
-            if (Script.PathData.TiltingToolState[pathNodeIndex]) {
-                HandleDisablingTiltingTool(pathNodeIndex, nodeTimestamp);
-            }
-            else {
-                HandleEnablingTiltingTool(pathNodeIndex, nodeTimestamp);
-            }
-        }
-
         private void OnDisable() {
             // Disable Unity scene tool.
             SceneTool.RestoreTool();
@@ -568,8 +431,33 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion DRAWING HANDLERS
-
         #region CALLBACK HANDLERS
+        private void DrawTangentHandlesCallbackHandler(
+                            int index,
+                            Vector3 inOutTangent) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update node tangents.");
+
+            Script.ChangeNodeTangents(index, inOutTangent);
+            Script.PathData.DistributeTimestamps();
+        }
+
+        private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
+            Undo.RecordObject(Script.PathData, "Toggle node tool.");
+
+            // If Ease tool is enabled..
+            if (Script.HandleMode == HandleMode.Ease) {
+                // Toggle ease tool.
+                HandleToggleEaseTool(index);
+            }
+            // If Tilting tool is enabled..
+            else if (Script.HandleMode == HandleMode.Tilting) {
+                // Toggle tilting tool.
+                HandleToggleTiltingTool(index);
+            }
+        }
+
 
         /// <summary>
         ///     Add node button pressed callback handler.
@@ -878,6 +766,114 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        /// <summary>
+        ///     Disable selected node tool.
+        /// </summary>
+        /// <param name="index">Index of node which tool will be disabled.</param>
+        /// <param name="timestamp">Timestamp of node which tool will be disabled.</param>
+        private void HandleDisablingEaseTool(int index, float timestamp) {
+            // Remove key from ease curve.
+            Script.PathData.RemoveKeyFromEaseCurve(timestamp);
+            // Disable ease tool.
+            Script.PathData.EaseToolState[index] = false;
+        }
+
+        private void HandleDisablingTiltingTool(int index, float nodeTimestamp) {
+            // Remove key from ease curve.
+            Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
+            // Disable ease tool.
+            Script.PathData.TiltingToolState[index] = false;
+        }
+
+        private void HandleDrawingSceneToolToggleButtons() {
+            // Handle shortcut only in Ease and Tilting handle mode.
+            if ((Script.HandleMode != HandleMode.Ease)
+                && (Script.HandleMode != HandleMode.Tilting)) {
+
+                return;
+            }
+
+            // Get positions positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme node positions.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+
+            // Get style for add button.
+            var toggleButtonStyle = Script.Skin.GetStyle(
+                "SceneToolToggleButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SceneToolToggleOffsetH,
+                Script.SettingsAsset.SceneToolToggleOffsetV,
+                DrawSceneToolToggleButtonsCallbackHandler,
+                toggleButtonStyle);
+        }
+
+        private void HandleDrawingTangentHandles() {
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only in tangent handle mode.
+            if (Script.HandleMode != HandleMode.Tangent) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Draw tangent handles.
+            DrawTangentHandles(
+                nodes,
+                DrawTangentHandlesCallbackHandler);
+        }
+
+        /// <summary>
+        ///     Enable selected node tool.
+        /// </summary>
+        /// <param name="index">Index of node which tool will be enabled.</param>
+        /// <param name="timestamp">Timestamp of node which tool will be enabled.</param>
+        private void HandleEnablingEaseTool(int index, float timestamp) {
+            // Add new key to ease curve.
+            Script.PathData.AddKeyToEaseCurve(timestamp);
+            // Enable ease tool for the node.
+            Script.PathData.EaseToolState[index] = true;
+        }
+
+        private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
+            // Add new key to ease curve.
+            Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
+            // Enable ease tool for the node.
+            Script.PathData.TiltingToolState[index] = true;
+        }
+
+        private void HandleToggleEaseTool(int pressedButtonIndex) {
+            // Calculate index of path node for which the ease tool should be toggled.
+            var pathNodeIndex = pressedButtonIndex + 1;
+            // Get node timestamp.
+            var pathNodeTimestamp =
+                Script.PathData.GetNodeTimestamp(pathNodeIndex);
+            // If tool enabled for node at index..
+            if (Script.PathData.EaseToolState[pathNodeIndex]) {
+                HandleDisablingEaseTool(pathNodeIndex, pathNodeTimestamp);
+            }
+            else {
+                HandleEnablingEaseTool(pathNodeIndex, pathNodeTimestamp);
+            }
+        }
+
+        private void HandleToggleTiltingTool(int pressedButtonIndex) {
+            // Calculate index of path node for which the ease tool should be toggled.
+            var pathNodeIndex = pressedButtonIndex + 1;
+            // Get node timestamp.
+            var nodeTimestamp = Script.PathData.GetNodeTimestamp(pathNodeIndex);
+            // If tool enabled for node at index..
+            if (Script.PathData.TiltingToolState[pathNodeIndex]) {
+                HandleDisablingTiltingTool(pathNodeIndex, nodeTimestamp);
+            }
+            else {
+                HandleEnablingTiltingTool(pathNodeIndex, nodeTimestamp);
+            }
+        }
         #endregion
 
         #region METHODS

@@ -1072,6 +1072,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUILayout.EndHorizontal();
 
             DrawTangentModeDropdown();
+            DrawNodeHandleDropdown();
             DrawPositionHandleDropdown();
             DrawRotationPathToggle();
 
@@ -1133,6 +1134,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawNodeHandleDropdown() {
+            Script.NodeHandle =
+                (NodeHandle) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Node Handle",
+                        "On-scene node handle."),
+                    Script.NodeHandle);
         }
 
         private void DrawRotationPathToggle() {

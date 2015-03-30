@@ -94,6 +94,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private bool rotationPathEnabled;
 
+        [SerializeField]
+        private NodeHandle nodeHandle = NodeHandle.Position;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -386,6 +389,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 rotationPathEnabled = value;
             }
+        }
+
+        public NodeHandle NodeHandle {
+            get { return nodeHandle; }
+            set { nodeHandle = value; }
         }
 
         #endregion

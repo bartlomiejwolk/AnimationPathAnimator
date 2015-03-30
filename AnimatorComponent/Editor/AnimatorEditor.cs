@@ -236,7 +236,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleDrawingSceneToolToggleButtons() {
             // Don't draw node tool in rotation mode.
-            if (Script.RotationPathEnabled) return;
+            //if (Script.RotationPathEnabled) return;
             // Don't draw node tool in tangent handle mode.
             if (Script.HandleMode == HandleMode.Tangent) return;
 

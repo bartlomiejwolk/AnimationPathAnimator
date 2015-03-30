@@ -376,9 +376,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set {
                 // On enable, reset rotation path.
                 if (value && !rotationPathEnabled) {
-                    PathData.ResetRotationPath();
                     // Sync rotation path with anim. obj. path.
                     PathData.RotationPathUpdateEnabled = true;
+                    PathData.ResetRotationPath();
                 }
                 else {
                     PathData.RotationPathUpdateEnabled = false;

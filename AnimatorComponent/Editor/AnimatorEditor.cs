@@ -194,7 +194,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
-            HandleDrawingTangentHandles();
+            HandleDrawingObjectPathTangentHandles();
             HandleDrawingRotationHandle();
 
             // Repaint inspector if any key was pressed.
@@ -812,7 +812,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 toggleButtonStyle);
         }
 
-        private void HandleDrawingTangentHandles() {
+        private void HandleDrawingObjectPathTangentHandles() {
             // Draw tangent handles only in custom tangent mode.
             if (Script.TangentMode != TangentMode.Custom) return;
             // Draw tangent handles only in tangent handle mode.

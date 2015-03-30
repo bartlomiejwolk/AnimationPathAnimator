@@ -1010,11 +1010,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
+            EditorGUILayout.BeginHorizontal();
             DrawHandleModeDropdown();
+            HandleDrawUpdateAllToggle();
+            EditorGUILayout.EndHorizontal();
+
             DrawTangentModeDropdown();
             DrawPositionHandleDropdown();
             DrawRotationPathToggle();
-            DrawUpdateAllToggle();
 
             DrawEaseCurve();
             DrawTiltingCurve();
@@ -1968,13 +1971,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleTargetGOFieldChange(prevTargetGO);
         }
 
-        private void DrawUpdateAllToggle() {
+        private void HandleDrawUpdateAllToggle() {
+            // Draw toggle only in Ease and Tilting handle mode.
+            if ((Script.HandleMode != HandleMode.Ease)
+                && (Script.HandleMode != HandleMode.Tilting)) {
+
+                return;
+            }
+
+            EditorGUIUtility.labelWidth = 65;
+
             Script.UpdateAllValues = EditorGUILayout.Toggle(
                 new GUIContent(
-                    "Update All Values",
+                    "Update All",
                     "When checked, values will be changed for all nodes. " +
                     "Default shortcut: P."),
                 Script.UpdateAllValues);
+
+            EditorGUIUtility.labelWidth = 0;
         }
 
         private void DrawWrapModeDropdown() {

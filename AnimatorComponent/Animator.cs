@@ -1232,18 +1232,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Returns global rotation path node positions.
         /// </summary>
         /// <returns></returns>
-        private Vector3[] GetGlobalRotationPointPositions() {
+        public List<Vector3> GetGlobalRotationPointPositions() {
             var localRotPointPositions =
                 pathData.GetRotationPointPositions();
 
-            var globalRotPointPositions =
-                new Vector3[localRotPointPositions.Length];
+            var globalRotPointPositions = new List<Vector3>();
 
             // For each local point..
             for (var i = 0; i < localRotPointPositions.Length; i++) {
-                // Convert to global.
-                globalRotPointPositions[i] =
+                // Transform point to global.
+                var globalPoint =
                     transform.TransformPoint(localRotPointPositions[i]);
+                // Save point to list.
+                globalRotPointPositions.Add(globalPoint);
             }
 
             return globalRotPointPositions;
@@ -1520,7 +1521,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
 
-            for (var i = 0; i < globalRotPointPositions.Length; i++) {
+            for (var i = 0; i < globalRotPointPositions.Count; i++) {
                 // Return if current animation time is the same as any node
                 // time.
                 if (Utilities.FloatsEqual(
@@ -1587,6 +1588,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return resultPositions.ToArray();
         }
 
+        // todo remove. Use direct call to PathData instead.
         public void ChangeNodeTangents(int index, Vector3 inOutTangent) {
             PathData.ChangePointTangents(index, inOutTangent);
         }

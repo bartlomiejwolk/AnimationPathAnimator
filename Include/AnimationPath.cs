@@ -504,6 +504,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return -1;
         }
 
+        // todo rename to OffsetNodeTangents.
         public void ChangePointTangents(
                 int nodeIndex,
                 Vector3 tangentDelta) {

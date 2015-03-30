@@ -112,7 +112,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns>True if any handle was moved.</returns>
         // todo move to SceneHandles class.
-        private void DrawObjectPathTangentHandles(
+        private void DrawTangentHandles(
             List<Vector3> nodes,
             Action<int, Vector3> callback) {
 
@@ -195,6 +195,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingPositionHandles();
             HandleDrawingObjectPathTangentHandles();
+            HandleDrawingRotationPathTangentHandles();
             HandleDrawingRotationHandle();
 
             // Repaint inspector if any key was pressed.
@@ -203,6 +204,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        private void HandleDrawingRotationPathTangentHandles() {
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only in tangent handle mode.
+            if (Script.HandleMode != HandleMode.Tangent) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalRotationPointPositions();
+
+            // Draw tangent handles.
+            DrawTangentHandles(
+                nodes,
+                //DrawTangentHandlesCallbackHandler);
+                UpdateRotationPathTangents);
         }
 
         #endregion UNITY MESSAGES
@@ -436,10 +453,41 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                             int index,
                             Vector3 inOutTangent) {
 
+            UpdateObjectPathTangents(index, inOutTangent);
+            UpdateRotationPathTangents(index, inOutTangent);
+        }
+
+        /// <summary>
+        /// Offset rotation path node tangents by given value.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="inOutTangent"></param>
+        private void UpdateRotationPathTangents(
+            int index,
+            // todo rename to inOutTangentOffset
+            Vector3 inOutTangent) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update rotation path tangents.");
+
+            Script.PathData.OffsetRotationPathNodeTangents(index, inOutTangent);
+        }
+
+        /// <summary>
+        /// Offset animated object path node tangents by given value.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="inOutTangent"></param>
+        private void UpdateObjectPathTangents(
+            int index,
+            // todo rename to inOutTangentOffset
+            Vector3 inOutTangent) {
+
             // Make snapshot of the target object.
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
             Script.ChangeNodeTangents(index, inOutTangent);
+            // todo move to event handler that handles path length change.
             Script.PathData.DistributeTimestamps();
         }
 
@@ -822,9 +870,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodes = Script.GetGlobalNodePositions();
 
             // Draw tangent handles.
-            DrawObjectPathTangentHandles(
+            DrawTangentHandles(
                 nodes,
-                DrawTangentHandlesCallbackHandler);
+                //DrawTangentHandlesCallbackHandler);
+                UpdateObjectPathTangents);
         }
 
         /// <summary>

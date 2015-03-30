@@ -1075,12 +1075,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TiltingCurve.AddKey(time, valueAtTime);
         }
 
+        // todo rename to OffsetPathNodeTangents.
         public void ChangePointTangents(
             int nodeIndex,
             Vector3 tangentDelta) {
 
             AnimatedObjectPath.ChangePointTangents(nodeIndex, tangentDelta);
             // todo create event NodeTangentsChanged
+        }
+        public void OffsetRotationPathNodeTangents(
+            int nodeIndex,
+            Vector3 tangentDelta) {
+
+            RotationPath.ChangePointTangents(nodeIndex, tangentDelta);
+            // todo create event RotationPathNodeTangentsChanged
         }
 
     }

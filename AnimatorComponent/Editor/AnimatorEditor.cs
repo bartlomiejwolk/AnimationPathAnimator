@@ -1009,6 +1009,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawHandleModeDropdown();
             DrawPositionHandleDropdown();
+            DrawRotationPathToggle();
             DrawUpdateAllToggle();
 
             DrawEaseCurve();
@@ -1071,6 +1072,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawRotationPathToggle() {
+            // todo handle undo
+            Script.RotationPathEnabled = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Rotation Path",
+                    ""),
+                Script.RotationPathEnabled);
         }
 
         private void DrawTiltingCurve() {

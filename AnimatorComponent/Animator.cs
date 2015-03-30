@@ -91,6 +91,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
+        [SerializeField]
+        private bool rotationPathEnabled;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -363,6 +366,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public AnimatorWrapMode WrapMode {
             get { return wrapMode; }
             set { wrapMode = value; }
+        }
+
+        /// <summary>
+        /// Enables rotation path.
+        /// </summary>
+        public bool RotationPathEnabled {
+            get { return rotationPathEnabled; }
+            set { rotationPathEnabled = value; }
         }
 
         #endregion

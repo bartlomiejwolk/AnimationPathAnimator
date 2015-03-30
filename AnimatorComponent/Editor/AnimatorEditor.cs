@@ -352,6 +352,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingRotationHandle() {
             if (!Script.RotationPathEnabled) return;
+            if (Script.NodeHandle != NodeHandle.Position) return;
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =

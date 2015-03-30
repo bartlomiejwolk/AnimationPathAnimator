@@ -1612,6 +1612,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawHandleModeDropdown() {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
+            var prevHandleMode = Script.HandleMode;
+
             Script.HandleMode =
                 (HandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
@@ -1619,6 +1621,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         "Tool displayed next to each node. Default " +
                         "shortcuts: Y, U, I, O."),
                     Script.HandleMode);
+
+            HandleHandleModeChange(prevHandleMode);
+        }
+
+        private void HandleHandleModeChange(HandleMode prevHandleMode) {
+            // Return if handle mode wasn't changed.
+            if (Script.HandleMode == prevHandleMode) return;
+
+            // On handle mode set to tangent, change tangent mode to custom.
+            if (Script.HandleMode == HandleMode.Tangent) {
+                Script.TangentMode = TangentMode.Custom;
+            }
         }
 
         private void DrawInfoLabel(string text) {

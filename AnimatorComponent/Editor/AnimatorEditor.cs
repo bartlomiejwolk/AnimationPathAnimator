@@ -112,7 +112,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns>True if any handle was moved.</returns>
         // todo move to SceneHandles class.
-        private void DrawTangentHandles(
+        private void DrawObjectPathTangentHandles(
             List<Vector3> nodes,
             Action<int, Vector3> callback) {
 
@@ -822,7 +822,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodes = Script.GetGlobalNodePositions();
 
             // Draw tangent handles.
-            DrawTangentHandles(
+            DrawObjectPathTangentHandles(
                 nodes,
                 DrawTangentHandlesCallbackHandler);
         }

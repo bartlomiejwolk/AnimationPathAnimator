@@ -61,8 +61,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <remarks>It'll sync number of nodes and their timestamps.</remarks>
         // todo remove. Use callback instead (if possible)
-        [SerializeField]
-        private bool rotationPathUpdateEnabled;
+        //[SerializeField]
+        //private bool rotationPathUpdateEnabled;
 
         #endregion FIELDS
 
@@ -785,11 +785,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleUpdateRotationPathTimestamps() {
             // Return if rotation path update is disabled.
-            if (!RotationPathUpdateEnabled) return;
+            //if (!RotationPathUpdateEnabled) return;
 
-            // Get node timestamps.
+            // Get path timestamps.
             var nodeTimestamps = GetPathTimestamps();
-            // Get rotation point timestamps.
+            // Get rotation path timestamps.
             var rotationCurvesTimestamps =
                 RotationPath.GetTimestamps();
 
@@ -811,7 +811,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleUpdateRotationPathWithAddedKeys() {
-            if (!RotationPathUpdateEnabled) return;
+            //if (!RotationPathUpdateEnabled) return;
 
             // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
@@ -819,6 +819,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var rotationPathTimestamps = RotationPath.GetTimestamps();
 
             // For each timestamp in the path..
+            // todo call method from AnimationPath. Do it in other places.
             foreach (var pathTimestamp in pathTimestamps) {
                 // Check if same timestamp exists in rotation path.
                 var keyExists = rotationPathTimestamps.Any(
@@ -834,13 +835,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public bool RotationPathUpdateEnabled {
-            get { return rotationPathUpdateEnabled; }
-            set { rotationPathUpdateEnabled = value; }
-        }
+        //public bool RotationPathUpdateEnabled {
+        //    get { return rotationPathUpdateEnabled; }
+        //    set { rotationPathUpdateEnabled = value; }
+        //}
 
         private void HandleUpdateRotationPathWithRemovedKeys() {
-            if (!RotationPathUpdateEnabled) return;
+            //if (!RotationPathUpdateEnabled) return;
 
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();

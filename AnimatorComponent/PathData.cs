@@ -326,30 +326,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EaseCurve.AddKey(time, valueAtTime);
         }
 
+        // todo rename to UpdateRotationPointAtTimestamp.
         public void ChangeRotationAtTimestamp(
             float timestamp,
             Vector3 newPosition,
             Action callback) {
 
-            // Get node timestamps.
-            var timestamps = RotationPath.GetTimestamps();
-            // If matching timestamp in the path was found.
-            var foundMatch = false;
+            // Get path node timestamps.
+            //var timestamps = RotationPath.GetTimestamps();
             // For each timestamp..
-            for (var i = 0; i < RotationPath.KeysNo; i++) {
-                // Check if it is the timestamp to remove..
-                if (Utilities.FloatsEqual(
-                    timestamps[i],
-                    timestamp,
-                    GlobalConstants.FloatPrecision)) {
+            //var foundMatch = false;
+            //for (var i = 0; i < RotationPath.KeysNo; i++) {
+            //    // If it is the node to change..
+            //    if (Utilities.FloatsEqual(
+            //        timestamps[i],
+            //        timestamp,
+            //        GlobalConstants.FloatPrecision)) {
 
-                    // Remove node.
-                    RotationPath.RemoveNode(i);
+            //        // Remove node.
+            //        //RotationPath.RemoveNode(i);
+            //        foundMatch = true;
+            //    }
+            //}
 
-                    foundMatch = true;
-                }
-            }
-
+            // Check if timestamp passed as argument matches any in the rotation path.
+            var foundMatch = RotationPath.NodeAtTimeExists(timestamp);
             // If timestamp was not found..
             if (!foundMatch) {
                 Debug.Log(
@@ -360,12 +361,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             // Create new node.
-            RotationPath.CreateNewNode(timestamp, newPosition);
+            //RotationPath.CreateNewNode(timestamp, newPosition);
 
-            // Execute callback.
+            RotationPath.MovePointToPosition(timestamp, newPosition);
+
             callback();
-            // Smooth all nodes.
-            //RotationPath.SmoothAllNodes(DefaultSmoothWeight);
 
             OnRotationPointPositionChanged();
         }

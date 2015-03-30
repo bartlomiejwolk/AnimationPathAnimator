@@ -369,7 +369,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     x,
                     currentAnimationTime,
                     GlobalConstants.FloatPrecision));
-
             if (index < 0) return;
 
             SceneHandles.DrawRotationHandle(

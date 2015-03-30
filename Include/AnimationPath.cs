@@ -35,6 +35,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return curves[0].length; }
         }
 
+        public float[] Timestamps {
+            get { return GetTimestamps(); }
+        } 
+
         /// <summary>
         ///     Class indexer.
         /// </summary>
@@ -301,6 +305,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Returns timestamps of all nodes.
         /// </summary>
         /// <returns>Array with node timestamps.</returns>
+        // todo Make private. Use Timestamps property instead.
         public float[] GetTimestamps() {
             var timestamps = new float[KeysNo];
 
@@ -366,6 +371,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             curves[0].MoveKey(keyIndex, keyXCopy);
             curves[1].MoveKey(keyIndex, keyYCopy);
             curves[2].MoveKey(keyIndex, keyZCopy);
+        }
+
+        public void MovePointToPosition(
+            float timestamp,
+            Vector3 position) {
+
+            var nodeIndex = GetNodeIndexAtTime(timestamp);
+            MovePointToPosition(nodeIndex, position);
         }
 
         /// <summary>
@@ -530,6 +543,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion PRIVATE METHODS
+
+        public bool NodeAtTimeExists(float timestamp) {
+            var foundMatch = false;
+            for (var i = 0; i < KeysNo; i++) {
+                // If it is the node to change..
+                // todo copy FloatsEqual method here.
+                if (Utilities.FloatsEqual(
+                    Timestamps[i],
+                    timestamp,
+                    GlobalConstants.FloatPrecision)) {
+
+                    foundMatch = true;
+                }
+            }
+
+            return foundMatch;
+        }
+
     }
 
 }

@@ -610,7 +610,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Set RotationPath node positions to the same as in AnimatedObjectPath.
+        ///     Set rotation path node positions to the same as in anim. object path.
         /// </summary>
         private void ResetRotationPathValues() {
             var animPathNodePositions = GetNodePositions();

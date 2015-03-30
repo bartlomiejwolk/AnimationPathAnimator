@@ -373,7 +373,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public bool RotationPathEnabled {
             get { return rotationPathEnabled; }
-            set { rotationPathEnabled = value; }
+            set {
+                rotationPathEnabled = value;
+
+                // On enable, reset rotation path.
+                if (value) PathData.ResetRotationPath();
+            }
         }
 
         #endregion

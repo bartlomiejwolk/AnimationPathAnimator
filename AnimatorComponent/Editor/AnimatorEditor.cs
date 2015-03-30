@@ -209,8 +209,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingRotationPathTangentHandles() {
             // Draw tangent handles only in custom tangent mode.
             if (Script.TangentMode != TangentMode.Custom) return;
-            // Draw tangent handles only in tangent handle mode.
-            if (Script.HandleMode != HandleMode.Tangent) return;
+            // Draw tangent handles only tangent node handle is selected.
+            if (Script.NodeHandle != NodeHandle.Tangent) return;
 
             // Positions at which to draw tangent handles.
             var nodes = Script.GetGlobalRotationPointPositions();
@@ -863,8 +863,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingObjectPathTangentHandles() {
             // Draw tangent handles only in custom tangent mode.
             if (Script.TangentMode != TangentMode.Custom) return;
-            // Draw tangent handles only in tangent handle mode.
-            if (Script.HandleMode != HandleMode.Tangent) return;
+            // Draw tangent handles only tangent node handle is selected.
+            if (Script.NodeHandle != NodeHandle.Tangent) return;
 
             // Positions at which to draw tangent handles.
             var nodes = Script.GetGlobalNodePositions();
@@ -2078,7 +2078,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.HandleMode == prevHandleMode) return;
 
             // On handle mode set to tangent, change tangent mode to custom.
-            if (Script.HandleMode == HandleMode.Tangent) {
+            if (Script.NodeHandle == NodeHandle.Tangent) {
                 Script.TangentMode = TangentMode.Custom;
             }
         }

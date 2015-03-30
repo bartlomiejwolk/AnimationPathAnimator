@@ -5,7 +5,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         None,
         Ease,
         Tilting,
-        Tangent
 
     }
 

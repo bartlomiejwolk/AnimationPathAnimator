@@ -835,6 +835,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <remarks>Such situation would be caused by placing rotation nodes too close to each other.</remarks>
         private void HandleUnsyncedObjectAndRotationPaths() {
+            // Don't check for sync if rotation path is disabled.
+            if (!Script.RotationPathEnabled) return;
+
             // Return if object and rotation path have the same number of nodes.
             if (Script.PathData.NodesNo == Script.PathData.RotationPathNodesNo) {
                 return;

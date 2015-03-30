@@ -56,6 +56,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private List<bool> tiltingToolState;
 
+        /// <summary>
+        /// If true, rotation path will be in sync with anim. obj. path.
+        /// </summary>
+        /// <remarks>It'll sync number of nodes and their timestamps.</remarks>
+        [SerializeField]
+        private bool rotationPathUpdateEnabled;
+
         #endregion FIELDS
 
         #region PROPERTIES
@@ -190,7 +197,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Debug.Log("Node added to list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
             
-            UpdateRotationPathWithAddedKeys();
+            HandleUpdateRotationPathWithAddedKeys();
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
@@ -202,7 +209,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Debug.Log("Node removed from list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
 
-            UpdateRotationPathWithRemovedKeys();
+            HandleUpdateRotationPathWithRemovedKeys();
         }
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {
@@ -211,7 +218,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
             UpdateToolTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateToolTimestamps(TiltingCurve, GetTiltedNodeTimestamps);
-            UpdateRotationPathTimestamps();
+            HandleUpdateRotationPathTimestamps();
         }
 
         private List<float> GetTiltedNodeTimestamps() {
@@ -474,7 +481,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void ResetRotationPath() {
             rotationPath = new AnimationPath();
 
-            UpdateRotationPathWithAddedKeys();
+            HandleUpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();
 
             OnRotationPathReset();
@@ -766,7 +773,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void UpdateRotationPathTimestamps() {
+        private void HandleUpdateRotationPathTimestamps() {
+            // Return if rotation path update is disabled.
+            if (!RotationPathUpdateEnabled) return;
+
             // Get node timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get rotation point timestamps.
@@ -790,7 +800,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void UpdateRotationPathWithAddedKeys() {
+        private void HandleUpdateRotationPathWithAddedKeys() {
+            if (!RotationPathUpdateEnabled) return;
+
             // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get rotation path timestamps.
@@ -812,7 +824,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void UpdateRotationPathWithRemovedKeys() {
+        public bool RotationPathUpdateEnabled {
+            get { return rotationPathUpdateEnabled; }
+            set { rotationPathUpdateEnabled = value; }
+        }
+
+        private void HandleUpdateRotationPathWithRemovedKeys() {
+            if (!RotationPathUpdateEnabled) return;
+
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get values from rotationPath.

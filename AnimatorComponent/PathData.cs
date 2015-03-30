@@ -253,7 +253,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             if (rotationPath == null) {
                 rotationPath = new AnimationPath();
-                InitializeRotationPath();
+                //InitializeRotationPath();
             }
             if (easeCurve == null) {
                 easeCurve = new AnimationCurve();

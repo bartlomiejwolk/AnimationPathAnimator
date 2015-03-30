@@ -60,6 +60,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// If true, rotation path will be in sync with anim. obj. path.
         /// </summary>
         /// <remarks>It'll sync number of nodes and their timestamps.</remarks>
+        // todo remove. Use callback instead (if possible)
         [SerializeField]
         private bool rotationPathUpdateEnabled;
 
@@ -327,7 +328,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public void ChangeRotationAtTimestamp(
             float timestamp,
-            Vector3 newPosition) {
+            Vector3 newPosition,
+            Action callback) {
 
             // Get node timestamps.
             var timestamps = RotationPath.GetTimestamps();
@@ -359,8 +361,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Create new node.
             RotationPath.CreateNewNode(timestamp, newPosition);
+
+            // Execute callback.
+            callback();
             // Smooth all nodes.
-            RotationPath.SmoothAllNodes(DefaultSmoothWeight);
+            //RotationPath.SmoothAllNodes(DefaultSmoothWeight);
 
             OnRotationPointPositionChanged();
         }
@@ -1089,6 +1094,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             RotationPath.ChangePointTangents(nodeIndex, tangentDelta);
             // todo create event RotationPathNodeTangentsChanged
+        }
+
+        public void SmoothAllRotationPathNodes() {
+            RotationPath.SmoothAllNodes();
         }
 
     }

@@ -635,9 +635,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             Script.PathData.ChangeRotationAtTimestamp(
                 Script.AnimationTime,
-                newLocalPos);
+                newLocalPos,
+                ChangeRotationAtTimestampCallbackHandler);
 
             EditorUtility.SetDirty(Script.PathData);
+        }
+
+        private void ChangeRotationAtTimestampCallbackHandler() {
+            if (Script.TangentMode == TangentMode.Custom) return;
+
+            Script.PathData.SmoothAllRotationPathNodes();
         }
 
         private void DrawTiltingHandlesCallbackHandler(

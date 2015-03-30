@@ -445,7 +445,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Smooth in/out tangents of all nodes.
         /// </summary>
-        public void SmoothAllNodes(float weight) {
+        public void SmoothAllNodes(float weight = 0) {
             for (var i = 0; i < KeysNo; i++) {
                 SmoothNodeInOutTangents(i, weight);
             }

@@ -1266,8 +1266,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo extract to separate methods.
         private void HandleShortcuts() {
-            serializedObject.Update();
-
             // Ease handle mode.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode
@@ -1275,14 +1273,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.HandleMode = HandleMode.Ease;
             }
-
-            // Rotation mode key.
-            //if (Event.current.type == EventType.keyDown
-            //    && Event.current.keyCode
-            //    == Script.SettingsAsset.RotationModeKey) {
-
-            //    Script.HandleMode = HandleMode.Rotation;
-            //}
 
             // Tilting mode key.
             if (Event.current.type == EventType.keyDown
@@ -1387,15 +1377,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToNextNodeKey) {
 
-                serializedObject.Update();
-
                 Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestForwardNodeTimestamp",
                         null);
-
-                serializedObject.ApplyModifiedProperties();
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -1409,15 +1395,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToPreviousNodeKey) {
 
-                serializedObject.Update();
-
                 Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestBackwardNodeTimestamp",
                         null);
-
-                serializedObject.ApplyModifiedProperties();
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -1434,11 +1416,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                serializedObject.Update();
-
                 Script.AnimationTime = 0;
-
-                serializedObject.ApplyModifiedProperties();
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -1455,11 +1433,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Event.current.modifiers,
                     Script.SettingsAsset.ModKey)) {
 
-                serializedObject.Update();
-
                 Script.AnimationTime = 1;
-
-                serializedObject.ApplyModifiedProperties();
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(

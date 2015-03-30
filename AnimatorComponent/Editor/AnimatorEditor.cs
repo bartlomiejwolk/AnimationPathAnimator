@@ -190,10 +190,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingSceneToolToggleButtons() {
-            // Don't draw node tool in rotation mode.
-            //if (Script.RotationPathEnabled) return;
-            // Don't draw node tool in tangent handle mode.
-            if (Script.HandleMode == HandleMode.Tangent) return;
+            // Handle shortcut only in Ease and Tilting handle mode.
+            if ((Script.HandleMode != HandleMode.Ease)
+                && (Script.HandleMode != HandleMode.Tilting)) {
+
+                return;
+            }
 
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();
@@ -319,6 +321,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     FocusType.Passive));
 
             HandleShortcuts();
+
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
             HandleDrawingSceneToolToggleButtons();

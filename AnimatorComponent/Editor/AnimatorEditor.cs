@@ -296,13 +296,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene button for removing nodes.
         /// </summary>
         private void HandleDrawingRemoveButtons() {
-            // todo extract to RemoveNodeButtonPositions().
-            // Node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme nodes.
-            // Extreme nodes can't be removed.
-            nodePositions.RemoveAt(0);
-            nodePositions.RemoveAt(nodePositions.Count - 1);
+            // Get positions for the buttons.
+            var nodePositions = RemoveNodeButtonPositions();
 
             // Get style for add button.
             var removeButtonStyle = Script.Skin.GetStyle(
@@ -315,6 +310,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.RemoveButtonV,
                 DrawRemoveNodeButtonsCallbackHandler,
                 removeButtonStyle);
+        }
+
+        private List<Vector3> RemoveNodeButtonPositions() {
+            // Node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme nodes.
+            // Extreme nodes can't be removed.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
         }
 
         /// <summary>

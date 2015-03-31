@@ -189,8 +189,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SceneHandles.DrawUpdateAllLabels(
                 globalNodePositions,
                 labelText,
-                Script.SettingsAsset.UpdateAllLabelOffsetX,
-                Script.SettingsAsset.UpdateAllLabelOffsetY,
+                Script.SettingsAsset.MoveAllLabelOffsetX,
+                Script.SettingsAsset.MoveAllLabelOffsetY,
                 Script.SettingsAsset.DefaultLabelWidth,
                 Script.SettingsAsset.DefaultLabelHeight,
                 Script.Skin.GetStyle("MoveAllLabel"));

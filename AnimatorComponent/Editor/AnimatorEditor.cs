@@ -1486,6 +1486,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 == Script.SettingsAsset.NoneModeKey) {
 
                 Script.HandleMode = HandleMode.None;
+                HandleHandleModeChange();
             }
         }
 
@@ -1782,7 +1783,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         "shortcuts: Y, U, I, O."),
                     Script.HandleMode);
 
-            HandleHandleModeChange(prevHandleMode);
+            // Return if handle mode wasn't changed.
+            if (Script.HandleMode == prevHandleMode) return;
+
+            HandleHandleModeChange();
         }
 
         private void DrawInfoLabel(string text) {
@@ -2131,13 +2135,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUIUtility.labelWidth = 0;
         }
 
-        private void HandleHandleModeChange(HandleMode prevHandleMode) {
-            // Return if handle mode wasn't changed.
-            if (Script.HandleMode == prevHandleMode) return;
-
-            // On handle mode set to tangent, change tangent mode to custom.
-            if (Script.NodeHandle == NodeHandle.Tangent) {
-                Script.TangentMode = TangentMode.Custom;
+        private void HandleHandleModeChange() {
+            // If handle mode was changed to None..
+            if (Script.HandleMode == HandleMode.None) {
+                // Don't display update all values mode label.
+                Script.UpdateAllValues = false;
             }
         }
 

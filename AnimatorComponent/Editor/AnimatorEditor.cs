@@ -1540,6 +1540,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleJumpToStartShortcut();
             HandleJumpToEndShortcut();
             HandlePlayPauseShortcut();
+            HandleMoveAllModeShortcut();
+        }
+
+        private void HandleMoveAllModeShortcut() {
+            // Handle shortcut only if node handle is set to position.
+            if (Script.NodeHandle != NodeHandle.Position) return;
+
+            // Move all mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.MoveAllKey) {
+
+                // Toggle mode.
+                Script.MoveAllMode = !Script.MoveAllMode;
+            }
         }
 
         private void HandleShortJumpBackwardShortcut() {

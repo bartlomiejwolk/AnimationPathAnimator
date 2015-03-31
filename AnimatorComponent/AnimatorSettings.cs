@@ -23,11 +23,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public KeyCode playModeModKey = KeyCode.RightAlt;
 
-        public KeyCode positionHandleKey = KeyCode.G;
+        public KeyCode positionHandleKey = KeyCode.P;
 
         [Header("Shortcuts")]
         [SerializeField]
         private KeyCode easeModeKey = KeyCode.U;
+
+        [SerializeField]
+        private KeyCode moveAllKey = KeyCode.G;
 
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
@@ -69,14 +72,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode shortJumpForwardKey = KeyCode.K;
 
         [SerializeField]
-        private KeyCode tiltingModeKey = KeyCode.O;
+        private KeyCode tiltingModeKey = KeyCode.I;
 
         [SerializeField]
-        private KeyCode updateAllKey = KeyCode.P;
+        private KeyCode updateAllKey = KeyCode.O;
 
         #endregion
 
         #region SHORTCUT PROPERTIES
+        public KeyCode MoveAllKey {
+            get { return moveAllKey; }
+            set { moveAllKey = value; }
+        }
+
 
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
@@ -562,7 +570,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return moveAllLabelOffsetY; }
             set { moveAllLabelOffsetY = value; }
         }
-
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

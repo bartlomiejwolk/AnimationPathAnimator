@@ -150,7 +150,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             HandleShortcuts();
 
-            // todo reorder
+            // todo release reorder
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
             HandleDrawingSceneToolToggleButtons();
@@ -181,10 +181,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Create array with text to be displayed for each node.
             // todo extract. Use also for Update All mode.
-            var labelText = new string[globalNodePositions.Count];
-            for (var i = 0; i < globalNodePositions.Count; i++) {
-                labelText[i] = Script.SettingsAsset.MoveAllLabelText;
-            }
+            var labelText = MultiplyTextIntoArray(
+                Script.SettingsAsset.MoveAllLabelText,
+                globalNodePositions);
 
             SceneHandles.DrawUpdateAllLabels(
                 globalNodePositions,
@@ -194,6 +193,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.DefaultLabelWidth,
                 Script.SettingsAsset.DefaultLabelHeight,
                 Script.Skin.GetStyle("MoveAllLabel"));
+        }
+
+        private string[] MultiplyTextIntoArray(
+            string text,
+            List<Vector3> globalNodePositions) {
+
+            var labelText = new string[globalNodePositions.Count];
+            for (var i = 0; i < globalNodePositions.Count; i++) {
+                labelText[i] = text;
+            }
+            return labelText;
         }
 
         private void HandleDrawingRotationPathTangentHandles() {
@@ -437,10 +447,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var globalNodePositions = Script.GetGlobalNodePositions();
 
             // Create array with text to be displayed for each node.
-            var labelText = new string[globalNodePositions.Count];
-            for (var i = 0; i < globalNodePositions.Count; i++) {
-                labelText[i] = Script.SettingsAsset.UpdateAllLabelText;
-            }
+            var labelText = MultiplyTextIntoArray(
+                Script.SettingsAsset.UpdateAllLabelText,
+                globalNodePositions);
 
             SceneHandles.DrawUpdateAllLabels(
                 globalNodePositions,

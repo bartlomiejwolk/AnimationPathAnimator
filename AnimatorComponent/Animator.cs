@@ -572,7 +572,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public void SetTangentLinear() {
             TangentMode = TangentMode.Linear;
-            PathData.SetLinearAnimObjPathTangents();
+            PathData.SetPathTangentsToLinear();
         }
 
         /// <summary>

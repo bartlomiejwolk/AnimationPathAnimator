@@ -587,7 +587,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var newLocalPos =
                 Script.transform.InverseTransformPoint(newPosition);
 
-            Script.PathData.ChangeRotationAtTimestamp(
+            Script.PathData.UpdateRotationPointAtTimestamp(
                 Script.AnimationTime,
                 newLocalPos,
                 ChangeRotationAtTimestampCallbackHandler);
@@ -650,7 +650,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleLinearTangentMode() {
             if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetLinearAnimObjPathTangents();
+                Script.PathData.SetPathTangentsToLinear();
                 Script.PathData.SetRotationPathTangentsToLineear();
             }
         }

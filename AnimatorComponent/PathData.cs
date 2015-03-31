@@ -318,28 +318,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EaseCurve.AddKey(time, valueAtTime);
         }
 
-        // todo rename to UpdateRotationPointAtTimestamp.
-        public void ChangeRotationAtTimestamp(
+        public void UpdateRotationPointAtTimestamp(
             float timestamp,
             Vector3 newPosition,
             Action callback) {
-
-            // Get path node timestamps.
-            //var timestamps = RotationPath.GetTimestamps();
-            // For each timestamp..
-            //var foundMatch = false;
-            //for (var i = 0; i < RotationPath.KeysNo; i++) {
-            //    // If it is the node to change..
-            //    if (Utilities.FloatsEqual(
-            //        timestamps[i],
-            //        timestamp,
-            //        GlobalConstants.FloatPrecision)) {
-
-            //        // Remove node.
-            //        //RotationPath.RemoveNode(i);
-            //        foundMatch = true;
-            //    }
-            //}
 
             // Check if timestamp passed as argument matches any in the rotation path.
             var foundMatch = RotationPath.NodeAtTimeExists(timestamp);
@@ -351,9 +333,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 return;
             }
-
-            // Create new node.
-            //RotationPath.CreateNewNode(timestamp, newPosition);
 
             RotationPath.MovePointToPosition(timestamp, newPosition);
 
@@ -491,8 +470,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateTiltingCurveValues(DefaultTiltingCurveValue);
         }
 
-        // todo rename to SetPathTangentsToLinear().
-        public void SetLinearAnimObjPathTangents() {
+        public void SetPathTangentsToLinear() {
             for (var i = 0; i < 3; i++) {
                 Utilities.SetCurveLinear(AnimatedObjectPath[i]);
             }

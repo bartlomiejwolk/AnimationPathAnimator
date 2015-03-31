@@ -305,8 +305,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Returns timestamps of all nodes.
         /// </summary>
         /// <returns>Array with node timestamps.</returns>
-        // todo Make private. Use Timestamps property instead.
-        public float[] GetTimestamps() {
+        private float[] GetTimestamps() {
             var timestamps = new float[KeysNo];
 
             for (var i = 0; i < KeysNo; i++) {

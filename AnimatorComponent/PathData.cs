@@ -791,8 +791,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get path timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get rotation path timestamps.
-            var rotationCurvesTimestamps =
-                RotationPath.GetTimestamps();
+            var rotationCurvesTimestamps = RotationPath.Timestamps;
 
             // For each node in rotationPath..
             for (var i = 1; i < RotationPath.KeysNo - 1; i++) {
@@ -818,7 +817,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get rotation path timestamps.
-            var rotationPathTimestamps = RotationPath.GetTimestamps();
+            var rotationPathTimestamps = RotationPath.Timestamps;
 
             // For each timestamp in the path..
             // todo call method from AnimationPath. Do it in other places.
@@ -849,7 +848,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get values from rotationPath.
-            var rotationCurvesTimestamps = RotationPath.GetTimestamps();
+            var rotationCurvesTimestamps = RotationPath.Timestamps;
 
             // For each timestamp in rotationPath..
             for (var i = 0; i < rotationCurvesTimestamps.Length; i++) {

@@ -533,8 +533,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 return;
             }
 
-            Undo.RecordObject(Script.PathData, "Change path");
+            Undo.RecordObject(Script.PathData, "Change node/s position.");
 
+            MoveNode(movedNodeIndex, newGlobalPos);
+
+            EditorUtility.SetDirty(Script.PathData);
+        }
+
+        private void MoveNode(int movedNodeIndex, Vector3 newGlobalPos) {
             // Remember path length before applying changes.
             var oldAnimGoPathLength = Script.PathData.GetPathLinearLength();
 
@@ -542,21 +548,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var newNodeLocalPosition =
                 Script.transform.InverseTransformPoint(newGlobalPos);
 
+            // Move node.
             Script.PathData.MoveNodeToPosition(
                 movedNodeIndex,
                 newNodeLocalPosition);
 
+            // Handle tangent mode.
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
 
+            // Distribute timestamps.
             Script.PathData.DistributeTimestamps();
+
             HandleUpdateRotationPathTimestamps();
 
             // Current path length.
             var newAnimGoPathLength = Script.PathData.GetPathLinearLength();
             DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
-
-            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawRemoveNodeButtonsCallbackHandler(int index) {

@@ -477,16 +477,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Offset animated object path node tangents by given value.
         /// </summary>
         /// <param name="index"></param>
-        /// <param name="inOutTangent"></param>
+        /// <param name="inOutTangentOffset"></param>
         private void UpdateObjectPathTangents(
             int index,
-            // todo rename to inOutTangentOffset
-            Vector3 inOutTangent) {
+            Vector3 inOutTangentOffset) {
 
             // Make snapshot of the target object.
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
-            Script.PathData.OffsetPathNodeTangents(index, inOutTangent);
+            Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
             // todo move to event handler that handles path length change.
             Script.PathData.DistributeTimestamps();
         }

@@ -507,7 +507,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each node..
             for (var i = 0; i < nodes.Count; i++) {
                 var handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                // todo create setting in asset .
                 var sphereSize = handleSize * handleSizeConst;
 
                 // draw node's handle.

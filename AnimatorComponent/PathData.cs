@@ -1093,14 +1093,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             int nodeIndex,
             Vector3 tangentDelta) {
 
-            AnimatedObjectPath.ChangePointTangents(nodeIndex, tangentDelta);
+            AnimatedObjectPath.OffsetNodeTangents(nodeIndex, tangentDelta);
             // todo create event NodeTangentsChanged
         }
         public void OffsetRotationPathNodeTangents(
             int nodeIndex,
             Vector3 tangentDelta) {
 
-            RotationPath.ChangePointTangents(nodeIndex, tangentDelta);
+            RotationPath.OffsetNodeTangents(nodeIndex, tangentDelta);
             // todo create event RotationPathNodeTangentsChanged
         }
 

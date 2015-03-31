@@ -1108,7 +1108,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             DrawRotationPathToggle();
+
+            EditorGUILayout.BeginHorizontal();
             DrawNodeHandleDropdown();
+            HandleDrawMoveAllToggle();
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             DrawHandleModeDropdown();
@@ -1176,6 +1180,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void HandleDrawMoveAllToggle() {
+            // Return if move all mode is disabled.
+            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
+
+            EditorGUIUtility.labelWidth = 65;
+
+            Script.MoveAllMode = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Move All",
+                    "When checked, all nodes will move together. " +
+                    "Default shortcut: P."),
+                Script.MoveAllMode);
+
+            EditorGUIUtility.labelWidth = 0;
         }
 
         private void DrawNodeHandleDropdown() {

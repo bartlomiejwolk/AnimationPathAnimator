@@ -97,6 +97,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private NodeHandle nodeHandle = NodeHandle.MoveSingle;
 
+        [SerializeField]
+        private bool moveAllMode;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -265,6 +268,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TangentMode.Smooth;
 
         [SerializeField]
+        // todo rename to updateAllMode.
         private bool updateAllValues;
 
         [SerializeField]
@@ -394,6 +398,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public NodeHandle NodeHandle {
             get { return nodeHandle; }
             set { nodeHandle = value; }
+        }
+
+        public bool MoveAllMode {
+            get { return moveAllMode; }
+            set { moveAllMode = value; }
         }
 
         #endregion

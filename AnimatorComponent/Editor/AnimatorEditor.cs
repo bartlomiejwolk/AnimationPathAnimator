@@ -1466,7 +1466,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo extract to separate methods.
         private void HandleShortcuts() {
             HandleEaseModeShortcut();
             HandleTiltingModeShortcut();

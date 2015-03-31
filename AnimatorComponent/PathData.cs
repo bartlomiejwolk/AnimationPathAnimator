@@ -56,14 +56,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private List<bool> tiltingToolState;
 
-        /// <summary>
-        /// If true, rotation path will be in sync with anim. obj. path.
-        /// </summary>
-        /// <remarks>It'll sync number of nodes and their timestamps.</remarks>
-        // todo remove. Use callback instead (if possible)
-        //[SerializeField]
-        //private bool rotationPathUpdateEnabled;
-
         #endregion FIELDS
 
         #region PROPERTIES

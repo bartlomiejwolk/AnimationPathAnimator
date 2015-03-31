@@ -1129,9 +1129,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawRotationPathToggle() {
+            Undo.RecordObject(Script, "Toggle rotation path.");
+
             var prevToggleValue = Script.RotationPathEnabled;
 
-            // todo handle undo
             var currentToggleValue = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Rotation Path",
@@ -1154,6 +1155,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleRotationPathEnabledToggleChange(
             bool prevToggleValue,
             bool currentToggleValue) {
+
             // Return if value did not change.
             if (currentToggleValue == prevToggleValue) return;
 

@@ -810,10 +810,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo rename to Update..
         public void UpdateRotationPathWithAddedKeys() {
-            //if (!RotationPathUpdateEnabled) return;
-
             // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get rotation path timestamps.

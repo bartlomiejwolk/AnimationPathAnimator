@@ -1863,7 +1863,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Reset curves to its default state.
                 Script.PathData.ResetRotationPath();
-                Script.PathData.SmoothRotationPathTangents();
+                //Script.PathData.SmoothRotationPathTangents();
 
                 // Change rotation mode.
                 Script.RotationMode = RotationMode.Custom;

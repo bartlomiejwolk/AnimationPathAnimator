@@ -535,12 +535,32 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             Undo.RecordObject(Script.PathData, "Change node/s position.");
 
-            MoveNode(movedNodeIndex, newGlobalPos);
+            HandleMoveSingleMode(movedNodeIndex, newGlobalPos);
+            HandleMoveAllMode(movedNodeIndex, newGlobalPos);
 
             EditorUtility.SetDirty(Script.PathData);
         }
 
-        private void MoveNode(int movedNodeIndex, Vector3 newGlobalPos) {
+        private void HandleMoveAllMode(int movedNodeIndex, Vector3 newGlobalPos) {
+            // Return if move all mode is disabled.
+            if (Script.NodeHandle != NodeHandle.MoveAll) return;
+
+            var oldNodeLocalPosition =
+                Script.PathData.GetNodePosition(movedNodeIndex);
+            var newNodeLocalPosition =
+                Script.transform.InverseTransformPoint(newGlobalPos);
+
+            // Calculate movement delta.
+            var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+            Script.PathData.OffsetNodePositions(moveDelta);
+            Script.PathData.OffsetRotationPathPosition(moveDelta);
+        }
+
+        private void HandleMoveSingleMode(int movedNodeIndex, Vector3 newGlobalPos) {
+            // Return if move single mode is disabled.
+            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
+
             // Remember path length before applying changes.
             var oldAnimGoPathLength = Script.PathData.GetPathLinearLength();
 

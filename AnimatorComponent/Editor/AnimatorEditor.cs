@@ -174,7 +174,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingMoveAllModeLables() {
-            if (Script.NodeHandle != NodeHandle.MoveAll) return;
+            if (!Script.MoveAllMode) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -357,7 +357,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingRotationHandle() {
             if (!Script.RotationPathEnabled) return;
-            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
+            if (Script.NodeHandle != NodeHandle.Position) return;
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
@@ -568,7 +568,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleMoveAllMode(int movedNodeIndex, Vector3 newGlobalPos) {
             // Return if move all mode is disabled.
-            if (Script.NodeHandle != NodeHandle.MoveAll) return;
+            if (!Script.MoveAllMode) return;
 
             var oldNodeLocalPosition =
                 Script.PathData.GetNodePosition(movedNodeIndex);
@@ -583,8 +583,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleMoveSingleMode(int movedNodeIndex, Vector3 newGlobalPos) {
-            // Return if move single mode is disabled.
-            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
+            // Return if node handle is not set to position.
+            if (Script.NodeHandle != NodeHandle.Position) return;
+            // Return if move all mode is enabled.
+            if (Script.MoveAllMode) return;
 
             // Remember path length before applying changes.
             var oldAnimGoPathLength = Script.PathData.GetPathLinearLength();
@@ -1184,7 +1186,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleDrawMoveAllToggle() {
             // Return if move all mode is disabled.
-            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
+            if (Script.NodeHandle != NodeHandle.Position) return;
 
             EditorGUIUtility.labelWidth = 65;
 

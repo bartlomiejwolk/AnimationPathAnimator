@@ -95,7 +95,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private bool rotationPathEnabled;
 
         [SerializeField]
-        private NodeHandle nodeHandle = NodeHandle.MoveSingle;
+        private NodeHandle nodeHandle = NodeHandle.Position;
 
         [SerializeField]
         private bool moveAllMode;

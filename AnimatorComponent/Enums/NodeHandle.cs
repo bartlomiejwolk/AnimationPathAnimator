@@ -1,5 +1,5 @@
 namespace ATP.AnimationPathTools.AnimatorComponent {
 
-    public enum NodeHandle { MoveSingle, MoveAll, Tangent }
+    public enum NodeHandle { Position, Tangent }
 
 }

@@ -198,7 +198,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Debug.Log("Node added to list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
             
-            //HandleUpdateRotationPathWithAddedKeys();
+            //UpdateRotationPathWithAddedKeys();
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
@@ -210,7 +210,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Debug.Log("Node removed from list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
 
-            //HandleUpdateRotationPathWithRemovedKeys();
+            //UpdateRotationPathWithRemovedKeys();
         }
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {
@@ -219,7 +219,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
             UpdateToolTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateToolTimestamps(TiltingCurve, GetTiltedNodeTimestamps);
-            //HandleUpdateRotationPathTimestamps();
+            //UpdateRotationPathTimestamps();
         }
 
         private List<float> GetTiltedNodeTimestamps() {
@@ -486,7 +486,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void ResetRotationPath() {
             rotationPath = new AnimationPath();
 
-            HandleUpdateRotationPathWithAddedKeys();
+            UpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();
 
             OnRotationPathReset();
@@ -784,7 +784,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         // todo rename to Update..
-        public void HandleUpdateRotationPathTimestamps() {
+        public void UpdateRotationPathTimestamps() {
             // Return if rotation path update is disabled.
             //if (!RotationPathUpdateEnabled) return;
 
@@ -812,7 +812,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         // todo rename to Update..
-        public void HandleUpdateRotationPathWithAddedKeys() {
+        public void UpdateRotationPathWithAddedKeys() {
             //if (!RotationPathUpdateEnabled) return;
 
             // Get path timestamps.
@@ -843,7 +843,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         //}
 
         // todo rename to Update..
-        public void HandleUpdateRotationPathWithRemovedKeys() {
+        public void UpdateRotationPathWithRemovedKeys() {
             //if (!RotationPathUpdateEnabled) return;
 
             // AnimationPathBuilder node timestamps.

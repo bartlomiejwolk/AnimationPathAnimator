@@ -517,12 +517,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Add a new node.
             AddNodeBetween(nodeIndex);
-            Script.PathData.HandleUpdateRotationPathWithAddedKeys();
+            HandleUpdateRotationPathWidhAddedKeys();
             HandleUnsyncedObjectAndRotationPaths();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
             Script.PathData.DistributeTimestamps();
-            Script.PathData.HandleUpdateRotationPathTimestamps();
+            HandleUpdateRotationPathTimestamps();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -579,7 +579,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleLinearTangentMode();
 
             Script.PathData.DistributeTimestamps();
-            Script.PathData.HandleUpdateRotationPathTimestamps();
+            HandleUpdateRotationPathTimestamps();
 
             // Current path length.
             var newAnimGoPathLength = Script.PathData.GetPathLinearLength();
@@ -596,11 +596,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodeIndex = index + 1;
 
             Script.PathData.RemoveNode(nodeIndex);
-            Script.PathData.HandleUpdateRotationPathWithRemovedKeys();
+            HandleUpdateRotationPathWithRemovedKeys();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
             Script.PathData.DistributeTimestamps();
-            Script.PathData.HandleUpdateRotationPathTimestamps();
+            HandleUpdateRotationPathTimestamps();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -918,6 +918,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             else {
                 HandleEnablingTiltingTool(pathNodeIndex, nodeTimestamp);
+            }
+        }
+
+        private void HandleUpdateRotationPathTimestamps() {
+            if (Script.RotationPathEnabled) {
+                Script.PathData.UpdateRotationPathTimestamps();
+            }
+        }
+
+        private void HandleUpdateRotationPathWithRemovedKeys() {
+            if (Script.RotationPathEnabled) {
+                Script.PathData.UpdateRotationPathWithRemovedKeys();
+            }
+        }
+
+        private void HandleUpdateRotationPathWidhAddedKeys() {
+            if (Script.RotationPathEnabled) {
+                Script.PathData.UpdateRotationPathWithAddedKeys();
             }
         }
         #endregion

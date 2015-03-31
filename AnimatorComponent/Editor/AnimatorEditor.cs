@@ -180,7 +180,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var globalNodePositions = Script.GetGlobalNodePositions();
 
             // Create array with text to be displayed for each node.
-            // todo extract. Use also for Update All mode.
             var labelText = MultiplyTextIntoArray(
                 Script.SettingsAsset.MoveAllLabelText,
                 globalNodePositions);
@@ -309,25 +308,40 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
-            // Get node positions.
-            var nodeGlobalPositions = Script.GetGlobalNodePositions();
+            HandleFreePositionHandle();
+            HandleDefaultPositionHandle();
+        }
 
-            // todo extract methods:
-            // todo HandleFreePositionHandle() and HandleDefaultPositionHandle().
-            // Draw custom position handles.
+        /// <summary>
+        /// Method responsible for drawing for each node Unity's default position handle.
+        /// </summary>
+        private void HandleDefaultPositionHandle() {
+            if (positionHandle.enumValueIndex ==
+                (int) PositionHandle.Position) {
+
+                // Get node positions.
+                var nodeGlobalPositions = Script.GetGlobalNodePositions();
+
+                SceneHandles.DrawPositionHandles(
+                    nodeGlobalPositions,
+                    DrawPositionHandlesCallbackHandler);
+            }
+        }
+
+        /// <summary>
+        /// Method responsible for drawing for each node custom position handle.
+        /// </summary>
+        private void HandleFreePositionHandle() {
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Free) {
+
+                // Get node positions.
+                var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
                 SceneHandles.DrawCustomPositionHandles(
                     nodeGlobalPositions,
                     Script.SettingsAsset.MovementHandleSize,
                     Script.GizmoCurveColor,
-                    DrawPositionHandlesCallbackHandler);
-            }
-            // Draw default position handles.
-            else {
-                SceneHandles.DrawPositionHandles(
-                    nodeGlobalPositions,
                     DrawPositionHandlesCallbackHandler);
             }
         }

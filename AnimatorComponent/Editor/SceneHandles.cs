@@ -491,7 +491,42 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Save value to animation curve.
             callback(curveValue);
         }
+        /// <summary>
+        ///     For each node in the scene draw handle that allow manipulating
+        ///     tangents for each of the animation curves separately.
+        /// </summary>
+        /// <returns>True if any handle was moved.</returns>
+        public static void DrawTangentHandles(
+            List<Vector3> nodes,
+            Color handleColor,
+            Action<int, Vector3> callback) {
 
+            Handles.color = handleColor;
+
+            // For each node..
+            for (var i = 0; i < nodes.Count; i++) {
+                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                // todo create setting in asset .
+                var sphereSize = handleSize * 0.25f;
+
+                // draw node's handle.
+                var newHandleValue = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.CircleCap);
+
+                // How much tangent's value changed in this frame.
+                var tangentDelta = newHandleValue - nodes[i];
+
+                // Remember if handle was moved.
+                if (tangentDelta != Vector3.zero) {
+                    // Execute callback.
+                    callback(i, tangentDelta);
+                }
+            }
+        }
         #endregion
     }
 

@@ -106,42 +106,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-        /// <summary>
-        ///     For each node in the scene draw handle that allow manipulating
-        ///     tangents for each of the animation curves separately.
-        /// </summary>
-        /// <returns>True if any handle was moved.</returns>
-        // todo move to SceneHandles class.
-        private void DrawTangentHandles(
-            List<Vector3> nodes,
-            Action<int, Vector3> callback) {
-
-            Handles.color = Script.GizmoCurveColor;
-
-            // For each node..
-            for (var i = 0; i < nodes.Count; i++) {
-                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                // todo create setting in asset .
-                var sphereSize = handleSize * 0.25f;
-
-                // draw node's handle.
-                var newHandleValue = Handles.FreeMoveHandle(
-                    nodes[i],
-                    Quaternion.identity,
-                    sphereSize,
-                    Vector3.zero,
-                    Handles.CircleCap);
-
-                // How much tangent's value changed in this frame.
-                var tangentDelta = newHandleValue - nodes[i];
-
-                // Remember if handle was moved.
-                if (tangentDelta != Vector3.zero) {
-                    // Execute callback.
-                    callback(i, tangentDelta);
-                }
-            }
-        }
+      
         private void OnDisable() {
             // Disable Unity scene tool.
             SceneTool.RestoreTool();
@@ -216,9 +181,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodes = Script.GetGlobalRotationPointPositions();
 
             // Draw tangent handles.
-            DrawTangentHandles(
+            SceneHandles.DrawTangentHandles(
                 nodes,
-                //DrawTangentHandlesCallbackHandler);
+                Script.GizmoCurveColor,
                 UpdateRotationPathTangents);
         }
 
@@ -860,8 +825,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodes = Script.GetGlobalNodePositions();
 
             // Draw tangent handles.
-            DrawTangentHandles(
+            SceneHandles.DrawTangentHandles(
                 nodes,
+                Script.GizmoCurveColor,
                 //DrawTangentHandlesCallbackHandler);
                 UpdateObjectPathTangents);
         }

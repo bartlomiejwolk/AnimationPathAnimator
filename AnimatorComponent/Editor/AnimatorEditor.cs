@@ -183,7 +183,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Draw tangent handles.
             SceneHandles.DrawTangentHandles(
                 nodes,
-                Script.GizmoCurveColor,
+                Script.RotationCurveColor,
                 UpdateRotationPathTangents);
         }
 

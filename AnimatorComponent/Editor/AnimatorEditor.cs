@@ -1222,6 +1222,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // If custom rotation mode was just select, apply selected mode.
             if (currentRotationMode == RotationMode.Custom) {
                 Script.RotationMode = RotationMode.Custom;
+                Script.PathData.ResetRotationPath();
                 return;
             }
 

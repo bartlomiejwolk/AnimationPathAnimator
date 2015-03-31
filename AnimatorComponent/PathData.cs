@@ -26,6 +26,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public event EventHandler RotationPointPositionChanged;
 
+        public event EventHandler NodeTangentsChanged;
+
         #endregion EVENTS
 
         #region CONST
@@ -792,7 +794,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo rename to Update..
         public void UpdateRotationPathWithRemovedKeys() {
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();
@@ -1042,18 +1043,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Vector3 tangentDelta) {
 
             AnimatedObjectPath.OffsetNodeTangents(nodeIndex, tangentDelta);
-            // todo create event NodeTangentsChanged
+            OnNodeTangentsChanged();
         }
         public void OffsetRotationPathNodeTangents(
             int nodeIndex,
             Vector3 tangentDelta) {
 
             RotationPath.OffsetNodeTangents(nodeIndex, tangentDelta);
-            // todo create event RotationPathNodeTangentsChanged
+            OnNodeTangentsChanged();
         }
 
         public void SmoothAllRotationPathNodes() {
             RotationPath.SmoothAllNodes();
+        }
+
+        private void OnNodeTangentsChanged() {
+            var handler = NodeTangentsChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
     }

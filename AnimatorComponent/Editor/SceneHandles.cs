@@ -132,6 +132,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Draws position handles with predefined cap function.
+        /// </summary>
+        /// <param name="nodeGlobalPositions"></param>
+        /// <param name="handleSize"></param>
+        /// <param name="curveColor"></param>
+        /// <param name="callback"></param>
         public static void DrawCustomPositionHandles(
             List<Vector3> nodeGlobalPositions,
             float handleSize,
@@ -181,6 +188,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        /// <summary>
+        /// Draw position handles using Unity's default movement handle.
+        /// </summary>
+        /// <param name="nodeGlobalPositions"></param>
+        /// <param name="callback"></param>
         public static void DrawPositionHandles(
             List<Vector3> nodeGlobalPositions,
             Action<int, Vector3> callback) {
@@ -419,6 +431,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 sphereSize,
                 Vector3.zero,
                 capFunction);
+
             return newPos;
         }
 

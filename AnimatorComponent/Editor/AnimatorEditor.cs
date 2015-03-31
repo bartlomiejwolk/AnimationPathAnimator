@@ -277,6 +277,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get node positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
+            // todo extract methods:
+            // todo HandleFreePositionHandle() and HandleDefaultPositionHandle().
             // Draw custom position handles.
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Free) {

@@ -172,6 +172,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingRotationPathTangentHandles() {
+            // Don't draw when rotation path is disabled.
+            if (!Script.RotationPathEnabled) return;
             // Draw tangent handles only in custom tangent mode.
             if (Script.TangentMode != TangentMode.Custom) return;
             // Draw tangent handles only tangent node handle is selected.

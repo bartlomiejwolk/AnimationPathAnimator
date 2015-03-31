@@ -499,6 +499,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public static void DrawTangentHandles(
             List<Vector3> nodes,
             Color handleColor,
+            float handleSizeConst,
             Action<int, Vector3> callback) {
 
             Handles.color = handleColor;
@@ -507,7 +508,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             for (var i = 0; i < nodes.Count; i++) {
                 var handleSize = HandleUtility.GetHandleSize(nodes[i]);
                 // todo create setting in asset .
-                var sphereSize = handleSize * 0.25f;
+                var sphereSize = handleSize * handleSizeConst;
 
                 // draw node's handle.
                 var newHandleValue = Handles.FreeMoveHandle(

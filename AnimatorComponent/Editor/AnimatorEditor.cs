@@ -186,6 +186,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SceneHandles.DrawTangentHandles(
                 nodes,
                 Script.RotationCurveColor,
+                Script.SettingsAsset.TangentHandleSize,
                 UpdateRotationPathTangents);
         }
 
@@ -839,7 +840,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SceneHandles.DrawTangentHandles(
                 nodes,
                 Script.GizmoCurveColor,
-                //DrawTangentHandlesCallbackHandler);
+                Script.SettingsAsset.TangentHandleSize,
                 UpdateObjectPathTangents);
         }
 

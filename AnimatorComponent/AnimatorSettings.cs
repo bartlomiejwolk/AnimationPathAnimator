@@ -349,6 +349,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [Header("Handles")]
 
         [SerializeField]
+        private float tangentHandleSize = 0.25f;
+
+        [SerializeField]
         private int sceneToolToggleOffsetH = 53;
 
         [SerializeField]
@@ -533,6 +536,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return sceneToolToggleOffsetV; }
             set { sceneToolToggleOffsetV = value; }
         }
+
+        public float TangentHandleSize {
+            get { return tangentHandleSize; }
+            set { tangentHandleSize = value; }
+        }
+
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

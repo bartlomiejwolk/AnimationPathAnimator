@@ -1598,7 +1598,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo remove. Use direct call to PathData instead.
         public void ChangeNodeTangents(int index, Vector3 inOutTangent) {
-            PathData.ChangePointTangents(index, inOutTangent);
+            PathData.OffsetPathNodeTangents(index, inOutTangent);
         }
 
     }

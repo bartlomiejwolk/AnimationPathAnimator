@@ -331,6 +331,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Method responsible for drawing for each node custom position handle.
         /// </summary>
+        // todo rename to HandleDrawCustomPositionHandle.
         private void HandleFreePositionHandle() {
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Free) {
@@ -602,9 +603,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
 
             Script.PathData.OffsetNodePositions(moveDelta);
+            HandleOffsetRotationPathPosition(moveDelta);
+        }
+
+        /// <summary>
+        /// Method responsible for offseting rotation path position by a given delta.
+        /// </summary>
+        /// <param name="moveDelta"></param>
+        private void HandleOffsetRotationPathPosition(Vector3 moveDelta) {
+            if (Script.RotationMode != RotationMode.Custom) return;
+            
             Script.PathData.OffsetRotationPathPosition(moveDelta);
         }
 
+        // todo rename to HandleMoveSingleNode
         private void HandleMoveSingleMode(int movedNodeIndex, Vector3 newGlobalPos) {
             // Return if node handle is not set to position.
             if (Script.NodeHandle != NodeHandle.Position) return;

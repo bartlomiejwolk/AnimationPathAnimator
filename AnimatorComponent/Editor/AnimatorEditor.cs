@@ -150,6 +150,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             HandleShortcuts();
 
+            // todo reorder
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
             HandleDrawingSceneToolToggleButtons();
@@ -158,6 +159,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingEaseLabel();
             HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
+            HandleDrawingMoveAllModeLables();
             HandleDrawingPositionHandles();
             HandleDrawingObjectPathTangentHandles();
             HandleDrawingRotationPathTangentHandles();
@@ -169,6 +171,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        private void HandleDrawingMoveAllModeLables() {
+            if (Script.NodeHandle != NodeHandle.MoveAll) return;
+
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            // todo extract. Use also for Update All mode.
+            var labelText = new string[globalNodePositions.Count];
+            for (var i = 0; i < globalNodePositions.Count; i++) {
+                labelText[i] = Script.SettingsAsset.MoveAllLabelText;
+            }
+
+            SceneHandles.DrawUpdateAllLabels(
+                globalNodePositions,
+                labelText,
+                Script.SettingsAsset.UpdateAllLabelOffsetX,
+                Script.SettingsAsset.UpdateAllLabelOffsetY,
+                Script.SettingsAsset.DefaultLabelWidth,
+                Script.SettingsAsset.DefaultLabelHeight,
+                Script.Skin.GetStyle("MoveAllLabel"));
         }
 
         private void HandleDrawingRotationPathTangentHandles() {

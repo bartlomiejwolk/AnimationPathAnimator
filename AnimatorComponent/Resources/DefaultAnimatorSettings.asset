@@ -68,5 +68,6 @@ MonoBehaviour:
   updateAllLabelOffsetX: -35
   updateAllLabelOffsetY: -25
   updateAllLabelText: A
+  moveAllLabelText: MA
   initialTiltingArcValue: 5
   tiltingValueMultiplierDenominator: 1

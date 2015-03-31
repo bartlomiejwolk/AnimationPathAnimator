@@ -408,7 +408,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private int updateAllLabelOffsetY = -25;
         [SerializeField]
-        private string updateAllLabelText = "A";
+        private string updateAllLabelText = "UA";
+        [SerializeField]
+        private string moveAllLabelText = "MA";
         [SerializeField]
         private float initialTiltingArcValue = 5f;
 
@@ -540,6 +542,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float TangentHandleSize {
             get { return tangentHandleSize; }
             set { tangentHandleSize = value; }
+        }
+
+        public string MoveAllLabelText {
+            get { return moveAllLabelText; }
+            set { moveAllLabelText = value; }
         }
 
         /// <summary>

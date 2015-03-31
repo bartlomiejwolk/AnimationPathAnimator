@@ -753,11 +753,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo rename to Update..
         public void UpdateRotationPathTimestamps() {
-            // Return if rotation path update is disabled.
-            //if (!RotationPathUpdateEnabled) return;
-
             // Get path timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get rotation path timestamps.
@@ -783,18 +779,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void UpdateRotationPathWithAddedKeys() {
             // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
-            // Get rotation path timestamps.
-            var rotationPathTimestamps = RotationPath.Timestamps;
 
             // For each timestamp in the path..
-            // todo call method from AnimationPath. Do it in other places.
             foreach (var pathTimestamp in pathTimestamps) {
-                // Check if same timestamp exists in rotation path.
-                var keyExists = rotationPathTimestamps.Any(
-                    t => Utilities.FloatsEqual(
-                        t,
-                        pathTimestamp,
-                        GlobalConstants.FloatPrecision));
+                // Check if key at timestamp exists in rotation path.
+                var keyExists = RotationPath.NodeAtTimeExists(pathTimestamp);
 
                 // If not..
                 if (!keyExists) {
@@ -803,15 +792,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        //public bool RotationPathUpdateEnabled {
-        //    get { return rotationPathUpdateEnabled; }
-        //    set { rotationPathUpdateEnabled = value; }
-        //}
-
         // todo rename to Update..
         public void UpdateRotationPathWithRemovedKeys() {
-            //if (!RotationPathUpdateEnabled) return;
-
             // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get values from rotationPath.

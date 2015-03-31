@@ -517,19 +517,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Add a new node.
             AddNodeBetween(nodeIndex);
+            Script.PathData.HandleUpdateRotationPathWithAddedKeys();
             HandleUnsyncedObjectAndRotationPaths();
-            Script.PathData.DistributeTimestamps();
-
-            // In Smooth mode sooth node tangents.
-            //if (Script.TangentMode == TangentMode.Smooth) {
-            //    Script.PathData.SmoothPathNodeTangents();
-            //}
             HandleSmoothTangentMode();
-            // In Linear mode set node tangents to linear.
-            //else if (Script.TangentMode == TangentMode.Linear) {
-            //    Script.PathData.SetLinearAnimObjPathTangents();
-            //}
             HandleLinearTangentMode();
+            Script.PathData.DistributeTimestamps();
+            Script.PathData.HandleUpdateRotationPathTimestamps();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -582,10 +575,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 movedNodeIndex,
                 newNodeLocalPosition);
 
-            Script.PathData.DistributeTimestamps();
-
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
+
+            Script.PathData.DistributeTimestamps();
+            Script.PathData.HandleUpdateRotationPathTimestamps();
 
             // Current path length.
             var newAnimGoPathLength = Script.PathData.GetPathLinearLength();
@@ -602,18 +596,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodeIndex = index + 1;
 
             Script.PathData.RemoveNode(nodeIndex);
-            Script.PathData.DistributeTimestamps();
-
-            // In Smooth mode mooth node tangents.
-            //if (Script.TangentMode == TangentMode.Smooth) {
-            //    Script.PathData.SmoothPathNodeTangents();
-            //}
+            Script.PathData.HandleUpdateRotationPathWithRemovedKeys();
             HandleSmoothTangentMode();
-            // In Linear mode set node tangents to linear.
-            //else if (Script.TangentMode == TangentMode.Linear) {
-            //    Script.PathData.SetLinearAnimObjPathTangents();
-            //}
             HandleLinearTangentMode();
+            Script.PathData.DistributeTimestamps();
+            Script.PathData.HandleUpdateRotationPathTimestamps();
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(

@@ -195,11 +195,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene buttons for adding new nodes.
         /// </summary>
         private void HandleDrawingAddButtons() {
-            // todo extract to AddNodeButtonPositions().
-            // Get node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove last node's position.
-            nodePositions.RemoveAt(nodePositions.Count - 1);
+            // Get positions for the buttons.
+            var nodePositions = AddNodeButtonPositions();
 
             // Get style for add button.
             var addButtonStyle = Script.Skin.GetStyle(
@@ -212,6 +209,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.AddButtonOffsetV,
                 DrawAddNodeButtonsCallbackHandler,
                 addButtonStyle);
+        }
+
+        private List<Vector3> AddNodeButtonPositions() {
+            // Get node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove last node's position.
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
         }
 
         /// <summary>

@@ -429,16 +429,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Offset rotation path node tangents by given value.
         /// </summary>
         /// <param name="index"></param>
-        /// <param name="inOutTangent"></param>
+        /// <param name="inOutTangentOffset"></param>
         private void UpdateRotationPathTangents(
             int index,
-            // todo rename to inOutTangentOffset
-            Vector3 inOutTangent) {
+            Vector3 inOutTangentOffset) {
 
             // Make snapshot of the target object.
             Undo.RecordObject(Script.PathData, "Update rotation path tangents.");
 
-            Script.PathData.OffsetRotationPathNodeTangents(index, inOutTangent);
+            Script.PathData.OffsetRotationPathNodeTangents(index, inOutTangentOffset);
         }
 
         /// <summary>

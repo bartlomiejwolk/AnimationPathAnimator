@@ -150,6 +150,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             HandleShortcuts();
 
+            // todo reorder
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
             HandleDrawingSceneToolToggleButtons();
@@ -158,6 +159,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingEaseLabel();
             HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
+            HandleDrawingMoveAllModeLables();
             HandleDrawingPositionHandles();
             HandleDrawingObjectPathTangentHandles();
             HandleDrawingRotationPathTangentHandles();
@@ -169,6 +171,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+        }
+
+        private void HandleDrawingMoveAllModeLables() {
+            if (Script.NodeHandle != NodeHandle.MoveAll) return;
+
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            // todo extract. Use also for Update All mode.
+            var labelText = new string[globalNodePositions.Count];
+            for (var i = 0; i < globalNodePositions.Count; i++) {
+                labelText[i] = Script.SettingsAsset.MoveAllLabelText;
+            }
+
+            SceneHandles.DrawUpdateAllLabels(
+                globalNodePositions,
+                labelText,
+                Script.SettingsAsset.MoveAllLabelOffsetX,
+                Script.SettingsAsset.MoveAllLabelOffsetY,
+                Script.SettingsAsset.DefaultLabelWidth,
+                Script.SettingsAsset.DefaultLabelHeight,
+                Script.Skin.GetStyle("MoveAllLabel"));
         }
 
         private void HandleDrawingRotationPathTangentHandles() {
@@ -277,6 +302,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Get node positions.
             var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
+            // todo extract methods:
+            // todo HandleFreePositionHandle() and HandleDefaultPositionHandle().
             // Draw custom position handles.
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Free) {
@@ -330,7 +357,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingRotationHandle() {
             if (!Script.RotationPathEnabled) return;
-            if (Script.NodeHandle != NodeHandle.Position) return;
+            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
 
             var currentAnimationTime = Script.AnimationTime;
             var rotationPointPosition =
@@ -531,7 +558,33 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 return;
             }
 
-            Undo.RecordObject(Script.PathData, "Change path");
+            Undo.RecordObject(Script.PathData, "Change node/s position.");
+
+            HandleMoveSingleMode(movedNodeIndex, newGlobalPos);
+            HandleMoveAllMode(movedNodeIndex, newGlobalPos);
+
+            EditorUtility.SetDirty(Script.PathData);
+        }
+
+        private void HandleMoveAllMode(int movedNodeIndex, Vector3 newGlobalPos) {
+            // Return if move all mode is disabled.
+            if (Script.NodeHandle != NodeHandle.MoveAll) return;
+
+            var oldNodeLocalPosition =
+                Script.PathData.GetNodePosition(movedNodeIndex);
+            var newNodeLocalPosition =
+                Script.transform.InverseTransformPoint(newGlobalPos);
+
+            // Calculate movement delta.
+            var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+            Script.PathData.OffsetNodePositions(moveDelta);
+            Script.PathData.OffsetRotationPathPosition(moveDelta);
+        }
+
+        private void HandleMoveSingleMode(int movedNodeIndex, Vector3 newGlobalPos) {
+            // Return if move single mode is disabled.
+            if (Script.NodeHandle != NodeHandle.MoveSingle) return;
 
             // Remember path length before applying changes.
             var oldAnimGoPathLength = Script.PathData.GetPathLinearLength();
@@ -540,21 +593,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var newNodeLocalPosition =
                 Script.transform.InverseTransformPoint(newGlobalPos);
 
+            // Move node.
             Script.PathData.MoveNodeToPosition(
                 movedNodeIndex,
                 newNodeLocalPosition);
 
+            // Handle tangent mode.
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
 
+            // Distribute timestamps.
             Script.PathData.DistributeTimestamps();
+
             HandleUpdateRotationPathTimestamps();
 
             // Current path length.
             var newAnimGoPathLength = Script.PathData.GetPathLinearLength();
             DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
-
-            EditorUtility.SetDirty(Script.PathData);
         }
 
         private void DrawRemoveNodeButtonsCallbackHandler(int index) {
@@ -1052,15 +1107,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
+            DrawRotationPathToggle();
+            DrawNodeHandleDropdown();
+
             EditorGUILayout.BeginHorizontal();
             DrawHandleModeDropdown();
             HandleDrawUpdateAllToggle();
             EditorGUILayout.EndHorizontal();
 
             DrawTangentModeDropdown();
-            DrawNodeHandleDropdown();
             DrawPositionHandleDropdown();
-            DrawRotationPathToggle();
 
             DrawEaseCurve();
             DrawTiltingCurve();

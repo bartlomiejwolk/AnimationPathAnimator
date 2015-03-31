@@ -853,16 +853,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return EaseCurve.Evaluate(timestamp);
         }
 
-        public Vector3 GetGlobalNodePosition(
-            int nodeIndex,
-            Transform transform) {
-
-            var localNodePosition = GetNodePosition(nodeIndex);
-            var globalNodePosition = transform.TransformPoint(localNodePosition);
-
-            return globalNodePosition;
-        }
-
         public float GetNodeEaseValue(int i) {
             return EaseCurve.keys[i].value;
         }

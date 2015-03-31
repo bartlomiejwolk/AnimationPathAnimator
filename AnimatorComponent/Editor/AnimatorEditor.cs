@@ -449,13 +449,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion DRAWING HANDLERS
         #region CALLBACK HANDLERS
-        private void DrawTangentHandlesCallbackHandler(
-                            int index,
-                            Vector3 inOutTangent) {
-
-            UpdateObjectPathTangents(index, inOutTangent);
-            UpdateRotationPathTangents(index, inOutTangent);
-        }
 
         /// <summary>
         /// Offset rotation path node tangents by given value.
@@ -486,8 +479,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
             Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
-            // todo move to event handler that handles path length change.
             Script.PathData.DistributeTimestamps();
+            HandleUpdateRotationPathTimestamps();
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {

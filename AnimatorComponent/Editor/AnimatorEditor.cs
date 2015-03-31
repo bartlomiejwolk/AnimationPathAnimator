@@ -1082,15 +1082,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
+            DrawRotationPathToggle();
+            DrawNodeHandleDropdown();
+
             EditorGUILayout.BeginHorizontal();
             DrawHandleModeDropdown();
             HandleDrawUpdateAllToggle();
             EditorGUILayout.EndHorizontal();
 
             DrawTangentModeDropdown();
-            DrawNodeHandleDropdown();
             DrawPositionHandleDropdown();
-            DrawRotationPathToggle();
 
             DrawEaseCurve();
             DrawTiltingCurve();

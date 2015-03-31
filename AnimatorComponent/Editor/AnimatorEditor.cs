@@ -486,7 +486,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Make snapshot of the target object.
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
-            Script.ChangeNodeTangents(index, inOutTangent);
+            Script.PathData.OffsetPathNodeTangents(index, inOutTangent);
             // todo move to event handler that handles path length change.
             Script.PathData.DistributeTimestamps();
         }

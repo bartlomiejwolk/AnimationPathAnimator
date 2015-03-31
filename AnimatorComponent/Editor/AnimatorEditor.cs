@@ -198,7 +198,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleDrawingRotationPathTangentHandles() {
             // Don't draw when rotation path is disabled.
-            if (!Script.RotationPathEnabled) return;
+            if (Script.RotationMode != RotationMode.Custom) return;
             // Draw tangent handles only in custom tangent mode.
             if (Script.TangentMode != TangentMode.Custom) return;
             // Draw tangent handles only tangent node handle is selected.
@@ -356,7 +356,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene rotation handle in Custom rotation mode.
         /// </summary>
         private void HandleDrawingRotationHandle() {
-            if (!Script.RotationPathEnabled) return;
+            if (Script.RotationMode != RotationMode.Custom) return;
             if (Script.NodeHandle != NodeHandle.Position) return;
 
             var currentAnimationTime = Script.AnimationTime;
@@ -721,6 +721,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script,
                 "HandleUpdateAnimGOInSceneView",
                 null);
+
             Script.HandleMode = HandleMode.None;
         }
 
@@ -799,7 +800,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <remarks>Such situation would be caused by placing rotation nodes too close to each other.</remarks>
         private void HandleUnsyncedObjectAndRotationPaths() {
             // Don't check for sync if rotation path is disabled.
-            if (!Script.RotationPathEnabled) return;
+            if (Script.RotationMode != RotationMode.Custom) return;
 
             // Return if object and rotation path have the same number of nodes.
             if (Script.PathData.NodesNo == Script.PathData.RotationPathNodesNo) {
@@ -828,14 +829,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 SceneView.RepaintAll();
             }
-            else {
-                // Set handle mode to Rotation so that user can fix the
-                // rotatio path.
-                Script.RotationPathEnabled = true;
-                // Set rotation mode to Custom so that user can see how
-                // changes to rotation path affect animated object.
-                Script.RotationMode = RotationMode.Custom;
-            }
+            //else {
+            //    // Set rotation mode to Custom so that user can see how
+            //    // changes to rotation path affect animated object.
+            //    Script.RotationMode = RotationMode.Custom;
+            //}
         }
 
         /// <summary>
@@ -950,19 +948,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleUpdateRotationPathTimestamps() {
-            if (Script.RotationPathEnabled) {
+            if (Script.RotationMode == RotationMode.Custom) {
                 Script.PathData.UpdateRotationPathTimestamps();
             }
         }
 
         private void HandleUpdateRotationPathWithRemovedKeys() {
-            if (Script.RotationPathEnabled) {
+            if (Script.RotationMode == RotationMode.Custom) {
                 Script.PathData.UpdateRotationPathWithRemovedKeys();
             }
         }
 
         private void HandleUpdateRotationPathWidhAddedKeys() {
-            if (Script.RotationPathEnabled) {
+            if (Script.RotationMode == RotationMode.Custom) {
                 Script.PathData.UpdateRotationPathWithAddedKeys();
             }
         }
@@ -1109,7 +1107,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
-            DrawRotationPathToggle();
+            //DrawRotationPathToggle();
 
             EditorGUILayout.BeginHorizontal();
             DrawNodeHandleDropdown();
@@ -1209,22 +1207,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.NodeHandle);
         }
 
-        private void DrawRotationPathToggle() {
-            Undo.RecordObject(Script, "Toggle rotation path.");
-
-            var prevToggleValue = Script.RotationPathEnabled;
-
-            var currentToggleValue = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Rotation Path",
-                    ""),
-                Script.RotationPathEnabled);
-
-            HandleRotationPathEnabledToggleChange(
-                prevToggleValue,
-                currentToggleValue);
-        }
-
         private void DrawTiltingCurve() {
             Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
                 new GUIContent(
@@ -1233,16 +1215,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.PathData.TiltingCurve);
         }
 
-        private void HandleRotationPathEnabledToggleChange(
-            bool prevToggleValue,
-            bool currentToggleValue) {
+        private void HandleRotationModeDropdownChange(
+            RotationMode prevRotationMode,
+            RotationMode currentRotationMode) {
 
-            // Return if value did not change.
-            if (currentToggleValue == prevToggleValue) return;
-
-            // Enable rotation path if toggle is true.
-            if (currentToggleValue) {
-                Script.RotationPathEnabled = true;
+            // If custom rotation mode was just select, apply selected mode.
+            if (currentRotationMode == RotationMode.Custom) {
+                Script.RotationMode = RotationMode.Custom;
                 return;
             }
 
@@ -1254,9 +1233,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 "Continue",
                 "Cancel");
 
-            // If user continues, disable rotation path.
+            // If user continues, apply selected rotation mode.
             if (canDisableRotationPath) {
-                Script.RotationPathEnabled = false;
+                Script.RotationMode = currentRotationMode;
             }
         }
 
@@ -1945,7 +1924,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Change rotation mode.
                 Script.RotationMode = RotationMode.Custom;
-                Script.RotationPathEnabled = true;
 
                 SceneView.RepaintAll();
             }
@@ -1983,7 +1961,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var prevRotationMode = Script.RotationMode;
 
             // Draw RotationMode dropdown.
-            Script.RotationMode =
+            var currentRotationMode =
                 (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
@@ -1991,15 +1969,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.RotationMode);
 
             // Return if rotation mode not changed.
-            if (Script.RotationMode == prevRotationMode) return;
+            if (currentRotationMode == prevRotationMode) return;
+
+            HandleRotationModeDropdownChange(
+                prevRotationMode,
+                currentRotationMode);
 
             // Update animated GO in the scene.
             callback();
-
-            // If Custom mode selected, change handle mode to Rotation.
-            if (Script.RotationMode == RotationMode.Custom) {
-                Script.RotationPathEnabled = true;
-            }
         }
 
         private void DrawRotationSpeedSlider() {

@@ -91,8 +91,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
-        [SerializeField]
-        private bool rotationPathEnabled;
+        //[SerializeField]
+        //private bool rotationPathEnabled;
 
         [SerializeField]
         private NodeHandle nodeHandle = NodeHandle.Position;
@@ -378,22 +378,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Enables rotation path.
         /// </summary>
-        public bool RotationPathEnabled {
-            get { return rotationPathEnabled; }
-            set {
-                // On enable, reset rotation path.
-                if (value && !rotationPathEnabled) {
-                    // Sync rotation path with anim. obj. path.
-                    //PathData.RotationPathUpdateEnabled = true;
-                    PathData.ResetRotationPath();
-                }
-                else {
-                    //PathData.RotationPathUpdateEnabled = false;
-                }
+        //public bool RotationPathEnabled {
+        //    get { return rotationPathEnabled; }
+        //    set {
+        //        // On enable, reset rotation path.
+        //        if (value && !rotationPathEnabled) {
+        //            // Sync rotation path with anim. obj. path.
+        //            //PathData.RotationPathUpdateEnabled = true;
+        //            PathData.ResetRotationPath();
+        //        }
+        //        else {
+        //            //PathData.RotationPathUpdateEnabled = false;
+        //        }
 
-                rotationPathEnabled = value;
-            }
-        }
+        //        rotationPathEnabled = value;
+        //    }
+        //}
 
         public NodeHandle NodeHandle {
             get { return nodeHandle; }
@@ -1458,7 +1458,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     It'll be drawn only when animation time is the same as a path node.
         /// </summary>
         private void HandleDrawingCurrentRotationPointGizmo() {
-            if (!RotationPathEnabled) return;
+            if (RotationMode != RotationMode.Custom) return;
 
             // Node path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
@@ -1503,7 +1503,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing rotation path curve.
         /// </summary>
         private void HandleDrawingRotationPathCurve() {
-            if (!RotationPathEnabled) return;
+            if (RotationMode != RotationMode.Custom) return;
 
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 SettingsAsset.RotationCurveSampling);
@@ -1531,7 +1531,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing rotation point gizmos.
         /// </summary>
         private void HandleDrawingRotationPointGizmos() {
-            if (!RotationPathEnabled) return;
+            if (RotationMode != RotationMode.Custom) return;
 
             var globalRotPointPositions = GetGlobalRotationPointPositions();
 

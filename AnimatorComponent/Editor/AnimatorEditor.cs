@@ -431,7 +431,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene label for "Update All" inspector option.
         /// </summary>
         private void HandleDrawingUpdateAllModeLabel() {
-            if (!Script.UpdateAllValues) return;
+            if (!Script.UpdateAllMode) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -537,7 +537,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Ease curve changed.");
 
             // If update all mode is set..
-            if (Script.UpdateAllValues) {
+            if (Script.UpdateAllMode) {
                 var oldValue = Script.PathData.GetEaseValueAtIndex(keyIndex);
                 MultiplyEaseValues(oldValue, newValue);
             }
@@ -666,7 +666,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float newValue) {
             Undo.RecordObject(Script.PathData, "Tilting curve changed.");
 
-            if (Script.UpdateAllValues) {
+            if (Script.UpdateAllMode) {
                 MultiplyTiltingValues(
                     Script.PathData.GetTiltingValueAtIndex(keyIndex),
                     newValue);
@@ -1617,8 +1617,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.UpdateAllKey) {
 
-                Script.UpdateAllValues =
-                    !Script.UpdateAllValues;
+                Script.UpdateAllMode =
+                    !Script.UpdateAllMode;
             }
         }
 
@@ -2125,12 +2125,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUIUtility.labelWidth = 65;
 
-            Script.UpdateAllValues = EditorGUILayout.Toggle(
+            Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Update All",
                     "When checked, values will be changed for all nodes. " +
                     "Default shortcut: P."),
-                Script.UpdateAllValues);
+                Script.UpdateAllMode);
 
             EditorGUIUtility.labelWidth = 0;
         }
@@ -2139,7 +2139,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // If handle mode was changed to None..
             if (Script.HandleMode == HandleMode.None) {
                 // Don't display update all values mode label.
-                Script.UpdateAllValues = false;
+                Script.UpdateAllMode = false;
             }
         }
 

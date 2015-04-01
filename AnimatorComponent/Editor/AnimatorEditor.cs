@@ -154,7 +154,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
             HandleDrawingSceneToolToggleButtons();
-            HandleDrawingSmoothPathNodeButtons();
+            HandleDrawingPathSmoothButtons();
+            HandleDrawingRotationPathSmoothButtons();
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
             HandleDrawingEaseLabel();
@@ -174,7 +175,37 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void HandleDrawingSmoothPathNodeButtons() {
+        private void HandleDrawingRotationPathSmoothButtons() {
+            // Custom tangent mode and Tangent node handle must be enabled.
+            if ((Script.TangentMode != TangentMode.Custom)
+                || (Script.NodeHandle != NodeHandle.Tangent)) {
+
+                return;
+            }
+
+            // Get positions positions.
+            var nodePositions = Script.GetGlobalRotationPointPositions();
+
+            // Get style for add button.
+            var buttonStyle = Script.Skin.GetStyle(
+                "SmoothNodeButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SmoothButtonOffsetH,
+                Script.SettingsAsset.SmoothButtonOffsetV,
+                DrawRotationPathSmoothButtonsCallbackHandler,
+                buttonStyle);
+        }
+
+        private void DrawRotationPathSmoothButtonsCallbackHandler(int nodeIndex) {
+            Undo.RecordObject(Script.PathData, "Smooth Rotation Path node.");
+
+            Script.PathData.SmoothRotationPathNodeTangents(nodeIndex);
+        }
+
+        private void HandleDrawingPathSmoothButtons() {
             // Custom tangent mode and Tangent node handle must be enabled.
             if ((Script.TangentMode != TangentMode.Custom)
                 || (Script.NodeHandle != NodeHandle.Tangent)) {
@@ -198,8 +229,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 buttonStyle);
         }
 
+        // todo rename to DrawPathSmoothButtonsCallbackHandler.
         private void DrawSmoothPathNodeButtonsCallbackHandler(int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Smooth Node.");
+            Undo.RecordObject(Script.PathData, "Smooth Path node.");
 
             Script.PathData.SmoothPathNodeTangents(nodeIndex);
         }

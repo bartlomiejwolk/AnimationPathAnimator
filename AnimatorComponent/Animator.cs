@@ -1248,6 +1248,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Returns global rotation path node positions.
         /// </summary>
         /// <returns></returns>
+        // todo rename to GetGlobalRotationPathPositions.
         public List<Vector3> GetGlobalRotationPointPositions() {
             var localRotPointPositions =
                 pathData.GetRotationPointPositions();

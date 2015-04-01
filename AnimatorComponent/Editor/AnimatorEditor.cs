@@ -178,10 +178,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingRotationPathSmoothButtons() {
             // Custom tangent mode and Tangent node handle must be enabled.
             if ((Script.TangentMode != TangentMode.Custom)
-                || (Script.NodeHandle != NodeHandle.Tangent)) {
-
-                return;
-            }
+                || (Script.RotationMode != RotationMode.Custom)) return;
 
             // Get positions positions.
             var nodePositions = Script.GetGlobalRotationPointPositions();
@@ -207,11 +204,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleDrawingPathSmoothButtons() {
             // Custom tangent mode and Tangent node handle must be enabled.
-            if ((Script.TangentMode != TangentMode.Custom)
-                || (Script.NodeHandle != NodeHandle.Tangent)) {
-
-                return;
-            }
+            if (Script.TangentMode != TangentMode.Custom) return;
 
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();

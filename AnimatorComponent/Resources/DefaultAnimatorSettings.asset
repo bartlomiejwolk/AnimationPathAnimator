@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
-  m_Name: 
+  m_Name: DefaultAnimatorSettings
   m_EditorClassIdentifier: 
   minNodeTimeSeparation: .00100000005
   pathLengthSampling: 40
@@ -51,7 +51,9 @@ MonoBehaviour:
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   tangentHandleSize: .25
-  sceneToolToggleOffsetH: 53
+  sceneToolToggleOffsetH: 72
+  smoothButtonOffsetH: 53
+  smoothButtonOffsetV: 5
   sceneToolToggleOffsetV: 5
   addButtonOffsetH: 15
   addButtonOffsetV: 5

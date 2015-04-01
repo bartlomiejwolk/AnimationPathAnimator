@@ -466,6 +466,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             UpdateRotationPathWithAddedKeys();
             ResetRotationPathValues();
+            SmoothAllRotationPathNodes();
 
             OnRotationPathReset();
         }
@@ -508,6 +509,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        // todo rename to SmoothAllPathNodeTangents.
         public void SmoothPathNodeTangents() {
             SmoothAnimationPathTangents(AnimatedObjectPath);
         }
@@ -620,7 +622,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void SmoothSingleNodeTangents(int nodeIndex) {
+        public void SmoothPathNodeTangents(int nodeIndex) {
             AnimatedObjectPath.SmoothNodeInOutTangents(
                 nodeIndex,
                 DefaultSmoothWeight);
@@ -1059,6 +1061,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public float GetPathLength(int sampling) {
             return AnimatedObjectPath.CalculatePathLength(sampling);
+        }
+
+        public void SmoothRotationPathNodeTangents(int nodeIndex) {
+            RotationPath.SmoothNodeInOutTangents(nodeIndex, 0);
         }
 
     }

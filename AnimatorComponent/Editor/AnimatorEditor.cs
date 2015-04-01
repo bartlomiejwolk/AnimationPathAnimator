@@ -763,8 +763,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothPathNodeTangents();
-                Script.PathData.SmoothRotationPathTangents();
+                HandleSmoothRotationPathTangents();
             }
+        }
+
+        /// <summary>
+        /// Method responsible for applying smooth to rotation path node tangents.
+        /// </summary>
+        private void HandleSmoothRotationPathTangents() {
+            if (Script.RotationMode != RotationMode.Custom) return;
+            
+            Script.PathData.SmoothRotationPathTangents();
         }
 
         /// <summary>

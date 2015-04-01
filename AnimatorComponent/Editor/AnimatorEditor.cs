@@ -570,15 +570,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
             Undo.RecordObject(Script.PathData, "Toggle node tool.");
 
-            // If Ease tool is enabled..
-            if (Script.HandleMode == HandleMode.Ease) {
-                // Toggle ease tool.
-                HandleToggleEaseTool(index);
-            }
-            // If Tilting tool is enabled..
-            else if (Script.HandleMode == HandleMode.Tilting) {
-                // Toggle tilting tool.
-                HandleToggleTiltingTool(index);
+            switch (Script.HandleMode) {
+                case HandleMode.Ease:
+                    // Toggle ease tool.
+                    HandleToggleEaseTool(index);
+                    break;
+                case HandleMode.Tilting:
+                    // Toggle tilting tool.
+                    HandleToggleTiltingTool(index);
+                    break;
             }
         }
 
@@ -967,7 +967,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme node positions.
+            // Remove extreme nodes.
             nodePositions.RemoveAt(0);
             nodePositions.RemoveAt(nodePositions.Count - 1);
 
@@ -1180,7 +1180,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
 
-        private void DrawEaseCurve() {
+        private void HandleDrawEaseCurve() {
+            if (Script.PathData == null) return;
+
             Script.PathData.EaseCurve = EditorGUILayout.CurveField(
                 new GUIContent(
                     "Ease Curve",
@@ -1224,7 +1226,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawTangentModeDropdown();
             DrawPositionHandleDropdown();
 
-            DrawEaseCurve();
+            HandleDrawEaseCurve();
             DrawTiltingCurve();
 
             EditorGUILayout.BeginHorizontal();
@@ -1310,6 +1312,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawTiltingCurve() {
+            if (Script.PathData == null) return;
+
             Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
                 new GUIContent(
                     "Tilting Curve",

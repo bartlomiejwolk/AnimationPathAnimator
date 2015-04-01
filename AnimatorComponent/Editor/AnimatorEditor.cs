@@ -1574,6 +1574,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleShortcuts() {
             HandleEaseModeShortcut();
+            HandleNodeHandleModeShortcut();
             HandleTiltingModeShortcut();
             HandleNoneHandleModeShortcut();
             HandleUpdateAllModeShortcut();
@@ -1588,6 +1589,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleJumpToEndShortcut();
             HandlePlayPauseShortcut();
             HandleMoveAllModeShortcut();
+        }
+
+        private void HandleNodeHandleModeShortcut() {
+            // Node handle mode.
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.NodeHandleMode) {
+
+                // Select other mode.
+                Script.NodeHandle = (Script.NodeHandle == NodeHandle.Position)
+                    ? NodeHandle.Tangent
+                    : NodeHandle.Position;
+            }
         }
 
         private void HandleMoveAllModeShortcut() {

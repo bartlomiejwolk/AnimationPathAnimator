@@ -33,7 +33,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode easeModeKey = KeyCode.U;
 
         [SerializeField]
-        private KeyCode moveAllKey = KeyCode.G;
+        private KeyCode nodeHandleMode = KeyCode.G;
+
+        [SerializeField]
+        private KeyCode moveAllKey = KeyCode.B;
 
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
@@ -137,6 +140,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public KeyCode PlayModeModKey {
             get { return playModeModKey; }
             set { playModeModKey = value; }
+        }
+
+        public KeyCode NodeHandleMode {
+            get { return nodeHandleMode; }
+            set { nodeHandleMode = value; }
         }
 
         public KeyCode PlayPauseKey {
@@ -578,7 +586,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return pathLengthSampling; }
             set { pathLengthSampling = value; }
         }
-
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

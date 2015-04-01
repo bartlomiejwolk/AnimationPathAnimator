@@ -24,6 +24,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private const float FloatPrecision = 0.0000001f;
 
+        private const int PathLengthSampling = 40;
+
         #endregion FIELDS
 
         #region PROPERTIES
@@ -426,7 +428,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             ref List<Vector3> points) {
 
             // Calculate linear path length
-            var linearPathLength = CalculatePathLinearLength();
+            var linearPathLength = CalculatePathLength(PathLengthSampling);
             // Calculate amount of points to extract.
             var samplingRate = (int) (linearPathLength * samplingFrequency);
 

@@ -507,7 +507,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
             Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
-            Script.PathData.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
             HandleUpdateRotationPathTimestamps();
         }
 
@@ -541,7 +541,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUnsyncedObjectAndRotationPaths();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
-            Script.PathData.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
             HandleUpdateRotationPathTimestamps();
 
             // Update animated object.
@@ -624,7 +624,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.MoveAllMode) return;
 
             // Remember path length before applying changes.
-            var oldAnimGoPathLength = Script.PathData.GetPathLinearLength();
+            var oldAnimGoPathLength = Script.PathData.GetPathLength(
+                Script.SettingsAsset.PathLengthSampling);
 
             // Calculate node new local position.
             var newNodeLocalPosition =
@@ -640,12 +641,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleLinearTangentMode();
 
             // Distribute timestamps.
-            Script.PathData.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
 
             HandleUpdateRotationPathTimestamps();
 
             // Current path length.
-            var newAnimGoPathLength = Script.PathData.GetPathLinearLength();
+            var newAnimGoPathLength = Script.PathData.GetPathLength(
+                Script.SettingsAsset.PathLengthSampling);
             DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
         }
 
@@ -660,7 +662,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUpdateRotationPathWithRemovedKeys();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
-            Script.PathData.DistributeTimestamps();
+            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
             HandleUpdateRotationPathTimestamps();
 
             // Update animated object.

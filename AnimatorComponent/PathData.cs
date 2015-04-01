@@ -35,6 +35,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private const float DefaultEaseCurveValue = 0.05f;
         private const float DefaultTiltingCurveValue = 0.001f;
         private const float DefaultSmoothWeight = 0;
+        /// <summary>
+        /// Default sampling used to calculate path lenght.
+        /// </summary>
+        //private const int PathLengthSampling = 40;
 
         #endregion
 
@@ -357,9 +361,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnNodeAdded(nodeIndex);
         }
 
-        public void DistributeTimestamps() {
+        public void DistributeTimestamps(int pathLengthSampling) {
             // Calculate path curved length.
-            var pathLength = AnimatedObjectPath.CalculatePathLinearLength();
+            var pathLength = AnimatedObjectPath.CalculatePathLength(
+                pathLengthSampling);
 
             // Calculate time for one meter of curve length.
             var timeForMeter = 1 / pathLength;
@@ -1050,6 +1055,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void OnNodeTangentsChanged() {
             var handler = NodeTangentsChanged;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public float GetPathLength(int sampling) {
+            return AnimatedObjectPath.CalculatePathLength(sampling);
         }
 
     }

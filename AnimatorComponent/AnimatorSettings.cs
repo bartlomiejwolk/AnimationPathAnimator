@@ -8,6 +8,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float minNodeTimeSeparation = 0.001f;
 
+        [SerializeField]
+        private int pathLengthSampling = 40;
+
         #endregion
 
         #region ADVANCED PROPERTIES 
@@ -570,6 +573,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return moveAllLabelOffsetY; }
             set { moveAllLabelOffsetY = value; }
         }
+
+        public int PathLengthSampling {
+            get { return pathLengthSampling; }
+            set { pathLengthSampling = value; }
+        }
+
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

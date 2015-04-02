@@ -24,6 +24,20 @@ namespace ATP.AnimationPathTools.ControlsMapperComponent {
             get { return targetComponents; }
         }
 
+        private void OnEnable() {
+            Animator.AnimationTimeChanged += Animator_AnimationTimeChanged;
+        }
+
+        private void OnDisable() {
+            Animator.AnimationTimeChanged -= Animator_AnimationTimeChanged;
+        }
+
+        void Animator_AnimationTimeChanged(object sender, AnimatorComponent.AnimationTimeChangedEventArgs e) {
+            foreach (var target in TargetComponents) {
+                target.AnimationTime += e.TimeDelta;
+            }
+        }
+
     }
 
 }

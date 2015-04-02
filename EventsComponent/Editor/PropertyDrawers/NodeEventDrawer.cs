@@ -67,6 +67,9 @@ namespace ATP.AnimationPathTools.EventsComponent {
             if (sourceGO.objectReferenceValue == null) {
                 // Set rows number to 1.
                 rowsProperty.intValue = 1;
+
+                sourceMethodName.stringValue = "";
+
                 return;
             }
             // Set rows number to 4.

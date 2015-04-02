@@ -155,6 +155,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public bool IsPlaying {
             get { return isPlaying; }
+            // todo should be private.
             set { isPlaying = value; }
         }
 

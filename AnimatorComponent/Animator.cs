@@ -48,6 +48,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler UndoRedoPerformed;
 
+        /// <summary>
+        /// Event called on every play/pause.
+        /// </summary>
+        public event EventHandler PlayPause;
+
         #endregion
 
         #region FIELDS
@@ -175,12 +180,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public bool Pause {
             get { return pause; }
             set {
+                // Remember previous value.
+                var prevPause = pause;
+
                 pause = value;
 
                 // On unpause..
                 if (!value) {
                     // Enable animating animated GO.
                     AnimGOUpdateEnabled = true;
+                }
+
+                // If pause state changed, call event.
+                if (value != prevPause) {
+                    // Call event.
+                    OnPlayPause();
                 }
             }
         }
@@ -326,6 +340,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { longJumpValue = value; }
         }
 
+        // todo release many of these properties should be private.
         public PositionHandle PositionHandle {
             get { return positionHandle; }
             set { positionHandle = value; }
@@ -1603,6 +1618,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             return resultPositions.ToArray();
+        }
+
+        private void OnPlayPause() {
+            var handler = PlayPause;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
     }

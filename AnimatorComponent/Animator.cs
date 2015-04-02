@@ -54,8 +54,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler PlayPause;
 
+        // todo remove this event.
         public event EventHandler<AnimationTimeChangedEventArgs> AnimationTimeChanged;
 
+        // todo remove event.
         public delegate void JumpPerformedEventHandler(
             object sender,
             float deltaTime);

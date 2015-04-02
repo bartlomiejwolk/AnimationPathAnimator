@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
 
@@ -10,8 +11,14 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         [SerializeField]
         private AnimatorComponent.Animator animator;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>Assigned in editor.</remarks>
         [SerializeField]
         private List<AnimatorComponent.Animator> targetComponents; 
+
+        private List<Dictionary<int, float>> nodeTimestamps;
 
         /// <summary>
         /// Source animator component.
@@ -25,23 +32,52 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
             get { return targetComponents; }
         }
 
-        private void OnEnable() {
-            Animator.JumpPerformed += Animator_JumpPerformed;
+        private List<Dictionary<int, float>> NodeTimestamps {
+            get { return nodeTimestamps; }
+            set { nodeTimestamps = value; }
         }
 
-        void Animator_JumpPerformed(object sender, float deltaTime) {
-            foreach (var target in TargetComponents) {
-                Logger.LogString("deltaTime: {0}", deltaTime);
-                Logger.LogString("AnimationTime before: {0}", target.AnimationTime);
-                target.AnimationTime += deltaTime;
-                Logger.LogString("AnimationTime after : {0}", target.AnimationTime);
+        private void Awake() {
+            // Instantiate list.
+            NodeTimestamps = new List<Dictionary<int, float>>();
+            // Instantiate list elements.
+            for (int i = 0; i < TargetComponents.Count; i++) {
+                NodeTimestamps.Add(new Dictionary<int, float>());
+            }
+        }
+
+        private void OnEnable() {
+            Animator.NodeReached += Animator_NodeReached;
+            Animator.JumpedToNode += Animator_JumpedToNode;
+        }
+
+        void Animator_NodeReached(
+            object sender,
+            AnimatorComponent.NodeReachedEventArgs e) {
+
+            // For each target animator component..
+            for (int i = 0; i < TargetComponents.Count; i++) {
+                // Remember current timestamp.
+                NodeTimestamps[i][e.NodeIndex] =
+                    TargetComponents[i].AnimationTime;
             }
         }
 
         private void OnDisable() {
-            Animator.JumpPerformed -= Animator_JumpPerformed;
+            Animator.NodeReached -= Animator_NodeReached;
+            Animator.JumpedToNode -= Animator_JumpedToNode;
         }
 
+        private void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
+            // For each target animator component..
+            for (int i = 0; i < TargetComponents.Count; i++) {
+                // Return if audio timestamp for this node was not recorded.
+                if (!nodeTimestamps[i].ContainsKey(e.NodeIndex)) continue;
+
+                TargetComponents[i].AnimationTime =
+                    NodeTimestamps[i][e.NodeIndex];
+            }
+        }
     }
 
 }

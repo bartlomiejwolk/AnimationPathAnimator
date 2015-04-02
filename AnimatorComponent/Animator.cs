@@ -53,6 +53,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler PlayPause;
 
+        public event EventHandler<AnimationTimeChangedEventArgs> AnimationTimeChanged;
+
         #endregion
 
         #region FIELDS
@@ -122,6 +124,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float AnimationTime {
             get { return animationTime; }
             set {
+                var prevValue = animationTime;
+
                 animationTime = value;
 
                 // In play mode, when animation is playing..
@@ -131,6 +135,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 else {
                     // Update animated GO.
                     HandleUpdateAnimGOInSceneView();
+                }
+
+                // If value changed..
+                if (value != prevValue) {
+                    // Calculate change delta.
+                    var timeDelta = value - prevValue;
+                    // Fire event.
+                    var eventArgs = new AnimationTimeChangedEventArgs(timeDelta);
+                    OnAnimationTimeChanged(eventArgs);
                 }
             }
         }
@@ -1636,6 +1649,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void OnPlayPause() {
             var handler = PlayPause;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnAnimationTimeChanged(AnimationTimeChangedEventArgs e) {
+            var handler = AnimationTimeChanged;
+            if (handler != null) handler(this, e);
+        }
+
+    }
+
+    public sealed class AnimationTimeChangedEventArgs : EventArgs {
+
+        public float TimeDelta { get; set; }
+
+        public AnimationTimeChangedEventArgs(float timeDelta) {
+            TimeDelta = timeDelta;
         }
 
     }

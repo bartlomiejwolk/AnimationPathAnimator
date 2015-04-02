@@ -82,6 +82,11 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         private void OnEnable() {
             Animator.NodeReached += Animator_NodeReached;
             Animator.JumpedToNode += Animator_JumpedToNode;
+            Animator.PlayPause += Animator_PlayPause;
+        }
+
+        void Animator_PlayPause(object sender, System.EventArgs e) {
+            HandlePlayPause();
         }
 
         private void Reset() {
@@ -129,7 +134,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void Update() {
-            HandleShortcuts();
+            //HandleShortcuts();
         }
 
         /// <summary>

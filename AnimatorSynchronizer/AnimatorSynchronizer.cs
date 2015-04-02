@@ -49,6 +49,13 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         private void OnEnable() {
             Animator.NodeReached += Animator_NodeReached;
             Animator.JumpedToNode += Animator_JumpedToNode;
+            Animator.PlayPause += Animator_PlayPause;
+        }
+
+        void Animator_PlayPause(object sender, System.EventArgs e) {
+            foreach (var target in TargetComponents) {
+                target.PlayPauseAnimation();
+            }
         }
 
         void Animator_NodeReached(
@@ -66,6 +73,7 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         private void OnDisable() {
             Animator.NodeReached -= Animator_NodeReached;
             Animator.JumpedToNode -= Animator_JumpedToNode;
+            Animator.PlayPause -= Animator_PlayPause;
         }
 
         private void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {

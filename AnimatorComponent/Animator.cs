@@ -209,10 +209,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 pause = value;
 
+                // On pause..
+                if (value) {
+                    IsPlaying = false;
+                }
                 // On unpause..
-                if (!value) {
+                else {
                     // Enable animating animated GO.
                     AnimGOUpdateEnabled = true;
+                    IsPlaying = true;
                 }
 
                 // If pause state changed, call event.

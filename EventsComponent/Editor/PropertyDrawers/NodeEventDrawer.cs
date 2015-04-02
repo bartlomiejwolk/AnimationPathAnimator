@@ -57,12 +57,13 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
             EditorGUIUtility.labelWidth = 80;
 
-            EditorGUI.PropertyField(
-                new Rect(pos.x, pos.y, pos.width, PropHeight),
-                sourceGO,
-                new GUIContent("Source GO", ""));
+            // Draw source GO field.
+            var sourceGOChanged = DrawSourceGOField(pos, sourceGO);
 
-            // If source GO is assigned..
+            // If source GO was changed, reset component index to avoid null ref. exception.
+            if (sourceGOChanged) sourceComponentIndex.intValue = 0;
+
+            // If source GO is not assigned..
             if (sourceGO.objectReferenceValue == null) {
                 // Set rows number to 1.
                 rowsProperty.intValue = 1;
@@ -87,16 +88,14 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 sourceComponentIndex.intValue = 0;
             }
 
-            // Display dropdown game object component list.
-            sourceComponentIndex.intValue = EditorGUI.Popup(
-                new Rect(
-                    pos.x,
-                    pos.y + 1 * (PropHeight + PropMargin),
-                    pos.width,
-                    PropHeight),
-                "Source Component",
-                sourceComponentIndex.intValue,
-                sourceCoNames);
+            // Draw source component dropdown.
+            var sourceComponentChanged =
+                DrawSourceComponentDropdown(pos, sourceComponentIndex, sourceCoNames);
+
+            // If source component was changed, reset method names index to avoid null ref. exception.
+            if (sourceComponentChanged) {
+                sourceMethodIndex.intValue = 0;
+            }
 
             // Update source component ref. in the NodeEventSlot property.
             sourceCo.objectReferenceValue =
@@ -115,20 +114,19 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 methodNames[i] = methods[i].Name;
             }
 
-            // Display dropdown with component properties.
-            sourceMethodIndex.intValue = EditorGUI.Popup(
-                new Rect(
-                    pos.x,
-                    pos.y + 2 * (PropHeight + PropMargin),
-                    pos.width,
-                    PropHeight),
-                "Methods",
-                sourceMethodIndex.intValue,
-                methodNames);
+            DrawMethodNamesDropdown(pos, sourceMethodIndex, methodNames);
 
             // Update method name in the NodeEventSlot property.
             sourceMethodName.stringValue =
                 methodNames[sourceMethodIndex.intValue];
+
+            DrawMethodArgumentField(pos, sourceGO, methodArg);
+        }
+
+        private static void DrawMethodArgumentField(
+            Rect pos,
+            SerializedProperty sourceGO,
+            SerializedProperty methodArg) {
 
             // Don't draw parameter field if source GO is not specified.
             if (sourceGO.objectReferenceValue == null) return;
@@ -140,6 +138,66 @@ namespace ATP.AnimationPathTools.EventsComponent {
                     PropHeight),
                 methodArg,
                 new GUIContent("Argument", ""));
+        }
+
+        private static void DrawMethodNamesDropdown(
+            Rect pos,
+            SerializedProperty sourceMethodIndex,
+            string[] methodNames) {
+
+            // Display dropdown with component properties.
+            sourceMethodIndex.intValue = EditorGUI.Popup(
+                new Rect(
+                    pos.x,
+                    pos.y + 2 * (PropHeight + PropMargin),
+                    pos.width,
+                    PropHeight),
+                "Methods",
+                sourceMethodIndex.intValue,
+                methodNames);
+        }
+
+        private static bool DrawSourceComponentDropdown(
+            Rect pos,
+            SerializedProperty sourceComponentIndex,
+            string[] sourceCoNames) {
+
+            var prevIndex = sourceComponentIndex.intValue;
+
+            // Display dropdown game object component list.
+            sourceComponentIndex.intValue = EditorGUI.Popup(
+                new Rect(
+                    pos.x,
+                    pos.y + 1 * (PropHeight + PropMargin),
+                    pos.width,
+                    PropHeight),
+                "Source Component",
+                sourceComponentIndex.intValue,
+                sourceCoNames);
+
+            if (sourceComponentIndex.intValue != prevIndex) {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool DrawSourceGOField(
+            Rect pos,
+            SerializedProperty sourceGO) {
+
+            var prevSourceGO = sourceGO.objectReferenceValue;
+
+            EditorGUI.PropertyField(
+                new Rect(pos.x, pos.y, pos.width, PropHeight),
+                sourceGO,
+                new GUIContent("Source GO", ""));
+
+            if (sourceGO.objectReferenceValue != prevSourceGO) {
+                return true;
+            }
+
+            return false;
         }
 
     }

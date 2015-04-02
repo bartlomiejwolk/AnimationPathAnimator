@@ -2,17 +2,17 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.ControlsMapperComponent {
+namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
-    [CustomEditor(typeof (ControlsMapper))]
-    public class ControlsMapperEditor : Editor {
+    [CustomEditor(typeof (AnimatorSynchronizer))]
+    public class AnimatorSynchronizerEditor : Editor {
 
         private SerializedProperty targetComponents;
 
-        private ControlsMapper Script;
+        private AnimatorSynchronizer Script;
 
         private void OnEnable() {
-            Script = (ControlsMapper) target;
+            Script = (AnimatorSynchronizer) target;
 
             targetComponents = serializedObject.FindProperty("targetComponents");
         }

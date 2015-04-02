@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
@@ -54,6 +55,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler PlayPause;
 
         public event EventHandler<AnimationTimeChangedEventArgs> AnimationTimeChanged;
+
+        public delegate void JumpPerformedEventHandler(
+            object sender,
+            float deltaTime);
+
+        public event JumpPerformedEventHandler JumpPerformed;
 
         #endregion
 
@@ -126,6 +133,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set {
                 var prevValue = animationTime;
 
+                // todo animation time cannot be less that 0
                 animationTime = value;
 
                 // In play mode, when animation is playing..
@@ -1654,6 +1662,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void OnAnimationTimeChanged(AnimationTimeChangedEventArgs e) {
             var handler = AnimationTimeChanged;
             if (handler != null) handler(this, e);
+        }
+
+        private void OnJumpPerformed(float deltatime) {
+            Logger.LogString("OnJumpPerformed({0})", deltatime);
+            var handler = JumpPerformed;
+            if (handler != null) handler(this, deltatime);
         }
 
     }

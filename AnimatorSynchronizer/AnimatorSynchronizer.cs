@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using ATP.LoggingTools;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.ControlsMapperComponent {
+namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
     [RequireComponent(typeof(AnimatorComponent.Animator))]
-    public sealed class ControlsMapper : MonoBehaviour {
+    public sealed class AnimatorSynchronizer : MonoBehaviour {
 
         [SerializeField]
         private AnimatorComponent.Animator animator;
@@ -25,17 +26,20 @@ namespace ATP.AnimationPathTools.ControlsMapperComponent {
         }
 
         private void OnEnable() {
-            Animator.AnimationTimeChanged += Animator_AnimationTimeChanged;
+            Animator.JumpPerformed += Animator_JumpPerformed;
+        }
+
+        void Animator_JumpPerformed(object sender, float deltaTime) {
+            foreach (var target in TargetComponents) {
+                Logger.LogString("deltaTime: {0}", deltaTime);
+                Logger.LogString("AnimationTime before: {0}", target.AnimationTime);
+                target.AnimationTime += deltaTime;
+                Logger.LogString("AnimationTime after : {0}", target.AnimationTime);
+            }
         }
 
         private void OnDisable() {
-            Animator.AnimationTimeChanged -= Animator_AnimationTimeChanged;
-        }
-
-        void Animator_AnimationTimeChanged(object sender, AnimatorComponent.AnimationTimeChangedEventArgs e) {
-            foreach (var target in TargetComponents) {
-                target.AnimationTime += e.TimeDelta;
-            }
+            Animator.JumpPerformed -= Animator_JumpPerformed;
         }
 
     }

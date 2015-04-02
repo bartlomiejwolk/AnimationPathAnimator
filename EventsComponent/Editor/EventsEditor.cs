@@ -117,7 +117,6 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void DrawReorderableEventList() {
-
             serializedObject.Update();
 
             ReorderableListGUI.Title("Events");

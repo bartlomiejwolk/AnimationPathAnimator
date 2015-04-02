@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
@@ -52,6 +53,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Event called on every play/pause.
         /// </summary>
         public event EventHandler PlayPause;
+
+        // todo remove this event.
+        public event EventHandler<AnimationTimeChangedEventArgs> AnimationTimeChanged;
+
+        // todo remove event.
+        public delegate void JumpPerformedEventHandler(
+            object sender,
+            float deltaTime);
+
+        public event JumpPerformedEventHandler JumpPerformed;
 
         #endregion
 
@@ -122,6 +133,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float AnimationTime {
             get { return animationTime; }
             set {
+                var prevValue = animationTime;
+
+                // todo animation time cannot be less that 0
                 animationTime = value;
 
                 // In play mode, when animation is playing..
@@ -131,6 +145,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 else {
                     // Update animated GO.
                     HandleUpdateAnimGOInSceneView();
+                }
+
+                // If value changed..
+                if (value != prevValue) {
+                    // Calculate change delta.
+                    var timeDelta = value - prevValue;
+                    // Fire event.
+                    var eventArgs = new AnimationTimeChangedEventArgs(timeDelta);
+                    OnAnimationTimeChanged(eventArgs);
                 }
             }
         }
@@ -186,10 +209,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 pause = value;
 
+                // On pause..
+                if (value) {
+                    IsPlaying = false;
+                }
                 // On unpause..
-                if (!value) {
+                else {
                     // Enable animating animated GO.
                     AnimGOUpdateEnabled = true;
+                    IsPlaying = true;
                 }
 
                 // If pause state changed, call event.
@@ -1636,6 +1664,28 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void OnPlayPause() {
             var handler = PlayPause;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnAnimationTimeChanged(AnimationTimeChangedEventArgs e) {
+            var handler = AnimationTimeChanged;
+            if (handler != null) handler(this, e);
+        }
+
+        private void OnJumpPerformed(float deltatime) {
+            Logger.LogString("OnJumpPerformed({0})", deltatime);
+            var handler = JumpPerformed;
+            if (handler != null) handler(this, deltatime);
+        }
+
+    }
+
+    public sealed class AnimationTimeChangedEventArgs : EventArgs {
+
+        // todo rename to DeltaTime.
+        public float TimeDelta { get; set; }
+
+        public AnimationTimeChangedEventArgs(float timeDelta) {
+            TimeDelta = timeDelta;
         }
 
     }

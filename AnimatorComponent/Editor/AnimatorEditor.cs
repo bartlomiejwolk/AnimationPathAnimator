@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -1492,7 +1493,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.AnimationTime = 1;
 
-                // Call JumpedToNode event.
+                // Call event.
                 Utilities.InvokeMethodWithReflection(
                     Script,
                     "FireJumpedToNodeEvent",
@@ -1506,17 +1507,27 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToNextNodeKey) {
 
+                var prevAnimationTime = Script.AnimationTime;
+
                 Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestForwardNodeTimestamp",
                         null);
 
+                var deltaTime = Script.AnimationTime - prevAnimationTime;
+
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
                     Script,
                     "FireJumpedToNodeEvent",
                     null);
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnJumpPerformed",
+                    new object[] { deltaTime });
             }
         }
 
@@ -1526,17 +1537,27 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToPreviousNodeKey) {
 
+                var prevAnimationTime = Script.AnimationTime;
+
                 Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestBackwardNodeTimestamp",
                         null);
 
+                var deltaTime = Script.AnimationTime - prevAnimationTime;
+
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
                     Script,
                     "FireJumpedToNodeEvent",
                     null);
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnJumpPerformed",
+                    new object[] { deltaTime });
             }
         }
 
@@ -1569,6 +1590,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.SettingsAsset.ModKey)) {
 
                 Script.AnimationTime -= Script.LongJumpValue;
+                Logger.LogString("AnimationTime: {0}", Script.AnimationTime);
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnJumpPerformed",
+                    new object[] {- Script.LongJumpValue});
             }
         }
 
@@ -1582,6 +1610,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.SettingsAsset.ModKey)) {
 
                 Script.AnimationTime += Script.LongJumpValue;
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnJumpPerformed",
+                    new object[] {Script.LongJumpValue});
             }
         }
 
@@ -1639,6 +1673,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleNoneHandleModeShortcut();
             HandleUpdateAllModeShortcut();
             HandlePositionHandleShortcut();
+            HandleMoveAllModeShortcut();
+            HandlePlayPauseShortcut();
+
             HandleShortJumpForwardShortcut();
             HandleShortJumpBackwardShortcut();
             HandleLongJumpForwardShortcut();
@@ -1647,8 +1684,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleJumpToPreviousNodeShortcut();
             HandleJumpToStartShortcut();
             HandleJumpToEndShortcut();
-            HandlePlayPauseShortcut();
-            HandleMoveAllModeShortcut();
         }
 
         private void HandleNodeHandleModeShortcut() {
@@ -1693,6 +1728,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.AnimationTime =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnJumpPerformed",
+                    new object[] {- Script.ShortJumpValue});
             }
         }
 
@@ -1711,6 +1752,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.AnimationTime =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "OnJumpPerformed",
+                    new object[] {Script.ShortJumpValue});
             }
         }
 

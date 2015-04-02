@@ -175,6 +175,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             NodeReachedEventArgs arg) {
 
             // Return if there's no event slot created for current path node.
+            // todo remove. Now every node has its own slot.
             if (arg.NodeIndex > NodeEventSlots.Count - 1) return;
             // Get event slot.
             var nodeEvent = NodeEventSlots[arg.NodeIndex];

@@ -420,6 +420,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { moveAllMode = value; }
         }
 
+        /// <summary>
+        ///     Animation time value from previous frame.
+        /// </summary>
+        public float PrevAnimationTime {
+            get { return prevAnimationTime; }
+            set { prevAnimationTime = value; }
+        }
+
         #endregion
         #region UNITY MESSAGES
 
@@ -456,6 +464,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void Start() {
+            // Animation does not always starts from time 0.
+            PrevAnimationTime = AnimationTime;
+
             HandleStartAnimation();
         }
 
@@ -979,7 +990,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each timestamp..
             for (var i = 0; i < nodeTimestamps.Length; i++) {
                 // If animation time "jumped over" a node..
-                if (prevAnimationTime < nodeTimestamps[i]
+                if (PrevAnimationTime < nodeTimestamps[i]
                     && AnimationTime >= nodeTimestamps[i]) {
 
                     // Create event args.
@@ -990,7 +1001,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             // Update helper field.
-            prevAnimationTime = AnimationTime;
+            PrevAnimationTime = AnimationTime;
         }
 
         /// <summary>
@@ -1098,6 +1109,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
+        // todo remove. Make HandleFireNodeReachedEvent to be fired for starting node (event if Animation time != 0)
         private void HandleFireNodeReachedEventForFirstNode() {
             if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);

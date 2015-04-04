@@ -191,6 +191,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
+            // Compare number of nodes with predicted number of elements in the list.
+            if (NodesNo != EaseToolState.Count + 1) {
+                throw new Exception("This operation will cause a list to have" +
+                                    "more entries then there's nodes in the" +
+                                    "path");
+            }
+
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
             Debug.Log("Node added to list: " + e.NodeIndex
@@ -201,6 +208,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
+            // Compare number of nodes with predicted number of elements in the list.
+            if (NodesNo != EaseToolState.Count - 1) {
+                throw new Exception("This operation will cause a list to have" +
+                                    "more entries then there's nodes in the" +
+                                    "path");
+            }
+
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
             Debug.Log("Node removed from list: " + e.NodeIndex

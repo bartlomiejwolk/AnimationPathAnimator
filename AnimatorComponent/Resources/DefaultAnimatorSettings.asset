@@ -46,8 +46,8 @@ MonoBehaviour:
   shortJumpMaxValue: .00400000019
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
-  gizmoCurveSamplingFrequency: 40
-  rotationCurveSampling: 40
+  gizmoCurveSamplingFrequency: 1
+  rotationCurveSampling: 1
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   tangentHandleSize: .25

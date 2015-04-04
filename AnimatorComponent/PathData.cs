@@ -195,8 +195,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TiltingToolState.Insert(e.NodeIndex, false);
             Debug.Log("Node added to list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
-            
-            //UpdateRotationPathWithAddedKeys();
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
@@ -207,8 +205,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             TiltingToolState.RemoveAt(e.NodeIndex);
             Debug.Log("Node removed from list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
-
-            //UpdateRotationPathWithRemovedKeys();
         }
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {

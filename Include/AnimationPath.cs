@@ -24,7 +24,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private const float FloatPrecision = 0.0000001f;
 
-        private const int PathLengthSampling = 40;
+        private const int PathLengthSampling = 10;
 
         #endregion FIELDS
 

@@ -183,6 +183,19 @@ namespace ATP.AnimationPathTools {
             return - 1;
         }
 
+        /// <summary>
+        /// Returns list with all timestamps from a given animation curve.
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <returns></returns>
+        public static List<float> GetAnimationCurveTimestamps(AnimationCurve curve) {
+            var easeCurveTimestamps = new List<float>();
+            for (int i = 0; i < curve.length; i++) {
+                easeCurveTimestamps.Add(curve.keys[i].time);
+            }
+
+            return easeCurveTimestamps;
+        }
     }
 
 }

@@ -143,7 +143,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT INVOCATORS
 
         private void OnNodeAdded(int nodeIndex) {
-            var args = new NodeAddedRemovedEventArgs(nodeIndex);
+            var nodeTimestamp = GetNodeTimestamp(nodeIndex);
+            var args = new NodeAddedRemovedEventArgs(nodeIndex, nodeTimestamp);
 
             var handler = NodeAdded;
             if (handler != null) handler(this, args);
@@ -155,7 +156,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnNodeRemoved(int nodeIndex) {
-            var args = new NodeAddedRemovedEventArgs(nodeIndex);
+            var nodeTimestamp = GetNodeTimestamp(nodeIndex);
+            var args = new NodeAddedRemovedEventArgs(nodeIndex, nodeTimestamp);
 
             var handler = NodeRemoved;
             if (handler != null) handler(this, args);
@@ -191,6 +193,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
+            // todo replace with assert
             // Compare number of nodes with predicted number of elements in the list.
             if (NodesNo != EaseToolState.Count + 1) {
                 throw new Exception("This operation will cause a list to have" +
@@ -208,6 +211,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
+            // todo replace with assert
             // Compare number of nodes with predicted number of elements in the list.
             if (NodesNo != EaseToolState.Count - 1) {
                 throw new Exception("This operation will cause a list to have" +
@@ -217,9 +221,64 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
+            HandleRemoveNodeTools(e.NodeIndex, e.NodeTimestamp);
             Debug.Log("Node removed from list: " + e.NodeIndex
                 + " Current tilting entries: " + TiltingToolState.Count);
         }
+
+        /// <summary>
+        /// Handles removal path node tools for a give node index.
+        /// </summary>
+        /// <param name="nodeIndex">Path node index.</param>
+        /// <param name="nodeTimestamp">Path node timestamp.</param>
+        private void HandleRemoveNodeTools(int nodeIndex, float nodeTimestamp) {
+            HandleRemoveEaseTool(nodeTimestamp);
+            HandleRemoveTiltingTool(nodeTimestamp);
+        }
+
+        /// <summary>
+        /// Removes tilting value for a given path node index.
+        /// </summary>
+        /// <param name="nodeIndex">Path node index.</param>
+        /// <param name="nodeTimestamp">Path node timestamp.</param>
+        private void HandleRemoveTiltingTool(float nodeTimestamp) {
+            // Find ease index for the given timestamp.
+            var tiltingKeyIndex = -1;
+            var tiltingTimestamps = Utilities.GetAnimationCurveTimestamps(TiltingCurve);
+            for (int i = 0; i < tiltingTimestamps.Count; i++) {
+                if (tiltingTimestamps[i] == nodeTimestamp) {
+                    tiltingKeyIndex = i;
+                    break;
+                }
+            }
+
+            // Remove key from ease curve.
+            if (tiltingKeyIndex == -1) return;
+            TiltingCurve.RemoveKey(tiltingKeyIndex);
+        }
+
+        /// <summary>
+        /// Removes ease value for a given path node index.
+        /// </summary>
+        /// <param name="nodeIndex">Path node index.</param>
+        /// <param name="nodeTimestamp">Path node timestamp.</param>
+        private void HandleRemoveEaseTool(float nodeTimestamp) {
+            // Find ease index for the given timestamp.
+            var easeKeyIndex = -1;
+            var easeTimestamps = Utilities.GetAnimationCurveTimestamps(EaseCurve);
+            for (int i = 0; i < easeTimestamps.Count; i++) {
+                if (easeTimestamps[i] == nodeTimestamp) {
+                    easeKeyIndex = i;
+                    break;
+                }
+            }
+
+            // Remove key from ease curve.
+            if (easeKeyIndex == -1) return;
+            EaseCurve.RemoveKey(easeKeyIndex);
+
+        }
+
 
         private void PathData_NodeTiltChanged(object sender, EventArgs e) {
         }

@@ -1636,6 +1636,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public Vector3[] GetGlobalEasedNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
 
+            Logger.LogString("globalNodePositions: {0}; EaseToolState: {1}",
+                globalNodePositions.Count,
+                PathData.EaseToolState.Count);
+
             // Filter out unwanted nodes.
             var resultPositions = new List<Vector3>();
             for (int i = 0; i < globalNodePositions.Count; i++) {

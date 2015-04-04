@@ -60,7 +60,7 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
         void Animator_NodeReached(
             object sender,
-            AnimatorComponent.NodeReachedEventArgs e) {
+            NodeReachedEventArgs e) {
 
             // For each target animator component..
             for (int i = 0; i < TargetComponents.Count; i++) {

@@ -1227,9 +1227,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawTangentModeDropdown();
             DrawPositionHandleDropdown();
 
-            HandleDrawEaseCurve();
-            DrawTiltingCurve();
-
             EditorGUILayout.BeginHorizontal();
 
             DrawResetEaseButton();
@@ -1795,6 +1792,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
+
+                HandleDrawEaseCurve();
+                DrawTiltingCurve();
+
+                EditorGUILayout.Space();
+
                 DrawShortJumpValueField();
                 DrawLongJumpValueField();
 

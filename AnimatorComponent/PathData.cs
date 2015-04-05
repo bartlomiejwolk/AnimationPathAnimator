@@ -215,8 +215,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Compare number of nodes with predicted number of elements in the list.
             if (NodesNo != EaseToolState.Count - 1) {
                 throw new Exception("This operation will cause a list to have" +
-                                    "more entries then there's nodes in the" +
-                                    "path");
+                                    " more entries then there's nodes in the" +
+                                    " path");
             }
 
             EaseToolState.RemoveAt(e.NodeIndex);
@@ -252,10 +252,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (tiltingKeyIndex != -1) {
                 TiltingCurve.RemoveKey(tiltingKeyIndex);
             }
+
+            Utilities.Assert(
+                () => TiltingCurve.length == tiltedNodesTimestamps.Count,
+                String.Format("Number of tilting curve keys and number of nodes" +
+                              " with enabled tilting tool differs.\n" +
+                              "Tilting curve length: {0}\n" +
+                              "Nodes with enabled ease tool: {1}",
+                              TiltingCurve.length,
+                              tiltedNodesTimestamps.Count));
         }
 
         /// <summary>
-        /// Removes ease value for a given path node index.
+        /// Removes ease value related to a given path node index.
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
@@ -270,6 +279,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Remove key from ease curve.
                 EaseCurve.RemoveKey(easeKeyIndex);
             }
+
+            Utilities.Assert(
+                () => EaseCurve.length == easedNodeTimestamps.Count,
+                String.Format("Number of ease curve keys and number of nodes" +
+                              " with enabled ease tool differs.\n" +
+                              "Ease curve length: {0}\n" +
+                              "Nodes with enabled ease tool: {1}",
+                              EaseCurve.length,
+                              easedNodeTimestamps.Count));
         }
 
 

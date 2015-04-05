@@ -241,20 +241,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
+        // todo rename to HandleDisableTiltingTool
         private void HandleRemoveTiltingTool(float nodeTimestamp) {
+            // Get nodes that have tilitng tool enabled.
+            var tiltedNodesTimestamps = Utilities.GetAnimationCurveTimestamps(TiltingCurve);
             // Find ease index for the given timestamp.
-            var tiltingKeyIndex = -1;
-            var tiltingTimestamps = Utilities.GetAnimationCurveTimestamps(TiltingCurve);
-            for (int i = 0; i < tiltingTimestamps.Count; i++) {
-                if (tiltingTimestamps[i] == nodeTimestamp) {
-                    tiltingKeyIndex = i;
-                    break;
-                }
-            }
+            var tiltingKeyIndex = tiltedNodesTimestamps.FindIndex(x => x == nodeTimestamp);
 
             // Remove key from ease curve.
-            if (tiltingKeyIndex == -1) return;
-            TiltingCurve.RemoveKey(tiltingKeyIndex);
+            if (tiltingKeyIndex != -1) {
+                TiltingCurve.RemoveKey(tiltingKeyIndex);
+            }
         }
 
         /// <summary>
@@ -262,21 +259,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
+        // todo rename to HandleDisableEaseTool
         private void HandleRemoveEaseTool(float nodeTimestamp) {
+            // Get nodes that have ease tool enabled.
+            var easedNodeTimestamps = Utilities.GetAnimationCurveTimestamps(EaseCurve);
             // Find ease index for the given timestamp.
-            var easeKeyIndex = -1;
-            var easeTimestamps = Utilities.GetAnimationCurveTimestamps(EaseCurve);
-            for (int i = 0; i < easeTimestamps.Count; i++) {
-                if (easeTimestamps[i] == nodeTimestamp) {
-                    easeKeyIndex = i;
-                    break;
-                }
+            var easeKeyIndex = easedNodeTimestamps.FindIndex(x => x == nodeTimestamp);
+
+            if (easeKeyIndex != -1) {
+                // Remove key from ease curve.
+                EaseCurve.RemoveKey(easeKeyIndex);
             }
-
-            // Remove key from ease curve.
-            if (easeKeyIndex == -1) return;
-            EaseCurve.RemoveKey(easeKeyIndex);
-
         }
 
 

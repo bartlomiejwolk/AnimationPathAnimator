@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
@@ -722,6 +723,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
             HandleUpdateRotationPathTimestamps();
 
+            // todo remove
+            Logger.LogString("NodesNo: {0}", Script.PathData.NodesNo);
+            Logger.LogString(
+                "TiltingToolState: {0}",
+                Script.PathData.TiltingToolState.Count);
+            var enabledTiltingToolsNo =
+                Script.PathData.GetTiltedNodeTimestamps();
+            Logger.LogString("TiltingToolState({0})", enabledTiltingToolsNo.Count);
+            Logger.LogString(
+                "TiltingCurve: {0}",
+                Script.PathData.TiltingCurve.length);
+
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
                 Script,
@@ -945,15 +958,39 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="index">Index of node which tool will be disabled.</param>
         /// <param name="timestamp">Timestamp of node which tool will be disabled.</param>
         private void HandleDisablingEaseTool(int index, float timestamp) {
+            // todo Create PathData.EaseCurveLength property and use instead.
+            var prevEaseCurveNodesNo = Script.PathData.EaseCurve.length;
+
             // Remove key from ease curve.
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
+
+            Utilities.Assert(
+                   () => Script.PathData.EaseCurve.length
+                       == prevEaseCurveNodesNo - 1,
+                   String.Format("Key wasn't removed. Previous keys number: {0};" +
+                                 " Current keys number: {1}",
+                                 prevEaseCurveNodesNo,
+                                 Script.PathData.EaseCurve.length));
+
             // Disable ease tool.
             Script.PathData.EaseToolState[index] = false;
         }
 
         private void HandleDisablingTiltingTool(int index, float nodeTimestamp) {
+            // todo Create PathData.TiltingCurveLength property and use instead.
+            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurve.length;
+
             // Remove key from ease curve.
             Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
+
+            Utilities.Assert(
+                () => Script.PathData.TiltingCurve.length
+                    == prevTiltingCurveNodesNo - 1,
+                String.Format("Key wasn't removed. Previous keys number: {0};" +
+                              " Current keys number: {1}",
+                              prevTiltingCurveNodesNo,
+                              Script.PathData.TiltingCurve.length));
+
             // Disable ease tool.
             Script.PathData.TiltingToolState[index] = false;
         }
@@ -1008,15 +1045,39 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="index">Index of node which tool will be enabled.</param>
         /// <param name="timestamp">Timestamp of node which tool will be enabled.</param>
         private void HandleEnablingEaseTool(int index, float timestamp) {
+            // todo Create PathData.EaseCurveLength property and use instead.
+            var prevEaseCurveNodesNo = Script.PathData.EaseCurve.length;
+
             // Add new key to ease curve.
             Script.PathData.AddKeyToEaseCurve(timestamp);
+
+            Utilities.Assert(
+                () => Script.PathData.EaseCurve.length
+                    == prevEaseCurveNodesNo + 1,
+                String.Format("Key wasn't added. Previous keys number: {0};" +
+                              " Current keys number: {1}",
+                              prevEaseCurveNodesNo,
+                              Script.PathData.EaseCurve.length));
+
             // Enable ease tool for the node.
             Script.PathData.EaseToolState[index] = true;
         }
 
         private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
+            // todo Create PathData.TiltingCurveLength property and use instead.
+            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurve.length;
+
             // Add new key to ease curve.
             Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
+
+            Utilities.Assert(
+                () => Script.PathData.TiltingCurve.length
+                    == prevTiltingCurveNodesNo + 1,
+                String.Format("Key wasn't added. Previous keys number: {0};" +
+                              " Current keys number: {1}",
+                              prevTiltingCurveNodesNo,
+                              Script.PathData.TiltingCurve.length));
+
             // Enable ease tool for the node.
             Script.PathData.TiltingToolState[index] = true;
         }

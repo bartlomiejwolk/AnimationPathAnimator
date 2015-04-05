@@ -996,14 +996,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingSceneToolToggleButtons() {
-            // Handle shortcut only in Ease and Tilting handle mode.
+            // todo this is redundant. Button won't display until at lease one
+            // of those mode is active.
             if ((Script.HandleMode != HandleMode.Ease)
                 && (Script.HandleMode != HandleMode.Tilting)) {
 
                 return;
             }
 
-            // Get positions positions.
+            // Get node positions.
             var nodePositions = Script.GetGlobalNodePositions();
             // Remove extreme nodes.
             nodePositions.RemoveAt(0);

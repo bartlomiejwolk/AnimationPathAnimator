@@ -202,11 +202,11 @@ namespace ATP.AnimationPathTools {
         /// 
         /// </summary>
         /// <remarks>http://forum.unity3d.com/threads/assert-class-for-debugging.59010/</remarks>
-        /// <param name="test"></param>
+        /// <param name="assertion"></param>
         /// <param name="assertString"></param>
         [Conditional("UNITY_EDITOR")]
-        static public void Assert(Func<bool> test, string assertString) {
-            if (!test()) {
+        static public void Assert(Func<bool> assertion, string assertString) {
+            if (!assertion()) {
                 StackTrace myTrace = new StackTrace(true);
                 StackFrame myFrame = myTrace.GetFrame(1);
                 string assertInformation = "Filename: " + myFrame.GetFileName() + "\nMethod: " + myFrame.GetMethod() + "\nLine: " + myFrame.GetFileLineNumber();

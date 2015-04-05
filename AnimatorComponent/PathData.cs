@@ -215,15 +215,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Compare number of nodes with predicted number of elements in the list.
             if (NodesNo != EaseToolState.Count - 1) {
                 throw new Exception("This operation will cause a list to have" +
-                                    "more entries then there's nodes in the" +
-                                    "path");
+                                    " more entries then there's nodes in the" +
+                                    " path");
             }
 
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
-            HandleRemoveNodeTools(e.NodeIndex, e.NodeTimestamp);
-            Debug.Log("Node removed from list: " + e.NodeIndex
-                + " Current tilting entries: " + TiltingToolState.Count);
+            HandleRemoveNodeTools(e.NodeTimestamp);
+            //Debug.Log("Node removed from list: " + e.NodeIndex
+            //    + " Current tilting entries: " + TiltingToolState.Count);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
-        private void HandleRemoveNodeTools(int nodeIndex, float nodeTimestamp) {
+        private void HandleRemoveNodeTools(float nodeTimestamp) {
             HandleRemoveEaseTool(nodeTimestamp);
             HandleRemoveTiltingTool(nodeTimestamp);
         }
@@ -241,42 +241,53 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
+        // todo rename to HandleDisableTiltingTool
         private void HandleRemoveTiltingTool(float nodeTimestamp) {
+            // Get nodes that have tilitng tool enabled.
+            var tiltedNodesTimestamps = Utilities.GetAnimationCurveTimestamps(TiltingCurve);
             // Find ease index for the given timestamp.
-            var tiltingKeyIndex = -1;
-            var tiltingTimestamps = Utilities.GetAnimationCurveTimestamps(TiltingCurve);
-            for (int i = 0; i < tiltingTimestamps.Count; i++) {
-                if (tiltingTimestamps[i] == nodeTimestamp) {
-                    tiltingKeyIndex = i;
-                    break;
-                }
-            }
+            var tiltingKeyIndex = tiltedNodesTimestamps.FindIndex(x => x == nodeTimestamp);
 
             // Remove key from ease curve.
-            if (tiltingKeyIndex == -1) return;
-            TiltingCurve.RemoveKey(tiltingKeyIndex);
+            if (tiltingKeyIndex != -1) {
+                TiltingCurve.RemoveKey(tiltingKeyIndex);
+            }
+
+            Utilities.Assert(
+                () => TiltingCurve.length == tiltedNodesTimestamps.Count,
+                String.Format("Number of tilting curve keys and number of nodes" +
+                              " with enabled tilting tool differs.\n" +
+                              "Tilting curve length: {0}\n" +
+                              "Nodes with enabled ease tool: {1}",
+                              TiltingCurve.length,
+                              tiltedNodesTimestamps.Count));
         }
 
         /// <summary>
-        /// Removes ease value for a given path node index.
+        /// Removes ease value related to a given path node index.
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
+        // todo rename to HandleDisableEaseTool
         private void HandleRemoveEaseTool(float nodeTimestamp) {
+            // Get nodes that have ease tool enabled.
+            var easedNodeTimestamps = Utilities.GetAnimationCurveTimestamps(EaseCurve);
             // Find ease index for the given timestamp.
-            var easeKeyIndex = -1;
-            var easeTimestamps = Utilities.GetAnimationCurveTimestamps(EaseCurve);
-            for (int i = 0; i < easeTimestamps.Count; i++) {
-                if (easeTimestamps[i] == nodeTimestamp) {
-                    easeKeyIndex = i;
-                    break;
-                }
+            var easeKeyIndex = easedNodeTimestamps.FindIndex(x => x == nodeTimestamp);
+
+            if (easeKeyIndex != -1) {
+                // Remove key from ease curve.
+                EaseCurve.RemoveKey(easeKeyIndex);
             }
 
-            // Remove key from ease curve.
-            if (easeKeyIndex == -1) return;
-            EaseCurve.RemoveKey(easeKeyIndex);
-
+            Utilities.Assert(
+                () => EaseCurve.length == easedNodeTimestamps.Count,
+                String.Format("Number of ease curve keys and number of nodes" +
+                              " with enabled ease tool differs.\n" +
+                              "Ease curve length: {0}\n" +
+                              "Nodes with enabled ease tool: {1}",
+                              EaseCurve.length,
+                              easedNodeTimestamps.Count));
         }
 
 
@@ -289,7 +300,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //UpdateRotationPathTimestamps();
         }
 
-        private List<float> GetTiltedNodeTimestamps() {
+        // todo make private
+        public List<float> GetTiltedNodeTimestamps() {
             var pathTimestamps = GetPathTimestamps();
             var resultTimestamps = new List<float>();
 
@@ -728,19 +740,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Func<List<float>> nodeTimestampsCallback) {
 
             // Get path timestamps.
-            var pathNodeTimestamps = nodeTimestampsCallback();
+            var toolTimestamps = nodeTimestampsCallback();
             // For each key in easeCurve..
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from curve timestamp..
                 if (!Utilities.FloatsEqual(
-                    pathNodeTimestamps[i],
+                    toolTimestamps[i],
                     curve.keys[i].value,
                     GlobalConstants.FloatPrecision)) {
 
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp
-                    keyCopy.time = pathNodeTimestamps[i];
+                    keyCopy.time = toolTimestamps[i];
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
                 }

@@ -221,9 +221,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
-            HandleRemoveNodeTools(e.NodeIndex, e.NodeTimestamp);
-            Debug.Log("Node removed from list: " + e.NodeIndex
-                + " Current tilting entries: " + TiltingToolState.Count);
+            HandleRemoveNodeTools(e.NodeTimestamp);
+            //Debug.Log("Node removed from list: " + e.NodeIndex
+            //    + " Current tilting entries: " + TiltingToolState.Count);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
-        private void HandleRemoveNodeTools(int nodeIndex, float nodeTimestamp) {
+        private void HandleRemoveNodeTools(float nodeTimestamp) {
             HandleRemoveEaseTool(nodeTimestamp);
             HandleRemoveTiltingTool(nodeTimestamp);
         }
@@ -289,7 +289,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //UpdateRotationPathTimestamps();
         }
 
-        private List<float> GetTiltedNodeTimestamps() {
+        // todo make private
+        public List<float> GetTiltedNodeTimestamps() {
             var pathTimestamps = GetPathTimestamps();
             var resultTimestamps = new List<float>();
 
@@ -728,19 +729,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Func<List<float>> nodeTimestampsCallback) {
 
             // Get path timestamps.
-            var pathNodeTimestamps = nodeTimestampsCallback();
+            var toolTimestamps = nodeTimestampsCallback();
             // For each key in easeCurve..
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from curve timestamp..
                 if (!Utilities.FloatsEqual(
-                    pathNodeTimestamps[i],
+                    toolTimestamps[i],
                     curve.keys[i].value,
                     GlobalConstants.FloatPrecision)) {
 
                     // Copy key
                     var keyCopy = curve.keys[i];
                     // Update timestamp
-                    keyCopy.time = pathNodeTimestamps[i];
+                    keyCopy.time = toolTimestamps[i];
                     // Move key to new value.
                     curve.MoveKey(i, keyCopy);
                 }

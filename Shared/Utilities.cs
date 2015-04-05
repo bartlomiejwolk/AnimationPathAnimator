@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using UnityEngine;
 
@@ -195,6 +196,33 @@ namespace ATP.AnimationPathTools {
             }
 
             return easeCurveTimestamps;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>http://forum.unity3d.com/threads/assert-class-for-debugging.59010/</remarks>
+        /// <param name="test"></param>
+        /// <param name="assertString"></param>
+        [Conditional("UNITY_EDITOR")]
+        static public void Assert(Func<bool> test, string assertString) {
+            if (!test()) {
+                StackTrace myTrace = new StackTrace(true);
+                StackFrame myFrame = myTrace.GetFrame(1);
+                string assertInformation = "Filename: " + myFrame.GetFileName() + "\nMethod: " + myFrame.GetMethod() + "\nLine: " + myFrame.GetFileLineNumber();
+
+                // Output message to Unity log window.
+                UnityEngine.Debug.Log(assertString + "\n" + assertInformation);
+                // Break only in play mode.
+                if (Application.isPlaying) {
+                    UnityEngine.Debug.Break();
+                }
+
+                if (UnityEditor.EditorUtility.DisplayDialog("Assert!", assertString + "\n" + assertInformation, "Open in editor", "Cancel")) {
+                    UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(myFrame.GetFileName(), myFrame.GetFileLineNumber());
+                    UnityEngine.Debug.Log(assertInformation);
+                }
+            }
         }
     }
 

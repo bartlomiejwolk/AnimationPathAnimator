@@ -456,6 +456,36 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
+        public List<float> SamplePathForTimestamps(int samplingFrequency) {
+            // Result list.
+            var resultTimestamps = new List<float>();
+
+            // Calculate linear path length
+            var linearPathLength = CalculatePathLength(PathLengthSampling);
+            // Calculate amount of points to extract.
+            var samplingRate = (int) (linearPathLength * samplingFrequency);
+
+            // NOTE Cannot do any sampling if sampling rate is less than 1.
+            if (samplingRate < 1) return new List<float>();
+
+            // Timestep between each point.
+            var timestep = 1f / samplingRate;
+
+            // Helper variable.
+            // Used to read values from animation curves.
+            float time = 0;
+ 
+            // For each point to extract..
+            for (var i = 0; i < samplingRate; i++) {
+                // Add to result list.
+                resultTimestamps.Add(time);
+                // Update time.
+                time += timestep;
+            }
+
+            return resultTimestamps;
+        } 
+
         /// <summary>
         ///     Smooth in/out tangents of all nodes.
         /// </summary>

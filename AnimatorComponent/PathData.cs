@@ -942,6 +942,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region GET METHODS
 
+        public List<float> SampleObjectPathForTimestamps(
+            int samplingFrequency) {
+
+            return AnimatedObjectPath.SamplePathForTimestamps(samplingFrequency);
+        } 
+
         /// <summary>
         /// Get all values from ease curve.
         /// </summary>

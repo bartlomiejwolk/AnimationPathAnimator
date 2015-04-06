@@ -552,7 +552,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUpdateAnimGOInSceneView();
         }
 
-        private void PathData_NodeTiltChanged(object sender, EventArgs e) {
+        private void PathData_TiltingCurveUpdated(object sender, EventArgs e) {
             HandleUpdateAnimGOInSceneView();
         }
 
@@ -1425,7 +1425,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.RotationPointPositionChanged +=
                 PathData_RotationPointPositionChanged;
             PathData.NodePositionChanged += PathData_NodePositionChanged;
-            PathData.NodeTiltChanged += PathData_NodeTiltChanged;
+            PathData.TiltingCurveUpdated += PathData_TiltingCurveUpdated;
             PathData.PathReset += PathData_PathReset;
             PathData.RotationPathReset += PathData_RotationPathReset;
             AnimationEnded += APAnimator_AnimationEnded;
@@ -1446,7 +1446,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.RotationPointPositionChanged -=
                 PathData_RotationPointPositionChanged;
             PathData.NodePositionChanged -= PathData_NodePositionChanged;
-            PathData.NodeTiltChanged -= PathData_NodeTiltChanged;
+            PathData.TiltingCurveUpdated -= PathData_TiltingCurveUpdated;
             PathData.PathReset -= PathData_PathReset;
             PathData.RotationPathReset -= PathData_RotationPathReset;
             AnimationEnded -= APAnimator_AnimationEnded;

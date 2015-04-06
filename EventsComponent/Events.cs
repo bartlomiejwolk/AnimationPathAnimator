@@ -83,7 +83,6 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void OnValidate() {
-            Debug.Log("OnValidate()");
             UnsubscribeFromEvents();
             SubscribeToEvents();
         }

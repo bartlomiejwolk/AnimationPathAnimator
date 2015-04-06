@@ -1477,11 +1477,39 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            Gizmos.color = GizmoCurveColor;
+            // Get timestamps of all curve points.
+            var timestamps = PathData.SampleObjectPathForTimestamps(
+                SettingsAsset.GizmoCurveSamplingFrequency);
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {
+                SetAnimationCurveColor(timestamps, i);
+
                 Gizmos.DrawLine(globalPoints[i], globalPoints[i + 1]);
+            }
+        }
+
+        /// <summary>
+        /// Sets curve color for each drawn section. Separate color for sections whose speed increases and those whose speed decreases.
+        /// </summary>
+        /// <param name="timestamps">Timestamps of all curve points.</param>
+        /// <param name="i">Currently drawn section.</param>
+        private void SetAnimationCurveColor(List<float> timestamps, int i) {
+            // Ease value for beginning of the section.
+            var easeValue = PathData.EaseCurve.Evaluate(timestamps[i]);
+            // Ease value for end of the section.
+            var nextEaseValue =
+                PathData.EaseCurve.Evaluate(timestamps[i + 1]);
+
+            if (easeValue < nextEaseValue) {
+                // todo create settings in Animator
+                Gizmos.color = Color.green;
+            }
+            else if (easeValue > nextEaseValue) {
+                Gizmos.color = Color.red;
+            }
+            else {
+                Gizmos.color = Color.yellow;
             }
         }
 

@@ -16,7 +16,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public event EventHandler<NodeAddedRemovedEventArgs> NodeRemoved;
 
-        public event EventHandler NodeTiltChanged;
+        //public event EventHandler TiltingCurveUpdated;
 
         public event EventHandler NodeTimeChanged;
 
@@ -27,6 +27,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler RotationPointPositionChanged;
 
         public event EventHandler NodeTangentsChanged;
+
+        /// <summary>
+        /// Event called after a key was added, removed or moved in the ease curve.
+        /// </summary>
+        public event EventHandler EaseCurveUpdated;
+
+        /// <summary>
+        /// Event called after a key was added, removed or moved in the tilting curve.
+        /// </summary>
+        public event EventHandler TiltingCurveUpdated;
 
         #endregion EVENTS
 
@@ -133,7 +143,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void UnsubscribeFromEvents() {
             NodeAdded -= PathData_NodeAdded;
             NodeRemoved -= PathData_NodeRemoved;
-            NodeTiltChanged -= PathData_NodeTiltChanged;
+            TiltingCurveUpdated -= PathData_TiltingCurveUpdated;
+            EaseCurveUpdated -= PathData_TiltingCurveUpdated;
             NodeTimeChanged -= PathData_NodeTimeChanged;
             NodePositionChanged -= PathData_NodePositionChanged;
         }
@@ -163,8 +174,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, args);
         }
 
-        private void OnNodeTiltChanged() {
-            var handler = NodeTiltChanged;
+        private void OnTiltingCurveUpdated() {
+            var handler = TiltingCurveUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -291,7 +302,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
 
-        private void PathData_NodeTiltChanged(object sender, EventArgs e) {
+        private void PathData_TiltingCurveUpdated(object sender, EventArgs e) {
+            SmoothCurve(TiltingCurve);
         }
 
         private void PathData_NodeTimeChanged(object sender, EventArgs e) {
@@ -369,6 +381,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void InitializeEaseCurve() {
             EaseCurve.AddKey(0, DefaultEaseCurveValue);
             EaseCurve.AddKey(1, DefaultEaseCurveValue);
+
+            OnEaseCurveUpdated();
         }
 
         private void InitializeRotationPath() {
@@ -382,14 +396,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void InitializeTiltingCurve() {
             TiltingCurve.AddKey(0, 0);
             TiltingCurve.AddKey(1, 0);
+
+            OnTiltingCurveUpdated();
         }
 
         private void SubscribeToEvents() {
             NodeAdded += PathData_NodeAdded;
             NodeRemoved += PathData_NodeRemoved;
-            NodeTiltChanged += PathData_NodeTiltChanged;
+            TiltingCurveUpdated += PathData_TiltingCurveUpdated;
+            EaseCurveUpdated += PathData_EaseCurveUpdated;
             NodeTimeChanged += PathData_NodeTimeChanged;
             NodePositionChanged += PathData_NodePositionChanged;
+        }
+
+        void PathData_EaseCurveUpdated(object sender, EventArgs e) {
+            SmoothCurve(EaseCurve);
         }
 
         #endregion METHODS
@@ -403,6 +424,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void AddKeyToEaseCurve(float time) {
             var valueAtTime = EaseCurve.Evaluate(time);
             EaseCurve.AddKey(time, valueAtTime);
+
+            OnEaseCurveUpdated();
         }
 
         public void UpdateRotationPointAtTimestamp(
@@ -533,6 +556,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateCurveWithAddedKeys(EaseCurve);
             // Set default value for each key.
             UpdateEaseCurveValues(DefaultEaseCurveValue);
+
+            OnEaseCurveUpdated();
         }
 
         public void ResetPath() {
@@ -557,6 +582,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateCurveWithAddedKeys(TiltingCurve);
             // Set default value for each key.
             UpdateTiltingCurveValues(DefaultTiltingCurveValue);
+
+            OnTiltingCurveUpdated();
         }
 
         public void SetPathTangentsToLinear() {
@@ -601,6 +628,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public void UpdateEaseCurveValues(float delta) {
             UpdateCurveValues(easeCurve, delta);
+
+            OnEaseCurveUpdated();
         }
 
         public void UpdateEaseValue(int keyIndex, float newValue) {
@@ -613,13 +642,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EaseCurve.RemoveKey(keyIndex);
             EaseCurve.AddKey(keyframeCopy);
 
+            OnEaseCurveUpdated();
+
             //SmoothCurve(EaseCurve);
         }
 
         public void UpdateTiltingCurveValues(float delta) {
             UpdateCurveValues(TiltingCurve, delta);
 
-            OnNodeTiltChanged();
+            OnTiltingCurveUpdated();
         }
 
         public void UpdateTiltingValue(int keyIndex, float newValue) {
@@ -636,7 +667,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //SmoothCurve(TiltingCurve);
             EaseCurveExtremeNodes(TiltingCurve);
 
-            OnNodeTiltChanged();
+            OnTiltingCurveUpdated();
         }
 
         private void AddKeyToCurve(
@@ -1075,6 +1106,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="multiplier">Multiplier value.</param>
         public void MultiplyEaseCurveValues(float multiplier) {
             MultiplyCurveValues(EaseCurve, multiplier);
+
+            OnEaseCurveUpdated();
         }
 
         /// <summary>
@@ -1104,6 +1137,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void RemoveKeyFromEaseCurve(float timestamp) {
             var index = Utilities.GetIndexAtTimestamp(EaseCurve, timestamp);
             EaseCurve.RemoveKey(index);
+
+            OnEaseCurveUpdated();
         }
 
         public void RemoveKeyFromTiltingCurve(float timestamp) {
@@ -1146,6 +1181,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public void SmoothRotationPathNodeTangents(int nodeIndex) {
             RotationPath.SmoothNodeInOutTangents(nodeIndex, 0);
+        }
+
+        private void OnEaseCurveUpdated() {
+            var handler = EaseCurveUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
     }

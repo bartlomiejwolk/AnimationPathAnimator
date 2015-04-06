@@ -1855,8 +1855,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
 
-                HandleDrawEaseCurve();
-                DrawTiltingCurve();
+                //HandleDrawEaseCurve();
+                //DrawTiltingCurve();
 
                 EditorGUILayout.Space();
 

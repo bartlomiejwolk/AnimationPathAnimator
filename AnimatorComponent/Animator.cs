@@ -1477,7 +1477,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            //Gizmos.color = GizmoCurveColor;
+            // Get timestamps of all curve points.
             var timestamps = PathData.SampleObjectPathForTimestamps(
                 SettingsAsset.GizmoCurveSamplingFrequency);
 
@@ -1495,7 +1495,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="timestamps">Timestamps of all curve points.</param>
         /// <param name="i">Currently drawn section.</param>
         private void SetAnimationCurveColor(List<float> timestamps, int i) {
+            // Ease value for beginning of the section.
             var easeValue = PathData.EaseCurve.Evaluate(timestamps[i]);
+            // Ease value for end of the section.
             var nextEaseValue =
                 PathData.EaseCurve.Evaluate(timestamps[i + 1]);
 

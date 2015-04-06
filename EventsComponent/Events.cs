@@ -146,7 +146,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         void Animator_UndoRedoPerformed(object sender, System.EventArgs e) {
             // During animator undo event, reference to path data could have been changed.
-            HandlePathDataRefChange();
+            //HandlePathDataRefChange();
         }
 
         void Animator_PathDataRefChanged(object sender, System.EventArgs e) {
@@ -154,6 +154,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void HandlePathDataRefChange() {
+            // todo invert condition (if == null)
             if (Animator.PathData != null) {
                 UnsubscribeFromEvents();
                 SubscribeToEvents();

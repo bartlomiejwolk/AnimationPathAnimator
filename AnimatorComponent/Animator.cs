@@ -116,6 +116,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private bool moveAllMode;
 
+        [SerializeField]
+        private bool drawRotationPathCurve;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -454,6 +457,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float PrevAnimationTime {
             get { return prevAnimationTime; }
             set { prevAnimationTime = value; }
+        }
+
+        public bool DrawRotationPathCurve {
+            get { return drawRotationPathCurve; }
+            set { drawRotationPathCurve = value; }
         }
 
         #endregion
@@ -1543,6 +1551,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingCurrentRotationPointGizmo() {
             if (RotationMode != RotationMode.Custom) return;
+            if (!DrawRotationPathCurve) return;
 
             // Node path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();
@@ -1588,6 +1597,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingRotationPathCurve() {
             if (RotationMode != RotationMode.Custom) return;
+            if (!DrawRotationPathCurve) return;
 
             var localPointPositions = pathData.SampleRotationPathForPoints(
                 SettingsAsset.RotationCurveSampling);
@@ -1616,6 +1626,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingRotationPointGizmos() {
             if (RotationMode != RotationMode.Custom) return;
+            if (!DrawRotationPathCurve) return;
 
             var globalRotPointPositions = GetGlobalRotationPointPositions();
 

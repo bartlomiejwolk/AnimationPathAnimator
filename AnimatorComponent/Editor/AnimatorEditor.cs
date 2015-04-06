@@ -1324,7 +1324,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.BeginHorizontal();
             DrawRotationModeDropdown(HandleRotationModeChange);
+            HandleDrawingDrawRotationCurveToggle();
+            EditorGUILayout.EndHorizontal();
 
             HandleDrawForwardPointOffsetSlider();
             DrawWrapModeDropdown();
@@ -1344,6 +1347,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void HandleDrawingDrawRotationCurveToggle() {
+            // Draw toggle only in Ease and Tilting handle mode.
+            if (Script.RotationMode != RotationMode.Custom) return;
+
+            EditorGUIUtility.labelWidth = 65;
+
+            Script.DrawRotationPathCurve = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw",
+                    ""),
+                Script.DrawRotationPathCurve);
+
+            EditorGUIUtility.labelWidth = 0;
         }
 
         private void HandleDrawMoveAllToggle() {

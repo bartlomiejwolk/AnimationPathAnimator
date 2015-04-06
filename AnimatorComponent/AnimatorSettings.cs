@@ -316,10 +316,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private string forwardPointIcon = "target_22x22-pink";
 
         [SerializeField]
-        private int gizmoCurveSamplingFrequency = 40;
+        private int gizmoCurveSamplingFrequency = 1;
 
         [SerializeField]
-        private int rotationCurveSampling = 40;
+        private int rotationCurveSampling = 1;
 
         [SerializeField]
         private string rotationPointGizmoIcon = "rec_16x16";
@@ -371,10 +371,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float tangentHandleSize = 0.25f;
 
         [SerializeField]
-        private int sceneToolToggleOffsetH = 72;
+        private int sceneToolToggleOffsetH = 53;
 
         [SerializeField]
-        private int smoothButtonOffsetH = 53;
+        private int smoothButtonOffsetH = 72;
 
         [SerializeField]
         private int smoothButtonOffsetV = 5;

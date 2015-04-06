@@ -51,8 +51,8 @@ MonoBehaviour:
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   tangentHandleSize: .25
-  sceneToolToggleOffsetH: 72
-  smoothButtonOffsetH: 53
+  sceneToolToggleOffsetH: 53
+  smoothButtonOffsetH: 72
   smoothButtonOffsetV: 5
   sceneToolToggleOffsetV: 5
   addButtonOffsetH: 15

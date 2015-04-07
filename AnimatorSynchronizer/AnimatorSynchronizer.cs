@@ -64,6 +64,9 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
             // For each target animator component..
             for (int i = 0; i < TargetComponents.Count; i++) {
+                // Don't record when source component is not playing.
+                if (!TargetComponents[i].IsPlaying) return;
+
                 // Remember current timestamp.
                 NodeTimestamps[i][e.NodeIndex] =
                     TargetComponents[i].AnimationTime;

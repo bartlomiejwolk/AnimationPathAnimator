@@ -678,11 +678,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Starts animation.
+        ///     Starts animation from the beginning.
         /// </summary>
         public void StartAnimation() {
             if (!PathDataAssetAssigned()) return;
 
+            AnimationTime = 0;
             IsPlaying = true;
             AnimGOUpdateEnabled = true;
 

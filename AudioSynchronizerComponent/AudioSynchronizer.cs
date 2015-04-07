@@ -85,7 +85,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             Animator.PlayPause += Animator_PlayPause;
         }
 
-        void Animator_PlayPause(object sender, System.EventArgs e) {
+        void Animator_PlayPause(object sender, float timestamp) {
             HandlePlayPause();
         }
 

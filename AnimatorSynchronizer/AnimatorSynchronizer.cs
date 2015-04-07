@@ -2,6 +2,7 @@
 using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
+using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
 namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
@@ -52,12 +53,13 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
             Animator.PlayPause += Animator_PlayPause;
         }
 
-        void Animator_PlayPause(object sender, System.EventArgs e) {
+        void Animator_PlayPause(object sender, float timestamp) {
             foreach (var target in TargetComponents) {
                 target.PlayPauseAnimation();
             }
         }
 
+        // todo it should record also for the node where car timestamp is 0
         void Animator_NodeReached(
             object sender,
             NodeReachedEventArgs e) {
@@ -71,6 +73,10 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
                 NodeTimestamps[i][e.NodeIndex] =
                     TargetComponents[i].AnimationTime;
             }
+
+            Logger.LogString("Record: [{0}] {1}",
+                e.NodeIndex,
+                TargetComponents[0].AnimationTime);
         }
 
         private void OnDisable() {
@@ -82,11 +88,17 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         private void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
             // For each target animator component..
             for (int i = 0; i < TargetComponents.Count; i++) {
-                // Return if audio timestamp for this node was not recorded.
-                if (!nodeTimestamps[i].ContainsKey(e.NodeIndex)) continue;
+                // Return if timestamp for this node was not recorded.
+                if (!NodeTimestamps[i].ContainsKey(e.NodeIndex)) continue;
 
                 TargetComponents[i].AnimationTime =
                     NodeTimestamps[i][e.NodeIndex];
+
+                if (i == 0) {
+                    Logger.LogString("Jump to: [{0}] {1}",
+                        e.NodeIndex,
+                        NodeTimestamps[i][e.NodeIndex]);
+                }
             }
         }
     }

@@ -98,6 +98,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void Reset() {
             Animator = GetComponent<Animator>();
+            nodeEventSlots = new List<NodeEventSlot>();
 
             InitializeSlots();
             LoadRequiredResources();
@@ -106,16 +107,28 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void InitializeSlots() {
-            // Instantiate slots list.
-            nodeEventSlots = new List<NodeEventSlot>();
             // Get number of nodes in the path.
             var nodesNo = Animator.PathData.NodesNo;
 
-            // For each path node..
-            for (int i = 0; i < nodesNo; i++) {
-                // Add empty slot.
+            // Calculate how many slots to add/remove.
+            var slotsDiff = NodeEventSlots.Count - nodesNo;
+
+            if (slotsDiff > 0) {
+                // Remove slots.
+                for (int i = 0; i < slotsDiff; i++) {
+                    NodeEventSlots.RemoveAt(NodeEventSlots.Count - 1);
+                }
+            }
+            else {
+                // Add slots
                 NodeEventSlots.Add(new NodeEventSlot());
             }
+
+            Utilities.Assert(
+                () => nodesNo == NodeEventSlots.Count,
+                string.Format("Number of nodes ({0}) in the path and event slots ({1}) differ.",
+                nodesNo,
+                NodeEventSlots.Count));
         }
 
         private void LoadRequiredResources() {
@@ -162,7 +175,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             }
             else {
                 UnsubscribeFromEvents();
-                NodeEventSlots.Clear();
+                //NodeEventSlots.Clear();
             }
         }
 

@@ -49,10 +49,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler UndoRedoPerformed;
 
+        public delegate void PlayPauseEventHandler(object sender, float timestamp);
+
         /// <summary>
         /// Event called on every play/pause.
         /// </summary>
-        public event EventHandler PlayPause;
+        public event PlayPauseEventHandler PlayPause;
 
         // todo remove this event.
         public event EventHandler<AnimationTimeChangedEventArgs> AnimationTimeChanged;
@@ -226,7 +228,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // If pause state changed, call event.
                 if (value != prevPause) {
                     // Call event.
-                    OnPlayPause();
+                    OnPlayPause(AnimationTime);
                 }
             }
         }
@@ -676,11 +678,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Starts animation.
+        ///     Starts animation from the beginning.
         /// </summary>
         public void StartAnimation() {
             if (!PathDataAssetAssigned()) return;
 
+            AnimationTime = 0;
             IsPlaying = true;
             AnimGOUpdateEnabled = true;
 
@@ -1675,9 +1678,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public Vector3[] GetGlobalEasedNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
 
-            Logger.LogString("globalNodePositions: {0}; EaseToolState: {1}",
-                globalNodePositions.Count,
-                PathData.EaseToolState.Count);
+            //Logger.LogString("globalNodePositions: {0}; EaseToolState: {1}",
+            //    globalNodePositions.Count,
+            //    PathData.EaseToolState.Count);
 
             // Filter out unwanted nodes.
             var resultPositions = new List<Vector3>();
@@ -1704,9 +1707,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return resultPositions.ToArray();
         }
 
-        private void OnPlayPause() {
+        private void OnPlayPause(float timestamp) {
             var handler = PlayPause;
-            if (handler != null) handler(this, EventArgs.Empty);
+            if (handler != null) handler(this, timestamp);
         }
 
         private void OnAnimationTimeChanged(AnimationTimeChangedEventArgs e) {
@@ -1715,7 +1718,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnJumpPerformed(float deltatime) {
-            Logger.LogString("OnJumpPerformed({0})", deltatime);
+            //Logger.LogString("OnJumpPerformed({0})", deltatime);
             var handler = JumpPerformed;
             if (handler != null) handler(this, deltatime);
         }

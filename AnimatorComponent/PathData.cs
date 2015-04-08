@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ATP.LoggingTools;
-using UnityEditor;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {

@@ -217,11 +217,12 @@ namespace ATP.AnimationPathTools {
                 if (Application.isPlaying) {
                     UnityEngine.Debug.Break();
                 }
-
+#if UNITY_EDITOR
                 if (UnityEditor.EditorUtility.DisplayDialog("Assert!", assertString + "\n" + assertInformation, "Open in editor", "Cancel")) {
                     UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(myFrame.GetFileName(), myFrame.GetFileLineNumber());
                     UnityEngine.Debug.Log(assertInformation);
                 }
+#endif
             }
         }
     }

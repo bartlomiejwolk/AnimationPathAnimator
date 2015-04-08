@@ -1293,6 +1293,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawObjectCurveToggle();
             DrawRotationCurveToggle();
 
+            EditorGUILayout.Space();
+
             EditorGUILayout.BeginHorizontal();
             DrawNodeHandleDropdown();
             HandleDrawMoveAllToggle();
@@ -1306,15 +1308,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawTangentModeDropdown();
             DrawPositionHandleDropdown();
 
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.Space();
 
+            EditorGUILayout.BeginHorizontal();
             DrawResetEaseButton();
             DrawResetRotationPathButton();
             DrawResetTiltingButton();
-
             EditorGUILayout.EndHorizontal();
 
-            DrawSceneToolShortcutsInfoLabel();
+            //DrawSceneToolShortcutsInfoLabel();
 
             EditorGUILayout.Space();
 
@@ -1322,7 +1324,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAnimationTimeValue();
             DrawPlayerControls();
-            DrawShortcutsInfoLabel();
+            //DrawShortcutsInfoLabel();
 
             EditorGUILayout.Space();
 

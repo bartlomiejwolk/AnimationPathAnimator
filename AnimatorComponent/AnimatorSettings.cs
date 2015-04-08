@@ -316,10 +316,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private string forwardPointIcon = "target_22x22-pink";
 
         [SerializeField]
-        private int gizmoCurveSamplingFrequency = 1;
+        // todo rename to objectCurveSampling.
+        private int gizmoCurveSamplingFrequency = 5;
 
         [SerializeField]
-        private int rotationCurveSampling = 1;
+        private int rotationCurveSampling = 5;
 
         [SerializeField]
         private string rotationPointGizmoIcon = "rec_16x16";

@@ -1775,11 +1775,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleEaseModeShortcut();
             HandleNodeHandleModeShortcut();
             HandleTiltingModeShortcut();
-            HandleNoneHandleModeShortcut();
             HandleUpdateAllModeShortcut();
             HandlePositionHandleShortcut();
             HandleMoveAllModeShortcut();
             HandlePlayPauseShortcut();
+            HandleNoneHandleModeShortcut();
 
             HandleShortJumpForwardShortcut();
             HandleShortJumpBackwardShortcut();

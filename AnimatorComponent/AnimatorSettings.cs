@@ -26,17 +26,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public KeyCode playModeModKey = KeyCode.RightAlt;
 
-        public KeyCode positionHandleKey = KeyCode.P;
+        public KeyCode positionHandleKey = KeyCode.G;
 
         [Header("Shortcuts")]
         [SerializeField]
-        private KeyCode easeModeKey = KeyCode.U;
+        private KeyCode easeModeKey = KeyCode.I;
 
         [SerializeField]
-        private KeyCode nodeHandleMode = KeyCode.G;
+        private KeyCode nodeHandleMode = KeyCode.Semicolon;
 
         [SerializeField]
-        private KeyCode moveAllKey = KeyCode.B;
+        private KeyCode moveAllKey = KeyCode.M;
 
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
@@ -63,13 +63,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private EventModifiers modKey = EventModifiers.Alt;
 
         [SerializeField]
-        private KeyCode noneModeKey = KeyCode.Y;
+        private KeyCode noneModeKey = KeyCode.U;
 
         [SerializeField]
         private KeyCode playPauseKey = KeyCode.Space;
 
-        [SerializeField]
-        private KeyCode rotationModeKey = KeyCode.I;
+        //[SerializeField]
+        //private KeyCode rotationModeKey = KeyCode.I;
 
         [SerializeField]
         private KeyCode shortJumpBackwardKey = KeyCode.J;
@@ -78,10 +78,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode shortJumpForwardKey = KeyCode.K;
 
         [SerializeField]
-        private KeyCode tiltingModeKey = KeyCode.I;
+        private KeyCode tiltingModeKey = KeyCode.O;
 
         [SerializeField]
-        private KeyCode updateAllKey = KeyCode.O;
+        private KeyCode updateAllKey = KeyCode.N;
 
         #endregion
 
@@ -157,10 +157,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { positionHandleKey = value; }
         }
 
-        public KeyCode RotationModeKey {
-            get { return rotationModeKey; }
-            set { rotationModeKey = value; }
-        }
+        //public KeyCode RotationModeKey {
+        //    get { return rotationModeKey; }
+        //    set { rotationModeKey = value; }
+        //}
 
         public KeyCode ShortJumpBackwardKey {
             get { return shortJumpBackwardKey; }

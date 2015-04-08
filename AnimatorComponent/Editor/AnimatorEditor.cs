@@ -1365,8 +1365,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingDrawObjectCurveToggle() {
-            if (!Script.DrawObjectPath) return;
-
             Undo.RecordObject(Script, "Toggle drawing object path.");
 
             Script.DrawObjectPath = EditorGUILayout.Toggle(

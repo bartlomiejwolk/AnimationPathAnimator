@@ -74,9 +74,9 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
                     TargetComponents[i].AnimationTime;
             }
 
-            Logger.LogString("Record: [{0}] {1}",
-                e.NodeIndex,
-                TargetComponents[0].AnimationTime);
+            //Logger.LogString("Record: [{0}] {1}",
+            //    e.NodeIndex,
+            //    TargetComponents[0].AnimationTime);
         }
 
         private void OnDisable() {
@@ -95,9 +95,9 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
                     NodeTimestamps[i][e.NodeIndex];
 
                 if (i == 0) {
-                    Logger.LogString("Jump to: [{0}] {1}",
-                        e.NodeIndex,
-                        NodeTimestamps[i][e.NodeIndex]);
+                    //Logger.LogString("Jump to: [{0}] {1}",
+                    //    e.NodeIndex,
+                    //    NodeTimestamps[i][e.NodeIndex]);
                 }
             }
         }

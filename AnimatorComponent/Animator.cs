@@ -121,6 +121,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private bool drawRotationPathCurve;
 
+        /// <summary>
+        /// Draw animated object path curve on the scene.
+        /// </summary>
+        [SerializeField]
+        private bool drawObjectPath = true;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -464,6 +470,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public bool DrawRotationPathCurve {
             get { return drawRotationPathCurve; }
             set { drawRotationPathCurve = value; }
+        }
+
+        /// <summary>
+        /// Draw animated object path curve on the scene.
+        /// </summary>
+        public bool DrawObjectPath {
+            get { return drawObjectPath; }
+            set { drawObjectPath = value; }
         }
 
         #endregion
@@ -1474,6 +1488,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawAnimationCurve() {
             // Return if path asset is not assigned.
             if (pathData == null) return;
+            if (!DrawObjectPath) return;
 
             // Get path points.
             var points = pathData.SampleAnimationPathForPoints(

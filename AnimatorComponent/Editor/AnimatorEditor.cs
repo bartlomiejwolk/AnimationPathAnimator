@@ -233,6 +233,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleDrawingMoveAllModeLables() {
             if (!Script.MoveAllMode) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -290,6 +291,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene buttons for adding new nodes.
         /// </summary>
         private void HandleDrawingAddButtons() {
+            if (!Script.DrawObjectPath) return;
+
             // Get positions for the buttons.
             var nodePositions = AddNodeButtonPositions();
 
@@ -319,6 +322,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingEaseHandles() {
             if (Script.HandleMode != HandleMode.Ease) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get path node positions with ease enabled.
             var easedNodePositions = Script.GetGlobalEasedNodePositions();
@@ -348,6 +352,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingEaseLabel() {
             if (Script.HandleMode != HandleMode.Ease) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get path node positions with ease enabled.
             var easedNodePositions = Script.GetGlobalEasedNodePositions();
@@ -366,6 +371,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing movement handles.
         /// </summary>
         private void HandleDrawingPositionHandles() {
+            if (!Script.DrawObjectPath) return;
+
             HandleFreePositionHandle();
             HandleDefaultPositionHandle();
         }
@@ -409,6 +416,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene button for removing nodes.
         /// </summary>
         private void HandleDrawingRemoveButtons() {
+            if (!Script.DrawObjectPath) return;
+
             // Get positions for the buttons.
             var nodePositions = RemoveNodeButtonPositions();
 
@@ -472,6 +481,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingTiltingHandles() {
             if (Script.HandleMode != HandleMode.Tilting) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get path node positions.
             var nodePositions =
@@ -497,6 +507,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingTiltingLabels() {
             if (Script.HandleMode != HandleMode.Tilting) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get path node positions with ease enabled.
             var tiltedNodePositions = Script.GetGlobalTiltedNodePositions();
@@ -516,6 +527,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDrawingUpdateAllModeLabel() {
             if (!Script.UpdateAllMode) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get global node positions.
             var globalNodePositions = Script.GetGlobalNodePositions();
@@ -997,6 +1009,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingSceneToolToggleButtons() {
+            if (!Script.DrawObjectPath) return;
+
             // todo this is redundant. Button won't display until at lease one
             // of those mode is active.
             if ((Script.HandleMode != HandleMode.Ease)
@@ -1348,6 +1362,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void HandleDrawingDrawObjectCurveToggle() {
+            if (!Script.DrawObjectPath) return;
+
+            Undo.RecordObject(Script, "Toggle drawing object path.");
+
+            Script.DrawObjectPath = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw Path",
+                    ""),
+                Script.DrawObjectPath);
         }
 
         private void HandleDrawingDrawRotationCurveToggle() {
@@ -1873,6 +1899,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
+
+                EditorGUILayout.Space();
+
+                HandleDrawingDrawObjectCurveToggle();
 
                 //HandleDrawEaseCurve();
                 //DrawTiltingCurve();

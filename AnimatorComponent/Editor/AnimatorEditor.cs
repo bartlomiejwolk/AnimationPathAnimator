@@ -1290,6 +1290,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             //DrawRotationPathToggle();
+            DrawObjectCurveToggle();
+            DrawRotationCurveToggle();
 
             EditorGUILayout.BeginHorizontal();
             DrawNodeHandleDropdown();
@@ -1339,10 +1341,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.BeginHorizontal();
+            //EditorGUILayout.BeginHorizontal();
             DrawRotationModeDropdown(HandleRotationModeChange);
-            HandleDrawingDrawRotationCurveToggle();
-            EditorGUILayout.EndHorizontal();
+            //EditorGUILayout.EndHorizontal();
 
             HandleDrawForwardPointOffsetSlider();
             DrawWrapModeDropdown();
@@ -1364,29 +1365,29 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawAdvancedSettingsControls();
         }
 
-        private void HandleDrawingDrawObjectCurveToggle() {
+        private void DrawObjectCurveToggle() {
             Undo.RecordObject(Script, "Toggle drawing object path.");
 
             Script.DrawObjectPath = EditorGUILayout.Toggle(
                 new GUIContent(
-                    "Draw Path",
+                    "Draw Object Path",
                     ""),
                 Script.DrawObjectPath);
         }
 
-        private void HandleDrawingDrawRotationCurveToggle() {
+        private void DrawRotationCurveToggle() {
             // Draw toggle only in Ease and Tilting handle mode.
-            if (Script.RotationMode != RotationMode.Custom) return;
+            //if (Script.RotationMode != RotationMode.Custom) return;
 
-            EditorGUIUtility.labelWidth = 65;
+            //EditorGUIUtility.labelWidth = 65;
 
             Script.DrawRotationPathCurve = EditorGUILayout.Toggle(
                 new GUIContent(
-                    "Draw",
+                    "Draw Rotation Path",
                     ""),
                 Script.DrawRotationPathCurve);
 
-            EditorGUIUtility.labelWidth = 0;
+            //EditorGUIUtility.labelWidth = 0;
         }
 
         private void HandleDrawMoveAllToggle() {
@@ -1897,13 +1898,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-
-                EditorGUILayout.Space();
-
-                HandleDrawingDrawObjectCurveToggle();
-
-                //HandleDrawEaseCurve();
-                //DrawTiltingCurve();
+                HandleDrawEaseCurve();
+                DrawTiltingCurve();
 
                 EditorGUILayout.Space();
 

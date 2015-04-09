@@ -1304,6 +1304,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawAnimatedGOField();
             DrawTargetGOField();
 
+            // Hide inspector options if path is not selected.
+            if (Script.PathData == null) return;
+
             EditorGUILayout.Space();
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);

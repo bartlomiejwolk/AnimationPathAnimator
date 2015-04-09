@@ -60,6 +60,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             UnsubscribeFromEvents();
         }
 
+        // todo rename to UnsubscribeFromAnimatorEvents.
         private void UnsubscribeFromEvents() {
             // Guard agains null reference.
             if (Animator == null) Animator = GetComponent<AnimationPathAnimator>();
@@ -162,7 +163,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         private void HandlePathDataRefChange() {
             // todo invert condition (if == null)
             if (Animator.PathData != null) {
-                UnsubscribeFromEvents();
+                UnsubscribeFromPathEvents();
                 //SubscribeToAnimatorEvents();
                 SubscribeToPathEvents();
                 InitializeSlots();

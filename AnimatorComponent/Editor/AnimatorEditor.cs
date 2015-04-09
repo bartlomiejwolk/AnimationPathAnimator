@@ -1295,6 +1295,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUILayout.Space();
 
+            DrawTangentModeDropdown();
+            DrawRotationModeDropdown(HandleRotationModeChange);
+
+            EditorGUILayout.Space();
+
             EditorGUILayout.BeginHorizontal();
             DrawHandleModeDropdown();
             HandleDrawUpdateAllToggle();
@@ -1306,11 +1311,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUILayout.EndHorizontal();
 
             DrawPositionHandleDropdown();
-
-            EditorGUILayout.Space();
-
-            DrawTangentModeDropdown();
-            DrawRotationModeDropdown(HandleRotationModeChange);
 
             EditorGUILayout.Space();
 

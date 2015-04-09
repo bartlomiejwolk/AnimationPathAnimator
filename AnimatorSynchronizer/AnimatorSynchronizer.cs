@@ -2,34 +2,33 @@
 using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
-using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
 namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
-    [RequireComponent(typeof(AnimatorComponent.Animator))]
+    [RequireComponent(typeof(AnimatorComponent.AnimationPathAnimator))]
     public sealed class AnimatorSynchronizer : MonoBehaviour {
 
         [SerializeField]
-        private AnimatorComponent.Animator animator;
+        private AnimatorComponent.AnimationPathAnimator animator;
 
         /// <summary>
         /// 
         /// </summary>
         /// <remarks>Assigned in editor.</remarks>
         [SerializeField]
-        private List<AnimatorComponent.Animator> targetComponents; 
+        private List<AnimatorComponent.AnimationPathAnimator> targetComponents; 
 
         private List<Dictionary<int, float>> nodeTimestamps;
 
         /// <summary>
         /// Source animator component.
         /// </summary>
-        public AnimatorComponent.Animator Animator {
+        public AnimatorComponent.AnimationPathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
 
-        public List<AnimatorComponent.Animator> TargetComponents {
+        public List<AnimatorComponent.AnimationPathAnimator> TargetComponents {
             get { return targetComponents; }
         }
 

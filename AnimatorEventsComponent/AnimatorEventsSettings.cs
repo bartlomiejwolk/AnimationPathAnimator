@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace ATP.AnimationPathTools.EventsComponent {
+namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
-    public sealed class EventsSettings : ScriptableObject {
+    public sealed class AnimatorEventsSettings : ScriptableObject {
         #region FIELDS
 
         [SerializeField]

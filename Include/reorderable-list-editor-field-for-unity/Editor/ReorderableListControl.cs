@@ -473,7 +473,7 @@ namespace ATP.AnimationPathTools.ReorderableList {
 
 		#endregion
 
-		#region Events
+		#region AnimatorEvents
 
 		/// <summary>
 		/// Occurs after list item is inserted or duplicated.

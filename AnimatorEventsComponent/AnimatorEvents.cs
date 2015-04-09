@@ -3,19 +3,18 @@ using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
 // todo use qualified name instead.
-using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
-namespace ATP.AnimationPathTools.EventsComponent {
+namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
-    [RequireComponent(typeof (Animator))]
-    public class Events : MonoBehaviour, ISerializationCallbackReceiver {
+    [RequireComponent(typeof (AnimationPathAnimator))]
+    public class AnimatorEvents : MonoBehaviour, ISerializationCallbackReceiver {
         #region FIELDS
 
         [SerializeField]
         private bool advancedSettingsFoldout;
 
         [SerializeField]
-        private Animator animator;
+        private AnimationPathAnimator animator;
 
 #pragma warning disable 0414 
         [SerializeField]
@@ -26,7 +25,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private List<NodeEventSlot> nodeEventSlots;
 
         [SerializeField]
-        private EventsSettings settings;
+        private AnimatorEventsSettings settings;
 
         [SerializeField]
         private GUISkin skin;
@@ -35,12 +34,12 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         #region PROPERTIES
 
-        public Animator Animator {
+        public AnimationPathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
 
-        public EventsSettings Settings {
+        public AnimatorEventsSettings Settings {
             get { return settings; }
         }
 
@@ -63,7 +62,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void UnsubscribeFromEvents() {
             // Guard agains null reference.
-            if (Animator == null) Animator = GetComponent<Animator>();
+            if (Animator == null) Animator = GetComponent<AnimationPathAnimator>();
 
             Animator.NodeReached -= Animator_NodeReached;
             Animator.PathDataRefChanged -= Animator_PathDataRefChanged;
@@ -94,7 +93,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         }
 
         private void Reset() {
-            Animator = GetComponent<Animator>();
+            Animator = GetComponent<AnimationPathAnimator>();
             nodeEventSlots = new List<NodeEventSlot>();
 
             InitializeSlots();
@@ -132,8 +131,8 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void LoadRequiredResources() {
             settings =
-                Resources.Load<EventsSettings>("DefaultEventsSettings");
-            skin = Resources.Load("DefaultEventsSkin") as GUISkin;
+                Resources.Load<AnimatorEventsSettings>("DefaultAnimatorEventsSettings");
+            skin = Resources.Load("DefaultAnimatorEventsSkin") as GUISkin;
         }
 
         // todo add same to other behaviours
@@ -143,7 +142,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void SubscribeToAnimatorEvents() {
             // Guard agains null reference.
-            if (Animator == null) Animator = GetComponent<Animator>();
+            if (Animator == null) Animator = GetComponent<AnimationPathAnimator>();
 
             Animator.NodeReached += Animator_NodeReached;
             Animator.PathDataRefChanged += Animator_PathDataRefChanged;

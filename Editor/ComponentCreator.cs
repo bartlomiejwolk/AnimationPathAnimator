@@ -24,7 +24,7 @@ namespace ATP.AnimationPathTools {
         [MenuItem("Component/ATP/AnimationPathTools/Animator")]
         private static void AddAPAnimatorComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(Animator));
+                Selection.activeGameObject.AddComponent(typeof(AnimationPathAnimator));
             }
         }
 

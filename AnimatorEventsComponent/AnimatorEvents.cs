@@ -3,11 +3,10 @@ using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
 // todo use qualified name instead.
-using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
 namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
-    [RequireComponent(typeof (Animator))]
+    [RequireComponent(typeof (AnimationPathAnimator))]
     public class AnimatorEvents : MonoBehaviour, ISerializationCallbackReceiver {
         #region FIELDS
 
@@ -15,7 +14,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         private bool advancedSettingsFoldout;
 
         [SerializeField]
-        private Animator animator;
+        private AnimationPathAnimator animator;
 
 #pragma warning disable 0414 
         [SerializeField]
@@ -35,7 +34,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         #region PROPERTIES
 
-        public Animator Animator {
+        public AnimationPathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
@@ -63,7 +62,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         private void UnsubscribeFromEvents() {
             // Guard agains null reference.
-            if (Animator == null) Animator = GetComponent<Animator>();
+            if (Animator == null) Animator = GetComponent<AnimationPathAnimator>();
 
             Animator.NodeReached -= Animator_NodeReached;
             Animator.PathDataRefChanged -= Animator_PathDataRefChanged;
@@ -94,7 +93,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         }
 
         private void Reset() {
-            Animator = GetComponent<Animator>();
+            Animator = GetComponent<AnimationPathAnimator>();
             nodeEventSlots = new List<NodeEventSlot>();
 
             InitializeSlots();
@@ -143,7 +142,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         private void SubscribeToAnimatorEvents() {
             // Guard agains null reference.
-            if (Animator == null) Animator = GetComponent<Animator>();
+            if (Animator == null) Animator = GetComponent<AnimationPathAnimator>();
 
             Animator.NodeReached += Animator_NodeReached;
             Animator.PathDataRefChanged += Animator_PathDataRefChanged;

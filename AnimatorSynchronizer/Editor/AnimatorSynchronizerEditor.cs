@@ -32,12 +32,12 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         }
 
         private void DrawSourceAnimatorField() {
-            Script.Animator = (AnimatorComponent.Animator)EditorGUILayout.ObjectField(
+            Script.Animator = (AnimatorComponent.AnimationPathAnimator)EditorGUILayout.ObjectField(
                 new GUIContent(
                     "Animator",
                     ""),
                 Script.Animator,
-                typeof (AnimatorComponent.Animator));
+                typeof (AnimatorComponent.AnimationPathAnimator));
         }
 
     }

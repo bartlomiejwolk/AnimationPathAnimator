@@ -9,7 +9,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
     /// and with keyboard shortcuts.
     /// </summary>
     // todo add menu option to create component
-    [RequireComponent(typeof(AnimatorComponent.Animator))]
+    [RequireComponent(typeof(AnimatorComponent.AnimationPathAnimator))]
     [RequireComponent(typeof(AudioSource))]
     public sealed class AudioSynchronizer : MonoBehaviour {
 
@@ -17,7 +17,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         private AudioSource audioSource;
 
         [SerializeField]
-        private AnimatorComponent.Animator animator;
+        private AnimatorComponent.AnimationPathAnimator animator;
 
         /// <summary>
         /// If to start audio playback on play mode enter.
@@ -49,7 +49,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         /// <summary>
         /// Reference to animator component.
         /// </summary>
-        public AnimatorComponent.Animator Animator {
+        public AnimatorComponent.AnimationPathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
@@ -91,7 +91,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
         private void Reset() {
             AudioSource = GetComponent<AudioSource>();
-            Animator = GetComponent<AnimatorComponent.Animator>();
+            Animator = GetComponent<AnimatorComponent.AnimationPathAnimator>();
         }
 
         private void Start() {

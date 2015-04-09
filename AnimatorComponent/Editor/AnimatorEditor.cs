@@ -2151,13 +2151,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPositionHandleDropdown() {
-            // Disable in these modes.
+            var disable = Script.NodeHandle != NodeHandle.Position;
+
+            // In tangent mode draw only free movement handle.
             if (Script.TangentMode == TangentMode.Custom
                 && Script.NodeHandle == NodeHandle.Tangent) {
 
                 Script.PositionHandle = PositionHandle.Free;
-                return;
+                //return;
             }
+
+            EditorGUI.BeginDisabledGroup(disable);
 
             serializedObject.Update();
 
@@ -2170,6 +2174,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "shortcut: G"));
 
             serializedObject.ApplyModifiedProperties();
+
+            EditorGUI.EndDisabledGroup();
         }
 
         private void DrawPositionSpeedSlider() {

@@ -382,7 +382,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void HandleDefaultPositionHandle() {
             if (positionHandle.enumValueIndex ==
-                (int) PositionHandle.Position) {
+                (int) PositionHandle.Default) {
 
                 // Get node positions.
                 var nodeGlobalPositions = Script.GetGlobalNodePositions();
@@ -1765,7 +1765,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Change to Position mode.
                 if (Script.PositionHandle == PositionHandle.Free) {
                     Script.PositionHandle =
-                        PositionHandle.Position;
+                        PositionHandle.Default;
                 }
                 // Change to Free mode.
                 else {

@@ -1,5 +1,5 @@
 namespace ATP.AnimationPathTools.AnimatorComponent {
 
-    public enum PositionHandle { Free, Position }
+    public enum PositionHandle { Free, Default }
 
 }

@@ -12,9 +12,6 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         private int defaultNodeLabelWidth = 100;
 
         [SerializeField]
-        private bool drawMethodNames = true;
-
-        [SerializeField]
         private int methodNameLabelOffsetX = 30;
 
         [SerializeField]
@@ -32,11 +29,6 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         public int DefaultNodeLabelWidth {
             get { return defaultNodeLabelWidth; }
             set { defaultNodeLabelWidth = value; }
-        }
-
-        public bool DrawMethodNames {
-            get { return drawMethodNames; }
-            set { drawMethodNames = value; }
         }
 
         public int MethodNameLabelOffsetX {

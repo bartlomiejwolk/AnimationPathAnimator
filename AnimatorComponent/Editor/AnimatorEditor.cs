@@ -1744,7 +1744,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 == Script.SettingsAsset.NoneModeKey) {
 
                 Script.HandleMode = HandleMode.None;
-                HandleHandleModeChange();
+                HandleModeChange();
             }
         }
 
@@ -2078,7 +2078,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if handle mode wasn't changed.
             if (Script.HandleMode == prevHandleMode) return;
 
-            HandleHandleModeChange();
+            HandleModeChange();
         }
 
         private void DrawInfoLabel(string text) {
@@ -2442,7 +2442,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUI.EndDisabledGroup();
         }
 
-        private void HandleHandleModeChange() {
+        private void HandleModeChange() {
             // If handle mode was changed to None..
             if (Script.HandleMode == HandleMode.None) {
                 // Don't display update all values mode label.

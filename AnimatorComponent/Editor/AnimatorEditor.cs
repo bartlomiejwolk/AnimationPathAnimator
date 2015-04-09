@@ -1296,15 +1296,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
+            DrawHandleModeDropdown();
+            HandleDrawUpdateAllToggle();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
             DrawNodeHandleDropdown();
             HandleDrawMoveAllToggle();
             EditorGUILayout.EndHorizontal();
             DrawPositionHandleDropdown();
-
-            EditorGUILayout.BeginHorizontal();
-            DrawHandleModeDropdown();
-            HandleDrawUpdateAllToggle();
-            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
@@ -1411,6 +1411,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawNodeHandleDropdown() {
+            if (Script.TangentMode != TangentMode.Custom) return;
+
             Script.NodeHandle =
                 (NodeHandle) EditorGUILayout.EnumPopup(
                     new GUIContent(
@@ -2139,6 +2141,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawPositionHandleDropdown() {
+            // Disable in these modes.
+            if (Script.TangentMode == TangentMode.Custom
+                && Script.NodeHandle == NodeHandle.Tangent) return;
+
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(

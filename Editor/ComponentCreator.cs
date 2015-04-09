@@ -1,5 +1,5 @@
 ﻿using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.AnimationPathTools.EventsComponent;
+using ATP.AnimationPathTools.AnimatorEventsComponent;
 using UnityEditor;
 
 namespace ATP.AnimationPathTools {
@@ -16,9 +16,9 @@ namespace ATP.AnimationPathTools {
             ScriptableObjectUtility.CreateAsset<AnimatorSettings>("AnimatorSettings");
         }
 
-        [MenuItem("Assets/Create/ATP/AnimationPathTools/Events Settings")]
+        [MenuItem("Assets/Create/ATP/AnimationPathTools/AnimatorEvents Settings")]
         private static void CreateAPEventsReflectionSettingsAsset() {
-            ScriptableObjectUtility.CreateAsset<EventsSettings>("EventsSettings");
+            ScriptableObjectUtility.CreateAsset<AnimatorEventsSettings>("AnimatorEventsSettings");
         }
 
         [MenuItem("Component/ATP/AnimationPathTools/Animator")]
@@ -28,10 +28,10 @@ namespace ATP.AnimationPathTools {
             }
         }
 
-        [MenuItem("Component/ATP/AnimationPathTools/Events")]
+        [MenuItem("Component/ATP/AnimationPathTools/AnimatorEvents")]
         private static void AddAPEventsComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(Events));
+                Selection.activeGameObject.AddComponent(typeof(AnimatorEvents));
             }
         }
     }

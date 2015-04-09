@@ -5,10 +5,10 @@ using UnityEngine;
 // todo use qualified name instead.
 using Animator = ATP.AnimationPathTools.AnimatorComponent.Animator;
 
-namespace ATP.AnimationPathTools.EventsComponent {
+namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
     [RequireComponent(typeof (Animator))]
-    public class Events : MonoBehaviour, ISerializationCallbackReceiver {
+    public class AnimatorEvents : MonoBehaviour, ISerializationCallbackReceiver {
         #region FIELDS
 
         [SerializeField]
@@ -26,7 +26,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private List<NodeEventSlot> nodeEventSlots;
 
         [SerializeField]
-        private EventsSettings settings;
+        private AnimatorEventsSettings settings;
 
         [SerializeField]
         private GUISkin skin;
@@ -40,7 +40,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             set { animator = value; }
         }
 
-        public EventsSettings Settings {
+        public AnimatorEventsSettings Settings {
             get { return settings; }
         }
 
@@ -132,8 +132,8 @@ namespace ATP.AnimationPathTools.EventsComponent {
 
         private void LoadRequiredResources() {
             settings =
-                Resources.Load<EventsSettings>("DefaultEventsSettings");
-            skin = Resources.Load("DefaultEventsSkin") as GUISkin;
+                Resources.Load<AnimatorEventsSettings>("DefaultAnimatorEventsSettings");
+            skin = Resources.Load("DefaultAnimatorEventsSkin") as GUISkin;
         }
 
         // todo add same to other behaviours

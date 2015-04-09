@@ -4,18 +4,18 @@ using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.EventsComponent {
+namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
-    [CustomEditor(typeof (Events))]
-    public class EventsEditor : Editor {
+    [CustomEditor(typeof (AnimatorEvents))]
+    public class AnimatorEventsEditor : Editor {
 
         #region PROPERTIES
 
         public bool SerializedPropertiesInitialized { get; set; }
 
-        private Events Script { get; set; }
+        private AnimatorEvents Script { get; set; }
 
-        private EventsSettings Settings { get; set; }
+        private AnimatorEventsSettings Settings { get; set; }
 
         #endregion
 
@@ -55,7 +55,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
             DrawAdvancedSettingsControls();
         }
         private void OnEnable() {
-            Script = target as Events;
+            Script = target as AnimatorEvents;
 
             if (!AssetsLoaded()) return;
 
@@ -119,7 +119,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
         private void DrawReorderableEventList() {
             serializedObject.Update();
 
-            ReorderableListGUI.Title("Events");
+            ReorderableListGUI.Title("AnimatorEvents");
             ReorderableListGUI.ListField(
                 nodeEvents,
                 ReorderableListFlags.HideAddButton
@@ -137,7 +137,7 @@ namespace ATP.AnimationPathTools.EventsComponent {
                 settings,
                 new GUIContent(
                     "Settings Asset",
-                    "Reference to asset with all Events component settings."));
+                    "Reference to asset with all AnimatorEvents component settings."));
 
             serializedObject.ApplyModifiedProperties();
         }

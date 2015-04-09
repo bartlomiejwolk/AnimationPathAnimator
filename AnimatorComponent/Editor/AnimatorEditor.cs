@@ -1415,7 +1415,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawNodeHandleDropdown() {
-            if (Script.TangentMode != TangentMode.Custom) return;
+            var disable = Script.TangentMode != TangentMode.Custom;
+
+            EditorGUI.BeginDisabledGroup(disable);
 
             Script.NodeHandle =
                 (NodeHandle) EditorGUILayout.EnumPopup(
@@ -1423,6 +1425,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                         "Node Handle",
                         "On-scene node handle."),
                     Script.NodeHandle);
+
+            EditorGUI.EndDisabledGroup();
         }
 
         private void DrawTiltingCurve() {

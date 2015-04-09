@@ -1804,6 +1804,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleNodeHandleModeShortcut() {
+            if (Script.TangentMode != TangentMode.Custom) return;
+
             // Node handle mode.
             if (Event.current.type == EventType.keyDown
                 && Event.current.keyCode

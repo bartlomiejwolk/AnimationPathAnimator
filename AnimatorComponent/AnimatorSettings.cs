@@ -30,7 +30,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [Header("Shortcuts")]
         [SerializeField]
-        private KeyCode easeModeKey = KeyCode.I;
+        private KeyCode easeModeKey = KeyCode.U;
 
         [SerializeField]
         private KeyCode nodeHandleMode = KeyCode.Semicolon;
@@ -63,7 +63,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private EventModifiers modKey = EventModifiers.Alt;
 
         [SerializeField]
-        private KeyCode noneModeKey = KeyCode.U;
+        private KeyCode noneModeKey = KeyCode.Y;
 
         [SerializeField]
         private KeyCode playPauseKey = KeyCode.Space;
@@ -78,10 +78,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode shortJumpForwardKey = KeyCode.K;
 
         [SerializeField]
-        private KeyCode tiltingModeKey = KeyCode.O;
+        private KeyCode tiltingModeKey = KeyCode.I;
 
         [SerializeField]
-        private KeyCode updateAllKey = KeyCode.N;
+        private KeyCode updateAllKey = KeyCode.O;
 
         #endregion
 

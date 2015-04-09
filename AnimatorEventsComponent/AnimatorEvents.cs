@@ -164,7 +164,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             if (Animator.PathData != null) {
                 UnsubscribeFromEvents();
                 //SubscribeToAnimatorEvents();
-                SubscriptToPathEvents();
+                SubscribeToPathEvents();
                 InitializeSlots();
             }
             else {
@@ -174,7 +174,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             }
         }
 
-        private void SubscriptToPathEvents() {
+        private void SubscribeToPathEvents() {
             if (Animator.PathData != null) {
                 Animator.PathData.NodeAdded += PathData_NodeAdded;
                 Animator.PathData.NodeRemoved += PathData_NodeRemoved;

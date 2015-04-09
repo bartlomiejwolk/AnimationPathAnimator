@@ -195,7 +195,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float forwardPointOffsetMinValue = 0.001f;
 
         [SerializeField]
-        private float forwardPointOffsetMaxValue = 0.5f;
+        private float forwardPointOffsetMaxValue = 0.15f;
 
         /// <summary>
         ///     Holds references to icons that will be copied to Assets/Gizmos folder.

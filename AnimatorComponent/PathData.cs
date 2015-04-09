@@ -464,7 +464,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void DistributeTimestamps(int pathLengthSampling) {
-            // Calculate path curved length.
             var pathLength = AnimatedObjectPath.CalculatePathLength(
                 pathLengthSampling);
 
@@ -477,8 +476,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
+                // todo crate setting in asset file for 3'd argument
                 var sectionLength = AnimatedObjectPath
-                    .CalculateSectionLinearLength(i - 1, i);
+                    .CalculateSectionLength(i - 1, i, 5);
 
                 // Calculate time interval for the section.
                 var sectionTimeInterval = sectionLength * timeForMeter;
@@ -490,8 +490,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 prevTimestamp = newTimestamp;
 
                 // NOTE When nodes on the scene overlap, it's possible that new
-                // timestamp is > 0, which is invalid.
+                // timestamp is > 1, which is invalid.
                 if (newTimestamp > 1) break;
+
+                //var nextNodeTimestamp = GetNodeTimestamp(i + 1);
+                //if (newTimestamp >= nextNodeTimestamp)
+                //    return;
 
                 // Update node timestamp.
                 AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);

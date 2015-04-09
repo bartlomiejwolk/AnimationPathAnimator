@@ -453,24 +453,46 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.NodeHandle != NodeHandle.Position) return;
             if (!Script.DrawRotationPathCurve) return;
 
-            var currentAnimationTime = Script.AnimationTime;
-            var rotationPointPosition =
-                Script.PathData.GetRotationAtTime(currentAnimationTime);
-            var rotationPointGlobalPosition =
-                Script.transform.TransformPoint(rotationPointPosition);
-            var nodeTimestamps = Script.PathData.GetPathTimestamps();
-
             // Return if current animation time is not equal to any node
             // timestamp.
+            var nodeTimestamps = Script.PathData.GetPathTimestamps();
             var index = Array.FindIndex(
                 nodeTimestamps,
                 x => Utilities.FloatsEqual(
                     x,
-                    currentAnimationTime,
+                    Script.AnimationTime,
                     GlobalConstants.FloatPrecision));
             if (index < 0) return;
 
-            SceneHandles.DrawRotationHandle(
+            var rotationPointPosition =
+                Script.PathData.GetRotationAtTime(Script.AnimationTime);
+            var rotationPointGlobalPosition =
+                Script.transform.TransformPoint(rotationPointPosition);
+
+            HandleDrawFreeRotationHandle(rotationPointGlobalPosition);
+            HandleDrawDefaultRotationHandle(rotationPointGlobalPosition);
+        }
+
+        private void HandleDrawDefaultRotationHandle(
+            Vector3 rotationPointGlobalPosition) {
+
+            if (positionHandle.enumValueIndex != (int) PositionHandle.Default) {
+                return;
+            }
+
+            SceneHandles.DrawDefaultRotationHandle(
+                rotationPointGlobalPosition,
+                DrawRotationHandlesCallbackHandler);
+        }
+
+        private void HandleDrawFreeRotationHandle(
+            Vector3 rotationPointGlobalPosition) {
+
+            if (positionHandle.enumValueIndex != (int) PositionHandle.Free) {
+                return;
+            }
+
+            SceneHandles.DrawCustomRotationHandle(
                 rotationPointGlobalPosition,
                 Script.SettingsAsset.RotationHandleSize,
                 Script.SettingsAsset.RotationHandleColor,

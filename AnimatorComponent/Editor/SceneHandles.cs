@@ -212,7 +212,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public static void DrawRotationHandle(
+        public static void DrawCustomRotationHandle(
             Vector3 rotationPointGlobalPosition,
             float rotationHandleSize,
             Color rotationHandleColor,
@@ -232,6 +232,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 sphereSize,
                 Vector3.zero,
                 Handles.SphereCap);
+
+            if (newGlobalPosition != rotationPointGlobalPosition) {
+                callback(newGlobalPosition);
+            }
+        }
+
+        public static void DrawDefaultRotationHandle(
+            Vector3 rotationPointGlobalPosition,
+            Action<Vector3> callback) {
+
+            // Draw node's handle.
+            var newGlobalPosition = Handles.PositionHandle(
+                rotationPointGlobalPosition,
+                Quaternion.identity);
 
             if (newGlobalPosition != rotationPointGlobalPosition) {
                 callback(newGlobalPosition);

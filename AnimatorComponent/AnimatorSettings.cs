@@ -378,7 +378,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private int smoothButtonOffsetH = 72;
 
         [SerializeField]
+        private int rotationSmoothButtonOffsetH = 15;
+
+        [SerializeField]
         private int smoothButtonOffsetV = 5;
+
+        [SerializeField]
+        private int rotationSmoothButtonOffsetV = 5;
 
         [SerializeField]
         private int sceneToolToggleOffsetV = 5;
@@ -602,6 +608,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public int SmoothButtonOffsetH {
             get { return smoothButtonOffsetH; }
             set { smoothButtonOffsetH = value; }
+        }
+
+        /// <summary>
+        /// Horizontal offset for rotation path on-scene smooth button.
+        /// </summary>
+        public int RotationSmoothButtonOffsetH {
+            get { return rotationSmoothButtonOffsetH; }
+            set { rotationSmoothButtonOffsetH = value; }
+        }
+
+        /// <summary>
+        /// Vertical offset for rotation path on-scene smooth button.
+        /// </summary>
+        public int RotationSmoothButtonOffsetV {
+            get { return rotationSmoothButtonOffsetV; }
+            set { rotationSmoothButtonOffsetV = value; }
         }
 
         /// <summary>

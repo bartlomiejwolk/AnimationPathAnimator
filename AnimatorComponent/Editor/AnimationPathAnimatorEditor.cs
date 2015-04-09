@@ -178,22 +178,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingRotationPathSmoothButtons() {
-            // Custom tangent mode and Tangent node handle must be enabled.
             if ((Script.TangentMode != TangentMode.Custom)
                 || (Script.RotationMode != RotationMode.Custom)) return;
 
-            // Get positions positions.
             var nodePositions = Script.GetGlobalRotationPointPositions();
 
-            // Get style for add button.
             var buttonStyle = Script.Skin.GetStyle(
                 "SmoothNodeButton");
 
-            // Draw add node buttons.
             SceneHandles.DrawNodeButtons(
                 nodePositions,
-                Script.SettingsAsset.SmoothButtonOffsetH,
-                Script.SettingsAsset.SmoothButtonOffsetV,
+                Script.SettingsAsset.RotationSmoothButtonOffsetH,
+                Script.SettingsAsset.RotationSmoothButtonOffsetV,
                 DrawRotationPathSmoothButtonsCallbackHandler,
                 buttonStyle);
         }

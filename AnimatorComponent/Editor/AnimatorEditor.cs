@@ -207,6 +207,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingPathSmoothButtons() {
             // Custom tangent mode and Tangent node handle must be enabled.
             if (Script.TangentMode != TangentMode.Custom) return;
+            if (!Script.DrawObjectPath) return;
 
             // Get positions positions.
             var nodePositions = Script.GetGlobalNodePositions();

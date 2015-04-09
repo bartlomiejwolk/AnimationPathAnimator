@@ -14,10 +14,10 @@ MonoBehaviour:
   minNodeTimeSeparation: .00100000005
   pathLengthSampling: 40
   playModeModKey: 307
-  positionHandleKey: 112
+  positionHandleKey: 103
   easeModeKey: 117
-  nodeHandleMode: 103
-  moveAllKey: 98
+  nodeHandleMode: 59
+  moveAllKey: 109
   jumpToEndKey: 108
   jumpToNextNodeKey: 108
   jumpToPreviousNodeKey: 104
@@ -27,14 +27,13 @@ MonoBehaviour:
   modKey: 4
   noneModeKey: 121
   playPauseKey: 32
-  rotationModeKey: 105
   shortJumpBackwardKey: 106
   shortJumpForwardKey: 107
   tiltingModeKey: 105
   updateAllKey: 111
   countdownToStopFramesNo: 10
   forwardPointOffsetMinValue: .00100000005
-  forwardPointOffsetMaxValue: .5
+  forwardPointOffsetMaxValue: .150000006
   gizmoIcons: []
   animationSpeedDenominator: .0500000007
   maxRotationSlerpSpeed: 20
@@ -46,14 +45,16 @@ MonoBehaviour:
   shortJumpMaxValue: .00400000019
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
-  gizmoCurveSamplingFrequency: 1
-  rotationCurveSampling: 1
+  gizmoCurveSamplingFrequency: 5
+  rotationCurveSampling: 5
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   tangentHandleSize: .25
   sceneToolToggleOffsetH: 53
   smoothButtonOffsetH: 72
+  rotationSmoothButtonOffsetH: 15
   smoothButtonOffsetV: 5
+  rotationSmoothButtonOffsetV: 5
   sceneToolToggleOffsetV: 5
   addButtonOffsetH: 15
   addButtonOffsetV: 5

@@ -2448,6 +2448,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Don't display update all values mode label.
                 Script.UpdateAllMode = false;
             }
+            // Handle changed to ease or tilting.
+            else {
+                Script.PositionHandle = PositionHandle.Free;
+            }
         }
 
         #endregion

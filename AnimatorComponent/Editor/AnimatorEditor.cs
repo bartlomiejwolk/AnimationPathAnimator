@@ -1304,6 +1304,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawNodeHandleDropdown();
             HandleDrawMoveAllToggle();
             EditorGUILayout.EndHorizontal();
+
             DrawPositionHandleDropdown();
 
             EditorGUILayout.Space();
@@ -1395,8 +1396,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawMoveAllToggle() {
-            // Return if move all mode is disabled.
-            if (Script.NodeHandle != NodeHandle.Position) return;
+            bool disabled = Script.NodeHandle != NodeHandle.Position;
+
+            EditorGUI.BeginDisabledGroup(disabled);
 
             EditorGUIUtility.labelWidth = 65;
 
@@ -1408,6 +1410,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.MoveAllMode);
 
             EditorGUIUtility.labelWidth = 0;
+
+            EditorGUI.EndDisabledGroup();
         }
 
         private void DrawNodeHandleDropdown() {
@@ -2143,10 +2147,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawPositionHandleDropdown() {
             // Disable in these modes.
             if (Script.TangentMode == TangentMode.Custom
-                && Script.NodeHandle == NodeHandle.Tangent) return;
+                && Script.NodeHandle == NodeHandle.Tangent) {
+
+                Script.PositionHandle = PositionHandle.Free;
+                return;
+            }
 
             serializedObject.Update();
 
+            // todo don't use serialized property
             EditorGUILayout.PropertyField(
                 positionHandle,
                 new GUIContent(
@@ -2401,12 +2410,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawUpdateAllToggle() {
-            // Draw toggle only in Ease and Tilting handle mode.
-            if ((Script.HandleMode != HandleMode.Ease)
-                && (Script.HandleMode != HandleMode.Tilting)) {
+            bool disable = (Script.HandleMode != HandleMode.Ease)
+                           && (Script.HandleMode != HandleMode.Tilting);
 
-                return;
-            }
+            EditorGUI.BeginDisabledGroup(disable);
 
             EditorGUIUtility.labelWidth = 65;
 
@@ -2418,6 +2425,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.UpdateAllMode);
 
             EditorGUIUtility.labelWidth = 0;
+
+            EditorGUI.EndDisabledGroup();
         }
 
         private void HandleHandleModeChange() {

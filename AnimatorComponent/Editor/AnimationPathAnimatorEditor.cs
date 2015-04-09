@@ -1382,9 +1382,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void DrawRotationCurveToggle() {
-            // Draw toggle only in Ease and Tilting handle mode.
-            //if (Script.RotationMode != RotationMode.Custom) return;
+            var disable = Script.RotationMode != RotationMode.Custom;
 
+            EditorGUI.BeginDisabledGroup(disable);
             //EditorGUIUtility.labelWidth = 65;
 
             Script.DrawRotationPathCurve = EditorGUILayout.Toggle(
@@ -1392,6 +1392,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Draw Rotation Path",
                     ""),
                 Script.DrawRotationPathCurve);
+
+            EditorGUI.EndDisabledGroup();
 
             //EditorGUIUtility.labelWidth = 0;
         }

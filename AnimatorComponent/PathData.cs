@@ -212,8 +212,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
-            Debug.Log("Node added to list: " + e.NodeIndex
-                + " Current tilting entries: " + TiltingToolState.Count);
+            //Debug.Log("Node added to list: " + e.NodeIndex
+            //    + " Current tilting entries: " + TiltingToolState.Count);
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {

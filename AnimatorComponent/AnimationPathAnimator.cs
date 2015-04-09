@@ -215,7 +215,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public bool Pause {
             get { return pause; }
             set {
-                // Remember previous value.
                 var prevPause = pause;
 
                 pause = value;
@@ -536,7 +535,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region EVENT INVOCATORS
         private void OnPathDataRefChanged() {
-            Debug.Log("PathDataRefChanged");
             var handler = PathDataRefChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -1445,6 +1443,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Subscribe to events.
         /// </summary>
         private void SubscribeToEvents() {
+            AnimationEnded += APAnimator_AnimationEnded;
+            PathDataRefChanged += Animator_PathDataRefChanged;
+
             if (pathData == null) return;
 
             PathData.RotationPointPositionChanged +=
@@ -1453,8 +1454,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.TiltingCurveUpdated += PathData_TiltingCurveUpdated;
             PathData.PathReset += PathData_PathReset;
             PathData.RotationPathReset += PathData_RotationPathReset;
-            AnimationEnded += APAnimator_AnimationEnded;
-            PathDataRefChanged += Animator_PathDataRefChanged;
         }
 
         void Animator_PathDataRefChanged(object sender, EventArgs e) {

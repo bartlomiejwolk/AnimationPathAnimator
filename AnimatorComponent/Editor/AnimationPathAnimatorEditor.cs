@@ -398,7 +398,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Free) {
 
-                // Get node positions.
                 var nodeGlobalPositions = Script.GetGlobalNodePositions();
 
                 SceneHandles.DrawCustomPositionHandles(
@@ -738,6 +737,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Current path length.
             var newAnimGoPathLength = Script.PathData.GetPathLength(
                 Script.SettingsAsset.PathLengthSampling);
+
             DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
         }
 

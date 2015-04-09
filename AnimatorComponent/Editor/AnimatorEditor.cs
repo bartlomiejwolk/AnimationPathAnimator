@@ -1298,6 +1298,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawTangentModeDropdown();
             DrawRotationModeDropdown(HandleRotationModeChange);
+            HandleDrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 
@@ -1351,7 +1352,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //EditorGUILayout.BeginHorizontal();
             //EditorGUILayout.EndHorizontal();
 
-            HandleDrawForwardPointOffsetSlider();
             DrawWrapModeDropdown();
 
             EditorGUILayout.Space();

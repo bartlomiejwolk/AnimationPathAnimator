@@ -473,6 +473,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Helper variable.
             float prevTimestamp = 0;
 
+            // New timestamps for non-extreme nodes.
+            var newTimestamps = new List<float>();
+
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
@@ -486,6 +489,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Calculate new timestamp.
                 var newTimestamp = prevTimestamp + sectionTimeInterval;
 
+                newTimestamps.Add(newTimestamp);
+
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
@@ -498,10 +503,70 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 //    return;
 
                 // Update node timestamp.
-                AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
+                //AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
+            }
+
+            // Insert timestamps for extreme nodes.
+            newTimestamps.Insert(0, 0);
+            newTimestamps.Add(1);
+
+            var xNodesCopy = new List<Keyframe>(NodesNo);
+            var yNodesCopy = new List<Keyframe>(NodesNo);
+            var zNodesCopy = new List<Keyframe>(NodesNo);
+
+            // Copy path nodes.
+            for (int i = 0; i < NodesNo; i++) {
+                xNodesCopy.Add(animatedObjectPath[0].keys[i]);
+                yNodesCopy.Add(animatedObjectPath[1].keys[i]);
+                zNodesCopy.Add(animatedObjectPath[2].keys[i]);
+            }
+
+            // Update node timestamps (only non-extreme nodes).
+            for (int i = 1; i < NodesNo - 1; i++) {
+                var modifiedKeyframe = new Keyframe(
+                    newTimestamps[i],
+                    xNodesCopy[i].value,
+                    xNodesCopy[i].inTangent,
+                    xNodesCopy[i].outTangent);
+
+                xNodesCopy[i] = modifiedKeyframe;
+
+                modifiedKeyframe = new Keyframe(
+                    newTimestamps[i],
+                    yNodesCopy[i].value,
+                    yNodesCopy[i].inTangent,
+                    yNodesCopy[i].outTangent);
+
+                yNodesCopy[i] = modifiedKeyframe;
+
+                modifiedKeyframe = new Keyframe(
+                    newTimestamps[i],
+                    zNodesCopy[i].value,
+                    zNodesCopy[i].inTangent,
+                    zNodesCopy[i].outTangent);
+
+                zNodesCopy[i] = modifiedKeyframe;
+            }
+
+            var nodesNo = NodesNo;
+
+            AnimatedObjectPath.RemoveAllNodes();
+
+            // Add updated nodes to animation path.
+            for (int i = 0; i < nodesNo; i++) {
+                AnimatedObjectPath[0].AddKey(xNodesCopy[i]);
+                AnimatedObjectPath[1].AddKey(yNodesCopy[i]);
+                AnimatedObjectPath[2].AddKey(zNodesCopy[i]);
             }
 
             OnNodeTimeChanged();
+        }
+
+        private struct NodeTangent {
+
+            public float InTangent;
+            public float OutTangent;
+
         }
 
         public void MoveNodeToPosition(

@@ -463,6 +463,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnNodeAdded(nodeIndex);
         }
 
+        // todo extract into methods
         public void DistributeTimestamps(int pathLengthSampling) {
             var pathLength = AnimatedObjectPath.CalculatePathLength(
                 pathLengthSampling);
@@ -496,14 +497,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // NOTE When nodes on the scene overlap, it's possible that new
                 // timestamp is > 1, which is invalid.
-                if (newTimestamp > 1) break;
-
-                //var nextNodeTimestamp = GetNodeTimestamp(i + 1);
-                //if (newTimestamp >= nextNodeTimestamp)
-                //    return;
-
-                // Update node timestamp.
-                //AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
+                if (newTimestamp > 1) return;
             }
 
             // Insert timestamps for extreme nodes.
@@ -560,13 +554,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             OnNodeTimeChanged();
-        }
-
-        private struct NodeTangent {
-
-            public float InTangent;
-            public float OutTangent;
-
         }
 
         public void MoveNodeToPosition(
@@ -942,12 +929,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void UpdateRotationPathTimestamps() {
-            // Get path timestamps.
             var nodeTimestamps = GetPathTimestamps();
-            // Get rotation path timestamps.
             var rotationCurvesTimestamps = RotationPath.Timestamps;
 
-            // For each node in rotationPath..
+            // For each node in rotation path..
             for (var i = 1; i < RotationPath.KeysNo - 1; i++) {
                 // If resp. path node timestamp is different from rotation
                 // point timestamp..

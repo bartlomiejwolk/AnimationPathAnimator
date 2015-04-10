@@ -465,6 +465,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo extract into methods
         public void DistributeTimestamps(int pathLengthSampling) {
+            var newTimestamps = CalculateUpdatedTimestamps(pathLengthSampling);
+
+            AnimatedObjectPath.ReplaceTimestamps(newTimestamps);
+
+            OnNodeTimeChanged();
+        }
+
+        /// <summary>
+        /// Returns list of object path node timestamps. Timestamps to section length ration will be equal for all timestamps.
+        /// </summary>
+        /// <param name="pathLengthSampling"></param>
+        /// <returns></returns>
+        private List<float> CalculateUpdatedTimestamps(int pathLengthSampling) {
             var pathLength = AnimatedObjectPath.CalculatePathLength(
                 pathLengthSampling);
 
@@ -497,63 +510,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // NOTE When nodes on the scene overlap, it's possible that new
                 // timestamp is > 1, which is invalid.
-                if (newTimestamp > 1) return;
+                // todo throw exception
+                //if (newTimestamp > 1) return;
             }
 
             // Insert timestamps for extreme nodes.
             newTimestamps.Insert(0, 0);
             newTimestamps.Add(1);
 
-            var xNodesCopy = new List<Keyframe>(NodesNo);
-            var yNodesCopy = new List<Keyframe>(NodesNo);
-            var zNodesCopy = new List<Keyframe>(NodesNo);
-
-            // Copy path nodes.
-            for (int i = 0; i < NodesNo; i++) {
-                xNodesCopy.Add(animatedObjectPath[0].keys[i]);
-                yNodesCopy.Add(animatedObjectPath[1].keys[i]);
-                zNodesCopy.Add(animatedObjectPath[2].keys[i]);
-            }
-
-            // Update node timestamps (only non-extreme nodes).
-            for (int i = 1; i < NodesNo - 1; i++) {
-                var modifiedKeyframe = new Keyframe(
-                    newTimestamps[i],
-                    xNodesCopy[i].value,
-                    xNodesCopy[i].inTangent,
-                    xNodesCopy[i].outTangent);
-
-                xNodesCopy[i] = modifiedKeyframe;
-
-                modifiedKeyframe = new Keyframe(
-                    newTimestamps[i],
-                    yNodesCopy[i].value,
-                    yNodesCopy[i].inTangent,
-                    yNodesCopy[i].outTangent);
-
-                yNodesCopy[i] = modifiedKeyframe;
-
-                modifiedKeyframe = new Keyframe(
-                    newTimestamps[i],
-                    zNodesCopy[i].value,
-                    zNodesCopy[i].inTangent,
-                    zNodesCopy[i].outTangent);
-
-                zNodesCopy[i] = modifiedKeyframe;
-            }
-
-            var nodesNo = NodesNo;
-
-            AnimatedObjectPath.RemoveAllNodes();
-
-            // Add updated nodes to animation path.
-            for (int i = 0; i < nodesNo; i++) {
-                AnimatedObjectPath[0].AddKey(xNodesCopy[i]);
-                AnimatedObjectPath[1].AddKey(yNodesCopy[i]);
-                AnimatedObjectPath[2].AddKey(zNodesCopy[i]);
-            }
-
-            OnNodeTimeChanged();
+            return newTimestamps;
         }
 
         public void MoveNodeToPosition(

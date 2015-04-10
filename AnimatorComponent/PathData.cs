@@ -16,6 +16,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         //public event EventHandler TiltingCurveUpdated;
 
+        // todo rename to PathTimestampsChanged.
         public event EventHandler NodeTimeChanged;
 
         public event EventHandler PathReset;

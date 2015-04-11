@@ -857,18 +857,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        /// <summary>
-        ///     Called on rotation mode change.
-        /// </summary>
-        private void HandleRotationModeChange() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandleUpdateAnimGOInSceneView",
-                null);
-
-            Script.HandleMode = HandleMode.None;
-        }
-
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == TangentMode.Smooth) {
                 Script.PathData.SmoothPathNodeTangents();
@@ -1325,7 +1313,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUILayout.Space();
 
             DrawTangentModeDropdown();
-            DrawRotationModeDropdown(HandleRotationModeChange);
+            DrawRotationModeDropdown(DrawRotationModeDropdownCallbackHandler);
             HandleDrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
@@ -1397,6 +1385,43 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawRotationModeDropdownCallbackHandler(
+            RotationMode prevRotationMode,
+            RotationMode currentRotationMode) {
+
+            Script.HandleMode = HandleMode.None;
+
+            // If custom rotation mode was just select, apply selected mode.
+            if (currentRotationMode == RotationMode.Custom) {
+                Script.RotationMode = RotationMode.Custom;
+                Script.DrawRotationPathCurve = true;
+                Script.PathData.ResetRotationPath();
+                return;
+            }
+
+            // Display modal window.
+            var canDisableRotationPath = EditorUtility.DisplayDialog(
+                "Are you sure want to disable rotation path?",
+                "If you disable rotation path, all rotation path data " +
+                "will be lost.",
+                "Continue",
+                "Cancel");
+
+            // If user continues, apply selected rotation mode.
+            if (canDisableRotationPath) {
+                Script.RotationMode = currentRotationMode;
+            }
+
+            //HandleRotationModeDropdownChange(
+            //    prevRotationMode,
+            //    currentRotationMode);
+
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandleUpdateAnimGOInSceneView",
+                null);
         }
 
         private void DrawObjectCurveToggle() {
@@ -1474,25 +1499,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             RotationMode prevRotationMode,
             RotationMode currentRotationMode) {
 
-            // If custom rotation mode was just select, apply selected mode.
-            if (currentRotationMode == RotationMode.Custom) {
-                Script.RotationMode = RotationMode.Custom;
-                Script.PathData.ResetRotationPath();
-                return;
-            }
-
-            // Display modal window.
-            var canDisableRotationPath = EditorUtility.DisplayDialog(
-                "Are you sure want to disable rotation path?",
-                "If you disable rotation path, all rotation path data " +
-                "will be lost.",
-                "Continue",
-                "Cancel");
-
-            // If user continues, apply selected rotation mode.
-            if (canDisableRotationPath) {
-                Script.RotationMode = currentRotationMode;
-            }
         }
 
         /// <summary>
@@ -2313,7 +2319,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawRotationModeDropdown(Action callback) {
+        private void DrawRotationModeDropdown(
+            Action<RotationMode, RotationMode> callback) {
+
             Undo.RecordObject(Script.SettingsAsset, "Change rotation mode.");
 
             // Remember current RotationMode.
@@ -2330,12 +2338,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return if rotation mode not changed.
             if (currentRotationMode == prevRotationMode) return;
 
-            HandleRotationModeDropdownChange(
-                prevRotationMode,
-                currentRotationMode);
-
-            // Update animated GO in the scene.
-            callback();
+            callback(prevRotationMode, currentRotationMode);
         }
 
         private void DrawRotationSpeedSlider() {

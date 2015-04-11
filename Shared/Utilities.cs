@@ -219,6 +219,7 @@ namespace ATP.AnimationPathTools {
                 }
 #if UNITY_EDITOR
                 if (UnityEditor.EditorUtility.DisplayDialog("Assert!", assertString + "\n" + assertInformation, "Open in editor", "Cancel")) {
+                    // todo this doesn't work.
                     UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(myFrame.GetFileName(), myFrame.GetFileLineNumber());
                 }
 #endif

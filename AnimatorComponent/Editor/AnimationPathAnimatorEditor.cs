@@ -1259,14 +1259,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Adjust ease values to path length. Making path longer will decrease ease values
         ///     to  maintain constant speed.
         /// </summary>
-        /// <param name="oldAnimGoLinearLength">Anim. Go path length before path update.</param>
-        /// <param name="newAnimGoLinearLength">Anim. Go path length after path update.</param>
+        /// <param name="oldAnimGoLength">Anim. Go path length before path update.</param>
+        /// <param name="newAnimGoLength">Anim. Go path length after path update.</param>
         private void DistributeEaseValues(
-            float oldAnimGoLinearLength,
-            float newAnimGoLinearLength) {
+            float oldAnimGoLength,
+            float newAnimGoLength) {
 
             // Calculate multiplier.
-            var multiplier = oldAnimGoLinearLength / newAnimGoLinearLength;
+            var multiplier = oldAnimGoLength / newAnimGoLength;
 
             // Multiply each single ease value.
             Script.PathData.MultiplyEaseCurveValues(multiplier);

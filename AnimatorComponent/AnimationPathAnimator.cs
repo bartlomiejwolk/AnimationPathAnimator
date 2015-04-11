@@ -205,7 +205,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 pathData = value;
 
                 // Call event.
-                if (pathData != oldValue) OnPathDataRefChanged();
+                if (value != oldValue) OnPathDataRefChanged();
             }
         }
 
@@ -1464,11 +1464,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
-            AssertNodesInSync();
         }
 
         void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
-            AssertNodesInSync();
         }
 
         void Animator_PathDataRefChanged(object sender, EventArgs e) {

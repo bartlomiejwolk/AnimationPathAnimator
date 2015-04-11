@@ -16,6 +16,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         //public event EventHandler TiltingCurveUpdated;
 
+        // todo rename to PathTimestampsChanged.
         public event EventHandler NodeTimeChanged;
 
         public event EventHandler PathReset;
@@ -43,6 +44,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private const float DefaultEaseCurveValue = 0.05f;
         private const float DefaultTiltingCurveValue = 0.001f;
         private const float DefaultSmoothWeight = 0;
+        /// <summary>
+        /// Sampling used to calculate path length.
+        /// </summary>
+        private const int PathLengthSampling = 5;
         /// <summary>
         /// Default sampling used to calculate path lenght.
         /// </summary>
@@ -463,10 +468,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnNodeAdded(nodeIndex);
         }
 
-        public void DistributeTimestamps(int pathLengthSampling) {
-            // Calculate path curved length.
+        public void DistributeTimestamps(Action<List<float>> callback) {
+            var newTimestamps = CalculateUpdatedTimestamps();
+            AnimatedObjectPath.ReplaceTimestamps(newTimestamps);
+
+            callback(newTimestamps);
+            OnNodeTimeChanged();
+        }
+
+        /// <summary>
+        /// Returns list of object path node timestamps. Timestamps to section length ration will be equal for all timestamps.
+        /// </summary>
+        /// <param name="pathLengthSampling"></param>
+        /// <returns></returns>
+        private List<float> CalculateUpdatedTimestamps() {
             var pathLength = AnimatedObjectPath.CalculatePathLength(
-                pathLengthSampling);
+                PathLengthSampling);
 
             // Calculate time for one meter of curve length.
             var timeForMeter = 1 / pathLength;
@@ -474,11 +491,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Helper variable.
             float prevTimestamp = 0;
 
+            // New timestamps for non-extreme nodes.
+            var newTimestamps = new List<float>();
+
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
+                // todo crate setting in asset file for 3'd argument
                 var sectionLength = AnimatedObjectPath
-                    .CalculateSectionLinearLength(i - 1, i);
+                    .CalculateSectionLength(i - 1, i, 5);
 
                 // Calculate time interval for the section.
                 var sectionTimeInterval = sectionLength * timeForMeter;
@@ -486,18 +507,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Calculate new timestamp.
                 var newTimestamp = prevTimestamp + sectionTimeInterval;
 
+                newTimestamps.Add(newTimestamp);
+
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
                 // NOTE When nodes on the scene overlap, it's possible that new
-                // timestamp is > 0, which is invalid.
-                if (newTimestamp > 1) break;
-
-                // Update node timestamp.
-                AnimatedObjectPath.ChangeNodeTimestamp(i, newTimestamp);
+                // timestamp is > 1, which is invalid.
+                // todo throw exception
+                //if (newTimestamp > 1) return;
             }
 
-            OnNodeTimeChanged();
+            // Insert timestamps for extreme nodes.
+            newTimestamps.Insert(0, 0);
+            newTimestamps.Add(1);
+
+            return newTimestamps;
         }
 
         public void MoveNodeToPosition(
@@ -872,27 +897,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public void UpdateRotationPathTimestamps() {
-            // Get path timestamps.
-            var nodeTimestamps = GetPathTimestamps();
-            // Get rotation path timestamps.
-            var rotationCurvesTimestamps = RotationPath.Timestamps;
+        public void UpdateRotationPathTimestamps(
+            List<float> distributedTimestamps) {
 
-            // For each node in rotationPath..
-            for (var i = 1; i < RotationPath.KeysNo - 1; i++) {
-                // If resp. path node timestamp is different from rotation
-                // point timestamp..
-                if (!Utilities.FloatsEqual(
-                    nodeTimestamps[i],
-                    rotationCurvesTimestamps[i],
-                    GlobalConstants.FloatPrecision)) {
-
-                    // Update rotation point timestamp.
-                    RotationPath.ChangeNodeTimestamp(
-                        i,
-                        nodeTimestamps[i]);
-                }
-            }
+            //var newTimestamps = CalculateUpdatedTimestamps();
+            RotationPath.ReplaceTimestamps(distributedTimestamps);
         }
 
         public void UpdateRotationPathWithAddedKeys() {

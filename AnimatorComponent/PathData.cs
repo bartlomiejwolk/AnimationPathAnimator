@@ -470,7 +470,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         // todo extract into methods
         public void DistributeTimestamps() {
-            var newTimestamps = CalculateUpdatedTimestamps(PathLengthSampling);
+            var newTimestamps = CalculateUpdatedTimestamps();
 
             AnimatedObjectPath.ReplaceTimestamps(newTimestamps);
 
@@ -482,9 +482,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="pathLengthSampling"></param>
         /// <returns></returns>
-        private List<float> CalculateUpdatedTimestamps(int pathLengthSampling) {
+        private List<float> CalculateUpdatedTimestamps() {
             var pathLength = AnimatedObjectPath.CalculatePathLength(
-                pathLengthSampling);
+                PathLengthSampling);
 
             // Calculate time for one meter of curve length.
             var timeForMeter = 1 / pathLength;

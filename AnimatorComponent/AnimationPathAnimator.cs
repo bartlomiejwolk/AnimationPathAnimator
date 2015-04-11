@@ -93,7 +93,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private PathData pathData;
 
-        private bool pause;
+        //private bool pause;
 
         /// <summary>
         ///     Animation time value from previous frame.
@@ -190,7 +190,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public bool IsPlaying {
             get { return isPlaying; }
             // todo should be private.
-            set { isPlaying = value; }
+            set {
+                isPlaying = value;
+
+                if (value) {
+                    AnimGOUpdateEnabled = true;
+                }
+            }
         }
 
         /// <summary>
@@ -212,31 +218,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Whether or not animation is paused. Animation can be paused only when animator is running.
         /// </summary>
-        public bool Pause {
-            get { return pause; }
-            set {
-                var prevPause = pause;
+        //public bool Pause {
+        //    get { return pause; }
+        //    set {
+        //        var prevPause = pause;
 
-                pause = value;
+        //        pause = value;
 
-                // On pause..
-                if (value) {
-                    IsPlaying = false;
-                }
-                // On unpause..
-                else {
-                    // Enable animating animated GO.
-                    AnimGOUpdateEnabled = true;
-                    IsPlaying = true;
-                }
+        //        // On pause..
+        //        if (value) {
+        //            IsPlaying = false;
+        //        }
+        //        // On unpause..
+        //        else {
+        //            // Enable animating animated GO.
+        //            AnimGOUpdateEnabled = true;
+        //            IsPlaying = true;
+        //        }
 
-                // If pause state changed, call event.
-                if (value != prevPause) {
-                    // Call event.
-                    OnPlayPause(AnimationTime);
-                }
-            }
-        }
+        //        // If pause state changed, call event.
+        //        if (value != prevPause) {
+        //            // Call event.
+        //            OnPlayPause(AnimationTime);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         ///     Reference to asset file holding animator settings.
@@ -264,6 +270,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     If animation should be played backward.
         /// </summary>
         private bool Reverse { get; set; }
+
+        private bool DuringPlayback {
+            get { return AnimationTime > 0 && AnimationTime < 1; }
+        }
 
         #endregion PROPERTIES
 
@@ -614,6 +624,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else {
                 // Increase animation time.
                 AnimationTime += timeStep * Time.deltaTime;
+
+                // Stop animation.
+                if (AnimationTime > 1) {
+                    AnimationTime = 1;
+                    IsPlaying = false;
+                }
             }
         }
 
@@ -622,15 +638,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Pauses animation.
         /// </summary>
         public void PauseAnimation() {
-            Pause = true;
+            //Pause = true;
+            IsPlaying = false;
         }
 
         /// <summary>
         ///     Toggles play/pause animation.
         /// </summary>
-        public void PlayPauseAnimation() {
-            Pause = !Pause;
-        }
+        //public void PlayPauseAnimation() {
+        //    Pause = !Pause;
+        //}
 
         /// <summary>
         ///     Sets rotation mode to Custom.
@@ -693,10 +710,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Starts animation from the beginning.
         /// </summary>
-        public void StartAnimation() {
-            if (!PathDataAssetAssigned()) return;
-
-            AnimationTime = 0;
+        public void Play() {
+            //AnimationTime = 0;
             IsPlaying = true;
             AnimGOUpdateEnabled = true;
 
@@ -710,7 +725,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Unpauses animation.
         /// </summary>
         public void UnpauseAnimation() {
-            Pause = false;
+            //Pause = false;
+            if (IsPlaying == false && DuringPlayback) {
+                IsPlaying = true;
+            }
         }
 
         /// <summary>
@@ -837,7 +855,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             while (true) {
                 // If animation is not paused..
-                if (!Pause) {
+                //if (!Pause) {
                     //HandleFireOnAnimationStartedEvent();
 
                     //UpdateAnimationTime();
@@ -845,7 +863,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     //HandleClampWrapMode();
                     //HandleLoopWrapMode();
                     //HandlePingPongWrapMode();
-                }
+                //}
 
                 //if (!EaseCoroutineRunning) break;
 
@@ -1093,43 +1111,47 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Allows toggle pause. Use only in play mode.
         /// </summary>
+        // todo rename to HandlePlayPauseButton.
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
             // Animation is playing and unpaused.
-            if (IsPlaying && !Pause) {
+            if (IsPlaying) {
                 // Pause animation.
-                Pause = true;
                 IsPlaying = false;
             }
             // Animation is playing but paused.
-            else if (!IsPlaying && Pause) {
+            else if (!IsPlaying && DuringPlayback) {
                 // Unpause animation.
-                Pause = false;
                 IsPlaying = true;
             }
             // Animation ended.
-            else if (!IsPlaying && !Pause && AnimationTime >= 1) {
+            else if (!IsPlaying && AnimationTime >= 1) {
                 AnimationTime = 0;
-                StartAnimation();
+                IsPlaying = true;
+                //StartAnimation();
             }
             // Disable play/pause while for animation start being invoked.
-            else if (IsInvoking("StartAnimation")) {
+            else if (IsInvoking("Play")) {
                 // Do nothing.
             }
             else {
                 // Start animation.
-                StartAnimation();
+                //StartAnimation();
+                IsPlaying = true;
             }
         }
 
         /// <summary>
         ///     Decides if to start animation playback on enter play mode.
         /// </summary>
+        // todo rename to HandleFirstAnimationStart.
         private void HandleStartAnimation() {
-            if (Application.isPlaying && AutoPlay) {
-                Invoke("StartAnimation", AutoPlayDelay);
-            }
+            if (!PathDataAssetAssigned()) return;
+            if (!Application.isPlaying) return;
+            if (!AutoPlay) return;
+
+            Invoke("Play", AutoPlayDelay);
         }
 
         /// <summary>
@@ -1165,7 +1187,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleFireNodeReachedEventForFirstNode() {
             if (AnimationTime == 0) {
                 var args = new NodeReachedEventArgs(0, 0);
-                // Fire event.
                 OnNodeReached(args);
             }
         }

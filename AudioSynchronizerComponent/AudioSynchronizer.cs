@@ -149,7 +149,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
         private void HandlePlayPause() {
             // Disable shortcut while animator awaits animation start.
-            if (Animator.IsInvoking("StartAnimation")) return;
+            if (Animator.IsInvoking("Play")) return;
 
             // Pause
             if (AudioSource.isPlaying) {

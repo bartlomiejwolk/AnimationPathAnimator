@@ -52,10 +52,11 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
             Animator.PlayPause += Animator_PlayPause;
         }
 
+        // todo Use separate events for play and pause.
         void Animator_PlayPause(object sender, float timestamp) {
-            foreach (var target in TargetComponents) {
-                target.PlayPauseAnimation();
-            }
+            //foreach (var target in TargetComponents) {
+            //    target.PlayPauseAnimation();
+            //}
         }
 
         // todo it should record also for the node where car timestamp is 0

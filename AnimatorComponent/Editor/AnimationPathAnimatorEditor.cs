@@ -596,8 +596,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
             Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
-            Script.PathData.DistributeTimestamps();
-            HandleUpdateRotationPathTimestamps();
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
         }
 
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
@@ -630,8 +630,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUnsyncedObjectAndRotationPaths();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
-            Script.PathData.DistributeTimestamps();
-            HandleUpdateRotationPathTimestamps();
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
 
             // Update animated object.
             Utilities.InvokeMethodWithReflection(
@@ -730,15 +730,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleLinearTangentMode();
 
             // Distribute timestamps.
-            Script.PathData.DistributeTimestamps();
-
-            HandleUpdateRotationPathTimestamps();
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
 
             // Current path length.
             var newAnimGoPathLength = Script.PathData.GetPathLength(
                 Script.SettingsAsset.PathLengthSampling);
 
             DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
+        }
+
+        private void DistributeTimestampsCallbackHandler(
+            List<float> distributedTimestamps) {
+            
+            HandleUpdateRotationPathTimestamps(distributedTimestamps);
         }
 
         private void DrawRemoveNodeButtonsCallbackHandler(int index) {
@@ -752,8 +757,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUpdateRotationPathWithRemovedKeys();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
-            Script.PathData.DistributeTimestamps();
-            HandleUpdateRotationPathTimestamps();
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
 
             // todo remove
             Logger.LogString("NodesNo: {0}", Script.PathData.NodesNo);
@@ -1146,9 +1151,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void HandleUpdateRotationPathTimestamps() {
+        private void HandleUpdateRotationPathTimestamps(
+            List<float> distributedTimestamps) {
+
             if (Script.RotationMode == RotationMode.Custom) {
-                Script.PathData.UpdateRotationPathTimestamps();
+                Script.PathData.UpdateRotationPathTimestamps(distributedTimestamps);
             }
         }
 

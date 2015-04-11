@@ -468,12 +468,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnNodeAdded(nodeIndex);
         }
 
-        // todo extract into methods
-        public void DistributeTimestamps() {
+        public void DistributeTimestamps(Action<List<float>> callback) {
             var newTimestamps = CalculateUpdatedTimestamps();
-
             AnimatedObjectPath.ReplaceTimestamps(newTimestamps);
 
+            callback(newTimestamps);
             OnNodeTimeChanged();
         }
 
@@ -898,9 +897,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public void UpdateRotationPathTimestamps() {
-            var newTimestamps = CalculateUpdatedTimestamps();
-            RotationPath.ReplaceTimestamps(newTimestamps);
+        public void UpdateRotationPathTimestamps(
+            List<float> distributedTimestamps) {
+
+            //var newTimestamps = CalculateUpdatedTimestamps();
+            RotationPath.ReplaceTimestamps(distributedTimestamps);
         }
 
         public void UpdateRotationPathWithAddedKeys() {

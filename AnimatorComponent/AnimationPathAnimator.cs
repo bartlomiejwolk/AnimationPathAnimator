@@ -52,6 +52,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public delegate void PlayPauseEventHandler(object sender, float timestamp);
 
         /// <summary>
+        /// Event fired on animation resumed from pause state.
+        /// </summary>
+        public event EventHandler AnimationResumed;
+
+        /// <summary>
+        /// Event fired when animation is paused when playing.
+        /// </summary>
+        public event EventHandler AnimationPaused;
+
+        /// <summary>
         /// Event called on every play/pause.
         /// </summary>
         // todo remove this event
@@ -236,6 +246,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         //            AnimGOUpdateEnabled = true;
         //            IsPlaying = true;
         //        }
+                    //OnAnimationResumed();
 
         //        // If pause state changed, call event.
         //        if (value != prevPause) {
@@ -1768,6 +1779,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Number of path nodes ({0}) and number of rotation path nodes ({1}) differ.",
                     PathData.NodesNo,
                     PathData.RotationPathNodesNo));
+        }
+
+        private void OnAnimationResumed() {
+            Logger.LogCall();
+            var handler = AnimationResumed;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnAnimationPaused() {
+            Logger.LogCall();
+            var handler = AnimationPaused;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
     }

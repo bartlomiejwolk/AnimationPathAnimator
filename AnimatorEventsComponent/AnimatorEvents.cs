@@ -82,6 +82,8 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             Logger.LogCall();
             UnsubscribeFromEvents();
             SubscribeToAnimatorEvents();
+            UnsubscribeFromPathEvents();
+            SubscribeToPathEvents();
         }
 
         void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {

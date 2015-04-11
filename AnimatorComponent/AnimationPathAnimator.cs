@@ -582,11 +582,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_PathReset(object sender, EventArgs e) {
             AnimationTime = 0;
             HandleUpdateAnimGOInSceneView();
-            AssertNodesInSync();
         }
 
         private void PathData_RotationPathReset(object sender, EventArgs e) {
-            AssertNodesInSync();
         }
 
         private void PathData_RotationPointPositionChanged(
@@ -594,7 +592,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EventArgs e) {
 
             HandleUpdateAnimGOInSceneView();
-            AssertNodesInSync();
         }
 
         #endregion

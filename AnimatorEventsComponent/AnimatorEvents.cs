@@ -179,13 +179,31 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             if (Animator.PathData != null) {
                 Animator.PathData.NodeAdded += PathData_NodeAdded;
                 Animator.PathData.NodeRemoved += PathData_NodeRemoved;
+                Animator.PathData.NodePositionChanged += PathData_NodePositionChanged;
             }
         }
+
+        void PathData_NodePositionChanged(object sender, System.EventArgs e) {
+            AssertSlotsInSyncWithPath();
+        }
+
+        private void AssertSlotsInSyncWithPath() {
+            Utilities.Assert(
+                () =>
+                    Animator.PathData.NodesNo
+                    == NodeEventSlots.Count,
+                string.Format(
+                    "Path nodes number ({0}) and event slots number ({1}) differ.",
+                    Animator.PathData.NodesNo,
+                    NodeEventSlots.Count));
+        }
+
 
         private void UnsubscribeFromPathEvents() {
             if (Animator.PathData != null) {
                 Animator.PathData.NodeAdded -= PathData_NodeAdded;
                 Animator.PathData.NodeRemoved -= PathData_NodeRemoved;
+                Animator.PathData.NodePositionChanged -= PathData_NodePositionChanged;
             }
         }
 

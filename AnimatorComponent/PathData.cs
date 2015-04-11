@@ -899,24 +899,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void UpdateRotationPathTimestamps() {
-            var nodeTimestamps = GetPathTimestamps();
-            var rotationCurvesTimestamps = RotationPath.Timestamps;
-
-            // For each node in rotation path..
-            for (var i = 1; i < RotationPath.KeysNo - 1; i++) {
-                // If resp. path node timestamp is different from rotation
-                // point timestamp..
-                if (!Utilities.FloatsEqual(
-                    nodeTimestamps[i],
-                    rotationCurvesTimestamps[i],
-                    GlobalConstants.FloatPrecision)) {
-
-                    // Update rotation point timestamp.
-                    RotationPath.ChangeNodeTimestamp(
-                        i,
-                        nodeTimestamps[i]);
-                }
-            }
+            var newTimestamps = CalculateUpdatedTimestamps();
+            RotationPath.ReplaceTimestamps(newTimestamps);
         }
 
         public void UpdateRotationPathWithAddedKeys() {

@@ -572,6 +572,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             HandleUpdateAnimGOInSceneView();
+            AssertNodesInSync();
         }
 
         private void PathData_TiltingCurveUpdated(object sender, EventArgs e) {
@@ -581,9 +582,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_PathReset(object sender, EventArgs e) {
             AnimationTime = 0;
             HandleUpdateAnimGOInSceneView();
+            AssertNodesInSync();
         }
 
         private void PathData_RotationPathReset(object sender, EventArgs e) {
+            AssertNodesInSync();
         }
 
         private void PathData_RotationPointPositionChanged(
@@ -591,6 +594,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EventArgs e) {
 
             HandleUpdateAnimGOInSceneView();
+            AssertNodesInSync();
         }
 
         #endregion
@@ -1446,6 +1450,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimationEnded += APAnimator_AnimationEnded;
             PathDataRefChanged += Animator_PathDataRefChanged;
 
+            // todo extract to SubscribeToPathEvents.
             if (pathData == null) return;
 
             PathData.RotationPointPositionChanged +=
@@ -1454,6 +1459,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.TiltingCurveUpdated += PathData_TiltingCurveUpdated;
             PathData.PathReset += PathData_PathReset;
             PathData.RotationPathReset += PathData_RotationPathReset;
+            PathData.NodeAdded += PathData_NodeAdded;
+            PathData.NodeRemoved += PathData_NodeRemoved;
+        }
+
+        void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
+            AssertNodesInSync();
+        }
+
+        void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
+            AssertNodesInSync();
         }
 
         void Animator_PathDataRefChanged(object sender, EventArgs e) {
@@ -1475,6 +1490,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.RotationPathReset -= PathData_RotationPathReset;
             AnimationEnded -= APAnimator_AnimationEnded;
             PathDataRefChanged -= Animator_PathDataRefChanged;
+            PathData.NodeAdded -= PathData_NodeAdded;
+            PathData.NodeRemoved -= PathData_NodeRemoved;
         }
 
         #endregion
@@ -1709,15 +1726,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, deltatime);
         }
 
-    }
+        public sealed class AnimationTimeChangedEventArgs : EventArgs {
 
-    public sealed class AnimationTimeChangedEventArgs : EventArgs {
+            // todo rename to DeltaTime.
+            public float TimeDelta { get; set; }
 
-        // todo rename to DeltaTime.
-        public float TimeDelta { get; set; }
+            public AnimationTimeChangedEventArgs(float timeDelta) {
+                TimeDelta = timeDelta;
+            }
 
-        public AnimationTimeChangedEventArgs(float timeDelta) {
-            TimeDelta = timeDelta;
+        }
+
+        /// <summary>
+        /// Assert that object path and rotation path nodes are in sync.
+        /// </summary>
+        private void AssertNodesInSync() {
+            if (RotationMode != RotationMode.Custom) return;
+
+            Utilities.Assert(
+                () =>
+                    PathData.NodesNo
+                    == PathData.RotationPathNodesNo,
+                String.Format(
+                    "Number of path nodes ({0}) and number of rotation path nodes ({1}) differ.",
+                    PathData.NodesNo,
+                    PathData.RotationPathNodesNo));
         }
 
     }

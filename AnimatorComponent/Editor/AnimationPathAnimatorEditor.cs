@@ -183,6 +183,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Assert that object path and rotation path nodes are in sync.
         /// </summary>
         private void AssertNodesInSync() {
+            if (Script.RotationMode != RotationMode.Custom) return;
+
             Utilities.Assert(
                 () =>
                     Script.PathData.NodesNo

@@ -48,7 +48,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             set { skin = value; }
         }
 
-        private List<NodeEventSlot> NodeEventSlots {
+        public List<NodeEventSlot> NodeEventSlots {
             get { return nodeEventSlots; }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
@@ -68,6 +69,19 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             if (!AssetsLoaded()) return;
 
             HandleDrawingMethodNames();
+
+            AssertSlotsInSyncWithPath();
+        }
+
+        private void AssertSlotsInSyncWithPath() {
+            Utilities.Assert(
+                () =>
+                    Script.Animator.PathData.NodesNo
+                    == Script.NodeEventSlots.Count,
+                String.Format(
+                    "Path nodes number ({0}) and event slots number ({1}) differ.",
+                    Script.Animator.PathData.NodesNo,
+                    Script.NodeEventSlots.Count));
         }
 
         #endregion

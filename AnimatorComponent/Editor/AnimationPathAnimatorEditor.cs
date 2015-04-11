@@ -596,7 +596,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Undo.RecordObject(Script.PathData, "Update node tangents.");
 
             Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
-            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
+            Script.PathData.DistributeTimestamps();
             HandleUpdateRotationPathTimestamps();
         }
 
@@ -630,7 +630,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUnsyncedObjectAndRotationPaths();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
-            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
+            Script.PathData.DistributeTimestamps();
             HandleUpdateRotationPathTimestamps();
 
             // Update animated object.
@@ -730,7 +730,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleLinearTangentMode();
 
             // Distribute timestamps.
-            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
+            Script.PathData.DistributeTimestamps();
 
             HandleUpdateRotationPathTimestamps();
 
@@ -752,7 +752,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUpdateRotationPathWithRemovedKeys();
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
-            Script.PathData.DistributeTimestamps(Script.SettingsAsset.PathLengthSampling);
+            Script.PathData.DistributeTimestamps();
             HandleUpdateRotationPathTimestamps();
 
             // todo remove

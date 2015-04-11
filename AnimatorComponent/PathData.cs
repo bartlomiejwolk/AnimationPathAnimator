@@ -45,6 +45,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private const float DefaultTiltingCurveValue = 0.001f;
         private const float DefaultSmoothWeight = 0;
         /// <summary>
+        /// Sampling used to calculate path length.
+        /// </summary>
+        private const int PathLengthSampling = 5;
+        /// <summary>
         /// Default sampling used to calculate path lenght.
         /// </summary>
         //private const int PathLengthSampling = 40;
@@ -465,8 +469,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         // todo extract into methods
-        public void DistributeTimestamps(int pathLengthSampling) {
-            var newTimestamps = CalculateUpdatedTimestamps(pathLengthSampling);
+        public void DistributeTimestamps() {
+            var newTimestamps = CalculateUpdatedTimestamps(PathLengthSampling);
 
             AnimatedObjectPath.ReplaceTimestamps(newTimestamps);
 

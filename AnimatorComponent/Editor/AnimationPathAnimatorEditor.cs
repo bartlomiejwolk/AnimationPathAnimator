@@ -175,6 +175,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Event.current.type == EventType.keyUp) {
                 Repaint();
             }
+
+            AssertNodesInSync();
+        }
+
+        /// <summary>
+        /// Assert that object path and rotation path nodes are in sync.
+        /// </summary>
+        private void AssertNodesInSync() {
+            Utilities.Assert(
+                () =>
+                    Script.PathData.NodesNo
+                    == Script.PathData.RotationPathNodesNo,
+                String.Format(
+                    "Number of path nodes ({0}) and number of rotation path nodes ({1}) differ.",
+                    Script.PathData.NodesNo,
+                    Script.PathData.RotationPathNodesNo));
         }
 
         private void HandleDrawingRotationPathSmoothButtons() {

@@ -54,6 +54,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Event called on every play/pause.
         /// </summary>
+        // todo remove this event
         public event PlayPauseEventHandler PlayPause;
 
         // todo remove this event.

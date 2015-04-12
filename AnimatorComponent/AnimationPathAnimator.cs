@@ -63,22 +63,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler AnimationPaused;
 
-        /// <summary>
-        /// Event called on every play/pause.
-        /// </summary>
-        // todo remove this event
-        public event PlayPauseEventHandler PlayPause;
-
-        // todo remove this event.
-        public event EventHandler<AnimationTimeChangedEventArgs> AnimationTimeChanged;
-
-        // todo remove event.
-        public delegate void JumpPerformedEventHandler(
-            object sender,
-            float deltaTime);
-
-        public event JumpPerformedEventHandler JumpPerformed;
-
         #endregion
 
         #region FIELDS
@@ -172,15 +156,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 else {
                     // Update animated GO.
                     HandleUpdateAnimGOInSceneView();
-                }
-
-                // If value changed..
-                if (value != prevValue) {
-                    // Calculate change delta.
-                    var timeDelta = value - prevValue;
-                    // Fire event.
-                    var eventArgs = new AnimationTimeChangedEventArgs(timeDelta);
-                    OnAnimationTimeChanged(eventArgs);
                 }
             }
         }
@@ -1765,22 +1740,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             return resultPositions.ToArray();
-        }
-
-        private void OnPlayPause(float timestamp) {
-            var handler = PlayPause;
-            if (handler != null) handler(this, timestamp);
-        }
-
-        private void OnAnimationTimeChanged(AnimationTimeChangedEventArgs e) {
-            var handler = AnimationTimeChanged;
-            if (handler != null) handler(this, e);
-        }
-
-        private void OnJumpPerformed(float deltatime) {
-            //Logger.LogString("OnJumpPerformed({0})", deltatime);
-            var handler = JumpPerformed;
-            if (handler != null) handler(this, deltatime);
         }
 
         public sealed class AnimationTimeChangedEventArgs : EventArgs {

@@ -77,7 +77,6 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
             SubscribeToEvents();
         }
 
-        // todo it should record also for the node where car timestamp is 0
         void Animator_NodeReached(
             object sender,
             NodeReachedEventArgs e) {

@@ -762,19 +762,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.DistributeTimestamps(
                 DistributeTimestampsCallbackHandler);
 
-            // todo remove
-            Logger.LogString("NodesNo: {0}", Script.PathData.NodesNo);
-            Logger.LogString(
-                "TiltingToolState: {0}",
-                Script.PathData.TiltingToolState.Count);
-            var enabledTiltingToolsNo =
-                Script.PathData.GetTiltedNodeTimestamps();
-            Logger.LogString("TiltingToolState({0})", enabledTiltingToolsNo.Count);
-            Logger.LogString(
-                "TiltingCurve: {0}",
-                Script.PathData.TiltingCurve.length);
-
-            // Update animated object.
             Utilities.InvokeMethodWithReflection(
                 Script,
                 "HandleUpdateAnimGOInSceneView",

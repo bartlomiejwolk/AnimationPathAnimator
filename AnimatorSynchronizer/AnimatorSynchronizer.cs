@@ -69,7 +69,7 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
         void Animator_AnimationPaused(object sender, System.EventArgs e) {
             foreach (var target in TargetComponents) {
-                target.PauseAnimation();
+                target.Pause();
             }
         }
 

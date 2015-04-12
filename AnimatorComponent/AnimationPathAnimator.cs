@@ -386,7 +386,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { longJumpValue = value; }
         }
 
-        // todo release many of these properties should be private.
         public PositionHandle PositionHandle {
             get { return positionHandle; }
             set { positionHandle = value; }
@@ -641,8 +640,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Pauses animation.
         /// </summary>
-        // todo rename to Pause.
-        public void PauseAnimation() {
+        public void Pause() {
             //Pause = true;
             IsPlaying = false;
 
@@ -1140,7 +1138,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (IsPlaying) {
                 // Pause animation.
                 //IsPlaying = false;
-                PauseAnimation();
+                Pause();
             }
             // Animation is playing but paused.
             else if (!IsPlaying && DuringPlayback) {

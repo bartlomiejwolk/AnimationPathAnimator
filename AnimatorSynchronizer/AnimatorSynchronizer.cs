@@ -3,6 +3,8 @@ using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
     [RequireComponent(typeof(AnimatorComponent.AnimationPathAnimator))]
@@ -111,16 +113,13 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
                 // Return if timestamp for this node was not recorded.
                 if (!NodeTimestamps[i].ContainsKey(e.NodeIndex)) continue;
 
+                // Update animation time.
                 TargetComponents[i].AnimationTime =
                     NodeTimestamps[i][e.NodeIndex];
-
-                if (i == 0) {
-                    //Logger.LogString("Jump to: [{0}] {1}",
-                    //    e.NodeIndex,
-                    //    NodeTimestamps[i][e.NodeIndex]);
-                }
             }
         }
     }
 
 }
+
+#endif

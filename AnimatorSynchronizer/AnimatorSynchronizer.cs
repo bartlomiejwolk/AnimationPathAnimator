@@ -82,6 +82,8 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
             object sender,
             NodeReachedEventArgs e) {
 
+            if (!Application.isPlaying) return;
+
             // For each target animator component..
             for (int i = 0; i < TargetComponents.Count; i++) {
                 // Don't record when source component is not playing.

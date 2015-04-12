@@ -717,13 +717,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public void Play() {
             IsPlaying = true;
-            //AnimGOUpdateEnabled = true;
+            HandleOnAnimationStarted();
+        }
 
-            // Fire event.
-            //HandleFireNodeReachedEventForStartingNode();
-
-            // Fire event.
-            // todo move to HandleOnAnimationStarted.
+        /// <summary>
+        /// Handle firing <c>AnimationStarted</c> event.
+        /// </summary>
+        private void HandleOnAnimationStarted() {
             if (AnimationTime == 0) {
                 OnAnimationStarted();
             }

@@ -46,7 +46,7 @@ MonoBehaviour:
   shortJumpMaxValue: .00400000019
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
-  gizmoCurveSamplingFrequency: 5
+  objectCurveSampling: 5
   rotationCurveSampling: 5
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue

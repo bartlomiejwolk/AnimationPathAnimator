@@ -178,6 +178,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingRotationPathSmoothButtons() {
+            if (!Script.DrawNodeButtons) return;
             if ((Script.TangentMode != TangentMode.Custom)
                 || (Script.RotationMode != RotationMode.Custom)) return;
 
@@ -201,6 +202,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingPathSmoothButtons() {
+            if (!Script.DrawNodeButtons) return;
             // Custom tangent mode and Tangent node handle must be enabled.
             if (Script.TangentMode != TangentMode.Custom) return;
             if (!Script.DrawObjectPath) return;
@@ -288,6 +290,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene buttons for adding new nodes.
         /// </summary>
         private void HandleDrawingAddButtons() {
+            if (!Script.DrawNodeButtons) return;
             if (!Script.DrawObjectPath) return;
 
             // Get positions for the buttons.
@@ -412,6 +415,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene button for removing nodes.
         /// </summary>
         private void HandleDrawingRemoveButtons() {
+            if (!Script.DrawNodeButtons) return;
             if (!Script.DrawObjectPath) return;
 
             // Get positions for the buttons.
@@ -1021,6 +1025,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawingSceneToolToggleButtons() {
+            if (!Script.DrawNodeButtons) return;
             if (!Script.DrawObjectPath) return;
 
             // todo this is redundant. Button won't display until at lease one
@@ -1309,6 +1314,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //DrawRotationPathToggle();
             DrawObjectCurveToggle();
             DrawRotationCurveToggle();
+            DrawNodeButtonsToggle();
 
             EditorGUILayout.Space();
 
@@ -1385,6 +1391,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawNodeButtonsToggle() {
+            Script.DrawNodeButtons = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw Buttons",
+                    "Draw on-scene node buttons."),
+                Script.DrawNodeButtons);
         }
 
         private void DrawRotationModeDropdownCallbackHandler(
@@ -1829,6 +1843,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleMoveAllModeShortcut();
             HandlePlayPauseShortcut();
             HandleNoneHandleModeShortcut();
+            HandleToggleButtonsShortcut();
 
             HandleShortJumpForwardShortcut();
             HandleShortJumpBackwardShortcut();
@@ -1838,6 +1853,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleJumpToPreviousNodeShortcut();
             HandleJumpToStartShortcut();
             HandleJumpToEndShortcut();
+        }
+
+        private void HandleToggleButtonsShortcut() {
+            if (Event.current.type == EventType.keyDown
+                && Event.current.keyCode
+                == Script.SettingsAsset.ToggleButtons) {
+
+                Script.DrawNodeButtons = !Script.DrawNodeButtons;
+            }
         }
 
         private void HandleNodeHandleModeShortcut() {

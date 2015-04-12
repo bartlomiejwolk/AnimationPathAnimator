@@ -139,6 +139,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private bool drawObjectPath = true;
 
+        [SerializeField]
+        private bool drawNodeButtons = true;
+
         #endregion OPTIONS
 
         #region PROPERTIES
@@ -500,6 +503,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public bool DrawObjectPath {
             get { return drawObjectPath; }
             set { drawObjectPath = value; }
+        }
+
+        public bool DrawNodeButtons {
+            get { return drawNodeButtons; }
+            set { drawNodeButtons = value; }
         }
 
         #endregion

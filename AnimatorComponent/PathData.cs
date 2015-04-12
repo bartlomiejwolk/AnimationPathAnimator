@@ -495,9 +495,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // For each node calculate and apply new timestamp.
             for (var i = 1; i < NodesNo - 1; i++) {
                 // Calculate section curved length.
-                // todo crate setting in asset file for 3'd argument
                 var sectionLength = AnimatedObjectPath
-                    .CalculateSectionLength(i - 1, i, 5);
+                    .CalculateSectionLength(i - 1, i, PathLengthSampling);
 
                 // Calculate time interval for the section.
                 var sectionTimeInterval = sectionLength * timeForMeter;

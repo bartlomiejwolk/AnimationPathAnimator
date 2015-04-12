@@ -19,6 +19,7 @@ MonoBehaviour:
   nodeHandleMode: 59
   moveAllKey: 109
   jumpToEndKey: 108
+  toggleButtons: 112
   jumpToNextNodeKey: 108
   jumpToPreviousNodeKey: 104
   jumpToStartKey: 104

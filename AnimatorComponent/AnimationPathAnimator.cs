@@ -810,6 +810,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
+                //RotateObjectWithLookAt(globalForwardPoint);
             }
         }
 
@@ -1014,7 +1015,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleCustomRotationModeInEditor() {
-
             if (RotationMode == RotationMode.Custom) {
                 // Get rotation point position.
                 var rotationPointPos =
@@ -1030,8 +1030,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleForwardRotationModeInEditor() {
-
-// If rotation mode is set to..
             if (RotationMode == RotationMode.Forward) {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
@@ -1348,9 +1346,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Local forward point position.</returns>
         private Vector3 CalculateLocalForwardPointPosition() {
             // Timestamp offset of the forward point.
-            var forwardPointDelta = ForwardPointOffset;
             // Forward point timestamp.
-            var forwardPointTimestamp = AnimationTime + forwardPointDelta;
+            var forwardPointTimestamp = AnimationTime + ForwardPointOffset;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
 
             return localPosition;

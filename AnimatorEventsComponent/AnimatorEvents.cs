@@ -57,6 +57,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         private void OnDisable() {
             UnsubscribeFromAnimatorEvents();
+            UnsubscribeFromPathEvents();
         }
 
         private void UnsubscribeFromAnimatorEvents() {
@@ -134,11 +135,6 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             settings =
                 Resources.Load<AnimatorEventsSettings>("DefaultAnimatorEventsSettings");
             skin = Resources.Load("DefaultAnimatorEventsSkin") as GUISkin;
-        }
-
-        // todo add same to other behaviours
-        private void OnDestroy() {
-            UnsubscribeFromAnimatorEvents();
         }
 
         private void SubscribeToAnimatorEvents() {

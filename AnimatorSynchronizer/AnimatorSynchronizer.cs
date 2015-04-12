@@ -62,7 +62,8 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
         void Animator_AnimationResumed(object sender, System.EventArgs e) {
             foreach (var target in TargetComponents) {
-                target.UnpauseAnimation();
+                //target.UnpauseAnimation();
+                target.Play();
             }
         }
 
@@ -80,6 +81,8 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         void Animator_NodeReached(
             object sender,
             NodeReachedEventArgs e) {
+
+            if (!Application.isPlaying) return;
 
             // For each target animator component..
             for (int i = 0; i < TargetComponents.Count; i++) {

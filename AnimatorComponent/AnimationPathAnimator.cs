@@ -32,7 +32,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         /// <summary>
         ///     Event called when animated object passes a node.
-        ///     It'll be called only when anim. go is before a node in one frame
+        ///     It'll be called when anim. go is positioned before a node in one frame
+        /// It'll be called also when animation starts and timestamp is equal to any node.
         ///     and after in the next one.
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> NodeReached;
@@ -550,6 +551,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PrevAnimationTime = AnimationTime;
 
             HandleStartAnimation();
+            Invoke("HandleFireNodeReachedEventForStartingNode", AutoPlayDelay);
         }
 
         private void Update() {
@@ -740,9 +742,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimGOUpdateEnabled = true;
 
             // Fire event.
-            HandleFireNodeReachedEventForFirstNode();
+            //HandleFireNodeReachedEventForStartingNode();
 
             // Fire event.
+            // todo move to HandleOnAnimationStarted.
             if (AnimationTime == 0) {
                 OnAnimationStarted();
             }
@@ -1219,12 +1222,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
-        // todo remove. Make HandleFireNodeReachedEvent to be fired for starting node (event if Animation time != 0)
-        private void HandleFireNodeReachedEventForFirstNode() {
-            if (AnimationTime == 0) {
-                var args = new NodeReachedEventArgs(0, 0);
-                OnNodeReached(args);
-            }
+        private void HandleFireNodeReachedEventForStartingNode() {
+            var currentNodeIndex = PathData.GetNodeIndexAtTime(AnimationTime);
+            if (currentNodeIndex == -1) return;
+
+            var args = new NodeReachedEventArgs(
+                currentNodeIndex,
+                AnimationTime);
+            OnNodeReached(args);
         }
         #endregion
         #region OTHER HANDLERS

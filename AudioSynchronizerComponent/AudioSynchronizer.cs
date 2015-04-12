@@ -148,6 +148,8 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         void Animator_NodeReached(object sender, NodeReachedEventArgs e) {
+            if (!Application.isPlaying) return;
+
             // If audio is playing, record timestamp.
             if (AudioSource.isPlaying) {
                 AudioNodeTimestamps[e.NodeIndex] = AudioSource.time;

@@ -47,16 +47,31 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         }
 
         private void OnEnable() {
-            Animator.NodeReached += Animator_NodeReached;
-            Animator.JumpedToNode += Animator_JumpedToNode;
-            Animator.PlayPause += Animator_PlayPause;
+            UnsubscribeFromEvents();
+            SubscribeToEvents();
         }
 
-        // todo Use separate events for play and pause.
-        void Animator_PlayPause(object sender, float timestamp) {
-            //foreach (var target in TargetComponents) {
-            //    target.PlayPauseAnimation();
-            //}
+        private void SubscribeToEvents() {
+            Animator.NodeReached += Animator_NodeReached;
+            Animator.JumpedToNode += Animator_JumpedToNode;
+            Animator.AnimationPaused += Animator_AnimationPaused;
+            Animator.AnimationResumed += Animator_AnimationResumed;
+        }
+
+        void Animator_AnimationResumed(object sender, System.EventArgs e) {
+            foreach (var target in TargetComponents) {
+                target.UnpauseAnimation();
+            }
+        }
+
+        void Animator_AnimationPaused(object sender, System.EventArgs e) {
+            foreach (var target in TargetComponents) {
+                target.PauseAnimation();
+            }
+        }
+
+        private void OnValidate() {
+            SubscribeToEvents();
         }
 
         // todo it should record also for the node where car timestamp is 0
@@ -80,9 +95,14 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         }
 
         private void OnDisable() {
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents() {
             Animator.NodeReached -= Animator_NodeReached;
             Animator.JumpedToNode -= Animator_JumpedToNode;
-            Animator.PlayPause -= Animator_PlayPause;
+            Animator.AnimationPaused -= Animator_AnimationPaused;
+            Animator.AnimationResumed -= Animator_AnimationResumed;
         }
 
         private void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {

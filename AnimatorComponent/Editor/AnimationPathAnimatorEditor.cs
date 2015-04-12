@@ -373,7 +373,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingPositionHandles() {
             if (!Script.DrawObjectPath) return;
 
-            HandleFreePositionHandle();
+            HandleDrawCustomPositionHandle();
             HandleDefaultPositionHandle();
         }
 
@@ -396,8 +396,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Method responsible for drawing for each node custom position handle.
         /// </summary>
-        // todo rename to HandleDrawCustomPositionHandle.
-        private void HandleFreePositionHandle() {
+        private void HandleDrawCustomPositionHandle() {
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Free) {
 

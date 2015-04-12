@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
     [RequireComponent(typeof (AnimationPathAnimator))]
-    public class AnimatorEvents : MonoBehaviour, ISerializationCallbackReceiver {
+    public class AnimatorEvents : MonoBehaviour {
         #region FIELDS
 
         [SerializeField]
@@ -248,8 +248,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         }
 
         private string[] GetMethodNames() {
-            // todo this may not be necessary if slots are always in sync with nodes
-            // Return empty array is slots list was not yet initalized.
+            // Return empty array if slots list was not yet initalized.
             if (NodeEventSlots == null) return new string[0];
 
             var methodNames = new string[NodeEventSlots.Count];
@@ -269,13 +268,6 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         }
 
         #endregion
-
-        // todo move to region
-        public void OnBeforeSerialize() {
-        }
-
-        public void OnAfterDeserialize() {
-        }
 
     }
 

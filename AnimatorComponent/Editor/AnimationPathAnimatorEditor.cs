@@ -182,7 +182,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if ((Script.TangentMode != TangentMode.Custom)
                 || (Script.RotationMode != RotationMode.Custom)) return;
 
-            var nodePositions = Script.GetGlobalRotationPointPositions();
+            var nodePositions = Script.GetGlobalRotationPathPositions();
 
             var buttonStyle = Script.Skin.GetStyle(
                 "SmoothNodeButton");
@@ -272,7 +272,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.NodeHandle != NodeHandle.Tangent) return;
 
             // Positions at which to draw tangent handles.
-            var nodes = Script.GetGlobalRotationPointPositions();
+            var nodes = Script.GetGlobalRotationPathPositions();
 
             // Draw tangent handles.
             SceneHandles.DrawTangentHandles(

@@ -1230,7 +1230,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleJumpToBeginningShortcut() {
-
 // Jump to beginning.
             if (Input.GetKeyDown(
                 SettingsAsset.JumpToPreviousNodeKey)
@@ -1243,7 +1242,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleJumpToPreviousNodeShortcut() {
-
 // Jump to previous node.
             if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
                 AnimationTime = GetNearestBackwardNodeTimestamp();
@@ -1253,7 +1251,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleJumpToNextNodeShortcut() {
-
 // Jump to next node.
             if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
                 AnimationTime = GetNearestForwardNodeTimestamp();
@@ -1263,7 +1260,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleLongJumpBackwardShortcut() {
-
 // Long jump backward. 
             if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
                 AnimationTime -= LongJumpValue;
@@ -1271,7 +1267,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleLongJumpForwardShortcut() {
-
 // Long jump forward
             if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
                 AnimationTime += LongJumpValue;
@@ -1279,7 +1274,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandlePlayPauseShortcut() {
-
 // Play/Pause.
             if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
                 HandlePlayPause();
@@ -1396,8 +1390,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Returns global rotation path node positions.
         /// </summary>
         /// <returns></returns>
-        // todo rename to GetGlobalRotationPathPositions.
-        public List<Vector3> GetGlobalRotationPointPositions() {
+        public List<Vector3> GetGlobalRotationPathPositions() {
             var localRotPointPositions =
                 pathData.GetRotationPointPositions();
 
@@ -1697,7 +1690,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (RotationMode != RotationMode.Custom) return;
             if (!DrawRotationPathCurve) return;
 
-            var globalRotPointPositions = GetGlobalRotationPointPositions();
+            var globalRotPointPositions = GetGlobalRotationPathPositions();
 
             // Path node timestamps.
             var nodeTimestamps = pathData.GetPathTimestamps();

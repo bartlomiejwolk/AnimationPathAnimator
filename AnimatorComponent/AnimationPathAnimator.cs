@@ -1218,40 +1218,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Method responsible for detecting all shortcuts pressed in play mode.
         /// </summary>
-        // todo extract methods.
         private void HandleShortcuts() {
             if (!EnableControlsInPlayMode) return;
 
-            // Play/Pause.
-            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
-                HandlePlayPause();
-            }
+            HandlePlayPauseShortcut();
+            HandleLongJumpForwardShortcut();
+            HandleLongJumpBackwardShortcut();
+            HandleJumpToNextNodeShortcut();
+            HandleJumpToPreviousNodeShortcut();
+            HandleJumpToBeginningShortcut();
+        }
 
-            // Long jump forward
-            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
-                AnimationTime += LongJumpValue;
-            }
+        private void HandleJumpToBeginningShortcut() {
 
-            // Long jump backward. 
-            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
-                AnimationTime -= LongJumpValue;
-            }
-
-            // Jump to next node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
-                AnimationTime = GetNearestForwardNodeTimestamp();
-
-                FireJumpedToNodeEvent();
-            }
-
-            // Jump to previous node.
-            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
-                AnimationTime = GetNearestBackwardNodeTimestamp();
-
-                FireJumpedToNodeEvent();
-            }
-
-            // Jump to beginning.
+// Jump to beginning.
             if (Input.GetKeyDown(
                 SettingsAsset.JumpToPreviousNodeKey)
                 && Input.GetKey(SettingsAsset.PlayModeModKey)) {
@@ -1259,6 +1239,50 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 AnimationTime = 0;
 
                 FireJumpedToNodeEvent();
+            }
+        }
+
+        private void HandleJumpToPreviousNodeShortcut() {
+
+// Jump to previous node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToPreviousNodeKey)) {
+                AnimationTime = GetNearestBackwardNodeTimestamp();
+
+                FireJumpedToNodeEvent();
+            }
+        }
+
+        private void HandleJumpToNextNodeShortcut() {
+
+// Jump to next node.
+            if (Input.GetKeyDown(SettingsAsset.JumpToNextNodeKey)) {
+                AnimationTime = GetNearestForwardNodeTimestamp();
+
+                FireJumpedToNodeEvent();
+            }
+        }
+
+        private void HandleLongJumpBackwardShortcut() {
+
+// Long jump backward. 
+            if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
+                AnimationTime -= LongJumpValue;
+            }
+        }
+
+        private void HandleLongJumpForwardShortcut() {
+
+// Long jump forward
+            if (Input.GetKeyDown(SettingsAsset.LongJumpForwardKey)) {
+                AnimationTime += LongJumpValue;
+            }
+        }
+
+        private void HandlePlayPauseShortcut() {
+
+// Play/Pause.
+            if (Input.GetKeyDown(SettingsAsset.PlayPauseKey)) {
+                HandlePlayPause();
             }
         }
 

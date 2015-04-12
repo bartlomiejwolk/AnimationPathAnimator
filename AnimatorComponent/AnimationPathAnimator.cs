@@ -1775,16 +1775,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return resultPositions.ToArray();
         }
 
-        public sealed class AnimationTimeChangedEventArgs : EventArgs {
-
-            public float DeltaTime { get; set; }
-
-            public AnimationTimeChangedEventArgs(float deltaTime) {
-                DeltaTime = deltaTime;
-            }
-
-        }
-
         /// <summary>
         /// Assert that object path and rotation path nodes are in sync.
         /// </summary>

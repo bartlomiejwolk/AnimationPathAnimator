@@ -16,8 +16,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         //public event EventHandler TiltingCurveUpdated;
 
-        // todo rename to PathTimestampsChanged.
-        public event EventHandler NodeTimeChanged;
+        public event EventHandler PathTimestampsChanged;
 
         public event EventHandler PathReset;
 
@@ -147,7 +146,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             NodeRemoved -= PathData_NodeRemoved;
             TiltingCurveUpdated -= PathData_TiltingCurveUpdated;
             EaseCurveUpdated -= PathData_TiltingCurveUpdated;
-            NodeTimeChanged -= PathData_NodeTimeChanged;
+            PathTimestampsChanged -= PathData_PathTimestampsChanged;
             NodePositionChanged -= PathData_NodePositionChanged;
         }
 
@@ -182,7 +181,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnNodeTimeChanged() {
-            var handler = NodeTimeChanged;
+            var handler = PathTimestampsChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -308,7 +307,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SmoothCurve(TiltingCurve);
         }
 
-        private void PathData_NodeTimeChanged(object sender, EventArgs e) {
+        private void PathData_PathTimestampsChanged(object sender, EventArgs e) {
             UpdateToolTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateToolTimestamps(TiltingCurve, GetTiltedNodeTimestamps);
             //UpdateRotationPathTimestamps();
@@ -407,7 +406,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             NodeRemoved += PathData_NodeRemoved;
             TiltingCurveUpdated += PathData_TiltingCurveUpdated;
             EaseCurveUpdated += PathData_EaseCurveUpdated;
-            NodeTimeChanged += PathData_NodeTimeChanged;
+            PathTimestampsChanged += PathData_PathTimestampsChanged;
             NodePositionChanged += PathData_NodePositionChanged;
         }
 

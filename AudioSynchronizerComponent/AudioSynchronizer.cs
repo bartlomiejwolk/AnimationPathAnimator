@@ -9,7 +9,6 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
     /// Allows controlling <c>AudioSource</c> component from inspector
     /// and with keyboard shortcuts.
     /// </summary>
-    // todo add menu option to create component
     [RequireComponent(typeof(AnimatorComponent.AnimationPathAnimator))]
     [RequireComponent(typeof(AudioSource))]
     public sealed class AudioSynchronizer : MonoBehaviour {

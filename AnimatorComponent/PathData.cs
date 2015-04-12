@@ -245,7 +245,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="nodeTimestamp">Path node timestamp.</param>
         private void HandleRemoveNodeTools(float nodeTimestamp) {
             HandleDisableEaseTool(nodeTimestamp);
-            HandleRemoveTiltingTool(nodeTimestamp);
+            HandleDisableTiltingTool(nodeTimestamp);
         }
 
         /// <summary>
@@ -253,8 +253,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
-        // todo rename to HandleDisableTiltingTool
-        private void HandleRemoveTiltingTool(float nodeTimestamp) {
+        private void HandleDisableTiltingTool(float nodeTimestamp) {
             // Get nodes that have tilitng tool enabled.
             var tiltedNodesTimestamps = Utilities.GetAnimationCurveTimestamps(TiltingCurve);
             // Find ease index for the given timestamp.

@@ -15,7 +15,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENTS
 
         /// <summary>
-        ///     Event fired when animation time is 1 and animated object stops moving.
+        ///     Event fired when animation time reaches 1.
+        /// Stoping animation manually won't fire this event.
         /// </summary>
         public event EventHandler AnimationEnded;
 
@@ -641,6 +642,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 if (AnimationTime > 1) {
                     AnimationTime = 1;
                     IsPlaying = false;
+
+                    OnAnimationEnded();
                 }
             }
         }
@@ -649,9 +652,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Pauses animation.
         /// </summary>
+        // todo rename to Pause.
         public void PauseAnimation() {
             //Pause = true;
             IsPlaying = false;
+
+            OnAnimationPaused();
         }
 
         /// <summary>
@@ -720,14 +726,19 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Starts animation from the beginning.
+        ///     Starts or continues animation.
         /// </summary>
         public void Play() {
-            //AnimationTime = 0;
             IsPlaying = true;
             AnimGOUpdateEnabled = true;
 
+            // Fire event.
             HandleFireNodeReachedEventForFirstNode();
+
+            // Fire event.
+            if (AnimationTime == 0) {
+                OnAnimationStarted();
+            }
         }
 
         /// <summary>
@@ -736,11 +747,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Unpauses animation.
         /// </summary>
+        // todo rename to Unpause.
         public void UnpauseAnimation() {
             //Pause = false;
             if (IsPlaying == false && DuringPlayback) {
                 IsPlaying = true;
             }
+
+            OnAnimationResumed();
         }
 
         /// <summary>

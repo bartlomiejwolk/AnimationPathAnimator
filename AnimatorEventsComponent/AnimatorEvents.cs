@@ -157,17 +157,13 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         }
 
         private void HandlePathDataRefChange() {
-            // todo invert condition (if == null)
-            if (Animator.PathData != null) {
+            if (Animator.PathData == null) {
                 UnsubscribeFromPathEvents();
-                //SubscribeToAnimatorEvents();
-                SubscribeToPathEvents();
-                InitializeSlots();
             }
             else {
-                //UnsubscribeFromAnimatorEvents();
                 UnsubscribeFromPathEvents();
-                //NodeEventSlots.Clear();
+                SubscribeToPathEvents();
+                InitializeSlots();
             }
         }
 

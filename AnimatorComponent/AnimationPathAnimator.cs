@@ -529,7 +529,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Animation does not always starts from time 0.
             PrevAnimationTime = AnimationTime;
 
-            HandleStartAnimation();
+            HandleStartAnimationOnEnterPlayMode();
             Invoke("HandleFireNodeReachedEventForStartingNode", AutoPlayDelay);
         }
 
@@ -1127,9 +1127,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Allows toggle pause. Use only in play mode.
+        ///     Action taken when Play/Pause shortcut is pressed.
+        /// Use in play mode.
         /// </summary>
-        // todo rename to HandlePlayPauseButton.
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
@@ -1166,8 +1166,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Decides if to start animation playback on enter play mode.
         /// </summary>
-        // todo rename to HandleFirstAnimationStart.
-        private void HandleStartAnimation() {
+        private void HandleStartAnimationOnEnterPlayMode() {
             if (!PathDataAssetAssigned()) return;
             if (!Application.isPlaying) return;
             if (!AutoPlay) return;
@@ -1219,6 +1218,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Method responsible for detecting all shortcuts pressed in play mode.
         /// </summary>
+        // todo extract methods.
         private void HandleShortcuts() {
             if (!EnableControlsInPlayMode) return;
 

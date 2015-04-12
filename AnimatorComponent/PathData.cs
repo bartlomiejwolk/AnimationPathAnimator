@@ -285,7 +285,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 String.Format("Number of tilting curve keys and number of nodes" +
                               " with enabled tilting tool differs.\n" +
                               "Tilting curve length: {0}\n" +
-                              "Nodes with enabled ease tool: {1}",
+                              "Nodes with enabled tilting tool: {1}",
                               TiltingCurve.length,
                               tiltedNodesTimestamps.Count));
         }

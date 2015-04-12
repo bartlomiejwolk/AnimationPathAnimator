@@ -244,7 +244,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
         private void HandleRemoveNodeTools(float nodeTimestamp) {
-            HandleRemoveEaseTool(nodeTimestamp);
+            HandleDisableEaseTool(nodeTimestamp);
             HandleRemoveTiltingTool(nodeTimestamp);
         }
 
@@ -278,10 +278,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         /// Removes ease value related to a given path node index.
         /// </summary>
-        /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
-        // todo rename to HandleDisableEaseTool
-        private void HandleRemoveEaseTool(float nodeTimestamp) {
+        private void HandleDisableEaseTool(float nodeTimestamp) {
             // Get nodes that have ease tool enabled.
             var easedNodeTimestamps = Utilities.GetAnimationCurveTimestamps(EaseCurve);
             // Find ease index for the given timestamp.
@@ -313,7 +311,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //UpdateRotationPathTimestamps();
         }
 
-        // todo make private
+        /// <summary>
+        ///  Get timestamps of nodes that have tilting value assigned.
+        /// </summary>
+        /// <returns></returns>
         public List<float> GetTiltedNodeTimestamps() {
             var pathTimestamps = GetPathTimestamps();
             var resultTimestamps = new List<float>();
@@ -809,6 +810,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
 
+        /// <summary>
+        /// Get timestamps of nodes that have ease value assigned.
+        /// </summary>
+        /// <returns></returns>
         public List<float> GetEasedNodeTimestamps() {
             var pathTimestamps = GetPathTimestamps();
             var resultTimestamps = new List<float>();

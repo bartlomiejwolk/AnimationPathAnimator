@@ -2187,27 +2187,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawPositionHandleDropdown() {
             var disable = Script.NodeHandle != NodeHandle.Position;
 
-            // In tangent mode draw only free movement handle.
+            // Set handle in custom tangent mode.
             if (Script.TangentMode == TangentMode.Custom
                 && Script.NodeHandle == NodeHandle.Tangent) {
 
                 Script.PositionHandle = PositionHandle.Free;
-                //return;
             }
 
             EditorGUI.BeginDisabledGroup(disable);
 
-            serializedObject.Update();
-
-            // todo don't use serialized property
-            EditorGUILayout.PropertyField(
-                positionHandle,
+            Script.PositionHandle = (PositionHandle) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Position Handle",
                     "Handle used to move nodes on scene. Default " +
-                    "shortcut: G"));
-
-            serializedObject.ApplyModifiedProperties();
+                    "shortcut: G"),
+                Script.PositionHandle);
 
             EditorGUI.EndDisabledGroup();
         }

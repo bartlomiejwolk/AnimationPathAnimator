@@ -510,10 +510,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Update previous timestamp.
                 prevTimestamp = newTimestamp;
 
-                // NOTE When nodes on the scene overlap, it's possible that new
-                // timestamp is > 1, which is invalid.
-                // todo throw exception
-                //if (newTimestamp > 1) return;
+                if (newTimestamp > 1) {
+                    throw new Exception("Node timestamps overflow.");
+                }
             }
 
             // Insert timestamps for extreme nodes.

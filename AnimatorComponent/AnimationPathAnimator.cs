@@ -740,8 +740,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Unpauses animation.
         /// </summary>
-        // todo rename to Unpause.
-        public void UnpauseAnimation() {
+        public void Unpause() {
             //Pause = false;
             if (IsPlaying == false && DuringPlayback) {
                 IsPlaying = true;
@@ -1144,7 +1143,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else if (!IsPlaying && DuringPlayback) {
                 // Unpause animation.
                 //IsPlaying = true;
-                UnpauseAnimation();
+                Unpause();
             }
             // Animation ended.
             else if (!IsPlaying && AnimationTime >= 1) {

@@ -62,7 +62,7 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
         void Animator_AnimationResumed(object sender, System.EventArgs e) {
             foreach (var target in TargetComponents) {
-                //target.UnpauseAnimation();
+                //target.Unpause();
                 target.Play();
             }
         }

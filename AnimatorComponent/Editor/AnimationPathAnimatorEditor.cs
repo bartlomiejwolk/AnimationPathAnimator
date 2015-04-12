@@ -1309,6 +1309,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             //DrawRotationPathToggle();
             DrawObjectCurveToggle();
             DrawRotationCurveToggle();
+            DrawNodeButtonsToggle();
 
             EditorGUILayout.Space();
 
@@ -1385,6 +1386,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
+        }
+
+        private void DrawNodeButtonsToggle() {
+            Script.DrawNodeButtons = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw Buttons",
+                    "Draw on-scene node buttons."),
+                Script.DrawNodeButtons);
         }
 
         private void DrawRotationModeDropdownCallbackHandler(

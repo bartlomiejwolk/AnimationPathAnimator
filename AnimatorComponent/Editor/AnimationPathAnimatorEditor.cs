@@ -152,22 +152,23 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             HandleShortcuts();
 
-            // todo release reorder
             HandleDrawingAddButtons();
             HandleDrawingRemoveButtons();
             HandleDrawingSceneToolToggleButtons();
             HandleDrawingPathSmoothButtons();
             HandleDrawingRotationPathSmoothButtons();
+
+            HandleDrawingPositionHandles();
+            HandleDrawingRotationHandle();
             HandleDrawingEaseHandles();
             HandleDrawingTiltingHandles();
+            HandleDrawingObjectPathTangentHandles();
+            HandleDrawingRotationPathTangentHandles();
+
             HandleDrawingEaseLabel();
             HandleDrawingTiltingLabels();
             HandleDrawingUpdateAllModeLabel();
             HandleDrawingMoveAllModeLables();
-            HandleDrawingPositionHandles();
-            HandleDrawingObjectPathTangentHandles();
-            HandleDrawingRotationPathTangentHandles();
-            HandleDrawingRotationHandle();
 
             // Repaint inspector if any key was pressed.
             // Inspector needs to be redrawn after option is changed

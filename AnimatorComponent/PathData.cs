@@ -205,7 +205,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
-            // todo replace with assert
             // Compare number of nodes with predicted number of elements in the list.
             //if (NodesNo != EaseToolState.Count + 1) {
             //    throw new Exception("This operation will cause a list to have" +

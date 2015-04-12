@@ -128,7 +128,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return tiltingToolState; }
             set { tiltingToolState = value; }
         }
-
         #endregion PROPERTIES
 
         #region UNITY MESSAGES

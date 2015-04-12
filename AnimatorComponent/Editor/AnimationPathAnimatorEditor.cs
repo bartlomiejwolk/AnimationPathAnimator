@@ -972,8 +972,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="index">Index of node which tool will be disabled.</param>
         /// <param name="timestamp">Timestamp of node which tool will be disabled.</param>
         private void HandleDisablingEaseTool(int index, float timestamp) {
-            // todo Create PathData.EaseCurveLength property and use instead.
-            var prevEaseCurveNodesNo = Script.PathData.EaseCurve.length;
+            var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
 
             // Remove key from ease curve.
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
@@ -991,8 +990,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDisablingTiltingTool(int index, float nodeTimestamp) {
-            // todo Create PathData.TiltingCurveLength property and use instead.
-            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurve.length;
+            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
 
             // Remove key from ease curve.
             Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);

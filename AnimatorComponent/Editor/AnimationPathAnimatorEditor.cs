@@ -220,12 +220,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 nodePositions,
                 Script.SettingsAsset.SmoothButtonOffsetH,
                 Script.SettingsAsset.SmoothButtonOffsetV,
-                DrawSmoothPathNodeButtonsCallbackHandler,
+                DrawPathSmoothButtonsCallbackHandler,
                 buttonStyle);
         }
 
-        // todo rename to DrawPathSmoothButtonsCallbackHandler.
-        private void DrawSmoothPathNodeButtonsCallbackHandler(int nodeIndex) {
+        private void DrawPathSmoothButtonsCallbackHandler(int nodeIndex) {
             Undo.RecordObject(Script.PathData, "Smooth Path node.");
 
             Script.PathData.SmoothPathNodeTangents(nodeIndex);

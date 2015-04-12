@@ -1777,11 +1777,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public sealed class AnimationTimeChangedEventArgs : EventArgs {
 
-            // todo rename to DeltaTime.
-            public float TimeDelta { get; set; }
+            public float DeltaTime { get; set; }
 
-            public AnimationTimeChangedEventArgs(float timeDelta) {
-                TimeDelta = timeDelta;
+            public AnimationTimeChangedEventArgs(float deltaTime) {
+                DeltaTime = deltaTime;
             }
 
         }

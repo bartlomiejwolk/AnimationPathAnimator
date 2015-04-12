@@ -2,7 +2,6 @@
 using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.LoggingTools;
 using UnityEngine;
-// todo use qualified name instead.
 
 namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
@@ -57,11 +56,10 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         #region UNITY MESSAGES
 
         private void OnDisable() {
-            UnsubscribeFromEvents();
+            UnsubscribeFromAnimatorEvents();
         }
 
-        // todo rename to UnsubscribeFromAnimatorEvents.
-        private void UnsubscribeFromEvents() {
+        private void UnsubscribeFromAnimatorEvents() {
             // Guard agains null reference.
             if (Animator == null) Animator = GetComponent<AnimationPathAnimator>();
 
@@ -74,13 +72,13 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             Debug.Log("OnEnable()");
             if (Animator == null) return;
 
-            UnsubscribeFromEvents();
+            UnsubscribeFromAnimatorEvents();
             SubscribeToAnimatorEvents();
         }
 
         private void OnValidate() {
             Logger.LogCall();
-            UnsubscribeFromEvents();
+            UnsubscribeFromAnimatorEvents();
             SubscribeToAnimatorEvents();
             UnsubscribeFromPathEvents();
             SubscribeToPathEvents();
@@ -101,7 +99,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
             InitializeSlots();
             LoadRequiredResources();
-            UnsubscribeFromEvents();
+            UnsubscribeFromAnimatorEvents();
             SubscribeToAnimatorEvents();
         }
 
@@ -140,7 +138,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         // todo add same to other behaviours
         private void OnDestroy() {
-            UnsubscribeFromEvents();
+            UnsubscribeFromAnimatorEvents();
         }
 
         private void SubscribeToAnimatorEvents() {
@@ -171,7 +169,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
                 InitializeSlots();
             }
             else {
-                //UnsubscribeFromEvents();
+                //UnsubscribeFromAnimatorEvents();
                 UnsubscribeFromPathEvents();
                 //NodeEventSlots.Clear();
             }

@@ -227,7 +227,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void DrawPathSmoothButtonsCallbackHandler(int nodeIndex) {
             Undo.RecordObject(Script.PathData, "Smooth Path node.");
 
-            Script.PathData.SmoothPathNodeTangents(nodeIndex);
+            Script.PathData.SmoothAllPathNodeTangents(nodeIndex);
         }
 
         private void HandleDrawingMoveAllModeLables() {
@@ -848,7 +848,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private void HandleSmoothTangentMode() {
             if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothPathNodeTangents();
+                Script.PathData.SmoothAllPathNodeTangents();
                 HandleSmoothRotationPathTangents();
             }
         }

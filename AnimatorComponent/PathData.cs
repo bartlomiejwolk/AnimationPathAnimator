@@ -638,8 +638,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo rename to SmoothAllPathNodeTangents.
-        public void SmoothPathNodeTangents() {
+        public void SmoothAllPathNodeTangents() {
             SmoothAnimationPathTangents(AnimatedObjectPath);
         }
 
@@ -755,7 +754,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        public void SmoothPathNodeTangents(int nodeIndex) {
+        public void SmoothAllPathNodeTangents(int nodeIndex) {
             AnimatedObjectPath.SmoothNodeInOutTangents(
                 nodeIndex,
                 DefaultSmoothWeight);

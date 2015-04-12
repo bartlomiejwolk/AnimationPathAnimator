@@ -1575,7 +1575,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Get path points.
             var points = pathData.SampleAnimationPathForPoints(
-                SettingsAsset.GizmoCurveSamplingFrequency);
+                SettingsAsset.ObjectCurveSampling);
 
             // Convert points to global coordinates.
             var globalPoints = new Vector3[points.Count];

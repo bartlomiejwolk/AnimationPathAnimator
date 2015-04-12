@@ -513,6 +513,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             LoadRequiredAssets();
             UnsubscribeFromEvents();
             SubscribeToEvents();
+            UnsubscribeFromPathEvents();
+            SubscribeToPathEvents();
         }
 
         private void OnValidate() {
@@ -1507,8 +1509,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void SubscribeToEvents() {
             AnimationEnded += APAnimator_AnimationEnded;
             PathDataRefChanged += Animator_PathDataRefChanged;
-
-            SubscribeToPathEvents();
         }
 
         private void SubscribeToPathEvents() {
@@ -1533,6 +1533,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         void Animator_PathDataRefChanged(object sender, EventArgs e) {
             UnsubscribeFromEvents();
             SubscribeToEvents();
+            UnsubscribeFromPathEvents();
+            SubscribeToPathEvents();
         }
 
         /// <summary>

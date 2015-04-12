@@ -954,11 +954,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Remember tilting.
             var tiltingEulerAngle = AnimatedGO.rotation.eulerAngles.z;
-
             // Calculate direction to target.
             var targetDirection = targetPosition - AnimatedGO.position;
             // Calculate rotation to target.
             var rotation = Quaternion.LookRotation(targetDirection);
+            // Convert rotation to Euler.
+            var rotationEuler = rotation.eulerAngles;
+            // Restore original tilting.
+            rotationEuler.z = tiltingEulerAngle;
+            // Convert rotation from Euler to Quaternion.
+            rotation = Quaternion.Euler(rotationEuler);
             // Calculate rotation speed.
             var speed = Time.deltaTime * RotationSlerpSpeed;
 
@@ -967,11 +972,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 AnimatedGO.rotation,
                 rotation,
                 speed);
-
-            // Restore tilting.
-            var rotationEuler = AnimatedGO.rotation.eulerAngles;
-            rotationEuler.z = tiltingEulerAngle;
-            AnimatedGO.rotation = Quaternion.Euler(rotationEuler);
         }
 
         /// <summary>

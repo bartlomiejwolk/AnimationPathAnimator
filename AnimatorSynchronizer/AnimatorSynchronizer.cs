@@ -108,6 +108,8 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         }
 
         private void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
+            if (!Application.isPlaying) return;
+
             // For each target animator component..
             for (int i = 0; i < TargetComponents.Count; i++) {
                 // Return if timestamp for this node was not recorded.

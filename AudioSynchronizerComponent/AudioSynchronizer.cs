@@ -139,6 +139,8 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
+            if (!Application.isPlaying) return;
+
             // Return if audio timestamp for this node was not recorded.
             if (!AudioNodeTimestamps.ContainsKey(e.NodeIndex)) return;
 

@@ -570,7 +570,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-
         private void OnAnimationEnded() {
             var handler = AnimationEnded;
             if (handler != null) handler(this, EventArgs.Empty);

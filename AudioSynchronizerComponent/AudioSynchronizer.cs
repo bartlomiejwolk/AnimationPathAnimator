@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using ATP.AnimationPathTools.AnimatorComponent;
+using ATP.LoggingTools;
 
 namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
@@ -80,8 +81,45 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void OnEnable() {
+            Logger.LogCall();
+            UnsubscribeFromEvents();
+            SubscribeToEvents();
+        }
+
+        private void OnValidate() {
+            Logger.LogCall();
+            UnsubscribeFromEvents();
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents() {
             Animator.NodeReached += Animator_NodeReached;
             Animator.JumpedToNode += Animator_JumpedToNode;
+            Animator.AnimationStarted += Animator_AnimationStarted;
+            Animator.AnimationPaused += Animator_AnimationPaused;
+            Animator.AnimationResumed += Animator_AnimationResumed;
+        }
+
+        void Animator_AnimationResumed(object sender, System.EventArgs e) {
+            Logger.LogCall();
+            AudioSource.UnPause();
+        }
+
+        void Animator_AnimationPaused(object sender, System.EventArgs e) {
+            Logger.LogCall();
+            AudioSource.Pause();
+        }
+
+        void Animator_AnimationStarted(object sender, System.EventArgs e) {
+            Logger.LogCall();
+            if (!AutoPlay) return;
+
+            if (AutoPlayDelay != 0) {
+                AudioSource.PlayDelayed(AutoPlayDelay);
+            }
+            else {
+                AudioSource.Play();
+            }
         }
 
         private void Reset() {
@@ -97,17 +135,7 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         /// Handle auto play inspector option.
         /// </summary>
         private void HandleAutoPlay() {
-            // Return if auto play is disabled.
-            if (!AutoPlay) return;
 
-            if (AutoPlayDelay != 0) {
-                // Apply delay.
-                AudioSource.PlayDelayed(AutoPlayDelay);
-            }
-            else {
-                // Play.
-                AudioSource.Play();
-            }
         }
 
         void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
@@ -125,7 +153,16 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void OnDisable() {
-            // todo unsubscribe from events.
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents() {
+
+            Animator.NodeReached -= Animator_NodeReached;
+            Animator.JumpedToNode -= Animator_JumpedToNode;
+            Animator.AnimationStarted -= Animator_AnimationStarted;
+            Animator.AnimationPaused -= Animator_AnimationPaused;
+            Animator.AnimationResumed -= Animator_AnimationResumed;
         }
 
         private void Update() {

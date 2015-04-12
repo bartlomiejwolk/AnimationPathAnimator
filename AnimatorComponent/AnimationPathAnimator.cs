@@ -1144,18 +1144,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Animation is playing and unpaused.
             if (IsPlaying) {
                 // Pause animation.
-                IsPlaying = false;
+                //IsPlaying = false;
+                PauseAnimation();
             }
             // Animation is playing but paused.
             else if (!IsPlaying && DuringPlayback) {
                 // Unpause animation.
-                IsPlaying = true;
+                //IsPlaying = true;
+                UnpauseAnimation();
             }
             // Animation ended.
             else if (!IsPlaying && AnimationTime >= 1) {
                 AnimationTime = 0;
-                IsPlaying = true;
-                //StartAnimation();
+                //IsPlaying = true;
+                Play();
             }
             // Disable play/pause while for animation start being invoked.
             else if (IsInvoking("Play")) {
@@ -1164,7 +1166,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             else {
                 // Start animation.
                 //StartAnimation();
-                IsPlaying = true;
+                //IsPlaying = true;
+                Play();
             }
         }
 

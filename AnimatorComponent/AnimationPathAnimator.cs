@@ -1508,7 +1508,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             AnimationEnded += APAnimator_AnimationEnded;
             PathDataRefChanged += Animator_PathDataRefChanged;
 
-            // todo extract to SubscribeToPathEvents.
+            SubscribeToPathEvents();
+        }
+
+        private void SubscribeToPathEvents() {
             if (pathData == null) return;
 
             PathData.RotationPointPositionChanged +=
@@ -1536,6 +1539,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Unsubscribe from events.
         /// </summary>
         private void UnsubscribeFromEvents() {
+            AnimationEnded -= APAnimator_AnimationEnded;
+            PathDataRefChanged -= Animator_PathDataRefChanged;
+
+            UnsubscribeFromPathEvents();
+        }
+
+        private void UnsubscribeFromPathEvents() {
+
             if (PathData == null) return;
 
             PathData.RotationPointPositionChanged -=
@@ -1544,8 +1555,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.TiltingCurveUpdated -= PathData_TiltingCurveUpdated;
             PathData.PathReset -= PathData_PathReset;
             PathData.RotationPathReset -= PathData_RotationPathReset;
-            AnimationEnded -= APAnimator_AnimationEnded;
-            PathDataRefChanged -= Animator_PathDataRefChanged;
             PathData.NodeAdded -= PathData_NodeAdded;
             PathData.NodeRemoved -= PathData_NodeRemoved;
         }

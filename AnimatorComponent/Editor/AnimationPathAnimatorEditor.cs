@@ -676,7 +676,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             Undo.RecordObject(Script.PathData, "Change node/s position.");
 
-            HandleMoveSingleMode(movedNodeIndex, newGlobalPos);
+            HandleMoveSingleNode(movedNodeIndex, newGlobalPos);
             HandleMoveAllMode(movedNodeIndex, newGlobalPos);
 
             EditorUtility.SetDirty(Script.PathData);
@@ -708,8 +708,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.OffsetRotationPathPosition(moveDelta);
         }
 
-        // todo rename to HandleMoveSingleNode
-        private void HandleMoveSingleMode(int movedNodeIndex, Vector3 newGlobalPos) {
+        private void HandleMoveSingleNode(int movedNodeIndex, Vector3 newGlobalPos) {
             // Return if node handle is not set to position.
             if (Script.NodeHandle != NodeHandle.Position) return;
             // Return if move all mode is enabled.

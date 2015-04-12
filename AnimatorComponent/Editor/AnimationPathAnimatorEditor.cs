@@ -2200,9 +2200,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Stop",
                     ""))) {
 
-                // todo create Animator.Stop().
-                Script.IsPlaying = false;
-                Script.AnimationTime = 0;
+                Script.Stop();
 
                 Utilities.InvokeMethodWithReflection(
                     Script,

@@ -144,10 +144,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public float AnimationTime {
             get { return animationTime; }
             set {
-                var prevValue = animationTime;
-
-                // todo animation time cannot be less that 0
-                animationTime = value;
+                // Validate value.
+                if (value < 0) {
+                    animationTime = 0;
+                }
+                else if (value > 1) {
+                    animationTime = 1;
+                }
+                else {
+                    animationTime = value;
+                }
 
                 // In play mode, when animation is playing..
                 if (Application.isPlaying && IsPlaying) {
@@ -180,8 +186,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public bool IsPlaying {
             get { return isPlaying; }
-            // todo should be private.
-            set {
+            private set {
                 isPlaying = value;
 
                 if (value) {
@@ -714,7 +719,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public void Play() {
             IsPlaying = true;
-            AnimGOUpdateEnabled = true;
+            //AnimGOUpdateEnabled = true;
 
             // Fire event.
             //HandleFireNodeReachedEventForStartingNode();
@@ -724,6 +729,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (AnimationTime == 0) {
                 OnAnimationStarted();
             }
+        }
+
+        public void Stop() {
+            IsPlaying = false;
+            AnimationTime = 0;
         }
 
         /// <summary>

@@ -530,7 +530,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Returns node index at the specified timestamp.
         /// </summary>
         /// <param name="searchedTimestamps">Timestamp to search for.</param>
-        /// <returns>Node index.</returns>
+        /// <returns>Node index. -1 if no node at time was found.</returns>
         public int GetNodeIndexAtTime(float searchedTimestamps) {
             List<float> timestamps = new List<float>();
             // For each key in a curve..

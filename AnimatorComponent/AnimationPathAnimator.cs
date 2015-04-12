@@ -841,16 +841,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var eulerAngles = AnimatedGO.rotation.eulerAngles;
             // Get tilting value.
             var zRotation = PathData.GetTiltingValueAtTime(AnimationTime);
-            // Lerp tilting value.
-            var zRotationLerped = Mathf.Lerp(
-                prevTilting,
-                zRotation,
-                // todo release create setting in animator
-                0.01f);
             // Update value on Z axis.
             eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotation);
-            // todo release enable tilting lerping
-            //eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zRotationLerped);
             // Update animated GO rotation.
             AnimatedGO.rotation = Quaternion.Euler(eulerAngles);
         
@@ -1206,6 +1198,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
         private void HandleFireNodeReachedEventForStartingNode() {
+            if (PathData == null) return;
+
             var currentNodeIndex = PathData.GetNodeIndexAtTime(AnimationTime);
             if (currentNodeIndex == -1) return;
 

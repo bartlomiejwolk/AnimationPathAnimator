@@ -1663,12 +1663,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script,
                     "FireJumpedToNodeEvent",
                     null);
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "OnJumpPerformed",
-                    new object[] { deltaTime });
             }
         }
 
@@ -1693,12 +1687,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script,
                     "FireJumpedToNodeEvent",
                     null);
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "OnJumpPerformed",
-                    new object[] { deltaTime });
             }
         }
 
@@ -1732,12 +1720,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.AnimationTime -= Script.LongJumpValue;
                 Logger.LogString("AnimationTime: {0}", Script.AnimationTime);
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "OnJumpPerformed",
-                    new object[] {- Script.LongJumpValue});
             }
         }
 
@@ -1751,12 +1733,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.SettingsAsset.ModKey)) {
 
                 Script.AnimationTime += Script.LongJumpValue;
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "OnJumpPerformed",
-                    new object[] {Script.LongJumpValue});
             }
         }
 
@@ -1881,12 +1857,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.AnimationTime =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "OnJumpPerformed",
-                    new object[] {- Script.ShortJumpValue});
             }
         }
 
@@ -1905,12 +1875,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 Script.AnimationTime =
                     (float) (Math.Round(newAnimationTimeRatio, 4));
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "OnJumpPerformed",
-                    new object[] {Script.ShortJumpValue});
             }
         }
 

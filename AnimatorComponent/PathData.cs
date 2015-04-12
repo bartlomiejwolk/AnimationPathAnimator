@@ -207,35 +207,52 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
             // todo replace with assert
             // Compare number of nodes with predicted number of elements in the list.
-            if (NodesNo != EaseToolState.Count + 1) {
-                throw new Exception("This operation will cause a list to have" +
-                                    "more entries then there's nodes in the" +
-                                    "path");
-            }
+            //if (NodesNo != EaseToolState.Count + 1) {
+            //    throw new Exception("This operation will cause a list to have" +
+            //                        "more entries then there's nodes in the" +
+            //                        "path");
+            //}
 
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
             //Debug.Log("Node added to list: " + e.NodeIndex
             //    + " Current tilting entries: " + TiltingToolState.Count);
+
+            Utilities.Assert(
+                () => NodesNo == EaseToolState.Count,
+                string.Format("Number of nodes in the path ({0}) is " +
+                              "different from number of entries in the " +
+                              "list holding info about what nodes have " +
+                              "enabled ease tool ({1}).",
+                              NodesNo,
+                              EaseToolState.Count));
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
         }
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
-            // todo replace with assert
             // Compare number of nodes with predicted number of elements in the list.
-            if (NodesNo != EaseToolState.Count - 1) {
-                throw new Exception("This operation will cause a list to have" +
-                                    " more entries then there's nodes in the" +
-                                    " path");
-            }
+            //if (NodesNo != EaseToolState.Count - 1) {
+            //    throw new Exception("This operation will cause a list to have" +
+            //                        " more entries then there's nodes in the" +
+            //                        " path");
+            //}
 
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
             HandleRemoveNodeTools(e.NodeTimestamp);
             //Debug.Log("Node removed from list: " + e.NodeIndex
             //    + " Current tilting entries: " + TiltingToolState.Count);
+
+            Utilities.Assert(
+                () => NodesNo == EaseToolState.Count,
+                string.Format("Number of nodes in the path ({0}) is " +
+                              "different from number of entries in the " +
+                              "list holding info about what nodes have " +
+                              "enabled ease tool ({1}).",
+                              NodesNo,
+                              EaseToolState.Count));
         }
 
         /// <summary>

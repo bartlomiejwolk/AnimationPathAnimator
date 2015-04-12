@@ -45,6 +45,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode jumpToEndKey = KeyCode.L;
 
         [SerializeField]
+        private KeyCode toggleButtons = KeyCode.P;
+
+        [SerializeField]
         private KeyCode jumpToNextNodeKey = KeyCode.L;
 
         [SerializeField]
@@ -86,6 +89,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region SHORTCUT PROPERTIES
+        public KeyCode ToggleButtons {
+            get { return toggleButtons; }
+            set { toggleButtons = value; }
+        }
+
         public KeyCode MoveAllKey {
             get { return moveAllKey; }
             set { moveAllKey = value; }
@@ -625,7 +633,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return rotationSmoothButtonOffsetV; }
             set { rotationSmoothButtonOffsetV = value; }
         }
-
         /// <summary>
         /// Minimum ease value below which ease handle drawer will set ease
         /// value back to default.

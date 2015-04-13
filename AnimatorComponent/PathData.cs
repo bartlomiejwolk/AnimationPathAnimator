@@ -395,9 +395,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void OffsetNodePositions(Vector3 moveDelta) {
             // For each node..
             for (var i = 0; i < NodesNo; i++) {
-                // Old node position.
                 var oldPosition = GetNodePosition(i);
-                // New node position.
                 var newPosition = oldPosition + moveDelta;
                 // Update node positions.
                 AnimatedObjectPath.MovePointToPosition(i, newPosition);
@@ -425,9 +423,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void OffsetRotationPathPosition(Vector3 moveDelta) {
             // For each node..
             for (var i = 0; i < NodesNo; i++) {
-                // Old node position.
                 var oldPosition = GetRotationPointPosition(i);
-                // New node position.
                 var newPosition = oldPosition + moveDelta;
                 // Update node positions.
                 RotationPath.MovePointToPosition(i, newPosition);
@@ -539,7 +535,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // For each key..
             for (var j = 0; j < NodesNo; j++) {
-                // Smooth in and out tangents.
                 path.SmoothNodeInOutTangents(j, DefaultSmoothWeight);
             }
         }
@@ -559,7 +554,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void UpdateEaseValue(int keyIndex, float newValue) {
-            // Copy keyframe.
             var keyframeCopy = EaseCurve.keys[keyIndex];
             // Update keyframe value.
             keyframeCopy.value = newValue;
@@ -578,7 +572,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void UpdateRotationPathWithAddedKeys() {
-            // Get path timestamps.
             var pathTimestamps = GetPathTimestamps();
 
             // For each timestamp in the path..
@@ -594,7 +587,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         public void UpdateRotationPathWithRemovedKeys() {
-            // AnimationPathBuilder node timestamps.
             var pathTimestamps = GetPathTimestamps();
             // Get values from rotationPath.
             var rotationCurvesTimestamps = RotationPath.Timestamps;
@@ -918,7 +910,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
-            // AnimationPathBuilder node timestamps.
             var nodeTimestamps = GetPathTimestamps();
             // Get values from curve.
             var curveTimestamps = new float[curve.length];

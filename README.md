@@ -1,10 +1,11 @@
 README
 ======
 
-AnimationPathAnimator extension allows animating objects along paths.
+**AnimationPath Animator** Unity extension allows animating objects along paths.
 
-Licensed under the MIT license.
-See LICENSE file in the project root for full license information.
+Licensed under MIT license. See LICENSE file in the project root.
+
+![AnimationPath Tools](/Resources/cover_screenshot.png?raw=true "AnimationPath Tools Scene view")
 
 Features
 --------

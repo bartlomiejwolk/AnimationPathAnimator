@@ -376,9 +376,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { gizmoCurveColor = value; }
         }
 
+        // todo rename to SceneTool
         public HandleMode HandleMode {
             get { return handleMode; }
-            set { handleMode = value; }
+            set {
+                handleMode = value;
+
+                if (value != HandleMode.None) {
+                    PositionHandle = PositionHandle.Free;
+                }
+            }
         }
 
         public float LongJumpValue {
@@ -388,7 +395,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public PositionHandle PositionHandle {
             get { return positionHandle; }
-            set { positionHandle = value; }
+            set {
+                positionHandle = value;
+
+                // Update scene tools.
+                if (value == PositionHandle.Default) {
+                    HandleMode = HandleMode.None;
+                }
+            }
         }
 
         public float PositionLerpSpeed {

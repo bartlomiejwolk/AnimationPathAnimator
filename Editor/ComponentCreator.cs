@@ -1,39 +1,56 @@
-﻿using ATP.AnimationPathAnimator.APAnimatorComponent;
-using ATP.AnimationPathAnimator.APEventsComponent;
+﻿using ATP.AnimationPathTools.AnimatorComponent;
+using ATP.AnimationPathTools.AnimatorEventsComponent;
+using ATP.AnimationPathTools.AnimatorSynchronizerComponent;
+using ATP.AnimationPathTools.AudioSynchronizerComponent;
 using UnityEditor;
 
-namespace ATP.AnimationPathAnimator {
+namespace ATP.AnimationPathTools {
 
     public static class ComponentCreator {
 
-        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/APAnimator SettingsAsset")]
-        //private static void CreateAnimatorSettingsAsset() {
-        //    ScriptableObjectUtility.CreateAsset<APAnimatorSettings>("APAnimatorSettings");
-        //}
+        [MenuItem("Assets/Create/ATP/AnimationPathTools/Animation Path")]
+        private static void CreatePathAsset() {
+            ScriptableObjectUtility.CreateAsset<PathData>("AnimationPath");
+        }
 
-        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/APEvents Reflection SettingsAsset")]
-        //private static void CreateAPEventsReflectionSettingsAsset() {
-        //    ScriptableObjectUtility.CreateAsset<APEventsSettings>("APEventsSettings");
-        //}
+        [MenuItem("Assets/Create/ATP/AnimationPathTools/Animator Settings")]
+        private static void CreateAnimatorSettingsAsset() {
+            ScriptableObjectUtility.CreateAsset<AnimatorSettings>("AnimatorSettings");
+        }
 
-        //[MenuItem("Assets/Create/ATP/AnimationPathAnimator/APAnimator Data")]
-        //private static void CreatePathAsset() {
-        //    ScriptableObjectUtility.CreateAsset<PathData>("APAnimatorData");
-        //}
+        [MenuItem("Assets/Create/ATP/AnimationPathTools/AnimatorEvents Settings")]
+        private static void CreateAPEventsReflectionSettingsAsset() {
+            ScriptableObjectUtility.CreateAsset<AnimatorEventsSettings>("AnimatorEventsSettings");
+        }
 
-        [MenuItem("Component/ATP/AnimationPathAnimator/APAnimator")]
-        private static void AddAPAnimatorComponent() {
+        [MenuItem("Component/ATP/AnimationPathTools/AnimationPathAnimator")]
+        private static void AddAnimationPathAnimatorComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(APAnimator));
+                Selection.activeGameObject.AddComponent(typeof(AnimationPathAnimator));
             }
         }
 
-        [MenuItem("Component/ATP/AnimationPathAnimator/APEvents")]
-        private static void AddAPEventsComponent() {
+        [MenuItem("Component/ATP/AnimationPathTools/AnimatorEvents")]
+        private static void AddAnimatorEventsComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(APEvents));
+                Selection.activeGameObject.AddComponent(typeof(AnimatorEvents));
             }
         }
+
+        [MenuItem("Component/ATP/AnimationPathTools/AnimatorSynchronizer")]
+        private static void AddAnimatorSynchronizerComponent() {
+            if (Selection.activeGameObject != null) {
+                Selection.activeGameObject.AddComponent(typeof(AnimatorSynchronizer));
+            }
+        }
+
+        [MenuItem("Component/ATP/AnimationPathTools/AudioSynchronizer")]
+        private static void AddAudioSynchronizerComponent() {
+            if (Selection.activeGameObject != null) {
+                Selection.activeGameObject.AddComponent(typeof(AudioSynchronizer));
+            }
+        }
+
     }
 
 }

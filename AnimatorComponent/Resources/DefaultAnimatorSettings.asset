@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e23b5fc1fa23549a5cba119c3cae60, type: 3}
+  m_Name: DefaultAnimatorSettings
+  m_EditorClassIdentifier: 
+  minNodeTimeSeparation: .00100000005
+  pathLengthSampling: 40
+  playModeModKey: 307
+  positionHandleKey: 103
+  easeModeKey: 117
+  nodeHandleMode: 59
+  moveAllKey: 109
+  jumpToEndKey: 108
+  toggleButtons: 112
+  jumpToNextNodeKey: 108
+  jumpToPreviousNodeKey: 104
+  jumpToStartKey: 104
+  longJumpBackwardKey: 106
+  longJumpForwardKey: 107
+  modKey: 4
+  noneModeKey: 121
+  playPauseKey: 32
+  shortJumpBackwardKey: 106
+  shortJumpForwardKey: 107
+  tiltingModeKey: 105
+  updateAllKey: 111
+  countdownToStopFramesNo: 10
+  forwardPointOffsetMinValue: .00100000005
+  forwardPointOffsetMaxValue: .150000006
+  gizmoIcons: []
+  animationSpeedDenominator: .0500000007
+  maxRotationSlerpSpeed: 20
+  minRotationSlerpSpeed: .100000001
+  minPositionLerpSpeed: .00100000005
+  maxPositionLerpSpeed: 1
+  pathDataAssetDefaultName: AnimationPath
+  shortJumpMinValue: 9.99999975e-05
+  shortJumpMaxValue: .00400000019
+  currentRotationPointGizmoIcon: rec_16x16-yellow
+  forwardPointIcon: target_22x22-pink
+  objectCurveSampling: 5
+  rotationCurveSampling: 5
+  rotationPointGizmoIcon: rec_16x16
+  targetGizmoIcon: target_22x22-blue
+  tangentHandleSize: .25
+  sceneToolToggleOffsetH: 53
+  smoothButtonOffsetH: 72
+  rotationSmoothButtonOffsetH: 15
+  smoothButtonOffsetV: 5
+  rotationSmoothButtonOffsetV: 5
+  sceneToolToggleOffsetV: 5
+  addButtonOffsetH: 15
+  addButtonOffsetV: 5
+  arcHandleRadius: .600000024
+  arcValueMultiplierNumerator: 360
+  defaultLabelHeight: 10
+  defaultLabelWidth: 30
+  easeValueLabelOffsetX: -20
+  easeValueLabelOffsetY: -25
+  initialEaseArcValue: 5
+  movementHandleSize: .119999997
+  removeButtonH: 34
+  removeButtonV: 5
+  rotationHandleColor: {r: 1, g: 0, b: 1, a: 1}
+  rotationHandleSize: .25999999
+  scaleHandleSize: 1.5
+  updateAllLabelOffsetX: -50
+  moveAllLabelOffsetX: -50
+  updateAllLabelOffsetY: -25
+  moveAllLabelOffsetY: -10
+  updateAllLabelText: UA
+  moveAllLabelText: MA
+  initialTiltingArcValue: 5
+  tiltingValueMultiplierDenominator: 1

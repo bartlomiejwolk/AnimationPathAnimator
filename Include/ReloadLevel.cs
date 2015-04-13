@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 
-public class ReloadLevel : MonoBehaviour {
+namespace ATP.AnimationPathTools {
 
-    private void Reload() {
-        Application.LoadLevel(Application.loadedLevel);
-    }
+    public class ReloadLevel : MonoBehaviour {
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            Reload();
+        private void Reload() {
+            Application.LoadLevel(Application.loadedLevel);
         }
+
+        private void Update() {
+            if (Input.GetKeyDown(KeyCode.R)) {
+                Reload();
+            }
+        }
+
     }
 
 }

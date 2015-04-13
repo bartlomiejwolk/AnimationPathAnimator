@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using UnityEngine;
 
-namespace ATP.AnimationPathAnimator {
+namespace ATP.AnimationPathTools {
 
     public static class Utilities {
+
+        private const float FloatPrecision = 0.0000001f;
 
         public static void ConvertToGlobalCoordinates(
             ref Vector3[] points,
@@ -45,7 +48,7 @@ namespace ATP.AnimationPathAnimator {
             if (a == 0 || b == 0) {
                 // a or b is zero or both are extremely close to it
                 // relative error is less meaningful here
-                return diff < (epsilon * float.MinValue);
+                return diff < (epsilon * Single.MinValue);
             }
             // use relative error
             return diff / (absA + absB) < epsilon;
@@ -145,6 +148,84 @@ namespace ATP.AnimationPathAnimator {
             return Vector3.SqrMagnitude(a - b) < precision;
         }
 
+        /// <summary>
+        /// Calculate the real difference between two angles, keeping the correct sign.
+        /// </summary>
+        /// <remarks>http://blog.lexique-du-net.com/index.php?post/Calculate-the-real-difference-between-two-angles-keeping-the-sign</remarks>
+        /// <param name="firstAngle">Old angle value.</param>
+        /// <param name="secondAngle">New angle value.</param>
+        /// <returns></returns>
+        public static float CalculateDifferenceBetweenAngles(
+            float firstAngle,
+            float secondAngle) {
+
+            float difference = secondAngle - firstAngle;
+
+            while (difference < -180) difference += 360;
+            while (difference > 180) difference -= 360;
+
+            return difference;
+        }
+
+        public static int GetIndexAtTimestamp(
+            AnimationCurve curve,
+            float timestamp) {
+
+            for (int i = 0; i < curve.length; i++) {
+                if (FloatsEqual(
+                    curve.keys[i].time,
+                    timestamp,
+                    FloatPrecision)) {
+
+                    return i;
+                }
+            }
+
+            return - 1;
+        }
+
+        /// <summary>
+        /// Returns list with all timestamps from a given animation curve.
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <returns></returns>
+        public static List<float> GetAnimationCurveTimestamps(AnimationCurve curve) {
+            var easeCurveTimestamps = new List<float>();
+            for (int i = 0; i < curve.length; i++) {
+                easeCurveTimestamps.Add(curve.keys[i].time);
+            }
+
+            return easeCurveTimestamps;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>http://forum.unity3d.com/threads/assert-class-for-debugging.59010/</remarks>
+        /// <param name="assertion"></param>
+        /// <param name="assertString"></param>
+        [Conditional("UNITY_EDITOR")]
+        static public void Assert(Func<bool> assertion, string assertString) {
+            if (!assertion()) {
+                StackTrace myTrace = new StackTrace(true);
+                StackFrame myFrame = myTrace.GetFrame(1);
+                string assertInformation = "Filename: " + myFrame.GetFileName() + "\nMethod: " + myFrame.GetMethod() + "\nLine: " + myFrame.GetFileLineNumber();
+
+                // Output message to Unity log window.
+                UnityEngine.Debug.Log(assertString + "\n" + assertInformation);
+                // Break only in play mode.
+                if (Application.isPlaying) {
+                    UnityEngine.Debug.Break();
+                }
+#if UNITY_EDITOR
+                if (UnityEditor.EditorUtility.DisplayDialog(
+                    "Assert!",
+                    assertString + "\n" + assertInformation,
+                    "Close")) {
+                }
+#endif
+            }
+        }
     }
 
 }

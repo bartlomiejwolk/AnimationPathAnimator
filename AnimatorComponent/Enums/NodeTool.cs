@@ -7,7 +7,7 @@
 
 namespace AnimationPathTools.AnimatorComponent {
 
-    public enum HandleMode {
+    public enum NodeTool {
 
         None,
         Ease,

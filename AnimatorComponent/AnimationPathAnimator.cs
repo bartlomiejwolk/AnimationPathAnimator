@@ -254,8 +254,8 @@ namespace AnimationPathTools.AnimatorComponent {
         private Color gizmoCurveColor = Color.yellow;
 
         [SerializeField]
-        private HandleMode handleMode =
-            HandleMode.None;
+        private NodeTool nodeTool =
+            NodeTool.None;
 
         [SerializeField]
         private float longJumpValue = 0.01f;
@@ -353,13 +353,12 @@ namespace AnimationPathTools.AnimatorComponent {
             set { gizmoCurveColor = value; }
         }
 
-        // todo rename to SceneTool
-        public HandleMode HandleMode {
-            get { return handleMode; }
+        public NodeTool NodeTool {
+            get { return nodeTool; }
             set {
-                handleMode = value;
+                nodeTool = value;
 
-                if (value != HandleMode.None) {
+                if (value != NodeTool.None) {
                     PositionHandle = PositionHandle.Free;
                 }
             }
@@ -387,7 +386,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
                 // Update scene tools.
                 if (value == PositionHandle.Default) {
-                    HandleMode = HandleMode.None;
+                    NodeTool = NodeTool.None;
                 }
             }
         }
@@ -1136,7 +1135,7 @@ namespace AnimationPathTools.AnimatorComponent {
         /// </summary>
         private void ResetInspectorOptions() {
             TargetGO = null;
-            HandleMode = HandleMode.None;
+            NodeTool = NodeTool.None;
             TangentMode = TangentMode.Smooth;
             UpdateAllMode = false;
             AnimationTime = 0;

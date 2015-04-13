@@ -319,21 +319,21 @@ namespace AnimationPathTools.AnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawHandleModeDropdown() {
+        private void DrawNodeToolDropdown() {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
-            var prevHandleMode = Script.HandleMode;
+            var prevHandleMode = Script.NodeTool;
 
-            Script.HandleMode =
-                (HandleMode) EditorGUILayout.EnumPopup(
+            Script.NodeTool =
+                (NodeTool) EditorGUILayout.EnumPopup(
                     new GUIContent(
-                        "Scene Tool",
+                        "Node Tool",
                         "Tool displayed next to each node. Default " +
                         "shortcuts: Y, U, I, O."),
-                    Script.HandleMode);
+                    Script.NodeTool);
 
             // Return if handle mode wasn't changed.
-            if (Script.HandleMode == prevHandleMode) return;
+            if (Script.NodeTool == prevHandleMode) return;
 
             HandleModeChange();
         }
@@ -449,7 +449,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
             Script.PositionHandle = (PositionHandle) EditorGUILayout.EnumPopup(
                 new GUIContent(
-                    "Position Handle",
+                    "Position Type",
                     "Handle used to move nodes on scene. Default " +
                     "shortcut: G"),
                 Script.PositionHandle);
@@ -504,7 +504,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
                 // Reset inspector options.
                 Script.AnimationTime = 0;
-                Script.HandleMode = HandleMode.None;
+                Script.NodeTool = NodeTool.None;
 
                 Utilities.InvokeMethodWithReflection(
                     Script,
@@ -750,8 +750,8 @@ namespace AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleDrawUpdateAllToggle() {
-            var disable = (Script.HandleMode != HandleMode.Ease)
-                          && (Script.HandleMode != HandleMode.Tilting);
+            var disable = (Script.NodeTool != NodeTool.Ease)
+                          && (Script.NodeTool != NodeTool.Tilting);
 
             EditorGUI.BeginDisabledGroup(disable);
 
@@ -862,7 +862,7 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Handle drawine on-scene ease handles.
         /// </summary>
         private void HandleDrawingEaseHandles() {
-            if (Script.HandleMode != HandleMode.Ease) return;
+            if (Script.NodeTool != NodeTool.Ease) return;
             if (!Script.DrawObjectPath) return;
 
             // Get path node positions with ease enabled.
@@ -893,7 +893,7 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene labes with ease values.
         /// </summary>
         private void HandleDrawingEaseLabel() {
-            if (Script.HandleMode != HandleMode.Ease) return;
+            if (Script.NodeTool != NodeTool.Ease) return;
             if (!Script.DrawObjectPath) return;
 
             // Get path node positions with ease enabled.
@@ -1061,7 +1061,7 @@ namespace AnimationPathTools.AnimatorComponent {
         private void HandleDrawingSceneToolToggleButtons() {
             if (!Script.DrawNodeButtons) return;
             if (!Script.DrawObjectPath) return;
-            if (Script.HandleMode == HandleMode.None) return;
+            if (Script.NodeTool == NodeTool.None) return;
 
             var nodePositions = Script.GetGlobalNodePositions();
 
@@ -1084,7 +1084,7 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene tilting handles.
         /// </summary>
         private void HandleDrawingTiltingHandles() {
-            if (Script.HandleMode != HandleMode.Tilting) return;
+            if (Script.NodeTool != NodeTool.Tilting) return;
             if (!Script.DrawObjectPath) return;
 
             var nodePositions =
@@ -1108,7 +1108,7 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Handle drawing on-scene tilting value labels.
         /// </summary>
         private void HandleDrawingTiltingLabels() {
-            if (Script.HandleMode != HandleMode.Tilting) return;
+            if (Script.NodeTool != NodeTool.Tilting) return;
             if (!Script.DrawObjectPath) return;
 
             // Get path node positions with ease enabled.
@@ -1277,7 +1277,7 @@ namespace AnimationPathTools.AnimatorComponent {
             RotationMode prevRotationMode,
             RotationMode currentRotationMode) {
 
-            Script.HandleMode = HandleMode.None;
+            Script.NodeTool = NodeTool.None;
 
             // If custom rotation mode was just select, apply selected mode.
             if (currentRotationMode == RotationMode.Custom) {
@@ -1321,12 +1321,12 @@ namespace AnimationPathTools.AnimatorComponent {
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
             Undo.RecordObject(Script.PathData, "Toggle node tool.");
 
-            switch (Script.HandleMode) {
-                case HandleMode.Ease:
+            switch (Script.NodeTool) {
+                case NodeTool.Ease:
                     HandleToggleEaseTool(index);
                     break;
 
-                case HandleMode.Tilting:
+                case NodeTool.Tilting:
                     HandleToggleTiltingTool(index);
                     break;
             }
@@ -1477,7 +1477,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
         // todo rename to HandleHandleModeChange.
         private void HandleModeChange() {
-            if (Script.HandleMode == HandleMode.None) {
+            if (Script.NodeTool == NodeTool.None) {
                 Script.UpdateAllMode = false;
             }
             else {
@@ -2058,7 +2058,7 @@ namespace AnimationPathTools.AnimatorComponent {
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
-            DrawHandleModeDropdown();
+            DrawNodeToolDropdown();
             HandleDrawUpdateAllToggle();
             EditorGUILayout.EndHorizontal();
 
@@ -2141,7 +2141,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.EaseModeKey) {
 
-                Script.HandleMode = HandleMode.Ease;
+                Script.NodeTool = NodeTool.Ease;
             }
         }
 
@@ -2284,7 +2284,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.NoneModeKey) {
 
-                Script.HandleMode = HandleMode.None;
+                Script.NodeTool = NodeTool.None;
                 HandleModeChange();
             }
         }
@@ -2374,7 +2374,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.TiltingModeKey) {
 
-                Script.HandleMode = HandleMode.Tilting;
+                Script.NodeTool = NodeTool.Tilting;
             }
         }
 
@@ -2389,8 +2389,8 @@ namespace AnimationPathTools.AnimatorComponent {
 
         private void HandleUpdateAllModeShortcut() {
             // Handle shortcut only in Ease and Tilting handle mode.
-            if ((Script.HandleMode != HandleMode.Ease)
-                && (Script.HandleMode != HandleMode.Tilting)) {
+            if ((Script.NodeTool != NodeTool.Ease)
+                && (Script.NodeTool != NodeTool.Tilting)) {
 
                 return;
             }

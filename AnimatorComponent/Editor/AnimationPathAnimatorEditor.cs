@@ -992,16 +992,9 @@ namespace AnimationPathTools.AnimatorComponent {
             if (Script.NodeHandle != NodeHandle.Position) return;
             if (!Script.DrawRotationPathCurve) return;
 
-            // Return if current animation time is not equal to any node
-            // timestamp.
-            // todo there should be a method for this
-            var nodeTimestamps = Script.PathData.GetPathTimestamps();
-            var index = Array.FindIndex(
-                nodeTimestamps,
-                x => Utilities.FloatsEqual(
-                    x,
-                    Script.AnimationTime,
-                    GlobalConstants.FloatPrecision));
+            // Get node index at current animation time.
+            var index = Script.PathData.AnimatedObjectPath.GetNodeIndexAtTime(
+                Script.AnimationTime);
             if (index < 0) return;
 
             var rotationPointPosition =

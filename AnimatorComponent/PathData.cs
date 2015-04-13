@@ -122,7 +122,7 @@ namespace AnimationPathTools.AnimatorComponent {
             set { tiltingToolState = value; }
         }
 
-        private AnimationPath AnimatedObjectPath {
+        public AnimationPath AnimatedObjectPath {
             get { return animatedObjectPath; }
         }
 

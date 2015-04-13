@@ -1,38 +1,40 @@
-﻿/* 
- * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
- *
- * This file is part of the AnimationPath Animator Unity extension.
- * Licensed under the MIT license. See LICENSE file in the project root folder.
- */
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
 
+#if UNITY_EDITOR
+
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using ATP.AnimationPathTools.AnimatorComponent;
+using UnityEngine;
 
 namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
     /// <summary>
-    /// Allows controlling <c>AudioSource</c> component from inspector
-    /// and with keyboard shortcuts.
+    ///     Allows controlling <c>AudioSource</c> component from inspector
+    ///     and with keyboard shortcuts.
     /// </summary>
-    [RequireComponent(typeof(AnimatorComponent.AnimationPathAnimator))]
-    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof (AnimationPathAnimator))]
+    [RequireComponent(typeof (AudioSource))]
     public sealed class AudioSynchronizer : MonoBehaviour {
+        #region FIELDS
 
         [SerializeField]
         private AudioSource audioSource;
 
         [SerializeField]
-        private AnimatorComponent.AnimationPathAnimator animator;
+        private AnimationPathAnimator animator;
 
         /// <summary>
-        /// If to start audio playback on play mode enter.
+        ///     If to start audio playback on play mode enter.
         /// </summary>
         [SerializeField]
         private bool autoPlay;
 
         /// <summary>
-        /// If auto play is enabled, delay playback by this value.
+        ///     If auto play is enabled, delay playback by this value.
         /// </summary>
         [SerializeField]
         private float autoPlayDelay;
@@ -40,12 +42,16 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         private Dictionary<int, float> audioNodeTimestamps;
 
         /// <summary>
-        /// Shortcut for play/pause.
+        ///     Shortcut for play/pause.
         /// </summary>
         public const KeyCode PlayPauseKey = KeyCode.Space;
 
+        #endregion
+
+        #region PROPERTIES
+
         /// <summary>
-        /// Reference to audio source component.
+        ///     Reference to audio source component.
         /// </summary>
         public AudioSource AudioSource {
             get { return audioSource; }
@@ -53,15 +59,15 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         /// <summary>
-        /// Reference to animator component.
+        ///     Reference to animator component.
         /// </summary>
-        public AnimatorComponent.AnimationPathAnimator Animator {
+        public AnimationPathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
 
         /// <summary>
-        /// Collection of node indexes and corresponding audio timestamps.
+        ///     Collection of node indexes and corresponding audio timestamps.
         /// </summary>
         public Dictionary<int, float> AudioNodeTimestamps {
             get { return audioNodeTimestamps; }
@@ -74,11 +80,24 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         /// <summary>
-        /// If auto play is enabled, delay playback by this value.
+        ///     If auto play is enabled, delay playback by this value.
         /// </summary>
         public float AutoPlayDelay {
             get { return autoPlayDelay; }
             set { autoPlayDelay = value; }
+        }
+
+        #endregion
+
+        #region UNITY MESSAGES
+
+        private void Reset() {
+            AudioSource = GetComponent<AudioSource>();
+            Animator = GetComponent<AnimationPathAnimator>();
+        }
+
+        private void OnDisable() {
+            UnsubscribeFromEvents();
         }
 
         private void Awake() {
@@ -95,23 +114,31 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             SubscribeToEvents();
         }
 
-        private void SubscribeToEvents() {
-            Animator.NodeReached += Animator_NodeReached;
-            Animator.JumpedToNode += Animator_JumpedToNode;
-            Animator.AnimationStarted += Animator_AnimationStarted;
-            Animator.AnimationPaused += Animator_AnimationPaused;
-            Animator.AnimationResumed += Animator_AnimationResumed;
+        #endregion
+
+        #region EVENT HANDLERS
+
+        private void Animator_NodeReached(object sender, NodeReachedEventArgs e) {
+            if (!Application.isPlaying) return;
+
+            // If audio is playing, record timestamp.
+            if (AudioSource.isPlaying) {
+                AudioNodeTimestamps[e.NodeIndex] = AudioSource.time;
+            }
         }
 
-        void Animator_AnimationResumed(object sender, System.EventArgs e) {
-            AudioSource.UnPause();
+        private void Animator_JumpedToNode(
+            object sender,
+            NodeReachedEventArgs e) {
+            if (!Application.isPlaying) return;
+
+            // Return if audio timestamp for this node was not recorded.
+            if (!AudioNodeTimestamps.ContainsKey(e.NodeIndex)) return;
+
+            AudioSource.time = AudioNodeTimestamps[e.NodeIndex];
         }
 
-        void Animator_AnimationPaused(object sender, System.EventArgs e) {
-            AudioSource.Pause();
-        }
-
-        void Animator_AnimationStarted(object sender, System.EventArgs e) {
+        private void Animator_AnimationStarted(object sender, EventArgs e) {
             if (!AutoPlay) return;
 
             if (AutoPlayDelay != 0) {
@@ -122,43 +149,17 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             }
         }
 
-        private void Reset() {
-            AudioSource = GetComponent<AudioSource>();
-            Animator = GetComponent<AnimatorComponent.AnimationPathAnimator>();
+        private void Animator_AnimationPaused(object sender, EventArgs e) {
+            AudioSource.Pause();
         }
 
-        private void Start() {
-            HandleAutoPlay();
+        private void Animator_AnimationResumed(object sender, EventArgs e) {
+            AudioSource.UnPause();
         }
 
-        /// <summary>
-        /// Handle auto play inspector option.
-        /// </summary>
-        private void HandleAutoPlay() {
+        #endregion
 
-        }
-
-        void Animator_JumpedToNode(object sender, NodeReachedEventArgs e) {
-            if (!Application.isPlaying) return;
-
-            // Return if audio timestamp for this node was not recorded.
-            if (!AudioNodeTimestamps.ContainsKey(e.NodeIndex)) return;
-
-            AudioSource.time = AudioNodeTimestamps[e.NodeIndex];
-        }
-
-        void Animator_NodeReached(object sender, NodeReachedEventArgs e) {
-            if (!Application.isPlaying) return;
-
-            // If audio is playing, record timestamp.
-            if (AudioSource.isPlaying) {
-                AudioNodeTimestamps[e.NodeIndex] = AudioSource.time;
-            }
-        }
-
-        private void OnDisable() {
-            UnsubscribeFromEvents();
-        }
+        #region DO METHODS
 
         private void UnsubscribeFromEvents() {
 
@@ -169,33 +170,17 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             Animator.AnimationResumed -= Animator_AnimationResumed;
         }
 
-        private void Update() {
+        private void SubscribeToEvents() {
+            Animator.NodeReached += Animator_NodeReached;
+            Animator.JumpedToNode += Animator_JumpedToNode;
+            Animator.AnimationStarted += Animator_AnimationStarted;
+            Animator.AnimationPaused += Animator_AnimationPaused;
+            Animator.AnimationResumed += Animator_AnimationResumed;
         }
 
-        /// <summary>
-        /// Handle space shortcut.
-        /// </summary>
-        private void HandleShortcuts() {
-            // If space pressed..
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                HandlePlayPause();
-            }
-        }
-
-        private void HandlePlayPause() {
-            // Disable shortcut while animator awaits animation start.
-            if (Animator.IsInvoking("Play")) return;
-
-            // Pause
-            if (AudioSource.isPlaying) {
-                AudioSource.Pause();
-            }
-            // Play
-            else {
-                AudioSource.Play();
-            }
-        }
-
+        #endregion
     }
 
 }
+
+#endif

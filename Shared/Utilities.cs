@@ -1,15 +1,15 @@
-﻿/* 
- * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
- *
- * This file is part of the AnimationPath Animator Unity extension.
- * Licensed under the MIT license. See LICENSE file in the project root folder.
- */
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace ATP.AnimationPathTools {
 
@@ -156,7 +156,7 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// Calculate the real difference between two angles, keeping the correct sign.
+        ///     Calculate the real difference between two angles, keeping the correct sign.
         /// </summary>
         /// <remarks>http://blog.lexique-du-net.com/index.php?post/Calculate-the-real-difference-between-two-angles-keeping-the-sign</remarks>
         /// <param name="firstAngle">Old angle value.</param>
@@ -166,7 +166,7 @@ namespace ATP.AnimationPathTools {
             float firstAngle,
             float secondAngle) {
 
-            float difference = secondAngle - firstAngle;
+            var difference = secondAngle - firstAngle;
 
             while (difference < -180) difference += 360;
             while (difference > 180) difference -= 360;
@@ -178,7 +178,7 @@ namespace ATP.AnimationPathTools {
             AnimationCurve curve,
             float timestamp) {
 
-            for (int i = 0; i < curve.length; i++) {
+            for (var i = 0; i < curve.length; i++) {
                 if (FloatsEqual(
                     curve.keys[i].time,
                     timestamp,
@@ -188,17 +188,18 @@ namespace ATP.AnimationPathTools {
                 }
             }
 
-            return - 1;
+            return -1;
         }
 
         /// <summary>
-        /// Returns list with all timestamps from a given animation curve.
+        ///     Returns list with all timestamps from a given animation curve.
         /// </summary>
         /// <param name="curve"></param>
         /// <returns></returns>
-        public static List<float> GetAnimationCurveTimestamps(AnimationCurve curve) {
+        public static List<float> GetAnimationCurveTimestamps(
+            AnimationCurve curve) {
             var easeCurveTimestamps = new List<float>();
-            for (int i = 0; i < curve.length; i++) {
+            for (var i = 0; i < curve.length; i++) {
                 easeCurveTimestamps.Add(curve.keys[i].time);
             }
 
@@ -206,26 +207,28 @@ namespace ATP.AnimationPathTools {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <remarks>http://forum.unity3d.com/threads/assert-class-for-debugging.59010/</remarks>
         /// <param name="assertion"></param>
         /// <param name="assertString"></param>
         [Conditional("UNITY_EDITOR")]
-        static public void Assert(Func<bool> assertion, string assertString) {
+        public static void Assert(Func<bool> assertion, string assertString) {
             if (!assertion()) {
-                StackTrace myTrace = new StackTrace(true);
-                StackFrame myFrame = myTrace.GetFrame(1);
-                string assertInformation = "Filename: " + myFrame.GetFileName() + "\nMethod: " + myFrame.GetMethod() + "\nLine: " + myFrame.GetFileLineNumber();
+                var myTrace = new StackTrace(true);
+                var myFrame = myTrace.GetFrame(1);
+                var assertInformation = "Filename: " + myFrame.GetFileName()
+                                        + "\nMethod: " + myFrame.GetMethod()
+                                        + "\nLine: "
+                                        + myFrame.GetFileLineNumber();
 
                 // Output message to Unity log window.
-                UnityEngine.Debug.Log(assertString + "\n" + assertInformation);
+                Debug.Log(assertString + "\n" + assertInformation);
                 // Break only in play mode.
                 if (Application.isPlaying) {
-                    UnityEngine.Debug.Break();
+                    Debug.Break();
                 }
 #if UNITY_EDITOR
-                if (UnityEditor.EditorUtility.DisplayDialog(
+                if (EditorUtility.DisplayDialog(
                     "Assert!",
                     assertString + "\n" + assertInformation,
                     "Close")) {
@@ -233,6 +236,7 @@ namespace ATP.AnimationPathTools {
 #endif
             }
         }
+
     }
 
 }

@@ -15,21 +15,6 @@ namespace ATP.AnimationPathTools {
 
     public static class ComponentCreator {
 
-        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/Animation Path")]
-        private static void CreatePathAsset() {
-            ScriptableObjectUtility.CreateAsset<PathData>("AnimationPath");
-        }
-
-        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/Animator Settings")]
-        private static void CreateAnimatorSettingsAsset() {
-            ScriptableObjectUtility.CreateAsset<AnimatorSettings>("AnimatorSettings");
-        }
-
-        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/AnimatorEvents Settings")]
-        private static void CreateAPEventsReflectionSettingsAsset() {
-            ScriptableObjectUtility.CreateAsset<AnimatorEventsSettings>("AnimatorEventsSettings");
-        }
-
         [MenuItem("Component/AirTime Productions/AnimationPath Animator/AnimationPathAnimator")]
         private static void AddAnimationPathAnimatorComponent() {
             if (Selection.activeGameObject != null) {
@@ -58,6 +43,20 @@ namespace ATP.AnimationPathTools {
             }
         }
 
+        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/Animator Settings")]
+        private static void CreateAnimatorSettingsAsset() {
+            ScriptableObjectUtility.CreateAsset<AnimatorSettings>("AnimatorSettings");
+        }
+
+        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/AnimatorEvents Settings")]
+        private static void CreateAPEventsReflectionSettingsAsset() {
+            ScriptableObjectUtility.CreateAsset<AnimatorEventsSettings>("AnimatorEventsSettings");
+        }
+
+        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/Animation Path")]
+        private static void CreatePathAsset() {
+            ScriptableObjectUtility.CreateAsset<PathData>("AnimationPath");
+        }
     }
 
 }

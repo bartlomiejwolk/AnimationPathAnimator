@@ -1,9 +1,7 @@
-﻿/* 
- * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
- *
- * This file is part of the AnimationPath Animator Unity extension.
- * Licensed under the MIT license. See LICENSE file in the project root folder.
- */
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
 
 using UnityEditor;
 using UnityEngine;
@@ -13,21 +11,11 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
     [CustomEditor(typeof (AudioSynchronizer))]
     public sealed class AudioSynchronizerEditor : Editor {
 
-        private AudioSynchronizer Script { get; set; }
-
-        private SerializedProperty audioSource;
         private SerializedProperty animator;
+        private SerializedProperty audioSource;
         private SerializedProperty autoPlay;
         private SerializedProperty autoPlayDelay;
-
-        private void OnEnable() {
-            Script = (AudioSynchronizer) target;
-
-            audioSource = serializedObject.FindProperty("audioSource");
-            animator = serializedObject.FindProperty("animator");
-            autoPlay = serializedObject.FindProperty("autoPlay");
-            autoPlayDelay = serializedObject.FindProperty("autoPlayDelay");
-        }
+        private AudioSynchronizer Script { get; set; }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
@@ -69,9 +57,6 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void OnSceneGUI() {
-        }
-
         private void HandlePlayPauseShortcut() {
             if (Event.current.type == EventType.KeyDown
                 && Event.current.keyCode == AudioSynchronizer.PlayPauseKey) {
@@ -81,6 +66,18 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
                     "HandlePlayPause",
                     null);
             }
+        }
+
+        private void OnEnable() {
+            Script = (AudioSynchronizer) target;
+
+            audioSource = serializedObject.FindProperty("audioSource");
+            animator = serializedObject.FindProperty("animator");
+            autoPlay = serializedObject.FindProperty("autoPlay");
+            autoPlayDelay = serializedObject.FindProperty("autoPlayDelay");
+        }
+
+        private void OnSceneGUI() {
         }
 
     }

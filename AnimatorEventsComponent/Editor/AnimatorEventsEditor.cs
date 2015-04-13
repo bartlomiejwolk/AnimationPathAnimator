@@ -1,12 +1,4 @@
-﻿/* 
- * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
- *
- * This file is part of the AnimationPath Animator Unity extension.
- * Licensed under the MIT license. See LICENSE file in the project root folder.
- */
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
@@ -16,7 +8,6 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
     [CustomEditor(typeof (AnimatorEvents))]
     public class AnimatorEventsEditor : Editor {
-
         #region PROPERTIES
 
         public bool SerializedPropertiesInitialized { get; set; }
@@ -62,6 +53,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
         }
+
         private void OnEnable() {
             Script = target as AnimatorEvents;
 
@@ -77,6 +69,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
             HandleDrawingMethodNames();
         }
+
         #endregion
 
         #region INSPECTOR
@@ -159,13 +152,13 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         #endregion
 
         #region METHODS
+
         private bool AssetsLoaded() {
-            return (bool)Utilities.InvokeMethodWithReflection(
+            return (bool) Utilities.InvokeMethodWithReflection(
                 Script,
                 "RequiredAssetsLoaded",
                 null);
         }
-
 
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;
@@ -181,7 +174,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
                 (List<Vector3>) Utilities.InvokeMethodWithReflection(
                     Script,
                     "GetNodePositions",
-                    new object[] { -1 });
+                    new object[] {-1});
 
             // Wait until event slots number is synced with path nodes number.
             if (methodNames.Length != nodePositions.Count) return;

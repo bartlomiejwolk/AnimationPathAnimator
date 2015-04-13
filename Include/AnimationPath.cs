@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AnimationPathTools.AnimatorComponent {
@@ -257,12 +258,7 @@ namespace AnimationPathTools.AnimatorComponent {
         /// <param name="searchedTimestamps">Timestamp to search for.</param>
         /// <returns>Node index. -1 if no node at time was found.</returns>
         public int GetNodeIndexAtTime(float searchedTimestamps) {
-            var timestamps = new List<float>();
-            // For each key in a curve..
-            foreach (var key in Curves[0].keys) {
-                // Remember timestamp.
-                timestamps.Add(key.time);
-            }
+            var timestamps = Curves[0].keys.Select(key => key.time).ToList();
 
             // For each timestamp in the path..
             for (var i = 0; i < timestamps.Count; i++) {

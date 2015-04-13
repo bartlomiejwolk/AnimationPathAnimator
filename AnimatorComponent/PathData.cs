@@ -677,7 +677,6 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Returns list of object path node timestamps. Timestamps to section
         ///     length ration will be equal for all timestamps.
         /// </summary>
-        /// <param name="pathLengthSampling"></param>
         /// <returns></returns>
         private List<float> CalculateUpdatedTimestamps() {
             var pathLength = AnimatedObjectPath.CalculatePathLength(
@@ -791,7 +790,6 @@ namespace AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Removes tilting value for a given path node index.
         /// </summary>
-        /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
         private void HandleDisableTiltingTool(float nodeTimestamp) {
             // Get nodes that have tilitng tool enabled.
@@ -820,7 +818,6 @@ namespace AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Handles removal path node tools for a give node index.
         /// </summary>
-        /// <param name="nodeIndex">Path node index.</param>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
         private void HandleRemoveNodeTools(float nodeTimestamp) {
             HandleDisableEaseTool(nodeTimestamp);
@@ -856,28 +853,6 @@ namespace AnimationPathTools.AnimatorComponent {
         private void SmoothCurve(AnimationCurve curve) {
             for (var i = 0; i < curve.length; i++) {
                 curve.SmoothTangents(i, 0);
-            }
-        }
-
-        private void UpdateCurveTimestamps(AnimationCurve curve) {
-            // Get path timestamps.
-            var pathNodeTimestamps = GetPathTimestamps();
-            // For each key in animation curve..
-            for (var i = 1; i < curve.length - 1; i++) {
-                // If appropriate node timestamp is different from curve
-                // timestamp..
-                if (!Utilities.FloatsEqual(
-                    pathNodeTimestamps[i],
-                    curve.keys[i].value,
-                    GlobalConstants.FloatPrecision)) {
-
-                    // Copy key
-                    var keyCopy = curve.keys[i];
-                    // Update timestamp
-                    keyCopy.time = pathNodeTimestamps[i];
-                    // Move key to new value.
-                    curve.MoveKey(i, keyCopy);
-                }
             }
         }
 
@@ -921,35 +896,11 @@ namespace AnimationPathTools.AnimatorComponent {
             }
         }
 
-        private void UpdateCurveWithRemovedKeys(AnimationCurve curve) {
-            var nodeTimestamps = GetPathTimestamps();
-            // Get values from curve.
-            var curveTimestamps = new float[curve.length];
-            for (var i = 0; i < curveTimestamps.Length; i++) {
-                curveTimestamps[i] = curve.keys[i].time;
-            }
-
-            // For each curve timestamp..
-            for (var i = 0; i < curveTimestamps.Length; i++) {
-                // Check if key at this timestamp exists..
-                var keyExists = nodeTimestamps.Any(
-                    t => Utilities.FloatsEqual(
-                        curveTimestamps[i],
-                        t,
-                        GlobalConstants.FloatPrecision));
-
-                if (keyExists) continue;
-
-                curve.RemoveKey(i);
-
-                break;
-            }
-        }
-
         /// <summary>
         ///     Updates curve timestamps but only for nodes that have tool enabled.
         /// </summary>
         /// <param name="curve"></param>
+        /// <param name="nodeTimestampsCallback"></param>
         private void UpdateToolTimestamps(
             AnimationCurve curve,
             Func<List<float>> nodeTimestampsCallback) {

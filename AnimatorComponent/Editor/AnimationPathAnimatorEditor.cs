@@ -221,17 +221,16 @@ namespace AnimationPathTools.AnimatorComponent {
         private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTime");
 
-            // todo rename
-            var newTimeRatio = DrawAnimationTimeSlider();
+            var newAnimationTime = DrawAnimationTimeSlider();
 
             // Update animation time only when value was changed.
             if (!Utilities.FloatsEqual(
-                newTimeRatio,
+                newAnimationTime,
                 Script.AnimationTime,
                 GlobalConstants.FloatPrecision)) {
 
                 serializedObject.Update();
-                animationTime.floatValue = newTimeRatio;
+                animationTime.floatValue = newAnimationTime;
                 serializedObject.ApplyModifiedProperties();
             }
         }

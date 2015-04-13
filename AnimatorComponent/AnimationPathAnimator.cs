@@ -50,9 +50,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler PathDataRefChanged;
 
         /// <summary>
-        ///     Event called after a new <c>PathData</c> asset is successfully created.
-        /// </summary>
-        /// <summary>
         ///     Event called from Editor after ValidateCommand of type UndoRedoPerformed was executed.
         /// </summary>
         public event EventHandler UndoRedoPerformed;
@@ -92,17 +89,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private bool animGOUpdateEnabled;
 
-        //private bool countdownCoroutineIsRunning;
-
-        //private bool easeCoroutineRunning;
-
         private bool isPlaying;
 
         [SerializeField]
         private PathData pathData;
-
-        //private bool pause;
-
         /// <summary>
         ///     Animation time value from previous frame.
         /// </summary>
@@ -116,9 +106,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [SerializeField]
         private Transform targetGO;
-
-        //[SerializeField]
-        //private bool rotationPathEnabled;
 
         [SerializeField]
         private NodeHandle nodeHandle = NodeHandle.Position;
@@ -186,15 +173,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { animGOUpdateEnabled = value; }
         }
 
-        /// <summary>
-        ///     It's true when <c>CountdownToStopAnimGOUpdate</c> coroutine is running.
-        /// </summary>
-        /// <summary>
-        ///     It's set to true when <c>EaseTime</c> coroutine is running.
-        /// </summary>
-        /// <summary>
-        ///     If animation is playing. It's true only when <c>EaseCoroutineRunning</c> is true and <c>Pause</c> is false.
-        /// </summary>
         public bool IsPlaying {
             get { return isPlaying; }
             private set {
@@ -222,35 +200,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        /// <summary>
-        ///     Whether or not animation is paused. Animation can be paused only when animator is running.
-        /// </summary>
-        //public bool Pause {
-        //    get { return pause; }
-        //    set {
-        //        var prevPause = pause;
-
-        //        pause = value;
-
-        //        // On pause..
-        //        if (value) {
-        //            IsPlaying = false;
-        //        }
-        //        // On unpause..
-        //        else {
-        //            // Enable animating animated GO.
-        //            AnimGOUpdateEnabled = true;
-        //            IsPlaying = true;
-        //        }
-                    //OnAnimationResumed();
-
-        //        // If pause state changed, call event.
-        //        if (value != prevPause) {
-        //            // Call event.
-        //            OnPlayPause(AnimationTime);
-        //        }
-        //    }
-        //}
 
         /// <summary>
         ///     Reference to asset file holding animator settings.
@@ -459,26 +408,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { wrapMode = value; }
         }
 
-        /// <summary>
-        /// Enables rotation path.
-        /// </summary>
-        //public bool RotationPathEnabled {
-        //    get { return rotationPathEnabled; }
-        //    set {
-        //        // On enable, reset rotation path.
-        //        if (value && !rotationPathEnabled) {
-        //            // Sync rotation path with anim. obj. path.
-        //            //PathData.RotationPathUpdateEnabled = true;
-        //            PathData.ResetRotationPath();
-        //        }
-        //        else {
-        //            //PathData.RotationPathUpdateEnabled = false;
-        //        }
-
-        //        rotationPathEnabled = value;
-        //    }
-        //}
-
         public NodeHandle NodeHandle {
             get { return nodeHandle; }
             set { nodeHandle = value; }
@@ -674,12 +603,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnAnimationPaused();
         }
 
-        /// <summary>
-        ///     Toggles play/pause animation.
-        /// </summary>
-        //public void PlayPauseAnimation() {
-        //    Pause = !Pause;
-        //}
 
         /// <summary>
         ///     Sets rotation mode to Custom.
@@ -764,9 +687,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Stops animation.
-        /// </summary>
-        /// <summary>
         ///     Unpauses animation.
         /// </summary>
         public void Unpause() {
@@ -837,7 +757,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 var globalForwardPoint = GetGlobalForwardPoint();
 
                 RotateObjectWithSlerp(globalForwardPoint);
-                //RotateObjectWithLookAt(globalForwardPoint);
             }
         }
 
@@ -881,34 +800,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 GlobalConstants.FloatPrecision);
 
             return tiltingChanged;
-        }
-
-        /// <summary>
-        ///     Coroutine responsible for updating animation time during playback in play mode.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator EaseTime() {
-            //EaseCoroutineRunning = true;
-            //Pause = false;
-            //IsPlaying = true;
-            //AnimGOUpdateEnabled = true;
-
-            while (true) {
-                // If animation is not paused..
-                //if (!Pause) {
-                    //HandleFireOnAnimationStartedEvent();
-
-                    //UpdateAnimationTime();
-
-                    //HandleClampWrapMode();
-                    //HandleLoopWrapMode();
-                    //HandlePingPongWrapMode();
-                //}
-
-                //if (!EaseCoroutineRunning) break;
-
-                yield return null;
-            }
         }
 
         /// <summary>
@@ -1002,11 +893,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Coroutine that will remember animated game object's current position, rotation and tilting
-        ///     and after a given number of frames will check if any of those values changed. If none was changed, animated GO
-        ///     stops being updated and <c>AnimatonEnded</c> event is called.
-        /// </summary>
-        /// <summary>
         ///     Updates animated game object position accordingly to current animation time.
         /// </summary>
         private void UpdateAnimatedGOPosition() {
@@ -1067,10 +953,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region ANIMATION HANDLERS
-        /// <summary>
-        ///     Update animation time with values taken from ease curve.
-        /// </summary>
-        /// <remarks>This is used to update animation time when animator is running.</remarks>
         /// <summary>
         ///     Decided what to at the end of animation when Clamp mode is selected.
         /// </summary>
@@ -1154,20 +1036,15 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Animation is playing and unpaused.
             if (IsPlaying) {
-                // Pause animation.
-                //IsPlaying = false;
                 Pause();
             }
             // Animation is playing but paused.
             else if (!IsPlaying && DuringPlayback) {
-                // Unpause animation.
-                //IsPlaying = true;
                 Unpause();
             }
             // Animation ended.
             else if (!IsPlaying && AnimationTime >= 1) {
                 AnimationTime = 0;
-                //IsPlaying = true;
                 Play();
             }
             // Disable play/pause while for animation start being invoked.
@@ -1175,9 +1052,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 // Do nothing.
             }
             else {
-                // Start animation.
-                //StartAnimation();
-                //IsPlaying = true;
                 Play();
             }
         }
@@ -1216,9 +1090,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        /// <summary>
-        ///     Handle starting <c>CountdownToStopAnimGOUpdate</c> coroutine.
-        /// </summary>
         /// <summary>
         ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
         /// </summary>
@@ -1725,17 +1596,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var nodeTimestamps = pathData.GetPathTimestamps();
 
             for (var i = 0; i < globalRotPointPositions.Count; i++) {
-                // Return if current animation time is the same as any node
-                // time.
-                //if (Utilities.FloatsEqual(
-                //    nodeTimestamps[i],
-                //    AnimationTime,
-                //    GlobalConstants.FloatPrecision)) {
-
-                //    continue;
-                //}
-
-                //Draw rotation point gizmo.
+                       //Draw rotation point gizmo.
                 Gizmos.DrawIcon(
                     globalRotPointPositions[i],
                     SettingsAsset.GizmosSubfolder
@@ -1765,10 +1626,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <returns>Node positions.</returns>
         public Vector3[] GetGlobalEasedNodePositions() {
             var globalNodePositions = GetGlobalNodePositions();
-
-            //Logger.LogString("globalNodePositions: {0}; EaseToolState: {1}",
-            //    globalNodePositions.Count,
-            //    PathData.EaseToolState.Count);
 
             // Filter out unwanted nodes.
             var resultPositions = new List<Vector3>();

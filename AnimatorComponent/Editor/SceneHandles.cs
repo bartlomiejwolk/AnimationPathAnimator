@@ -395,7 +395,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             var newArcValue = DrawArcScaleHandle(
                 arcValue,
-                //allowNegative,
                 position,
                 initialValue,
                 scaleHandleSize,

@@ -78,9 +78,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private KeyCode playPauseKey = KeyCode.Space;
 
-        //[SerializeField]
-        //private KeyCode rotationModeKey = KeyCode.I;
-
         [SerializeField]
         private KeyCode shortJumpBackwardKey = KeyCode.J;
 
@@ -172,10 +169,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { positionHandleKey = value; }
         }
 
-        //public KeyCode RotationModeKey {
-        //    get { return rotationModeKey; }
-        //    set { rotationModeKey = value; }
-        //}
 
         public KeyCode ShortJumpBackwardKey {
             get { return shortJumpBackwardKey; }
@@ -406,8 +399,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private int addButtonOffsetH = 15;
 
-        //[SerializeField]
-        //private float minEaseValueThreshold = 0.01f;
 
         [SerializeField]
         private int addButtonOffsetV = 5;
@@ -639,14 +630,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return rotationSmoothButtonOffsetV; }
             set { rotationSmoothButtonOffsetV = value; }
         }
-        /// <summary>
-        /// Minimum ease value below which ease handle drawer will set ease
-        /// value back to default.
-        /// </summary>
-        //public float MinEaseValueThreshold {
-        //    get { return minEaseValueThreshold; }
-        //    set { minEaseValueThreshold = value; }
-        //}
+
 
         #endregion
     }

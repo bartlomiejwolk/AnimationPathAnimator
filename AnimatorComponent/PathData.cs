@@ -21,7 +21,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         public event EventHandler<NodeAddedRemovedEventArgs> NodeRemoved;
 
-        //public event EventHandler TiltingCurveUpdated;
 
         public event EventHandler PathTimestampsChanged;
 
@@ -54,10 +53,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// Sampling used to calculate path length.
         /// </summary>
         private const int PathLengthSampling = 5;
-        /// <summary>
-        /// Default sampling used to calculate path lenght.
-        /// </summary>
-        //private const int PathLengthSampling = 40;
+     
 
         #endregion
 
@@ -212,17 +208,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENT HANDLERS
 
         private void PathData_NodeAdded(object sender, NodeAddedRemovedEventArgs e) {
-            // Compare number of nodes with predicted number of elements in the list.
-            //if (NodesNo != EaseToolState.Count + 1) {
-            //    throw new Exception("This operation will cause a list to have" +
-            //                        "more entries then there's nodes in the" +
-            //                        "path");
-            //}
-
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
-            //Debug.Log("Node added to list: " + e.NodeIndex
-            //    + " Current tilting entries: " + TiltingToolState.Count);
 
             Utilities.Assert(
                 () => NodesNo == EaseToolState.Count,
@@ -238,18 +225,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void PathData_NodeRemoved(object sender, NodeAddedRemovedEventArgs e) {
-            // Compare number of nodes with predicted number of elements in the list.
-            //if (NodesNo != EaseToolState.Count - 1) {
-            //    throw new Exception("This operation will cause a list to have" +
-            //                        " more entries then there's nodes in the" +
-            //                        " path");
-            //}
-
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
             HandleRemoveNodeTools(e.NodeTimestamp);
-            //Debug.Log("Node removed from list: " + e.NodeIndex
-            //    + " Current tilting entries: " + TiltingToolState.Count);
 
             Utilities.Assert(
                 () => NodesNo == EaseToolState.Count,
@@ -330,7 +308,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void PathData_PathTimestampsChanged(object sender, EventArgs e) {
             UpdateToolTimestamps(EaseCurve, GetEasedNodeTimestamps);
             UpdateToolTimestamps(TiltingCurve, GetTiltedNodeTimestamps);
-            //UpdateRotationPathTimestamps();
         }
 
         /// <summary>
@@ -376,7 +353,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             if (rotationPath == null) {
                 rotationPath = new AnimationPath();
-                //InitializeRotationPath();
             }
             if (easeCurve == null) {
                 easeCurve = new AnimationCurve();
@@ -684,8 +660,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EaseCurve.AddKey(keyframeCopy);
 
             OnEaseCurveUpdated();
-
-            //SmoothCurve(EaseCurve);
         }
 
         public void UpdateTiltingCurveValues(float delta) {
@@ -705,7 +679,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Add updated key.
             TiltingCurve.AddKey(keyframeCopy);
 
-            //SmoothCurve(TiltingCurve);
             EaseCurveExtremeNodes(TiltingCurve);
 
             OnTiltingCurveUpdated();
@@ -859,8 +832,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 curve.RemoveKey(i);
                 // Add key.
                 curve.AddKey(keyCopy);
-                // Smooth all tangents.
-                //SmoothCurve(curve);
             }
         }
 
@@ -888,7 +859,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 if (valueExists) continue;
 
                 AddKeyToCurve(curve, nodeTimestamp);
-                //SmoothCurve(curve);
             }
         }
 
@@ -913,7 +883,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 if (keyExists) continue;
 
                 curve.RemoveKey(i);
-                //SmoothCurve(curve);
 
                 break;
             }
@@ -922,7 +891,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void UpdateRotationPathTimestamps(
             List<float> distributedTimestamps) {
 
-            //var newTimestamps = CalculateUpdatedTimestamps();
             RotationPath.ReplaceTimestamps(distributedTimestamps);
         }
 
@@ -1164,8 +1132,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 curve.RemoveKey(i);
                 // Add key.
                 curve.AddKey(keyCopy);
-                // Smooth all tangents.
-                //SmoothCurve(curve);
             }
         }
 

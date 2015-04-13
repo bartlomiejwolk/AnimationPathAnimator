@@ -500,8 +500,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region EVENT INVOCATORS
-        private void OnAnimationResumed() {
-            var handler = AnimationResumed;
+
+        private void OnAnimationEnded() {
+            var handler = AnimationEnded;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -510,19 +511,18 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        private void OnAnimationStopped() {
-            var handler = AnimationStopped;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-
-        private void OnAnimationEnded() {
-            var handler = AnimationEnded;
+        private void OnAnimationResumed() {
+            var handler = AnimationResumed;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
         private void OnAnimationStarted() {
             var handler = AnimationStarted;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnAnimationStopped() {
+            var handler = AnimationStopped;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -549,6 +549,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region EVENT HANDLERS
+
         private void Animator_PathDataRefChanged(object sender, EventArgs e) {
             UnsubscribeFromEvents();
             SubscribeToEvents();
@@ -556,23 +557,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SubscribeToPathEvents();
         }
 
-        private void PathData_NodeAdded(
-                    object sender,
-                    NodeAddedRemovedEventArgs e) {
-        }
-
-        private void PathData_NodeRemoved(
-                    object sender,
-                    NodeAddedRemovedEventArgs e) {
-        }
-
-
         private void APAnimator_AnimationEnded(object sender, EventArgs e) {
+        }
+
+        private void PathData_NodeAdded(
+            object sender,
+            NodeAddedRemovedEventArgs e) {
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {
             HandleUpdateAnimGOInSceneView();
             AssertNodesInSync();
+        }
+
+        private void PathData_NodeRemoved(
+            object sender,
+            NodeAddedRemovedEventArgs e) {
         }
 
         private void PathData_PathReset(object sender, EventArgs e) {
@@ -595,7 +595,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         #endregion
+
         #region GET METHODS
+
         /// <summary>
         ///     Get positions of all nodes that have ease value assigned.
         /// </summary>
@@ -614,19 +616,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return resultPositions.ToArray();
         }
 
-        public Vector3[] GetGlobalTiltedNodePositions() {
-            var globalNodePositions = GetGlobalNodePositions();
-
-            // Filter out unwanted nodes.
-            var resultPositions = new List<Vector3>();
-            for (var i = 0; i < globalNodePositions.Count; i++) {
-                if (PathData.TiltingToolState[i]) {
-                    resultPositions.Add(globalNodePositions[i]);
-                }
-            }
-
-            return resultPositions.ToArray();
-        }
         /// <summary>
         ///     Returns global node positions.
         /// </summary>
@@ -663,6 +652,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             return globalRotPointPositions;
         }
+
+        public Vector3[] GetGlobalTiltedNodePositions() {
+            var globalNodePositions = GetGlobalNodePositions();
+
+            // Filter out unwanted nodes.
+            var resultPositions = new List<Vector3>();
+            for (var i = 0; i < globalNodePositions.Count; i++) {
+                if (PathData.TiltingToolState[i]) {
+                    resultPositions.Add(globalNodePositions[i]);
+                }
+            }
+
+            return resultPositions.ToArray();
+        }
+
         /// <summary>
         ///     Returns local forward point position for current animation time.
         /// </summary>
@@ -675,6 +679,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             return localPosition;
         }
+
         /// <summary>
         ///     Returns global forward point position for current animation time.
         /// </summary>
@@ -722,6 +727,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Return timestamp of the last node.
             return 1.0f;
         }
+
         /// <summary>
         ///     Use it to guard agains null path data asset.
         /// </summary>
@@ -745,6 +751,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             return false;
         }
+
         #endregion
 
         #region EDIT METHODS
@@ -765,6 +772,64 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void Play() {
             IsPlaying = true;
             HandleOnAnimationStarted();
+        }
+
+        /// <summary>
+        ///     Sets rotation mode to Custom.
+        /// </summary>
+        public void SetRotationCustom() {
+            RotationMode = RotationMode.Custom;
+        }
+
+        /// <summary>
+        ///     Sets rotation mode to Forward.
+        /// </summary>
+        public void SetRotationForward() {
+            RotationMode = RotationMode.Forward;
+        }
+
+        /// <summary>
+        ///     Sets rotation mode to Target.
+        /// </summary>
+        public void SetRotationTarget() {
+            RotationMode = RotationMode.Target;
+        }
+
+        /// <summary>
+        ///     Sets tangent mode to Linear.
+        /// </summary>
+        public void SetTangentLinear() {
+            TangentMode = TangentMode.Linear;
+            PathData.SetPathTangentsToLinear();
+        }
+
+        /// <summary>
+        ///     Sets tangent mode to Smooth.
+        /// </summary>
+        public void SetTangentSmooth() {
+            TangentMode = TangentMode.Smooth;
+            PathData.SmoothAllPathNodeTangents();
+        }
+
+        /// <summary>
+        ///     Sets wrap mode to Clamp.
+        /// </summary>
+        public void SetWrapClamp() {
+            WrapMode = AnimatorWrapMode.Clamp;
+        }
+
+        /// <summary>
+        ///     Sets wrap mode to Loop.
+        /// </summary>
+        public void SetWrapLoop() {
+            WrapMode = AnimatorWrapMode.Loop;
+        }
+
+        /// <summary>
+        ///     Set wrap mode to PingPong.
+        /// </summary>
+        public void SetWrapPingPong() {
+            WrapMode = AnimatorWrapMode.PingPong;
         }
 
         public void Stop() {
@@ -866,62 +931,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Sets rotation mode to Custom.
-        /// </summary>
-        public void SetRotationCustom() {
-            RotationMode = RotationMode.Custom;
-        }
-
-        /// <summary>
-        ///     Sets rotation mode to Forward.
-        /// </summary>
-        public void SetRotationForward() {
-            RotationMode = RotationMode.Forward;
-        }
-        /// <summary>
-        ///     Sets tangent mode to Linear.
-        /// </summary>
-        public void SetTangentLinear() {
-            TangentMode = TangentMode.Linear;
-            PathData.SetPathTangentsToLinear();
-        }
-
-        /// <summary>
-        ///     Sets tangent mode to Smooth.
-        /// </summary>
-        public void SetTangentSmooth() {
-            TangentMode = TangentMode.Smooth;
-            PathData.SmoothAllPathNodeTangents();
-        }
-        /// <summary>
-        ///     Sets wrap mode to Loop.
-        /// </summary>
-        public void SetWrapLoop() {
-            WrapMode = AnimatorWrapMode.Loop;
-        }
-
-        /// <summary>
-        ///     Set wrap mode to PingPong.
-        /// </summary>
-        public void SetWrapPingPong() {
-            WrapMode = AnimatorWrapMode.PingPong;
-        }
-
-        /// <summary>
-        ///     Sets rotation mode to Target.
-        /// </summary>
-        public void SetRotationTarget() {
-            RotationMode = RotationMode.Target;
-        }
-
-        /// <summary>
-        ///     Sets wrap mode to Clamp.
-        /// </summary>
-        public void SetWrapClamp() {
-            WrapMode = AnimatorWrapMode.Clamp;
-        }
-
-        /// <summary>
         ///     Assigns camera tagged "MainCamera" as animated game object.
         /// </summary>
         private void AssignMainCameraAsAnimatedGO() {
@@ -934,36 +943,41 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Loads asset files from component folder, that are required for the component to run.
+        ///     Method responsible for updating animated GO position, rotation and tilting in play mode during playback.
         /// </summary>
-        private void LoadRequiredAssets() {
-            if (settingsAsset == null) {
-                settingsAsset = Resources.Load("DefaultAnimatorSettings")
-                    as AnimatorSettings;
-            }
+        private void HandleAnimateAnimatedGO() {
+            // Return if not in play mode.
+            if (!Application.isPlaying) return;
+            // Return if anim. GO update is disabled.
+            if (!AnimGOUpdateEnabled) return;
 
-            if (skin == null) {
-                skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+            // Animate animated GO.
+            var positionChanged = AnimateAnimatedGOPosition();
+            var rotationChanged = AnimateAnimatedGORotation();
+            var tiltingChanged = AnimateAnimatedGOTilting();
+
+            HandleFireNodeReachedEvent();
+
+            // Stop animating anim. GO if none of its properties changes.
+            if (!positionChanged && !rotationChanged && !tiltingChanged) {
+                // Stop updating animated game object.
+                AnimGOUpdateEnabled = false;
             }
         }
 
         /// <summary>
-        ///     Reset inspector options.
+        ///     Decided what to at the end of animation when Clamp mode is selected.
         /// </summary>
-        private void ResetInspectorOptions() {
-            TargetGO = null;
-            HandleMode = HandleMode.None;
-            TangentMode = TangentMode.Smooth;
-            UpdateAllMode = false;
-            AnimationTime = 0;
-            AutoPlay = true;
-            EnableControlsInPlayMode = true;
-            RotationMode = RotationMode.Forward;
-            WrapMode = AnimatorWrapMode.Clamp;
-            ForwardPointOffset = 0.001f;
-            PositionLerpSpeed = 1;
-            RotationSlerpSpeed = 999;
-            ExportSamplingFrequency = 5;
+        private void HandleClampWrapMode() {
+            if (AnimationTime > 1
+                && WrapMode == AnimatorWrapMode.Clamp) {
+
+                AnimationTime = 1;
+                IsPlaying = false;
+
+                // Fire event.
+                OnAnimationEnded();
+            }
         }
 
         private void HandleCustomRotationModeInEditor() {
@@ -1004,6 +1018,73 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 RotateObjectWithSlerp(globalForwardPoint);
             }
         }
+
+        /// <summary>
+        ///     Decides what to do on animation end in Loop wrap mode.
+        /// </summary>
+        private void HandleLoopWrapMode() {
+            if (AnimationTime > 1 && WrapMode == AnimatorWrapMode.Loop) {
+                AnimationTime = 0;
+            }
+        }
+
+        /// <summary>
+        ///     Decides what to do on animation end in PingPong wrap mode.
+        /// </summary>
+        private void HandlePingPongWrapMode() {
+            if (AnimationTime > 1
+                && WrapMode == AnimatorWrapMode.PingPong) {
+
+                Reverse = true;
+            }
+
+            if (AnimationTime < 0
+                && WrapMode == AnimatorWrapMode.PingPong) {
+
+                Reverse = false;
+            }
+        }
+
+        /// <summary>
+        ///     Action taken when Play/Pause shortcut is pressed.
+        ///     Use in play mode.
+        /// </summary>
+        private void HandlePlayPause() {
+            if (!Application.isPlaying) return;
+
+            // Animation is playing and unpaused.
+            if (IsPlaying) {
+                Pause();
+            }
+            // Animation is playing but paused.
+            else if (!IsPlaying && DuringPlayback) {
+                Unpause();
+            }
+            // Animation ended.
+            else if (!IsPlaying && AnimationTime >= 1) {
+                AnimationTime = 0;
+                Play();
+            }
+            // Disable play/pause while for animation start being invoked.
+            else if (IsInvoking("Play")) {
+                // Do nothing.
+            }
+            else {
+                Play();
+            }
+        }
+
+        /// <summary>
+        ///     Decides if to start animation playback on enter play mode.
+        /// </summary>
+        private void HandleStartAnimationOnEnterPlayMode() {
+            if (!PathDataAssetAssigned()) return;
+            if (!Application.isPlaying) return;
+            if (!AutoPlay) return;
+
+            Invoke("Play", AutoPlayDelay);
+        }
+
         private void HandleTargetRotationModeInEditor() {
 
             if (RotationMode == RotationMode.Target) {
@@ -1038,6 +1119,39 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             UpdateAnimatedGOPosition();
             UpdateAnimatedGORotation();
             UpdateAnimatedGOTilting();
+        }
+
+        /// <summary>
+        ///     Loads asset files from component folder, that are required for the component to run.
+        /// </summary>
+        private void LoadRequiredAssets() {
+            if (settingsAsset == null) {
+                settingsAsset = Resources.Load("DefaultAnimatorSettings")
+                    as AnimatorSettings;
+            }
+
+            if (skin == null) {
+                skin = Resources.Load("DefaultAnimatorSkin") as GUISkin;
+            }
+        }
+
+        /// <summary>
+        ///     Reset inspector options.
+        /// </summary>
+        private void ResetInspectorOptions() {
+            TargetGO = null;
+            HandleMode = HandleMode.None;
+            TangentMode = TangentMode.Smooth;
+            UpdateAllMode = false;
+            AnimationTime = 0;
+            AutoPlay = true;
+            EnableControlsInPlayMode = true;
+            RotationMode = RotationMode.Forward;
+            WrapMode = AnimatorWrapMode.Clamp;
+            ForwardPointOffset = 0.001f;
+            PositionLerpSpeed = 1;
+            RotationSlerpSpeed = 999;
+            ExportSamplingFrequency = 5;
         }
 
         /// <summary>
@@ -1166,225 +1280,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        /// <summary>
-        ///     Method responsible for updating animated GO position, rotation and tilting in play mode during playback.
-        /// </summary>
-        private void HandleAnimateAnimatedGO() {
-            // Return if not in play mode.
-            if (!Application.isPlaying) return;
-            // Return if anim. GO update is disabled.
-            if (!AnimGOUpdateEnabled) return;
-
-            // Animate animated GO.
-            var positionChanged = AnimateAnimatedGOPosition();
-            var rotationChanged = AnimateAnimatedGORotation();
-            var tiltingChanged = AnimateAnimatedGOTilting();
-
-            HandleFireNodeReachedEvent();
-
-            // Stop animating anim. GO if none of its properties changes.
-            if (!positionChanged && !rotationChanged && !tiltingChanged) {
-                // Stop updating animated game object.
-                AnimGOUpdateEnabled = false;
-            }
-        }
-
-        /// <summary>
-        ///     Decided what to at the end of animation when Clamp mode is selected.
-        /// </summary>
-        private void HandleClampWrapMode() {
-            if (AnimationTime > 1
-                && WrapMode == AnimatorWrapMode.Clamp) {
-
-                AnimationTime = 1;
-                IsPlaying = false;
-
-                // Fire event.
-                OnAnimationEnded();
-            }
-        }
-        /// <summary>
-        ///     Decides what to do on animation end in Loop wrap mode.
-        /// </summary>
-        private void HandleLoopWrapMode() {
-            if (AnimationTime > 1 && WrapMode == AnimatorWrapMode.Loop) {
-                AnimationTime = 0;
-            }
-        }
-
-        /// <summary>
-        ///     Decides what to do on animation end in PingPong wrap mode.
-        /// </summary>
-        private void HandlePingPongWrapMode() {
-            if (AnimationTime > 1
-                && WrapMode == AnimatorWrapMode.PingPong) {
-
-                Reverse = true;
-            }
-
-            if (AnimationTime < 0
-                && WrapMode == AnimatorWrapMode.PingPong) {
-
-                Reverse = false;
-            }
-        }
-
-        /// <summary>
-        ///     Action taken when Play/Pause shortcut is pressed.
-        ///     Use in play mode.
-        /// </summary>
-        private void HandlePlayPause() {
-            if (!Application.isPlaying) return;
-
-            // Animation is playing and unpaused.
-            if (IsPlaying) {
-                Pause();
-            }
-            // Animation is playing but paused.
-            else if (!IsPlaying && DuringPlayback) {
-                Unpause();
-            }
-            // Animation ended.
-            else if (!IsPlaying && AnimationTime >= 1) {
-                AnimationTime = 0;
-                Play();
-            }
-            // Disable play/pause while for animation start being invoked.
-            else if (IsInvoking("Play")) {
-                // Do nothing.
-            }
-            else {
-                Play();
-            }
-        }
-
-        /// <summary>
-        ///     Decides if to start animation playback on enter play mode.
-        /// </summary>
-        private void HandleStartAnimationOnEnterPlayMode() {
-            if (!PathDataAssetAssigned()) return;
-            if (!Application.isPlaying) return;
-            if (!AutoPlay) return;
-
-            Invoke("Play", AutoPlayDelay);
-        }
-
         #endregion
 
         #region DO METHODS
-        /// <summary>
-        ///     Method responsible for firing <c>AnimationStarted</c> event.
-        ///     Use in play mode only.
-        /// </summary>
-        private void HandleFireOnAnimationStartedEvent() {
-            if (AnimationTime == 0) OnAnimationStarted();
-        }
-
-        /// <summary>
-        ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
-        /// </summary>
-        private void HandleFireNodeReachedEventForStartingNode() {
-            if (PathData == null) return;
-
-            var currentNodeIndex = PathData.GetNodeIndexAtTime(AnimationTime);
-            if (currentNodeIndex == -1) return;
-
-            var args = new NodeReachedEventArgs(
-                currentNodeIndex,
-                AnimationTime);
-
-            OnNodeReached(args);
-        }
-
-        /// <summary>
-        ///     This method is responsible for firing <c>NodeReached</c> event.
-        ///     Use in play mode only.
-        /// </summary>
-        private void HandleFireNodeReachedEvent() {
-            // Get path timestamps.
-            var nodeTimestamps = PathData.GetPathTimestamps();
-
-            // For each timestamp..
-            for (var i = 0; i < nodeTimestamps.Length; i++) {
-                // If animation time "jumped over" a node..
-                if (PrevAnimationTime < nodeTimestamps[i]
-                    && AnimationTime >= nodeTimestamps[i]) {
-
-                    // Create event args.
-                    var args = new NodeReachedEventArgs(i, AnimationTime);
-                    // Fire event.
-                    OnNodeReached(args);
-                }
-            }
-
-            // Update helper field.
-            PrevAnimationTime = AnimationTime;
-        }
-
-        /// <summary>
-        ///     Handle firing <c>AnimationStarted</c> event.
-        /// </summary>
-        private void HandleOnAnimationStarted() {
-            if (AnimationTime == 0) {
-                OnAnimationStarted();
-            }
-        }
-
-        private void FireJumpedToNodeEvent() {
-            // Create event args.
-            var nodeIndex = PathData.GetNodeIndexAtTime(
-                animationTime);
-            var args = new NodeReachedEventArgs(nodeIndex, animationTime);
-
-            // Fire event.
-            OnJumpedToNode(args);
-        }
-
-        private void FireUndoRedoPerformedEvent() {
-            OnUndoRedoPerformed();
-        }
-        /// <summary>
-        ///     Subscribe to events.
-        /// </summary>
-        private void SubscribeToEvents() {
-            AnimationEnded += APAnimator_AnimationEnded;
-            PathDataRefChanged += Animator_PathDataRefChanged;
-        }
-        /// <summary>
-        ///     Unsubscribe from events.
-        /// </summary>
-        private void UnsubscribeFromEvents() {
-            AnimationEnded -= APAnimator_AnimationEnded;
-            PathDataRefChanged -= Animator_PathDataRefChanged;
-
-            UnsubscribeFromPathEvents();
-        }
-
-        private void UnsubscribeFromPathEvents() {
-
-            if (PathData == null) return;
-
-            PathData.RotationPointPositionChanged -=
-                PathData_RotationPointPositionChanged;
-            PathData.NodePositionChanged -= PathData_NodePositionChanged;
-            PathData.TiltingCurveUpdated -= PathData_TiltingCurveUpdated;
-            PathData.PathReset -= PathData_PathReset;
-            PathData.RotationPathReset -= PathData_RotationPathReset;
-            PathData.NodeAdded -= PathData_NodeAdded;
-            PathData.NodeRemoved -= PathData_NodeRemoved;
-        }
-        private void SubscribeToPathEvents() {
-            if (pathData == null) return;
-
-            PathData.RotationPointPositionChanged +=
-                PathData_RotationPointPositionChanged;
-            PathData.NodePositionChanged += PathData_NodePositionChanged;
-            PathData.TiltingCurveUpdated += PathData_TiltingCurveUpdated;
-            PathData.PathReset += PathData_PathReset;
-            PathData.RotationPathReset += PathData_RotationPathReset;
-            PathData.NodeAdded += PathData_NodeAdded;
-            PathData.NodeRemoved += PathData_NodeRemoved;
-        }
 
         /// <summary>
         ///     Export path nodes as transforms.
@@ -1435,6 +1333,123 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     "Number of path nodes ({0}) and number of rotation path nodes ({1}) differ.",
                     PathData.NodesNo,
                     PathData.RotationPathNodesNo));
+        }
+
+        private void FireJumpedToNodeEvent() {
+            // Create event args.
+            var nodeIndex = PathData.GetNodeIndexAtTime(
+                animationTime);
+            var args = new NodeReachedEventArgs(nodeIndex, animationTime);
+
+            // Fire event.
+            OnJumpedToNode(args);
+        }
+
+        private void FireUndoRedoPerformedEvent() {
+            OnUndoRedoPerformed();
+        }
+
+        /// <summary>
+        ///     This method is responsible for firing <c>NodeReached</c> event.
+        ///     Use in play mode only.
+        /// </summary>
+        private void HandleFireNodeReachedEvent() {
+            // Get path timestamps.
+            var nodeTimestamps = PathData.GetPathTimestamps();
+
+            // For each timestamp..
+            for (var i = 0; i < nodeTimestamps.Length; i++) {
+                // If animation time "jumped over" a node..
+                if (PrevAnimationTime < nodeTimestamps[i]
+                    && AnimationTime >= nodeTimestamps[i]) {
+
+                    // Create event args.
+                    var args = new NodeReachedEventArgs(i, AnimationTime);
+                    // Fire event.
+                    OnNodeReached(args);
+                }
+            }
+
+            // Update helper field.
+            PrevAnimationTime = AnimationTime;
+        }
+
+        /// <summary>
+        ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
+        /// </summary>
+        private void HandleFireNodeReachedEventForStartingNode() {
+            if (PathData == null) return;
+
+            var currentNodeIndex = PathData.GetNodeIndexAtTime(AnimationTime);
+            if (currentNodeIndex == -1) return;
+
+            var args = new NodeReachedEventArgs(
+                currentNodeIndex,
+                AnimationTime);
+
+            OnNodeReached(args);
+        }
+
+        /// <summary>
+        ///     Method responsible for firing <c>AnimationStarted</c> event.
+        ///     Use in play mode only.
+        /// </summary>
+        private void HandleFireOnAnimationStartedEvent() {
+            if (AnimationTime == 0) OnAnimationStarted();
+        }
+
+        /// <summary>
+        ///     Handle firing <c>AnimationStarted</c> event.
+        /// </summary>
+        private void HandleOnAnimationStarted() {
+            if (AnimationTime == 0) {
+                OnAnimationStarted();
+            }
+        }
+
+        /// <summary>
+        ///     Subscribe to events.
+        /// </summary>
+        private void SubscribeToEvents() {
+            AnimationEnded += APAnimator_AnimationEnded;
+            PathDataRefChanged += Animator_PathDataRefChanged;
+        }
+
+        private void SubscribeToPathEvents() {
+            if (pathData == null) return;
+
+            PathData.RotationPointPositionChanged +=
+                PathData_RotationPointPositionChanged;
+            PathData.NodePositionChanged += PathData_NodePositionChanged;
+            PathData.TiltingCurveUpdated += PathData_TiltingCurveUpdated;
+            PathData.PathReset += PathData_PathReset;
+            PathData.RotationPathReset += PathData_RotationPathReset;
+            PathData.NodeAdded += PathData_NodeAdded;
+            PathData.NodeRemoved += PathData_NodeRemoved;
+        }
+
+        /// <summary>
+        ///     Unsubscribe from events.
+        /// </summary>
+        private void UnsubscribeFromEvents() {
+            AnimationEnded -= APAnimator_AnimationEnded;
+            PathDataRefChanged -= Animator_PathDataRefChanged;
+
+            UnsubscribeFromPathEvents();
+        }
+
+        private void UnsubscribeFromPathEvents() {
+
+            if (PathData == null) return;
+
+            PathData.RotationPointPositionChanged -=
+                PathData_RotationPointPositionChanged;
+            PathData.NodePositionChanged -= PathData_NodePositionChanged;
+            PathData.TiltingCurveUpdated -= PathData_TiltingCurveUpdated;
+            PathData.PathReset -= PathData_PathReset;
+            PathData.RotationPathReset -= PathData_RotationPathReset;
+            PathData.NodeAdded -= PathData_NodeAdded;
+            PathData.NodeRemoved -= PathData_NodeRemoved;
         }
 
         #endregion

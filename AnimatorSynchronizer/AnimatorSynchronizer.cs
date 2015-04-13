@@ -58,6 +58,13 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
             Animator.JumpedToNode += Animator_JumpedToNode;
             Animator.AnimationPaused += Animator_AnimationPaused;
             Animator.AnimationResumed += Animator_AnimationResumed;
+            Animator.AnimationStopped += Animator_AnimationStopped;
+        }
+
+        void Animator_AnimationStopped(object sender, System.EventArgs e) {
+            foreach (var target in TargetComponents) {
+                target.Stop();
+            }
         }
 
         void Animator_AnimationResumed(object sender, System.EventArgs e) {

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     ///     Animates object along path.

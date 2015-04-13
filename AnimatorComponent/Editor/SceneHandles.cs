@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     ///     Class responsible for drawing all on scene handles.

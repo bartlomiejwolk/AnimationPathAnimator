@@ -5,7 +5,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root folder.
  */
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     public enum NodeHandle { Position, Tangent }
 

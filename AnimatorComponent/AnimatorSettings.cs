@@ -5,7 +5,7 @@
 
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     public sealed class AnimatorSettings : ScriptableObject {
         #region ADVANCED FIELDS

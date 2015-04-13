@@ -7,7 +7,7 @@
 
 using UnityEditor;
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     public static class SceneTool {
 

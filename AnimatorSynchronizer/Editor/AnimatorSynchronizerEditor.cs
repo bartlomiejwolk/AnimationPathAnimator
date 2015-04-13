@@ -3,12 +3,12 @@
 // This file is part of the AnimationPath Animator Unity extension.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
-using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.AnimationPathTools.ReorderableList;
+using AnimationPathTools.AnimatorComponent;
+using AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
+namespace AnimationPathTools.AnimatorSynchronizerComponent {
 
     [CustomEditor(typeof (AnimatorSynchronizer))]
     public class AnimatorSynchronizerEditor : Editor {

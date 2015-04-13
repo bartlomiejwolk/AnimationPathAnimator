@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace AnimationPathTools {
 
     public static class ScriptableObjectUtility {
 

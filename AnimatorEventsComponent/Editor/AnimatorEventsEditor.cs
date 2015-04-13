@@ -4,12 +4,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
 using System.Collections.Generic;
-using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.AnimationPathTools.ReorderableList;
+using AnimationPathTools.AnimatorComponent;
+using AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorEventsComponent {
+namespace AnimationPathTools.AnimatorEventsComponent {
 
     [CustomEditor(typeof (AnimatorEvents))]
     public class AnimatorEventsEditor : Editor {

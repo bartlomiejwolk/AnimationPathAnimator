@@ -5,10 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using ATP.AnimationPathTools.AnimatorComponent;
+using AnimationPathTools.AnimatorComponent;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorEventsComponent {
+namespace AnimationPathTools.AnimatorEventsComponent {
 
     [RequireComponent(typeof (AnimationPathAnimator))]
     public class AnimatorEvents : MonoBehaviour {

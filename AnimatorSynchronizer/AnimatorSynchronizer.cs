@@ -5,10 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using ATP.AnimationPathTools.AnimatorComponent;
+using AnimationPathTools.AnimatorComponent;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
+namespace AnimationPathTools.AnimatorSynchronizerComponent {
 
     [RequireComponent(typeof (AnimationPathAnimator))]
     public sealed class AnimatorSynchronizer : MonoBehaviour {

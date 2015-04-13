@@ -5,13 +5,13 @@
  * Licensed under the MIT license. See LICENSE file in the project root folder.
  */
 
-using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.AnimationPathTools.AnimatorEventsComponent;
-using ATP.AnimationPathTools.AnimatorSynchronizerComponent;
-using ATP.AnimationPathTools.AudioSynchronizerComponent;
+using AnimationPathTools.AnimatorComponent;
+using AnimationPathTools.AnimatorEventsComponent;
+using AnimationPathTools.AnimatorSynchronizerComponent;
+using AnimationPathTools.AudioSynchronizerComponent;
 using UnityEditor;
 
-namespace ATP.AnimationPathTools {
+namespace AnimationPathTools {
 
     public static class ComponentCreator {
 

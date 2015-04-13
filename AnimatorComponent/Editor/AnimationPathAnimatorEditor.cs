@@ -14,34 +14,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     /// </summary>
     [CustomEditor(typeof (AnimationPathAnimator))]
     public sealed class AnimationPathAnimatorEditor : Editor {
-        #region EXPORTER
-
-        public void DrawExportControls() {
-            EditorGUILayout.BeginHorizontal();
-
-            Script.ExportSamplingFrequency =
-                EditorGUILayout.IntField(
-                    new GUIContent(
-                        "Export Sampling",
-                        "Number of points to export for 1 m of the animation "
-                        + "path. If set to 0, it'll export only keys defined in "
-                        + "the path."),
-                    Script.ExportSamplingFrequency);
-
-            // Limit value.
-            if (Script.ExportSamplingFrequency < 1) {
-                Script.ExportSamplingFrequency = 1;
-            }
-
-            if (GUILayout.Button("Export")) {
-                Script.ExportNodes(Script.ExportSamplingFrequency);
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        #endregion
-
         #region PROPERTIES
 
         /// <summary>
@@ -52,6 +24,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Is true when serialized properties are initialized.
         /// </summary>
+        // todo remove
         private bool SerializedPropertiesInitialized { get; set; }
 
         /// <summary>
@@ -105,6 +78,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
+
         private void OnDisable() {
             // Disable Unity scene tool.
             SceneTool.RestoreTool();
@@ -175,16 +149,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion UNITY MESSAGES
 
         #region INSPECTOR CONTROLS
-        private void DrawTiltingCurve() {
-            if (Script.PathData == null) return;
-
-            Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
-                new GUIContent(
-                    "Tilting Curve",
-                    ""),
-                Script.PathData.TiltingCurve);
-        }
-
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
@@ -335,23 +299,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleDrawEaseCurve() {
-            if (Script.PathData == null) return;
-
-            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
-                new GUIContent(
-                    "Ease Curve",
-                    ""),
-                Script.PathData.EaseCurve);
-        }
-
         private void DrawHandleModeDropdown() {
             Undo.RecordObject(Script.SettingsAsset, "Change handle mode.");
 
             var prevHandleMode = Script.HandleMode;
 
             Script.HandleMode =
-                (HandleMode)EditorGUILayout.EnumPopup(
+                (HandleMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Scene Tool",
                         "Tool displayed next to each node. Default " +
@@ -383,13 +337,46 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void DrawNodeButtonsToggle() {
+            Script.DrawNodeButtons = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw Buttons",
+                    "Draw on-scene node buttons."),
+                Script.DrawNodeButtons);
+        }
+
+        private void DrawNodeHandleDropdown() {
+            var disable = Script.TangentMode != TangentMode.Custom;
+
+            EditorGUI.BeginDisabledGroup(disable);
+
+            Script.NodeHandle =
+                (NodeHandle) EditorGUILayout.EnumPopup(
+                    new GUIContent(
+                        "Node Handle",
+                        "On-scene node handle."),
+                    Script.NodeHandle);
+
+            EditorGUI.EndDisabledGroup();
+        }
+
+        private void DrawObjectCurveToggle() {
+            Undo.RecordObject(Script, "Toggle drawing object path.");
+
+            Script.DrawObjectPath = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw Object Path",
+                    ""),
+                Script.DrawObjectPath);
+        }
+
         private void DrawPathDataAssetField() {
             Undo.RecordObject(Script, "Change PathData inspector field.");
 
-            Script.PathData = (PathData)EditorGUILayout.ObjectField(
+            Script.PathData = (PathData) EditorGUILayout.ObjectField(
                 new GUIContent("Path Asset", "Asset containing all path data."),
                 Script.PathData,
-                typeof(PathData),
+                typeof (PathData),
                 false);
         }
 
@@ -446,7 +433,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUI.BeginDisabledGroup(disable);
 
-            Script.PositionHandle = (PositionHandle)EditorGUILayout.EnumPopup(
+            Script.PositionHandle = (PositionHandle) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Position Handle",
                     "Handle used to move nodes on scene. Default " +
@@ -557,6 +544,20 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void DrawRotationCurveToggle() {
+            var disable = Script.RotationMode != RotationMode.Custom;
+
+            EditorGUI.BeginDisabledGroup(disable);
+
+            Script.DrawRotationPathCurve = EditorGUILayout.Toggle(
+                new GUIContent(
+                    "Draw Rotation Path",
+                    ""),
+                Script.DrawRotationPathCurve);
+
+            EditorGUI.EndDisabledGroup();
+        }
+
         private void DrawRotationModeDropdown(
             Action<RotationMode, RotationMode> callback) {
 
@@ -567,7 +568,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw RotationMode dropdown.
             var currentRotationMode =
-                (RotationMode)EditorGUILayout.EnumPopup(
+                (RotationMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Rotation Mode",
                         "Mode that controls animated game object rotation."),
@@ -648,7 +649,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Draw tangent mode dropdown.
             Script.TangentMode =
-                (TangentMode)EditorGUILayout.EnumPopup(
+                (TangentMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Tangent Mode",
                         "Tangent mode applied to each path node."),
@@ -658,38 +659,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.TangentMode != prevTangentMode) {
                 HandleTangentModeChange(prevTangentMode);
             }
-        }
-
-        private void DrawRotationCurveToggle() {
-            var disable = Script.RotationMode != RotationMode.Custom;
-
-            EditorGUI.BeginDisabledGroup(disable);
-
-            Script.DrawRotationPathCurve = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Draw Rotation Path",
-                    ""),
-                Script.DrawRotationPathCurve);
-
-            EditorGUI.EndDisabledGroup();
-        }
-
-        private void DrawNodeButtonsToggle() {
-            Script.DrawNodeButtons = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Draw Buttons",
-                    "Draw on-scene node buttons."),
-                Script.DrawNodeButtons);
-        }
-
-        private void DrawObjectCurveToggle() {
-            Undo.RecordObject(Script, "Toggle drawing object path.");
-
-            Script.DrawObjectPath = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Draw Object Path",
-                    ""),
-                Script.DrawObjectPath);
         }
 
         private void DrawTargetGOField() {
@@ -705,28 +674,33 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleTargetGOFieldChange(prevTargetGO);
         }
 
-        private void DrawNodeHandleDropdown() {
-            var disable = Script.TangentMode != TangentMode.Custom;
+        private void DrawTiltingCurve() {
+            if (Script.PathData == null) return;
 
-            EditorGUI.BeginDisabledGroup(disable);
-
-            Script.NodeHandle =
-                (NodeHandle) EditorGUILayout.EnumPopup(
-                    new GUIContent(
-                        "Node Handle",
-                        "On-scene node handle."),
-                    Script.NodeHandle);
-
-            EditorGUI.EndDisabledGroup();
+            Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
+                new GUIContent(
+                    "Tilting Curve",
+                    ""),
+                Script.PathData.TiltingCurve);
         }
 
         private void DrawWrapModeDropdown() {
             Script.WrapMode =
-                (AnimatorWrapMode)EditorGUILayout.EnumPopup(
+                (AnimatorWrapMode) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Wrap Mode",
                         "Determines animator behaviour after animation end."),
                     Script.WrapMode);
+        }
+
+        private void HandleDrawEaseCurve() {
+            if (Script.PathData == null) return;
+
+            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
+                new GUIContent(
+                    "Ease Curve",
+                    ""),
+                Script.PathData.EaseCurve);
         }
 
         private void HandleDrawForwardPointOffsetSlider() {
@@ -780,129 +754,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorGUI.EndDisabledGroup();
         }
+
         #endregion
 
         #region SCENE VIEW DRAWING HANDLERS
-        private void HandleDrawingMoveAllModeLables() {
-            if (!Script.MoveAllMode) return;
-            if (!Script.DrawObjectPath) return;
 
-            // Get global node positions.
-            var globalNodePositions = Script.GetGlobalNodePositions();
-
-            // Create array with text to be displayed for each node.
-            var labelText = MultiplyTextIntoArray(
-                Script.SettingsAsset.MoveAllLabelText,
-                globalNodePositions);
-
-            SceneHandles.DrawUpdateAllLabels(
-                globalNodePositions,
-                labelText,
-                Script.SettingsAsset.MoveAllLabelOffsetX,
-                Script.SettingsAsset.MoveAllLabelOffsetY,
-                Script.SettingsAsset.DefaultLabelWidth,
-                Script.SettingsAsset.DefaultLabelHeight,
-                Script.Skin.GetStyle("MoveAllLabel"));
-        }
-
-        private void HandleDrawingRotationPathTangentHandles() {
-            // Don't draw when rotation path is disabled.
-            if (Script.RotationMode != RotationMode.Custom) return;
-            // Draw tangent handles only in custom tangent mode.
-            if (Script.TangentMode != TangentMode.Custom) return;
-            // Draw tangent handles only tangent node handle is selected.
-            if (Script.NodeHandle != NodeHandle.Tangent) return;
-
-            // Positions at which to draw tangent handles.
-            var nodes = Script.GetGlobalRotationPathPositions();
-
-            // Draw tangent handles.
-            SceneHandles.DrawTangentHandles(
-                nodes,
-                Script.RotationCurveColor,
-                Script.SettingsAsset.TangentHandleSize,
-                UpdateRotationPathTangents);
-        }
-
-        private void HandleDrawingRotationPathSmoothButtons() {
-            if (!Script.DrawNodeButtons) return;
-            if ((Script.TangentMode != TangentMode.Custom)
-                || (Script.RotationMode != RotationMode.Custom)) return;
-
-            var nodePositions = Script.GetGlobalRotationPathPositions();
-
-            var buttonStyle = Script.Skin.GetStyle(
-                "SmoothNodeButton");
-
-            SceneHandles.DrawNodeButtons(
-                nodePositions,
-                Script.SettingsAsset.RotationSmoothButtonOffsetH,
-                Script.SettingsAsset.RotationSmoothButtonOffsetV,
-                DrawRotationPathSmoothButtonsCallbackHandler,
-                buttonStyle);
-        }
-
-        private void HandleDrawingPathSmoothButtons() {
-            if (!Script.DrawNodeButtons) return;
-            // Custom tangent mode and Tangent node handle must be enabled.
-            if (Script.TangentMode != TangentMode.Custom) return;
-            if (!Script.DrawObjectPath) return;
-
-            // Get positions positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-
-            // Get style for add button.
-            var buttonStyle = Script.Skin.GetStyle(
-                "SmoothNodeButton");
-
-            // Draw add node buttons.
-            SceneHandles.DrawNodeButtons(
-                nodePositions,
-                Script.SettingsAsset.SmoothButtonOffsetH,
-                Script.SettingsAsset.SmoothButtonOffsetV,
-                DrawPathSmoothButtonsCallbackHandler,
-                buttonStyle);
-        }
-
-        private void HandleDrawingObjectPathTangentHandles() {
-            // Draw tangent handles only in custom tangent mode.
-            if (Script.TangentMode != TangentMode.Custom) return;
-            // Draw tangent handles only tangent node handle is selected.
-            if (Script.NodeHandle != NodeHandle.Tangent) return;
-
-            // Positions at which to draw tangent handles.
-            var nodes = Script.GetGlobalNodePositions();
-
-            // Draw tangent handles.
-            SceneHandles.DrawTangentHandles(
-                nodes,
-                Script.GizmoCurveColor,
-                Script.SettingsAsset.TangentHandleSize,
-                UpdateObjectPathTangents);
-        }
-
-        private void HandleDrawingSceneToolToggleButtons() {
-            if (!Script.DrawNodeButtons) return;
-            if (!Script.DrawObjectPath) return;
-
-            // Get node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme nodes.
-            nodePositions.RemoveAt(0);
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-
-            // Get style for add button.
-            var toggleButtonStyle = Script.Skin.GetStyle(
-                "SceneToolToggleButton");
-
-            // Draw add node buttons.
-            SceneHandles.DrawNodeButtons(
-                nodePositions,
-                Script.SettingsAsset.SceneToolToggleOffsetH,
-                Script.SettingsAsset.SceneToolToggleOffsetV,
-                DrawSceneToolToggleButtonsCallbackHandler,
-                toggleButtonStyle);
-        }
         /// <summary>
         ///     Method responsible for drawing for each node Unity's default position handle.
         /// </summary>
@@ -1036,6 +892,67 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.Skin.GetStyle("EaseValueLabel"));
         }
 
+        private void HandleDrawingMoveAllModeLables() {
+            if (!Script.MoveAllMode) return;
+            if (!Script.DrawObjectPath) return;
+
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            var labelText = MultiplyTextIntoArray(
+                Script.SettingsAsset.MoveAllLabelText,
+                globalNodePositions);
+
+            SceneHandles.DrawUpdateAllLabels(
+                globalNodePositions,
+                labelText,
+                Script.SettingsAsset.MoveAllLabelOffsetX,
+                Script.SettingsAsset.MoveAllLabelOffsetY,
+                Script.SettingsAsset.DefaultLabelWidth,
+                Script.SettingsAsset.DefaultLabelHeight,
+                Script.Skin.GetStyle("MoveAllLabel"));
+        }
+
+        private void HandleDrawingObjectPathTangentHandles() {
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only tangent node handle is selected.
+            if (Script.NodeHandle != NodeHandle.Tangent) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalNodePositions();
+
+            // Draw tangent handles.
+            SceneHandles.DrawTangentHandles(
+                nodes,
+                Script.GizmoCurveColor,
+                Script.SettingsAsset.TangentHandleSize,
+                UpdateObjectPathTangents);
+        }
+
+        private void HandleDrawingPathSmoothButtons() {
+            if (!Script.DrawNodeButtons) return;
+            // Custom tangent mode and Tangent node handle must be enabled.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            if (!Script.DrawObjectPath) return;
+
+            // Get positions positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+
+            // Get style for add button.
+            var buttonStyle = Script.Skin.GetStyle(
+                "SmoothNodeButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SmoothButtonOffsetH,
+                Script.SettingsAsset.SmoothButtonOffsetV,
+                DrawPathSmoothButtonsCallbackHandler,
+                buttonStyle);
+        }
+
         /// <summary>
         ///     Handle drawing movement handles.
         /// </summary>
@@ -1095,6 +1012,66 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             HandleDrawFreeRotationHandle(rotationPointGlobalPosition);
             HandleDrawDefaultRotationHandle(rotationPointGlobalPosition);
+        }
+
+        private void HandleDrawingRotationPathSmoothButtons() {
+            if (!Script.DrawNodeButtons) return;
+            if ((Script.TangentMode != TangentMode.Custom)
+                || (Script.RotationMode != RotationMode.Custom)) return;
+
+            var nodePositions = Script.GetGlobalRotationPathPositions();
+
+            var buttonStyle = Script.Skin.GetStyle(
+                "SmoothNodeButton");
+
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.RotationSmoothButtonOffsetH,
+                Script.SettingsAsset.RotationSmoothButtonOffsetV,
+                DrawRotationPathSmoothButtonsCallbackHandler,
+                buttonStyle);
+        }
+
+        private void HandleDrawingRotationPathTangentHandles() {
+            // Don't draw when rotation path is disabled.
+            if (Script.RotationMode != RotationMode.Custom) return;
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only tangent node handle is selected.
+            if (Script.NodeHandle != NodeHandle.Tangent) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalRotationPathPositions();
+
+            // Draw tangent handles.
+            SceneHandles.DrawTangentHandles(
+                nodes,
+                Script.RotationCurveColor,
+                Script.SettingsAsset.TangentHandleSize,
+                UpdateRotationPathTangents);
+        }
+
+        private void HandleDrawingSceneToolToggleButtons() {
+            if (!Script.DrawNodeButtons) return;
+            if (!Script.DrawObjectPath) return;
+
+            // Get node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme nodes.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+
+            // Get style for add button.
+            var toggleButtonStyle = Script.Skin.GetStyle(
+                "SceneToolToggleButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SceneToolToggleOffsetH,
+                Script.SettingsAsset.SceneToolToggleOffsetV,
+                DrawSceneToolToggleButtonsCallbackHandler,
+                toggleButtonStyle);
         }
 
         /// <summary>
@@ -1167,60 +1144,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.DefaultLabelHeight,
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
+
         #endregion DRAWING HANDLERS
 
         #region CALLBACK HANDLERS
-        private void DrawRotationPathSmoothButtonsCallbackHandler(int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Smooth Rotation Path node.");
-
-            Script.PathData.SmoothRotationPathNodeTangents(nodeIndex);
-        }
-
-        private void DrawPathSmoothButtonsCallbackHandler(int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Smooth Path node.");
-
-            Script.PathData.SmoothAllPathNodeTangents(nodeIndex);
-        }
-
-        private void DrawRotationModeDropdownCallbackHandler(
-                    RotationMode prevRotationMode,
-                    RotationMode currentRotationMode) {
-
-            Script.HandleMode = HandleMode.None;
-
-            // If custom rotation mode was just select, apply selected mode.
-            if (currentRotationMode == RotationMode.Custom) {
-                Script.RotationMode = RotationMode.Custom;
-                Script.DrawRotationPathCurve = true;
-                Script.PathData.ResetRotationPath();
-                return;
-            }
-
-            // Display modal window only when exiting custom rotation mode.
-            if (prevRotationMode != RotationMode.Custom) {
-                Script.RotationMode = currentRotationMode;
-                return;
-            }
-
-            // Display modal window.
-            var canDisableRotationPath = EditorUtility.DisplayDialog(
-                "Are you sure want to disable rotation path?",
-                "If you disable rotation path, all rotation path data " +
-                "will be lost.",
-                "Continue",
-                "Cancel");
-
-            // If user continues, apply selected rotation mode.
-            if (canDisableRotationPath) {
-                Script.RotationMode = currentRotationMode;
-            }
-
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandleUpdateAnimGOInSceneView",
-                null);
-        }
-
 
         private void ChangeRotationAtTimestampCallbackHandler() {
             if (Script.TangentMode == TangentMode.Custom) return;
@@ -1280,6 +1207,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorUtility.SetDirty(Script.PathData);
         }
 
+        private void DrawPathSmoothButtonsCallbackHandler(int nodeIndex) {
+            Undo.RecordObject(Script.PathData, "Smooth Path node.");
+
+            Script.PathData.SmoothAllPathNodeTangents(nodeIndex);
+        }
+
         private void DrawPositionHandlesCallbackHandler(
             int movedNodeIndex,
             Vector3 newGlobalPos) {
@@ -1337,6 +1270,51 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorUtility.SetDirty(Script.PathData);
         }
 
+        private void DrawRotationModeDropdownCallbackHandler(
+            RotationMode prevRotationMode,
+            RotationMode currentRotationMode) {
+
+            Script.HandleMode = HandleMode.None;
+
+            // If custom rotation mode was just select, apply selected mode.
+            if (currentRotationMode == RotationMode.Custom) {
+                Script.RotationMode = RotationMode.Custom;
+                Script.DrawRotationPathCurve = true;
+                Script.PathData.ResetRotationPath();
+                return;
+            }
+
+            // Display modal window only when exiting custom rotation mode.
+            if (prevRotationMode != RotationMode.Custom) {
+                Script.RotationMode = currentRotationMode;
+                return;
+            }
+
+            // Display modal window.
+            var canDisableRotationPath = EditorUtility.DisplayDialog(
+                "Are you sure want to disable rotation path?",
+                "If you disable rotation path, all rotation path data " +
+                "will be lost.",
+                "Continue",
+                "Cancel");
+
+            // If user continues, apply selected rotation mode.
+            if (canDisableRotationPath) {
+                Script.RotationMode = currentRotationMode;
+            }
+
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandleUpdateAnimGOInSceneView",
+                null);
+        }
+
+        private void DrawRotationPathSmoothButtonsCallbackHandler(int nodeIndex) {
+            Undo.RecordObject(Script.PathData, "Smooth Rotation Path node.");
+
+            Script.PathData.SmoothRotationPathNodeTangents(nodeIndex);
+        }
+
         private void DrawSceneToolToggleButtonsCallbackHandler(int index) {
             Undo.RecordObject(Script.PathData, "Toggle node tool.");
 
@@ -1373,127 +1351,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             EditorUtility.SetDirty(Script.PathData);
         }
+
         #endregion CALLBACK HANDLERS
 
         #region OTHER HANDLERS
-        // todo rename to HandleHandleModeChange.
-        private void HandleModeChange() {
-            // If handle mode was changed to None..
-            if (Script.HandleMode == HandleMode.None) {
-                // Don't display update all values mode label.
-                Script.UpdateAllMode = false;
-            }
-            // Handle changed to ease or tilting.
-            else {
-                Script.PositionHandle = PositionHandle.Free;
-            }
-        }
-
-        private void HandlePlayPauseButton() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandlePlayPause",
-                null);
-        }
-
-        private void HandleRotationModeDropdownChange(
-                    RotationMode prevRotationMode,
-                    RotationMode currentRotationMode) {
-
-        }
-
-        /// <summary>
-        ///     Defines what to do when undo event is performed.
-        /// </summary>
-        private void HandleUndoEvent() {
-            if (Event.current.type == EventType.ValidateCommand
-                && Event.current.commandName == "UndoRedoPerformed") {
-
-                // Repaint inspector.
-                Repaint();
-
-                // Update path with new tangent setting.
-                HandleSmoothTangentMode();
-                HandleLinearTangentMode();
-
-                // Update animated object.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "HandleUpdateAnimGOInSceneView",
-                    null);
-
-                // Fire event.
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "FireUndoRedoPerformedEvent",
-                    null);
-
-                SceneView.RepaintAll();
-            }
-        }
-
-        /// <summary>
-        ///     Method responsible for offseting rotation path position by a given delta.
-        /// </summary>
-        /// <param name="moveDelta"></param>
-        private void HandleOffsetRotationPathPosition(Vector3 moveDelta) {
-            if (Script.RotationMode != RotationMode.Custom) return;
-
-            Script.PathData.OffsetRotationPathPosition(moveDelta);
-        }
-
-        private void HandleMoveSingleNode(
-                    int movedNodeIndex,
-                    Vector3 newGlobalPos) {
-            // Return if node handle is not set to position.
-            if (Script.NodeHandle != NodeHandle.Position) return;
-            // Return if move all mode is enabled.
-            if (Script.MoveAllMode) return;
-
-            // Remember path length before applying changes.
-            var oldAnimGoPathLength = Script.PathData.GetPathLength(
-                Script.SettingsAsset.PathLengthSampling);
-
-            // Calculate node new local position.
-            var newNodeLocalPosition =
-                Script.transform.InverseTransformPoint(newGlobalPos);
-
-            // Move node.
-            Script.PathData.MoveNodeToPosition(
-                movedNodeIndex,
-                newNodeLocalPosition);
-
-            // Handle tangent mode.
-            HandleSmoothTangentMode();
-            HandleLinearTangentMode();
-
-            // Distribute timestamps.
-            Script.PathData.DistributeTimestamps(
-                DistributeTimestampsCallbackHandler);
-
-            // Current path length.
-            var newAnimGoPathLength = Script.PathData.GetPathLength(
-                Script.SettingsAsset.PathLengthSampling);
-
-            DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
-        }
-
-        private void HandleMoveAllMode(int movedNodeIndex, Vector3 newGlobalPos) {
-            // Return if move all mode is disabled.
-            if (!Script.MoveAllMode) return;
-
-            var oldNodeLocalPosition =
-                Script.PathData.GetNodePosition(movedNodeIndex);
-            var newNodeLocalPosition =
-                Script.transform.InverseTransformPoint(newGlobalPos);
-
-            // Calculate movement delta.
-            var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
-
-            Script.PathData.OffsetNodePositions(moveDelta);
-            HandleOffsetRotationPathPosition(moveDelta);
-        }
-
 
         /// <summary>
         ///     Defines what to do when tangent mode is changed from custom to something else.
@@ -1512,56 +1373,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 "Cancel");
 
             return (canExit);
-        }
-
-        private void HandleLinearTangentMode() {
-            if (Script.TangentMode == TangentMode.Linear) {
-                Script.PathData.SetPathTangentsToLinear();
-                Script.PathData.SetRotationPathTangentsToLineear();
-            }
-        }
-
-        /// <summary>
-        ///     Method responsible for applying smooth to rotation path node tangents.
-        /// </summary>
-        private void HandleSmoothRotationPathTangents() {
-            if (Script.RotationMode != RotationMode.Custom) return;
-
-            Script.PathData.SmoothRotationPathTangents();
-        }
-
-        private void HandleSmoothTangentMode() {
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAllPathNodeTangents();
-                HandleSmoothRotationPathTangents();
-            }
-        }
-
-        /// <summary>
-        ///     Handles tangent mode change.
-        /// </summary>
-        /// <param name="prevTangentMode"></param>
-        private void HandleTangentModeChange(TangentMode prevTangentMode) {
-            if (Script.PathData == null) return;
-
-            Undo.RecordObject(Script.PathData, "Smooth path node tangents.");
-
-            // Display modal window.
-            var canExitCustomTangentMode =
-                HandleAskIfExitTangentMode(prevTangentMode);
-            // If user canceled operation..
-            if (!canExitCustomTangentMode) {
-                // Restore Custom tangent mode.
-                Script.TangentMode = TangentMode.Custom;
-
-                return;
-            }
-
-            // Handle selected tangent mode.
-            HandleSmoothTangentMode();
-            HandleLinearTangentMode();
-
-            SceneView.RepaintAll();
         }
 
         /// <summary>
@@ -1606,6 +1417,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Disable ease tool.
             Script.PathData.TiltingToolState[index] = false;
         }
+
         /// <summary>
         ///     Enable selected node tool.
         /// </summary>
@@ -1647,6 +1459,144 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Enable ease tool for the node.
             Script.PathData.TiltingToolState[index] = true;
+        }
+
+        private void HandleLinearTangentMode() {
+            if (Script.TangentMode == TangentMode.Linear) {
+                Script.PathData.SetPathTangentsToLinear();
+                Script.PathData.SetRotationPathTangentsToLineear();
+            }
+        }
+
+        // todo rename to HandleHandleModeChange.
+        private void HandleModeChange() {
+            // If handle mode was changed to None..
+            if (Script.HandleMode == HandleMode.None) {
+                // Don't display update all values mode label.
+                Script.UpdateAllMode = false;
+            }
+            // Handle changed to ease or tilting.
+            else {
+                Script.PositionHandle = PositionHandle.Free;
+            }
+        }
+
+        private void HandleMoveAllMode(int movedNodeIndex, Vector3 newGlobalPos) {
+            // Return if move all mode is disabled.
+            if (!Script.MoveAllMode) return;
+
+            var oldNodeLocalPosition =
+                Script.PathData.GetNodePosition(movedNodeIndex);
+            var newNodeLocalPosition =
+                Script.transform.InverseTransformPoint(newGlobalPos);
+
+            // Calculate movement delta.
+            var moveDelta = newNodeLocalPosition - oldNodeLocalPosition;
+
+            Script.PathData.OffsetNodePositions(moveDelta);
+            HandleOffsetRotationPathPosition(moveDelta);
+        }
+
+        private void HandleMoveSingleNode(
+            int movedNodeIndex,
+            Vector3 newGlobalPos) {
+            // Return if node handle is not set to position.
+            if (Script.NodeHandle != NodeHandle.Position) return;
+            // Return if move all mode is enabled.
+            if (Script.MoveAllMode) return;
+
+            // Remember path length before applying changes.
+            var oldAnimGoPathLength = Script.PathData.GetPathLength(
+                Script.SettingsAsset.PathLengthSampling);
+
+            // Calculate node new local position.
+            var newNodeLocalPosition =
+                Script.transform.InverseTransformPoint(newGlobalPos);
+
+            // Move node.
+            Script.PathData.MoveNodeToPosition(
+                movedNodeIndex,
+                newNodeLocalPosition);
+
+            // Handle tangent mode.
+            HandleSmoothTangentMode();
+            HandleLinearTangentMode();
+
+            // Distribute timestamps.
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
+
+            // Current path length.
+            var newAnimGoPathLength = Script.PathData.GetPathLength(
+                Script.SettingsAsset.PathLengthSampling);
+
+            DistributeEaseValues(oldAnimGoPathLength, newAnimGoPathLength);
+        }
+
+        /// <summary>
+        ///     Method responsible for offseting rotation path position by a given delta.
+        /// </summary>
+        /// <param name="moveDelta"></param>
+        private void HandleOffsetRotationPathPosition(Vector3 moveDelta) {
+            if (Script.RotationMode != RotationMode.Custom) return;
+
+            Script.PathData.OffsetRotationPathPosition(moveDelta);
+        }
+
+        private void HandlePlayPauseButton() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandlePlayPause",
+                null);
+        }
+
+        private void HandleRotationModeDropdownChange(
+            RotationMode prevRotationMode,
+            RotationMode currentRotationMode) {
+
+        }
+
+        /// <summary>
+        ///     Method responsible for applying smooth to rotation path node tangents.
+        /// </summary>
+        private void HandleSmoothRotationPathTangents() {
+            if (Script.RotationMode != RotationMode.Custom) return;
+
+            Script.PathData.SmoothRotationPathTangents();
+        }
+
+        private void HandleSmoothTangentMode() {
+            if (Script.TangentMode == TangentMode.Smooth) {
+                Script.PathData.SmoothAllPathNodeTangents();
+                HandleSmoothRotationPathTangents();
+            }
+        }
+
+        /// <summary>
+        ///     Handles tangent mode change.
+        /// </summary>
+        /// <param name="prevTangentMode"></param>
+        private void HandleTangentModeChange(TangentMode prevTangentMode) {
+            if (Script.PathData == null) return;
+
+            Undo.RecordObject(Script.PathData, "Smooth path node tangents.");
+
+            // Display modal window.
+            var canExitCustomTangentMode =
+                HandleAskIfExitTangentMode(prevTangentMode);
+            // If user canceled operation..
+            if (!canExitCustomTangentMode) {
+                // Restore Custom tangent mode.
+                Script.TangentMode = TangentMode.Custom;
+
+                return;
+            }
+
+            // Handle selected tangent mode.
+            HandleSmoothTangentMode();
+            HandleLinearTangentMode();
+
+            SceneView.RepaintAll();
         }
 
         /// <summary>
@@ -1705,6 +1655,36 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
             else {
                 HandleEnablingTiltingTool(pathNodeIndex, nodeTimestamp);
+            }
+        }
+
+        /// <summary>
+        ///     Defines what to do when undo event is performed.
+        /// </summary>
+        private void HandleUndoEvent() {
+            if (Event.current.type == EventType.ValidateCommand
+                && Event.current.commandName == "UndoRedoPerformed") {
+
+                // Repaint inspector.
+                Repaint();
+
+                // Update path with new tangent setting.
+                HandleSmoothTangentMode();
+                HandleLinearTangentMode();
+
+                // Update animated object.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "HandleUpdateAnimGOInSceneView",
+                    null);
+
+                // Fire event.
+                Utilities.InvokeMethodWithReflection(
+                    Script,
+                    "FireUndoRedoPerformedEvent",
+                    null);
+
+                SceneView.RepaintAll();
             }
         }
 
@@ -1770,69 +1750,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
-        private string[] MultiplyTextIntoArray(
-                    string text,
-                    List<Vector3> globalNodePositions) {
 
-            var labelText = new string[globalNodePositions.Count];
-            for (var i = 0; i < globalNodePositions.Count; i++) {
-                labelText[i] = text;
+        public void DrawExportControls() {
+            EditorGUILayout.BeginHorizontal();
+
+            Script.ExportSamplingFrequency =
+                EditorGUILayout.IntField(
+                    new GUIContent(
+                        "Export Sampling",
+                        "Number of points to export for 1 m of the animation "
+                        + "path. If set to 0, it'll export only keys defined in "
+                        + "the path."),
+                    Script.ExportSamplingFrequency);
+
+            // Limit value.
+            if (Script.ExportSamplingFrequency < 1) {
+                Script.ExportSamplingFrequency = 1;
             }
-            return labelText;
+
+            if (GUILayout.Button("Export")) {
+                Script.ExportNodes(Script.ExportSamplingFrequency);
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
-
-        private List<Vector3> RemoveNodeButtonPositions() {
-            // Node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme nodes.
-            // Extreme nodes can't be removed.
-            nodePositions.RemoveAt(0);
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-            return nodePositions;
-        }
-
-        private List<Vector3> AddNodeButtonPositions() {
-            // Get node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove last node's position.
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-            return nodePositions;
-        }
-
-        /// <summary>
-        ///     Offset rotation path node tangents by given value.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="inOutTangentOffset"></param>
-        private void UpdateRotationPathTangents(
-            int index,
-            Vector3 inOutTangentOffset) {
-
-            // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Update rotation path tangents.");
-
-            Script.PathData.OffsetRotationPathNodeTangents(
-                index,
-                inOutTangentOffset);
-        }
-
-        /// <summary>
-        ///     Offset animated object path node tangents by given value.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="inOutTangentOffset"></param>
-        private void UpdateObjectPathTangents(
-            int index,
-            Vector3 inOutTangentOffset) {
-
-            // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Update node tangents.");
-
-            Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
-            Script.PathData.DistributeTimestamps(
-                DistributeTimestampsCallbackHandler);
-        }
-
 
         private static void FocusOnSceneView() {
             if (SceneView.sceneViews.Count > 0) {
@@ -1871,6 +1812,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Add node to the animation curves.
             Script.PathData.CreateNodeAtTime(newKeyTime);
+        }
+
+        private List<Vector3> AddNodeButtonPositions() {
+            // Get node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove last node's position.
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
         }
 
         /// <summary>
@@ -2043,6 +1992,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
         }
+
         private void InitializeSerializedProperties() {
             animatedGO = serializedObject.FindProperty("animatedGO");
             targetGO = serializedObject.FindProperty("targetGO");
@@ -2071,15 +2021,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             SerializedPropertiesInitialized = true;
         }
 
-        private bool RequiredAssetsLoaded() {
-            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
-                Script,
-                "RequiredAssetsLoaded",
-                null);
-
-            return assetsLoaded;
-        }
-
         /// <summary>
         ///     Multiply each ease value by a difference between two given values.
         /// </summary>
@@ -2105,6 +2046,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
 
+        private string[] MultiplyTextIntoArray(
+            string text,
+            List<Vector3> globalNodePositions) {
+
+            var labelText = new string[globalNodePositions.Count];
+            for (var i = 0; i < globalNodePositions.Count; i++) {
+                labelText[i] = text;
+            }
+            return labelText;
+        }
+
         /// <summary>
         ///     Multiply each tilting value by a difference between two given values.
         /// </summary>
@@ -2128,6 +2080,59 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             // Multiply each single ease value.
             Script.PathData.MultiplyTiltingCurveValues(multiplier);
+        }
+
+        private List<Vector3> RemoveNodeButtonPositions() {
+            // Node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme nodes.
+            // Extreme nodes can't be removed.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
+        }
+
+        private bool RequiredAssetsLoaded() {
+            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
+                Script,
+                "RequiredAssetsLoaded",
+                null);
+
+            return assetsLoaded;
+        }
+
+        /// <summary>
+        ///     Offset animated object path node tangents by given value.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="inOutTangentOffset"></param>
+        private void UpdateObjectPathTangents(
+            int index,
+            Vector3 inOutTangentOffset) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update node tangents.");
+
+            Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
+        }
+
+        /// <summary>
+        ///     Offset rotation path node tangents by given value.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="inOutTangentOffset"></param>
+        private void UpdateRotationPathTangents(
+            int index,
+            Vector3 inOutTangentOffset) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update rotation path tangents.");
+
+            Script.PathData.OffsetRotationPathNodeTangents(
+                index,
+                inOutTangentOffset);
         }
 
         #endregion
@@ -2295,6 +2300,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 HandleModeChange();
             }
         }
+
         private void HandlePlayPauseShortcut() {
             // Play/pause animation.
             if (Event.current.type == EventType.keyDown

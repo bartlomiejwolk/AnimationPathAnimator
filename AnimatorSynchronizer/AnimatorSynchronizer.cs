@@ -53,6 +53,8 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
         }
 
         private void SubscribeToEvents() {
+            if (Animator == null) return;
+
             Animator.NodeReached += Animator_NodeReached;
             Animator.JumpedToNode += Animator_JumpedToNode;
             Animator.AnimationPaused += Animator_AnimationPaused;

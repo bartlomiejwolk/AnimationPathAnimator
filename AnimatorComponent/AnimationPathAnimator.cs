@@ -63,6 +63,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         public event EventHandler AnimationPaused;
 
+        /// <summary>
+        /// Event fired after animation was stopped.
+        /// </summary>
+        public event EventHandler AnimationStopped;
+
         #endregion
 
         #region FIELDS
@@ -748,6 +753,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public void Stop() {
             IsPlaying = false;
             AnimationTime = 0;
+
+            OnAnimationStopped();
         }
 
         /// <summary>
@@ -1807,6 +1814,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void OnAnimationPaused() {
             Logger.LogCall();
             var handler = AnimationPaused;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void OnAnimationStopped() {
+            var handler = AnimationStopped;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

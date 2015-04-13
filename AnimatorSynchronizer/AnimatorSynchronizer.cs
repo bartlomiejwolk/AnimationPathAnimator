@@ -77,7 +77,6 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
 
         void Animator_AnimationResumed(object sender, System.EventArgs e) {
             foreach (var target in TargetComponents) {
-                //target.Unpause();
                 target.Play();
             }
         }
@@ -107,10 +106,6 @@ namespace ATP.AnimationPathTools.AnimatorSynchronizerComponent {
                 NodeTimestamps[i][e.NodeIndex] =
                     TargetComponents[i].AnimationTime;
             }
-
-            //Logger.LogString("Record: [{0}] {1}",
-            //    e.NodeIndex,
-            //    TargetComponents[0].AnimationTime);
         }
 
         private void OnDisable() {

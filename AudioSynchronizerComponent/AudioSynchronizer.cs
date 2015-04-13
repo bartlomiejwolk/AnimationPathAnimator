@@ -170,7 +170,6 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void Update() {
-            //HandleShortcuts();
         }
 
         /// <summary>

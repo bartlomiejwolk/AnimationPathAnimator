@@ -70,7 +70,6 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void OnSceneGUI() {
-            //HandlePlayPauseShortcut();
         }
 
         private void HandlePlayPauseShortcut() {

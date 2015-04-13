@@ -5,6 +5,8 @@
  * Licensed under the MIT license. See LICENSE file in the project root folder.
  */
 
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using UnityEngine;
 using ATP.AnimationPathTools.AnimatorComponent;
@@ -199,3 +201,5 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
     }
 
 }
+
+#endif

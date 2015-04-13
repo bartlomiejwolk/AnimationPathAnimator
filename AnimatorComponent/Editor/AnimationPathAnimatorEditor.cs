@@ -766,8 +766,7 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Method responsible for drawing for each node Unity's default
         ///     position handle.
         /// </summary>
-        // todo rename to HandleDrawDefaultPositionHandle.
-        private void HandleDefaultPositionHandle() {
+        private void HandleDrawDefaultPositionHandle() {
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Default) {
 
@@ -962,7 +961,7 @@ namespace AnimationPathTools.AnimatorComponent {
             if (!Script.DrawObjectPath) return;
 
             HandleDrawCustomPositionHandle();
-            HandleDefaultPositionHandle();
+            HandleDrawDefaultPositionHandle();
         }
 
         /// <summary>

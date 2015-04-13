@@ -1388,6 +1388,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 return;
             }
 
+            // Display modal window only when exiting custom rotation mode.
+            if (prevRotationMode != RotationMode.Custom) {
+                Script.RotationMode = currentRotationMode;
+                return;
+            }
+
             // Display modal window.
             var canDisableRotationPath = EditorUtility.DisplayDialog(
                 "Are you sure want to disable rotation path?",

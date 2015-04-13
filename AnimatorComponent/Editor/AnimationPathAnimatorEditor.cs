@@ -105,111 +105,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Repaint scene after each inspector update.
             SceneView.RepaintAll();
         }
-
-        private void DrawPathSmoothButtonsCallbackHandler(int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Smooth Path node.");
-
-            Script.PathData.SmoothAllPathNodeTangents(nodeIndex);
-        }
-
-        private void DrawRotationPathSmoothButtonsCallbackHandler(int nodeIndex) {
-            Undo.RecordObject(Script.PathData, "Smooth Rotation Path node.");
-
-            Script.PathData.SmoothRotationPathNodeTangents(nodeIndex);
-        }
-
-        private void HandleDrawingMoveAllModeLables() {
-            if (!Script.MoveAllMode) return;
-            if (!Script.DrawObjectPath) return;
-
-            // Get global node positions.
-            var globalNodePositions = Script.GetGlobalNodePositions();
-
-            // Create array with text to be displayed for each node.
-            var labelText = MultiplyTextIntoArray(
-                Script.SettingsAsset.MoveAllLabelText,
-                globalNodePositions);
-
-            SceneHandles.DrawUpdateAllLabels(
-                globalNodePositions,
-                labelText,
-                Script.SettingsAsset.MoveAllLabelOffsetX,
-                Script.SettingsAsset.MoveAllLabelOffsetY,
-                Script.SettingsAsset.DefaultLabelWidth,
-                Script.SettingsAsset.DefaultLabelHeight,
-                Script.Skin.GetStyle("MoveAllLabel"));
-        }
-
-        private void HandleDrawingPathSmoothButtons() {
-            if (!Script.DrawNodeButtons) return;
-            // Custom tangent mode and Tangent node handle must be enabled.
-            if (Script.TangentMode != TangentMode.Custom) return;
-            if (!Script.DrawObjectPath) return;
-
-            // Get positions positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-
-            // Get style for add button.
-            var buttonStyle = Script.Skin.GetStyle(
-                "SmoothNodeButton");
-
-            // Draw add node buttons.
-            SceneHandles.DrawNodeButtons(
-                nodePositions,
-                Script.SettingsAsset.SmoothButtonOffsetH,
-                Script.SettingsAsset.SmoothButtonOffsetV,
-                DrawPathSmoothButtonsCallbackHandler,
-                buttonStyle);
-        }
-
-        private void HandleDrawingRotationPathSmoothButtons() {
-            if (!Script.DrawNodeButtons) return;
-            if ((Script.TangentMode != TangentMode.Custom)
-                || (Script.RotationMode != RotationMode.Custom)) return;
-
-            var nodePositions = Script.GetGlobalRotationPathPositions();
-
-            var buttonStyle = Script.Skin.GetStyle(
-                "SmoothNodeButton");
-
-            SceneHandles.DrawNodeButtons(
-                nodePositions,
-                Script.SettingsAsset.RotationSmoothButtonOffsetH,
-                Script.SettingsAsset.RotationSmoothButtonOffsetV,
-                DrawRotationPathSmoothButtonsCallbackHandler,
-                buttonStyle);
-        }
-
-        private void HandleDrawingRotationPathTangentHandles() {
-            // Don't draw when rotation path is disabled.
-            if (Script.RotationMode != RotationMode.Custom) return;
-            // Draw tangent handles only in custom tangent mode.
-            if (Script.TangentMode != TangentMode.Custom) return;
-            // Draw tangent handles only tangent node handle is selected.
-            if (Script.NodeHandle != NodeHandle.Tangent) return;
-
-            // Positions at which to draw tangent handles.
-            var nodes = Script.GetGlobalRotationPathPositions();
-
-            // Draw tangent handles.
-            SceneHandles.DrawTangentHandles(
-                nodes,
-                Script.RotationCurveColor,
-                Script.SettingsAsset.TangentHandleSize,
-                UpdateRotationPathTangents);
-        }
-
-        private string[] MultiplyTextIntoArray(
-            string text,
-            List<Vector3> globalNodePositions) {
-
-            var labelText = new string[globalNodePositions.Count];
-            for (var i = 0; i < globalNodePositions.Count; i++) {
-                labelText[i] = text;
-            }
-            return labelText;
-        }
-
         private void OnDisable() {
             // Disable Unity scene tool.
             SceneTool.RestoreTool();
@@ -438,6 +333,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 new GUIContent("Curve Color", ""));
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleDrawEaseCurve() {
+            if (Script.PathData == null) return;
+
+            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
+                new GUIContent(
+                    "Ease Curve",
+                    ""),
+                Script.PathData.EaseCurve);
         }
 
         private void DrawHandleModeDropdown() {
@@ -837,41 +742,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.ForwardPointOffsetMaxValue);
         }
 
-        private void HandleDrawUpdateAllToggle() {
-            var disable = (Script.HandleMode != HandleMode.Ease)
-                          && (Script.HandleMode != HandleMode.Tilting);
-
-            EditorGUI.BeginDisabledGroup(disable);
-
-            EditorGUIUtility.labelWidth = 65;
-
-            Script.UpdateAllMode = EditorGUILayout.Toggle(
-                new GUIContent(
-                    "Update All",
-                    "When checked, values will be changed for all nodes. " +
-                    "Default shortcut: P."),
-                Script.UpdateAllMode);
-
-            EditorGUIUtility.labelWidth = 0;
-
-            EditorGUI.EndDisabledGroup();
-        }
-
-        private void HandleModeChange() {
-            // If handle mode was changed to None..
-            if (Script.HandleMode == HandleMode.None) {
-                // Don't display update all values mode label.
-                Script.UpdateAllMode = false;
-            }
-            // Handle changed to ease or tilting.
-            else {
-                Script.PositionHandle = PositionHandle.Free;
-            }
-        }
-
-        #endregion
-
-        #region DRAWING HANDLERS
         private void HandleDrawMoveAllToggle() {
             var disabled = Script.NodeHandle != NodeHandle.Position;
 
@@ -891,14 +761,107 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             EditorGUI.EndDisabledGroup();
         }
 
-        private void HandleDrawEaseCurve() {
-            if (Script.PathData == null) return;
+        private void HandleDrawUpdateAllToggle() {
+            var disable = (Script.HandleMode != HandleMode.Ease)
+                          && (Script.HandleMode != HandleMode.Tilting);
 
-            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
+            EditorGUI.BeginDisabledGroup(disable);
+
+            EditorGUIUtility.labelWidth = 65;
+
+            Script.UpdateAllMode = EditorGUILayout.Toggle(
                 new GUIContent(
-                    "Ease Curve",
-                    ""),
-                Script.PathData.EaseCurve);
+                    "Update All",
+                    "When checked, values will be changed for all nodes. " +
+                    "Default shortcut: P."),
+                Script.UpdateAllMode);
+
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUI.EndDisabledGroup();
+        }
+        #endregion
+
+        #region SCENE VIEW DRAWING HANDLERS
+        private void HandleDrawingMoveAllModeLables() {
+            if (!Script.MoveAllMode) return;
+            if (!Script.DrawObjectPath) return;
+
+            // Get global node positions.
+            var globalNodePositions = Script.GetGlobalNodePositions();
+
+            // Create array with text to be displayed for each node.
+            var labelText = MultiplyTextIntoArray(
+                Script.SettingsAsset.MoveAllLabelText,
+                globalNodePositions);
+
+            SceneHandles.DrawUpdateAllLabels(
+                globalNodePositions,
+                labelText,
+                Script.SettingsAsset.MoveAllLabelOffsetX,
+                Script.SettingsAsset.MoveAllLabelOffsetY,
+                Script.SettingsAsset.DefaultLabelWidth,
+                Script.SettingsAsset.DefaultLabelHeight,
+                Script.Skin.GetStyle("MoveAllLabel"));
+        }
+
+        private void HandleDrawingRotationPathTangentHandles() {
+            // Don't draw when rotation path is disabled.
+            if (Script.RotationMode != RotationMode.Custom) return;
+            // Draw tangent handles only in custom tangent mode.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            // Draw tangent handles only tangent node handle is selected.
+            if (Script.NodeHandle != NodeHandle.Tangent) return;
+
+            // Positions at which to draw tangent handles.
+            var nodes = Script.GetGlobalRotationPathPositions();
+
+            // Draw tangent handles.
+            SceneHandles.DrawTangentHandles(
+                nodes,
+                Script.RotationCurveColor,
+                Script.SettingsAsset.TangentHandleSize,
+                UpdateRotationPathTangents);
+        }
+
+        private void HandleDrawingRotationPathSmoothButtons() {
+            if (!Script.DrawNodeButtons) return;
+            if ((Script.TangentMode != TangentMode.Custom)
+                || (Script.RotationMode != RotationMode.Custom)) return;
+
+            var nodePositions = Script.GetGlobalRotationPathPositions();
+
+            var buttonStyle = Script.Skin.GetStyle(
+                "SmoothNodeButton");
+
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.RotationSmoothButtonOffsetH,
+                Script.SettingsAsset.RotationSmoothButtonOffsetV,
+                DrawRotationPathSmoothButtonsCallbackHandler,
+                buttonStyle);
+        }
+
+        private void HandleDrawingPathSmoothButtons() {
+            if (!Script.DrawNodeButtons) return;
+            // Custom tangent mode and Tangent node handle must be enabled.
+            if (Script.TangentMode != TangentMode.Custom) return;
+            if (!Script.DrawObjectPath) return;
+
+            // Get positions positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+
+            // Get style for add button.
+            var buttonStyle = Script.Skin.GetStyle(
+                "SmoothNodeButton");
+
+            // Draw add node buttons.
+            SceneHandles.DrawNodeButtons(
+                nodePositions,
+                Script.SettingsAsset.SmoothButtonOffsetH,
+                Script.SettingsAsset.SmoothButtonOffsetV,
+                DrawPathSmoothButtonsCallbackHandler,
+                buttonStyle);
         }
 
         private void HandleDrawingObjectPathTangentHandles() {
@@ -940,19 +903,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 DrawSceneToolToggleButtonsCallbackHandler,
                 toggleButtonStyle);
         }
-
-
-        private List<Vector3> AddNodeButtonPositions() {
-            // Get node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove last node's position.
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-            return nodePositions;
-        }
-
         /// <summary>
         ///     Method responsible for drawing for each node Unity's default position handle.
         /// </summary>
+        // todo rename to HandleDrawDefaultPositionHandle.
         private void HandleDefaultPositionHandle() {
             if (positionHandle.enumValueIndex ==
                 (int) PositionHandle.Default) {
@@ -1213,20 +1167,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.SettingsAsset.DefaultLabelHeight,
                 Script.Skin.GetStyle("UpdateAllLabel"));
         }
-
-        private List<Vector3> RemoveNodeButtonPositions() {
-            // Node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme nodes.
-            // Extreme nodes can't be removed.
-            nodePositions.RemoveAt(0);
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-            return nodePositions;
-        }
-
         #endregion DRAWING HANDLERS
 
         #region CALLBACK HANDLERS
+        private void DrawRotationPathSmoothButtonsCallbackHandler(int nodeIndex) {
+            Undo.RecordObject(Script.PathData, "Smooth Rotation Path node.");
+
+            Script.PathData.SmoothRotationPathNodeTangents(nodeIndex);
+        }
+
+        private void DrawPathSmoothButtonsCallbackHandler(int nodeIndex) {
+            Undo.RecordObject(Script.PathData, "Smooth Path node.");
+
+            Script.PathData.SmoothAllPathNodeTangents(nodeIndex);
+        }
+
         private void DrawRotationModeDropdownCallbackHandler(
                     RotationMode prevRotationMode,
                     RotationMode currentRotationMode) {
@@ -1421,6 +1376,26 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion CALLBACK HANDLERS
 
         #region OTHER HANDLERS
+        // todo rename to HandleHandleModeChange.
+        private void HandleModeChange() {
+            // If handle mode was changed to None..
+            if (Script.HandleMode == HandleMode.None) {
+                // Don't display update all values mode label.
+                Script.UpdateAllMode = false;
+            }
+            // Handle changed to ease or tilting.
+            else {
+                Script.PositionHandle = PositionHandle.Free;
+            }
+        }
+
+        private void HandlePlayPauseButton() {
+            Utilities.InvokeMethodWithReflection(
+                Script,
+                "HandlePlayPause",
+                null);
+        }
+
         private void HandleRotationModeDropdownChange(
                     RotationMode prevRotationMode,
                     RotationMode currentRotationMode) {
@@ -1795,6 +1770,35 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #endregion
 
         #region METHODS
+        private string[] MultiplyTextIntoArray(
+                    string text,
+                    List<Vector3> globalNodePositions) {
+
+            var labelText = new string[globalNodePositions.Count];
+            for (var i = 0; i < globalNodePositions.Count; i++) {
+                labelText[i] = text;
+            }
+            return labelText;
+        }
+
+        private List<Vector3> RemoveNodeButtonPositions() {
+            // Node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme nodes.
+            // Extreme nodes can't be removed.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
+        }
+
+        private List<Vector3> AddNodeButtonPositions() {
+            // Get node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove last node's position.
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
+        }
+
         /// <summary>
         ///     Offset rotation path node tangents by given value.
         /// </summary>
@@ -2291,14 +2295,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 HandleModeChange();
             }
         }
-
-        private void HandlePlayPauseButton() {
-            Utilities.InvokeMethodWithReflection(
-                Script,
-                "HandlePlayPause",
-                null);
-        }
-
         private void HandlePlayPauseShortcut() {
             // Play/pause animation.
             if (Event.current.type == EventType.keyDown

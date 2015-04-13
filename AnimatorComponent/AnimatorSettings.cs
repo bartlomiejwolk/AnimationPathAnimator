@@ -1,11 +1,4 @@
-﻿/* 
- * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
- *
- * This file is part of the AnimationPath Animator Unity extension.
- * Licensed under the MIT license. See LICENSE file in the project root folder.
- */
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
 
@@ -27,6 +20,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { minNodeTimeSeparation = value; }
         }
 
+        public int PathLengthSampling {
+            get { return pathLengthSampling; }
+            set { pathLengthSampling = value; }
+        }
+
         #endregion
 
         #region SHORTCUT FIELDS
@@ -39,20 +37,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private KeyCode easeModeKey = KeyCode.U;
 
-        [SerializeField]
-        private KeyCode nodeHandleMode = KeyCode.Semicolon;
-
-        [SerializeField]
-        private KeyCode moveAllKey = KeyCode.M;
-
         /// <summary>
         ///     Key shortcut to jump to the end of the animation.
         /// </summary>
         [SerializeField]
         private KeyCode jumpToEndKey = KeyCode.L;
-
-        [SerializeField]
-        private KeyCode toggleButtons = KeyCode.P;
 
         [SerializeField]
         private KeyCode jumpToNextNodeKey = KeyCode.L;
@@ -73,6 +62,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private EventModifiers modKey = EventModifiers.Alt;
 
         [SerializeField]
+        private KeyCode moveAllKey = KeyCode.M;
+
+        [SerializeField]
+        private KeyCode nodeHandleMode = KeyCode.Semicolon;
+
+        [SerializeField]
         private KeyCode noneModeKey = KeyCode.Y;
 
         [SerializeField]
@@ -88,21 +83,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private KeyCode tiltingModeKey = KeyCode.I;
 
         [SerializeField]
+        private KeyCode toggleButtons = KeyCode.P;
+
+        [SerializeField]
         private KeyCode updateAllKey = KeyCode.O;
 
         #endregion
 
         #region SHORTCUT PROPERTIES
-        public KeyCode ToggleButtons {
-            get { return toggleButtons; }
-            set { toggleButtons = value; }
-        }
-
-        public KeyCode MoveAllKey {
-            get { return moveAllKey; }
-            set { moveAllKey = value; }
-        }
-
 
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
@@ -144,6 +132,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { modKey = value; }
         }
 
+        public KeyCode MoveAllKey {
+            get { return moveAllKey; }
+            set { moveAllKey = value; }
+        }
+
+        public KeyCode NodeHandleMode {
+            get { return nodeHandleMode; }
+            set { nodeHandleMode = value; }
+        }
+
         public KeyCode NoneModeKey {
             get { return noneModeKey; }
             set { noneModeKey = value; }
@@ -152,11 +150,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public KeyCode PlayModeModKey {
             get { return playModeModKey; }
             set { playModeModKey = value; }
-        }
-
-        public KeyCode NodeHandleMode {
-            get { return nodeHandleMode; }
-            set { nodeHandleMode = value; }
         }
 
         public KeyCode PlayPauseKey {
@@ -168,7 +161,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return positionHandleKey; }
             set { positionHandleKey = value; }
         }
-
 
         public KeyCode ShortJumpBackwardKey {
             get { return shortJumpBackwardKey; }
@@ -185,6 +177,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { tiltingModeKey = value; }
         }
 
+        public KeyCode ToggleButtons {
+            get { return toggleButtons; }
+            set { toggleButtons = value; }
+        }
+
         public KeyCode UpdateAllKey {
             get { return updateAllKey; }
             set { updateAllKey = value; }
@@ -194,16 +191,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region ANIMATOR FIELDS
 
-        [Header("Animator")]
-
+        /// <summary>
+        ///     Used to convert animation curve value to arc handle value.
+        /// </summary>
         [SerializeField]
+        private float animationSpeedDenominator = 0.05f;
+
+        [Header("Animator")]
+        [SerializeField]
+        // todo remove
         private int countdownToStopFramesNo = 10;
 
         [SerializeField]
-        private float forwardPointOffsetMinValue = 0.001f;
+        private float forwardPointOffsetMaxValue = 0.15f;
 
         [SerializeField]
-        private float forwardPointOffsetMaxValue = 0.15f;
+        private float forwardPointOffsetMinValue = 0.001f;
 
         /// <summary>
         ///     Holds references to icons that will be copied to Assets/Gizmos folder.
@@ -213,55 +216,44 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         private string gizmosSubfolder = "ATP/";
 
-        /// <summary>
-        /// Used to convert animation curve value to arc handle value.
-        /// </summary>
         [SerializeField]
-        private float animationSpeedDenominator = 0.05f;
+        private float maxPositionLerpSpeed = 1;
 
         [SerializeField]
         private float maxRotationSlerpSpeed = 20f;
 
         [SerializeField]
-        private float minRotationSlerpSpeed = 0.1f;
-
-        [SerializeField]
         private float minPositionLerpSpeed = 0.001f;
 
         [SerializeField]
-        private float maxPositionLerpSpeed = 1;
+        private float minRotationSlerpSpeed = 0.1f;
+
+        [SerializeField]
+        private string pathDataAssetDefaultName = "AnimationPath";
+
+        [SerializeField]
+        private float shortJumpMaxValue = 0.004f;
+
+        [SerializeField]
+        private float shortJumpMinValue = 0.0001f;
+
         #endregion
 
         #region ANIMATOR PROPERTIES
-        public float ForwardPointOffsetMaxValue {
-            get { return forwardPointOffsetMaxValue; }
-            set { forwardPointOffsetMaxValue = value; }
-        }
 
-        public float MinPositionLerpSpeed {
-            get { return minPositionLerpSpeed; }
-            set { minPositionLerpSpeed = value; }
+        public float AnimationSpeedDenominator {
+            get { return animationSpeedDenominator; }
+            set { animationSpeedDenominator = value; }
         }
-
-        public float MaxPositionLerpSpeed {
-            get { return maxPositionLerpSpeed; }
-            set { maxPositionLerpSpeed = value; }
-        }
-
-        public float MinRotationSlerpSpeed {
-            get { return minRotationSlerpSpeed; }
-            set { minRotationSlerpSpeed = value; }
-        }
-
-        public float MaxRotationSlerpSpeed {
-            get { return maxRotationSlerpSpeed; }
-            set { maxRotationSlerpSpeed = value; }
-        }
-
 
         public int CountdownToStopFramesNo {
             get { return countdownToStopFramesNo; }
             set { countdownToStopFramesNo = value; }
+        }
+
+        public float ForwardPointOffsetMaxValue {
+            get { return forwardPointOffsetMaxValue; }
+            set { forwardPointOffsetMaxValue = value; }
         }
 
         public float ForwardPointOffsetMinValue {
@@ -279,25 +271,31 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { gizmosSubfolder = value; }
         }
 
-        public float AnimationSpeedDenominator {
-            get { return animationSpeedDenominator; }
-            set { animationSpeedDenominator = value; }
+        public float MaxPositionLerpSpeed {
+            get { return maxPositionLerpSpeed; }
+            set { maxPositionLerpSpeed = value; }
         }
 
-        #endregion
+        public float MaxRotationSlerpSpeed {
+            get { return maxRotationSlerpSpeed; }
+            set { maxRotationSlerpSpeed = value; }
+        }
 
-        #region INSPECTOR FIELDS
-        [SerializeField]
-        private string pathDataAssetDefaultName = "AnimationPath";
+        public float MinPositionLerpSpeed {
+            get { return minPositionLerpSpeed; }
+            set { minPositionLerpSpeed = value; }
+        }
 
-        [SerializeField]
-        private float shortJumpMinValue = 0.0001f;
+        public float MinRotationSlerpSpeed {
+            get { return minRotationSlerpSpeed; }
+            set { minRotationSlerpSpeed = value; }
+        }
 
-        [SerializeField]
-        private float shortJumpMaxValue = 0.004f;
+        public string PathDataAssetDefaultName {
+            get { return pathDataAssetDefaultName; }
+            set { pathDataAssetDefaultName = value; }
+        }
 
-        #endregion
-        #region INSPECTOR PROPERTIES
         public float ShortJumpMaxValue {
             get { return shortJumpMaxValue; }
             set { shortJumpMaxValue = value; }
@@ -308,10 +306,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { shortJumpMinValue = value; }
         }
 
-        public string PathDataAssetDefaultName {
-            get { return pathDataAssetDefaultName; }
-            set { pathDataAssetDefaultName = value; }
-        }
         #endregion
 
         #region GIZMO FIELDS
@@ -373,32 +367,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region HANDLES FIELDS
 
-        [Header("Handles")]
-
-        [SerializeField]
-        private float tangentHandleSize = 0.25f;
-
-        [SerializeField]
-        private int sceneToolToggleOffsetH = 53;
-
-        [SerializeField]
-        private int smoothButtonOffsetH = 72;
-
-        [SerializeField]
-        private int rotationSmoothButtonOffsetH = 15;
-
-        [SerializeField]
-        private int smoothButtonOffsetV = 5;
-
-        [SerializeField]
-        private int rotationSmoothButtonOffsetV = 5;
-
-        [SerializeField]
-        private int sceneToolToggleOffsetV = 5;
-
         [SerializeField]
         private int addButtonOffsetH = 15;
-
 
         [SerializeField]
         private int addButtonOffsetV = 5;
@@ -417,10 +387,24 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         [SerializeField]
         private int easeValueLabelOffsetX = -20;
+
         [SerializeField]
         private int easeValueLabelOffsetY = -25;
+
         [SerializeField]
         private float initialEaseArcValue = 5f;
+
+        [SerializeField]
+        private float initialTiltingArcValue = 5f;
+
+        [SerializeField]
+        private int moveAllLabelOffsetX = -50;
+
+        [SerializeField]
+        private int moveAllLabelOffsetY = -10;
+
+        [SerializeField]
+        private string moveAllLabelText = "MA";
 
         [SerializeField]
         private float movementHandleSize = 0.12f;
@@ -438,25 +422,41 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float rotationHandleSize = 0.26f;
 
         [SerializeField]
+        private int rotationSmoothButtonOffsetH = 15;
+
+        [SerializeField]
+        private int rotationSmoothButtonOffsetV = 5;
+
+        [SerializeField]
         private float scaleHandleSize = 1.5f;
 
         [SerializeField]
-        private int updateAllLabelOffsetX = -50;
+        private int sceneToolToggleOffsetH = 53;
+
         [SerializeField]
-        private int moveAllLabelOffsetX = -50;
+        private int sceneToolToggleOffsetV = 5;
+
         [SerializeField]
-        private int updateAllLabelOffsetY = -25;
+        private int smoothButtonOffsetH = 72;
+
         [SerializeField]
-        private int moveAllLabelOffsetY = -10;
+        private int smoothButtonOffsetV = 5;
+
+        [Header("Handles")]
         [SerializeField]
-        private string updateAllLabelText = "UA";
-        [SerializeField]
-        private string moveAllLabelText = "MA";
-        [SerializeField]
-        private float initialTiltingArcValue = 5f;
+        private float tangentHandleSize = 0.25f;
 
         [SerializeField]
         private float tiltingValueMultiplierDenominator = 1;
+
+        [SerializeField]
+        private int updateAllLabelOffsetX = -50;
+
+        [SerializeField]
+        private int updateAllLabelOffsetY = -25;
+
+        [SerializeField]
+        private string updateAllLabelText = "UA";
 
         #endregion
 
@@ -512,6 +512,21 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { initialTiltingArcValue = value; }
         }
 
+        public int MoveAllLabelOffsetX {
+            get { return moveAllLabelOffsetX; }
+            set { moveAllLabelOffsetX = value; }
+        }
+
+        public int MoveAllLabelOffsetY {
+            get { return moveAllLabelOffsetY; }
+            set { moveAllLabelOffsetY = value; }
+        }
+
+        public string MoveAllLabelText {
+            get { return moveAllLabelText; }
+            set { moveAllLabelText = value; }
+        }
+
         public Color MoveAllModeColor {
             get { return Color.red; }
         }
@@ -545,9 +560,55 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { rotationHandleSize = value; }
         }
 
+        /// <summary>
+        ///     Horizontal offset for rotation path on-scene smooth button.
+        /// </summary>
+        public int RotationSmoothButtonOffsetH {
+            get { return rotationSmoothButtonOffsetH; }
+            set { rotationSmoothButtonOffsetH = value; }
+        }
+
+        /// <summary>
+        ///     Vertical offset for rotation path on-scene smooth button.
+        /// </summary>
+        public int RotationSmoothButtonOffsetV {
+            get { return rotationSmoothButtonOffsetV; }
+            set { rotationSmoothButtonOffsetV = value; }
+        }
+
         public float ScaleHandleSize {
             get { return scaleHandleSize; }
             set { scaleHandleSize = value; }
+        }
+
+        public int SceneToolToggleOffsetH {
+            get { return sceneToolToggleOffsetH; }
+            set { sceneToolToggleOffsetH = value; }
+        }
+
+        public int SceneToolToggleOffsetV {
+            get { return sceneToolToggleOffsetV; }
+            set { sceneToolToggleOffsetV = value; }
+        }
+
+        public int SmoothButtonOffsetH {
+            get { return smoothButtonOffsetH; }
+            set { smoothButtonOffsetH = value; }
+        }
+
+        public int SmoothButtonOffsetV {
+            get { return smoothButtonOffsetV; }
+            set { smoothButtonOffsetV = value; }
+        }
+
+        public float TangentHandleSize {
+            get { return tangentHandleSize; }
+            set { tangentHandleSize = value; }
+        }
+
+        public float TiltingValueMultiplierDenominator {
+            get { return tiltingValueMultiplierDenominator; }
+            set { tiltingValueMultiplierDenominator = value; }
         }
 
         public int UpdateAllLabelOffsetX {
@@ -564,73 +625,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
-
-        public float TiltingValueMultiplierDenominator {
-            get { return tiltingValueMultiplierDenominator; }
-            set { tiltingValueMultiplierDenominator = value; }
-        }
-
-        public int SceneToolToggleOffsetH {
-            get { return sceneToolToggleOffsetH; }
-            set { sceneToolToggleOffsetH = value; }
-        }
-
-        public int SceneToolToggleOffsetV {
-            get { return sceneToolToggleOffsetV; }
-            set { sceneToolToggleOffsetV = value; }
-        }
-
-        public float TangentHandleSize {
-            get { return tangentHandleSize; }
-            set { tangentHandleSize = value; }
-        }
-
-        public string MoveAllLabelText {
-            get { return moveAllLabelText; }
-            set { moveAllLabelText = value; }
-        }
-
-        public int MoveAllLabelOffsetX {
-            get { return moveAllLabelOffsetX; }
-            set { moveAllLabelOffsetX = value; }
-        }
-
-        public int MoveAllLabelOffsetY {
-            get { return moveAllLabelOffsetY; }
-            set { moveAllLabelOffsetY = value; }
-        }
-
-        public int PathLengthSampling {
-            get { return pathLengthSampling; }
-            set { pathLengthSampling = value; }
-        }
-
-        public int SmoothButtonOffsetV {
-            get { return smoothButtonOffsetV; }
-            set { smoothButtonOffsetV = value; }
-        }
-
-        public int SmoothButtonOffsetH {
-            get { return smoothButtonOffsetH; }
-            set { smoothButtonOffsetH = value; }
-        }
-
-        /// <summary>
-        /// Horizontal offset for rotation path on-scene smooth button.
-        /// </summary>
-        public int RotationSmoothButtonOffsetH {
-            get { return rotationSmoothButtonOffsetH; }
-            set { rotationSmoothButtonOffsetH = value; }
-        }
-
-        /// <summary>
-        /// Vertical offset for rotation path on-scene smooth button.
-        /// </summary>
-        public int RotationSmoothButtonOffsetV {
-            get { return rotationSmoothButtonOffsetV; }
-            set { rotationSmoothButtonOffsetV = value; }
-        }
-
 
         #endregion
     }

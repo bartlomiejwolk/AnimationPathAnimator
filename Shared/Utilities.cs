@@ -7,9 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace ATP.AnimationPathTools {
 

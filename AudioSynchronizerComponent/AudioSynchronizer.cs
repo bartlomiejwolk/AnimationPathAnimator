@@ -3,8 +3,6 @@
 // This file is part of the AnimationPath Animator Unity extension.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
-#if UNITY_EDITOR
-
 using System;
 using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
@@ -182,5 +180,3 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
     }
 
 }
-
-#endif

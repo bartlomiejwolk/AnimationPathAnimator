@@ -16,47 +16,40 @@ MonoBehaviour:
   playModeModKey: 307
   positionHandleKey: 103
   easeModeKey: 117
-  nodeHandleMode: 59
-  moveAllKey: 109
   jumpToEndKey: 108
-  toggleButtons: 112
   jumpToNextNodeKey: 108
   jumpToPreviousNodeKey: 104
   jumpToStartKey: 104
   longJumpBackwardKey: 106
   longJumpForwardKey: 107
   modKey: 4
+  moveAllKey: 109
+  nodeHandleMode: 59
   noneModeKey: 121
   playPauseKey: 32
   shortJumpBackwardKey: 106
   shortJumpForwardKey: 107
   tiltingModeKey: 105
+  toggleButtons: 112
   updateAllKey: 111
-  countdownToStopFramesNo: 10
-  forwardPointOffsetMinValue: .00100000005
-  forwardPointOffsetMaxValue: .150000006
-  gizmoIcons: []
   animationSpeedDenominator: .0500000007
-  maxRotationSlerpSpeed: 20
-  minRotationSlerpSpeed: .100000001
-  minPositionLerpSpeed: .00100000005
+  countdownToStopFramesNo: 10
+  forwardPointOffsetMaxValue: .150000006
+  forwardPointOffsetMinValue: .00100000005
+  gizmoIcons: []
   maxPositionLerpSpeed: 1
+  maxRotationSlerpSpeed: 20
+  minPositionLerpSpeed: .00100000005
+  minRotationSlerpSpeed: .100000001
   pathDataAssetDefaultName: AnimationPath
-  shortJumpMinValue: 9.99999975e-05
   shortJumpMaxValue: .00400000019
+  shortJumpMinValue: 9.99999975e-05
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   objectCurveSampling: 5
   rotationCurveSampling: 5
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
-  tangentHandleSize: .25
-  sceneToolToggleOffsetH: 53
-  smoothButtonOffsetH: 72
-  rotationSmoothButtonOffsetH: 15
-  smoothButtonOffsetV: 5
-  rotationSmoothButtonOffsetV: 5
-  sceneToolToggleOffsetV: 5
   addButtonOffsetH: 15
   addButtonOffsetV: 5
   arcHandleRadius: .600000024
@@ -66,17 +59,24 @@ MonoBehaviour:
   easeValueLabelOffsetX: -20
   easeValueLabelOffsetY: -25
   initialEaseArcValue: 5
+  initialTiltingArcValue: 5
+  moveAllLabelOffsetX: -50
+  moveAllLabelOffsetY: -10
+  moveAllLabelText: MA
   movementHandleSize: .119999997
   removeButtonH: 34
   removeButtonV: 5
   rotationHandleColor: {r: 1, g: 0, b: 1, a: 1}
   rotationHandleSize: .25999999
+  rotationSmoothButtonOffsetH: 15
+  rotationSmoothButtonOffsetV: 5
   scaleHandleSize: 1.5
-  updateAllLabelOffsetX: -50
-  moveAllLabelOffsetX: -50
-  updateAllLabelOffsetY: -25
-  moveAllLabelOffsetY: -10
-  updateAllLabelText: UA
-  moveAllLabelText: MA
-  initialTiltingArcValue: 5
+  sceneToolToggleOffsetH: 53
+  sceneToolToggleOffsetV: 5
+  smoothButtonOffsetH: 72
+  smoothButtonOffsetV: 5
+  tangentHandleSize: .25
   tiltingValueMultiplierDenominator: 1
+  updateAllLabelOffsetX: -50
+  updateAllLabelOffsetY: -25
+  updateAllLabelText: UA

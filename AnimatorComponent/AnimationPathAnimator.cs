@@ -1,4 +1,9 @@
-﻿using System;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,8 +22,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             float timestamp);
 
         /// <summary>
-        ///     Event fired when animation time reaches 1.
-        ///     Stoping animation manually won't fire this event.
+        ///     Event fired when animation time reaches 1. Stoping animation
+        ///     manually won't fire this event.
         /// </summary>
         public event EventHandler AnimationEnded;
 
@@ -43,34 +48,38 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler AnimationStopped;
 
         /// <summary>
-        ///     Event called right after animation jump backward to the previous node.
+        ///     Event called right after animation jump backward to the previous
+        ///     node.
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> JumpedToNode;
 
         /// <summary>
-        ///     Event called when animated object passes a node.
-        ///     It'll be called when anim. go is positioned before a node in one frame
-        ///     It'll be called also when animation starts and timestamp is equal to any node.
-        ///     and after in the next one.
+        ///     Event called when animated object passes a node. It'll be called
+        ///     when anim. go is positioned before a node in one frame It'll be
+        ///     called also when animation starts and timestamp is equal to any
+        ///     node. and after in the next one.
         /// </summary>
         public event EventHandler<NodeReachedEventArgs> NodeReached;
 
         /// <summary>
-        ///     Event fired every time path data inspector field is changed or set to null.
+        ///     Event fired every time path data inspector field is changed or set
+        ///     to null.
         /// </summary>
         public event EventHandler PathDataRefChanged;
 
         /// <summary>
-        ///     Event called from Editor after ValidateCommand of type UndoRedoPerformed was executed.
+        ///     Event called from Editor after ValidateCommand of type
+        ///     UndoRedoPerformed was executed.
         /// </summary>
         public event EventHandler UndoRedoPerformed;
 
-        #endregion
+        #endregion EVENTS
 
         #region FIELDS
 
         /// <summary>
-        ///     Whether inspector advanced settings foldout should be open or folded.
+        ///     Whether inspector advanced settings foldout should be open or
+        ///     folded.
         /// </summary>
         [SerializeField]
         private bool advancedSettingsFoldout;
@@ -120,7 +129,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private Transform targetGO;
 
-        #endregion OPTIONS
+        #endregion FIELDS
 
         #region PROPERTIES
 
@@ -132,7 +141,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Percentage of the overall animation progress. 0.5 means position in the middle of the path.
+        ///     Percentage of the overall animation progress. 0.5 means position in
+        ///     the middle of the path.
         /// </summary>
         public float AnimationTime {
             get { return animationTime; }
@@ -160,8 +170,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Whether to update animated object positon, rotation and tilting. It's executed independent from animation time,
-        ///     so animated object can be updated even if animator is stopped or paused.
+        ///     Whether to update animated object positon, rotation and tilting.
+        ///     It's executed independent from animation time, so animated object
+        ///     can be updated even if animator is stopped or paused.
         /// </summary>
         public bool AnimGOUpdateEnabled {
             get { return animGOUpdateEnabled; }
@@ -234,7 +245,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private bool autoPlay;
 
         /// <summary>
-        ///     If autoplay is enabled, this is delay before animation starts playing.
+        ///     If autoplay is enabled, this is delay before animation starts
+        ///     playing.
         /// </summary>
         [SerializeField]
         private float autoPlayDelay;
@@ -287,7 +299,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private AnimatorWrapMode wrapMode = AnimatorWrapMode.Clamp;
 
-        #endregion
+        #endregion INSPECTOR SETTINGS
 
         #region INSPECTOR SETTINGS PROPERTIES
 
@@ -297,7 +309,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     If autoplay is enabled, this is delay before animation starts playing.
+        ///     If autoplay is enabled, this is delay before animation starts
+        ///     playing.
         /// </summary>
         public float AutoPlayDelay {
             get { return autoPlayDelay; }
@@ -440,7 +453,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { wrapMode = value; }
         }
 
-        #endregion
+        #endregion INSPECTOR SETTINGS PROPERTIES
 
         #region UNITY MESSAGES
 
@@ -546,7 +559,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        #endregion
+        #endregion EVENT INVOCATORS
 
         #region EVENT HANDLERS
 
@@ -594,7 +607,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleUpdateAnimGOInSceneView();
         }
 
-        #endregion
+        #endregion EVENT HANDLERS
 
         #region GET METHODS
 
@@ -619,7 +632,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Returns global node positions.
         /// </summary>
-        /// <param name="nodesNo">Number of nodes to return, starting from index 0.</param>
+        /// <param name="nodesNo">
+        ///     Number of nodes to return, starting from index 0.
+        /// </param>
         /// <returns>Global node positions.</returns>
         public List<Vector3> GetGlobalNodePositions(int nodesNo = -1) {
             var nodePositions = PathData.GetNodePositions(nodesNo);
@@ -672,8 +687,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <returns>Local forward point position.</returns>
         private Vector3 CalculateLocalForwardPointPosition() {
-            // Timestamp offset of the forward point.
-            // Forward point timestamp.
+            // Timestamp offset of the forward point. Forward point timestamp.
             var forwardPointTimestamp = AnimationTime + ForwardPointOffset;
             var localPosition = PathData.GetVectorAtTime(forwardPointTimestamp);
 
@@ -693,7 +707,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Returns timestamp of a node which timestamp is closest to and bigger than the current animation time.
+        ///     Returns timestamp of a node which timestamp is closest to and
+        ///     bigger than the current animation time.
         /// </summary>
         /// <returns>Node timestamp.</returns>
         private float GetNearestBackwardNodeTimestamp() {
@@ -711,7 +726,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Returns timestamp of a node which timestamp is closest to and bigger than the current animation time.
+        ///     Returns timestamp of a node which timestamp is closest to and
+        ///     bigger than the current animation time.
         /// </summary>
         /// <returns>Node timestamp.</returns>
         private float GetNearestForwardNodeTimestamp() {
@@ -752,7 +768,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return false;
         }
 
-        #endregion
+        #endregion GET METHODS
 
         #region EDIT METHODS
 
@@ -760,7 +776,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Pauses animation.
         /// </summary>
         public void Pause() {
-            //Pause = true;
             IsPlaying = false;
 
             OnAnimationPaused();
@@ -843,7 +858,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Unpauses animation.
         /// </summary>
         public void Unpause() {
-            //Pause = false;
             if (IsPlaying == false && DuringPlayback) {
                 IsPlaying = true;
             }
@@ -857,7 +871,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private bool AnimateAnimatedGOPosition() {
             if (AnimatedGO == null) return false;
 
-            // Local position that the animated object should be at in this frame.
+            // Local position that the animated object should be at in this
+            // frame.
             var localPosAtTime =
                 PathData.GetVectorAtTime(AnimationTime);
 
@@ -943,12 +958,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Method responsible for updating animated GO position, rotation and tilting in play mode during playback.
+        ///     Method responsible for updating animated GO position, rotation and
+        ///     tilting in play mode during playback.
         /// </summary>
         private void HandleAnimateAnimatedGO() {
-            // Return if not in play mode.
             if (!Application.isPlaying) return;
-            // Return if anim. GO update is disabled.
             if (!AnimGOUpdateEnabled) return;
 
             // Animate animated GO.
@@ -966,7 +980,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Decided what to at the end of animation when Clamp mode is selected.
+        ///     Decided what to at the end of animation when Clamp mode is
+        ///     selected.
         /// </summary>
         private void HandleClampWrapMode() {
             if (AnimationTime > 1
@@ -975,7 +990,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 AnimationTime = 1;
                 IsPlaying = false;
 
-                // Fire event.
                 OnAnimationEnded();
             }
         }
@@ -1046,21 +1060,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Action taken when Play/Pause shortcut is pressed.
-        ///     Use in play mode.
+        ///     Action taken when Play/Pause shortcut is pressed. Use in play mode.
         /// </summary>
         private void HandlePlayPause() {
             if (!Application.isPlaying) return;
 
-            // Animation is playing and unpaused.
             if (IsPlaying) {
                 Pause();
             }
-            // Animation is playing but paused.
             else if (!IsPlaying && DuringPlayback) {
                 Unpause();
             }
-            // Animation ended.
             else if (!IsPlaying && AnimationTime >= 1) {
                 AnimationTime = 0;
                 Play();
@@ -1104,12 +1114,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Update animated GO position, rotation and tilting accordingly to current
-        ///     animation time.
+        ///     Update animated GO position, rotation and tilting accordingly to
+        ///     current animation time.
         /// </summary>
-        /// <remarks>
-        ///     Used to update animated GO with keys.
-        /// </remarks>
+        /// <remarks>Used to update animated GO with keys.</remarks>
         private void HandleUpdateAnimGOInSceneView() {
             if (!RequiredAssetsLoaded()) return;
             if (AnimatedGO == null) return;
@@ -1122,7 +1130,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Loads asset files from component folder, that are required for the component to run.
+        ///     Loads asset files from component folder, that are required for the
+        ///     component to run.
         /// </summary>
         private void LoadRequiredAssets() {
             if (settingsAsset == null) {
@@ -1214,7 +1223,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Updates animated game object position accordingly to current animation time.
+        ///     Updates animated game object position accordingly to current
+        ///     animation time.
         /// </summary>
         private void UpdateAnimatedGOPosition() {
             // Get animated GO position at current animation time.
@@ -1229,7 +1239,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Updates animated game object rotation accordingly to current animation time.
+        ///     Updates animated game object rotation accordingly to current
+        ///     animation time.
         /// </summary>
         private void UpdateAnimatedGORotation() {
             if (AnimatedGO == null) return;
@@ -1280,7 +1291,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        #endregion
+        #endregion EDIT METHODS
 
         #region DO METHODS
 
@@ -1341,7 +1352,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 animationTime);
             var args = new NodeReachedEventArgs(nodeIndex, animationTime);
 
-            // Fire event.
             OnJumpedToNode(args);
         }
 
@@ -1350,8 +1360,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     This method is responsible for firing <c>NodeReached</c> event.
-        ///     Use in play mode only.
+        ///     This method is responsible for firing <c>NodeReached</c> event. Use
+        ///     in play mode only.
         /// </summary>
         private void HandleFireNodeReachedEvent() {
             // Get path timestamps.
@@ -1363,9 +1373,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 if (PrevAnimationTime < nodeTimestamps[i]
                     && AnimationTime >= nodeTimestamps[i]) {
 
-                    // Create event args.
-                    var args = new NodeReachedEventArgs(i, AnimationTime);
                     // Fire event.
+                    var args = new NodeReachedEventArgs(i, AnimationTime);
                     OnNodeReached(args);
                 }
             }
@@ -1375,7 +1384,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Used at animation start to fire <c>NodeReached </c> event for the first node.
+        ///     Used at animation start to fire <c>NodeReached</c> event for the
+        ///     first node.
         /// </summary>
         private void HandleFireNodeReachedEventForStartingNode() {
             if (PathData == null) return;
@@ -1391,8 +1401,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Method responsible for firing <c>AnimationStarted</c> event.
-        ///     Use in play mode only.
+        ///     Method responsible for firing <c>AnimationStarted</c> event. Use in
+        ///     play mode only.
         /// </summary>
         private void HandleFireOnAnimationStartedEvent() {
             if (AnimationTime == 0) OnAnimationStarted();
@@ -1452,7 +1462,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             PathData.NodeRemoved -= PathData_NodeRemoved;
         }
 
-        #endregion
+        #endregion DO METHODS
 
         #region SHORTCUTS
 
@@ -1487,7 +1497,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void HandleLongJumpBackwardShortcut() {
-            // Long jump backward. 
+            // Long jump backward.
             if (Input.GetKeyDown(SettingsAsset.LongJumpBackwardKey)) {
                 AnimationTime -= LongJumpValue;
             }
@@ -1508,7 +1518,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Method responsible for detecting all shortcuts pressed in play mode.
+        ///     Method responsible for detecting all shortcuts pressed in play
+        ///     mode.
         /// </summary>
         private void HandleShortcuts() {
             if (!EnableControlsInPlayMode) return;
@@ -1521,7 +1532,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             HandleJumpToBeginningShortcut();
         }
 
-        #endregion
+        #endregion SHORTCUTS
 
         #region GIZMOS
 
@@ -1529,7 +1540,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Draw animated object path gizmo curve.
         /// </summary>
         private void DrawAnimationCurve() {
-            // Return if path asset is not assigned.
             if (pathData == null) return;
             if (!DrawObjectPath) return;
 
@@ -1689,7 +1699,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        #endregion
+        #endregion GIZMOS
     }
 
 }

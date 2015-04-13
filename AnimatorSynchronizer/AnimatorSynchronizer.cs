@@ -23,8 +23,6 @@ namespace AnimationPathTools.AnimatorSynchronizerComponent {
         [SerializeField]
         private List<AnimationPathAnimator> targetComponents;
 
-        private List<Dictionary<int, float>> nodeTimestamps;
-
         #endregion
 
         #region PROPERTIES
@@ -41,10 +39,7 @@ namespace AnimationPathTools.AnimatorSynchronizerComponent {
             get { return targetComponents; }
         }
 
-        private List<Dictionary<int, float>> NodeTimestamps {
-            get { return nodeTimestamps; }
-            set { nodeTimestamps = value; }
-        }
+        private List<Dictionary<int, float>> NodeTimestamps { get; set; }
 
         #endregion
 

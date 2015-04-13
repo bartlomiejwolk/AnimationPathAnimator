@@ -15,7 +15,6 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
         private SerializedProperty audioSource;
         private SerializedProperty autoPlay;
         private SerializedProperty autoPlayDelay;
-        private AudioSynchronizer Script { get; set; }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
@@ -57,27 +56,11 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandlePlayPauseShortcut() {
-            if (Event.current.type == EventType.KeyDown
-                && Event.current.keyCode == AudioSynchronizer.PlayPauseKey) {
-
-                Utilities.InvokeMethodWithReflection(
-                    Script,
-                    "HandlePlayPause",
-                    null);
-            }
-        }
-
         private void OnEnable() {
-            Script = (AudioSynchronizer) target;
-
             audioSource = serializedObject.FindProperty("audioSource");
             animator = serializedObject.FindProperty("animator");
             autoPlay = serializedObject.FindProperty("autoPlay");
             autoPlayDelay = serializedObject.FindProperty("autoPlayDelay");
-        }
-
-        private void OnSceneGUI() {
         }
 
     }

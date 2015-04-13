@@ -37,8 +37,6 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
         [SerializeField]
         private float autoPlayDelay;
 
-        private Dictionary<int, float> audioNodeTimestamps;
-
         /// <summary>
         ///     Shortcut for play/pause.
         /// </summary>
@@ -67,10 +65,7 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
         /// <summary>
         ///     Collection of node indexes and corresponding audio timestamps.
         /// </summary>
-        public Dictionary<int, float> AudioNodeTimestamps {
-            get { return audioNodeTimestamps; }
-            set { audioNodeTimestamps = value; }
-        }
+        public Dictionary<int, float> AudioNodeTimestamps { get; set; }
 
         public bool AutoPlay {
             get { return autoPlay; }

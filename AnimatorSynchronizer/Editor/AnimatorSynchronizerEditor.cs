@@ -28,7 +28,8 @@ namespace AnimationPathTools.AnimatorSynchronizerComponent {
                         "Animator",
                         ""),
                     Script.Animator,
-                    typeof (AnimationPathAnimator));
+                    typeof (AnimationPathAnimator),
+                    true);
         }
 
         private void DrawTargetAnimatorComponentList() {

@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
+using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
 
@@ -11,9 +16,9 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private int pathLengthSampling = 40;
 
-        #endregion
+        #endregion ADVANCED FIELDS
 
-        #region ADVANCED PROPERTIES 
+        #region ADVANCED PROPERTIES
 
         public float MinNodeTimeSeparation {
             get { return minNodeTimeSeparation; }
@@ -25,7 +30,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { pathLengthSampling = value; }
         }
 
-        #endregion
+        #endregion ADVANCED PROPERTIES
 
         #region SHORTCUT FIELDS
 
@@ -88,7 +93,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private KeyCode updateAllKey = KeyCode.O;
 
-        #endregion
+        #endregion SHORTCUT FIELDS
 
         #region SHORTCUT PROPERTIES
 
@@ -187,7 +192,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { updateAllKey = value; }
         }
 
-        #endregion
+        #endregion SHORTCUT PROPERTIES
 
         #region ANIMATOR FIELDS
 
@@ -209,7 +214,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private float forwardPointOffsetMinValue = 0.001f;
 
         /// <summary>
-        ///     Holds references to icons that will be copied to Assets/Gizmos folder.
+        ///     Holds references to icons that will be copied to Assets/Gizmos
+        ///     folder.
         /// </summary>
         [SerializeField]
         private Texture[] gizmoIcons;
@@ -237,7 +243,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float shortJumpMinValue = 0.0001f;
 
-        #endregion
+        #endregion ANIMATOR FIELDS
 
         #region ANIMATOR PROPERTIES
 
@@ -306,7 +312,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { shortJumpMinValue = value; }
         }
 
-        #endregion
+        #endregion ANIMATOR PROPERTIES
 
         #region GIZMO FIELDS
 
@@ -329,7 +335,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private string targetGizmoIcon = "target_22x22-blue";
 
-        #endregion
+        #endregion GIZMO FIELDS
 
         #region GIZMO PROPERTIES
 
@@ -363,7 +369,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { targetGizmoIcon = value; }
         }
 
-        #endregion
+        #endregion GIZMO PROPERTIES
 
         #region HANDLES FIELDS
 
@@ -458,7 +464,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private string updateAllLabelText = "UA";
 
-        #endregion
+        #endregion HANDLES FIELDS
 
         #region HANDLES PROPERTIES
 
@@ -626,7 +632,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             set { updateAllLabelText = value; }
         }
 
-        #endregion
+        #endregion HANDLES PROPERTIES
     }
 
 }

@@ -402,13 +402,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
         private void DrawPlayerControls() {
             // Play/Pause button text.
-            string playPauseBtnText;
-            if (!Script.IsPlaying) {
-                playPauseBtnText = "Play";
-            }
-            else {
-                playPauseBtnText = "Pause";
-            }
+            var playPauseBtnText = !Script.IsPlaying ? "Play" : "Pause";
 
             EditorGUILayout.BeginHorizontal();
 
@@ -1558,12 +1552,6 @@ namespace AnimationPathTools.AnimatorComponent {
                 null);
         }
 
-        private void HandleRotationModeDropdownChange(
-            RotationMode prevRotationMode,
-            RotationMode currentRotationMode) {
-
-        }
-
         /// <summary>
         ///     Method responsible for applying smooth to rotation path node
         ///     tangents.
@@ -2182,15 +2170,11 @@ namespace AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToNextNodeKey) {
 
-                var prevAnimationTime = Script.AnimationTime;
-
                 Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestForwardNodeTimestamp",
                         null);
-
-                var deltaTime = Script.AnimationTime - prevAnimationTime;
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -2206,15 +2190,11 @@ namespace AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.JumpToPreviousNodeKey) {
 
-                var prevAnimationTime = Script.AnimationTime;
-
                 Script.AnimationTime =
                     (float) Utilities.InvokeMethodWithReflection(
                         Script,
                         "GetNearestBackwardNodeTimestamp",
                         null);
-
-                var deltaTime = Script.AnimationTime - prevAnimationTime;
 
                 // Call JumpedToNode event.
                 Utilities.InvokeMethodWithReflection(
@@ -2325,16 +2305,9 @@ namespace AnimationPathTools.AnimatorComponent {
                 && Event.current.keyCode
                 == Script.SettingsAsset.PositionHandleKey) {
 
-                // Change to Position mode.
-                if (Script.PositionHandle == PositionHandle.Free) {
-                    Script.PositionHandle =
-                        PositionHandle.Default;
-                }
-                // Change to Free mode.
-                else {
-                    Script.PositionHandle =
-                        PositionHandle.Free;
-                }
+                // Update position handle.
+                Script.PositionHandle = Script.PositionHandle == PositionHandle.Free
+                    ? PositionHandle.Default : PositionHandle.Free;
             }
         }
 

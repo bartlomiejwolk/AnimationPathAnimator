@@ -26,12 +26,6 @@ namespace AnimationPathTools.AnimatorComponent {
         /// </summary>
         private AnimationPathAnimator Script { get; set; }
 
-        /// <summary>
-        ///     Is true when serialized properties are initialized.
-        /// </summary>
-        // todo remove
-        private bool SerializedPropertiesInitialized { get; set; }
-
         #endregion PROPERTIES
 
         #region SERIALIZED PROPERTIES
@@ -63,9 +57,6 @@ namespace AnimationPathTools.AnimatorComponent {
 
                 return;
             }
-
-            // Check if serialized properties are initialized.
-            if (!SerializedPropertiesInitialized) return;
 
             HandleUndoEvent();
             DrawInspector();
@@ -107,7 +98,6 @@ namespace AnimationPathTools.AnimatorComponent {
         private void OnSceneGUI() {
             if (!RequiredAssetsLoaded()) return;
             if (Script.PathData == null) return;
-            if (!SerializedPropertiesInitialized) return;
 
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(
@@ -1867,8 +1857,6 @@ namespace AnimationPathTools.AnimatorComponent {
                 serializedObject.FindProperty("positionHandle");
             autoPlayDelay =
                 serializedObject.FindProperty("autoPlayDelay");
-
-            SerializedPropertiesInitialized = true;
         }
 
         /// <summary>

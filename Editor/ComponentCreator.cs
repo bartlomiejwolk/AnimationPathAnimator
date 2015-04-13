@@ -15,45 +15,45 @@ namespace AnimationPathTools {
 
     public static class ComponentCreator {
 
-        [MenuItem("Component/AirTime Productions/AnimationPath Animator/AnimationPathAnimator")]
+        [MenuItem("Component/AnimationPath Animator/AnimationPathAnimator")]
         private static void AddAnimationPathAnimatorComponent() {
             if (Selection.activeGameObject != null) {
                 Selection.activeGameObject.AddComponent(typeof(AnimationPathAnimator));
             }
         }
 
-        [MenuItem("Component/AirTime Productions/AnimationPath Animator/AnimatorEvents")]
+        [MenuItem("Component/AnimationPath Animator/AnimatorEvents")]
         private static void AddAnimatorEventsComponent() {
             if (Selection.activeGameObject != null) {
                 Selection.activeGameObject.AddComponent(typeof(AnimatorEvents));
             }
         }
 
-        [MenuItem("Component/AirTime Productions/AnimationPath Animator/AnimatorSynchronizer")]
+        [MenuItem("Component/AnimationPath Animator/AnimatorSynchronizer")]
         private static void AddAnimatorSynchronizerComponent() {
             if (Selection.activeGameObject != null) {
                 Selection.activeGameObject.AddComponent(typeof(AnimatorSynchronizer));
             }
         }
 
-        [MenuItem("Component/AirTime Productions/AnimationPath Animator/AudioSynchronizer")]
+        [MenuItem("Component/AnimationPath Animator/AudioSynchronizer")]
         private static void AddAudioSynchronizerComponent() {
             if (Selection.activeGameObject != null) {
                 Selection.activeGameObject.AddComponent(typeof(AudioSynchronizer));
             }
         }
 
-        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/Animator Settings")]
+        [MenuItem("Assets/Create/AnimationPath Animator/Animator Settings")]
         private static void CreateAnimatorSettingsAsset() {
             ScriptableObjectUtility.CreateAsset<AnimatorSettings>("AnimatorSettings");
         }
 
-        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/AnimatorEvents Settings")]
+        [MenuItem("Assets/Create/AnimationPath Animator/AnimatorEvents Settings")]
         private static void CreateAPEventsReflectionSettingsAsset() {
             ScriptableObjectUtility.CreateAsset<AnimatorEventsSettings>("AnimatorEventsSettings");
         }
 
-        [MenuItem("Assets/Create/AirTime Productions/AnimationPath Animator/Animation Path")]
+        [MenuItem("Assets/Create/AnimationPath Animator/Animation Path")]
         private static void CreatePathAsset() {
             ScriptableObjectUtility.CreateAsset<PathData>("AnimationPath");
         }

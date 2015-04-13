@@ -344,9 +344,6 @@ namespace AnimationPathTools.AnimatorComponent {
         /// <param name="scaleHandleSize">Handle size.</param>
         /// <param name="arcRadius">Position offset.</param>
         /// <param name="handleColor">Handle color.</param>
-        /// <param name="allowNegative">
-        ///     If handle can return negative values.
-        /// </param>
         /// <returns></returns>
         private static float DrawArcScaleHandle(
             float value,
@@ -411,7 +408,6 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     Callback that will be executed when arc value changes. It takes
         ///     changed value as an argument.
         /// </param>
-        /// <param name="arcValue">Value passed to the tool.</param>
         private static void DrawArcTool(
             float value,
             bool allowNegative,

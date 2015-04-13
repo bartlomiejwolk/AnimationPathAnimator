@@ -90,8 +90,6 @@ namespace AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float animationTime;
 
-        private bool animGOUpdateEnabled;
-
         [SerializeField]
         private bool drawNodeButtons = true;
 
@@ -114,11 +112,6 @@ namespace AnimationPathTools.AnimatorComponent {
 
         [SerializeField]
         private PathData pathData;
-
-        /// <summary>
-        ///     Animation time value from previous frame.
-        /// </summary>
-        private float prevAnimationTime;
 
         [SerializeField]
         private AnimatorSettings settingsAsset;
@@ -174,10 +167,7 @@ namespace AnimationPathTools.AnimatorComponent {
         ///     It's executed independent from animation time, so animated object
         ///     can be updated even if animator is stopped or paused.
         /// </summary>
-        public bool AnimGOUpdateEnabled {
-            get { return animGOUpdateEnabled; }
-            set { animGOUpdateEnabled = value; }
-        }
+        public bool AnimGOUpdateEnabled { get; set; }
 
         public bool IsPlaying {
             get { return isPlaying; }
@@ -410,10 +400,7 @@ namespace AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Animation time value from previous frame.
         /// </summary>
-        public float PrevAnimationTime {
-            get { return prevAnimationTime; }
-            set { prevAnimationTime = value; }
-        }
+        public float PrevAnimationTime { get; set; }
 
         public Color RotationCurveColor {
             get { return rotationCurveColor; }
@@ -1401,14 +1388,6 @@ namespace AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Method responsible for firing <c>AnimationStarted</c> event. Use in
-        ///     play mode only.
-        /// </summary>
-        private void HandleFireOnAnimationStartedEvent() {
-            if (AnimationTime == 0) OnAnimationStarted();
-        }
-
-        /// <summary>
         ///     Handle firing <c>AnimationStarted</c> event.
         /// </summary>
         private void HandleOnAnimationStarted() {
@@ -1672,9 +1651,6 @@ namespace AnimationPathTools.AnimatorComponent {
             if (!DrawRotationPathCurve) return;
 
             var globalRotPointPositions = GetGlobalRotationPathPositions();
-
-            // Path node timestamps.
-            var nodeTimestamps = pathData.GetPathTimestamps();
 
             for (var i = 0; i < globalRotPointPositions.Count; i++) {
                 //Draw rotation point gizmo.

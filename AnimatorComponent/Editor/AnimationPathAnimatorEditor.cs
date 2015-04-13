@@ -1083,6 +1083,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         private void HandleDrawingSceneToolToggleButtons() {
             if (!Script.DrawNodeButtons) return;
             if (!Script.DrawObjectPath) return;
+            if (Script.HandleMode == HandleMode.None) return;
 
             // Get node positions.
             var nodePositions = Script.GetGlobalNodePositions();

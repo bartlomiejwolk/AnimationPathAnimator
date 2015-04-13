@@ -155,6 +155,30 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #region INSPECTOR CONTROLS
 
+        public void DrawExportControls() {
+            EditorGUILayout.BeginHorizontal();
+
+            Script.ExportSamplingFrequency =
+                EditorGUILayout.IntField(
+                    new GUIContent(
+                        "Export Sampling",
+                        "Number of points to export for 1 m of the animation "
+                        + "path. If set to 0, it'll export only keys defined in "
+                        + "the path."),
+                    Script.ExportSamplingFrequency);
+
+            // Limit value.
+            if (Script.ExportSamplingFrequency < 1) {
+                Script.ExportSamplingFrequency = 1;
+            }
+
+            if (GUILayout.Button("Export")) {
+                Script.ExportNodes(Script.ExportSamplingFrequency);
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
                 HandleDrawEaseCurve();
@@ -1754,38 +1778,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion
 
-        #region METHODS
-
-        public void DrawExportControls() {
-            EditorGUILayout.BeginHorizontal();
-
-            Script.ExportSamplingFrequency =
-                EditorGUILayout.IntField(
-                    new GUIContent(
-                        "Export Sampling",
-                        "Number of points to export for 1 m of the animation "
-                        + "path. If set to 0, it'll export only keys defined in "
-                        + "the path."),
-                    Script.ExportSamplingFrequency);
-
-            // Limit value.
-            if (Script.ExportSamplingFrequency < 1) {
-                Script.ExportSamplingFrequency = 1;
-            }
-
-            if (GUILayout.Button("Export")) {
-                Script.ExportNodes(Script.ExportSamplingFrequency);
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private static void FocusOnSceneView() {
-            if (SceneView.sceneViews.Count > 0) {
-                var sceneView = (SceneView) SceneView.sceneViews[0];
-                sceneView.Focus();
-            }
-        }
+        #region EDIT METHODS
 
         /// <summary>
         ///     Add new path node between two others, exactly in the middle.
@@ -1850,6 +1843,169 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
+        ///     Adjust ease values to path length. Making path longer will decrease ease values
+        ///     to  maintain constant speed.
+        /// </summary>
+        /// <param name="oldAnimGoLength">Anim. Go path length before path update.</param>
+        /// <param name="newAnimGoLength">Anim. Go path length after path update.</param>
+        private void DistributeEaseValues(
+            float oldAnimGoLength,
+            float newAnimGoLength) {
+
+            // Calculate multiplier.
+            var multiplier = oldAnimGoLength / newAnimGoLength;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
+        }
+
+        private void InitializeSerializedProperties() {
+            animatedGO = serializedObject.FindProperty("animatedGO");
+            targetGO = serializedObject.FindProperty("targetGO");
+            advancedSettingsFoldout =
+                serializedObject.FindProperty("advancedSettingsFoldout");
+            enableControlsInPlayMode =
+                serializedObject.FindProperty(
+                    "enableControlsInPlayMode");
+            skin = serializedObject.FindProperty("skin");
+            settings = serializedObject.FindProperty("settingsAsset");
+            gizmoCurveColor =
+                serializedObject.FindProperty("gizmoCurveColor");
+            rotationCurveColor =
+                serializedObject.FindProperty("rotationCurveColor");
+            shortJumpValue =
+                serializedObject.FindProperty("shortJumpValue");
+            longJumpValue =
+                serializedObject.FindProperty("longJumpValue");
+            animationTime =
+                serializedObject.FindProperty("animationTime");
+            positionHandle =
+                serializedObject.FindProperty("positionHandle");
+            autoPlayDelay =
+                serializedObject.FindProperty("autoPlayDelay");
+
+            SerializedPropertiesInitialized = true;
+        }
+
+        /// <summary>
+        ///     Multiply each ease value by a difference between two given values.
+        /// </summary>
+        /// <param name="oldValue"></param>
+        /// <param name="newValue"></param>
+        private void MultiplyEaseValues(float oldValue, float newValue) {
+            // Guard against null division.
+            if (Utilities.FloatsEqual(
+                oldValue,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Calculate multiplier.
+            var multiplier = newValue / oldValue;
+
+            // Don't let ease value reach zero.
+            if (Utilities.FloatsEqual(
+                multiplier,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyEaseCurveValues(multiplier);
+        }
+
+        /// <summary>
+        ///     Multiply each tilting value by a difference between two given values.
+        /// </summary>
+        /// <param name="oldValue"></param>
+        /// <param name="newValue"></param>
+        private void MultiplyTiltingValues(float oldValue, float newValue) {
+            // Guard against null division.
+            if (Utilities.FloatsEqual(
+                oldValue,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Calculate multiplier.
+            var multiplier = newValue / oldValue;
+
+            // Don't let tilting value reach zero.
+            if (Utilities.FloatsEqual(
+                multiplier,
+                0,
+                GlobalConstants.FloatPrecision)) return;
+
+            // Multiply each single ease value.
+            Script.PathData.MultiplyTiltingCurveValues(multiplier);
+        }
+
+        /// <summary>
+        ///     Offset animated object path node tangents by given value.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="inOutTangentOffset"></param>
+        private void UpdateObjectPathTangents(
+            int index,
+            Vector3 inOutTangentOffset) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update node tangents.");
+
+            Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
+            Script.PathData.DistributeTimestamps(
+                DistributeTimestampsCallbackHandler);
+        }
+
+        /// <summary>
+        ///     Offset rotation path node tangents by given value.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="inOutTangentOffset"></param>
+        private void UpdateRotationPathTangents(
+            int index,
+            Vector3 inOutTangentOffset) {
+
+            // Make snapshot of the target object.
+            Undo.RecordObject(Script.PathData, "Update rotation path tangents.");
+
+            Script.PathData.OffsetRotationPathNodeTangents(
+                index,
+                inOutTangentOffset);
+        }
+
+        #endregion
+
+        #region GET METHODS
+
+        private List<Vector3> RemoveNodeButtonPositions() {
+            // Node positions.
+            var nodePositions = Script.GetGlobalNodePositions();
+            // Remove extreme nodes.
+            // Extreme nodes can't be removed.
+            nodePositions.RemoveAt(0);
+            nodePositions.RemoveAt(nodePositions.Count - 1);
+            return nodePositions;
+        }
+
+        private bool RequiredAssetsLoaded() {
+            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
+                Script,
+                "RequiredAssetsLoaded",
+                null);
+
+            return assetsLoaded;
+        }
+
+        #endregion
+
+        #region DO METHODS
+
+        private static void FocusOnSceneView() {
+            if (SceneView.sceneViews.Count > 0) {
+                var sceneView = (SceneView) SceneView.sceneViews[0];
+                sceneView.Focus();
+            }
+        }
+
+        /// <summary>
         ///     Copies gizmo icons from component Resource folder to Assets/Gizmos/ATP.
         /// </summary>
         private void CopyIconsToGizmosFolder() {
@@ -1880,23 +2036,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     iconPath,
                     "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath));
             }
-        }
-
-        /// <summary>
-        ///     Adjust ease values to path length. Making path longer will decrease ease values
-        ///     to  maintain constant speed.
-        /// </summary>
-        /// <param name="oldAnimGoLength">Anim. Go path length before path update.</param>
-        /// <param name="newAnimGoLength">Anim. Go path length after path update.</param>
-        private void DistributeEaseValues(
-            float oldAnimGoLength,
-            float newAnimGoLength) {
-
-            // Calculate multiplier.
-            var multiplier = oldAnimGoLength / newAnimGoLength;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyEaseCurveValues(multiplier);
         }
 
         private void DrawInspector() {
@@ -1998,59 +2137,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawAdvancedSettingsControls();
         }
 
-        private void InitializeSerializedProperties() {
-            animatedGO = serializedObject.FindProperty("animatedGO");
-            targetGO = serializedObject.FindProperty("targetGO");
-            advancedSettingsFoldout =
-                serializedObject.FindProperty("advancedSettingsFoldout");
-            enableControlsInPlayMode =
-                serializedObject.FindProperty(
-                    "enableControlsInPlayMode");
-            skin = serializedObject.FindProperty("skin");
-            settings = serializedObject.FindProperty("settingsAsset");
-            gizmoCurveColor =
-                serializedObject.FindProperty("gizmoCurveColor");
-            rotationCurveColor =
-                serializedObject.FindProperty("rotationCurveColor");
-            shortJumpValue =
-                serializedObject.FindProperty("shortJumpValue");
-            longJumpValue =
-                serializedObject.FindProperty("longJumpValue");
-            animationTime =
-                serializedObject.FindProperty("animationTime");
-            positionHandle =
-                serializedObject.FindProperty("positionHandle");
-            autoPlayDelay =
-                serializedObject.FindProperty("autoPlayDelay");
-
-            SerializedPropertiesInitialized = true;
-        }
-
-        /// <summary>
-        ///     Multiply each ease value by a difference between two given values.
-        /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private void MultiplyEaseValues(float oldValue, float newValue) {
-            // Guard against null division.
-            if (Utilities.FloatsEqual(
-                oldValue,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Calculate multiplier.
-            var multiplier = newValue / oldValue;
-
-            // Don't let ease value reach zero.
-            if (Utilities.FloatsEqual(
-                multiplier,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyEaseCurveValues(multiplier);
-        }
-
         private string[] MultiplyTextIntoArray(
             string text,
             List<Vector3> globalNodePositions) {
@@ -2060,84 +2146,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 labelText[i] = text;
             }
             return labelText;
-        }
-
-        /// <summary>
-        ///     Multiply each tilting value by a difference between two given values.
-        /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private void MultiplyTiltingValues(float oldValue, float newValue) {
-            // Guard against null division.
-            if (Utilities.FloatsEqual(
-                oldValue,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Calculate multiplier.
-            var multiplier = newValue / oldValue;
-
-            // Don't let tilting value reach zero.
-            if (Utilities.FloatsEqual(
-                multiplier,
-                0,
-                GlobalConstants.FloatPrecision)) return;
-
-            // Multiply each single ease value.
-            Script.PathData.MultiplyTiltingCurveValues(multiplier);
-        }
-
-        private List<Vector3> RemoveNodeButtonPositions() {
-            // Node positions.
-            var nodePositions = Script.GetGlobalNodePositions();
-            // Remove extreme nodes.
-            // Extreme nodes can't be removed.
-            nodePositions.RemoveAt(0);
-            nodePositions.RemoveAt(nodePositions.Count - 1);
-            return nodePositions;
-        }
-
-        private bool RequiredAssetsLoaded() {
-            var assetsLoaded = (bool) Utilities.InvokeMethodWithReflection(
-                Script,
-                "RequiredAssetsLoaded",
-                null);
-
-            return assetsLoaded;
-        }
-
-        /// <summary>
-        ///     Offset animated object path node tangents by given value.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="inOutTangentOffset"></param>
-        private void UpdateObjectPathTangents(
-            int index,
-            Vector3 inOutTangentOffset) {
-
-            // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Update node tangents.");
-
-            Script.PathData.OffsetPathNodeTangents(index, inOutTangentOffset);
-            Script.PathData.DistributeTimestamps(
-                DistributeTimestampsCallbackHandler);
-        }
-
-        /// <summary>
-        ///     Offset rotation path node tangents by given value.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="inOutTangentOffset"></param>
-        private void UpdateRotationPathTangents(
-            int index,
-            Vector3 inOutTangentOffset) {
-
-            // Make snapshot of the target object.
-            Undo.RecordObject(Script.PathData, "Update rotation path tangents.");
-
-            Script.PathData.OffsetRotationPathNodeTangents(
-                index,
-                inOutTangentOffset);
         }
 
         #endregion

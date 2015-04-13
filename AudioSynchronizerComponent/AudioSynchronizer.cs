@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.LoggingTools;
 
 namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
 
@@ -80,13 +79,11 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         private void OnEnable() {
-            Logger.LogCall();
             UnsubscribeFromEvents();
             SubscribeToEvents();
         }
 
         private void OnValidate() {
-            Logger.LogCall();
             UnsubscribeFromEvents();
             SubscribeToEvents();
         }
@@ -100,17 +97,14 @@ namespace ATP.AnimationPathTools.AudioSynchronizerComponent {
         }
 
         void Animator_AnimationResumed(object sender, System.EventArgs e) {
-            Logger.LogCall();
             AudioSource.UnPause();
         }
 
         void Animator_AnimationPaused(object sender, System.EventArgs e) {
-            Logger.LogCall();
             AudioSource.Pause();
         }
 
         void Animator_AnimationStarted(object sender, System.EventArgs e) {
-            Logger.LogCall();
             if (!AutoPlay) return;
 
             if (AutoPlayDelay != 0) {

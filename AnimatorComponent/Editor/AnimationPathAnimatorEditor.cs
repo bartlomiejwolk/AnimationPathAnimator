@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
-using ATP.LoggingTools;
 using UnityEditor;
 using UnityEngine;
 
@@ -1725,7 +1724,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                     Script.SettingsAsset.ModKey)) {
 
                 Script.AnimationTime -= Script.LongJumpValue;
-                Logger.LogString("AnimationTime: {0}", Script.AnimationTime);
             }
         }
 

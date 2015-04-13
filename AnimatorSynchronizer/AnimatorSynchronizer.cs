@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.LoggingTools;
 using UnityEngine;
 
 #if UNITY_EDITOR

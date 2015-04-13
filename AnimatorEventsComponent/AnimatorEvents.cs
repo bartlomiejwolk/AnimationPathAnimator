@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorEventsComponent {
@@ -78,7 +77,6 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         }
 
         private void OnValidate() {
-            Logger.LogCall();
             UnsubscribeFromAnimatorEvents();
             SubscribeToAnimatorEvents();
             UnsubscribeFromPathEvents();

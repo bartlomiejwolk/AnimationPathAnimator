@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ATP.LoggingTools;
 using UnityEngine;
 
 namespace ATP.AnimationPathTools.AnimatorComponent {
@@ -1806,13 +1805,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         private void OnAnimationResumed() {
-            Logger.LogCall();
             var handler = AnimationResumed;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
         private void OnAnimationPaused() {
-            Logger.LogCall();
             var handler = AnimationPaused;
             if (handler != null) handler(this, EventArgs.Empty);
         }

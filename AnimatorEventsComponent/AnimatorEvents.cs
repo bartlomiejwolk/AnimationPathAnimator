@@ -105,6 +105,8 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         }
 
         private void InitializeSlots() {
+            if (Animator.PathData == null) return;
+
             // Get number of nodes in the path.
             var nodesNo = Animator.PathData.NodesNo;
 

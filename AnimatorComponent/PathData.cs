@@ -1,4 +1,9 @@
-﻿using System;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +14,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         #region EVENTS
 
         /// <summary>
-        ///     Event called after a key was added, removed or moved in the ease curve.
+        ///     Event called after a key was added, removed or moved in the ease
+        ///     curve.
         /// </summary>
         public event EventHandler EaseCurveUpdated;
 
@@ -24,12 +30,14 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         public event EventHandler PathReset;
 
         public event EventHandler PathTimestampsChanged;
+
         public event EventHandler RotationPathReset;
 
         public event EventHandler RotationPointPositionChanged;
 
         /// <summary>
-        ///     Event called after a key was added, removed or moved in the tilting curve.
+        ///     Event called after a key was added, removed or moved in the tilting
+        ///     curve.
         /// </summary>
         public event EventHandler TiltingCurveUpdated;
 
@@ -46,7 +54,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         private const int PathLengthSampling = 5;
 
-        #endregion
+        #endregion CONST
 
         #region FIELDS
 
@@ -323,12 +331,13 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             OnTiltingCurveUpdated();
         }
 
-        #endregion METHODS
+        #endregion INIT METHODS
 
         #region EDIT METHODS
 
         /// <summary>
-        ///     Add a new key to ease curve. Value will be read from existing curve.
+        ///     Add a new key to ease curve. Value will be read from existing
+        ///     curve.
         /// </summary>
         /// <param name="time"></param>
         public void AddKeyToEaseCurve(float time) {
@@ -615,7 +624,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             Vector3 newPosition,
             Action callback) {
 
-            // Check if timestamp passed as argument matches any in the rotation path.
+            // Check if timestamp passed as argument matches any in the
+            // rotation path.
             var foundMatch = RotationPath.NodeAtTimeExists(timestamp);
             // If timestamp was not found..
             if (!foundMatch) {
@@ -664,7 +674,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Returns list of object path node timestamps. Timestamps to section length ration will be equal for all timestamps.
+        ///     Returns list of object path node timestamps. Timestamps to section
+        ///     length ration will be equal for all timestamps.
         /// </summary>
         /// <param name="pathLengthSampling"></param>
         /// <returns></returns>
@@ -831,7 +842,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Set rotation path node positions to the same as in anim. object path.
+        ///     Set rotation path node positions to the same as in anim. object
+        ///     path.
         /// </summary>
         private void ResetRotationPathValues() {
             var animPathNodePositions = GetNodePositions();
@@ -852,7 +864,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var pathNodeTimestamps = GetPathTimestamps();
             // For each key in animation curve..
             for (var i = 1; i < curve.length - 1; i++) {
-                // If appropriate node timestamp is different from curve 
+                // If appropriate node timestamp is different from curve
                 // timestamp..
                 if (!Utilities.FloatsEqual(
                     pathNodeTimestamps[i],
@@ -962,7 +974,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        #endregion
+        #endregion EDIT METHODS
 
         #region GET METHODS
 
@@ -1033,7 +1045,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     Got positions of all path nodes.
         /// </summary>
-        /// <param name="nodesNo">Number of nodes to return. If not specified, all nodes will be returned.</param>
+        /// <param name="nodesNo">
+        ///     Number of nodes to return. If not specified, all nodes will be
+        ///     returned.
+        /// </param>
         /// <returns></returns>
         public List<Vector3> GetNodePositions(int nodesNo = -1) {
             // Specify number of nodes to return.
@@ -1162,7 +1177,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return RotationPath.SamplePathForPoints(samplingFrequency);
         }
 
-        #endregion
+        #endregion GET METHODS
 
         #region DO METHODS
 
@@ -1184,7 +1199,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             NodePositionChanged -= PathData_NodePositionChanged;
         }
 
-        #endregion
+        #endregion DO METHODS
     }
 
 }

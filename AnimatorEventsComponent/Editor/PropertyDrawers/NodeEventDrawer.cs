@@ -1,4 +1,9 @@
-﻿using System.Reflection;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -60,7 +65,8 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             // Draw source GO field.
             var sourceGOChanged = DrawSourceGOField(pos, sourceGO);
 
-            // If source GO was changed, reset component index to avoid null ref. exception.
+            // If source GO was changed, reset component index to avoid null
+            // ref. exception.
             if (sourceGOChanged) sourceComponentIndex.intValue = 0;
 
             // If source GO is not assigned..
@@ -98,7 +104,8 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
                     sourceComponentIndex,
                     sourceCoNames);
 
-            // If source component was changed, reset method names index to avoid null ref. exception.
+            // If source component was changed, reset method names index to
+            // avoid null ref. exception.
             if (sourceComponentChanged) {
                 sourceMethodIndex.intValue = 0;
             }

@@ -20,10 +20,12 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         [SerializeField]
         private AnimationPathAnimator animator;
 
-#pragma warning disable 0414 
+#pragma warning disable 0414
+
         [SerializeField]
         private bool drawMethodNames = true;
-#pragma warning restore 0414 
+
+#pragma warning restore 0414
 
         [SerializeField]
         private List<NodeEventSlot> nodeEventSlots;
@@ -34,7 +36,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         [SerializeField]
         private GUISkin skin;
 
-        #endregion
+        #endregion FIELDS
 
         #region PROPERTIES
 
@@ -56,7 +58,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             set { skin = value; }
         }
 
-        #endregion
+        #endregion PROPERTIES
 
         #region UNITY MESSAGES
 
@@ -90,7 +92,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             SubscribeToAnimatorEvents();
         }
 
-        #endregion
+        #endregion UNITY MESSAGES
 
         #region EVENT HANDLERS
 
@@ -150,7 +152,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             NodeEventSlots.RemoveAt(e.NodeIndex);
         }
 
-        #endregion
+        #endregion EVENT HANDLERS
 
         #region EDIT METHODS
 
@@ -202,7 +204,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             skin = Resources.Load("DefaultAnimatorEventsSkin") as GUISkin;
         }
 
-        #endregion
+        #endregion EDIT METHODS
 
         #region GET METHODS
 
@@ -234,7 +236,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             return false;
         }
 
-        #endregion
+        #endregion GET METHODS
 
         #region DO METHODS
 
@@ -287,7 +289,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             }
         }
 
-        #endregion
+        #endregion DO METHODS
     }
 
 }

@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
+using System.Collections.Generic;
 using ATP.AnimationPathTools.AnimatorComponent;
 using ATP.AnimationPathTools.ReorderableList;
 using UnityEditor;
@@ -16,7 +21,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         private AnimatorEventsSettings Settings { get; set; }
 
-        #endregion
+        #endregion PROPERTIES
 
         #region SERIALIZED PROPERTIES
 
@@ -28,7 +33,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         private SerializedProperty settings;
         private SerializedProperty skin;
 
-        #endregion
+        #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
 
@@ -70,7 +75,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             HandleDrawingMethodNames();
         }
 
-        #endregion
+        #endregion UNITY MESSAGES
 
         #region INSPECTOR
 
@@ -149,7 +154,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        #endregion
+        #endregion INSPECTOR
 
         #region METHODS
 
@@ -207,7 +212,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             SerializedPropertiesInitialized = true;
         }
 
-        #endregion
+        #endregion METHODS
     }
 
 }

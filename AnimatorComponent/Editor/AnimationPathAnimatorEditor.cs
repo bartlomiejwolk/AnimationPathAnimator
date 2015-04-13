@@ -65,7 +65,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <summary>
         ///     <c>SerializedObject</c> for <c>AnimatorSettings</c> asset.
         /// </summary>
-        //private SerializedObject serializedObject { get; set; }
 
         #endregion
 
@@ -148,8 +147,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             if (Script.PathData == null) return;
             // Return if serialized properties are not initialized.
             if (!SerializedPropertiesInitialized) return;
-
-            //HandleAnimatorEventsSubscription();
 
             // Disable interaction with background scene elements.
             HandleUtility.AddDefaultControl(
@@ -965,11 +962,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 SceneView.RepaintAll();
             }
-            //else {
-            //    // Set rotation mode to Custom so that user can see how
-            //    // changes to rotation path affect animated object.
-            //    Script.RotationMode = RotationMode.Custom;
-            //}
         }
 
         /// <summary>
@@ -1220,6 +1212,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             // Create Asset/Gizmos/ATP folder if not exists.
+            // todo rename folder to AnimationPathAnimator
             if (!Directory.Exists(gizmosDir + "/ATP")) {
                 Directory.CreateDirectory(gizmosDir + "/ATP");
             }
@@ -1290,7 +1283,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
-            //DrawRotationPathToggle();
             DrawObjectCurveToggle();
             DrawRotationCurveToggle();
             DrawNodeButtonsToggle();
@@ -1323,15 +1315,12 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawResetTiltingButton();
             EditorGUILayout.EndHorizontal();
 
-            //DrawSceneToolShortcutsInfoLabel();
-
             EditorGUILayout.Space();
 
             GUILayout.Label("Player", EditorStyles.boldLabel);
 
             DrawAnimationTimeValue();
             DrawPlayerControls();
-            //DrawShortcutsInfoLabel();
 
             EditorGUILayout.Space();
 
@@ -1349,9 +1338,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             DrawEnableControlsInPlayModeToggle();
 
             EditorGUILayout.Space();
-
-            //EditorGUILayout.BeginHorizontal();
-            //EditorGUILayout.EndHorizontal();
 
             DrawWrapModeDropdown();
 
@@ -1413,10 +1399,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.RotationMode = currentRotationMode;
             }
 
-            //HandleRotationModeDropdownChange(
-            //    prevRotationMode,
-            //    currentRotationMode);
-
             Utilities.InvokeMethodWithReflection(
                 Script,
                 "HandleUpdateAnimGOInSceneView",
@@ -1437,7 +1419,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var disable = Script.RotationMode != RotationMode.Custom;
 
             EditorGUI.BeginDisabledGroup(disable);
-            //EditorGUIUtility.labelWidth = 65;
 
             Script.DrawRotationPathCurve = EditorGUILayout.Toggle(
                 new GUIContent(
@@ -1446,8 +1427,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 Script.DrawRotationPathCurve);
 
             EditorGUI.EndDisabledGroup();
-
-            //EditorGUIUtility.labelWidth = 0;
         }
 
         private void HandleDrawMoveAllToggle() {
@@ -2249,7 +2228,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // Reset curves to its default state.
                 Script.PathData.ResetRotationPath();
-                //Script.PathData.SmoothRotationPathTangents();
 
                 // Change rotation mode.
                 Script.RotationMode = RotationMode.Custom;

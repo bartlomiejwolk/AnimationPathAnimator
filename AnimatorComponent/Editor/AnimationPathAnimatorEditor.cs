@@ -2097,8 +2097,6 @@ namespace AnimationPathTools.AnimatorComponent {
 
             DrawEnableControlsInPlayModeToggle();
 
-            EditorGUILayout.Space();
-
             DrawWrapModeDropdown();
 
             EditorGUILayout.Space();

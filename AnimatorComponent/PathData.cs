@@ -165,8 +165,7 @@ namespace AnimationPathTools.AnimatorComponent {
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        private void OnNodeRemoved(int nodeIndex) {
-            var nodeTimestamp = GetNodeTimestamp(nodeIndex);
+        private void OnNodeRemoved(int nodeIndex, float nodeTimestamp) {
             var args = new NodeAddedRemovedEventArgs(nodeIndex, nodeTimestamp);
 
             var handler = NodeRemoved;
@@ -234,6 +233,7 @@ namespace AnimationPathTools.AnimatorComponent {
         private void PathData_NodeRemoved(
             object sender,
             NodeAddedRemovedEventArgs e) {
+
             EaseToolState.RemoveAt(e.NodeIndex);
             TiltingToolState.RemoveAt(e.NodeIndex);
             HandleRemoveNodeTools(e.NodeTimestamp);
@@ -460,9 +460,10 @@ namespace AnimationPathTools.AnimatorComponent {
         }
 
         public void RemoveNode(int nodeIndex) {
+            var nodeTimestamp = GetNodeTimestamp(nodeIndex);
             AnimatedObjectPath.RemoveNode(nodeIndex);
 
-            OnNodeRemoved(nodeIndex);
+            OnNodeRemoved(nodeIndex, nodeTimestamp);
         }
 
         public void ResetEaseCurve() {
@@ -907,7 +908,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
             // Get path timestamps.
             var toolTimestamps = nodeTimestampsCallback();
-            // For each key in easeCurve..
+            // For each key in ease curve..
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from curve timestamp..
                 if (!Utilities.FloatsEqual(

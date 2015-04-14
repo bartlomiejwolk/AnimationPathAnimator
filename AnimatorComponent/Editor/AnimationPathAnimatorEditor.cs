@@ -200,7 +200,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 animatedGO,
                 new GUIContent(
                     "Animated Object",
-                    "Game object to animate."));
+                    "Game object to animate along the path."));
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -224,22 +224,23 @@ namespace AnimationPathTools.AnimatorComponent {
             var newAnimationTime = DrawAnimationTimeSlider();
 
             // Update animation time only when value was changed.
-            if (!Utilities.FloatsEqual(
+            if (Utilities.FloatsEqual(
                 newAnimationTime,
                 Script.AnimationTime,
-                GlobalConstants.FloatPrecision)) {
+                GlobalConstants.FloatPrecision)) return;
 
-                serializedObject.Update();
-                animationTime.floatValue = newAnimationTime;
-                serializedObject.ApplyModifiedProperties();
-            }
+            serializedObject.Update();
+
+            animationTime.floatValue = newAnimationTime;
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawAutoPlayControl() {
             Script.AutoPlay = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Auto Play",
-                    "Start playing animation after entering play mode."),
+                    "Start animation after entering play mode."),
                 Script.AutoPlay);
         }
 
@@ -313,12 +314,22 @@ namespace AnimationPathTools.AnimatorComponent {
 
             var prevHandleMode = Script.NodeTool;
 
+            var noneKey = Script.SettingsAsset.NoneModeKey;
+            var easeKey = Script.SettingsAsset.EaseModeKey;
+            var tiltingKey = Script.SettingsAsset.TiltingModeKey;
+            var updateAllKey = Script.SettingsAsset.UpdateAllKey;
+
             Script.NodeTool =
                 (NodeTool) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Node Tool",
-                        "Tool displayed next to each node. Default " +
-                        "shortcuts: Y, U, I, O."),
+                        string.Format(
+                            "Tool displayed next to each node. Shortcuts: " +
+                            "{0}, {1}, {2}, {3}.",
+                            noneKey,
+                            easeKey,
+                            tiltingKey,
+                            updateAllKey)),
                     Script.NodeTool);
 
             // Return if handle mode wasn't changed.
@@ -334,12 +345,19 @@ namespace AnimationPathTools.AnimatorComponent {
         private void DrawLongJumpValueField() {
             serializedObject.Update();
 
+            // Get shortcut keys.
+            var longJumpForwardKey = Script.SettingsAsset.LongJumpForwardKey;
+            var longJumpBackwardKey = Script.SettingsAsset.LongJumpBackwardKey;
+
             longJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Long Jump Value",
-                    "Fraction of animation time used to jump forward/backward "
-                    + "in time with keyboard keys."),
+                    string.Format("Fraction of animation time used to jump forward/backward "
+                    + "in time with shortcut keys {0} and {1}.",
+                    longJumpForwardKey,
+                    longJumpBackwardKey)),
                 longJumpValue.floatValue,
+                // todo create settings
                 0.004f,
                 0.1f);
 
@@ -363,7 +381,8 @@ namespace AnimationPathTools.AnimatorComponent {
                 (NodeHandle) EditorGUILayout.EnumPopup(
                     new GUIContent(
                         "Node Handle",
-                        "On-scene node handle."),
+                        "On-scene node handle used for changing node position "
+                        + "and tangents."),
                     Script.NodeHandle);
 
             EditorGUI.EndDisabledGroup();
@@ -375,7 +394,7 @@ namespace AnimationPathTools.AnimatorComponent {
             Script.DrawObjectPath = EditorGUILayout.Toggle(
                 new GUIContent(
                     "Draw Object Path",
-                    ""),
+                    "Draw gizmo curve for object path."),
                 Script.DrawObjectPath);
         }
 
@@ -436,11 +455,14 @@ namespace AnimationPathTools.AnimatorComponent {
 
             EditorGUI.BeginDisabledGroup(disable);
 
+            var positionKey = Script.SettingsAsset.positionHandleKey;
+
             Script.PositionHandle = (PositionHandle) EditorGUILayout.EnumPopup(
                 new GUIContent(
                     "Position Type",
-                    "Handle used to move nodes on scene. Default " +
-                    "shortcut: G"),
+                    string.Format("Type of handle used to move nodes on scene. " +
+                    "Shortcut: {0}",
+                    positionKey)),
                 Script.PositionHandle);
 
             EditorGUI.EndDisabledGroup();

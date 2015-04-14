@@ -324,7 +324,7 @@ namespace AnimationPathTools.AnimatorComponent {
             // Return if handle mode wasn't changed.
             if (Script.NodeTool == prevHandleMode) return;
 
-            HandleModeChange();
+            HandleNodeToolChange();
         }
 
         private void DrawInfoLabel(string text) {
@@ -1456,8 +1456,7 @@ namespace AnimationPathTools.AnimatorComponent {
             }
         }
 
-        // todo rename to HandleHandleModeChange.
-        private void HandleModeChange() {
+        private void HandleNodeToolChange() {
             if (Script.NodeTool == NodeTool.None) {
                 Script.UpdateAllMode = false;
             }
@@ -2264,7 +2263,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 == Script.SettingsAsset.NoneModeKey) {
 
                 Script.NodeTool = NodeTool.None;
-                HandleModeChange();
+                HandleNodeToolChange();
             }
         }
 

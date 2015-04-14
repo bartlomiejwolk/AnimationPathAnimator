@@ -204,10 +204,6 @@ namespace AnimationPathTools.AnimatorComponent {
 
         [Header("Animator")]
         [SerializeField]
-        // todo remove
-        private int countdownToStopFramesNo = 10;
-
-        [SerializeField]
         private float forwardPointOffsetMaxValue = 0.15f;
 
         [SerializeField]
@@ -250,11 +246,6 @@ namespace AnimationPathTools.AnimatorComponent {
         public float AnimationSpeedDenominator {
             get { return animationSpeedDenominator; }
             set { animationSpeedDenominator = value; }
-        }
-
-        public int CountdownToStopFramesNo {
-            get { return countdownToStopFramesNo; }
-            set { countdownToStopFramesNo = value; }
         }
 
         public float ForwardPointOffsetMaxValue {

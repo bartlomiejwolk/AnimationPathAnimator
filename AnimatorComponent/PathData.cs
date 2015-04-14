@@ -908,7 +908,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
             // Get path timestamps.
             var toolTimestamps = nodeTimestampsCallback();
-            // For each key in easeCurve..
+            // For each key in ease curve..
             for (var i = 1; i < curve.length - 1; i++) {
                 // If resp. node timestamp is different from curve timestamp..
                 if (!Utilities.FloatsEqual(

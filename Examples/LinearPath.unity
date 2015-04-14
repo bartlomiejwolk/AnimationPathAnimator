@@ -215,31 +215,31 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -.576126099
+      value: -51.1471062
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.74465561
+      value: -.000373363495
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.5966959
+      value: -21.2627468
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -3.27747766e-05
+      value: 7.25612263e-05
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: .00170506747
+      value: -.707980692
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 8.78254195e-06
+      value: -8.50975557e-05
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: .999998569
+      value: -.706231773
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 0df5cbdfca021274aa11a352026d13d6, type: 3}
       propertyPath: m_RootOrder
@@ -461,8 +461,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   advancedSettingsFoldout: 1
   animatedGO: {fileID: 916761027}
-  animationTime: .859437764
-  drawNodeButtons: 1
+  animationTime: 0
+  drawNodeButtons: 0
   drawObjectPath: 1
   drawRotationPathCurve: 0
   moveAllMode: 0
@@ -483,7 +483,7 @@ MonoBehaviour:
   positionLerpSpeed: 1
   rotationCurveColor: {r: .5, g: .5, b: .5, a: 1}
   rotationMode: 0
-  rotationSlerpSpeed: 20
+  rotationSlerpSpeed: 5
   shortJumpValue: .00200000009
   tangentMode: 1
   updateAllMode: 0

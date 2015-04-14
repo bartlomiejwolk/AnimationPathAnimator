@@ -787,7 +787,7 @@ namespace AnimationPathTools.AnimatorComponent {
                     "Ease curve length: {0}\n" +
                     "Nodes with enabled ease tool: {1}",
                     EaseCurve.length,
-                    easeCurveTimestamps.Count));
+                    nodesWithEaseEnabledNo.Count));
         }
 
         /// <summary>
@@ -808,7 +808,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 TiltingCurve.RemoveKey(tiltingKeyIndex);
             }
 
-            var nodesWithTiltingEnabledNo = GetEasedNodeTimestamps();
+            var nodesWithTiltingEnabledNo = GetTiltedNodeTimestamps();
 
             Utilities.Assert(
                 () => TiltingCurve.length == nodesWithTiltingEnabledNo.Count,
@@ -818,7 +818,7 @@ namespace AnimationPathTools.AnimatorComponent {
                     "Tilting curve length: {0}\n" +
                     "Nodes with enabled tilting tool: {1}",
                     TiltingCurve.length,
-                    tiltingCurveTimestamps.Count));
+                    nodesWithTiltingEnabledNo.Count));
         }
 
         /// <summary>

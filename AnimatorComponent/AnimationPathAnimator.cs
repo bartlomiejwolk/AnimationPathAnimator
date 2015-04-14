@@ -939,7 +939,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 animatedGO = Camera.main.transform;
             }
             else {
-                Debug.LogWarning("Camera with tag \"MainCamera\" not found.");
+                Debug.LogWarning("Camera with tag \"MainCamera\" was not found.");
             }
         }
 

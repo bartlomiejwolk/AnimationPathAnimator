@@ -46,7 +46,7 @@ MonoBehaviour:
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   objectCurveSampling: 40
-  rotationCurveSampling: 5
+  rotationCurveSampling: 40
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
   addButtonOffsetH: 15

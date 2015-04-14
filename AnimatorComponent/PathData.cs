@@ -765,27 +765,29 @@ namespace AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodeTimestamp">Path node timestamp.</param>
         private void HandleDisableEaseTool(float nodeTimestamp) {
-            // Get nodes that have ease tool enabled.
-            var easedNodeTimestamps =
+            var easeCurveTimestamps =
                 Utilities.GetAnimationCurveTimestamps(EaseCurve);
+
             // Find ease index for the given timestamp.
             var easeKeyIndex =
-                easedNodeTimestamps.FindIndex(x => x == nodeTimestamp);
+                easeCurveTimestamps.FindIndex(x => x == nodeTimestamp);
 
             if (easeKeyIndex != -1) {
                 // Remove key from ease curve.
                 EaseCurve.RemoveKey(easeKeyIndex);
             }
 
+            var nodesWithEaseEnabledNo = GetEasedNodeTimestamps();
+
             Utilities.Assert(
-                () => EaseCurve.length == easedNodeTimestamps.Count,
+                () => EaseCurve.length == nodesWithEaseEnabledNo.Count,
                 String.Format(
                     "Number of ease curve keys and number of nodes" +
                     " with enabled ease tool differs.\n" +
                     "Ease curve length: {0}\n" +
                     "Nodes with enabled ease tool: {1}",
                     EaseCurve.length,
-                    easedNodeTimestamps.Count));
+                    nodesWithEaseEnabledNo.Count));
         }
 
         /// <summary>
@@ -794,26 +796,29 @@ namespace AnimationPathTools.AnimatorComponent {
         /// <param name="nodeTimestamp">Path node timestamp.</param>
         private void HandleDisableTiltingTool(float nodeTimestamp) {
             // Get nodes that have tilitng tool enabled.
-            var tiltedNodesTimestamps =
+            var tiltingCurveTimestamps =
                 Utilities.GetAnimationCurveTimestamps(TiltingCurve);
+
             // Find ease index for the given timestamp.
             var tiltingKeyIndex =
-                tiltedNodesTimestamps.FindIndex(x => x == nodeTimestamp);
+                tiltingCurveTimestamps.FindIndex(x => x == nodeTimestamp);
 
             // Remove key from ease curve.
             if (tiltingKeyIndex != -1) {
                 TiltingCurve.RemoveKey(tiltingKeyIndex);
             }
 
+            var nodesWithTiltingEnabledNo = GetTiltedNodeTimestamps();
+
             Utilities.Assert(
-                () => TiltingCurve.length == tiltedNodesTimestamps.Count,
+                () => TiltingCurve.length == nodesWithTiltingEnabledNo.Count,
                 String.Format(
                     "Number of tilting curve keys and number of nodes" +
                     " with enabled tilting tool differs.\n" +
                     "Tilting curve length: {0}\n" +
                     "Nodes with enabled tilting tool: {1}",
                     TiltingCurve.length,
-                    tiltedNodesTimestamps.Count));
+                    nodesWithTiltingEnabledNo.Count));
         }
 
         /// <summary>

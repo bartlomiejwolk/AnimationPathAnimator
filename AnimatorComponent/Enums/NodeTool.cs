@@ -1,5 +1,5 @@
-Ôªø/* 
- * Copyright (c) 2015 Bart≈Çomiej Wo≈Çk (bartlomiejwolk@gmail.com).
+/* 
+ * Copyright (c) 2015 Bart≥omiej Wo≥k (bartlomiejwolk@gmail.com).
  *
  * This file is part of the AnimationPath Animator Unity extension.
  * Licensed under the MIT license. See LICENSE file in the project root folder.
@@ -7,11 +7,11 @@
 
 namespace AnimationPathTools.AnimatorComponent {
 
-    public enum AnimatorWrapMode {
+    public enum NodeTool {
 
-        Clamp = 1,
-        Loop = 2,
-        PingPong = 4
+        None,
+        Ease,
+        Tilting,
 
     }
 

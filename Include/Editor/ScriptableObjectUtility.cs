@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools {
+namespace AnimationPathTools {
 
     public static class ScriptableObjectUtility {
 
@@ -56,28 +56,6 @@ namespace ATP.AnimationPathTools {
 
             return asset;
         }
-
-        //	This makes it easy to create, name and place unique new ScriptableObject asset files.
-        /// <summary>
-        /// </summary>
-        //public static T CreateAsset<T>(string path) where T : ScriptableObject {
-        //    // Path cannot be empty.
-        //    if (path == "") {
-        //        Debug.LogWarning("Path to create new asset cannot be empty.");
-
-        //        return null;
-        //    }
-
-        //    var asset = ScriptableObject.CreateInstance<T>();
-
-        //    AssetDatabase.CreateAsset(asset, path);
-        //    AssetDatabase.SaveAssets();
-        //    AssetDatabase.Refresh();
-        //    Selection.activeObject = asset;
-
-        //    return asset;
-        //}
-
     }
 
 }

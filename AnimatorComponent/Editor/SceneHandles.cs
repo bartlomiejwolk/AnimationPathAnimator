@@ -1,9 +1,14 @@
+// Copyright (c) 2015 Bart³omiej Wo³k (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
 using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     ///     Class responsible for drawing all on scene handles.
@@ -15,45 +20,11 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         ///     Minimum value below which arc handle drawer method will set the
         ///     value back to default.
         /// </summary>
-        private static float MinValueThreshold = 0.1f;
+        private const float MinValueThreshold = 0.1f;
 
-        #endregion
+        #endregion FIELDS
 
         #region METHDOS
-
-        public static void DrawNodeButtons(
-            List<Vector3> nodePositions,
-            int buttonHoffset,
-            int buttonVoffset,
-            Action<int> callback,
-            GUIStyle buttonStyle) {
-
-            Handles.BeginGUI();
-
-            // Draw add buttons for each node. Execute
-            // callback on button press.
-            for (var i = 0; i < nodePositions.Count; i++) {
-                // Translate node's 3d position into screen coordinates.
-                var guiPoint = HandleUtility.WorldToGUIPoint(
-                    nodePositions[i]);
-
-                // Draw button.
-                var buttonPressed = DrawButton(
-                    guiPoint,
-                    buttonHoffset,
-                    buttonVoffset,
-                    15,
-                    15,
-                    buttonStyle);
-
-                // Execute callback.
-                if (buttonPressed) {
-                    callback(i);
-                }
-            }
-
-            Handles.EndGUI();
-        }
 
         public static void DrawArcHandleLabels(
             Vector3[] nodeGlobalPositions,
@@ -98,13 +69,22 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// </summary>
         /// <param name="nodePositions">Positions to draw the tools.</param>
         /// <param name="curveValues">Values represented by the tools.</param>
-        /// <param name="initialValue">If tool value is 0 and user moves handle, this will be the initial tool value.</param>
-        /// <param name="allowNegative">If tool should allow setting/displaying negative values.</param>
-        /// <param name="arcValueMultiplier">If set to 1, value of 1 will be represented as 1 degree.</param>
+        /// <param name="initialValue">
+        ///     If tool value is 0 and user moves handle, this will be the initial
+        ///     tool value.
+        /// </param>
+        /// <param name="allowNegative">
+        ///     If tool should allow setting/displaying negative values.
+        /// </param>
+        /// <param name="arcValueMultiplier">
+        ///     If set to 1, value of 1 will be represented as 1 degree.
+        /// </param>
         /// <param name="arcHandleRadius">Radius of the arc.</param>
         /// <param name="scaleHandleSize">Size of the scale handle.</param>
         /// <param name="color">Color for the arc and scale handle.</param>
-        /// <param name="callback">Method used to update animation curve.</param>
+        /// <param name="callback">
+        ///     Method used to update animation curve.
+        /// </param>
         public static void DrawArcTools(
             Vector3[] nodePositions,
             float[] curveValues,
@@ -133,7 +113,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        /// Draws position handles with predefined cap function.
+        ///     Draws position handles with predefined cap function.
         /// </summary>
         /// <param name="nodeGlobalPositions"></param>
         /// <param name="handleSize"></param>
@@ -161,52 +141,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
                 // If node was moved..
                 if (newGlobalPos != nodeGlobalPositions[i]) {
-                    // Execute callback.
-                    callback(i, newGlobalPos);
-                }
-            }
-        }
-
-        public static void DrawNodeLabels(
-            List<Vector3> nodeGlobalPositions,
-            string[] text,
-            int offsetX,
-            int offsetY,
-            int labelWidth,
-            int labelHeight,
-            GUIStyle style) {
-
-            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
-                DrawNodeLabel(
-                    nodeGlobalPositions[i],
-                    text[i],
-                    offsetX,
-                    offsetY,
-                    labelWidth,
-                    labelHeight,
-                    style);
-            }
-        }
-
-        /// <summary>
-        /// Draw position handles using Unity's default movement handle.
-        /// </summary>
-        /// <param name="nodeGlobalPositions"></param>
-        /// <param name="callback"></param>
-        public static void DrawPositionHandles(
-            List<Vector3> nodeGlobalPositions,
-            Action<int, Vector3> callback) {
-
-            // For each node..
-            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
-                // Draw position handle.
-                var newGlobalPos = Handles.PositionHandle(
-                    nodeGlobalPositions[i],
-                    Quaternion.identity);
-
-                // If node was moved..
-                if (newGlobalPos != nodeGlobalPositions[i]) {
-                    // Execute callback.
                     callback(i, newGlobalPos);
                 }
             }
@@ -222,7 +156,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
                 HandleUtility.GetHandleSize(rotationPointGlobalPosition);
             var sphereSize = handleSize * rotationHandleSize;
 
-            // Set handle color.
             Handles.color = rotationHandleColor;
 
             // Draw node's handle.
@@ -249,6 +182,119 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             if (newGlobalPosition != rotationPointGlobalPosition) {
                 callback(newGlobalPosition);
+            }
+        }
+
+        public static void DrawNodeButtons(
+            List<Vector3> nodePositions,
+            int buttonHoffset,
+            int buttonVoffset,
+            Action<int> callback,
+            GUIStyle buttonStyle) {
+
+            Handles.BeginGUI();
+
+            // Draw add buttons for each node. Execute callback on button
+            // press.
+            for (var i = 0; i < nodePositions.Count; i++) {
+                // Translate node's 3d position into screen coordinates.
+                var guiPoint = HandleUtility.WorldToGUIPoint(
+                    nodePositions[i]);
+
+                // Draw button.
+                var buttonPressed = DrawButton(
+                    guiPoint,
+                    buttonHoffset,
+                    buttonVoffset,
+                    15,
+                    15,
+                    buttonStyle);
+
+                if (buttonPressed) {
+                    callback(i);
+                }
+            }
+
+            Handles.EndGUI();
+        }
+
+        public static void DrawNodeLabels(
+            List<Vector3> nodeGlobalPositions,
+            string[] text,
+            int offsetX,
+            int offsetY,
+            int labelWidth,
+            int labelHeight,
+            GUIStyle style) {
+
+            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
+                DrawNodeLabel(
+                    nodeGlobalPositions[i],
+                    text[i],
+                    offsetX,
+                    offsetY,
+                    labelWidth,
+                    labelHeight,
+                    style);
+            }
+        }
+
+        /// <summary>
+        ///     Draw position handles using Unity's default movement handle.
+        /// </summary>
+        /// <param name="nodeGlobalPositions"></param>
+        /// <param name="callback"></param>
+        public static void DrawPositionHandles(
+            List<Vector3> nodeGlobalPositions,
+            Action<int, Vector3> callback) {
+
+            // For each node..
+            for (var i = 0; i < nodeGlobalPositions.Count; i++) {
+                // Draw position handle.
+                var newGlobalPos = Handles.PositionHandle(
+                    nodeGlobalPositions[i],
+                    Quaternion.identity);
+
+                // If node was moved..
+                if (newGlobalPos != nodeGlobalPositions[i]) {
+                    callback(i, newGlobalPos);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     For each node in the scene draw handle that allow manipulating
+        ///     tangents for each of the animation curves separately.
+        /// </summary>
+        /// <returns>True if any handle was moved.</returns>
+        public static void DrawTangentHandles(
+            List<Vector3> nodes,
+            Color handleColor,
+            float handleSizeConst,
+            Action<int, Vector3> callback) {
+
+            Handles.color = handleColor;
+
+            // For each node..
+            for (var i = 0; i < nodes.Count; i++) {
+                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
+                var sphereSize = handleSize * handleSizeConst;
+
+                // draw node's handle.
+                var newHandleValue = Handles.FreeMoveHandle(
+                    nodes[i],
+                    Quaternion.identity,
+                    sphereSize,
+                    Vector3.zero,
+                    Handles.CircleCap);
+
+                // How much tangent's value changed in this frame.
+                var tangentDelta = newHandleValue - nodes[i];
+
+                // Remember if handle was moved.
+                if (tangentDelta != Vector3.zero) {
+                    callback(i, tangentDelta);
+                }
             }
         }
 
@@ -298,7 +344,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="scaleHandleSize">Handle size.</param>
         /// <param name="arcRadius">Position offset.</param>
         /// <param name="handleColor">Handle color.</param>
-        /// <param name="allowNegative">If handle can return negative values.</param>
         /// <returns></returns>
         private static float DrawArcScaleHandle(
             float value,
@@ -317,8 +362,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Calculate displayed value.
             var handleValue = value % 360;
 
-            // Set initial handle value. Without it, after reseting handle value,
-            // the value would change really slow.
+            // Set initial handle value. Without it, after reseting handle
+            // value, the value would change really slow.
             handleValue = Math.Abs(handleValue) < MinValueThreshold
                 ? initialValue
                 : handleValue;
@@ -359,8 +404,10 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         /// <param name="arcHandleRadius">Radius of the arc.</param>
         /// <param name="scaleHandleSize"></param>
         /// <param name="handleColor">Handle color.</param>
-        /// <param name="callback">Callback that will be executed when arc value changes. It takes changed value as an argument.</param>
-        /// <param name="arcValue">Value passed to the tool.</param>
+        /// <param name="callback">
+        ///     Callback that will be executed when arc value changes. It takes
+        ///     changed value as an argument.
+        /// </param>
         private static void DrawArcTool(
             float value,
             bool allowNegative,
@@ -388,7 +435,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
             var newArcValue = DrawArcScaleHandle(
                 arcValue,
-                //allowNegative,
                 position,
                 initialValue,
                 scaleHandleSize,
@@ -480,13 +526,17 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Save new tilting value to animation curve.
+        ///     Convert arc value to be saved in animation curve.
         /// </summary>
         /// <param name="arcValue"></param>
         /// <param name="newArcValue"></param>
-        /// <param name="allowNegative">If negative values can be saved to the animation curve.</param>
+        /// <param name="allowNegative">
+        ///     If negative values can be saved to the animation curve.
+        /// </param>
         /// <param name="arcValueMultiplier"></param>
-        /// <param name="callback">Pass updated value here.</param>
+        /// <param name="callback">
+        ///     Method used to save value to animationpath.
+        /// </param>
         private static void SaveArcValue(
             float arcValue,
             float newArcValue,
@@ -498,7 +548,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var modArcValue = arcValue % 360;
             var modNewArcValue = newArcValue % 360;
 
-            // Return if value wasn't changed.
+            // Return if value wasn't changed. todo move this up.
             if (Utilities.FloatsEqual(
                 modArcValue,
                 modNewArcValue,
@@ -507,6 +557,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             var diff = Utilities.CalculateDifferenceBetweenAngles(
                 modArcValue,
                 modNewArcValue);
+
             var resultValue = arcValue + diff;
 
             // Convert value in degrees to back curve value.
@@ -518,43 +569,8 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Save value to animation curve.
             callback(curveValue);
         }
-        /// <summary>
-        ///     For each node in the scene draw handle that allow manipulating
-        ///     tangents for each of the animation curves separately.
-        /// </summary>
-        /// <returns>True if any handle was moved.</returns>
-        public static void DrawTangentHandles(
-            List<Vector3> nodes,
-            Color handleColor,
-            float handleSizeConst,
-            Action<int, Vector3> callback) {
 
-            Handles.color = handleColor;
-
-            // For each node..
-            for (var i = 0; i < nodes.Count; i++) {
-                var handleSize = HandleUtility.GetHandleSize(nodes[i]);
-                var sphereSize = handleSize * handleSizeConst;
-
-                // draw node's handle.
-                var newHandleValue = Handles.FreeMoveHandle(
-                    nodes[i],
-                    Quaternion.identity,
-                    sphereSize,
-                    Vector3.zero,
-                    Handles.CircleCap);
-
-                // How much tangent's value changed in this frame.
-                var tangentDelta = newHandleValue - nodes[i];
-
-                // Remember if handle was moved.
-                if (tangentDelta != Vector3.zero) {
-                    // Execute callback.
-                    callback(i, tangentDelta);
-                }
-            }
-        }
-        #endregion
+        #endregion METHDOS
     }
 
 }

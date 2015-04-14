@@ -1,31 +1,34 @@
-﻿/*The MIT License (MIT)
-
-Copyright (c) 2015 Bartłomiej Wołk
-Please direct any bugs/comments/suggestions to bartlomiejwolk@gmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.*/
+﻿/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+ * Please direct any bugs/comments/suggestions to bartlomiejwolk@gmail.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorComponent {
+namespace AnimationPathTools.AnimatorComponent {
 
     /// <summary>
     ///     Represents 3d points with three animation curves.
@@ -37,17 +40,46 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
     /// </remarks>
     [Serializable]
     public class AnimationPath {
+        #region DO METHODS
+
+        /// <summary>
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
+        /// <remarks>http://stackoverflow.com/questions/3874627/floating-point-comparison-functions-for-c-sharp</remarks>
+        private bool FloatsEqual(float a, float b, float epsilon) {
+            var absA = Math.Abs(a);
+            var absB = Math.Abs(b);
+            var diff = Math.Abs(a - b);
+
+            if (a == b) {
+                // shortcut, handles infinities
+                return true;
+            }
+            if (a == 0 || b == 0) {
+                // a or b is zero or both are extremely close to it
+                // relative error is less meaningful here
+                return diff < (epsilon * Single.MinValue);
+            }
+            // use relative error
+            return diff / (absA + absB) < epsilon;
+        }
+
+        #endregion
+
         #region FIELDS
+
+        private const float FloatPrecision = 0.0000001f;
+
+        private const int PathLengthSampling = 10;
 
         /// <summary>
         ///     Animation curves based on which the animation path is constructed.
         /// </summary>
         [SerializeField]
         private AnimationCurve[] curves;
-
-        private const float FloatPrecision = 0.0000001f;
-
-        private const int PathLengthSampling = 10;
 
         #endregion FIELDS
 
@@ -83,28 +115,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
 
         #endregion
 
-        #region METHODS
-
-        /// <summary>
-        ///     Constructor.
-        /// </summary>
-        public AnimationPath() {
-            InitializeAnimationPathCurves();
-        }
-
-        /// <summary>
-        ///     Adds node at timestamp. Node's position will be evaluated using existing path.
-        /// </summary>
-        /// <param name="timestamp">Timestamp of for the node.</param>
-        public void AddNodeAtTime(float timestamp) {
-            // For each curve..
-            for (var j = 0; j < 3; j++) {
-                // Get key value.
-                var newKeyValue = Curves[j].Evaluate(timestamp);
-                // Add new key to path.
-                Curves[j].AddKey(timestamp, newKeyValue);
-            }
-        }
+        #region GET METHODS
 
         /// <summary>
         ///     Calculates path length.
@@ -192,70 +203,6 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Changes in/out tangents of a single node.
-        /// </summary>
-        /// <param name="nodeIndex">Node index.</param>
-        /// <param name="inTangent">New in tangent.</param>
-        /// <param name="outTangent">New out tangent</param>
-        public void ChangeNodeTangents(
-            int nodeIndex,
-            float inTangent,
-            float outTangent) {
-
-            // Copy keys.
-            var keyXCopy = Curves[0].keys[nodeIndex];
-            var keyYCopy = Curves[1].keys[nodeIndex];
-            var keyZCopy = Curves[2].keys[nodeIndex];
-
-            // Update keys' values.
-            keyXCopy.inTangent = inTangent;
-            keyYCopy.inTangent = inTangent;
-            keyZCopy.inTangent = inTangent;
-
-            keyXCopy.outTangent = outTangent;
-            keyYCopy.outTangent = outTangent;
-            keyZCopy.outTangent = outTangent;
-
-            // Update keys.
-            Curves[0].MoveKey(nodeIndex, keyXCopy);
-            Curves[1].MoveKey(nodeIndex, keyYCopy);
-            Curves[2].MoveKey(nodeIndex, keyZCopy);
-        }
-
-        /// <summary>
-        ///     Changes node timestamp.
-        /// </summary>
-        /// <param name="keyIndex">Node index.</param>
-        /// <param name="newTimestamp">New timestamp.</param>
-        public void ChangeNodeTimestamp(
-            int keyIndex,
-            float newTimestamp) {
-
-            // For each curve..
-            for (var i = 0; i < 3; i++) {
-                // Get copy of the key from animation curves.
-                var keyCopy = Curves[i].keys[keyIndex];
-
-                // Change key's time.
-                keyCopy.time = newTimestamp;
-
-                // Replace old key with a new one.
-                Curves[i].MoveKey(keyIndex, keyCopy);
-            }
-        }
-
-        /// <summary>
-        ///     Creates new node at position.
-        /// </summary>
-        /// <param name="timestamp">Node timestamp.</param>
-        /// <param name="position">Node position</param>
-        public void CreateNewNode(float timestamp, Vector3 position) {
-            Curves[0].AddKey(timestamp, position.x);
-            Curves[1].AddKey(timestamp, position.y);
-            Curves[2].AddKey(timestamp, position.z);
-        }
-
-        /// <summary>
         ///     Extracts 3d points from a path section between two given nodes.
         /// </summary>
         /// <param name="firstNodeIndex">First node index.</param>
@@ -325,26 +272,36 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
         }
 
         /// <summary>
+        ///     Returns node index at the specified timestamp.
+        /// </summary>
+        /// <param name="searchedTimestamps">Timestamp to search for.</param>
+        /// <returns>Node index. -1 if no node at time was found.</returns>
+        public int GetNodeIndexAtTime(float searchedTimestamps) {
+            var timestamps = Curves[0].keys.Select(key => key.time).ToList();
+
+            // For each timestamp in the path..
+            for (var i = 0; i < timestamps.Count; i++) {
+                // If is equal with arg.
+                if (Utilities.FloatsEqual(
+                    timestamps[i],
+                    searchedTimestamps,
+                    FloatPrecision)) {
+
+                    // Return node index.
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
         ///     Returns timestamp of a given node.
         /// </summary>
         /// <param name="keyIndex">Node index</param>
         /// <returns></returns>
         public float GetTimeAtKey(int keyIndex) {
             return Curves[0].keys[keyIndex].time;
-        }
-
-        /// <summary>
-        ///     Returns timestamps of all nodes.
-        /// </summary>
-        /// <returns>Array with node timestamps.</returns>
-        private float[] GetTimestamps() {
-            var timestamps = new float[KeysNo];
-
-            for (var i = 0; i < KeysNo; i++) {
-                timestamps[i] = Curves[0].keys[i].time;
-            }
-
-            return timestamps;
         }
 
         /// <summary>
@@ -379,59 +336,16 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             return pos;
         }
 
-        /// <summary>
-        ///     Changes node's position at index.
-        /// </summary>
-        /// <param name="keyIndex">Index of the key to update.</param>
-        /// <param name="position">New node position.</param>
-        public void MovePointToPosition(
-            int keyIndex,
-            Vector3 position) {
-
-            // Copy keys.
-            var keyXCopy = Curves[0].keys[keyIndex];
-            var keyYCopy = Curves[1].keys[keyIndex];
-            var keyZCopy = Curves[2].keys[keyIndex];
-
-            // Update keys' values.
-            keyXCopy.value = position.x;
-            keyYCopy.value = position.y;
-            keyZCopy.value = position.z;
-
-            // Move keys.
-            Curves[0].MoveKey(keyIndex, keyXCopy);
-            Curves[1].MoveKey(keyIndex, keyYCopy);
-            Curves[2].MoveKey(keyIndex, keyZCopy);
-        }
-
-        public void MovePointToPosition(
-            float timestamp,
-            Vector3 position) {
-
-            var nodeIndex = GetNodeIndexAtTime(timestamp);
-            MovePointToPosition(nodeIndex, position);
-        }
-
-        /// <summary>
-        ///     Removes all nodes.
-        /// </summary>
-        public void RemoveAllNodes() {
-            var keysToRemoveNo = KeysNo;
-            for (var i = 0; i < keysToRemoveNo; i++) {
-                RemoveNode(0);
+        public bool NodeAtTimeExists(float timestamp) {
+            var foundMatch = false;
+            for (var i = 0; i < KeysNo; i++) {
+                // If it is the node to change..
+                if (FloatsEqual(Timestamps[i], timestamp, FloatPrecision)) {
+                    foundMatch = true;
+                }
             }
-        }
 
-        /// <summary>
-        ///     Removes node at index.
-        /// </summary>
-        /// <param name="nodeIndex">Node index.</param>
-        public void RemoveNode(int nodeIndex) {
-            // For each animation curve..
-            for (var i = 0; i < 3; i++) {
-                // Remove node keys.
-                Curves[i].RemoveKey(nodeIndex);
-            }
+            return foundMatch;
         }
 
         /// <summary>
@@ -504,7 +418,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             // Helper variable.
             // Used to read values from animation curves.
             float time = 0;
- 
+
             // For each point to extract..
             for (var i = 0; i < samplingRate; i++) {
                 // Add to result list.
@@ -514,7 +428,247 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
 
             return resultTimestamps;
-        } 
+        }
+
+        /// <summary>
+        ///     Returns timestamps of all nodes.
+        /// </summary>
+        /// <returns>Array with node timestamps.</returns>
+        private float[] GetTimestamps() {
+            var timestamps = new float[KeysNo];
+
+            for (var i = 0; i < KeysNo; i++) {
+                timestamps[i] = Curves[0].keys[i].time;
+            }
+
+            return timestamps;
+        }
+
+        #endregion PRIVATE METHODS
+
+        #region EDIT METHODS
+
+        /// <summary>
+        ///     Constructor.
+        /// </summary>
+        public AnimationPath() {
+            InitializeAnimationPathCurves();
+        }
+
+        /// <summary>
+        ///     Adds node at timestamp. Node's position will be evaluated using existing path.
+        /// </summary>
+        /// <param name="timestamp">Timestamp of for the node.</param>
+        public void AddNodeAtTime(float timestamp) {
+            // For each curve..
+            for (var j = 0; j < 3; j++) {
+                // Get key value.
+                var newKeyValue = Curves[j].Evaluate(timestamp);
+                // Add new key to path.
+                Curves[j].AddKey(timestamp, newKeyValue);
+            }
+        }
+
+        /// <summary>
+        ///     Changes in/out tangents of a single node.
+        /// </summary>
+        /// <param name="nodeIndex">Node index.</param>
+        /// <param name="inTangent">New in tangent.</param>
+        /// <param name="outTangent">New out tangent</param>
+        public void ChangeNodeTangents(
+            int nodeIndex,
+            float inTangent,
+            float outTangent) {
+
+            // Copy keys.
+            var keyXCopy = Curves[0].keys[nodeIndex];
+            var keyYCopy = Curves[1].keys[nodeIndex];
+            var keyZCopy = Curves[2].keys[nodeIndex];
+
+            // Update keys' values.
+            keyXCopy.inTangent = inTangent;
+            keyYCopy.inTangent = inTangent;
+            keyZCopy.inTangent = inTangent;
+
+            keyXCopy.outTangent = outTangent;
+            keyYCopy.outTangent = outTangent;
+            keyZCopy.outTangent = outTangent;
+
+            // Update keys.
+            Curves[0].MoveKey(nodeIndex, keyXCopy);
+            Curves[1].MoveKey(nodeIndex, keyYCopy);
+            Curves[2].MoveKey(nodeIndex, keyZCopy);
+        }
+
+        /// <summary>
+        ///     Changes node timestamp.
+        /// </summary>
+        /// <param name="keyIndex">Node index.</param>
+        /// <param name="newTimestamp">New timestamp.</param>
+        public void ChangeNodeTimestamp(
+            int keyIndex,
+            float newTimestamp) {
+
+            // For each curve..
+            for (var i = 0; i < 3; i++) {
+                // Get copy of the key from animation curves.
+                var keyCopy = Curves[i].keys[keyIndex];
+
+                // Change key's time.
+                keyCopy.time = newTimestamp;
+
+                // Replace old key with a new one.
+                Curves[i].MoveKey(keyIndex, keyCopy);
+            }
+        }
+
+        /// <summary>
+        ///     Creates new node at position.
+        /// </summary>
+        /// <param name="timestamp">Node timestamp.</param>
+        /// <param name="position">Node position</param>
+        public void CreateNewNode(float timestamp, Vector3 position) {
+            Curves[0].AddKey(timestamp, position.x);
+            Curves[1].AddKey(timestamp, position.y);
+            Curves[2].AddKey(timestamp, position.z);
+        }
+
+        /// <summary>
+        ///     Changes node's position at index.
+        /// </summary>
+        /// <param name="keyIndex">Index of the key to update.</param>
+        /// <param name="position">New node position.</param>
+        public void MovePointToPosition(
+            int keyIndex,
+            Vector3 position) {
+
+            // Copy keys.
+            var keyXCopy = Curves[0].keys[keyIndex];
+            var keyYCopy = Curves[1].keys[keyIndex];
+            var keyZCopy = Curves[2].keys[keyIndex];
+
+            // Update keys' values.
+            keyXCopy.value = position.x;
+            keyYCopy.value = position.y;
+            keyZCopy.value = position.z;
+
+            // Move keys.
+            Curves[0].MoveKey(keyIndex, keyXCopy);
+            Curves[1].MoveKey(keyIndex, keyYCopy);
+            Curves[2].MoveKey(keyIndex, keyZCopy);
+        }
+
+        public void MovePointToPosition(
+            float timestamp,
+            Vector3 position) {
+
+            var nodeIndex = GetNodeIndexAtTime(timestamp);
+            MovePointToPosition(nodeIndex, position);
+        }
+
+        public void OffsetNodeTangents(
+            int nodeIndex,
+            Vector3 tangentDelta) {
+
+            // Copy keys.
+            var keyXCopy = Curves[0].keys[nodeIndex];
+            var keyYCopy = Curves[1].keys[nodeIndex];
+            var keyZCopy = Curves[2].keys[nodeIndex];
+
+            // Update keys' values.
+            keyXCopy.inTangent += tangentDelta.x;
+            keyYCopy.inTangent += tangentDelta.y;
+            keyZCopy.inTangent += tangentDelta.z;
+
+            keyXCopy.outTangent += tangentDelta.x;
+            keyYCopy.outTangent += tangentDelta.y;
+            keyZCopy.outTangent += tangentDelta.z;
+
+            // Update keys.
+            Curves[0].MoveKey(nodeIndex, keyXCopy);
+            Curves[1].MoveKey(nodeIndex, keyYCopy);
+            Curves[2].MoveKey(nodeIndex, keyZCopy);
+        }
+
+        /// <summary>
+        ///     Removes all nodes.
+        /// </summary>
+        public void RemoveAllNodes() {
+            var keysToRemoveNo = KeysNo;
+            for (var i = 0; i < keysToRemoveNo; i++) {
+                RemoveNode(0);
+            }
+        }
+
+        /// <summary>
+        ///     Removes node at index.
+        /// </summary>
+        /// <param name="nodeIndex">Node index.</param>
+        public void RemoveNode(int nodeIndex) {
+            // For each animation curve..
+            for (var i = 0; i < 3; i++) {
+                // Remove node keys.
+                Curves[i].RemoveKey(nodeIndex);
+            }
+        }
+
+        /// <summary>
+        ///     Replaces path timestamps with those passed in the argument.
+        /// </summary>
+        /// <param name="newTimestamps"></param>
+        public void ReplaceTimestamps(List<float> newTimestamps) {
+            // Number of new timestamps must match path nodes number.
+            if (newTimestamps.Count != KeysNo) return;
+
+            var xNodesCopy = new List<Keyframe>(KeysNo);
+            var yNodesCopy = new List<Keyframe>(KeysNo);
+            var zNodesCopy = new List<Keyframe>(KeysNo);
+
+            // Copy path nodes.
+            for (var i = 0; i < KeysNo; i++) {
+                xNodesCopy.Add(Curves[0].keys[i]);
+                yNodesCopy.Add(Curves[1].keys[i]);
+                zNodesCopy.Add(Curves[2].keys[i]);
+            }
+
+            // Update node timestamps (only non-extreme nodes).
+            for (var i = 1; i < KeysNo - 1; i++) {
+                var modifiedKeyframe = new Keyframe(
+                    newTimestamps[i],
+                    xNodesCopy[i].value,
+                    xNodesCopy[i].inTangent,
+                    xNodesCopy[i].outTangent);
+
+                xNodesCopy[i] = modifiedKeyframe;
+
+                modifiedKeyframe = new Keyframe(
+                    newTimestamps[i],
+                    yNodesCopy[i].value,
+                    yNodesCopy[i].inTangent,
+                    yNodesCopy[i].outTangent);
+
+                yNodesCopy[i] = modifiedKeyframe;
+
+                modifiedKeyframe = new Keyframe(
+                    newTimestamps[i],
+                    zNodesCopy[i].value,
+                    zNodesCopy[i].inTangent,
+                    zNodesCopy[i].outTangent);
+
+                zNodesCopy[i] = modifiedKeyframe;
+            }
+
+            var keysNo = KeysNo;
+
+            RemoveAllNodes();
+
+            // Add updated nodes to animation path.
+            for (var i = 0; i < keysNo; i++) {
+                Curves[0].AddKey(xNodesCopy[i]);
+                Curves[1].AddKey(yNodesCopy[i]);
+                Curves[2].AddKey(zNodesCopy[i]);
+            }
+        }
 
         /// <summary>
         ///     Smooth in/out tangents of all nodes.
@@ -549,156 +703,7 @@ namespace ATP.AnimationPathTools.AnimatorComponent {
             }
         }
 
-        /// <summary>
-        /// Returns node index at the specified timestamp.
-        /// </summary>
-        /// <param name="searchedTimestamps">Timestamp to search for.</param>
-        /// <returns>Node index. -1 if no node at time was found.</returns>
-        public int GetNodeIndexAtTime(float searchedTimestamps) {
-            List<float> timestamps = new List<float>();
-            // For each key in a curve..
-            foreach (var key in Curves[0].keys) {
-                // Remember timestamp.
-                timestamps.Add(key.time);
-            }
-
-            // For each timestamp in the path..
-            for (int i = 0; i < timestamps.Count; i++) {
-                // If is equal with arg.
-                if (Utilities.FloatsEqual(
-                    timestamps[i],
-                    searchedTimestamps,
-                    FloatPrecision)) {
-
-                    // Return node index.
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        public void OffsetNodeTangents(
-                int nodeIndex,
-                Vector3 tangentDelta) {
-
-            // Copy keys.
-            var keyXCopy = Curves[0].keys[nodeIndex];
-            var keyYCopy = Curves[1].keys[nodeIndex];
-            var keyZCopy = Curves[2].keys[nodeIndex];
-
-            // Update keys' values.
-            keyXCopy.inTangent += tangentDelta.x;
-            keyYCopy.inTangent += tangentDelta.y;
-            keyZCopy.inTangent += tangentDelta.z;
-
-            keyXCopy.outTangent += tangentDelta.x;
-            keyYCopy.outTangent += tangentDelta.y;
-            keyZCopy.outTangent += tangentDelta.z;
-
-            // Update keys.
-            Curves[0].MoveKey(nodeIndex, keyXCopy);
-            Curves[1].MoveKey(nodeIndex, keyYCopy);
-            Curves[2].MoveKey(nodeIndex, keyZCopy);
-        }
-
-        #endregion PRIVATE METHODS
-
-        public bool NodeAtTimeExists(float timestamp) {
-            var foundMatch = false;
-            for (var i = 0; i < KeysNo; i++) {
-                // If it is the node to change..
-                if (FloatsEqual(Timestamps[i], timestamp, FloatPrecision)) {
-                    foundMatch = true;
-                }
-            }
-
-            return foundMatch;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="epsilon"></param>
-        /// <returns></returns>
-        /// <remarks>http://stackoverflow.com/questions/3874627/floating-point-comparison-functions-for-c-sharp</remarks>
-        private bool FloatsEqual(float a, float b, float epsilon) {
-            var absA = Math.Abs(a);
-            var absB = Math.Abs(b);
-            var diff = Math.Abs(a - b);
-
-            if (a == b) {
-                // shortcut, handles infinities
-                return true;
-            }
-            if (a == 0 || b == 0) {
-                // a or b is zero or both are extremely close to it
-                // relative error is less meaningful here
-                return diff < (epsilon * Single.MinValue);
-            }
-            // use relative error
-            return diff / (absA + absB) < epsilon;
-        }
-
-        /// <summary>
-        /// Replaces path timestamps with those passed in the argument.
-        /// </summary>
-        /// <param name="newTimestamps"></param>
-        public void ReplaceTimestamps(List<float> newTimestamps) {
-            // Number of new timestamps must match path nodes number.
-            if (newTimestamps.Count != KeysNo) return;
-
-            var xNodesCopy = new List<Keyframe>(KeysNo);
-            var yNodesCopy = new List<Keyframe>(KeysNo);
-            var zNodesCopy = new List<Keyframe>(KeysNo);
-
-            // Copy path nodes.
-            for (int i = 0; i < KeysNo; i++) {
-                xNodesCopy.Add(Curves[0].keys[i]);
-                yNodesCopy.Add(Curves[1].keys[i]);
-                zNodesCopy.Add(Curves[2].keys[i]);
-            }
-
-            // Update node timestamps (only non-extreme nodes).
-            for (int i = 1; i < KeysNo - 1; i++) {
-                var modifiedKeyframe = new Keyframe(
-                    newTimestamps[i],
-                    xNodesCopy[i].value,
-                    xNodesCopy[i].inTangent,
-                    xNodesCopy[i].outTangent);
-
-                xNodesCopy[i] = modifiedKeyframe;
-
-                modifiedKeyframe = new Keyframe(
-                    newTimestamps[i],
-                    yNodesCopy[i].value,
-                    yNodesCopy[i].inTangent,
-                    yNodesCopy[i].outTangent);
-
-                yNodesCopy[i] = modifiedKeyframe;
-
-                modifiedKeyframe = new Keyframe(
-                    newTimestamps[i],
-                    zNodesCopy[i].value,
-                    zNodesCopy[i].inTangent,
-                    zNodesCopy[i].outTangent);
-
-                zNodesCopy[i] = modifiedKeyframe;
-            }
-
-            var keysNo = KeysNo;
-
-            RemoveAllNodes();
-
-            // Add updated nodes to animation path.
-            for (int i = 0; i < keysNo; i++) {
-                Curves[0].AddKey(xNodesCopy[i]);
-                Curves[1].AddKey(yNodesCopy[i]);
-                Curves[2].AddKey(zNodesCopy[i]);
-            }
-        }
-
+        #endregion
     }
 
 }

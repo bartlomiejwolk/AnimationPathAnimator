@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root.
 
 using System.Collections.Generic;
-using ATP.AnimationPathTools.ReorderableList.Internal;
+using AnimationPathTools.ReorderableList.Internal;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.ReorderableList {
+namespace AnimationPathTools.ReorderableList {
 
 	/// <summary>
 	/// Utility class for drawing reorderable lists.

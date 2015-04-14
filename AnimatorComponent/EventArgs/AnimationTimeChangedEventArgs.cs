@@ -5,14 +5,15 @@
  * Licensed under the MIT license. See LICENSE file in the project root folder.
  */
 
-namespace AnimationPathTools.AnimatorComponent {
+using System;
 
-    public enum AnimatorWrapMode {
+public sealed class AnimationTimeChangedEventArgs : EventArgs {
 
-        Clamp = 1,
-        Loop = 2,
-        PingPong = 4
+    public float DeltaTime { get; set; }
 
+    public AnimationTimeChangedEventArgs(float deltaTime) {
+        DeltaTime = deltaTime;
     }
 
 }
+

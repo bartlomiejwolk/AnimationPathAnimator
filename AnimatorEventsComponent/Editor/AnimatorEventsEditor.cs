@@ -1,15 +1,18 @@
-﻿using System;
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+//  
+// This file is part of the AnimationPath Animator Unity extension.
+// Licensed under the MIT license. See LICENSE file in the project root folder.
+
 using System.Collections.Generic;
-using ATP.AnimationPathTools.AnimatorComponent;
-using ATP.AnimationPathTools.ReorderableList;
+using AnimationPathTools.AnimatorComponent;
+using AnimationPathTools.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 
-namespace ATP.AnimationPathTools.AnimatorEventsComponent {
+namespace AnimationPathTools.AnimatorEventsComponent {
 
     [CustomEditor(typeof (AnimatorEvents))]
     public class AnimatorEventsEditor : Editor {
-
         #region PROPERTIES
 
         public bool SerializedPropertiesInitialized { get; set; }
@@ -18,7 +21,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
         private AnimatorEventsSettings Settings { get; set; }
 
-        #endregion
+        #endregion PROPERTIES
 
         #region SERIALIZED PROPERTIES
 
@@ -30,7 +33,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
         private SerializedProperty settings;
         private SerializedProperty skin;
 
-        #endregion
+        #endregion SERIALIZED PROPERTIES
 
         #region UNITY MESSAGES
 
@@ -55,6 +58,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             DrawAdvancedSettingsFoldout();
             DrawAdvancedSettingsControls();
         }
+
         private void OnEnable() {
             Script = target as AnimatorEvents;
 
@@ -70,7 +74,8 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
 
             HandleDrawingMethodNames();
         }
-        #endregion
+
+        #endregion UNITY MESSAGES
 
         #region INSPECTOR
 
@@ -149,16 +154,16 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             serializedObject.ApplyModifiedProperties();
         }
 
-        #endregion
+        #endregion INSPECTOR
 
         #region METHODS
+
         private bool AssetsLoaded() {
-            return (bool)Utilities.InvokeMethodWithReflection(
+            return (bool) Utilities.InvokeMethodWithReflection(
                 Script,
                 "RequiredAssetsLoaded",
                 null);
         }
-
 
         private void HandleDrawingMethodNames() {
             if (!drawMethodNames.boolValue) return;
@@ -174,7 +179,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
                 (List<Vector3>) Utilities.InvokeMethodWithReflection(
                     Script,
                     "GetNodePositions",
-                    new object[] { -1 });
+                    new object[] {-1});
 
             // Wait until event slots number is synced with path nodes number.
             if (methodNames.Length != nodePositions.Count) return;
@@ -207,7 +212,7 @@ namespace ATP.AnimationPathTools.AnimatorEventsComponent {
             SerializedPropertiesInitialized = true;
         }
 
-        #endregion
+        #endregion METHODS
     }
 
 }

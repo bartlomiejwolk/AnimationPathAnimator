@@ -1,4 +1,4 @@
-﻿namespace AnimationPathTools {
+﻿namespace AnimationPathAnimator {
 
     /// <summary>
     ///     Helper class for logical bitwise combination setting of Enums with the Flag attribute.

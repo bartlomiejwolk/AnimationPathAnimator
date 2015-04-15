@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     public sealed class PathData : ScriptableObject {
         #region EVENTS
@@ -80,7 +80,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
         #region PROPERTIES
 
-        public AnimationCurve EaseCurve {
+        private AnimationCurve EaseCurve {
             get { return easeCurve; }
             set { easeCurve = value; }
         }
@@ -105,7 +105,7 @@ namespace AnimationPathTools.AnimatorComponent {
             get { return RotationPath.KeysNo; }
         }
 
-        public AnimationCurve TiltingCurve {
+        private AnimationCurve TiltingCurve {
             get { return tiltingCurve; }
             set { tiltingCurve = value; }
         }

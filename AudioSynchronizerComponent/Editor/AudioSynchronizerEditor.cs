@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimationPathTools.AudioSynchronizerComponent {
+namespace AnimationPathAnimator.AudioSynchronizerComponent {
 
     [CustomEditor(typeof (AudioSynchronizer))]
     public sealed class AudioSynchronizerEditor : Editor {

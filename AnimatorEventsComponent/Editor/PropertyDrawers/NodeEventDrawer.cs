@@ -7,7 +7,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorEventsComponent {
+namespace AnimationPathAnimator.AnimatorEventsComponent {
 
     [CustomPropertyDrawer(typeof (NodeEventSlot))]
     public sealed class NodeEventDrawer : PropertyDrawer {

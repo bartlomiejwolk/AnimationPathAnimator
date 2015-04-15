@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     /// <summary>
     ///     Animates object along path.
     /// </summary>
     [ExecuteInEditMode]
-    public sealed class AnimationPathAnimator : MonoBehaviour {
+    public sealed class PathAnimator : MonoBehaviour {
         #region EVENTS
 
         public delegate void PlayPauseEventHandler(
@@ -1550,7 +1550,7 @@ namespace AnimationPathTools.AnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 forwardPointPosition,
-                SettingsAsset.GizmosSubfolder + SettingsAsset.ForwardPointIcon,
+                SettingsAsset.GizmosSubfolder + "/" + SettingsAsset.ForwardPointIcon,
                 false);
         }
 
@@ -1562,7 +1562,7 @@ namespace AnimationPathTools.AnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetPosition,
-                SettingsAsset.GizmosSubfolder + SettingsAsset.TargetGizmoIcon,
+                SettingsAsset.GizmosSubfolder + "/" + SettingsAsset.TargetGizmoIcon,
                 false);
         }
 
@@ -1597,7 +1597,7 @@ namespace AnimationPathTools.AnimatorComponent {
             Gizmos.DrawIcon(
                 globalRotationPointPosition,
                 SettingsAsset.GizmosSubfolder
-                + SettingsAsset.CurrentRotationPointGizmoIcon,
+                + "/" + SettingsAsset.CurrentRotationPointGizmoIcon,
                 false);
         }
 
@@ -1656,7 +1656,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 Gizmos.DrawIcon(
                     globalRotPointPositions[i],
                     SettingsAsset.GizmosSubfolder
-                    + SettingsAsset.RotationPointGizmoIcon,
+                    + "/" + SettingsAsset.RotationPointGizmoIcon,
                     false);
             }
         }

@@ -6,7 +6,7 @@
 using System;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorEventsComponent {
+namespace AnimationPathAnimator.AnimatorEventsComponent {
 
     [Serializable]
     public sealed class NodeEventSlot {

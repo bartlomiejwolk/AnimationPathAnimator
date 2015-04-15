@@ -5,7 +5,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root folder.
  */
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     public enum PositionHandle { Free, Default }
 

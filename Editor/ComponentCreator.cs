@@ -5,20 +5,20 @@
  * Licensed under the MIT license. See LICENSE file in the project root folder.
  */
 
-using AnimationPathTools.AnimatorComponent;
-using AnimationPathTools.AnimatorEventsComponent;
-using AnimationPathTools.AnimatorSynchronizerComponent;
-using AnimationPathTools.AudioSynchronizerComponent;
+using AnimationPathAnimator.AnimatorComponent;
+using AnimationPathAnimator.AnimatorEventsComponent;
+using AnimationPathAnimator.AnimatorSynchronizerComponent;
+using AnimationPathAnimator.AudioSynchronizerComponent;
 using UnityEditor;
 
-namespace AnimationPathTools {
+namespace AnimationPathAnimator {
 
     public static class ComponentCreator {
 
-        [MenuItem("Component/AnimationPath Animator/AnimationPathAnimator")]
-        private static void AddAnimationPathAnimatorComponent() {
+        [MenuItem("Component/AnimationPath Animator/PathAnimator")]
+        private static void AddPathAnimatorComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(AnimationPathAnimator));
+                Selection.activeGameObject.AddComponent(typeof(PathAnimator));
             }
         }
 

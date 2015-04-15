@@ -5,7 +5,7 @@
 
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     public sealed class AnimatorSettings : ScriptableObject {
         #region ADVANCED FIELDS
@@ -216,7 +216,7 @@ namespace AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private Texture[] gizmoIcons;
 
-        private string gizmosSubfolder = "ATP/";
+        private string gizmosSubfolder = "AnimationPathAnimator";
 
         [SerializeField]
         private float maxPositionLerpSpeed = 1;
@@ -239,9 +239,25 @@ namespace AnimationPathTools.AnimatorComponent {
         [SerializeField]
         private float shortJumpMinValue = 0.0001f;
 
+        [SerializeField]
+        private float longJumpMaxValue = 0.004f;
+
+        [SerializeField]
+        private float longJumpMinValue = 0.1f;
+
         #endregion ANIMATOR FIELDS
 
         #region ANIMATOR PROPERTIES
+        public float LongJumpMinValue {
+            get { return longJumpMinValue; }
+            set { longJumpMinValue = value; }
+        }
+
+        public float LongJumpMaxValue {
+            get { return longJumpMaxValue; }
+            set { longJumpMaxValue = value; }
+        }
+
 
         public float AnimationSpeedDenominator {
             get { return animationSpeedDenominator; }
@@ -622,7 +638,6 @@ namespace AnimationPathTools.AnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
-
         #endregion HANDLES PROPERTIES
     }
 

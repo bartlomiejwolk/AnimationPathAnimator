@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     /// <summary>
     ///     Represents 3d points with three animation curves.

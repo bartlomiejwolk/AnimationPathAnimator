@@ -11,20 +11,20 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     /// <summary>
     ///     Editor class responsible for drawing inspector and on-scene handles.
     ///     All editor related functionality is defined here.
     /// </summary>
-    [CustomEditor(typeof (AnimationPathAnimator))]
-    public sealed class AnimationPathAnimatorEditor : Editor {
+    [CustomEditor(typeof (PathAnimator))]
+    public sealed class PathAnimatorEditor : Editor {
         #region PROPERTIES
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private AnimationPathAnimator Script { get; set; }
+        private PathAnimator Script { get; set; }
 
         #endregion PROPERTIES
 
@@ -76,7 +76,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
         private void OnEnable() {
             // Get target script reference.
-            Script = (AnimationPathAnimator) target;
+            Script = (PathAnimator) target;
 
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;
@@ -84,7 +84,7 @@ namespace AnimationPathTools.AnimatorComponent {
             InitializeSerializedProperties();
             CopyIconsToGizmosFolder();
             SceneTool.RememberCurrentTool();
-            FocusOnSceneView();
+            //FocusOnSceneView();
 
             // Update animated GO.
             Utilities.InvokeMethodWithReflection(
@@ -100,8 +100,7 @@ namespace AnimationPathTools.AnimatorComponent {
             if (Script.PathData == null) return;
 
             // Disable interaction with background scene elements.
-            HandleUtility.AddDefaultControl(
-                GUIUtility.GetControlID(
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(
                     FocusType.Passive));
 
             HandleShortcuts();
@@ -161,11 +160,6 @@ namespace AnimationPathTools.AnimatorComponent {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-                HandleDrawEaseCurve();
-                DrawTiltingCurve();
-
-                EditorGUILayout.Space();
-
                 DrawShortJumpValueField();
                 DrawLongJumpValueField();
 
@@ -352,14 +346,14 @@ namespace AnimationPathTools.AnimatorComponent {
             longJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Long Jump Value",
-                    string.Format("Fraction of animation time used to jump forward/backward "
-                    + "in time with shortcut keys {0} and {1}.",
-                    longJumpForwardKey,
-                    longJumpBackwardKey)),
+                    string.Format(
+                        "Fraction of animation time used to jump forward/backward "
+                        + "in time with shortcut keys {0} and {1}.",
+                        longJumpForwardKey,
+                        longJumpBackwardKey)),
                 longJumpValue.floatValue,
-                // todo create settings
-                0.004f,
-                0.1f);
+                Script.SettingsAsset.LongJumpMaxValue,
+                Script.SettingsAsset.LongJumpMinValue);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -691,15 +685,15 @@ namespace AnimationPathTools.AnimatorComponent {
             HandleTargetGOFieldChange(prevTargetGO);
         }
 
-        private void DrawTiltingCurve() {
-            if (Script.PathData == null) return;
+        //private void DrawTiltingCurve() {
+        //    if (Script.PathData == null) return;
 
-            Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
-                new GUIContent(
-                    "Tilting Curve",
-                    ""),
-                Script.PathData.TiltingCurve);
-        }
+        //    Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
+        //        new GUIContent(
+        //            "Tilting Curve",
+        //            ""),
+        //        Script.PathData.TiltingCurve);
+        //}
 
         private void DrawWrapModeDropdown() {
             Script.WrapMode =
@@ -710,15 +704,15 @@ namespace AnimationPathTools.AnimatorComponent {
                     Script.WrapMode);
         }
 
-        private void HandleDrawEaseCurve() {
-            if (Script.PathData == null) return;
+        //private void HandleDrawEaseCurve() {
+        //    if (Script.PathData == null) return;
 
-            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
-                new GUIContent(
-                    "Ease Curve",
-                    ""),
-                Script.PathData.EaseCurve);
-        }
+        //    Script.PathData.EaseCurve = EditorGUILayout.CurveField(
+        //        new GUIContent(
+        //            "Ease Curve",
+        //            ""),
+        //        Script.PathData.EaseCurve);
+        //}
 
         private void HandleDrawForwardPointOffsetSlider() {
             if (Script.RotationMode != RotationMode.Forward) return;
@@ -1394,13 +1388,13 @@ namespace AnimationPathTools.AnimatorComponent {
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
 
             Utilities.Assert(
-                () => Script.PathData.EaseCurve.length
+                () => Script.PathData.EaseCurveKeysNo
                       == prevEaseCurveNodesNo - 1,
                 String.Format(
                     "Key wasn't removed. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurve.length));
+                    Script.PathData.EaseCurveKeysNo));
 
             // Disable ease tool.
             Script.PathData.EaseToolState[index] = false;
@@ -1412,13 +1406,13 @@ namespace AnimationPathTools.AnimatorComponent {
             Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
 
             Utilities.Assert(
-                () => Script.PathData.TiltingCurve.length
+                () => Script.PathData.TiltingCurveKeysNo
                       == prevTiltingCurveNodesNo - 1,
                 String.Format(
                     "Key wasn't removed. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurve.length));
+                    Script.PathData.TiltingCurveKeysNo));
 
             // Disable ease tool.
             Script.PathData.TiltingToolState[index] = false;
@@ -1439,13 +1433,13 @@ namespace AnimationPathTools.AnimatorComponent {
             Script.PathData.AddKeyToEaseCurve(timestamp);
 
             Utilities.Assert(
-                () => Script.PathData.EaseCurve.length
+                () => Script.PathData.EaseCurveKeysNo
                       == prevEaseCurveNodesNo + 1,
                 String.Format(
                     "Key wasn't added. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurve.length));
+                    Script.PathData.EaseCurveKeysNo));
 
             // Enable ease tool for the node.
             Script.PathData.EaseToolState[index] = true;
@@ -1457,13 +1451,13 @@ namespace AnimationPathTools.AnimatorComponent {
             Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
 
             Utilities.Assert(
-                () => Script.PathData.TiltingCurve.length
+                () => Script.PathData.TiltingCurveKeysNo
                       == prevTiltingCurveNodesNo + 1,
                 String.Format(
                     "Key wasn't added. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurve.length));
+                    Script.PathData.TiltingCurveKeysNo));
 
             // Enable ease tool for the node.
             Script.PathData.TiltingToolState[index] = true;
@@ -1987,21 +1981,20 @@ namespace AnimationPathTools.AnimatorComponent {
 
         /// <summary>
         ///     Copies gizmo icons from component Resource folder to
-        ///     Assets/Gizmos/ATP.
+        ///     Assets/Gizmos/AnimationPathAnimator.
         /// </summary>
         private void CopyIconsToGizmosFolder() {
             // Path to Unity Gizmos folder.
-            var gizmosDir = Application.dataPath + "/Gizmos";
+            var gizmosDir = Application.dataPath + "/Gizmos/";
 
             // Create Asset/Gizmos folder if not exists.
             if (!Directory.Exists(gizmosDir)) {
                 Directory.CreateDirectory(gizmosDir);
             }
 
-            // Create Asset/Gizmos/ATP folder if not exists. todo rename folder
-            // to AnimationPathAnimator
-            if (!Directory.Exists(gizmosDir + "/ATP")) {
-                Directory.CreateDirectory(gizmosDir + "/ATP");
+            // Create Asset/Gizmos/AnimationPathAnimator folder if not exists.
+            if (!Directory.Exists(gizmosDir + Script.SettingsAsset.GizmosSubfolder)) {
+                Directory.CreateDirectory(gizmosDir + Script.SettingsAsset.GizmosSubfolder);
             }
 
             // Check if settings asset has icons specified.
@@ -2015,7 +2008,7 @@ namespace AnimationPathTools.AnimatorComponent {
                 // Copy icon to Gizmos folder.
                 AssetDatabase.CopyAsset(
                     iconPath,
-                    "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath));
+                    "Assets/Gizmos/" + Script.SettingsAsset.GizmosSubfolder + "/" + Path.GetFileName(iconPath));
             }
         }
 

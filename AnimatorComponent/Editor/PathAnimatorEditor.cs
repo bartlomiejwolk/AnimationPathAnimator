@@ -2008,7 +2008,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 // Copy icon to Gizmos folder.
                 AssetDatabase.CopyAsset(
                     iconPath,
-                    "Assets/Gizmos/" + Script.SettingsAsset.GizmosSubfolder + Path.GetFileName(iconPath));
+                    "Assets/Gizmos/" + Script.SettingsAsset.GizmosSubfolder + "/" + Path.GetFileName(iconPath));
             }
         }
 

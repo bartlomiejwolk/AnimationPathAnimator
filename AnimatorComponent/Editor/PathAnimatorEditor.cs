@@ -84,7 +84,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             InitializeSerializedProperties();
             CopyIconsToGizmosFolder();
             SceneTool.RememberCurrentTool();
-            FocusOnSceneView();
+            //FocusOnSceneView();
 
             // Update animated GO.
             Utilities.InvokeMethodWithReflection(

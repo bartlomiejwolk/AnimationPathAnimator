@@ -10,18 +10,18 @@ using UnityEngine;
 
 namespace AnimationPathTools.AnimatorSynchronizerComponent {
 
-    [RequireComponent(typeof (AnimationPathAnimator))]
+    [RequireComponent(typeof (PathAnimator))]
     public sealed class AnimatorSynchronizer : MonoBehaviour {
         #region FIELDS
 
         [SerializeField]
-        private AnimationPathAnimator animator;
+        private PathAnimator animator;
 
         /// <summary>
         /// </summary>
         /// <remarks>Assigned in editor.</remarks>
         [SerializeField]
-        private List<AnimationPathAnimator> targetComponents;
+        private List<PathAnimator> targetComponents;
 
         #endregion
 
@@ -30,12 +30,12 @@ namespace AnimationPathTools.AnimatorSynchronizerComponent {
         /// <summary>
         ///     Source animator component.
         /// </summary>
-        public AnimationPathAnimator Animator {
+        public PathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
 
-        public List<AnimationPathAnimator> TargetComponents {
+        public List<PathAnimator> TargetComponents {
             get { return targetComponents; }
         }
 

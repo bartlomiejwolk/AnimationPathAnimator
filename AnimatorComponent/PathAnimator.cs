@@ -14,7 +14,7 @@ namespace AnimationPathTools.AnimatorComponent {
     ///     Animates object along path.
     /// </summary>
     [ExecuteInEditMode]
-    public sealed class AnimationPathAnimator : MonoBehaviour {
+    public sealed class PathAnimator : MonoBehaviour {
         #region EVENTS
 
         public delegate void PlayPauseEventHandler(

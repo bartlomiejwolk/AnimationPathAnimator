@@ -17,14 +17,14 @@ namespace AnimationPathTools.AnimatorComponent {
     ///     Editor class responsible for drawing inspector and on-scene handles.
     ///     All editor related functionality is defined here.
     /// </summary>
-    [CustomEditor(typeof (AnimationPathAnimator))]
+    [CustomEditor(typeof (PathAnimator))]
     public sealed class AnimationPathAnimatorEditor : Editor {
         #region PROPERTIES
 
         /// <summary>
         ///     Reference to target script.
         /// </summary>
-        private AnimationPathAnimator Script { get; set; }
+        private PathAnimator Script { get; set; }
 
         #endregion PROPERTIES
 
@@ -76,7 +76,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
         private void OnEnable() {
             // Get target script reference.
-            Script = (AnimationPathAnimator) target;
+            Script = (PathAnimator) target;
 
             // Return is required assets are not referenced.
             if (!RequiredAssetsLoaded()) return;

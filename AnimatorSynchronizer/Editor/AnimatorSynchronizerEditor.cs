@@ -23,12 +23,12 @@ namespace AnimationPathTools.AnimatorSynchronizerComponent {
 
         private void DrawSourceAnimatorField() {
             Script.Animator =
-                (AnimationPathAnimator) EditorGUILayout.ObjectField(
+                (PathAnimator) EditorGUILayout.ObjectField(
                     new GUIContent(
                         "Animator",
                         ""),
                     Script.Animator,
-                    typeof (AnimationPathAnimator),
+                    typeof (PathAnimator),
                     true);
         }
 

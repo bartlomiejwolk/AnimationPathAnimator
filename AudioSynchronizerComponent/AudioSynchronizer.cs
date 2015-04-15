@@ -14,7 +14,7 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
     ///     Allows controlling <c>AudioSource</c> component from inspector
     ///     and with keyboard shortcuts.
     /// </summary>
-    [RequireComponent(typeof (AnimationPathAnimator))]
+    [RequireComponent(typeof (PathAnimator))]
     [RequireComponent(typeof (AudioSource))]
     public sealed class AudioSynchronizer : MonoBehaviour {
         #region FIELDS
@@ -23,7 +23,7 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
         private AudioSource audioSource;
 
         [SerializeField]
-        private AnimationPathAnimator animator;
+        private PathAnimator animator;
 
         /// <summary>
         ///     If to start audio playback on play mode enter.
@@ -57,7 +57,7 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
         /// <summary>
         ///     Reference to animator component.
         /// </summary>
-        public AnimationPathAnimator Animator {
+        public PathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
@@ -86,7 +86,7 @@ namespace AnimationPathTools.AudioSynchronizerComponent {
 
         private void Reset() {
             AudioSource = GetComponent<AudioSource>();
-            Animator = GetComponent<AnimationPathAnimator>();
+            Animator = GetComponent<PathAnimator>();
         }
 
         private void OnDisable() {

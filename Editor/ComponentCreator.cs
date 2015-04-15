@@ -18,7 +18,7 @@ namespace AnimationPathTools {
         [MenuItem("Component/AnimationPath Animator/AnimationPathAnimator")]
         private static void AddAnimationPathAnimatorComponent() {
             if (Selection.activeGameObject != null) {
-                Selection.activeGameObject.AddComponent(typeof(AnimationPathAnimator));
+                Selection.activeGameObject.AddComponent(typeof(PathAnimator));
             }
         }
 

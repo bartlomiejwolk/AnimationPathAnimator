@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace AnimationPathTools.AnimatorEventsComponent {
 
-    [RequireComponent(typeof (AnimationPathAnimator))]
+    [RequireComponent(typeof (PathAnimator))]
     public class AnimatorEvents : MonoBehaviour {
         #region FIELDS
 
@@ -18,7 +18,7 @@ namespace AnimationPathTools.AnimatorEventsComponent {
         private bool advancedSettingsFoldout;
 
         [SerializeField]
-        private AnimationPathAnimator animator;
+        private PathAnimator animator;
 
 #pragma warning disable 0414
 
@@ -40,7 +40,7 @@ namespace AnimationPathTools.AnimatorEventsComponent {
 
         #region PROPERTIES
 
-        public AnimationPathAnimator Animator {
+        public PathAnimator Animator {
             get { return animator; }
             set { animator = value; }
         }
@@ -83,7 +83,7 @@ namespace AnimationPathTools.AnimatorEventsComponent {
         }
 
         private void Reset() {
-            Animator = GetComponent<AnimationPathAnimator>();
+            Animator = GetComponent<PathAnimator>();
             nodeEventSlots = new List<NodeEventSlot>();
 
             InitializeSlots();
@@ -254,7 +254,7 @@ namespace AnimationPathTools.AnimatorEventsComponent {
         private void SubscribeToAnimatorEvents() {
             // Guard agains null reference.
             if (Animator == null)
-                Animator = GetComponent<AnimationPathAnimator>();
+                Animator = GetComponent<PathAnimator>();
 
             Animator.NodeReached += Animator_NodeReached;
             Animator.PathDataRefChanged += Animator_PathDataRefChanged;
@@ -273,7 +273,7 @@ namespace AnimationPathTools.AnimatorEventsComponent {
         private void UnsubscribeFromAnimatorEvents() {
             // Guard agains null reference.
             if (Animator == null)
-                Animator = GetComponent<AnimationPathAnimator>();
+                Animator = GetComponent<PathAnimator>();
 
             Animator.NodeReached -= Animator_NodeReached;
             Animator.PathDataRefChanged -= Animator_PathDataRefChanged;

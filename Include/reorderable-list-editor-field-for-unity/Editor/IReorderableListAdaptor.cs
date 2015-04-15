@@ -3,7 +3,7 @@
 
 using UnityEngine;
 
-namespace AnimationPathTools.ReorderableList {
+namespace AnimationPathAnimator.ReorderableList {
 
 	/// <summary>
 	/// Adaptor allowing reorderable list control to interface with list data.

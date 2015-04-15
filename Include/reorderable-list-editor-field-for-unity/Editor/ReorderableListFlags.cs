@@ -3,7 +3,7 @@
 
 using System;
 
-namespace AnimationPathTools.ReorderableList {
+namespace AnimationPathAnimator.ReorderableList {
 
 	/// <summary>
 	/// Additional flags which can be passed into reorderable list field.

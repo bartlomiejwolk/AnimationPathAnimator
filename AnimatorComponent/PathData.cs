@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     public sealed class PathData : ScriptableObject {
         #region EVENTS

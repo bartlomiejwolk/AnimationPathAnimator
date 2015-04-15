@@ -14,7 +14,7 @@ using Debug = UnityEngine.Debug;
 using UnityEditor;
 #endif
 
-namespace AnimationPathTools {
+namespace AnimationPathAnimator {
 
     public static class Utilities {
 

@@ -5,10 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using AnimationPathTools.AnimatorComponent;
+using AnimationPathAnimator.AnimatorComponent;
 using UnityEngine;
 
-namespace AnimationPathTools.AudioSynchronizerComponent {
+namespace AnimationPathAnimator.AudioSynchronizerComponent {
 
     /// <summary>
     ///     Allows controlling <c>AudioSource</c> component from inspector

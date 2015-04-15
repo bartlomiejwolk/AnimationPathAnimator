@@ -11,7 +11,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     /// <summary>
     ///     Editor class responsible for drawing inspector and on-scene handles.

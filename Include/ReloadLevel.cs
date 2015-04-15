@@ -25,7 +25,7 @@
 
 using UnityEngine;
 
-namespace AnimationPathTools {
+namespace AnimationPathAnimator {
 
     public class ReloadLevel : MonoBehaviour {
 

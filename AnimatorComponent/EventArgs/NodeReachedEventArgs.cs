@@ -7,7 +7,7 @@
 
 using System;
 
-namespace AnimationPathTools.AnimatorComponent {
+namespace AnimationPathAnimator.AnimatorComponent {
 
     public sealed class NodeReachedEventArgs : EventArgs {
 

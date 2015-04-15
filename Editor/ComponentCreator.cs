@@ -15,8 +15,8 @@ namespace AnimationPathAnimator {
 
     public static class ComponentCreator {
 
-        [MenuItem("Component/AnimationPath Animator/AnimationPathAnimator")]
-        private static void AddAnimationPathAnimatorComponent() {
+        [MenuItem("Component/AnimationPath Animator/PathAnimator")]
+        private static void AddPathAnimatorComponent() {
             if (Selection.activeGameObject != null) {
                 Selection.activeGameObject.AddComponent(typeof(PathAnimator));
             }

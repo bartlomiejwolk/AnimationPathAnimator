@@ -216,7 +216,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         [SerializeField]
         private Texture[] gizmoIcons;
 
-        private string gizmosSubfolder = "PathAnimator/";
+        private string gizmosSubfolder = "AnimationPathAnimator/";
 
         [SerializeField]
         private float maxPositionLerpSpeed = 1;

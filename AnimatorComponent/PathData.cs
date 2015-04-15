@@ -80,7 +80,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
         #region PROPERTIES
 
-        public AnimationCurve EaseCurve {
+        private AnimationCurve EaseCurve {
             get { return easeCurve; }
             set { easeCurve = value; }
         }
@@ -105,7 +105,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             get { return RotationPath.KeysNo; }
         }
 
-        public AnimationCurve TiltingCurve {
+        private AnimationCurve TiltingCurve {
             get { return tiltingCurve; }
             set { tiltingCurve = value; }
         }

@@ -160,11 +160,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
         private void DrawAdvancedSettingsControls() {
             if (advancedSettingsFoldout.boolValue) {
-                HandleDrawEaseCurve();
-                DrawTiltingCurve();
-
-                EditorGUILayout.Space();
-
                 DrawShortJumpValueField();
                 DrawLongJumpValueField();
 
@@ -690,15 +685,15 @@ namespace AnimationPathAnimator.AnimatorComponent {
             HandleTargetGOFieldChange(prevTargetGO);
         }
 
-        private void DrawTiltingCurve() {
-            if (Script.PathData == null) return;
+        //private void DrawTiltingCurve() {
+        //    if (Script.PathData == null) return;
 
-            Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
-                new GUIContent(
-                    "Tilting Curve",
-                    ""),
-                Script.PathData.TiltingCurve);
-        }
+        //    Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
+        //        new GUIContent(
+        //            "Tilting Curve",
+        //            ""),
+        //        Script.PathData.TiltingCurve);
+        //}
 
         private void DrawWrapModeDropdown() {
             Script.WrapMode =
@@ -709,15 +704,15 @@ namespace AnimationPathAnimator.AnimatorComponent {
                     Script.WrapMode);
         }
 
-        private void HandleDrawEaseCurve() {
-            if (Script.PathData == null) return;
+        //private void HandleDrawEaseCurve() {
+        //    if (Script.PathData == null) return;
 
-            Script.PathData.EaseCurve = EditorGUILayout.CurveField(
-                new GUIContent(
-                    "Ease Curve",
-                    ""),
-                Script.PathData.EaseCurve);
-        }
+        //    Script.PathData.EaseCurve = EditorGUILayout.CurveField(
+        //        new GUIContent(
+        //            "Ease Curve",
+        //            ""),
+        //        Script.PathData.EaseCurve);
+        //}
 
         private void HandleDrawForwardPointOffsetSlider() {
             if (Script.RotationMode != RotationMode.Forward) return;
@@ -1393,13 +1388,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
 
             Utilities.Assert(
-                () => Script.PathData.EaseCurve.length
+                () => Script.PathData.EaseCurveKeysNo
                       == prevEaseCurveNodesNo - 1,
                 String.Format(
                     "Key wasn't removed. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurve.length));
+                    Script.PathData.EaseCurveKeysNo));
 
             // Disable ease tool.
             Script.PathData.EaseToolState[index] = false;
@@ -1411,13 +1406,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
 
             Utilities.Assert(
-                () => Script.PathData.TiltingCurve.length
+                () => Script.PathData.TiltingCurveKeysNo
                       == prevTiltingCurveNodesNo - 1,
                 String.Format(
                     "Key wasn't removed. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurve.length));
+                    Script.PathData.TiltingCurveKeysNo));
 
             // Disable ease tool.
             Script.PathData.TiltingToolState[index] = false;
@@ -1438,13 +1433,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             Script.PathData.AddKeyToEaseCurve(timestamp);
 
             Utilities.Assert(
-                () => Script.PathData.EaseCurve.length
+                () => Script.PathData.EaseCurveKeysNo
                       == prevEaseCurveNodesNo + 1,
                 String.Format(
                     "Key wasn't added. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurve.length));
+                    Script.PathData.EaseCurveKeysNo));
 
             // Enable ease tool for the node.
             Script.PathData.EaseToolState[index] = true;
@@ -1456,13 +1451,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
 
             Utilities.Assert(
-                () => Script.PathData.TiltingCurve.length
+                () => Script.PathData.TiltingCurveKeysNo
                       == prevTiltingCurveNodesNo + 1,
                 String.Format(
                     "Key wasn't added. Previous keys number: {0};" +
                     " Current keys number: {1}",
                     prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurve.length));
+                    Script.PathData.TiltingCurveKeysNo));
 
             // Enable ease tool for the node.
             Script.PathData.TiltingToolState[index] = true;

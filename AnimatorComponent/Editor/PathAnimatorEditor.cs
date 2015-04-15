@@ -18,7 +18,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
     ///     All editor related functionality is defined here.
     /// </summary>
     [CustomEditor(typeof (PathAnimator))]
-    public sealed class AnimationPathAnimatorEditor : Editor {
+    public sealed class PathAnimatorEditor : Editor {
         #region PROPERTIES
 
         /// <summary>

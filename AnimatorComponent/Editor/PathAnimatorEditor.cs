@@ -1985,7 +1985,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         /// </summary>
         private void CopyIconsToGizmosFolder() {
             // Path to Unity Gizmos folder.
-            var gizmosDir = Application.dataPath + "/Gizmos";
+            var gizmosDir = Application.dataPath + "/Gizmos/";
 
             // Create Asset/Gizmos folder if not exists.
             if (!Directory.Exists(gizmosDir)) {
@@ -1993,9 +1993,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
             }
 
             // Create Asset/Gizmos/AnimationPathAnimator folder if not exists.
-            //todo create setting 
-            if (!Directory.Exists(gizmosDir + "/AnimationPathAnimator")) {
-                Directory.CreateDirectory(gizmosDir + "/AnimationPathAnimator");
+            if (!Directory.Exists(gizmosDir + Script.SettingsAsset.GizmosSubfolder)) {
+                Directory.CreateDirectory(gizmosDir + Script.SettingsAsset.GizmosSubfolder);
             }
 
             // Check if settings asset has icons specified.
@@ -2009,8 +2008,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 // Copy icon to Gizmos folder.
                 AssetDatabase.CopyAsset(
                     iconPath,
-                    //todo create setting 
-                    "Assets/Gizmos/AnimationPathAnimator/" + Path.GetFileName(iconPath));
+                    "Assets/Gizmos/" + Script.SettingsAsset.GizmosSubfolder + Path.GetFileName(iconPath));
             }
         }
 

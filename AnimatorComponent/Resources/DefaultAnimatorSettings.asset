@@ -35,7 +35,11 @@ MonoBehaviour:
   animationSpeedDenominator: .0500000007
   forwardPointOffsetMaxValue: .150000006
   forwardPointOffsetMinValue: .00100000005
-  gizmoIcons: []
+  gizmoIcons:
+  - {fileID: 2800000, guid: 7035c5b758f753f4c85443715f7b41a7, type: 3}
+  - {fileID: 2800000, guid: d09a8dd6e0e171b49ba73fd3d5c57205, type: 3}
+  - {fileID: 2800000, guid: 649104d15ab43284cb21177f43ec04a4, type: 3}
+  - {fileID: 2800000, guid: d777b5e2cb371524fade0782c726f2e6, type: 3}
   maxPositionLerpSpeed: 1
   maxRotationSlerpSpeed: 20
   minPositionLerpSpeed: .00100000005

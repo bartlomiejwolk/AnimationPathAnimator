@@ -346,14 +346,14 @@ namespace AnimationPathAnimator.AnimatorComponent {
             longJumpValue.floatValue = EditorGUILayout.Slider(
                 new GUIContent(
                     "Long Jump Value",
-                    string.Format("Fraction of animation time used to jump forward/backward "
-                    + "in time with shortcut keys {0} and {1}.",
-                    longJumpForwardKey,
-                    longJumpBackwardKey)),
+                    string.Format(
+                        "Fraction of animation time used to jump forward/backward "
+                        + "in time with shortcut keys {0} and {1}.",
+                        longJumpForwardKey,
+                        longJumpBackwardKey)),
                 longJumpValue.floatValue,
-                // todo create settings
-                0.004f,
-                0.1f);
+                Script.SettingsAsset.LongJumpMaxValue,
+                Script.SettingsAsset.LongJumpMinValue);
 
             serializedObject.ApplyModifiedProperties();
         }

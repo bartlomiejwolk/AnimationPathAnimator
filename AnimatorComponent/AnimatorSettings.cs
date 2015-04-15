@@ -239,9 +239,25 @@ namespace AnimationPathAnimator.AnimatorComponent {
         [SerializeField]
         private float shortJumpMinValue = 0.0001f;
 
+        [SerializeField]
+        private float longJumpMaxValue = 0.004f;
+
+        [SerializeField]
+        private float longJumpMinValue = 0.1f;
+
         #endregion ANIMATOR FIELDS
 
         #region ANIMATOR PROPERTIES
+        public float LongJumpMinValue {
+            get { return longJumpMinValue; }
+            set { longJumpMinValue = value; }
+        }
+
+        public float LongJumpMaxValue {
+            get { return longJumpMaxValue; }
+            set { longJumpMaxValue = value; }
+        }
+
 
         public float AnimationSpeedDenominator {
             get { return animationSpeedDenominator; }
@@ -622,7 +638,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
-
         #endregion HANDLES PROPERTIES
     }
 

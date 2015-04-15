@@ -47,6 +47,8 @@ MonoBehaviour:
   pathDataAssetDefaultName: AnimationPath
   shortJumpMaxValue: .00400000019
   shortJumpMinValue: 9.99999975e-05
+  longJumpMaxValue: .00400000019
+  longJumpMinValue: .100000001
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   objectCurveSampling: 5

@@ -1987,7 +1987,7 @@ namespace AnimationPathTools.AnimatorComponent {
 
         /// <summary>
         ///     Copies gizmo icons from component Resource folder to
-        ///     Assets/Gizmos/ATP.
+        ///     Assets/Gizmos/AnimationPathAnimator.
         /// </summary>
         private void CopyIconsToGizmosFolder() {
             // Path to Unity Gizmos folder.
@@ -1998,10 +1998,10 @@ namespace AnimationPathTools.AnimatorComponent {
                 Directory.CreateDirectory(gizmosDir);
             }
 
-            // Create Asset/Gizmos/ATP folder if not exists. todo rename folder
-            // to AnimationPathAnimator
-            if (!Directory.Exists(gizmosDir + "/ATP")) {
-                Directory.CreateDirectory(gizmosDir + "/ATP");
+            // Create Asset/Gizmos/AnimationPathAnimator folder if not exists.
+            //todo create setting 
+            if (!Directory.Exists(gizmosDir + "/AnimationPathAnimator")) {
+                Directory.CreateDirectory(gizmosDir + "/AnimationPathAnimator");
             }
 
             // Check if settings asset has icons specified.
@@ -2015,7 +2015,8 @@ namespace AnimationPathTools.AnimatorComponent {
                 // Copy icon to Gizmos folder.
                 AssetDatabase.CopyAsset(
                     iconPath,
-                    "Assets/Gizmos/ATP/" + Path.GetFileName(iconPath));
+                    //todo create setting 
+                    "Assets/Gizmos/AnimationPathAnimator/" + Path.GetFileName(iconPath));
             }
         }
 

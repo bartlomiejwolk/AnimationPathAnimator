@@ -1550,7 +1550,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 forwardPointPosition,
-                SettingsAsset.GizmosSubfolder + SettingsAsset.ForwardPointIcon,
+                SettingsAsset.GizmosSubfolder + "/" + SettingsAsset.ForwardPointIcon,
                 false);
         }
 
@@ -1562,7 +1562,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             //Draw rotation point gizmo.
             Gizmos.DrawIcon(
                 targetPosition,
-                SettingsAsset.GizmosSubfolder + SettingsAsset.TargetGizmoIcon,
+                SettingsAsset.GizmosSubfolder + "/" + SettingsAsset.TargetGizmoIcon,
                 false);
         }
 
@@ -1597,7 +1597,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             Gizmos.DrawIcon(
                 globalRotationPointPosition,
                 SettingsAsset.GizmosSubfolder
-                + SettingsAsset.CurrentRotationPointGizmoIcon,
+                + "/" + SettingsAsset.CurrentRotationPointGizmoIcon,
                 false);
         }
 
@@ -1656,7 +1656,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 Gizmos.DrawIcon(
                     globalRotPointPositions[i],
                     SettingsAsset.GizmosSubfolder
-                    + SettingsAsset.RotationPointGizmoIcon,
+                    + "/" + SettingsAsset.RotationPointGizmoIcon,
                     false);
             }
         }

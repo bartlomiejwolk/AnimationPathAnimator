@@ -3,8 +3,6 @@
 // This file is part of the AnimationPath Animator Unity extension.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
-#define DEBUG
-
 using System;
 using System.Collections.Generic;
 using System.IO;

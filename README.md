@@ -1,7 +1,7 @@
 README
 ======
 
-**AnimationPath Animator** Unity extension allows animating objects along paths.
+AnimationPath Animator is a path animator extension for Unity.
 
 Licensed under MIT license. See LICENSE file in the project root.
 
@@ -29,9 +29,13 @@ Features
 - Separate config asset files.
 - Video tutorials at youtube.
 - Example scenes.
-- API reference documentation at http://animationpathtools.airtime-productions.com and in `Support` folder.
+- [API reference documentation](http://animationpathanimator.airtime-productions.com "Online API").
 
-Installing scripts
+See [video preview](https://youtu.be/wS1hQ5641zQ "AnimationPath Animator Unity 5 Extension Preview ")
+
+Quick Start
 ------------------
 
-Clone repository (or extract zip package) to any location in `Assets` folder.
+- Clone repository (or extract zip package) to any location in `Assets` folder.
+- Go to `Examples` in extension root folder and open an example scene.
+- Enter play mode to start animation or select `*Path` game object to edit path in the scene.

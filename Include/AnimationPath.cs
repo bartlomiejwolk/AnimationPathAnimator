@@ -1,7 +1,7 @@
 ﻿/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+ * Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com)
  * Please direct any bugs/comments/suggestions to bartlomiejwolk@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy

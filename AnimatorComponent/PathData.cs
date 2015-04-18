@@ -503,6 +503,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
         public void ResetEaseCurve() {
             easeCurve = new AnimationCurve();
+
             UpdateEaseCurveWithAddedKeys();
             UpdateEaseCurveValues(DefaultEaseCurveValue);
 

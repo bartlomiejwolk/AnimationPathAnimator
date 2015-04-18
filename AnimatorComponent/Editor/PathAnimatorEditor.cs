@@ -211,12 +211,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             return newTimeRatio;
         }
 
+        // todo rename to DrawAnimationTimeControl
         private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTime");
 
             var newAnimationTime = DrawAnimationTimeSlider();
 
-            // Update animation time only when value was changed.
+            // Update animation time only if value was changed.
             if (Utilities.FloatsEqual(
                 newAnimationTime,
                 Script.AnimationTime,
@@ -694,7 +695,9 @@ namespace AnimationPathAnimator.AnimatorComponent {
         }
 
         private void HandleDrawForwardPointOffsetSlider() {
-            if (Script.RotationMode != RotationMode.Forward) return;
+            var disabled = Script.RotationMode != RotationMode.Forward;
+
+            EditorGUI.BeginDisabledGroup(disabled);
 
             Script.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
@@ -704,6 +707,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 Script.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 Script.SettingsAsset.ForwardPointOffsetMaxValue);
+
+            EditorGUI.EndDisabledGroup();
         }
 
         private void HandleDrawMoveAllToggle() {
@@ -2067,7 +2072,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             DrawRotationModeDropdown(DrawRotationModeDropdownCallbackHandler);
             DrawTangentModeDropdown();
-            HandleDrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 
@@ -2119,6 +2123,10 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             DrawPositionSpeedSlider();
             DrawRotationSpeedSlider();
+
+            EditorGUILayout.Space();
+
+            HandleDrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 

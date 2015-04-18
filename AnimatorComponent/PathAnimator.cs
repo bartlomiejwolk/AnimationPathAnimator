@@ -1,6 +1,6 @@
-﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com)
 //  
-// This file is part of the AnimationPath Animator Unity extension.
+// This file is part of the AnimationPath Animator extension for Unity.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
 using System;
@@ -970,10 +970,9 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     selected.
         /// </summary>
         private void HandleClampWrapMode() {
-            if (AnimationTime > 1
+            if (AnimationTime == 1
                 && WrapMode == AnimatorWrapMode.Clamp) {
 
-                AnimationTime = 1;
                 IsPlaying = false;
 
                 OnAnimationEnded();
@@ -1023,7 +1022,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     Decides what to do on animation end in Loop wrap mode.
         /// </summary>
         private void HandleLoopWrapMode() {
-            if (AnimationTime > 1 && WrapMode == AnimatorWrapMode.Loop) {
+            if (AnimationTime == 1 && WrapMode == AnimatorWrapMode.Loop) {
                 AnimationTime = 0;
             }
         }
@@ -1032,13 +1031,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     Decides what to do on animation end in PingPong wrap mode.
         /// </summary>
         private void HandlePingPongWrapMode() {
-            if (AnimationTime > 1
+            if (AnimationTime == 1
                 && WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = true;
             }
 
-            if (AnimationTime < 0
+            if (AnimationTime == 0
                 && WrapMode == AnimatorWrapMode.PingPong) {
 
                 Reverse = false;

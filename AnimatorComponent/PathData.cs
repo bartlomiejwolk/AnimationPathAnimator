@@ -1,6 +1,6 @@
-﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com)
 //  
-// This file is part of the AnimationPath Animator Unity extension.
+// This file is part of the AnimationPath Animator extension for Unity.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
 using System;
@@ -130,6 +130,18 @@ namespace AnimationPathAnimator.AnimatorComponent {
             get { return rotationPath; }
         }
 
+        public int EasedNodesNo {
+            get {
+                return EaseToolState.Count(easeTool => easeTool);
+            }
+        }
+
+        public int TiltedNodesNo {
+            get {
+                return TiltingToolState.Count(tiltingTool => tiltingTool);
+            }
+        }
+
         #endregion PROPERTIES
 
         #region UNITY MESSAGES
@@ -213,6 +225,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         private void PathData_NodeAdded(
             object sender,
             NodeAddedRemovedEventArgs e) {
+
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
 
@@ -242,11 +255,33 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 () => NodesNo == EaseToolState.Count,
                 string.Format(
                     "Number of nodes in the path ({0}) is " +
-                    "different from number of entries in the " +
-                    "list holding info about what nodes have " +
-                    "enabled ease tool ({1}).",
+                    "different from number of nodes" +
+                    "with enabled ease tool ({1}).",
                     NodesNo,
                     EaseToolState.Count));
+
+            Utilities.Assert(
+                () => NodesNo == TiltingToolState.Count,
+                string.Format(
+                    "Number of nodes in the path ({0}) is " +
+                    "different from number nodes" +
+                    "with enabled tilting tool ({1}).",
+                    NodesNo,
+                    TiltingToolState.Count));
+
+            Utilities.Assert(
+                () => EasedNodesNo == EaseCurveKeysNo,
+                      string.Format("Number of path nodes ({0}) is different"
+                                    + " from number of ease curve keys ({1}).",
+                                    EasedNodesNo,
+                                    EaseCurveKeysNo));
+
+            Utilities.Assert(
+                () => TiltedNodesNo == TiltingCurveKeysNo,
+                      string.Format("Number of path nodes ({0}) is different"
+                                    + " from number of tilting curve keys ({1}).",
+                                    TiltedNodesNo,
+                                    TiltingCurveKeysNo));
         }
 
         private void PathData_PathTimestampsChanged(object sender, EventArgs e) {
@@ -468,8 +503,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
         public void ResetEaseCurve() {
             easeCurve = new AnimationCurve();
-            UpdateCurveWithAddedKeys(EaseCurve);
-            // Set default value for each key.
+            UpdateEaseCurveWithAddedKeys();
             UpdateEaseCurveValues(DefaultEaseCurveValue);
 
             OnEaseCurveUpdated();
@@ -494,7 +528,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
         public void ResetTiltingCurve() {
             tiltingCurve = new AnimationCurve();
-            UpdateCurveWithAddedKeys(TiltingCurve);
+            UpdateTiltedCurveWithAddedKeys();
             // Set default value for each key.
             UpdateTiltingCurveValues(DefaultTiltingCurveValue);
 
@@ -751,11 +785,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             curve.AddKey(lastKeyCopy);
         }
 
+        // todo rename to ForceInstantiateFields
         private void ForceInstantiatePathsAndCurves() {
             animatedObjectPath = new AnimationPath();
             rotationPath = new AnimationPath();
             easeCurve = new AnimationCurve();
             tiltingCurve = new AnimationCurve();
+
             EaseToolState = new List<bool>();
             TiltingToolState = new List<bool>();
         }
@@ -876,29 +912,46 @@ namespace AnimationPathAnimator.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Update AnimationCurve with keys added to the path.
+        /// Create key in ease curve for each path node that has ease tool enabled.
+        /// </summary>
+        private void UpdateEaseCurveWithAddedKeys() {
+            var timestamps = GetEasedNodeTimestamps();
+            UpdateCurveWithAddedKeys(EaseCurve, timestamps);
+        }
+
+        /// <summary>
+        /// Create key in tilting curve for each path node that has tilting tool enabled.
+        /// </summary>
+        private void UpdateTiltedCurveWithAddedKeys() {
+            var timestamps = GetTiltedNodeTimestamps();
+            UpdateCurveWithAddedKeys(TiltingCurve, timestamps);
+        }
+
+        /// <summary>
+        ///     Create keys at timestamps.
         /// </summary>
         /// <param name="curve"></param>
-        private void UpdateCurveWithAddedKeys(AnimationCurve curve) {
-            var nodeTimestamps = GetPathTimestamps();
-            // Get curve value.
+        private void UpdateCurveWithAddedKeys(
+            AnimationCurve curve,
+            List<float> timestamps ) {
+
             var curveTimestamps = new float[curve.length];
             for (var i = 0; i < curve.length; i++) {
                 curveTimestamps[i] = curve.keys[i].time;
             }
 
-            // For each path timestamp..
-            foreach (var nodeTimestamp in nodeTimestamps) {
-                var valueExists = curveTimestamps.Any(
+            // For each timestamp..
+            for (int i = 0; i < timestamps.Count; i++) {
+                var keyExists = curveTimestamps.Any(
                     t => Utilities.FloatsEqual(
-                        nodeTimestamp,
+                        timestamps[i],
                         t,
                         GlobalConstants.FloatPrecision));
 
                 // Add missing key.
-                if (valueExists) continue;
+                if (keyExists) continue;
 
-                AddKeyToCurve(curve, nodeTimestamp);
+                AddKeyToCurve(curve, timestamps[i]);
             }
         }
 

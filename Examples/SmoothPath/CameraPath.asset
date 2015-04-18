@@ -1,0 +1,173 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2b9ce7b47dc9c4ea51e1ab6f1a9d57, type: 3}
+  m_Name: CameraPath
+  m_EditorClassIdentifier: 
+  animatedObjectPath:
+    curves:
+    - serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 41.6026497
+        inSlope: -17.6447945
+        outSlope: -17.6447945
+        tangentMode: 0
+      - time: .357010245
+        value: 35.3055382
+        inSlope: -13.9944611
+        outSlope: -13.9944611
+        tangentMode: 0
+      - time: .649772167
+        value: 32.278286
+        inSlope: -12.2398758
+        outSlope: -12.2398758
+        tangentMode: 0
+      - time: 1
+        value: 27.3242626
+        inSlope: -14.1356249
+        outSlope: -14.1356249
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    - serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: -3.03768253
+        inSlope: 4.54884291
+        outSlope: 4.54884291
+        tangentMode: 0
+      - time: .357010245
+        value: -1.41428185
+        inSlope: 5.03337193
+        outSlope: 5.03337193
+        tangentMode: 0
+      - time: .649772167
+        value: .200554848
+        inSlope: 5.00235748
+        outSlope: 5.00235748
+        tangentMode: 0
+      - time: 1
+        value: 1.77302027
+        inSlope: 4.48681402
+        outSlope: 4.48681402
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    - serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 30.6021671
+        inSlope: -2.99838567
+        outSlope: -2.99838567
+        tangentMode: 0
+      - time: .357010245
+        value: 29.5320969
+        inSlope: -8.73450756
+        outSlope: -8.73450756
+        tangentMode: 0
+      - time: .649772167
+        value: 25.2972069
+        inSlope: -12.8659725
+        outSlope: -12.8659725
+        tangentMode: 0
+      - time: 1
+        value: 21.3505249
+        inSlope: -11.2613153
+        outSlope: -11.2613153
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+  easeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: .09665934
+      inSlope: -.0622582063
+      outSlope: -.0622582063
+      tangentMode: 0
+    - time: .357010245
+      value: .0744325221
+      inSlope: -.0749888644
+      outSlope: -.0749888644
+      tangentMode: 0
+    - time: .649772167
+      value: .0487515852
+      inSlope: -.107426569
+      outSlope: -.107426569
+      tangentMode: 0
+    - time: 1
+      value: .00422585802
+      inSlope: -.127133608
+      outSlope: -.127133608
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  easeToolState: 01010101
+  rotationPath:
+    curves:
+    - serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    - serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    - serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+  tiltingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  tiltingToolState: 01000001

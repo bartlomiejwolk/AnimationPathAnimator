@@ -1,9 +1,7 @@
-﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com).
+﻿// Copyright (c) 2015 Bartłomiej Wołk (bartlomiejwolk@gmail.com)
 //  
-// This file is part of the AnimationPath Animator Unity extension.
+// This file is part of the AnimationPath Animator extension for Unity.
 // Licensed under the MIT license. See LICENSE file in the project root folder.
-
-#define DEBUG
 
 using System;
 using System.Collections.Generic;
@@ -58,6 +56,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 return;
             }
 
+            // todo move down
             HandleUndoEvent();
             DrawInspector();
 
@@ -685,16 +684,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
             HandleTargetGOFieldChange(prevTargetGO);
         }
 
-        //private void DrawTiltingCurve() {
-        //    if (Script.PathData == null) return;
-
-        //    Script.PathData.TiltingCurve = EditorGUILayout.CurveField(
-        //        new GUIContent(
-        //            "Tilting Curve",
-        //            ""),
-        //        Script.PathData.TiltingCurve);
-        //}
-
         private void DrawWrapModeDropdown() {
             Script.WrapMode =
                 (AnimatorWrapMode) EditorGUILayout.EnumPopup(
@@ -703,16 +692,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
                         "Determines animator behaviour after animation end."),
                     Script.WrapMode);
         }
-
-        //private void HandleDrawEaseCurve() {
-        //    if (Script.PathData == null) return;
-
-        //    Script.PathData.EaseCurve = EditorGUILayout.CurveField(
-        //        new GUIContent(
-        //            "Ease Curve",
-        //            ""),
-        //        Script.PathData.EaseCurve);
-        //}
 
         private void HandleDrawForwardPointOffsetSlider() {
             if (Script.RotationMode != RotationMode.Forward) return;
@@ -954,6 +933,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             if (!Script.DrawNodeButtons) return;
             if (Script.TangentMode != TangentMode.Custom) return;
             if (!Script.DrawObjectPath) return;
+            if (Script.NodeHandle != NodeHandle.Tangent) return;
 
             var nodePositions = Script.GetGlobalNodePositions();
 
@@ -1024,6 +1004,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             if (!Script.DrawNodeButtons) return;
             if ((Script.TangentMode != TangentMode.Custom)
                 || (Script.RotationMode != RotationMode.Custom)) return;
+            if (!Script.DrawRotationPathCurve) return;
 
             var nodePositions = Script.GetGlobalRotationPathPositions();
 
@@ -1042,6 +1023,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             if (Script.RotationMode != RotationMode.Custom) return;
             if (Script.TangentMode != TangentMode.Custom) return;
             if (Script.NodeHandle != NodeHandle.Tangent) return;
+            if (!Script.DrawRotationPathCurve) return;
 
             // Positions at which to draw tangent handles.
             var nodes = Script.GetGlobalRotationPathPositions();
@@ -1432,6 +1414,9 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             Script.PathData.AddKeyToEaseCurve(timestamp);
 
+            // Enable ease tool for the node.
+            Script.PathData.EaseToolState[index] = true;
+
             Utilities.Assert(
                 () => Script.PathData.EaseCurveKeysNo
                       == prevEaseCurveNodesNo + 1,
@@ -1440,9 +1425,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
                     " Current keys number: {1}",
                     prevEaseCurveNodesNo,
                     Script.PathData.EaseCurveKeysNo));
-
-            // Enable ease tool for the node.
-            Script.PathData.EaseToolState[index] = true;
         }
 
         private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
@@ -1557,10 +1539,10 @@ namespace AnimationPathAnimator.AnimatorComponent {
         }
 
         private void HandleSmoothTangentMode() {
-            if (Script.TangentMode == TangentMode.Smooth) {
-                Script.PathData.SmoothAllPathNodeTangents();
-                HandleSmoothRotationPathTangents();
-            }
+            if (Script.TangentMode != TangentMode.Smooth) return;
+
+            Script.PathData.SmoothAllPathNodeTangents();
+            HandleSmoothRotationPathTangents();
         }
 
         /// <summary>
@@ -1586,6 +1568,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
             // Handle selected tangent mode.
             HandleSmoothTangentMode();
             HandleLinearTangentMode();
+
+            Script.NodeHandle = NodeHandle.Position;
 
             SceneView.RepaintAll();
         }
@@ -1680,6 +1664,45 @@ namespace AnimationPathAnimator.AnimatorComponent {
                     null);
 
                 SceneView.RepaintAll();
+
+                // todo move assert methods to a separate class
+                Utilities.Assert(
+                    () => Script.PathData.NodesNo
+                        == Script.PathData.EaseToolState.Count,
+                    string.Format(
+                        "Number of nodes in the path ({0}) is " +
+                        "different from number of entries in the " +
+                        "list holding info about what nodes have " +
+                        "enabled ease tool ({1}).",
+                        Script.PathData.NodesNo,
+                        Script.PathData.EaseToolState.Count));
+
+                Utilities.Assert(
+                    () => Script.PathData.NodesNo
+                        == Script.PathData.TiltingToolState.Count,
+                    string.Format(
+                        "Number of nodes in the path ({0}) is " +
+                        "different from number of entries in the " +
+                        "list holding info about what nodes have " +
+                        "enabled tilting tool ({1}).",
+                        Script.PathData.NodesNo,
+                        Script.PathData.EaseToolState.Count));
+
+                Utilities.Assert(
+                    () => Script.PathData.EasedNodesNo
+                          == Script.PathData.EaseCurveKeysNo,
+                          string.Format("Number of path nodes ({0}) with enabled ease tool is different"
+                                        + " from number of ease curve keys ({1}).",
+                                        Script.PathData.EasedNodesNo,
+                                        Script.PathData.EaseCurveKeysNo));
+
+                Utilities.Assert(
+                    () => Script.PathData.TiltedNodesNo
+                          == Script.PathData.TiltingCurveKeysNo,
+                          string.Format("Number of path nodes ({0}) with enabled tilting tool is different"
+                                        + " from number of tilting curve keys ({1}).",
+                                        Script.PathData.TiltedNodesNo,
+                                        Script.PathData.TiltingCurveKeysNo));
             }
         }
 
@@ -2042,8 +2065,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            DrawTangentModeDropdown();
             DrawRotationModeDropdown(DrawRotationModeDropdownCallbackHandler);
+            DrawTangentModeDropdown();
             HandleDrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();

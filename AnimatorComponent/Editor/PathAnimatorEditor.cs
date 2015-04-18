@@ -2073,18 +2073,46 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
+            GUILayout.Label("Player Options", EditorStyles.boldLabel);
 
-            DrawObjectCurveToggle();
-            DrawRotationCurveToggle();
-            DrawNodeButtonsToggle();
+            EditorGUILayout.BeginHorizontal();
+            DrawAutoPlayControl();
+            DrawAutoPlayDelayField();
+            EditorGUILayout.EndHorizontal();
+
+            DrawEnableControlsInPlayModeToggle();
 
             EditorGUILayout.Space();
 
             DrawRotationModeDropdown(DrawRotationModeDropdownCallbackHandler);
+            DrawWrapModeDropdown();
+
+            EditorGUILayout.Space();
+
+            HandleDrawForwardPointOffsetSlider();
+
+            EditorGUILayout.Space();
+
+            DrawPositionSpeedSlider();
+            DrawRotationSpeedSlider();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Path Options", EditorStyles.boldLabel);
+
             DrawTangentModeDropdown();
 
             EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            DrawResetEaseButton();
+            DrawResetRotationPathButton();
+            DrawResetTiltingButton();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
             DrawNodeToolDropdown();
@@ -2100,33 +2128,11 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.BeginHorizontal();
-            DrawResetEaseButton();
-            DrawResetRotationPathButton();
-            DrawResetTiltingButton();
-            EditorGUILayout.EndHorizontal();
+            GUILayout.Label("Scene Options", EditorStyles.boldLabel);
 
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player Options", EditorStyles.boldLabel);
-
-            EditorGUILayout.BeginHorizontal();
-            DrawAutoPlayControl();
-            DrawAutoPlayDelayField();
-            EditorGUILayout.EndHorizontal();
-
-            DrawEnableControlsInPlayModeToggle();
-
-            DrawWrapModeDropdown();
-
-            EditorGUILayout.Space();
-
-            DrawPositionSpeedSlider();
-            DrawRotationSpeedSlider();
-
-            EditorGUILayout.Space();
-
-            HandleDrawForwardPointOffsetSlider();
+            DrawObjectCurveToggle();
+            DrawRotationCurveToggle();
+            DrawNodeButtonsToggle();
 
             EditorGUILayout.Space();
 

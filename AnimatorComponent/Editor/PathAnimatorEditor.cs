@@ -2062,6 +2062,17 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             EditorGUILayout.Space();
 
+            GUILayout.Label("Player", EditorStyles.boldLabel);
+
+            DrawAnimationTimeValue();
+            DrawPlayerControls();
+
+            EditorGUILayout.Space();
+
+            EditorGUIUtility.labelWidth = 0;
+
+            EditorGUILayout.Space();
+
             GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
 
             DrawObjectCurveToggle();
@@ -2094,17 +2105,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
             DrawResetRotationPathButton();
             DrawResetTiltingButton();
             EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Player", EditorStyles.boldLabel);
-
-            DrawAnimationTimeValue();
-            DrawPlayerControls();
-
-            EditorGUILayout.Space();
-
-            EditorGUIUtility.labelWidth = 0;
 
             EditorGUILayout.Space();
 

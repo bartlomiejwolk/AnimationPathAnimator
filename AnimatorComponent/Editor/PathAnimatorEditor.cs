@@ -141,7 +141,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                     new GUIContent(
                         "Export Sampling",
                         "Number of points to export for 1 m of the animation "
-                        + "path. If set to 0, it'll export only keys defined in "
+                        + "path. If set to 0, it'll export only nodes defined in "
                         + "the path."),
                     Script.ExportSamplingFrequency);
 

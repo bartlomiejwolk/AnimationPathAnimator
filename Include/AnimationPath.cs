@@ -174,10 +174,21 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 secondNodeIndex,
                 samplingFrequency);
 
-            // For each point..
-            for (var i = 1; i < points.Count; i++) {
-                // Calculate distance this and previous point.
-                pathLength += Vector3.Distance(points[i - 1], points[i]);
+            // To measure length at least two point are required.
+            if (points.Count > 1) {
+                // For each point..
+                for (var i = 1; i < points.Count; i++) {
+                    // Calculate distance this and previous point.
+                    pathLength += Vector3.Distance(points[i - 1], points[i]);
+                }
+            }
+            // If sampling frequency is too small to identity more than one point
+            // between two nodes then calculate distance directly between those
+            // two nodes.
+            else {
+                pathLength = CalculateSectionLinearLength(
+                    firstNodeIndex,
+                    secondNodeIndex);
             }
 
             return pathLength;

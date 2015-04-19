@@ -233,8 +233,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 () => NodesNo == EaseToolState.Count,
                 string.Format(
                     "Number of nodes in the path ({0}) is " +
-                    "different from number of entries in the " +
-                    "list holding info about what nodes have " +
+                    "different from number of nodes with " +
                     "enabled ease tool ({1}).",
                     NodesNo,
                     EaseToolState.Count));

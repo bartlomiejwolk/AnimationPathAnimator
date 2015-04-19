@@ -1676,8 +1676,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                         == Script.PathData.EaseToolState.Count,
                     string.Format(
                         "Number of nodes in the path ({0}) is " +
-                        "different from number of entries in the " +
-                        "list holding info about what nodes have " +
+                        "different from number of nodes with" +
                         "enabled ease tool ({1}).",
                         Script.PathData.NodesNo,
                         Script.PathData.EaseToolState.Count));
@@ -1687,8 +1686,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                         == Script.PathData.TiltingToolState.Count,
                     string.Format(
                         "Number of nodes in the path ({0}) is " +
-                        "different from number of entries in the " +
-                        "list holding info about what nodes have " +
+                        "different from number of nodes with " +
                         "enabled tilting tool ({1}).",
                         Script.PathData.NodesNo,
                         Script.PathData.EaseToolState.Count));

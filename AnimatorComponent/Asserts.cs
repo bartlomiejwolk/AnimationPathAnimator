@@ -11,7 +11,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         /// <param name="nodesNo">Number of nodes in the path.</param>
         /// <param name="toolStateNo">Number of entries in the tool state list.</param>
         /// <param name="toolName">Name of the tool ("ease" or "tilting").</param>
-        public static void AssertNodeToolInSync(
+        public static void AssertEnabledToolsListInSync(
             int nodesNo,
             int toolStateNo,
             string toolName) {
@@ -25,6 +25,22 @@ namespace AnimationPathAnimator.AnimatorComponent {
                     nodesNo,
                     toolStateNo,
                     toolName));
+        }
+
+        public static void AssertToolCurveInSync(
+            int nodesWithToolEnabled,
+            int toolCurveKeysNo,
+            string toolName) {
+
+            Utilities.Assert(
+                () => nodesWithToolEnabled
+                      == toolCurveKeysNo,
+                      string.Format("Number of path nodes ({0}) with enabled {2} tool is different"
+                                    + " from number of {2} curve keys ({1}).",
+                                    nodesWithToolEnabled,
+                                    toolCurveKeysNo,
+                                    toolName));
+
         }
 
     }

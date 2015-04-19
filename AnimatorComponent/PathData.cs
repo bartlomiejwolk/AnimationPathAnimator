@@ -229,14 +229,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             EaseToolState.Insert(e.NodeIndex, false);
             TiltingToolState.Insert(e.NodeIndex, false);
 
-            Utilities.Assert(
-                () => NodesNo == EaseToolState.Count,
-                string.Format(
-                    "Number of nodes in the path ({0}) is " +
-                    "different from number of nodes with " +
-                    "enabled ease tool ({1}).",
-                    NodesNo,
-                    EaseToolState.Count));
+            Asserts.AssertEnabledToolsListInSync(NodesNo, EaseToolState.Count, "ease");
         }
 
         private void PathData_NodePositionChanged(object sender, EventArgs e) {

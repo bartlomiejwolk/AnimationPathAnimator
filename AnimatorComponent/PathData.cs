@@ -243,37 +243,58 @@ namespace AnimationPathAnimator.AnimatorComponent {
             TiltingToolState.RemoveAt(e.NodeIndex);
             HandleRemoveNodeTools(e.NodeTimestamp);
 
-            Utilities.Assert(
-                () => NodesNo == EaseToolState.Count,
-                string.Format(
-                    "Number of nodes in the path ({0}) is " +
-                    "different from number of nodes" +
-                    "with enabled ease tool ({1}).",
-                    NodesNo,
-                    EaseToolState.Count));
+            // todo delete
+            //Utilities.Assert(
+            //    () => NodesNo == EaseToolState.Count,
+            //    string.Format(
+            //        "Number of nodes in the path ({0}) is " +
+            //        "different from number of nodes" +
+            //        "with enabled ease tool ({1}).",
+            //        NodesNo,
+            //        EaseToolState.Count));
 
-            Utilities.Assert(
-                () => NodesNo == TiltingToolState.Count,
-                string.Format(
-                    "Number of nodes in the path ({0}) is " +
-                    "different from number nodes" +
-                    "with enabled tilting tool ({1}).",
-                    NodesNo,
-                    TiltingToolState.Count));
+            Asserts.AssertEnabledToolsListInSync(
+                NodesNo,
+                EaseToolState.Count,
+                "ease");
 
-            Utilities.Assert(
-                () => EasedNodesNo == EaseCurveKeysNo,
-                      string.Format("Number of path nodes ({0}) is different"
-                                    + " from number of ease curve keys ({1}).",
-                                    EasedNodesNo,
-                                    EaseCurveKeysNo));
+            Asserts.AssertEnabledToolsListInSync(
+                NodesNo,
+                TiltingToolState.Count,
+                "tilting");
 
-            Utilities.Assert(
-                () => TiltedNodesNo == TiltingCurveKeysNo,
-                      string.Format("Number of path nodes ({0}) is different"
-                                    + " from number of tilting curve keys ({1}).",
-                                    TiltedNodesNo,
-                                    TiltingCurveKeysNo));
+            Asserts.AssertToolCurveInSync(
+                EasedNodesNo,
+                EaseCurveKeysNo,
+                "ease");
+
+            Asserts.AssertToolCurveInSync(
+                TiltedNodesNo,
+                TiltingCurveKeysNo,
+                "tilting");
+
+            //Utilities.Assert(
+            //    () => NodesNo == TiltingToolState.Count,
+            //    string.Format(
+            //        "Number of nodes in the path ({0}) is " +
+            //        "different from number nodes" +
+            //        "with enabled tilting tool ({1}).",
+            //        NodesNo,
+            //        TiltingToolState.Count));
+
+            //Utilities.Assert(
+            //    () => EasedNodesNo == EaseCurveKeysNo,
+            //          string.Format("Number of path nodes ({0}) is different"
+            //                        + " from number of ease curve keys ({1}).",
+            //                        EasedNodesNo,
+            //                        EaseCurveKeysNo));
+
+            //Utilities.Assert(
+            //    () => TiltedNodesNo == TiltingCurveKeysNo,
+            //          string.Format("Number of path nodes ({0}) is different"
+            //                        + " from number of tilting curve keys ({1}).",
+            //                        TiltedNodesNo,
+            //                        TiltingCurveKeysNo));
         }
 
         private void PathData_PathTimestampsChanged(object sender, EventArgs e) {
@@ -806,17 +827,23 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 EaseCurve.RemoveKey(easeKeyIndex);
             }
 
-            var nodesWithEaseEnabledNo = GetEasedNodeTimestamps();
+            Asserts.AssertToolCurveInSync(
+                EasedNodesNo,
+                EaseCurveKeysNo,
+                "ease");
 
-            Utilities.Assert(
-                () => EaseCurve.length == nodesWithEaseEnabledNo.Count,
-                String.Format(
-                    "Number of ease curve keys and number of nodes" +
-                    " with enabled ease tool differs.\n" +
-                    "Ease curve length: {0}\n" +
-                    "Nodes with enabled ease tool: {1}",
-                    EaseCurve.length,
-                    nodesWithEaseEnabledNo.Count));
+            // todo remove
+            //var nodesWithEaseEnabledNo = GetEasedNodeTimestamps();
+
+            //Utilities.Assert(
+            //    () => EaseCurve.length == nodesWithEaseEnabledNo.Count,
+            //    String.Format(
+            //        "Number of ease curve keys and number of nodes" +
+            //        " with enabled ease tool differs.\n" +
+            //        "Ease curve length: {0}\n" +
+            //        "Nodes with enabled ease tool: {1}",
+            //        EaseCurve.length,
+            //        nodesWithEaseEnabledNo.Count));
         }
 
         /// <summary>
@@ -837,17 +864,23 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 TiltingCurve.RemoveKey(tiltingKeyIndex);
             }
 
-            var nodesWithTiltingEnabledNo = GetTiltedNodeTimestamps();
+            Asserts.AssertToolCurveInSync(
+                TiltedNodesNo,
+                TiltingCurveKeysNo,
+                "tilting");
 
-            Utilities.Assert(
-                () => TiltingCurve.length == nodesWithTiltingEnabledNo.Count,
-                String.Format(
-                    "Number of tilting curve keys and number of nodes" +
-                    " with enabled tilting tool differs.\n" +
-                    "Tilting curve length: {0}\n" +
-                    "Nodes with enabled tilting tool: {1}",
-                    TiltingCurve.length,
-                    nodesWithTiltingEnabledNo.Count));
+            // toro remove
+            //var nodesWithTiltingEnabledNo = GetTiltedNodeTimestamps();
+
+            //Utilities.Assert(
+            //    () => TiltingCurve.length == nodesWithTiltingEnabledNo.Count,
+            //    String.Format(
+            //        "Number of tilting curve keys and number of nodes" +
+            //        " with enabled tilting tool differs.\n" +
+            //        "Tilting curve length: {0}\n" +
+            //        "Nodes with enabled tilting tool: {1}",
+            //        TiltingCurve.length,
+            //        nodesWithTiltingEnabledNo.Count));
         }
 
         /// <summary>

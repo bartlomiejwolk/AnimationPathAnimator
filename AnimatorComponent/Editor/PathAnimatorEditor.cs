@@ -1427,39 +1427,51 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     Timestamp of node which tool will be enabled.
         /// </param>
         private void HandleEnablingEaseTool(int index, float timestamp) {
-            var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
+            // todo remove
+            //var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
 
             Script.PathData.AddKeyToEaseCurve(timestamp);
 
             // Enable ease tool for the node.
             Script.PathData.EaseToolState[index] = true;
 
-            Utilities.Assert(
-                () => Script.PathData.EaseCurveKeysNo
-                      == prevEaseCurveNodesNo + 1,
-                String.Format(
-                    "Key wasn't added. Previous keys number: {0};" +
-                    " Current keys number: {1}",
-                    prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurveKeysNo));
+            Asserts.AssertToolCurveInSync(
+                Script.PathData.EasedNodesNo,
+                Script.PathData.EaseCurveKeysNo,
+                "ease"); ;
+
+            //Utilities.Assert(
+            //    () => Script.PathData.EaseCurveKeysNo
+            //          == prevEaseCurveNodesNo + 1,
+            //    String.Format(
+            //        "Key wasn't added. Previous keys number: {0};" +
+            //        " Current keys number: {1}",
+            //        prevEaseCurveNodesNo,
+            //        Script.PathData.EaseCurveKeysNo));
         }
 
         private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
-            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
+            // todo remove
+            //var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
 
             Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
 
-            Utilities.Assert(
-                () => Script.PathData.TiltingCurveKeysNo
-                      == prevTiltingCurveNodesNo + 1,
-                String.Format(
-                    "Key wasn't added. Previous keys number: {0};" +
-                    " Current keys number: {1}",
-                    prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurveKeysNo));
+            //Utilities.Assert(
+            //    () => Script.PathData.TiltingCurveKeysNo
+            //          == prevTiltingCurveNodesNo + 1,
+            //    String.Format(
+            //        "Key wasn't added. Previous keys number: {0};" +
+            //        " Current keys number: {1}",
+            //        prevTiltingCurveNodesNo,
+            //        Script.PathData.TiltingCurveKeysNo));
 
             // Enable ease tool for the node.
             Script.PathData.TiltingToolState[index] = true;
+
+            Asserts.AssertToolCurveInSync(
+                Script.PathData.TiltedNodesNo,
+                Script.PathData.TiltingCurveKeysNo,
+                "tilting");
         }
 
         private void HandleLinearTangentMode() {

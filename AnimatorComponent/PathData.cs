@@ -52,7 +52,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         /// <summary>
         ///     Sampling used to calculate path length.
         /// </summary>
-        private const int PathLengthSampling = 5;
+        private const int PathLengthSampling = 10;
 
         #endregion CONST
 
@@ -405,6 +405,11 @@ namespace AnimationPathAnimator.AnimatorComponent {
             var newTimestamps = CalculateUpdatedTimestamps();
             AnimatedObjectPath.ReplaceTimestamps(newTimestamps);
 
+            Asserts.AssertEnabledToolsListInSync(
+                NodesNo,
+                EaseToolState.Count,
+                "ease");
+
             callback(newTimestamps);
             OnNodeTimeChanged();
         }
@@ -713,6 +718,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     length ration will be equal for all timestamps.
         /// </summary>
         /// <returns></returns>
+        // todo refactor
         private List<float> CalculateUpdatedTimestamps() {
             var pathLength = AnimatedObjectPath.CalculatePathLength(
                 PathLengthSampling);
@@ -744,7 +750,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 prevTimestamp = newTimestamp;
 
                 if (newTimestamp > 1) {
-                    throw new Exception("Node timestamps overflow.");
+                    throw new Exception("Node timestamp overflow.");
                 }
             }
 

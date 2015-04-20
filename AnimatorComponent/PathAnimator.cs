@@ -251,7 +251,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         private float forwardPointOffset = 0.05f;
 
         [SerializeField]
-        private Color gizmoCurveColor = Color.yellow;
+        private Color gizmoCurveColor;
 
         [SerializeField]
         private NodeTool nodeTool =
@@ -267,7 +267,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         private float positionLerpSpeed = 1;
 
         [SerializeField]
-        private Color rotationCurveColor = Color.gray;
+        private Color rotationCurveColor;
 
         [SerializeField]
         private RotationMode rotationMode =
@@ -1146,6 +1146,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
             PositionLerpSpeed = 1;
             RotationSlerpSpeed = 999;
             ExportSamplingFrequency = 5;
+            GizmoCurveColor = SettingsAsset.DefaultObjectPathCurveColor;
+            RotationCurveColor = SettingsAsset.DefaultRotationPathCurveColor;
         }
 
         /// <summary>
@@ -1533,7 +1535,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
             // There must be at least 3 points to draw a line.
             if (points.Count < 3) return;
 
-            Gizmos.color = Color.yellow;
+            Gizmos.color = GizmoCurveColor;
 
             // Draw curve.
             for (var i = 0; i < points.Count - 1; i++) {

@@ -141,7 +141,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
                     new GUIContent(
                         "Export Sampling",
                         "Number of points to export for 1 m of the animation "
-                        + "path. If set to 0, it'll export only keys defined in "
+                        + "path. If set to 0, it'll export only nodes defined in "
                         + "the path."),
                     Script.ExportSamplingFrequency);
 
@@ -211,12 +211,13 @@ namespace AnimationPathAnimator.AnimatorComponent {
             return newTimeRatio;
         }
 
+        // todo rename to DrawAnimationTimeControl
         private void DrawAnimationTimeValue() {
             Undo.RecordObject(target, "Update AnimationTime");
 
             var newAnimationTime = DrawAnimationTimeSlider();
 
-            // Update animation time only when value was changed.
+            // Update animation time only if value was changed.
             if (Utilities.FloatsEqual(
                 newAnimationTime,
                 Script.AnimationTime,
@@ -694,7 +695,9 @@ namespace AnimationPathAnimator.AnimatorComponent {
         }
 
         private void HandleDrawForwardPointOffsetSlider() {
-            if (Script.RotationMode != RotationMode.Forward) return;
+            var disabled = Script.RotationMode != RotationMode.Forward;
+
+            EditorGUI.BeginDisabledGroup(disabled);
 
             Script.ForwardPointOffset = EditorGUILayout.Slider(
                 new GUIContent(
@@ -704,6 +707,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 Script.ForwardPointOffset,
                 Script.SettingsAsset.ForwardPointOffsetMinValue,
                 Script.SettingsAsset.ForwardPointOffsetMaxValue);
+
+            EditorGUI.EndDisabledGroup();
         }
 
         private void HandleDrawMoveAllToggle() {
@@ -1365,39 +1370,51 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     Timestamp of node which tool will be disabled.
         /// </param>
         private void HandleDisablingEaseTool(int index, float timestamp) {
-            var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
+            // todo remove
+            //var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
 
             Script.PathData.RemoveKeyFromEaseCurve(timestamp);
 
-            Utilities.Assert(
-                () => Script.PathData.EaseCurveKeysNo
-                      == prevEaseCurveNodesNo - 1,
-                String.Format(
-                    "Key wasn't removed. Previous keys number: {0};" +
-                    " Current keys number: {1}",
-                    prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurveKeysNo));
+            //Utilities.Assert(
+            //    () => Script.PathData.EaseCurveKeysNo
+            //          == prevEaseCurveNodesNo - 1,
+            //    String.Format(
+            //        "Key wasn't removed. Previous keys number: {0};" +
+            //        " Current keys number: {1}",
+            //        prevEaseCurveNodesNo,
+            //        Script.PathData.EaseCurveKeysNo));
 
             // Disable ease tool.
             Script.PathData.EaseToolState[index] = false;
+
+            Asserts.AssertToolCurveInSync(
+                Script.PathData.EasedNodesNo,
+                Script.PathData.EaseCurveKeysNo,
+                "ease");
         }
 
         private void HandleDisablingTiltingTool(int index, float nodeTimestamp) {
-            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
+            // todo remove
+            //var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
 
             Script.PathData.RemoveKeyFromTiltingCurve(nodeTimestamp);
 
-            Utilities.Assert(
-                () => Script.PathData.TiltingCurveKeysNo
-                      == prevTiltingCurveNodesNo - 1,
-                String.Format(
-                    "Key wasn't removed. Previous keys number: {0};" +
-                    " Current keys number: {1}",
-                    prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurveKeysNo));
+            //Utilities.Assert(
+            //    () => Script.PathData.TiltingCurveKeysNo
+            //          == prevTiltingCurveNodesNo - 1,
+            //    String.Format(
+            //        "Key wasn't removed. Previous keys number: {0};" +
+            //        " Current keys number: {1}",
+            //        prevTiltingCurveNodesNo,
+            //        Script.PathData.TiltingCurveKeysNo));
 
             // Disable ease tool.
             Script.PathData.TiltingToolState[index] = false;
+
+            Asserts.AssertToolCurveInSync(
+                Script.PathData.TiltedNodesNo,
+                Script.PathData.TiltingCurveKeysNo,
+                "tilting");
         }
 
         /// <summary>
@@ -1410,39 +1427,51 @@ namespace AnimationPathAnimator.AnimatorComponent {
         ///     Timestamp of node which tool will be enabled.
         /// </param>
         private void HandleEnablingEaseTool(int index, float timestamp) {
-            var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
+            // todo remove
+            //var prevEaseCurveNodesNo = Script.PathData.EaseCurveKeysNo;
 
             Script.PathData.AddKeyToEaseCurve(timestamp);
 
             // Enable ease tool for the node.
             Script.PathData.EaseToolState[index] = true;
 
-            Utilities.Assert(
-                () => Script.PathData.EaseCurveKeysNo
-                      == prevEaseCurveNodesNo + 1,
-                String.Format(
-                    "Key wasn't added. Previous keys number: {0};" +
-                    " Current keys number: {1}",
-                    prevEaseCurveNodesNo,
-                    Script.PathData.EaseCurveKeysNo));
+            Asserts.AssertToolCurveInSync(
+                Script.PathData.EasedNodesNo,
+                Script.PathData.EaseCurveKeysNo,
+                "ease"); ;
+
+            //Utilities.Assert(
+            //    () => Script.PathData.EaseCurveKeysNo
+            //          == prevEaseCurveNodesNo + 1,
+            //    String.Format(
+            //        "Key wasn't added. Previous keys number: {0};" +
+            //        " Current keys number: {1}",
+            //        prevEaseCurveNodesNo,
+            //        Script.PathData.EaseCurveKeysNo));
         }
 
         private void HandleEnablingTiltingTool(int index, float nodeTimestamp) {
-            var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
+            // todo remove
+            //var prevTiltingCurveNodesNo = Script.PathData.TiltingCurveKeysNo;
 
             Script.PathData.AddKeyToTiltingCurve(nodeTimestamp);
 
-            Utilities.Assert(
-                () => Script.PathData.TiltingCurveKeysNo
-                      == prevTiltingCurveNodesNo + 1,
-                String.Format(
-                    "Key wasn't added. Previous keys number: {0};" +
-                    " Current keys number: {1}",
-                    prevTiltingCurveNodesNo,
-                    Script.PathData.TiltingCurveKeysNo));
+            //Utilities.Assert(
+            //    () => Script.PathData.TiltingCurveKeysNo
+            //          == prevTiltingCurveNodesNo + 1,
+            //    String.Format(
+            //        "Key wasn't added. Previous keys number: {0};" +
+            //        " Current keys number: {1}",
+            //        prevTiltingCurveNodesNo,
+            //        Script.PathData.TiltingCurveKeysNo));
 
             // Enable ease tool for the node.
             Script.PathData.TiltingToolState[index] = true;
+
+            Asserts.AssertToolCurveInSync(
+                Script.PathData.TiltedNodesNo,
+                Script.PathData.TiltingCurveKeysNo,
+                "tilting");
         }
 
         private void HandleLinearTangentMode() {
@@ -1665,44 +1694,26 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
                 SceneView.RepaintAll();
 
-                // todo move assert methods to a separate class
-                Utilities.Assert(
-                    () => Script.PathData.NodesNo
-                        == Script.PathData.EaseToolState.Count,
-                    string.Format(
-                        "Number of nodes in the path ({0}) is " +
-                        "different from number of entries in the " +
-                        "list holding info about what nodes have " +
-                        "enabled ease tool ({1}).",
-                        Script.PathData.NodesNo,
-                        Script.PathData.EaseToolState.Count));
+                Asserts.AssertEnabledToolsListInSync(
+                    Script.PathData.NodesNo,
+                    Script.PathData.EaseToolState.Count,
+                    "ease");
 
-                Utilities.Assert(
-                    () => Script.PathData.NodesNo
-                        == Script.PathData.TiltingToolState.Count,
-                    string.Format(
-                        "Number of nodes in the path ({0}) is " +
-                        "different from number of entries in the " +
-                        "list holding info about what nodes have " +
-                        "enabled tilting tool ({1}).",
-                        Script.PathData.NodesNo,
-                        Script.PathData.EaseToolState.Count));
+                Asserts.AssertEnabledToolsListInSync(
+                    Script.PathData.NodesNo,
+                    Script.PathData.TiltingToolState.Count,
+                    "tilting");
 
-                Utilities.Assert(
-                    () => Script.PathData.EasedNodesNo
-                          == Script.PathData.EaseCurveKeysNo,
-                          string.Format("Number of path nodes ({0}) with enabled ease tool is different"
-                                        + " from number of ease curve keys ({1}).",
-                                        Script.PathData.EasedNodesNo,
-                                        Script.PathData.EaseCurveKeysNo));
+                Asserts.AssertToolCurveInSync(
+                    Script.PathData.EasedNodesNo,
+                    Script.PathData.EaseCurveKeysNo,
+                    "ease");
 
-                Utilities.Assert(
-                    () => Script.PathData.TiltedNodesNo
-                          == Script.PathData.TiltingCurveKeysNo,
-                          string.Format("Number of path nodes ({0}) with enabled tilting tool is different"
-                                        + " from number of tilting curve keys ({1}).",
-                                        Script.PathData.TiltedNodesNo,
-                                        Script.PathData.TiltingCurveKeysNo));
+                Asserts.AssertToolCurveInSync(
+                    Script.PathData.TiltedNodesNo,
+                    Script.PathData.TiltingCurveKeysNo,
+                    "tilting");
+
             }
         }
 
@@ -2057,42 +2068,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             EditorGUILayout.Space();
 
-            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
-
-            DrawObjectCurveToggle();
-            DrawRotationCurveToggle();
-            DrawNodeButtonsToggle();
-
-            EditorGUILayout.Space();
-
-            DrawRotationModeDropdown(DrawRotationModeDropdownCallbackHandler);
-            DrawTangentModeDropdown();
-            HandleDrawForwardPointOffsetSlider();
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.BeginHorizontal();
-            DrawNodeToolDropdown();
-            HandleDrawUpdateAllToggle();
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            DrawNodeHandleDropdown();
-            HandleDrawMoveAllToggle();
-            EditorGUILayout.EndHorizontal();
-
-            DrawPositionHandleDropdown();
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.BeginHorizontal();
-            DrawResetEaseButton();
-            DrawResetRotationPathButton();
-            DrawResetTiltingButton();
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
             GUILayout.Label("Player", EditorStyles.boldLabel);
 
             DrawAnimationTimeValue();
@@ -2113,12 +2088,57 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
             DrawEnableControlsInPlayModeToggle();
 
+            EditorGUILayout.Space();
+
+            DrawRotationModeDropdown(DrawRotationModeDropdownCallbackHandler);
             DrawWrapModeDropdown();
+
+            EditorGUILayout.Space();
+
+            HandleDrawForwardPointOffsetSlider();
 
             EditorGUILayout.Space();
 
             DrawPositionSpeedSlider();
             DrawRotationSpeedSlider();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Path Options", EditorStyles.boldLabel);
+
+            DrawTangentModeDropdown();
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            DrawResetEaseButton();
+            DrawResetRotationPathButton();
+            DrawResetTiltingButton();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Scene Tools", EditorStyles.boldLabel);
+
+            EditorGUILayout.BeginHorizontal();
+            DrawNodeToolDropdown();
+            HandleDrawUpdateAllToggle();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            DrawNodeHandleDropdown();
+            HandleDrawMoveAllToggle();
+            EditorGUILayout.EndHorizontal();
+
+            DrawPositionHandleDropdown();
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Scene Options", EditorStyles.boldLabel);
+
+            DrawObjectCurveToggle();
+            DrawRotationCurveToggle();
+            DrawNodeButtonsToggle();
 
             EditorGUILayout.Space();
 

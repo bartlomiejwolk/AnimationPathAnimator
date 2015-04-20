@@ -142,6 +142,12 @@ namespace AnimationPathAnimator.AnimatorComponent {
         [SerializeField]
         private string targetGizmoIcon = "target_22x22-blue";
 
+        [SerializeField]
+        private Color defaultObjectPathCurveColor = Color.yellow;
+
+        [SerializeField]
+        private Color defaultRotationPathCurveColor = Color.gray;
+
         #endregion GIZMO FIELDS
 
         #region HANDLES FIELDS
@@ -626,6 +632,16 @@ namespace AnimationPathAnimator.AnimatorComponent {
         public string UpdateAllLabelText {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
+        }
+
+        public Color DefaultObjectPathCurveColor {
+            get { return defaultObjectPathCurveColor; }
+            set { defaultObjectPathCurveColor = value; }
+        }
+
+        public Color DefaultRotationPathCurveColor {
+            get { return defaultRotationPathCurveColor; }
+            set { defaultRotationPathCurveColor = value; }
         }
 
         #endregion

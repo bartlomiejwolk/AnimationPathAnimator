@@ -46,12 +46,15 @@ MonoBehaviour:
   - {fileID: 2800000, guid: d09a8dd6e0e171b49ba73fd3d5c57205, type: 3}
   - {fileID: 2800000, guid: 649104d15ab43284cb21177f43ec04a4, type: 3}
   - {fileID: 2800000, guid: d777b5e2cb371524fade0782c726f2e6, type: 3}
+  gizmosSubfolder: AnimationPathAnimator
   currentRotationPointGizmoIcon: rec_16x16-yellow
   forwardPointIcon: target_22x22-pink
   objectCurveSampling: 40
   rotationCurveSampling: 40
   rotationPointGizmoIcon: rec_16x16
   targetGizmoIcon: target_22x22-blue
+  defaultObjectPathCurveColor: {r: .124080881, g: .633240402, b: .992647052, a: 1}
+  defaultRotationPathCurveColor: {r: .845588207, g: .130568787, b: .130568787, a: 1}
   addButtonOffsetH: 15
   addButtonOffsetV: 5
   arcHandleRadius: .600000024

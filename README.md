@@ -12,19 +12,19 @@ Features
 
 - Linear and Bezier paths.
 - Custom rotation, animation speed and tilting.
-- Once, Loop and PingPong wrap modes.
+- Wrap modes: Once, Loop and PingPong.
 - Rotation by following target object.
 - Rotation by looking ahead of the path.
 - Autoplay, play with delay.
 - Position and rotation lerp.
-- Realtime animation preview in edit and in play mode.
+- Realtime animation preview in edit and play mode.
 - Editing path in play mode.
 - Custom node events.
 - Synchronizing multiple animators.
 - Synchronizing animation with music.
-- Ability to fully customize shortcuts and other, most advanced options.
-- Controlling playback with API.
-- Export waypoints as transforms.
+- Ability to fully customize shortcuts and other advanced options.
+- Playback control with API.
+- Node export as transforms.
 - Separate path asset file for every path.
 - Separate config asset files.
 - Video tutorials at youtube.

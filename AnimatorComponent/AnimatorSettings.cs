@@ -8,37 +8,14 @@ using UnityEngine;
 namespace AnimationPathAnimator.AnimatorComponent {
 
     public sealed class AnimatorSettings : ScriptableObject {
-        #region ADVANCED FIELDS
-
-        [SerializeField]
-        private float minNodeTimeSeparation = 0.001f;
-
-        [SerializeField]
-        private int pathLengthSampling = 40;
-
-        #endregion ADVANCED FIELDS
-
-        #region ADVANCED PROPERTIES
-
-        public float MinNodeTimeSeparation {
-            get { return minNodeTimeSeparation; }
-            set { minNodeTimeSeparation = value; }
-        }
-
-        public int PathLengthSampling {
-            get { return pathLengthSampling; }
-            set { pathLengthSampling = value; }
-        }
-
-        #endregion ADVANCED PROPERTIES
-
         #region SHORTCUT FIELDS
+
+        [Header("Shortcuts")]
 
         public KeyCode playModeModKey = KeyCode.RightAlt;
 
         public KeyCode positionHandleKey = KeyCode.G;
 
-        [Header("Shortcuts")]
         [SerializeField]
         private KeyCode easeModeKey = KeyCode.U;
 
@@ -95,7 +72,207 @@ namespace AnimationPathAnimator.AnimatorComponent {
 
         #endregion SHORTCUT FIELDS
 
-        #region SHORTCUT PROPERTIES
+        #region ANIMATOR FIELDS
+
+        [Header("Animator")]
+
+        [SerializeField]
+        private float forwardPointOffsetMaxValue = 0.15f;
+
+        [SerializeField]
+        private float forwardPointOffsetMinValue = 0.001f;
+        [SerializeField]
+        private float maxPositionLerpSpeed = 1;
+
+        [SerializeField]
+        private float maxRotationSlerpSpeed = 20f;
+
+        [SerializeField]
+        private float minPositionLerpSpeed = 0.001f;
+
+        [SerializeField]
+        private float minRotationSlerpSpeed = 0.1f;
+
+        [SerializeField]
+        private string pathDataAssetDefaultName = "AnimationPath";
+
+        [SerializeField]
+        private float shortJumpMaxValue = 0.004f;
+
+        [SerializeField]
+        private float shortJumpMinValue = 0.0001f;
+
+        [SerializeField]
+        private float longJumpMaxValue = 0.004f;
+
+        [SerializeField]
+        private float longJumpMinValue = 0.1f;
+
+        #endregion ANIMATOR FIELDS
+
+        #region GIZMO FIELDS
+
+        [Header("Gizmos")]
+
+        /// <summary>
+        ///     Holds references to icons that will be copied to Assets/Gizmos
+        ///     folder.
+        /// </summary>
+        [SerializeField]
+        private Texture[] gizmoIcons;
+
+        [SerializeField]
+        private string gizmosSubfolder = "AnimationPathAnimator";
+
+        [SerializeField]
+        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
+
+        [SerializeField]
+        private string forwardPointIcon = "target_22x22-pink";
+
+        [SerializeField]
+        private int objectCurveSampling = 5;
+
+        [SerializeField]
+        private int rotationCurveSampling = 5;
+
+        [SerializeField]
+        private string rotationPointGizmoIcon = "rec_16x16";
+
+        [SerializeField]
+        private string targetGizmoIcon = "target_22x22-blue";
+
+        [SerializeField]
+        private Color defaultObjectPathCurveColor = Color.yellow;
+
+        [SerializeField]
+        private Color defaultRotationPathCurveColor = Color.gray;
+
+        #endregion GIZMO FIELDS
+
+        #region HANDLES FIELDS
+
+        [Header("Handles")]
+
+        [SerializeField]
+        private int addButtonOffsetH = 15;
+
+        [SerializeField]
+        private int addButtonOffsetV = 5;
+
+        [SerializeField]
+        private float arcHandleRadius = 0.6f;
+        [SerializeField]
+        private int defaultLabelHeight = 10;
+
+        [SerializeField]
+        private int defaultLabelWidth = 30;
+
+        [SerializeField]
+        private int easeValueLabelOffsetX = -20;
+
+        [SerializeField]
+        private int easeValueLabelOffsetY = -25;
+
+        [SerializeField]
+        private float initialEaseArcValue = 5f;
+
+        [SerializeField]
+        private float initialTiltingArcValue = 5f;
+
+        [SerializeField]
+        private int moveAllLabelOffsetX = -50;
+
+        [SerializeField]
+        private int moveAllLabelOffsetY = -10;
+
+        [SerializeField]
+        private string moveAllLabelText = "MA";
+
+        [SerializeField]
+        private float movementHandleSize = 0.12f;
+
+        [SerializeField]
+        private int removeButtonH = 34;
+
+        [SerializeField]
+        private int removeButtonV = 5;
+
+        [SerializeField]
+        private Color rotationHandleColor = Color.magenta;
+
+        [SerializeField]
+        private float rotationHandleSize = 0.26f;
+
+        [SerializeField]
+        private int rotationSmoothButtonOffsetH = 15;
+
+        [SerializeField]
+        private int rotationSmoothButtonOffsetV = 5;
+
+        [SerializeField]
+        private float scaleHandleSize = 1.5f;
+
+        [SerializeField]
+        private int sceneToolToggleOffsetH = 53;
+
+        [SerializeField]
+        private int sceneToolToggleOffsetV = 5;
+
+        [SerializeField]
+        private int smoothButtonOffsetH = 72;
+
+        [SerializeField]
+        private int smoothButtonOffsetV = 5;
+
+        [SerializeField]
+        private float tangentHandleSize = 0.25f;
+        [SerializeField]
+        private int updateAllLabelOffsetX = -50;
+
+        [SerializeField]
+        private int updateAllLabelOffsetY = -25;
+
+        [SerializeField]
+        private string updateAllLabelText = "UA";
+
+        #endregion HANDLES FIELDS
+
+        #region ADVANCED FIELDS
+
+        [Header("Advanced settings")]
+
+        [SerializeField]
+        private float tiltingValueMultiplierDenominator = 1;
+
+        [SerializeField]
+        private int arcValueMultiplierNumerator = 360;
+
+
+        /// <summary>
+        ///     Used to convert animation curve value to arc handle value.
+        /// </summary>
+        [SerializeField]
+        private float animationSpeedDenominator = 0.05f;
+
+        [SerializeField]
+        private float minNodeTimeSeparation = 0.001f;
+
+        [SerializeField]
+        private int pathLengthSampling = 40;
+
+        #endregion ADVANCED FIELDS
+        #region PROPERTIES
+
+        public float MinNodeTimeSeparation {
+            get { return minNodeTimeSeparation; }
+            set { minNodeTimeSeparation = value; }
+        }
+
+        public int PathLengthSampling {
+            get { return pathLengthSampling; }
+            set { pathLengthSampling = value; }
+        }
 
         public KeyCode EaseModeKey {
             get { return easeModeKey; }
@@ -192,62 +369,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
             set { updateAllKey = value; }
         }
 
-        #endregion SHORTCUT PROPERTIES
-
-        #region ANIMATOR FIELDS
-
-        /// <summary>
-        ///     Used to convert animation curve value to arc handle value.
-        /// </summary>
-        [SerializeField]
-        private float animationSpeedDenominator = 0.05f;
-
-        [Header("Animator")]
-        [SerializeField]
-        private float forwardPointOffsetMaxValue = 0.15f;
-
-        [SerializeField]
-        private float forwardPointOffsetMinValue = 0.001f;
-
-        /// <summary>
-        ///     Holds references to icons that will be copied to Assets/Gizmos
-        ///     folder.
-        /// </summary>
-        [SerializeField]
-        private Texture[] gizmoIcons;
-
-        private string gizmosSubfolder = "AnimationPathAnimator";
-
-        [SerializeField]
-        private float maxPositionLerpSpeed = 1;
-
-        [SerializeField]
-        private float maxRotationSlerpSpeed = 20f;
-
-        [SerializeField]
-        private float minPositionLerpSpeed = 0.001f;
-
-        [SerializeField]
-        private float minRotationSlerpSpeed = 0.1f;
-
-        [SerializeField]
-        private string pathDataAssetDefaultName = "AnimationPath";
-
-        [SerializeField]
-        private float shortJumpMaxValue = 0.004f;
-
-        [SerializeField]
-        private float shortJumpMinValue = 0.0001f;
-
-        [SerializeField]
-        private float longJumpMaxValue = 0.004f;
-
-        [SerializeField]
-        private float longJumpMinValue = 0.1f;
-
-        #endregion ANIMATOR FIELDS
-
-        #region ANIMATOR PROPERTIES
         public float LongJumpMinValue {
             get { return longJumpMinValue; }
             set { longJumpMinValue = value; }
@@ -319,33 +440,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
             set { shortJumpMinValue = value; }
         }
 
-        #endregion ANIMATOR PROPERTIES
-
-        #region GIZMO FIELDS
-
-        [Header("Gizmos")]
-        [SerializeField]
-        private string currentRotationPointGizmoIcon = "rec_16x16-yellow";
-
-        [SerializeField]
-        private string forwardPointIcon = "target_22x22-pink";
-
-        [SerializeField]
-        private int objectCurveSampling = 5;
-
-        [SerializeField]
-        private int rotationCurveSampling = 5;
-
-        [SerializeField]
-        private string rotationPointGizmoIcon = "rec_16x16";
-
-        [SerializeField]
-        private string targetGizmoIcon = "target_22x22-blue";
-
-        #endregion GIZMO FIELDS
-
-        #region GIZMO PROPERTIES
-
         public string CurrentRotationPointGizmoIcon {
             get { return currentRotationPointGizmoIcon; }
             set { currentRotationPointGizmoIcon = value; }
@@ -375,105 +469,6 @@ namespace AnimationPathAnimator.AnimatorComponent {
             get { return targetGizmoIcon; }
             set { targetGizmoIcon = value; }
         }
-
-        #endregion GIZMO PROPERTIES
-
-        #region HANDLES FIELDS
-
-        [SerializeField]
-        private int addButtonOffsetH = 15;
-
-        [SerializeField]
-        private int addButtonOffsetV = 5;
-
-        [SerializeField]
-        private float arcHandleRadius = 0.6f;
-
-        [SerializeField]
-        private int arcValueMultiplierNumerator = 360;
-
-        [SerializeField]
-        private int defaultLabelHeight = 10;
-
-        [SerializeField]
-        private int defaultLabelWidth = 30;
-
-        [SerializeField]
-        private int easeValueLabelOffsetX = -20;
-
-        [SerializeField]
-        private int easeValueLabelOffsetY = -25;
-
-        [SerializeField]
-        private float initialEaseArcValue = 5f;
-
-        [SerializeField]
-        private float initialTiltingArcValue = 5f;
-
-        [SerializeField]
-        private int moveAllLabelOffsetX = -50;
-
-        [SerializeField]
-        private int moveAllLabelOffsetY = -10;
-
-        [SerializeField]
-        private string moveAllLabelText = "MA";
-
-        [SerializeField]
-        private float movementHandleSize = 0.12f;
-
-        [SerializeField]
-        private int removeButtonH = 34;
-
-        [SerializeField]
-        private int removeButtonV = 5;
-
-        [SerializeField]
-        private Color rotationHandleColor = Color.magenta;
-
-        [SerializeField]
-        private float rotationHandleSize = 0.26f;
-
-        [SerializeField]
-        private int rotationSmoothButtonOffsetH = 15;
-
-        [SerializeField]
-        private int rotationSmoothButtonOffsetV = 5;
-
-        [SerializeField]
-        private float scaleHandleSize = 1.5f;
-
-        [SerializeField]
-        private int sceneToolToggleOffsetH = 53;
-
-        [SerializeField]
-        private int sceneToolToggleOffsetV = 5;
-
-        [SerializeField]
-        private int smoothButtonOffsetH = 72;
-
-        [SerializeField]
-        private int smoothButtonOffsetV = 5;
-
-        [Header("Handles")]
-        [SerializeField]
-        private float tangentHandleSize = 0.25f;
-
-        [SerializeField]
-        private float tiltingValueMultiplierDenominator = 1;
-
-        [SerializeField]
-        private int updateAllLabelOffsetX = -50;
-
-        [SerializeField]
-        private int updateAllLabelOffsetY = -25;
-
-        [SerializeField]
-        private string updateAllLabelText = "UA";
-
-        #endregion HANDLES FIELDS
-
-        #region HANDLES PROPERTIES
 
         public int AddButtonOffsetH {
             get { return addButtonOffsetH; }
@@ -638,7 +633,18 @@ namespace AnimationPathAnimator.AnimatorComponent {
             get { return updateAllLabelText; }
             set { updateAllLabelText = value; }
         }
-        #endregion HANDLES PROPERTIES
+
+        public Color DefaultObjectPathCurveColor {
+            get { return defaultObjectPathCurveColor; }
+            set { defaultObjectPathCurveColor = value; }
+        }
+
+        public Color DefaultRotationPathCurveColor {
+            get { return defaultRotationPathCurveColor; }
+            set { defaultRotationPathCurveColor = value; }
+        }
+
+        #endregion
     }
 
 }

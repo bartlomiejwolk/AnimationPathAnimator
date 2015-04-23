@@ -131,10 +131,10 @@ namespace AnimationPathAnimator.AnimatorComponent {
         private string forwardPointIcon = "target_22x22-pink";
 
         [SerializeField]
-        private int objectCurveSampling = 5;
+        private int objectCurveSampling = 20;
 
         [SerializeField]
-        private int rotationCurveSampling = 5;
+        private int rotationCurveSampling = 20;
 
         [SerializeField]
         private string rotationPointGizmoIcon = "rec_16x16";

@@ -42,3 +42,14 @@ Quick Start
 - Clone repository (or extract zip package) to any location in `Assets` folder.
 - Go to `Examples` in extension root folder and open an example scene.
 - Enter play mode to start animation or select `*Path` game object to edit path in the scene.
+
+Help
+-----
+
+Just create an issue and I'll do my best to help.
+
+Contributions
+------------
+
+Pull requests, ideas, questions and any feedback at all are welcome.
+

@@ -43,6 +43,19 @@ Quick Start
 - Go to `Examples` in extension root folder and open an example scene.
 - Enter play mode to start animation or select `*Path` game object to edit path in the scene.
 
+Shortcuts
+---------
+
+- L : Jump to next node.
+- H : Jump to previous node.
+- K : Long jump forward.
+- J : Short jump forward.
+- Alt + H : Jump to the beginning.
+- Alt + L : Jump to the end.
+- Alt + K : Small jump forward.
+- Alt + J : Small jump backward.
+- Space : Play/pause animation (only in play mode).
+
 Help
 -----
 

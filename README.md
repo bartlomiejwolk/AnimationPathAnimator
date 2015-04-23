@@ -22,16 +22,19 @@ Features
 - Custom node events.
 - Synchronizing multiple animators.
 - Synchronizing animation with music.
+- Comfortable keyboard shortcuts.
 - Ability to fully customize shortcuts and other advanced options.
 - Playback control with API.
 - Node export as transforms.
 - Separate path asset file for every path.
 - Separate config asset files.
-- Video tutorials at youtube.
+- Quick Start tutorial on youtube*.
 - Example scenes.
 - [API reference documentation](http://animationpathanimator.airtime-productions.com "Online API").
 
-See [video preview](https://youtu.be/wS1hQ5641zQ "AnimationPath Animator Unity 5 Extension Preview ")
+*not available
+
+See [video teaser](https://youtu.be/wS1hQ5641zQ "AnimationPath Animator Unity 5 Extension Teaser ")
 
 Quick Start
 ------------------

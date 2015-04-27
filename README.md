@@ -1,7 +1,7 @@
 README
 ======
 
-AnimationPath Animator is a path animator extension for Unity.
+AnimationPath Animator is a path animator extension for Unity 5.
 
 Licensed under MIT license. See LICENSE file in the project root.
 

@@ -39,22 +39,22 @@ See [video teaser](https://youtu.be/wS1hQ5641zQ "AnimationPath Animator Unity 5 
 Quick Start
 ------------------
 
-- Clone repository (or extract zip package) to any location in `Assets` folder.
+- Clone repository (or extract [zip package](https://github.com/bartlomiejwolk/animationpathanimator/archive/master.zip)) to any location in `Assets` folder.
 - Go to `Examples` in extension root folder and open an example scene.
 - Enter play mode to start animation or select `*Path` game object to edit path in the scene.
 
 Shortcuts
 ---------
 
-- L : Jump to next node.
-- H : Jump to previous node.
-- K : Long jump forward.
-- J : Short jump forward.
-- Alt + H : Jump to the beginning.
-- Alt + L : Jump to the end.
-- Alt + K : Small jump forward.
-- Alt + J : Small jump backward.
-- Space : Play/pause animation (only in play mode).
+- `L` Jump to next node.
+- `H` Jump to previous node.
+- `K` Long jump forward.
+- `J` Short jump forward.
+- `Alt + H` Jump to the beginning.
+- `Alt + L` Jump to the end.
+- `Alt + K` Small jump forward.
+- `Alt + J` Small jump backward.
+- `Space` Play/pause animation (only in play mode).
 
 Help
 -----
@@ -66,3 +66,12 @@ Contributions
 
 Pull requests, ideas, questions and any feedback at all are welcome.
 
+Versioning
+----------
+
+Example: `v0.2.3f1`
+
+- `0` Introduces breaking changes.
+- `2` Major release. Adds new features.
+- `3` Minor release. Bug fixes and refactoring.
+- `f1` Quick fix.

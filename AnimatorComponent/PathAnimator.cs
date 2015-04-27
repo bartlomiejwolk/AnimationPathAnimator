@@ -74,6 +74,12 @@ namespace AnimationPathAnimator.AnimatorComponent {
         public event EventHandler UndoRedoPerformed;
 
         #endregion EVENTS
+		
+		#region CONST
+		
+		public const string VERSION = "v0.2.5";
+		
+		#endregion
 
         #region FIELDS
 

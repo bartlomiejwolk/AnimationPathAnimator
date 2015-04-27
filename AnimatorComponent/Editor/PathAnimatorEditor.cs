@@ -402,6 +402,10 @@ namespace AnimationPathAnimator.AnimatorComponent {
                 false);
         }
 
+		private void DrawVersionNo() {
+			EditorGUILayout.LabelField(PathAnimator.VERSION);
+		}
+		
         private void DrawPlayerControls() {
             // Play/Pause button text.
             var playPauseBtnText = !Script.IsPlaying ? "Play" : "Pause";
@@ -2047,6 +2051,10 @@ namespace AnimationPathAnimator.AnimatorComponent {
         }
 
         private void DrawInspector() {
+			DrawVersionNo();
+			
+			EditorGUILayout.Space();
+			
             DrawPathDataAssetField();
 
             EditorGUILayout.BeginHorizontal();

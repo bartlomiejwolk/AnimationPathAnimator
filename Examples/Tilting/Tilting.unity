@@ -309,8 +309,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1369512163}
-  m_LocalRotation: {x: 0, y: .918096125, z: 0, w: .396357745}
-  m_LocalPosition: {x: -17.8019009, y: 3.53515625, z: -15.5343733}
+  m_LocalRotation: {x: 5.9673971e-06, y: .683813334, z: -6.36745835e-06, w: -.729656994}
+  m_LocalPosition: {x: 43.4575577, y: 2.7339344, z: 16.4067822}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -401,13 +401,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   advancedSettingsFoldout: 1
   animatedGO: {fileID: 1369512165}
-  animationTime: 1
+  animationTime: 0
   drawNodeButtons: 1
   drawObjectPath: 1
   drawRotationPathCurve: 1
   moveAllMode: 0
   nodeHandle: 0
-  pathData: {fileID: 11400000, guid: a982a51ad010b8c48a99c8f37dbcd433, type: 2}
+  pathData: {fileID: 11400000, guid: e96900acba8dd5547aaa06a6def19e92, type: 2}
   settingsAsset: {fileID: 11400000, guid: 1e25496e492b8be4ba46c0dc5854a4ef, type: 2}
   skin: {fileID: 11400000, guid: e7d64a53ce459024299b48caab901ad2, type: 2}
   targetGO: {fileID: 0}

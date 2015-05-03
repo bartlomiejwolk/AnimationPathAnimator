@@ -140,8 +140,8 @@ namespace AnimationPathAnimator.AnimatorComponent {
         }
 
         /// <summary>
-        ///     Percentage of the overall animation progress. 0.5 means position in
-        ///     the middle of the path.
+        ///     Animation time ratio. 0.5 means that half of the overall
+        ///     animation time is over.
         /// </summary>
         public float AnimationTime {
             get { return animationTime; }

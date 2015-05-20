@@ -36,9 +36,13 @@ Features
 - Example scenes
 - [API reference documentation](http://animationpathanimator.airtime-productions.com "Online API")
 
-
 [Video Teaser](https://youtu.be/wS1hQ5641zQ "AnimationPath Animator Unity 5 Extension Teaser ")<br>
-[Quick Start Tutorial](https://youtu.be/M_7y2k4UgOc)
+
+Resources
+---
+* [Quick Start Tutorial](https://youtu.be/M_7y2k4UgOc)
+* [Unity Forum Thread](http://forum.unity3d.com/threads/open-source-unity-5-animationpath-animator-beta.321802/)
+* [Youtube Playlist](https://www.youtube.com/playlist?list=PLtjvHab0cn92H1T7TojFkuohx1ngpy069)
 
 Quick Start
 ------------------

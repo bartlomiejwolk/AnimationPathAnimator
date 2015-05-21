@@ -48,7 +48,8 @@ Quick Start
 ------------------
 
 - Clone repository (or extract [zip package](https://github.com/bartlomiejwolk/animationpathanimator/archive/master.zip)) to any location in `Assets` folder.
-- Go to `Examples` in extension root folder and open an example scene.
+- Go to `AnimationPathAnimator` folder and run `Examples.unitypackage` to extract example assets.
+- Go to `Assets/AnimationPathAnimator_examples` folder and open example scene.
 - Enter play mode to start animation or select `*Path` game object to edit path in the scene.
 
 Shortcuts

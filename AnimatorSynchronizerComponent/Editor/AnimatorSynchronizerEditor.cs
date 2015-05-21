@@ -4,7 +4,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root folder.
 
 using AnimationPathAnimator.AnimatorComponent;
-using AnimationPathAnimator.ReorderableList;
 using UnityEditor;
 using UnityEngine;
 

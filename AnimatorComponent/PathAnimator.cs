@@ -77,7 +77,7 @@ namespace AnimationPathAnimator.AnimatorComponent {
         
         #region CONST
         
-        public const string VERSION = "v0.2.5";
+        public const string VERSION = "v0.2.6";
         
         #endregion
 

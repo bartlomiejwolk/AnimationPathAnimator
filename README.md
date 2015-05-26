@@ -37,6 +37,7 @@ Features
 Resources
 ---
 * [Quick Start Tutorial](https://youtu.be/M_7y2k4UgOc)
+* [Blog Post](https://bartlomiejwolk.wordpress.com/2015/03/27/animationpath-animator/)    
 * [Unity Forum Thread](http://forum.unity3d.com/threads/open-source-unity-5-animationpath-animator-beta.321802/)
 * [Youtube Playlist](https://www.youtube.com/playlist?list=PLtjvHab0cn92H1T7TojFkuohx1ngpy069)
 

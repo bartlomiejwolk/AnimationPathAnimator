@@ -1,10 +1,6 @@
 README
 ======
 
-***
-**UPDATE: I renamed the repository so if you've cloned it earlier, this is how you can update (example for _SourceTree_):   Copy repo address, open ST, go to _Repository -> Add Remote_ select _origin_ and _Edit_. Paste the new repo url in the _URL_ field and press _OK_.**
-***
-
 AnimationPath Animator is a path animator extension for Unity 5.
 
 Licensed under MIT license. See LICENSE file in the project root.

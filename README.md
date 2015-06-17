@@ -72,8 +72,6 @@ Contributions
 
 Pull requests, ideas, questions and any feedback at all are welcome.
 
-See also: [Unity extensions as git submodules](http://wp.me/p56Vqs-6o)
-
 Versioning
 ----------
 
